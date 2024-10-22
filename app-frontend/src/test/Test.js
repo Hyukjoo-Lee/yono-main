@@ -1,7 +1,5 @@
 import React from "react";
 import styled from "styled-components";
-import { ThemeProvider } from "styled-components";
-import theme from "../theme/Theme";
 
 const ButtonStyle = styled.button`
   width: 162px;
@@ -23,11 +21,9 @@ const TextStyle = styled.p`
 export default function Test() {
   return (
     <>
-      <ThemeProvider theme={theme}>
         <ButtonStyle>
           <TextStyle>더 알아보기</TextStyle>
         </ButtonStyle>
-      </ThemeProvider>
     </>
   );
 }

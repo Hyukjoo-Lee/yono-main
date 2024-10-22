@@ -1,7 +1,5 @@
 import React from "react";
 import styled from "styled-components";
-import { ThemeProvider } from "styled-components";
-import theme from "../theme/Theme";
 
 function CustomButton(props) {
   const {
@@ -48,23 +46,21 @@ function CustomButton(props) {
   `;
 
   return (
-    <ThemeProvider theme={theme}>
-      <ButtonStyle
-        width={width}
-        height={height}
-        background={background}
-        borderColor={borderColor}
-        borderRadius={borderRadius}
-        hoverBk={hoverBk}
-        hoverColor={hoverColor}
-        onClick={onClick}
-        disabled={disabled}
-      >
-        <TextStyle color={color} fontSize={fontSize}>
-          {text}
-        </TextStyle>
-      </ButtonStyle>
-    </ThemeProvider>
+    <ButtonStyle
+      width={width}
+      height={height}
+      background={background}
+      borderColor={borderColor}
+      borderRadius={borderRadius}
+      hoverBk={hoverBk}
+      hoverColor={hoverColor}
+      onClick={onClick}
+      disabled={disabled}
+    >
+      <TextStyle color={color} fontSize={fontSize}>
+        {text}
+      </TextStyle>
+    </ButtonStyle>
   );
 }
 
