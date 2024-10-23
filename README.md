@@ -83,6 +83,10 @@ npm start
   - `../mickle-muckle/app-frontend # git` ❌
   - `../mickle-muckle # git` ✅
 
+* 만약 상위 폴더(../mickle-muckle)가 이미 Git 저장소로 설정되어 있는데
+* 그 내부 폴더(app-frontend)에서도 git init이나 git clone 같은 작업을 하면,
+* app-frontend 를 새로운 저장소로 인식하기 때문에 동일한 저장소의 중복된 복사본이 생성될 수 있습니다.
+
 ### 5. 커밋 메시지 규칙
 
 - 명확하고 일관된 커밋 메시지를 작성합니다:
