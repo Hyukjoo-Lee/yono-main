@@ -5,23 +5,24 @@ import {
   Route,
   useLocation,
 } from "react-router-dom";
+
 import { SubHeader } from "./common/SubHeader";
 import { MainHeader } from "./common/MainHeader";
 import { Footer } from "./common/Footer";
-import { MainPage } from "./pages/MainPage";
-import { Login } from "./pages/Login";
-import { SignUp } from "./pages/SignUp";
-import { FindID } from "./pages/FindID";
-import { FindPassword } from "./pages/FindPassword";
-import { Intro } from "./pages/Intro";
-import { CardChallege } from "./pages/CardChallege";
-import { CardAnalysis } from "./pages/CardAnalysis";
-import { Community } from "./pages/Community";
-import { MyCard } from "./pages/MyCard";
-import { MyPage } from "./pages/MyPage";
 
 import { ThemeProvider } from "styled-components";
 import theme from "./theme/theme";
+import { MainPage } from "./pages/MainPage";
+import { Login } from "./pages/auth/Login";
+import { SignUp } from "./pages/auth/SignUp";
+import { FindID } from "./pages/auth/FindID";
+import { MyPage } from "./pages/mypage/MyPage";
+import { FindPassword } from "./pages/auth/FindPassword";
+import { Intro } from "./pages/intro/Intro";
+import { CardChallege } from "./pages/cardChallege/CardChallege";
+import { CardAnalysis } from "./pages/cardAnalysis/CardAnalysis";
+import { Community } from "./pages/community/Community";
+import { MyCard } from "./pages/mycard/MyCard";
 
 /**
  * hideHeaderFooter: 특정 경로에서만 헤더나 푸터를 숨기기위함

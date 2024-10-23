@@ -29,13 +29,13 @@ const StyledLink = styled(Link)`
 `;
 
 export function SubHeader() {
-    return (
-        <Nav>
-            <StyledLink to="/login">로그인</StyledLink>
-            <StyledLink to="/signup">회원가입</StyledLink>
-            <StyledLink to="/mypage">마이페이지</StyledLink>
-            <StyledLink to="/find-id">아이디찾기</StyledLink>
-            <StyledLink to="/find-pwd">비밀번호찾기</StyledLink>
-        </Nav>
-    )
+  return (
+    <Nav>
+      <StyledLink to="/login">로그인</StyledLink>
+      <StyledLink to="/signup">회원가입</StyledLink>
+      <StyledLink to="/mypage">마이페이지</StyledLink>
+      <StyledLink to="/find-id">아이디찾기</StyledLink>
+      <StyledLink to="/find-pwd">비밀번호찾기</StyledLink>
+    </Nav>
+  );
 }
