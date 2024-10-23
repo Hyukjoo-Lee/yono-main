@@ -1,7 +1,7 @@
 import React from "react";
 import styled from "styled-components";
 
-const ButtonStyle = styled.button`
+export const ButtonStyle = styled.button`
   width: ${(props) => (props.width ? props.width : "162px")};
   height: ${(props) => (props.height ? props.height : "48px")};
   background-color: ${(props) =>
@@ -21,46 +21,10 @@ const ButtonStyle = styled.button`
   }
 `;
 
-const TextStyle = styled.p`
+export const TextStyle = styled.p`
   font-size: ${(props) =>
     props.fontSize ? props.fontSize : props.theme.fontSize.md};
   color: ${(props) => (props.color ? props.color : props.theme.color.white)};
   margin: 0px;
   line-height: 22px;
 `;
-
-const CustomButton = (props) => {
-  const {
-    text,
-    width,
-    height,
-    background,
-    color,
-    borderColor,
-    borderRadius,
-    fontSize,
-    disabled,
-    onClick,
-    hoverBk,
-    hoverColor,
-  } = props;
-
-  return (
-    <ButtonStyle
-      width={width}
-      height={height}
-      background={background}
-      borderColor={borderColor}
-      borderRadius={borderRadius}
-      hoverBk={hoverBk}
-      hoverColor={hoverColor}
-      onClick={disabled ? undefined : onClick}
-      disabled={disabled}
-    >
-      <TextStyle color={color} fontSize={fontSize}>
-        {text}
-      </TextStyle>
-    </ButtonStyle>
-  );
-};
-export default CustomButton;
