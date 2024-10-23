@@ -8,7 +8,7 @@ import {
 
 import { SubHeader } from "./common/SubHeader";
 import { MainHeader } from "./common/MainHeader";
-import { Footer } from "./common/Footer";
+import Footer from "./common/Footer";
 
 import { ThemeProvider } from "styled-components";
 import theme from "./theme/theme";
