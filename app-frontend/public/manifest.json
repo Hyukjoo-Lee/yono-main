@@ -1,0 +1,9 @@
+{
+  "short_name": "Mickle & Muckle",
+  "name": "Web service to help users saving their money",
+  "icons": [],
+  "start_url": ".",
+  "display": "standalone",
+  "theme_color": "#000000",
+  "background_color": "#ffffff"
+}
