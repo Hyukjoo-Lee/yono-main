@@ -1,5 +1,10 @@
 import "./App.css";
-import { BrowserRouter as Router, Routes, Route, useLocation } from "react-router-dom";
+import {
+  BrowserRouter as Router,
+  Routes,
+  Route,
+  useLocation,
+} from "react-router-dom";
 import { SubHeader } from "./common/SubHeader";
 import { MainHeader } from "./common/MainHeader";
 import { Footer } from "./common/Footer";
@@ -19,7 +24,7 @@ import { ThemeProvider } from "styled-components";
 import theme from "./theme/theme";
 
 /**
- * hideHeaderFooter: 특정 경로에서만 헤더나 푸터를 숨기기위함 
+ * hideHeaderFooter: 특정 경로에서만 헤더나 푸터를 숨기기위함
  */
 function Layout({ children }) {
   const location = useLocation();
