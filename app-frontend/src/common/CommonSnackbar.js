@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import Box from "@mui/material/Box";
 import Snackbar from "@mui/material/Snackbar";
 import Alert from "@mui/material/Alert";
-import CommonButton from "./CustomButton";
+import CommonButton from "./CommonButton";
 import styled from "styled-components";
 
 const CommonSnackbarStyle = styled(Snackbar)`
