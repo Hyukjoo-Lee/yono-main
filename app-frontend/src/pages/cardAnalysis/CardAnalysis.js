@@ -7,6 +7,7 @@ const Root = styled.div`
   margin: 0 auto;
   box-sizing: border-box;
   padding-top: 30px;
+  padding-bottom: 180px;
 `;
 const TitleStyle = styled.p`
   margin: 0px;

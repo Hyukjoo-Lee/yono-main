@@ -10,9 +10,7 @@ import {
   endOfWeek,
 } from "date-fns";
 
-const Root = styled.div`
-  padding-bottom: 150px;
-`;
+const Root = styled.div``;
 
 const RowBox = styled.div`
   display: flex;
@@ -29,7 +27,8 @@ const DaysBox = styled.div`
   cursor: pointer;
   padding: 5px 10px;
   box-sizing: border-box;
-  background: ${(props) => (props.selected ? "#eee" : props.theme.color.white)};
+  background: ${(props) =>
+    props.$selected ? "#eee" : props.theme.color.white};
   &:last-child {
     border-right: 0px;
   }
@@ -38,11 +37,11 @@ const DaysBox = styled.div`
 const DayBox = styled.div`
   text-align: right;
   color: ${(props) =>
-    props.today
+    props.$today
       ? "red"
-      : props.lastMonth
+      : props.$lastMonth
       ? "#D4D5D6"
-      : props.selected
+      : props.$selected
       ? "blue"
       : props.theme.color.black};
 `;
@@ -71,13 +70,13 @@ const CalendarBody = ({ currentMonth, selectedDate, onDateClick }) => {
       days.push(
         <DaysBox
           key={day}
-          selected={isSameDay(day, selectedDate)}
+          $selected={isSameDay(day, selectedDate)}
           onClick={() => onDateClick(cloneDay)}
         >
           <DayBox
-            today={isSameDay(day, new Date())}
-            selected={isSameDay(day, selectedDate)}
-            lastMonth={format(currentMonth, "M") !== format(day, "M")}
+            $today={isSameDay(day, new Date())}
+            $selected={isSameDay(day, selectedDate)}
+            $lastMonth={format(currentMonth, "M") !== format(day, "M")}
           >
             {formattedDate}
           </DayBox>

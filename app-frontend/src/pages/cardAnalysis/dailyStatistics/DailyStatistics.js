@@ -16,8 +16,8 @@ const CalendarBox = styled.div`
 
 const ListBox = styled.div`
   width: 423px;
-  height: 500px;
-  overflow-y: scroll;
+  height: 518px;
+  overflow-y: auto;
 `;
 
 const DailyStatistics = () => {
