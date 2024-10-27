@@ -5,6 +5,7 @@ import {
   Route,
   useLocation,
 } from "react-router-dom";
+import styled from "styled-components";
 
 import { SubHeader } from "./common/SubHeader";
 import { MainHeader } from "./common/MainHeader";
@@ -20,9 +21,16 @@ import { MyPage } from "./pages/mypage/MyPage";
 import { FindPassword } from "./pages/auth/FindPassword";
 import { Intro } from "./pages/intro/Intro";
 import { CardChallege } from "./pages/cardChallege/CardChallege";
-import { CardAnalysis } from "./pages/cardAnalysis/CardAnalysis";
+import CardAnalysis from "./pages/cardAnalysis/CardAnalysis";
 import { Community } from "./pages/community/Community";
 import { MyCard } from "./pages/mycard/MyCard";
+
+const Root = styled.div`
+  & *,
+  p {
+    font-family: "Noto Sans KR";
+  }
+`;
 
 /**
  * hideHeaderFooter: 특정 경로에서만 헤더나 푸터를 숨기기위함
@@ -32,12 +40,12 @@ function Layout({ children }) {
   const hideHeaderFooter = ["/login", "/signup"].includes(location.pathname);
 
   return (
-    <>
+    <Root>
       {!hideHeaderFooter && <SubHeader />}
       {!hideHeaderFooter && <MainHeader />}
       {children}
       {!hideHeaderFooter && <Footer />}
-    </>
+    </Root>
   );
 }
 
