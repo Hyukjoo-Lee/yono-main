@@ -52,13 +52,20 @@ npm start
 
 ### 3. 작업 전후 코드 업데이트
 
-- **작업 시작 전**: Main 브랜치에서 최신 코드를 `pull`하여 최신 상태를 유지합니다.
+- **작업 시작 전**: Main 브랜치에서 최신 코드를 `pull` 하여 로컬 브랜치의 main 브랜치에도 최신 상태를 유지합니다.
 
   ```bash
   git checkout main
   git pull origin main
   ```
 
+- **최신 Main 브랜치 코드와 작업 브랜치 병합**: Main 브랜치에서의 변경 사항을 작업 중인 브랜치에 병합합니다.
+  
+   ```bash
+   git checkout [작업 브랜치 이름]  # 작업 브랜치로 이동
+   git merge main                  # main 브랜치의 변경 사항 병합
+   ```
+---
 - **작업 완료 후**: Push 전에도 Main 브랜치에서 다시 한 번 코드를 `pull`하여 충돌을 방지합니다.
 
   ```bash

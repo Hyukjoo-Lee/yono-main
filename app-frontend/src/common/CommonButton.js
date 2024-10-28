@@ -11,6 +11,11 @@ const ButtonStyle = styled.button`
   border-radius: ${(props) =>
     props.borderRadius ? props.borderRadius : "50px"};
   cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0 10px;
+  box-sizing: border-box;
   &:hover {
     background: ${(props) =>
       props.hoverBk ? props.hoverBk : props.theme.color.blue};
@@ -27,6 +32,7 @@ const TextStyle = styled.p`
   color: ${(props) => (props.color ? props.color : props.theme.color.white)};
   margin: 0px;
   line-height: 22px;
+  padding: 0 8px;
 `;
 
 const CustomButton = (props) => {
@@ -43,6 +49,8 @@ const CustomButton = (props) => {
     onClick,
     hoverBk,
     hoverColor,
+    startIcon,
+    endIcon,
   } = props;
 
   return (
@@ -57,9 +65,11 @@ const CustomButton = (props) => {
       onClick={disabled ? undefined : onClick}
       disabled={disabled}
     >
+      {startIcon && startIcon}
       <TextStyle color={color} fontSize={fontSize}>
         {text}
       </TextStyle>
+      {endIcon && endIcon}
     </ButtonStyle>
   );
 };
