@@ -2,15 +2,14 @@ import React from "react";
 import styled from "styled-components";
 
 const SelectStyle = styled.select`
-  width: ${(props) => (props.width ? props.width : "200px")};
-  height: ${(props) => (props.height ? props.height : "40px")};
+  width: ${(props) => (props.width ? props.width : "211px")};
+  height: ${(props) => (props.height ? props.height : "38px")};
   background-color: ${(props) =>
-    props.background ? props.background : props.theme.color.white};
-  color: ${(props) => (props.color ? props.color : props.theme.color.black)};
+    props.background ? props.background : "#FFFFFF"};
   border: ${(props) =>
-    props.borderColor ? `1px solid ${props.borderColor}` : "1px solid #ccc"};
+    props.borderColor ? `1px solid ${props.borderColor}` : "1px solid #D7D7D7"};
   border-radius: ${(props) =>
-    props.borderRadius ? props.borderRadius : "4px"};
+    props.borderRadius ? props.borderRadius : "5px"};
   font-size: ${(props) =>
     props.fontSize ? props.fontSize : props.theme.fontSize.md};
   cursor: pointer;
@@ -18,7 +17,7 @@ const SelectStyle = styled.select`
     background-color: ${(props) =>
       props.hoverBk ? props.hoverBk : props.theme.color.lightGrey};
     color: ${(props) =>
-      props.hoverColor ? props.hoverColor : props.theme.color.black};
+      props.hoverColor ? props.hoverColor : "#757575"};
   }
   &:disabled {
     background-color: #f2f2f2;
