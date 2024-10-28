@@ -2,14 +2,16 @@ import React from "react";
 import styled from "styled-components";
 import DailyStatistics from "./dailyStatistics/DailyStatistics";
 
-const Root = styled.div`
+// Root, TitleStyle, TestStyle 공통된 부문 많아보임 - 나중에 Common 컴포넌트로 나누기
+export const Root = styled.div`
   width: 1154px;
   margin: 0 auto;
   box-sizing: border-box;
-  padding-top: 30px;
+  padding-top: 45px;
   padding-bottom: 180px;
 `;
-const TitleStyle = styled.p`
+
+export const TitleStyle = styled.p`
   margin: 0px;
   font-size: 32px;
   color: #212121;
@@ -17,7 +19,7 @@ const TitleStyle = styled.p`
   font-weight: bold;
 `;
 
-const TextStyle = styled.p`
+export const TextStyle = styled.p`
   margin: 8px 0px 20px;
   font-size: 16px;
   color: #757575;
