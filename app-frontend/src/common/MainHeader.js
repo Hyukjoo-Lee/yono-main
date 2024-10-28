@@ -1,41 +1,59 @@
 import { Link } from "react-router-dom";
 import styled from "styled-components";
+import { ReactComponent as Logo } from "../assets/images/MickleMuckleLogo.svg";
 
 const Nav = styled.nav`
-  background-color: #f8f9fa;
-  margin-top: 10px;
-  padding: 10px 20px;
+  padding: 8px 16px;
   display: flex;
-  justify-content: space-around;
+  justify-content: space-between;
   align-items: center;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+`;
+
+const MenuBox = styled.div`
+  display: flex;
+  align-items: center;
 `;
 
 const StyledLink = styled(Link)`
-  color: #007bff;
+  color: #000;
   text-decoration: none;
   font-size: 16px;
   font-weight: bold;
-  padding: 8px 16px;
+  padding: 0 16px;
 
   &:hover {
-    background-color: #e9ecef;
+    background-color: transparent;
     color: #0056b3;
   }
 
   &:active {
-    background-color: #dee2e6;
+    background-color: transparent;
+  }
+
+  &:last-child {
+    padding-right: 0px;
   }
 `;
 
 export function MainHeader() {
+  const menuList = [
+    { label: "미클머클", path: "/intro" },
+    { label: "카드챌린지", path: "/card-challege" },
+    { label: "소비패턴분석", path: "/card-analysis" },
+    { label: "커뮤니티", path: "/community" },
+    { label: "마이카드", path: "/mycard" },
+  ];
+
   return (
     <Nav>
-      <StyledLink to="/intro">미클머클</StyledLink>
-      <StyledLink to="/card-challege">카드챌린지</StyledLink>
-      <StyledLink to="/card-analysis">소비패턴분석</StyledLink>
-      <StyledLink to="/community">커뮤니티</StyledLink>
-      <StyledLink to="/mycard">마이카드</StyledLink>
+      <Logo />
+      <MenuBox>
+        {menuList.map((item, index) => (
+          <StyledLink to={item.path} key={index}>
+            {item.label}
+          </StyledLink>
+        ))}
+      </MenuBox>
     </Nav>
   );
 }

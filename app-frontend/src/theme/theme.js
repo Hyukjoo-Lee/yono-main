@@ -12,6 +12,7 @@ const color = {
   black: "#000000",
   gray: "#656565",
   lightGray: "#DEDEDE",
+  lightBlue: "#E7ECFC"
 };
 
 const theme = {

@@ -2,40 +2,53 @@ import { Link } from "react-router-dom";
 import styled from "styled-components";
 
 const Nav = styled.nav`
-  background-color: #f8f9fa;
-  padding: 10px 20px;
+  padding: 10px 16px;
   display: flex;
-  justify-content: space-around;
+  justify-content: flex-end;
   align-items: center;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 `;
 
 const StyledLink = styled(Link)`
-  color: #007bff;
+  color: #464646;
   text-decoration: none;
-  font-size: 16px;
-  font-weight: bold;
-  padding: 8px 16px;
-  border-radius: 5px;
+  font-size: 12px;
+  font-weight: regular;
+  padding: 0;
+  display: flex;
+  align-items: center;
 
   &:hover {
-    background-color: #e9ecef;
+    background-color: transparent;
     color: #0056b3;
   }
 
   &:active {
-    background-color: #dee2e6;
+    background-color: transparent;
   }
+`;
+const LineStyle = styled.p`
+  margin: 0px 8px;
+  font-size: 12px;
+  color: #464646;
 `;
 
 export function SubHeader() {
+  const list = [
+    { label: "로그인", path: "/login" },
+    { label: "회원가입", path: "/signup" },
+    { label: "마이페이지", path: "/mypage" },
+    { label: "아이디찾기", path: "/find-id" },
+    { label: "비밀번호찾기", path: "/find-pwd" },
+  ];
+
   return (
     <Nav>
-      <StyledLink to="/login">로그인</StyledLink>
-      <StyledLink to="/signup">회원가입</StyledLink>
-      <StyledLink to="/mypage">마이페이지</StyledLink>
-      <StyledLink to="/find-id">아이디찾기</StyledLink>
-      <StyledLink to="/find-pwd">비밀번호찾기</StyledLink>
+      {list.map((item, index) => (
+        <StyledLink to={item.path} key={index}>
+          {item.label}
+          {index !== list.length - 1 && <LineStyle>|</LineStyle>}
+        </StyledLink>
+      ))}
     </Nav>
   );
 }
