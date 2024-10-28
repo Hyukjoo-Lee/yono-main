@@ -1,6 +1,7 @@
 import styled from "styled-components";
 import CommonCardListBox from "../../common/CommonCardListBox";
 import CardImage from "../../assets/images/CardImage.png";
+import CardRegFormBox from "./CardRegFormBox";
 
 const Root = styled.div`
   width: 100%;
@@ -9,14 +10,6 @@ const Root = styled.div`
   box-sizing: border-box;
   gap: 25px;
 `;
-
-const FormBox = styled.div`
-  width: 50%;
-  border-radius: 5px;
-  height: 518px;
-  overflow-y: auto;
-  background-color: ${(props) => props.theme.color.lightBlue};
-`
 
 const ListBox = styled.div`
   width: 50%;
@@ -66,8 +59,8 @@ const CardRegTab = () => {
 
   return(
     <Root>
-      <FormBox>
-      </FormBox>
+      <CardRegFormBox>
+      </CardRegFormBox>
       <ListBox>
         {cardList.map((item, index) => (
           <CommonCardListBox
