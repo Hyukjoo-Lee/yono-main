@@ -1,8 +1,32 @@
 import React, { useState } from "react";
-import { Root, TextStyle, TitleStyle } from "../cardAnalysis/CardAnalysis";
 import CommonTabs from "../../common/CommonTabs";
 import CardRegTab from "./CardRegTab";
 import CardRecTab from "./CardRecTab";
+import styled from "styled-components";
+
+const Root = styled.div`
+  width: 1154px;
+  margin: 0 auto;
+  box-sizing: border-box;
+  padding-top: 45px;
+  padding-bottom: 180px;
+`;
+
+const TitleStyle = styled.p`
+  margin: 0px;
+  font-size: 32px;
+  color: #212121;
+  text-align: center;
+  font-weight: bold;
+`;
+
+const TextStyle = styled.p`
+  margin: 8px 0px 20px;
+  font-size: 16px;
+  color: #757575;
+  line-height: 24px;
+  text-align: center;
+`;
 
 export function MyCard() {
   const [selectedTab, setSelectedTab] = useState(0);

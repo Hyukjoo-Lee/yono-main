@@ -8,6 +8,7 @@ const StyledTabs = styled(Tabs)`
   }
 `;
 
+
 const CommonTabs = ({ labels, onTabChange, value }) => {
   const handleChange = (event, newValue) => {
     onTabChange(newValue);
