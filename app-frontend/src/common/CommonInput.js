@@ -11,6 +11,10 @@ const InputStyle = styled.input`
     props.borderRadius ? props.borderRadius : "5px"};
   cursor: pointer;
   padding: 0 10px;
+  &::placeholder {
+    font-size: ${(props) => (props.placeholderFontSize ? props.placeholderFontSize : "16px")};
+    color: #b0b0b0;
+  }
   &:hover {
     & p {
       color: ${(props) =>
@@ -29,6 +33,7 @@ const TextStyle = styled.p`
 const CommonInput = (props) => {
   const {
     placeholder,
+    placeholderFontSize,
     text,
     type = "text",
     width,
@@ -51,6 +56,7 @@ const CommonInput = (props) => {
 
       <InputStyle
         placeholder={placeholder}
+        placeholderFontSize={placeholderFontSize}
         type={type}
         width={width}
         height={height}

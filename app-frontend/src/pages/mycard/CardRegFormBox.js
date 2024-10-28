@@ -1,15 +1,15 @@
 import styled from "styled-components";
 import CommonInput from "../../common/CommonInput";
 import { Box, Grid2 } from "@mui/material";
+import CardSlider from "./CardSlider";
 
 const FormBox = styled.form`
   width: 50%;
   border-radius: 5px;
   height: 518px;
   overflow-y: auto;
-  background-color: ${(props) => props.background ||  "#EFF3FD"};
+  background-color: ${(props) => props.background || "#EFF3FD"};
   padding: 40px;
-  /* text-align: center; */
 `;
 
 const CardRegFormBox = () => {
@@ -19,7 +19,7 @@ const CardRegFormBox = () => {
   return (
     <FormBox onSubmit={handleSubmit}>
       <Box width={"100%"}>
-        <Grid2 container rowSpacing={1.2} columnSpacing={4}>
+        <Grid2 container rowSpacing={1} columnSpacing={4}>
           <Grid2 size={24}>
             <CommonInput
               text="카드번호"
@@ -41,6 +41,9 @@ const CardRegFormBox = () => {
           </Grid2>
           <Grid2 size={6}>
             <CommonInput text="카드선택" placeholder="카드를 선택하세요" />
+          </Grid2>
+          <Grid2 size={12}>
+            <CardSlider />
           </Grid2>
         </Grid2>
       </Box>

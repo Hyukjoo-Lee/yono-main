@@ -5,6 +5,7 @@ import CardRegFormBox from "./CardRegFormBox";
 
 const Root = styled.div`
   width: 100%;
+  height: 780px;
   display: flex;
   justify-content: space-between;
   box-sizing: border-box;
@@ -13,7 +14,7 @@ const Root = styled.div`
 
 const ListBox = styled.div`
   width: 50%;
-  height: 518px;
+  height: 598px;
   overflow-y: auto;
 `;
 
@@ -59,8 +60,7 @@ const CardRegTab = () => {
 
   return(
     <Root>
-      <CardRegFormBox>
-      </CardRegFormBox>
+      <CardRegFormBox/>
       <ListBox>
         {cardList.map((item, index) => (
           <CommonCardListBox
