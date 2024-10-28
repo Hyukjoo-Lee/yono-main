@@ -7,12 +7,12 @@ const Root = styled.div`
   align-items: center;
   justify-content: space-between;
   box-sizing: border-box;
-  border: 1px solid #d4d5d6;
+  // border: 1px solid #d4d5d6;
   & > div {
     padding: 5px 10px;
     width: calc(100% / 7);
     text-align: center;
-    border-right: 1px solid #d4d5d6;
+    // border-right: 1px solid #d4d5d6;
     &:last-child {
       border-right: 0px;
     }

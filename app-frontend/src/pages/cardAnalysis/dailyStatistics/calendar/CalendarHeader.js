@@ -9,7 +9,7 @@ const Root = styled.div`
   display: flex;
   align-items: center;
   justify-content: space-between;
-  padding: 5px 10px;
+  padding: 20px 10px;
   box-sizing: border-box;
 `;
 
@@ -27,11 +27,18 @@ const IconButton = styled.button`
   border-radius: 50%;
   background: ${(props) => props.theme.color.white};
   cursor: pointer;
+  & svg {
+    width: 35px;
+    height: 35px;
+  }
 `;
 
 const TextStyle = styled.p`
-  font-size: ${(props) => props.theme.fontSize.md};
-  color: ${(props) => props.theme.color.black};
+  // font-size: ${(props) => props.theme.fontSize.md};
+  font-size: 1.5rem;
+  // color: ${(props) => props.theme.color.black};
+  color: #212121;
+  font-weight: bold;
   margin: 0px;
 `;
 
