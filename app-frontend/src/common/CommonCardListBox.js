@@ -19,7 +19,7 @@ const CardName = styled.p`
   font-size: 20px;
   color: #212121;
   font-weight: bold;
-  margin-bottom: 8px;
+  margin-bottom: 0 0 8px 0;
 `;
 
 const InfoRow = styled.div`
@@ -42,20 +42,76 @@ const TextStyle = styled(TitleStyle)`
   color: #333333;
 `;
 
-const CommonCardListBox = ({ cardTitle, cardImg, cardInfo }) => {
+const CardImage = styled.img`
+  width: 100px;
+  height: auto;
+`;
+
+const CardInfoContainer = styled.div`
+  display: flex;
+  flex-direction: column;
+`;
+
+const CardNumber = styled.p`
+  font-size: 16px;
+  color: ${(props) => props.theme.color.black};
+  margin: 0 0 5px 0;
+`;
+
+const AdditionalInfo = styled.div`
+  font-size: 14px;
+  color: #000000;
+  text-align: right;
+  margin-left: 5px;
+`;
+
+const CommonCardListBox = ({
+  cardTitle,
+  cardImg,
+  cardInfo,
+  data,
+  showDetailed,
+}) => {
   return (
-    <BoxStyle>
-      <img src={cardImg} alt="카드이미지" />
-      <div>
-        <CardName>{cardTitle}</CardName>
-        {cardInfo.map((item, index) => (
-          <InfoRow key={index}>
-            <TitleStyle>{item.label}</TitleStyle>
-            <TextStyle>{item.value}</TextStyle>
-          </InfoRow>
-        ))}
-      </div>
-    </BoxStyle>
+    <>
+      {showDetailed ? (
+        <>
+          {data &&
+            data.map((card, index) => (
+              <BoxStyle key={index}>
+                <CardImage src={card.cardImg} alt="카드 이미지" />
+                <CardInfoContainer>
+                  <CardName>{card.cardTitle}</CardName>
+                  <CardNumber>{card.cardNumber}</CardNumber>
+                  {card.cardInfo.map((item, itemIndex) => (
+                    <InfoRow key={itemIndex}>
+                      <TitleStyle style={{ color: "#000000" }}>
+                        {item.label}
+                      </TitleStyle>
+                      <AdditionalInfo>
+                        {item.value} ({item.additional})
+                      </AdditionalInfo>
+                    </InfoRow>
+                  ))}
+                </CardInfoContainer>
+              </BoxStyle>
+            ))}
+        </>
+      ) : (
+        <BoxStyle>
+          <img src={cardImg} alt="카드이미지" />
+          <div>
+            <CardName>{cardTitle}</CardName>
+            {cardInfo.map((item, index) => (
+              <InfoRow key={index}>
+                <TitleStyle>{item.label}</TitleStyle>
+                <TextStyle>{item.value}</TextStyle>
+              </InfoRow>
+            ))}
+          </div>
+        </BoxStyle>
+      )}
+    </>
   );
 };
 export default CommonCardListBox;
