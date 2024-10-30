@@ -5,10 +5,10 @@ import CardRecTab from "./CardRecTab";
 import styled from "styled-components";
 
 const Root = styled.div`
-  width: 1104px;
+  width: 1101px;
   margin: 0 auto;
   box-sizing: border-box;
-  padding-top: 45px;
+  padding-top: 24px;
 `;
 
 const TitleStyle = styled.p`

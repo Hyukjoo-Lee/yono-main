@@ -2,7 +2,7 @@ import React from "react";
 import styled from "styled-components";
 
 const InputStyle = styled.input`
-  width: ${(props) => (props.width ? props.width : "211px")};
+  width: ${(props) => (props.width ? props.width : "191px")}; // placeholder text padding 양쪽 20px
   height: ${(props) => (props.height ? props.height : "38px")};
   background-color: ${(props) =>
     props.background ? props.background : "#F8F9FE"};
@@ -28,6 +28,7 @@ const TextStyle = styled.p`
     props.fontSize ? props.fontSize : "16px"};
   color: ${(props) => (props.color ? props.color : props.theme.color.white)};
   margin-bottom: 6px;
+  margin-top: 0px;
 `;
 
 const CommonInput = (props) => {
