@@ -7,7 +7,6 @@ import {
 } from "react-router-dom";
 import styled from "styled-components";
 
-import { SubHeader } from "./common/SubHeader";
 import { MainHeader } from "./common/MainHeader";
 import Footer from "./common/Footer";
 
@@ -32,27 +31,16 @@ const Root = styled.div`
   }
 `;
 
-/**
- * hideHeaderFooter: 특정 경로에서만 헤더나 푸터를 숨기기위함
- */
 function Layout({ children }) {
-  const location = useLocation();
-  const hideHeaderFooter = ["/login", "/signup"].includes(location.pathname);
-
   return (
     <Root>
-      {/* {!hideHeaderFooter && <SubHeader />} */}
-      {!hideHeaderFooter && <MainHeader />}
+      <MainHeader />
       {children}
-      {!hideHeaderFooter && <Footer />}
+      <Footer />
     </Root>
   );
 }
 
-/**
- * 메인 페이지 헤더1 - 로그인, 회원가입, 마이페이지, 아이디찾기, 비번찾기
- * 메인 페이지 헤더2 - 미클머클소개, 카드챌린지, 소비패턴분석, 커뮤니티, 마이카드
- */
 function App() {
   return (
     <ThemeProvider theme={theme}>

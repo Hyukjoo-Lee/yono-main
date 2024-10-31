@@ -68,7 +68,6 @@ const DailyStatistics = () => {
       ],
     },
   ];
-
   return (
     <Root>
       <CalendarBox>
@@ -81,6 +80,7 @@ const DailyStatistics = () => {
             cardTitle={item.title}
             cardImg={item.cardImage}
             cardInfo={item.info}
+            showDetailed={false}
           />
         ))}
       </ListBox>

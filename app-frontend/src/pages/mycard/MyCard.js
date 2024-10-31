@@ -5,11 +5,11 @@ import CardRecTab from "./CardRecTab";
 import styled from "styled-components";
 
 const Root = styled.div`
-  width: 1154px;
+  width: 1101px;
   margin: 0 auto;
   box-sizing: border-box;
-  padding-top: 45px;
-  padding-bottom: 180px;
+  padding-top: ${(props) => props.theme.headerHeight};
+  padding-bottom: ${(props) => props.theme.contentsPaddingBottom};
 `;
 
 const TitleStyle = styled.p`

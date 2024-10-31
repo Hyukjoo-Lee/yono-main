@@ -1,85 +1,95 @@
 import styled from "styled-components";
-import CommonCardListBox from "../../common/CommonCardListBox";
 import CardImage from "../../assets/images/CardImage.png";
+import CardRegFormBox from "./CardRegFormBox";
+import CommonCardListBox from "../../common/CommonCardListBox";
 
 const Root = styled.div`
   width: 100%;
+  height: 700px;
   display: flex;
   justify-content: space-between;
   box-sizing: border-box;
   gap: 25px;
 `;
 
-const FormBox = styled.div`
-  width: 50%;
-  border-radius: 5px;
-  height: 518px;
-  overflow-y: auto;
-  background-color: ${(props) => props.theme.color.lightBlue};
-`
-
 const ListBox = styled.div`
-  width: 50%;
-  height: 518px;
+  width: 100%;
+  height: 567px;
   overflow-y: auto;
 `;
 
 const CardRegTab = () => {
-  const cardList = [
+  const cardData = [
     {
-      title: "현대카드(신용)",
-      cardImage: CardImage,
-      info: [
-        { label: "날짜", value: "2024.10.20" },
-        { label: "사용처", value: "88맥주집" },
-        { label: "카테고리", value: "식당" },
+      cardTitle: "현대카드(신용)",
+      cardImg: CardImage,
+      cardNumber: "0000 0000 0000 0000",
+      cardInfo: [
+        { label: "스타벅스 할인", value: "50%", additional: "월 1회" },
+        { label: "대중교통 할인", value: "20%", additional: "청구할인" },
+        { label: "영화 쿠폰 제공", value: "무료", additional: "연 12회" },
       ],
     },
     {
-      title: "신한카드(체크)",
-      cardImage: CardImage,
-      info: [
-        { label: "날짜", value: "2024.10.20" },
-        { label: "사용처", value: "삼겹살" },
-        { label: "카테고리", value: "식당" },
+      cardTitle: "신한카드(신용)",
+      cardImg: CardImage,
+      cardNumber: "0000 0000 0000 0000",
+      cardInfo: [
+        { label: "스타벅스 할인", value: "20%", additional: "월 2회" },
+        { label: "대중교통 할인", value: "10%", additional: "청구할인" },
+        { label: "영화 쿠폰 제공", value: "무료", additional: "연 12회" },
       ],
     },
     {
-      title: "국민카드(신용)",
-      cardImage: CardImage,
-      info: [
-        { label: "날짜", value: "2024.10.20" },
-        { label: "사용처", value: "kg중국집" },
-        { label: "카테고리", value: "식당" },
+      cardTitle: "농협카드(신용)",
+      cardImg: CardImage,
+      cardNumber: "0000 0000 0000 0000",
+      cardInfo: [
+        { label: "스타벅스 할인", value: "50%", additional: "월 1회" },
+        { label: "대중교통 할인", value: "20%", additional: "청구할인" },
+        { label: "영화 쿠폰 제공", value: "무료", additional: "연 12회" },
       ],
     },
     {
-      title: "현대카드(신용)",
-      cardImage: CardImage,
-      info: [
-        { label: "날짜", value: "2024.10.20" },
-        { label: "사용처", value: "kg쌀국수" },
-        { label: "카테고리", value: "식당" },
+      cardTitle: "현대카드(체크)",
+      cardImg: CardImage,
+      cardNumber: "0000 0000 0000 0000",
+      cardInfo: [
+        { label: "스타벅스 할인", value: "50%", additional: "월 1회" },
+        { label: "대중교통 할인", value: "20%", additional: "청구할인" },
+        { label: "영화 쿠폰 제공", value: "무료", additional: "연 12회" },
+      ],
+    },
+    {
+      cardTitle: "하나카드(신용)",
+      cardImg: CardImage,
+      cardNumber: "0000 0000 0000 0000",
+      cardInfo: [
+        { label: "스타벅스 할인", value: "50%", additional: "월 1회" },
+        { label: "대중교통 할인", value: "20%", additional: "청구할인" },
+        { label: "영화 쿠폰 제공", value: "무료", additional: "연 8회" },
+      ],
+    },
+    {
+      cardTitle: "현대카드(신용)",
+      cardImg: CardImage,
+      cardNumber: "0000 0000 0000 0000",
+      cardInfo: [
+        { label: "스타벅스 할인", value: "50%", additional: "월 1회" },
+        { label: "대중교통 할인", value: "20%", additional: "청구할인" },
+        { label: "영화 쿠폰 제공", value: "무료", additional: "연 12회" },
       ],
     },
   ];
 
-  return(
+  return (
     <Root>
-      <FormBox>
-      </FormBox>
+        <CardRegFormBox />
       <ListBox>
-        {cardList.map((item, index) => (
-          <CommonCardListBox
-            key={index}
-            cardTitle={item.title}
-            cardImg={item.cardImage}
-            cardInfo={item.info}
-          />
-        ))}
+        <CommonCardListBox data={cardData} showDetailed={true} />
       </ListBox>
     </Root>
-  )
+  );
 };
 
 export default CardRegTab;
