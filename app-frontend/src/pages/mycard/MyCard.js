@@ -4,16 +4,7 @@ import CardRegTab from "./CardRegTab";
 import CardRecTab from "./CardRecTab";
 import styled from "styled-components";
 import CommonPageInfo from "../../common/CommonPageInfo";
-
-const Root = styled.div`
-  width: 100%;
-  box-sizing: border-box;
-  padding-top: ${(props) => props.theme.headerHeight};
-  padding-bottom: ${(props) => props.theme.contentsPaddingBottom};
-  display: flex;
-  justify-content: center;
-
-`;
+import CommonRoot from "../../common/CommonRoot";
 
 const RootIn = styled.div`
   width: ${(props) => props.theme.display.lg};
@@ -24,6 +15,7 @@ const RootIn = styled.div`
 export function MyCard() {
   const [selectedTab, setSelectedTab] = useState(0);
   const items = [{text: "카드 등록"}, {text: "카드 추천"}]
+
   /**
    * 띄울 탭 페이지
    */
@@ -33,14 +25,13 @@ export function MyCard() {
   ];
 
   return (
-    <Root>
+    <CommonRoot>
       <RootIn>
         <CommonTabs
           items={items}
           value={selectedTab}
           selectedTab={setSelectedTab}
         />
-        
         <CommonPageInfo
           title="나의 카드 등록"
           text={
@@ -52,6 +43,6 @@ export function MyCard() {
         />
         {panels[selectedTab]}
       </RootIn>
-    </Root>
+    </CommonRoot>
   );
 }

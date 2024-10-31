@@ -5,7 +5,6 @@ import CommonCardListBox from "../../common/CommonCardListBox";
 
 const Root = styled.div`
   width: 100%;
-  height: 700px;
   display: flex;
   justify-content: space-between;
   box-sizing: border-box;

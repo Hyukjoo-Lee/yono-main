@@ -1,14 +1,7 @@
-import styled from "styled-components";
-
-const Root = styled.div`
-  width: 100%;
-  display: flex;
-  justify-content: space-between;
-  box-sizing: border-box;
-`;
+import CommonRoot from "../../common/CommonRoot";
 
 const CardRecTab = () => {
-  return <Root></Root>;
+  return <CommonRoot></CommonRoot>;
 };
 
 export default CardRecTab;

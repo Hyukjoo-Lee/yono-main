@@ -7,7 +7,6 @@ import CardSlider from "./CardSlider";
 const FormBox = styled.form`
   width: 100%;
   border-radius: 5px;
-  height: 567px;
   overflow-y: auto;
   background-color: ${(props) => props.background || "#EFF3FD"};
 `;
@@ -18,14 +17,14 @@ const CardRegFormBox = () => {
   };
   return (
     <FormBox onSubmit={handleSubmit}>
-      <Box style={{padding: "50px"}}>
-        <Grid2 container rowSpacing={1} columnSpacing={4}>
+      <Box style={{padding: "55px"}}>
+        <Grid2 container rowSpacing={1} columnSpacing={2}>
           <Grid2 size={24}>
             <CommonInput
               margin="0px"
               text="카드번호"
               placeholder="카드번호를 입력하세요 (-제외)"
-              width="418px"
+              width={"457px"}
             />
           </Grid2>
           <Grid2 size={6}>
@@ -49,6 +48,7 @@ const CardRegFormBox = () => {
               ]}
               text="카드선택"
               margin="0px 0px 0px 0px"
+              padding="10px"
               labelColor={"#4a4a4a"}
                />
           </Grid2>

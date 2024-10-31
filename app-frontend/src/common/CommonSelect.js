@@ -38,6 +38,7 @@ const CommonSelect = ({
   height,
   options = [],
   width,
+  padding,
   background,
   color,
   labelColor,
@@ -74,6 +75,7 @@ const CommonSelect = ({
           onChange={handleChange}
           width={width}
           height={height}
+          padding={padding}
           background={background}
           fontSize={fontSize}
           fieldBorderColor={fieldBorderColor}

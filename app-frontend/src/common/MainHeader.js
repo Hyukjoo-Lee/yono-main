@@ -48,6 +48,11 @@ const LineStyle = styled.p`
   color: ${(props) => props.theme.color.gray};
 `;
 
+const LogoLink = styled(Link)`
+  display: flex;
+  align-items: center;
+`;
+
 const MenuList = styled.div`
   display: flex;
   justify-content: space-between;
@@ -111,7 +116,9 @@ export function MainHeader() {
         </TopListBox>
 
         <MenuList>
-          <Logo />
+          <LogoLink to="/">
+            <Logo />
+          </LogoLink>
           <MenuBox>
             {menuList.map((item, index) => (
               <MenuStyledLink to={item.path} key={index}>
