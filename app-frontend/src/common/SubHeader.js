@@ -2,10 +2,14 @@ import { Link } from "react-router-dom";
 import styled from "styled-components";
 
 const Nav = styled.nav`
+  position: fixed;
+  width: 100%;
+  background: ${(props) => props.theme.color.white};
   padding: 10px 16px;
   display: flex;
   justify-content: flex-end;
   align-items: center;
+  box-sizing: borer-box;
 `;
 
 const StyledLink = styled(Link)`
@@ -40,7 +44,6 @@ export function SubHeader() {
     { label: "아이디찾기", path: "/find-id" },
     { label: "비밀번호찾기", path: "/find-pwd" },
   ];
-
   return (
     <Nav>
       {list.map((item, index) => (

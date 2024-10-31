@@ -11,13 +11,22 @@ const Root = styled.div`
   box-sizing: border-box;
 `;
 const CalendarBox = styled.div`
-  width: 625px;
+  width: 740px;
 `;
 
 const ListBox = styled.div`
-  width: 423px;
-  height: 518px;
+  width: 430px;
+  height: 530px;
   overflow-y: auto;
+  &::-webkit-scrollbar {
+    width: 0;
+  }
+  &::-webkit-scrollbar-thumb {
+    background: transparent;
+  }
+  &::-webkit-scrollbar-track {
+    background: transparent;
+  }
 `;
 
 const DailyStatistics = () => {
