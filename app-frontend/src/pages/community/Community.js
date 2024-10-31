@@ -5,13 +5,23 @@ import TableBody from '@mui/material/TableBody';
 import TableCell from '@mui/material/TableCell';
 import TableRow from '@mui/material/TableRow';
 import { TableContainer, TableHead } from "@material-ui/core";
-import CustomButton from "../../common/CommonButton";
-import CustomInput from "../../common/CustomInput";
+import CommonButton from "../../common/CommonButton";
+import CommonInput from "../../common/CommonInput";
 import styled from "styled-components";
+import Pagination from '@mui/material/Pagination';
+
+
+const Root = styled.div`
+  width: ${(props) => props.theme.display.lg};
+  margin: 0 auto;
+  box-sizing: border-box;
+  padding-top: ${(props) => props.theme.headerHeight};
+  padding-bottom: ${(props) => props.theme.contentsPaddingBottom};
+`;
 
 const columns = [
   { id: 'Category', label: '카테고리 ', minWidth: 100 },
-  { id: 'title', label: '제목 ', minWidth: 150, align: 'center'},
+  { id: 'title', label: '제목 ', minWidth: 150, align: 'center' },
   { id: 'day', label: '등록일', minWidth: 100 }
 ];
 function createData(Category, title, day) {
@@ -33,14 +43,28 @@ const rows = [
   createData('공지사항', '자유게시판 서비스 중단 소식을 알려드립니다', '2024-10-28'),
   createData('공지사항', '자유게시판 서비스 중단 소식을 알려드립니다', '2024-10-28'),
   createData('공지사항', '자유게시판 서비스 중단 소식을 알려드립니다', '2024-10-28'),
+  createData('공지사항', '자유게시판 서비스 중단 소식을 알려드립니다', '2024-10-28'),
+  createData('공지사항', '자유게시판 서비스 중단 소식을 알려드립니다', '2024-10-28'),
+  createData('공지사항', '자유게시판 서비스 중단 소식을 알려드립니다', '2024-10-28'),
+  createData('공지사항', '자유게시판 서비스 중단 소식을 알려드립니다', '2024-10-28'),
+  createData('공지사항', '자유게시판 서비스 중단 소식을 알려드립니다', '2024-10-28'),
+  createData('공지사항', '자유게시판 서비스 중단 소식을 알려드립니다', '2024-10-28'),
+  createData('공지사항', '자유게시판 서비스 중단 소식을 알려드립니다', '2024-10-28'),
+  createData('공지사항', '자유게시판 서비스 중단 소식을 알려드립니다', '2024-10-28'),
+  createData('공지사항', '자유게시판 서비스 중단 소식을 알려드립니다', '2024-10-28'),
+  createData('공지사항', '자유게시판 서비스 중단 소식을 알려드립니다', '2024-10-28'),
+  createData('공지사항', '자유게시판 서비스 중단 소식을 알려드립니다', '2024-10-28'),
+  createData('공지사항', '자유게시판 서비스 중단 소식을 알려드립니다', '2024-10-28'),
 
 ];
 
 const Box = styled.div`
   display: flex;
   justify-content: flex-end;
-  margin-right:250px;
+  margin-bottom:30px;
+  margin-right:50px;
   & button {
+  margin-top:5px;
   margin-left: 20px;
   }
 `;
@@ -52,26 +76,28 @@ const TableContainerStyle = styled(TableContainer)`
   overflow-y: auto;
 `;
 
+const PaginationStyle = styled(Pagination)`
+  color:"white";
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-top: 16px;
+`;
+
 export function Community() {
   const [page, setPage] = React.useState(0);
-  const [rowsPerPage, setRowsPage] = React.useState(10);
+  const rowsPerPage = 10;
 
   const handleChangePage = (event, newPage) => {
-    setPage(newPage);
+    setPage(newPage - 1);
   };
-
-  const handleChangeRowsPerPage = (event) => {
-    setRowsPage(+event.target.value);
-    setPage(0);
-  };
-
   return (
     <>
-      <Box>
-        <CustomInput width="228px" height="39px" placeholder="검색어를 입력하세요" />
-        <CustomButton width="74px" height="39px" background-color="#3563E9" color="white" text="검색" borderRadius="5px" />
-      </Box>
-      <div style={{ display: 'flex', justifyContent: 'center', marginTop: "50px" }}>
+      <Root>
+        <Box>
+          <CommonInput width="228px" height="39px" placeholder="검색어를 입력하세요" />
+          <CommonButton width="74px" height="39px" background-color="#3563E9" color="white" text="검색" borderRadius="5px" />
+        </Box>
         <Paper sx={{ width: "1154px", overflow: 'hidden', }}>
           <TableContainerStyle sx={{ maxHeight: 440 }}>
             <Table stickyHeader aria-label="sticky table">
@@ -108,8 +134,15 @@ export function Community() {
               </TableBody>
             </Table>
           </TableContainerStyle>
+
+          <PaginationStyle
+            count={Math.ceil(rows.length / rowsPerPage)}
+            page={page + 1}
+            onChange={handleChangePage}
+          />
+
         </Paper>
-      </div>
+      </Root>
     </>
   );
 }
