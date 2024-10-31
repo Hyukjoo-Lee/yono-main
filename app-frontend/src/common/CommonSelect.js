@@ -104,29 +104,3 @@ const CommonSelect = ({
 };
 
 export default CommonSelect;
-
-
-/*
-사용 예시)
-
-const options = [
-  { value: "option1", label: "Option 1" },
-  { value: "option2", label: "Option 2" },
-  { value: "option3", label: "Option 3" },
-];
-
-const handleSelect = (selectedValue) => {
-  alert(`Selected value: ${selectedValue}`);
-};
-
-
-
-return 사용 예시)
-<CommonSelect
-  // options, onSelect 는 필수
-  options={options}
-  onSelect={handleSelect}
-
-  // 외에 다른 props 는 설정하지 않을시 default
-/>
-*/

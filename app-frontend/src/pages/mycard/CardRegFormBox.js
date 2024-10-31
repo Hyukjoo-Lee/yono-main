@@ -41,16 +41,6 @@ const CardRegFormBox = () => {
             <CommonInput text="영문이름" placeholder="영문이름을 입력하세요" />
           </Grid2>
           <Grid2 size={6}>
-            {/* <CommonInput text="카드선택" placeholder="카드를 선택하세요" /> */}
-            {/* <CommonSelect
-              options={[
-                { value: "option_1", label: "삼성카드" },
-                { value: "option_2", label: "농협카드" },
-                { value: "option_3", label: "신한카드" },
-              ]}
-              text="카드선택"
-              margin="0px 0px 0px 0px"
-            /> */}
             <CommonSelect
              options={[
                 { value: "option_1", label: "삼성카드" },
