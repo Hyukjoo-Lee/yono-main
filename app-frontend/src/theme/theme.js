@@ -1,4 +1,4 @@
-const headerHeight = "110.8px";
+const headerHeight = "160.8px"; // header(110.8px) 높이 + padding(50px)
 const contentsPaddingBottom = "30px";
 
 const display = {

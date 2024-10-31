@@ -11,11 +11,11 @@ const Root = styled.div`
   box-sizing: border-box;
 `;
 const CalendarBox = styled.div`
-  width: 625px;
+  width: 740px;
 `;
 
 const ListBox = styled.div`
-  width: 423px;
+  width: 430px;
   height: 465px;
   overflow-y: auto;
 `;

@@ -4,17 +4,17 @@ import styled from "styled-components";
 const Root = styled.div`
   width: 100%;
   & > p:last-child {
-    margin: 8px 0px 20px;
-    font-size: 16px;
-    color: #757575;
+    margin: 20px 0px 30px;
+    font-size: ${(props) => props.theme.fontSize.base};
+    color: ${(props) => props.theme.color.lightGray};
     line-height: 24px;
     text-align: center;
   }
 `;
 const TitleStyle = styled.p`
-  margin: 0px;
+  margin: 30px 0px 0;
   font-size: ${(props) => props.theme.fontSize.xl};
-  color: #212121;
+  color: ${(props) => props.theme.color.black};
   text-align: center;
   font-weight: bold;
 `;

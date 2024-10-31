@@ -4,7 +4,7 @@ import DailyStatistics from "./dailyStatistics/DailyStatistics";
 import CommonPageInfo from "../../common/CommonPageInfo";
 
 const Root = styled.div`
-  width: 1154px;
+  width: ${(props) => props.theme.display.lg};
   margin: 0 auto;
   box-sizing: border-box;
   padding-top: ${(props) => props.theme.headerHeight};
