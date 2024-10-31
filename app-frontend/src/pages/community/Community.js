@@ -11,7 +11,7 @@ import styled from "styled-components";
 
 const columns = [
   { id: 'Category', label: '카테고리 ', minWidth: 100 },
-  { id: 'title', label: '제목 ', minWidth: 150 },
+  { id: 'title', label: '제목 ', minWidth: 150, align: 'center'},
   { id: 'day', label: '등록일', minWidth: 100 }
 ];
 function createData(Category, title, day) {
@@ -19,6 +19,12 @@ function createData(Category, title, day) {
 }
 
 const rows = [
+  createData('공지사항', '자유게시판 서비스 중단 소식을 알려드립니다', '2024-10-28'),
+  createData('공지사항', '자유게시판 서비스 중단 소식을 알려드립니다', '2024-10-28'),
+  createData('공지사항', '자유게시판 서비스 중단 소식을 알려드립니다', '2024-10-28'),
+  createData('공지사항', '자유게시판 서비스 중단 소식을 알려드립니다', '2024-10-28'),
+  createData('공지사항', '자유게시판 서비스 중단 소식을 알려드립니다', '2024-10-28'),
+  createData('공지사항', '자유게시판 서비스 중단 소식을 알려드립니다', '2024-10-28'),
   createData('공지사항', '자유게시판 서비스 중단 소식을 알려드립니다', '2024-10-28'),
   createData('공지사항', '자유게시판 서비스 중단 소식을 알려드립니다', '2024-10-28'),
   createData('공지사항', '자유게시판 서비스 중단 소식을 알려드립니다', '2024-10-28'),
@@ -40,6 +46,10 @@ const Box = styled.div`
 `;
 const TableRowStyle = styled(TableRow)`
 background-color: #F7FAFF;
+`;
+const TableContainerStyle = styled(TableContainer)`
+  max-height: 440px;
+  overflow-y: auto;
 `;
 
 export function Community() {
@@ -63,7 +73,7 @@ export function Community() {
       </Box>
       <div style={{ display: 'flex', justifyContent: 'center', marginTop: "50px" }}>
         <Paper sx={{ width: "1154px", overflow: 'hidden', }}>
-          <TableContainer sx={{ maxHeight: 440 }}>
+          <TableContainerStyle sx={{ maxHeight: 440 }}>
             <Table stickyHeader aria-label="sticky table">
               <TableHead>
                 <TableRowStyle>
@@ -97,7 +107,7 @@ export function Community() {
                   })}
               </TableBody>
             </Table>
-          </TableContainer>
+          </TableContainerStyle>
         </Paper>
       </div>
     </>
