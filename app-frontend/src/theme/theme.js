@@ -1,21 +1,34 @@
+const headerHeight = "160.8px"; // header(110.8px) 높이 + padding(50px)
+const contentsPaddingBottom = "30px";
+
+const display = {
+  sm: "950px",
+  lg: "1200px",
+};
+
 const fontSize = {
-  xs: "0.5rem",
-  sm: "0.75rem",
-  base: "1rem",
-  md: "1.25rem",
-  lg: "1.5rem",
+  xs: "0.75rem", // 12px
+  sm: "0.938rem", //15px
+  base: "1rem", // 16px
+  md: "1.25rem", // 20px
+  lg: "1.5rem", // 24px
+  xl: "2rem", // 32px
 };
 
 const color = {
-  blue: "#2357A2",
+  blue: "#4064e6",
+  lightBlue: "#EFF3FD",
+  gray: "#464646",
+  lightGray: "#757575",
+  brightGray: "#d0d0d0",
   white: "#FFFFFF",
   black: "#000000",
-  gray: "#656565",
-  lightGray: "#DEDEDE",
-  lightBlue: "#E7ECFC"
 };
 
 const theme = {
+  headerHeight,
+  display,
+  contentsPaddingBottom,
   fontSize,
   color,
 };

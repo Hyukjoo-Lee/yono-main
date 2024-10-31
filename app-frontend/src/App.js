@@ -41,7 +41,7 @@ function Layout({ children }) {
 
   return (
     <Root>
-      {!hideHeaderFooter && <SubHeader />}
+      {/* {!hideHeaderFooter && <SubHeader />} */}
       {!hideHeaderFooter && <MainHeader />}
       {children}
       {!hideHeaderFooter && <Footer />}
