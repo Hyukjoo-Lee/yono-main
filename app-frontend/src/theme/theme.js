@@ -1,24 +1,34 @@
+const headerHeight = "110.8px";
+const contentsPaddingBottom = "30px";
+
+const display = {
+  sm: "950px",
+  lg: "1200px",
+};
+
 const fontSize = {
-  xs: "0.75rem",
-  sm: "0.938rem",
-  base: "1rem",
-  md: "1.25rem",
-  lg: "1.5rem",
-  xl: "2rem",
+  xs: "0.75rem", // 12px
+  sm: "0.938rem", //15px
+  base: "1rem", // 16px
+  md: "1.25rem", // 20px
+  lg: "1.5rem", // 24px
+  xl: "2rem", // 32px
 };
 
 const color = {
   blue: "#4064e6",
-  white: "#FFFFFF",
-  black: "#000000",
+  lightBlue: "#EFF3FD",
   gray: "#464646",
   lightGray: "#757575",
-  darkGray: "#333333",
-  lightBlue: "#EFF3FD",
   brightGray: "#d0d0d0",
+  white: "#FFFFFF",
+  black: "#000000",
 };
 
 const theme = {
+  headerHeight,
+  display,
+  contentsPaddingBottom,
   fontSize,
   color,
 };

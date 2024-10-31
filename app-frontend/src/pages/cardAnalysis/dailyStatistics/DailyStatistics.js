@@ -16,7 +16,7 @@ const CalendarBox = styled.div`
 
 const ListBox = styled.div`
   width: 423px;
-  height: 518px;
+  height: 465px;
   overflow-y: auto;
 `;
 
