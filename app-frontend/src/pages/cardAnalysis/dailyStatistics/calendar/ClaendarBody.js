@@ -16,14 +16,11 @@ const RowBox = styled.div`
   display: flex;
   justify-content: space-between;
   align-items: center;
-  border: 1px solid #d4d5d6;
-  border-top: 0px;
 `;
 
 const DaysBox = styled.div`
   width: calc(100% / 7);
-  aspect-ratio: 1;
-  border-right: 1px solid #d4d5d6;
+  aspect-ratio: 1 / 0.8;
   cursor: pointer;
   padding: 5px 10px;
   box-sizing: border-box;
@@ -35,19 +32,33 @@ const DaysBox = styled.div`
 `;
 
 const DayBox = styled.div`
-  text-align: right;
+  font-size: ${(props) => props.theme.fontSize.base};
+  text-align: center;
   color: ${(props) =>
     props.$today
       ? "red"
       : props.$lastMonth
-      ? "#D4D5D6"
+      ? props.theme.color.brightGray
       : props.$selected
-      ? "blue"
+      ? props.theme.color.blue
       : props.theme.color.black};
 `;
 
 const HistoryBox = styled.div`
-  font-size: ${(props) => props.theme.fontSize.xs};
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-top: 10px;
+  & div {
+    border-radius: 50%;
+    background: ${(props) => props.theme.color.blue};
+    width: 8px;
+    height: 8px;
+    margin-right: 3px;
+    &:last-child {
+      margin-right: 0px;
+    }
+  }
 `;
 
 const CalendarBody = ({ currentMonth, selectedDate, onDateClick }) => {
@@ -65,7 +76,10 @@ const CalendarBody = ({ currentMonth, selectedDate, onDateClick }) => {
     for (let i = 0; i < 7; i++) {
       formattedDate = format(day, "d");
       const cloneDay = day;
-      const history = format(day, "MM-dd") === "10-03";
+      const history =
+        format(day, "MM-dd") === "10-03" ||
+        format(day, "MM-dd") === "10-02" ||
+        format(day, "MM-dd") === "10-04";
 
       days.push(
         <DaysBox
@@ -80,7 +94,15 @@ const CalendarBody = ({ currentMonth, selectedDate, onDateClick }) => {
           >
             {formattedDate}
           </DayBox>
-          {history && <HistoryBox>편의점 : 1000원</HistoryBox>}
+          {history && (
+            <HistoryBox>
+              <div />
+              <div style={{ background: "red" }} />
+              <div style={{ background: "pink" }} />
+              <div style={{ background: "green" }} />
+              <div style={{ background: "orange" }} />
+            </HistoryBox>
+          )}
         </DaysBox>
       );
       day = addDays(day, 1);
