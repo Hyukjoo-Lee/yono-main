@@ -8,7 +8,8 @@ const Root = styled.div`
   width: 1101px;
   margin: 0 auto;
   box-sizing: border-box;
-  padding-top: 24px;
+  padding-top: ${(props) => props.theme.headerHeight};
+  padding-bottom: ${(props) => props.theme.contentsPaddingBottom};
 `;
 
 const TitleStyle = styled.p`

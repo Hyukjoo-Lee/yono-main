@@ -32,14 +32,11 @@ const Root = styled.div`
 `;
 
 function Layout({ children }) {
-  const location = useLocation();
-  const hideHeaderFooter = ["/login", "/signup"].includes(location.pathname);
-
   return (
     <Root>
-      {!hideHeaderFooter && <MainHeader />}
+      <MainHeader />
       {children}
-      {!hideHeaderFooter && <Footer />}
+      <Footer />
     </Root>
   );
 }
