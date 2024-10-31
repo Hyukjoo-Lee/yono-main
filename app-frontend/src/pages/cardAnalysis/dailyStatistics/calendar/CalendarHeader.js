@@ -34,10 +34,8 @@ const IconButton = styled.button`
 `;
 
 const TextStyle = styled.p`
-  // font-size: ${(props) => props.theme.fontSize.md};
-  font-size: 1.5rem;
-  // color: ${(props) => props.theme.color.black};
-  color: #212121;
+  font-size: ${(props) => props.theme.fontSize.lg};
+  color: ${(props) => props.theme.color.black};
   font-weight: bold;
   margin: 0px;
 `;

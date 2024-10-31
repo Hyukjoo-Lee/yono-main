@@ -16,8 +16,17 @@ const CalendarBox = styled.div`
 
 const ListBox = styled.div`
   width: 430px;
-  height: 465px;
+  height: 530px;
   overflow-y: auto;
+  &::-webkit-scrollbar {
+    width: 0;
+  }
+  &::-webkit-scrollbar-thumb {
+    background: transparent;
+  }
+  &::-webkit-scrollbar-track {
+    background: transparent;
+  }
 `;
 
 const DailyStatistics = () => {

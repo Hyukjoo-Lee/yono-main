@@ -16,14 +16,11 @@ const RowBox = styled.div`
   display: flex;
   justify-content: space-between;
   align-items: center;
-  // border: 1px solid #d4d5d6;
-  // border-top: 0px;
 `;
 
 const DaysBox = styled.div`
   width: calc(100% / 7);
   aspect-ratio: 1 / 0.8;
-  // border-right: 1px solid #d4d5d6;
   cursor: pointer;
   padding: 5px 10px;
   box-sizing: border-box;
@@ -35,15 +32,15 @@ const DaysBox = styled.div`
 `;
 
 const DayBox = styled.div`
-  font-size: 16px;
+  font-size: ${(props) => props.theme.fontSize.base};
   text-align: center;
   color: ${(props) =>
     props.$today
       ? "red"
       : props.$lastMonth
-      ? "#D4D5D6"
+      ? props.theme.color.brightGray
       : props.$selected
-      ? "blue"
+      ? props.theme.color.blue
       : props.theme.color.black};
 `;
 
@@ -52,10 +49,9 @@ const HistoryBox = styled.div`
   justify-content: center;
   align-items: center;
   margin-top: 10px;
-  // font-size: ${(props) => props.theme.fontSize.xs};
   & div {
     border-radius: 50%;
-    background: blue;
+    background: ${(props) => props.theme.color.blue};
     width: 8px;
     height: 8px;
     margin-right: 3px;
