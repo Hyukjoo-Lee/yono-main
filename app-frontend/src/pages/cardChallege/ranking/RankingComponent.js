@@ -9,7 +9,7 @@ const Root = styled.div`
   width: 100%;
   margin-bottom: 50px;
   display: flex;
-  justify-content: space-between;
+  justify-content: space-around;
   align-items: flex-end;
 `;
 
@@ -20,15 +20,15 @@ const BoxStyle = styled.div`
 `;
 
 const CircleBox = styled.div`
-  width: ${(props) => (props.$rank === 1 ? "210px" : "190px")};
+  width: ${(props) => (props.$rank === 1 ? "190px" : "150px")};
   aspect-ratio: 1;
   border-radius: 50%;
-  background: #d9d9d9;
+  background: ${(props) => props.theme.color.brightGray};
   margin: 20px 0px;
 `;
 
 const NameStyle = styled.p`
-  font-size: 24px;
+  font-size: ${(props) => props.theme.fontSize.md};
   color: #000;
   margin: 0 0 24px;
 `;
@@ -36,17 +36,16 @@ const NameStyle = styled.p`
 const Box = styled.div`
   min-width: 180px;
   border-radius: 5px;
-  background: #eff3fd;
+  background: ${(props) => props.theme.color.lightBlue};
   padding: 5px 10px;
   box-sizing: border-box;
   display: flex;
   justify-content: center;
   align-items: center;
   & p {
-    font-size: 16px;
-    color: #737373;
-    margin-left: 10px;
-    margin: 0px;
+    font-size: ${(props) => props.theme.fontSize.base};
+    color: ${(props) => props.theme.color.lightGray};
+    margin: 0 0 0 6px;
   }
 `;
 
