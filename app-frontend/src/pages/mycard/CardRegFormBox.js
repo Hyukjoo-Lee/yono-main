@@ -33,23 +33,23 @@ const CardRegFormBox = () => {
               margin="0px"
               text="카드번호"
               placeholder="카드번호를 입력하세요 (-제외)"
-              width={"455.5px"}
+              width={"465px"}
             />
           </Grid2>
           <Grid2 size={6}>
-            <CommonInput text="CVC" placeholder="뒷면 서명란 끝 3자리" width="208px" />
+            <CommonInput text="CVC" placeholder="뒷면 서명란 끝 3자리"  />
           </Grid2>
           <Grid2 size={6}>
             <CommonInput
               text="유효기간"
-              placeholder="날짜를 입력하세요 (/제외)" width="208px"
+              placeholder="날짜를 입력하세요 (/제외)" 
             />
           </Grid2>
           <Grid2 size={6}>
-            <CommonInput text="영문이름" placeholder="영문이름을 입력하세요" width="208px" />
+            <CommonInput text="영문이름" placeholder="영문이름을 입력하세요"  />
           </Grid2>
-          <Grid2 size={6}>
-            <CommonSelect
+          <Grid2>
+          <CommonSelect
              options={[
                 { value: "option_1", label: "삼성카드" },
                 { value: "option_2", label: "농협카드" },
@@ -57,8 +57,6 @@ const CardRegFormBox = () => {
               ]}
               text="카드선택"
               margin="0px 0px 0px 0px"
-              padding="10px"
-              width="230px"
               labelColor={"#4a4a4a"}
                />
           </Grid2>
