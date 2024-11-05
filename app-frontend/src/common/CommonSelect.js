@@ -6,12 +6,6 @@ import FormControl from "@mui/material/FormControl";
 import styled from "styled-components";
 
 const StyledSelect = styled(Select)`
-  /* width: ${(props) => props.width || "238px"};
-  height: ${(props) => props.height || "40px"};
-  background-color: ${(props) => props.background || "#F8F9FE"};
-  color: ${(props) => props.color || "#b0b0b0"} !important;
-  border-radius: ${(props) => props.borderRadius || "5px"} !important;
-  font-size: ${(props) => props.fontSize || "16px"} !important; */
 
   &.MuiOutlinedInput-root {
     width: ${(props) => props.width || "218px"};
