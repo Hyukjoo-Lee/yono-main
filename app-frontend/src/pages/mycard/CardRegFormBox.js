@@ -3,6 +3,7 @@ import CommonInput from "../../common/CommonInput";
 import CommonSelect from "../../common/CommonSelect";
 import { Box, Grid2 } from "@mui/material";
 import CardSlider from "./CardSlider";
+import CardDemoImage from "../../assets/images/card_demo.png";
 
 const FormBox = styled.form`
   width: 100%;
@@ -15,6 +16,14 @@ const CardRegFormBox = () => {
   const handleSubmit = () => {
     console.log("submit!");
   };
+
+  const cardList = [
+    { image: CardDemoImage, name: "Card 1" },
+    { image: CardDemoImage, name: "Card 2" },
+    { image: CardDemoImage, name: "Card 3" },
+    { image: CardDemoImage, name: "Card 4" },
+  ];
+
   return (
     <FormBox onSubmit={handleSubmit}>
       <Box style={{padding: "55px"}}>
@@ -24,20 +33,20 @@ const CardRegFormBox = () => {
               margin="0px"
               text="카드번호"
               placeholder="카드번호를 입력하세요 (-제외)"
-              width={"457px"}
+              width={"455.5px"}
             />
           </Grid2>
           <Grid2 size={6}>
-            <CommonInput text="CVC" placeholder="뒷면 서명란 끝 3자리" />
+            <CommonInput text="CVC" placeholder="뒷면 서명란 끝 3자리" width="208px" />
           </Grid2>
           <Grid2 size={6}>
             <CommonInput
               text="유효기간"
-              placeholder="날짜를 입력하세요 (/제외)"
+              placeholder="날짜를 입력하세요 (/제외)" width="208px"
             />
           </Grid2>
           <Grid2 size={6}>
-            <CommonInput text="영문이름" placeholder="영문이름을 입력하세요" />
+            <CommonInput text="영문이름" placeholder="영문이름을 입력하세요" width="208px" />
           </Grid2>
           <Grid2 size={6}>
             <CommonSelect
@@ -49,11 +58,12 @@ const CardRegFormBox = () => {
               text="카드선택"
               margin="0px 0px 0px 0px"
               padding="10px"
+              width="230px"
               labelColor={"#4a4a4a"}
                />
           </Grid2>
           <Grid2 size={12}>
-            <CardSlider />
+            <CardSlider cardList={cardList}/>
           </Grid2>
         </Grid2>
       </Box>

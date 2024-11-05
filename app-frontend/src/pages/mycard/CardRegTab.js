@@ -15,9 +15,14 @@ const ListBox = styled.div`
   width: 100%;
   height: 567px;
   overflow-y: auto;
+
+  &::-webkit-scrollbar {
+    width: 0;
+  }
 `;
 
 const CardRegTab = () => {
+
   const cardData = [
     {
       cardTitle: "현대카드(신용)",
