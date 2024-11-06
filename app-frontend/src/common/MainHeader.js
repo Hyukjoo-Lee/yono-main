@@ -28,7 +28,7 @@ const StyledLink = styled(Link)`
   color: ${(props) => props.theme.color.gray};
   text-decoration: none;
   font-size: ${(props) => props.theme.fontSize.xs};
-  font-weight: regular;
+  font-weight: 500;
   padding: 0;
   display: flex;
   align-items: center;
