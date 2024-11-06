@@ -1,5 +1,14 @@
 import React from "react";
 import styled from "styled-components";
+import CommonButton from "./CommonButton";
+
+
+const HoverButtonContainer = styled.div`
+  margin: 0 10px 28px 0;
+  opacity: 0;
+  transition: opacity 0.5s ease;
+  visibility: hidden;
+`;
 
 const BoxStyle = styled.div`
   width: 100%;
@@ -12,6 +21,11 @@ const BoxStyle = styled.div`
   padding: 16px 33px;
   box-sizing: border-box;
   margin-bottom: 10px;
+
+  &:hover ${HoverButtonContainer} {
+    visibility: visible;
+    opacity: 1;
+  }
 `;
 
 const CardName = styled.p`
@@ -59,10 +73,9 @@ const CardNumber = styled.p`
 `;
 
 const AdditionalInfo = styled.div`
-  font-size: 14px;
+  font-size: 15px;
   color: #000000;
-  text-align: right;
-  margin-left: 5px;
+  margin-bottom: 3px;
 `;
 
 const CommonCardListBox = ({
@@ -88,10 +101,25 @@ const CommonCardListBox = ({
                       <TitleStyle style={{ color: "#000000" }}>
                         {item.label}
                       </TitleStyle>
-                      <AdditionalInfo>
-                        {item.value} ({item.additional})
-                      </AdditionalInfo>
                     </InfoRow>
+                  ))}
+                </CardInfoContainer>
+                <CardInfoContainer>
+                  <HoverButtonContainer>
+                    <CommonButton
+                      text="카드 선택"
+                      fontSize="16px"
+                      width="100px"
+                      height="30px"
+                    />
+                  </HoverButtonContainer>
+
+                  {card.cardInfo.map((item, itemIndex) => (
+                    <AdditionalInfo key={itemIndex}>
+                      <TitleStyle style={{ color: "#000000" }}>
+                        {item.value} ({item.additional})
+                      </TitleStyle>
+                    </AdditionalInfo>
                   ))}
                 </CardInfoContainer>
               </BoxStyle>

@@ -4,6 +4,7 @@ import CommonSelect from "../../common/CommonSelect";
 import { Box, Grid2 } from "@mui/material";
 import CardSlider from "./CardSlider";
 import CardDemoImage from "../../assets/images/card_demo.png";
+import CommonButton from "../../common/CommonButton";
 
 const FormBox = styled.form`
   width: 100%;
@@ -63,7 +64,11 @@ const CardRegFormBox = () => {
           <Grid2 size={12}>
             <CardSlider cardList={cardList}/>
           </Grid2>
+          <Grid2 container justifyContent="center" size={12} pt={3}>
+            <CommonButton item fontSize="16px" width="120px" height="35px" text="카드 등록"/>
+          </Grid2>
         </Grid2>
+        
       </Box>
     </FormBox>
   );

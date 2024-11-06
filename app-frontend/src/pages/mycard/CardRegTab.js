@@ -11,9 +11,10 @@ const Root = styled.div`
   gap: 25px;
 `;
 
+
 const ListBox = styled.div`
   width: 100%;
-  height: 567px;
+  height: 628px;
   overflow-y: auto;
 
   &::-webkit-scrollbar {
