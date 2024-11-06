@@ -1,18 +1,11 @@
 import React from "react";
-import styled from "styled-components";
 import DailyStatistics from "./dailyStatistics/DailyStatistics";
 import CommonPageInfo from "../../common/CommonPageInfo";
+import CommonRoot from "../../common/CommonRoot";
 
-const Root = styled.div`
-  width: ${(props) => props.theme.display.lg};
-  margin: 0 auto;
-  box-sizing: border-box;
-  padding-top: ${(props) => props.theme.headerHeight};
-  padding-bottom: ${(props) => props.theme.contentsPaddingBottom};
-`;
 const CardAnalysis = () => {
   return (
-    <Root>
+    <CommonRoot>
       <CommonPageInfo
         title={"일별통계(캘린더)"}
         text={
@@ -23,7 +16,7 @@ const CardAnalysis = () => {
         }
       />
       <DailyStatistics />
-    </Root>
+    </CommonRoot>
   );
 };
 export default CardAnalysis;

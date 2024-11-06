@@ -12,7 +12,7 @@ const Root = styled.div`
   }
 `;
 const TitleStyle = styled.p`
-  margin: 30px 0px 0;
+  margin: 20px 0px 0;
   font-size: ${(props) => props.theme.fontSize.xl};
   color: ${(props) => props.theme.color.black};
   text-align: center;

@@ -1,17 +1,10 @@
-import styled from "styled-components";
+import CommonRoot from "../../common/CommonRoot";
 
-const Root = styled.div`
-  width: ${(props) => props.theme.display.lg};
-  margin: 0 auto;
-  box-sizing: border-box;
-  padding-top: ${(props) => props.theme.headerHeight};
-  padding-bottom: ${(props) => props.theme.contentsPaddingBottom};
-`;
 
 export function SignUp() {
   return (
-    <Root>
+    <CommonRoot>
       <h1>회원가입</h1>
-    </Root>
+    </CommonRoot>
   );
 }
