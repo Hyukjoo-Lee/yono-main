@@ -21,6 +21,7 @@ const BoxStyle = styled.div`
   padding: 16px 33px;
   box-sizing: border-box;
   margin-bottom: 10px;
+  cursor: pointer;
 
   &:hover ${HoverButtonContainer} {
     visibility: visible;
@@ -48,7 +49,7 @@ const InfoRow = styled.div`
 
 const TitleStyle = styled.p`
   font-size: 15px;
-  color: #757575;
+  color: ${(props) => props.theme.color.lightGray};
   margin: 0;
 `;
 
@@ -98,7 +99,7 @@ const CommonCardListBox = ({
                   <CardNumber>{card.cardNumber}</CardNumber>
                   {card.cardInfo.map((item, itemIndex) => (
                     <InfoRow key={itemIndex}>
-                      <TitleStyle style={{ color: "#000000" }}>
+                      <TitleStyle>
                         {item.label}
                       </TitleStyle>
                     </InfoRow>
@@ -116,7 +117,7 @@ const CommonCardListBox = ({
 
                   {card.cardInfo.map((item, itemIndex) => (
                     <AdditionalInfo key={itemIndex}>
-                      <TitleStyle style={{ color: "#000000" }}>
+                      <TitleStyle>
                         {item.value} ({item.additional})
                       </TitleStyle>
                     </AdditionalInfo>
