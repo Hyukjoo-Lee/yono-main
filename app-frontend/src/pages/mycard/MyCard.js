@@ -3,7 +3,7 @@ import CommonTabs from "../../common/CommonTabs";
 import CardRegTab from "./CardRegTab";
 import CardRecTab from "./CardRecTab";
 import styled from "styled-components";
-import CommonPageInfo from "../../common/CommonPageInfo";
+
 import CommonRoot from "../../common/CommonRoot";
 
 const RootIn = styled.div`
@@ -31,15 +31,6 @@ export function MyCard() {
           items={items}
           value={selectedTab}
           selectedTab={setSelectedTab}
-        />
-        <CommonPageInfo
-          title="나의 카드 등록"
-          text={
-            <p>
-              소비패턴을 확인하고 싶은 카드로 등록하세요. <br />
-              등록하고 싶은 카드를 입력 후 카드 리스트에서 확인하세요.
-            </p>
-          }
         />
         {panels[selectedTab]}
       </RootIn>

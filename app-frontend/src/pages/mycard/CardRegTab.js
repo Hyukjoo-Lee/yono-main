@@ -2,6 +2,7 @@ import styled from "styled-components";
 import CardImage from "../../assets/images/CardImage.png";
 import CardRegFormBox from "./CardRegFormBox";
 import CommonCardListBox from "../../common/CommonCardListBox";
+import CommonPageInfo from "../../common/CommonPageInfo";
 
 const Root = styled.div`
   width: 100%;
@@ -10,7 +11,6 @@ const Root = styled.div`
   box-sizing: border-box;
   gap: 25px;
 `;
-
 
 const ListBox = styled.div`
   width: 100%;
@@ -23,7 +23,6 @@ const ListBox = styled.div`
 `;
 
 const CardRegTab = () => {
-
   const cardData = [
     {
       cardTitle: "현대카드(신용)",
@@ -88,12 +87,23 @@ const CardRegTab = () => {
   ];
 
   return (
-    <Root>
+    <>
+      <CommonPageInfo
+        title="나의 카드 등록"
+        text={
+          <p>
+            소비패턴을 확인하고 싶은 카드로 등록하세요. <br />
+            등록하고 싶은 카드를 입력 후 카드 리스트에서 확인하세요.
+          </p>
+        }
+      />
+      <Root>
         <CardRegFormBox />
-      <ListBox>
-        <CommonCardListBox data={cardData} showDetailed={true} />
-      </ListBox>
-    </Root>
+        <ListBox>
+          <CommonCardListBox data={cardData} showDetailed={true} />
+        </ListBox>
+      </Root>
+    </>
   );
 };
 
