@@ -5,13 +5,14 @@ import MenuItem from "@mui/material/MenuItem";
 import FormControl from "@mui/material/FormControl";
 import styled from "styled-components";
 
-const StyledSelect = styled(Select)`
-
+const StyledSelect = styled(Select).withConfig({
+  shouldForwardProp: (prop) => prop !== "isDefault",
+})`
   &.MuiOutlinedInput-root {
     width: ${(props) => props.width || "218px"};
     height: ${(props) => props.height || "38px"};
     background-color: ${(props) => props.background || "#F8F9FE"};
-    color: ${(props) => props.isDefault ? "#b0b0b0" : "#000000"};
+    color: ${(props) => (props.isDefault ? "#b0b0b0" : "#000000")};
     border-radius: ${(props) => props.borderRadius || "5px"};
     font-size: ${(props) => props.fontSize || "16px"};
 

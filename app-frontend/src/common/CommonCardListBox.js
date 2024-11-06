@@ -1,7 +1,9 @@
 import React from "react";
 import styled from "styled-components";
 import CommonButton from "./CommonButton";
-
+import LiveTvIcon from "@mui/icons-material/LiveTv";
+import CoffeeIcon from "@mui/icons-material/Coffee";
+import BusIcon from "@mui/icons-material/DirectionsBusFilled";
 
 const HoverButtonContainer = styled.div`
   margin: 0 10px 28px 0;
@@ -48,9 +50,14 @@ const InfoRow = styled.div`
 `;
 
 const TitleStyle = styled.p`
-  font-size: 15px;
+  font-size: ${(props) => props.theme.fontSize.sm};
   color: ${(props) => props.theme.color.lightGray};
   margin: 0;
+
+  & > svg {
+    margin-right: 5px;
+    font-size: ${(props) => props.theme.fontSize.sm};
+  }
 `;
 
 const TextStyle = styled(TitleStyle)`
@@ -71,6 +78,7 @@ const CardNumber = styled.p`
   font-size: 16px;
   color: ${(props) => props.theme.color.black};
   margin: 0 0 5px 0;
+  min-height: 27px;
 `;
 
 const AdditionalInfo = styled.div`
@@ -96,11 +104,14 @@ const CommonCardListBox = ({
                 <CardImage src={card.cardImg} alt="카드 이미지" />
                 <CardInfoContainer>
                   <CardName>{card.cardTitle}</CardName>
-                  <CardNumber>{card.cardNumber}</CardNumber>
-                  {card.cardInfo.map((item, itemIndex) => (
-                    <InfoRow key={itemIndex}>
+                  <CardNumber> {card.cardNumber || ""}</CardNumber>
+                  {card.cardInfo.map((benefit, index) => (
+                    <InfoRow key={index}>
                       <TitleStyle>
-                        {item.label}
+                        {benefit.label === "스타벅스 할인" && <CoffeeIcon />}
+                        {benefit.label === "대중교통 할인" && <BusIcon />}
+                        {benefit.label === "영화 쿠폰 제공" && <LiveTvIcon />}
+                        {benefit.label}
                       </TitleStyle>
                     </InfoRow>
                   ))}
@@ -115,10 +126,10 @@ const CommonCardListBox = ({
                     />
                   </HoverButtonContainer>
 
-                  {card.cardInfo.map((item, itemIndex) => (
-                    <AdditionalInfo key={itemIndex}>
+                  {card.cardInfo.map((benefit, index) => (
+                    <AdditionalInfo key={index}>
                       <TitleStyle>
-                        {item.value} ({item.additional})
+                        {benefit.value} ({benefit.additional})
                       </TitleStyle>
                     </AdditionalInfo>
                   ))}
