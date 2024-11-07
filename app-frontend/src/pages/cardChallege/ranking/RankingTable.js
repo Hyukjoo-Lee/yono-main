@@ -24,13 +24,27 @@ const BoxStyle = styled.div`
   &::-webkit-scrollbar-track {
     background: transparent;
   }
+
+  & > div:nth-child(1),
+  > div:nth-child(2),
+  > div:nth-child(3) {
+    & p {
+      font-weight: bold;
+      color: ${(props) => props.theme.color.blue};
+    }
+  }
 `;
 
 const MyBoxStyle = styled(BoxStyle)`
-  margin-bottom: 50px;
+  margin-bottom: 30px;
+  border: 0px;
   & > div {
-    background: ${(props) => props.theme.color.lightBlue};
+    background: ${(props) => props.theme.color.lightBlue} !important;
     border-bottom: 0px;
+    & p {
+      font-weight: normal !important;
+      color: ${(props) => props.theme.color.gray} !important;
+    }
   }
 `;
 
