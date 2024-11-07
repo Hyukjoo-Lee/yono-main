@@ -2,7 +2,7 @@ import React from "react";
 import styled from "styled-components";
 
 const InputStyle = styled.input`
-  width: ${(props) => (props.width ? props.width : "191px")}; // placeholder text padding 양쪽 20px
+  width: ${(props) => (props.width ? props.width : "218px")}; 
   height: ${(props) => (props.height ? props.height : "38px")};
   background-color: ${(props) =>
     props.background ? props.background : "#F8F9FE"};
@@ -11,9 +11,16 @@ const InputStyle = styled.input`
     props.borderRadius ? props.borderRadius : "5px"};
   cursor: pointer;
   padding: 0 10px;
+  box-sizing: border-box;
+  font-size: ${(props) => props.fontSize || "16px"};
+  
   &::placeholder {
     font-size: ${(props) => (props.placeholderFontSize ? props.placeholderFontSize : "16px")};
     color: #b0b0b0;
+  }
+  &:focus {
+  border: 1px solid ${(props) => props.focusBorderColor || "#1976D2"};
+  outline: none;
   }
   &:hover {
     & p {
@@ -21,11 +28,15 @@ const InputStyle = styled.input`
         props.hoverColor ? props.hoverColor : props.theme.color.white};
     }
   }
+  &:focus {
+  border: 1px solid ${(props) => props.focusBorderColor || "#1976D2"};
+  outline: none;
+  }
 `;
 
 const TextStyle = styled.p`
   font-size: ${(props) =>
-    props.fontSize ? props.fontSize : "16px"};
+    props.TextFontSize ? props.TextFontSize : "16px"};
   color: ${(props) => (props.color ? props.color : props.theme.color.white)};
   margin-bottom: 6px;
   margin-top: 0px;
@@ -42,8 +53,10 @@ const CommonInput = (props) => {
     background,
     color = "#4A4A4A",
     borderColor,
+    focusBorderColor,
     borderRadius,
     fontSize,
+    TextFontSize,
     disabled,
     hoverBk,
     hoverColor,
@@ -51,7 +64,7 @@ const CommonInput = (props) => {
 
   return (
     <div>
-      <TextStyle color={color} fontSize={fontSize}>
+      <TextStyle color={color} TextFontSize={TextFontSize}>
         {text}
       </TextStyle>
 
@@ -63,7 +76,9 @@ const CommonInput = (props) => {
         height={height}
         background={background}
         borderColor={borderColor}
+        focusBorderColor={focusBorderColor}
         borderRadius={borderRadius}
+        fontSize={fontSize}
         hoverBk={hoverBk}
         hoverColor={hoverColor}
         disabled={disabled}

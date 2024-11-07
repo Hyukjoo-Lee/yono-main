@@ -4,7 +4,7 @@ import Table from '@mui/material/Table';
 import TableBody from '@mui/material/TableBody';
 import TableCell from '@mui/material/TableCell';
 import TableRow from '@mui/material/TableRow';
-import { TableContainer, TableHead } from "@material-ui/core";
+import { TableContainer, TableHead } from "@mui/material";
 import CommonButton from "../../common/CommonButton";
 import CommonInput from "../../common/CommonInput";
 import styled from "styled-components";
