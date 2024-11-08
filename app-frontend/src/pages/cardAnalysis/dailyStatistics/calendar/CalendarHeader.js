@@ -9,7 +9,7 @@ const Root = styled.div`
   display: flex;
   align-items: center;
   justify-content: space-between;
-  padding: 20px 10px;
+  padding: 20px;
   box-sizing: border-box;
 `;
 
@@ -22,15 +22,13 @@ const IconButton = styled.button`
   display: flex;
   align-items: center;
   justify-content: center;
-  padding: 0px;
+  padding: 0px 10px;
   border: 0px;
-  border-radius: 50%;
+  border-radius: 4px;
+  margin: 0 2px;
+  border: 1px solid ${(props) => props.theme.color.brightGray};
   background: ${(props) => props.theme.color.white};
   cursor: pointer;
-  & svg {
-    width: 35px;
-    height: 35px;
-  }
 `;
 
 const TextStyle = styled.p`
@@ -50,19 +48,17 @@ const CalendarHeader = ({
   return (
     <Root>
       <Box>
+        <TextStyle>
+          {format(currentMonth, "yyyy")}년 {format(currentMonth, "M")}월
+        </TextStyle>
+      </Box>
+      <Box>
         <IconButton onClick={prevYear}>
           <ArrowsIcon />
         </IconButton>
         <IconButton onClick={prevMonth}>
           <ArrowIcon />
         </IconButton>
-      </Box>
-      <Box>
-        <TextStyle>
-          {format(currentMonth, "yyyy")}년 {format(currentMonth, "M")}월
-        </TextStyle>
-      </Box>
-      <Box>
         <IconButton onClick={nextMonth}>
           <ArrowIcon style={{ transform: "scaleX(-1)" }} />
         </IconButton>
