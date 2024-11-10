@@ -1,9 +1,9 @@
-import CommonRoot from "../../common/CommonRoot";
-
+import FindForm from "./authComponents/FindForm";
 export function FindID() {
+  const find = "아이디 찾기";
   return (
-    <CommonRoot>
-      <h1>아이디찾기</h1>
-    </CommonRoot>
+    <div>
+      <FindForm find={find} />
+    </div>
   );
 }
