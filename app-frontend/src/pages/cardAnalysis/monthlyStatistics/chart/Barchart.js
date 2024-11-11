@@ -62,17 +62,17 @@ const Barchart = ({ data }) => {
                 }}
                 axisBottom={{
                     tickSize: 5, // 값 설명하기 위해 튀어나오는 점 크기
-                    tickPadding: 5,
+                    tickPadding: 0,
                     tickRotation: 0,
-                    legend: '월',
+                    legend: '',
                     legendPosition: 'middle',
-                    legendOffset: 50, // 글씨와 chart간 간격
+                    legendOffset: 40, // 글씨와 chart간 간격
                 }}
                 axisLeft={{
                     tickSize: 5,
                     tickPadding: 5,
                     tickRotation: 0,
-                    legend: '금액',
+                    legend: '',
                     legendPosition: 'middle',
                     legendOffset: -60,
                 }}
