@@ -1,28 +1,46 @@
-import { Box, Tab, Tabs } from "@mui/material";
+import Tab from '@mui/material/Tab';
+import Tabs from '@mui/material/Tabs';
+import * as React from 'react';
 import styled from "styled-components";
-import React from "react";
 
-const StyledTabs = styled(Tabs)`
-  & .MuiTab-root {
-    font-size: 18px;
+const TabsStyle = styled(Tabs)`
+  & .MuiTabs-indicator {
+    height: 1px;
+    
+    background-color: #4064e6;
+  }
+  & .MuiTabs-flexContainer {
+    justify-content: center;
   }
 `;
 
+const TabStyle = styled(Tab)`
+  &.MuiButtonBase-root {
+    color:${(props) => props.theme.color.black};;
+    font-size:18px;
+    padding:0px 25px 10px 25px;
+    min-width:117px;
+    font-weight:black;
 
-const CommonTabs = ({ labels, onTabChange, value }) => {
+    &.Mui-selected {
+      color:#4064e6
+    }
+  }
+`;
+
+const CommonTabs = ({items, value, selectedTab}) =>{
+  
+
   const handleChange = (event, newValue) => {
-    onTabChange(newValue);
+    selectedTab(newValue);
   };
 
   return (
-    <Box sx={{ width: "100%", bgcolor: "background.paper", marginBottom: "20px"}}>
-      <StyledTabs value={value} onChange={handleChange} centered>
-        {labels.map((label, index) => (
-          <Tab key={index} label={label} />
+    <TabsStyle value={value} onChange={handleChange}>
+        {items.map((item, index) => (
+          <TabStyle key={index} label={item.text} disableRipple/>
         ))}
-      </StyledTabs>
-    </Box>
+    </TabsStyle>
   );
-};
-
+}
 export default CommonTabs;

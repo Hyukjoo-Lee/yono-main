@@ -1,13 +1,10 @@
+
 import styled from "styled-components";
 import InfoCard from './InfoCard'; // InfoCard 컴포넌트를 import
 
-const Root = styled.div`
-  width: ${(props) => props.theme.display.lg};
-  margin: 0 auto;
-  box-sizing: border-box;
-  padding-top: ${(props) => props.theme.headerHeight};
-  padding-bottom: ${(props) => props.theme.contentsPaddingBottom};
-`;
+
+import CommonRoot from "../../common/CommonRoot";
+
 
 const StyledWrap = styled.div`
     width: 1200px;
@@ -55,7 +52,7 @@ export function Intro() {
     }
   ];
   return (
-    <Root>
+    <CommonRoot>
       <StyledWrap className="wrap">
             <StyledInfo_main className="info_main">
                 <StyledInfo_img className="info_img"></StyledInfo_img>
@@ -66,6 +63,6 @@ export function Intro() {
                 </StyledInfo>
             </StyledInfo_main>
         </StyledWrap>
-    </Root>
+    </CommonRoot>
   );
 }
