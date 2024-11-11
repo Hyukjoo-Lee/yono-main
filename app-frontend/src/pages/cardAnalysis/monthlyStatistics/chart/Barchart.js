@@ -12,20 +12,22 @@ const Barchart = ({ data }) => {
     };
 
     return (
-        <div style={{ width: '900px', height: '500px', margin: '0 auto' }}>
+        <div style={{ width: '618px', height: '567px', margin: '0 auto' }}>
             <ResponsiveBar
                 data={data}
-                keys={['외식', '의류', '온라인쇼핑']}
+                keys={['외식', '의류', '온라인쇼핑', '주류', '전자제품']}
                 indexBy="bottle"
                 margin={{ top: 50, right: 130, bottom: 50, left: 80 }}
                 padding={0.3}
                 groupMode='grouped'
-                colors={{ scheme: 'blues' }}
+                // colors={{ scheme: 'blues' }}
+                colors = {['#DDEBF7', '#CBD6EF', '#9ECAE0', '#6BAED6', '#4292C6']}
                 // colors = {['olive', 'brown', 'orange']} -> 커스텀하여 사용할 때
                 // colors = {{ scheme: 'nivo' }} -> nivo 에서 제공해주는 색상 조합 사용할 때
                 colorBy="id" 
                 // 색상을 keys 요소들에 각각 적용
                 // colorBy="indexValue" -> indexBy 로 묵인 인덱스별로 각각 적용
+                borderRadius={0}
                 theme={{
                     // label style (bar 에 표현되는 글씨)
                     labels: {
@@ -60,9 +62,9 @@ const Barchart = ({ data }) => {
                 }}
                 axisBottom={{
                     tickSize: 5, // 값 설명하기 위해 튀어나오는 점 크기
-                    tickPadding: 5,
+                    tickPadding: 0,
                     tickRotation: 0,
-                    legend: '월',
+                    legend: '',
                     legendPosition: 'middle',
                     legendOffset: 40, // 글씨와 chart간 간격
                 }}
@@ -70,7 +72,7 @@ const Barchart = ({ data }) => {
                     tickSize: 5,
                     tickPadding: 5,
                     tickRotation: 0,
-                    legend: '금액',
+                    legend: '',
                     legendPosition: 'middle',
                     legendOffset: -60,
                 }}
@@ -78,6 +80,8 @@ const Barchart = ({ data }) => {
                 labelSkipWidth={36}
                 // label 안보이게 할 기준 height
                 labelSkipHeight={12}
+                // 토탈 값 표시
+                // enableTotals = {true}
                 onClick={handle.barClick}
                 legends={[
                     {
