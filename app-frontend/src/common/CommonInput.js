@@ -32,7 +32,7 @@ const InputStyle = styled.input`
 
 const TextStyle = styled.p`
   font-size: ${(props) =>
-    props.TextFontSize ? props.TextFontSize : "16px"};
+    props.$TextFontSize ? props.TextFontSize : "16px"};
   color: ${(props) => (props.color ? props.color : props.theme.color.white)};
   margin-bottom: 6px;
   margin-top: 0px;
@@ -65,19 +65,19 @@ const CommonInput = (props) => {
       </TextStyle>
 
       <InputStyle
-        placeholder={placeholder}
-        placeholderFontSize={placeholderFontSize}
-        type={type}
+         placeholder={placeholder}
+        $placeholderFontSize={placeholderFontSize}
+        $type={type}
         width={width}
         height={height}
-        background={background}
-        borderColor={borderColor}
-        focusBorderColor={focusBorderColor}
-        borderRadius={borderRadius}
-        fontSize={fontSize}
-        hoverBk={hoverBk}
-        hoverColor={hoverColor}
-        disabled={disabled}
+        $background={background}
+        $borderColor={borderColor}
+        $focusBorderColor={focusBorderColor}
+        $borderRadius={borderRadius}
+        $fontSize={fontSize}
+        $hoverBk={hoverBk}
+        $hoverColor={hoverColor}
+        $disabled={disabled}
       />
     </div>
   );

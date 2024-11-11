@@ -4,7 +4,7 @@ const IconButton = ({ imgesRoute }) => {
   return (
     <img
       src={imgesRoute}
-      alt="이미지 버튼"
+      alt="사진"
       style={{
         background: "white",
       }}
