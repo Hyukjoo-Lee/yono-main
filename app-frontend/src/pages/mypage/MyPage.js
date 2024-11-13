@@ -4,6 +4,7 @@ import CommonTabs from "../../common/CommonTabs";
 import BadgeInfo from "./BadgeInfo";
 import CheckUserInfo from "./CheckUserInfo";
 import Box from '@mui/material/Box';
+
 import { useState } from "react";
 
 export function MyPage() {

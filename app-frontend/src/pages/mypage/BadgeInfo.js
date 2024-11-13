@@ -22,8 +22,8 @@ const BadgeInfo = () => {
         <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap : '16px' }}>
 
             <CommonInput
-                placeholder = "이번 달 목표 지출액"
-                text = "이번 달 목표 지출액"
+                placeholder = "이번 달 목표 지출금액"
+                text = "이번 달 목표 지출금액"
                 {...commonInputProps}
             />
 

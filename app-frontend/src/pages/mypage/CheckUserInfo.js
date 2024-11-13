@@ -2,12 +2,50 @@ import React from "react";
 import { useState } from "react";
 import CustomButton from "../../common/CommonButton";
 import CommonInput from "../../common/CommonInput";
+import ImageGallery from "./ImageSelect";
+import styled from "styled-components";
+
+import image1 from "../../assets/images/Character1.png";
+import image2 from "../../assets/images/Character2.png";
+import image3 from "../../assets/images/Character3.png";
+import image4 from "../../assets/images/Character4.png";
+
+const images = [
+    image1,
+    image2,
+    image3,
+    image4,
+];
+
+const Root = styled.div`
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 15px;
+`;
+
+const Root2 = styled.div`
+    width: 350px;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    align-items: flex-start;
+    margin-top: 10px;
+    gap: 5px;
+`;
+
+const Button = styled.div`
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    margin-top: 30px;
+    gap: 15px;
+`;
 
 const CheckUserInfo = ({
     userId = "아이디",
     password = "비밀번호",
     nickname = "닉네임",
-    character = "캐릭터"
 }) => {
 
     const [inputDisabled, setInputDisabled] = useState(true);
@@ -35,11 +73,13 @@ const CheckUserInfo = ({
 
     return (
         <>
-        <div style = {{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap : '15px' }}>
+        <Root>
             <CommonInput
                 placeholder = {userId}
                 text = "아이디"
-                {...commonInputProps}
+                disabled = "true"
+                background = "#F5F5F5"
+                width = '350px'
             />
 
             <CommonInput
@@ -54,18 +94,16 @@ const CheckUserInfo = ({
                 {...commonInputProps}
             />
 
-            <CommonInput
-                placeholder = {character}
-                text = "캐릭터"
-                {...commonInputProps}
-            />
-
-            
-        </div>
+            <Root2>
+                캐릭터 선택
+                <ImageGallery images = {images}/>
+            </Root2>
+        </Root>
+        
         
 
-        <div style={{ display: 'flex', flexDirection: 'row', justifyContent: 'center', marginTop: '30px', gap : '15px'}}>
-            <CustomButton 
+        <Button>
+            <CustomButton
                 text = '수정'
                 onClick = {modify}
                 {...commonButtonProps}
@@ -77,7 +115,7 @@ const CheckUserInfo = ({
                 {...commonButtonProps}
             />
 
-        </div>
+        </Button>
 
         </>
     );

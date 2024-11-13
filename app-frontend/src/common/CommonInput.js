@@ -70,14 +70,14 @@ const CommonInput = (props) => {
         $type={type}
         width={width}
         height={height}
-        $background={background}
+        background={background}
         $borderColor={borderColor}
         $focusBorderColor={focusBorderColor}
         $borderRadius={borderRadius}
         $fontSize={fontSize}
         $hoverBk={hoverBk}
         $hoverColor={hoverColor}
-        $disabled={disabled}
+        disabled={disabled}
       />
     </div>
   );
