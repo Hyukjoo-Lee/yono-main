@@ -46,6 +46,7 @@ const CheckUserInfo = ({
     userId = "아이디",
     password = "비밀번호",
     nickname = "닉네임",
+    Target_Expenditure_Amout = "테스트 목표 지출금액",
 }) => {
 
     const [inputDisabled, setInputDisabled] = useState(true);
@@ -91,6 +92,12 @@ const CheckUserInfo = ({
             <CommonInput
                 placeholder = {nickname}
                 text = "닉네임"
+                {...commonInputProps}
+            />
+
+            <CommonInput
+                placeholder = {Target_Expenditure_Amout}
+                text = "이번 달 목표 지출금액"
                 {...commonInputProps}
             />
 
