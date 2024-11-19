@@ -6,17 +6,8 @@ import image from "./images/or.png";
 import kakaoimage from "./images/kakao.png";
 import google from "./images/google.png";
 import IconButton from "./Component/IconButton"; // IButton을 정확히 import
-import CommonRoot from "../../common/CommonRoot";
+import CommonDialog from "../../common/CommonDialog";
 
-const Rootin = styled.div`
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-  width: ${(props) => props.theme.display.lg};
-  margin: 0 auto;
-  box-sizing: border-box;
-`;
 
 const StyledCheckbox = styled.input.attrs({ type: "checkbox" })`
   margin-right: 8px;
@@ -39,8 +30,7 @@ const LineStyle = styled.p`
 `;
 export function Login() {
   return (
-    <CommonRoot>
-      <Rootin>
+    <CommonDialog $visible={true}>
         <Title>로그인</Title>
 
         <div
@@ -116,6 +106,7 @@ export function Login() {
               color="#464646"
               fontSize="16px"
             />
+
           </div>
         </div>
 
@@ -150,7 +141,6 @@ export function Login() {
             <IconButton imgesRoute={google} />
           </div>
         </div>
-      </Rootin>
-    </CommonRoot>
+    </CommonDialog>
   );
 }
