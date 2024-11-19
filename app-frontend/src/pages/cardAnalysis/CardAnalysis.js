@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import DailyStatistics from "./dailyStatistics/DailyStatistics";
+import MonthlyStatistics from "./monthlyStatistics/MonthlyStatistics";
 import CommonPageInfo from "../../common/CommonPageInfo";
 import CommonRoot from "../../common/CommonRoot";
 import CommonTabs from "../../common/CommonTabs";
@@ -14,7 +15,7 @@ const CardAnalysis = () => {
 
   const panels = [
     <DailyStatistics />,
-    <DailyStatistics />,
+    <MonthlyStatistics />,
     <DailyStatistics />,
   ];
   return (
