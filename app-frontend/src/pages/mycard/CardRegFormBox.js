@@ -27,7 +27,7 @@ const CardRegFormBox = () => {
 
   return (
     <FormBox onSubmit={handleSubmit}>
-      <Box style={{padding: "50px"}}>
+      <Box style={{ padding: "50px" }}>
         <Grid2 container rowSpacing={1} columnSpacing={4}>
           <Grid2 size={24}>
             <CommonInput
@@ -51,7 +51,7 @@ const CardRegFormBox = () => {
           </Grid2>
           <Grid2 size={6}>
             <CommonSelect
-             options={[
+              options={[
                 { value: "option_1", label: "삼성카드" },
                 { value: "option_2", label: "농협카드" },
                 { value: "option_3", label: "신한카드" },
