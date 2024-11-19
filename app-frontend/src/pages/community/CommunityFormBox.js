@@ -44,15 +44,12 @@ const Row = styled.div`
     font-size:16px;
     }
 
-    & 
-    textarea:focus{
+    & textarea:focus{
     border: 1px solid #1976D2;
-    outline: none;}
-
+    outline: none;
     }
-
-
 `;
+
 const Row1 = styled.div`
     display: flex;
     justify-content: center;
