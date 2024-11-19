@@ -32,12 +32,20 @@ export function CardChallege() {
           selectedTab={setSelectedTab}
         />
         <CommonPageInfo
-          title="뱃지 랭킹확인"
+          title={selectedTab === 0 ? "전월비교" : "뱃지 랭킹확인"}
           text={
-            <p>
-              나의 소비패턴을 확인하고 절약하면 뱃지를 드려요! <br />
-              친구들과 경쟁하며 뱃지 랭킹 확인 해보세요!
-            </p>
+            selectedTab === 0 ? (
+              <p>
+                전달과 이번달의 소비패턴을 분석해드려요!
+                <br />
+                캘린더에서 확인하고 싶은 날짜를 클릭하면 막대그래프가 나와요
+              </p>
+            ) : (
+              <p>
+                나의 소비패턴을 확인하고 절약하면 뱃지를 드려요! <br />
+                친구들과 경쟁하며 뱃지 랭킹 확인 해보세요!
+              </p>
+            )
           }
         />
         {panels[selectedTab]}

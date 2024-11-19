@@ -62,6 +62,7 @@ const CommonSelect = ({
   fieldHoverBorderColor,
   fieldFocusedBorderColor,
   onSelect,
+  find="카드를 선택하세요"
 }) => {
   const [selectedValue, setSelectedValue] = useState("");
 
@@ -104,7 +105,7 @@ const CommonSelect = ({
         >
           {isDefault && (
             <MenuItem value="default" disabled>
-              카드를 선택하세요
+              {find}
             </MenuItem>
           )}
           {options.map((option, index) => (
