@@ -30,13 +30,10 @@ const Row = styled.div`
     gap:10px;
     justify-content: center;
     & > span {
-        margin-right: 50px; 
+        width:60px;
+        margin-right: 100px; 
         white-space: nowrap;
-        display: flex;
-        
-    }
-    & > input, & > div, & > select{
-    margin: 0 ; 
+        display: flex;   
     }
 
     & > textarea {
@@ -61,9 +58,6 @@ const Row1 = styled.div`
     justify-content: center;
     margin: 0 auto;
 `;
-
-
-
 
 const Box1 = styled.div`
     display: flex;
@@ -97,14 +91,14 @@ export function CommunityFormBox() {
                     <CommonInput width="500px" height="40px" placeholder="제목을 입력해주세요" />
                 </Row>
                 <Row>
-                    <span>카테고리</span>
-                    <CommonSelect
+                    <span> 카테고리</span>
+                    <CommonSelect 
                         options={[
                             { value: "option_1", label: "정보공유" },
                             { value: "option_2", label: "질문" },
                             { value: "option_3", label: "기타 문의" },
                         ]}
-                        width= '400px'
+                        width= '500px'
                         height= '40px'
                         text="문의를 선택해주세요"
                         display="none"

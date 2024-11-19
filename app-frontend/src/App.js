@@ -23,7 +23,6 @@ import CardAnalysis from "./pages/cardAnalysis/CardAnalysis";
 import { Community } from "./pages/community/Community";
 import  {CommunityFormBox} from "./pages/community/CommunityFormBox";
 import { MyCard } from "./pages/mycard/MyCard";
-
 const Root = styled.div`
   & *,
   p {
