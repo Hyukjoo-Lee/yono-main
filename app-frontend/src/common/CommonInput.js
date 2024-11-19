@@ -66,18 +66,18 @@ const CommonInput = (props) => {
 
       <InputStyle
          placeholder={placeholder}
-        $placeholderFontSize={placeholderFontSize}
-        $type={type}
+        placeholderFontSize={placeholderFontSize}
+        type={type}
         width={width}
         height={height}
-        $background={background}
-        $borderColor={borderColor}
-        $focusBorderColor={focusBorderColor}
-        $borderRadius={borderRadius}
-        $fontSize={fontSize}
-        $hoverBk={hoverBk}
-        $hoverColor={hoverColor}
-        $disabled={disabled}
+        background={background}
+        borderColor={borderColor}
+        focusBorderColor={focusBorderColor}
+        borderRadius={borderRadius}
+        fontSize={fontSize}
+        hoverBk={hoverBk}
+        hoverColor={hoverColor}
+        disabled={disabled}
       />
     </div>
   );
