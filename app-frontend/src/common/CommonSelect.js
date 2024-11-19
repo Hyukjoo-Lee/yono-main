@@ -43,10 +43,11 @@ const TextStyle = styled.p`
   color: ${(props) => (props.color ? props.color : props.theme.color.white)};
   margin-bottom: 6px;
   margin-top: 0px;
+  display: ${(props) => (props.display ? props.display : "")};
 `;
 
 const CommonSelect = ({
-  text,
+  text="카드를 선택하세요",
   height,
   options = [],
   width,
@@ -61,6 +62,7 @@ const CommonSelect = ({
   focusBorderWidth,
   fieldHoverBorderColor,
   fieldFocusedBorderColor,
+  display,
   onSelect,
   find="카드를 선택하세요"
 }) => {
@@ -82,7 +84,7 @@ const CommonSelect = ({
       }}
     >
       <FormControl variant="outlined">
-        <TextStyle color={labelColor} fontSize={fontSize}>
+        <TextStyle color={labelColor} fontSize={fontSize} display={display}>
           {text}
         </TextStyle>
 

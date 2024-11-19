@@ -27,8 +27,8 @@ const CardRegFormBox = () => {
 
   return (
     <FormBox onSubmit={handleSubmit}>
-      <Box style={{padding: "55px"}}>
-        <Grid2 container rowSpacing={1} columnSpacing={2}>
+      <Box style={{ padding: "50px" }}>
+        <Grid2 container rowSpacing={1} columnSpacing={4}>
           <Grid2 size={24}>
             <CommonInput
               margin="0px"
@@ -49,9 +49,9 @@ const CardRegFormBox = () => {
           <Grid2 size={6}>
             <CommonInput text="영문이름" placeholder="영문이름을 입력하세요"  />
           </Grid2>
-          <Grid2>
-          <CommonSelect
-             options={[
+          <Grid2 size={6}>
+            <CommonSelect
+              options={[
                 { value: "option_1", label: "삼성카드" },
                 { value: "option_2", label: "농협카드" },
                 { value: "option_3", label: "신한카드" },
@@ -59,7 +59,7 @@ const CardRegFormBox = () => {
               text="카드선택"
               margin="0px 0px 0px 0px"
               labelColor={"#4a4a4a"}
-               />
+            />
           </Grid2>
           <Grid2 size={12}>
             <CardSlider cardList={cardList}/>

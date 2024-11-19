@@ -18,6 +18,10 @@ const InputStyle = styled.input`
     font-size: ${(props) => (props.placeholderFontSize ? props.placeholderFontSize : "16px")};
     color: #b0b0b0;
   }
+  &:focus {
+  border: 1px solid ${(props) => props.focusBorderColor || "#1976D2"};
+  outline: none;
+  }
   &:hover {
     & p {
       color: ${(props) =>
