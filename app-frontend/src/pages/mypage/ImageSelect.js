@@ -25,7 +25,7 @@ const Thumbnail = styled.img`
   height: 50px;
   object-fit: cover;
   cursor: pointer;
-  border: 2px solid transparent;
+  border: 2px solid ${(props) => (props.$isSelected ? "#4064e6" : "transparent")};
   &:hover {
     border-color: #4064e6;
   }
@@ -63,7 +63,7 @@ const ImageGallery = ({ images }) => {
             <Thumbnail
               src={image}
               alt={`Thumbnail ${index + 1}`}
-              isSelected={image === selectedImage}
+              $isSelected={image === selectedImage}
               onClick={() => handleThumbnailClick(image)}
             />
             {image === selectedImage && <CheckIcon src={checkIcon} alt="Check" />}
