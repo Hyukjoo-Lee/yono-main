@@ -9,7 +9,17 @@ import image2 from "../../assets/images/Character2.png";
 import image3 from "../../assets/images/Character3.png";
 import image4 from "../../assets/images/Character4.png";
 
+// 리팩토링 필요
+// 수정할 비밀번호 -> 답변 맞으면 (버튼 누르면) 나오는 형태로 수정
+
 const images = [image1, image2, image3, image4];
+
+const StyledHr = styled.hr`
+  width: 100%;
+  border: none;
+  border-top: 1px solid #e0e0e0; /* 색상 조정 */
+  margin: 15px 0; /* 위아래 여백 */
+`;
 
 const Root = styled.div`
   display: flex;
@@ -54,8 +64,10 @@ const HiddenSection = styled.div`
 `;
 
 const CheckUserInfo = ({
+  userName = "사용자 이름",
   userId = "아이디",
   password = "비밀번호",
+  email = "이메일",
   nickname = "닉네임",
   Target_Expenditure_Amout = "테스트 목표 지출금액",
 }) => {
@@ -90,6 +102,22 @@ const CheckUserInfo = ({
 
   return (
     <Root>
+      <CommonInput
+        placeholder={userName}
+        text="이름"
+        disabled="true"
+        background="#F5F5F5"
+        width="350px"
+      />
+
+      <CommonInput
+        placeholder={nickname}
+        text="닉네임"
+        {...commonInputProps}
+      />
+
+      <StyledHr />
+
       <CommonInput
         placeholder={userId}
         text="아이디"
@@ -141,9 +169,11 @@ const CheckUserInfo = ({
       </HiddenSection>
 
       <CommonInput
-        placeholder={nickname}
-        text="닉네임"
-        {...commonInputProps}
+        placeholder={email}
+        text="이메일"
+        disabled="true"
+        background="#F5F5F5"
+        width="350px"
       />
 
       <CommonInput
