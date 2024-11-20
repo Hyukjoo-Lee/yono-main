@@ -32,9 +32,9 @@ export function CardChallege() {
           selectedTab={setSelectedTab}
         />
         <CommonPageInfo
-          title={selectedTab == 0 ? "전월비교" : "뱃지 랭킹확인"}
+          title={selectedTab === 0 ? "전월비교" : "뱃지 랭킹확인"}
           text={
-            selectedTab == 0 ? (
+            selectedTab === 0 ? (
               <p>
                 전달과 이번달의 소비패턴을 분석해드려요!
                 <br />
