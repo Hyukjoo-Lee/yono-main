@@ -58,7 +58,7 @@ const InlineWrapper = styled.div`
 const HiddenSection = styled.div`
   margin-top: 10px;
   width: 350px;
-  display: ${({ visible }) => (visible ? "flex" : "none")};
+  display: ${({ $visible }) => ($visible ? "flex" : "none")};
   flex-direction: column;
   gap: 15px;
 `;
@@ -105,7 +105,7 @@ const CheckUserInfo = ({
       <CommonInput
         placeholder={userName}
         text="이름"
-        disabled="true"
+        disabled= {true}
         background="#F5F5F5"
         width="350px"
       />
@@ -121,7 +121,7 @@ const CheckUserInfo = ({
       <CommonInput
         placeholder={userId}
         text="아이디"
-        disabled="true"
+        disabled= {true}
         background="#F5F5F5"
         width="350px"
       />
@@ -140,10 +140,10 @@ const CheckUserInfo = ({
         />
       </InlineWrapper>
 
-      <HiddenSection visible={showPasswordQuestion}>
+      <HiddenSection $visible={showPasswordQuestion}>
         <CommonInput
           placeholder="비밀번호 질문"
-          disabled="true" 
+          disabled= {true}
           text="질문"
           width="350px"
         />
@@ -171,7 +171,7 @@ const CheckUserInfo = ({
       <CommonInput
         placeholder={email}
         text="이메일"
-        disabled="true"
+        disabled= {true}
         background="#F5F5F5"
         width="350px"
       />

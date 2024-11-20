@@ -5,7 +5,7 @@ const InputStyle = styled.input`
   width: ${(props) => (props.width ? props.width : "218px")}; 
   height: ${(props) => (props.height ? props.height : "38px")};
   background-color: ${(props) =>
-    props.background ? props.background : "#F8F9FE"};
+    props.$background ? props.$background : "#F8F9FE"};
   border: 1px solid ${(props) => props.borderColor || "#D7D7D7"};
   border-radius: ${(props) =>
     props.borderRadius ? props.borderRadius : "5px"};
@@ -17,6 +17,10 @@ const InputStyle = styled.input`
   &::placeholder {
     font-size: ${(props) => (props.placeholderFontSize ? props.placeholderFontSize : "16px")};
     color: #b0b0b0;
+  }
+  &:focus {
+  border: 1px solid ${(props) => props.focusBorderColor || "#1976D2"};
+  outline: none;
   }
   &:hover {
     & p {
@@ -32,7 +36,7 @@ const InputStyle = styled.input`
 
 const TextStyle = styled.p`
   font-size: ${(props) =>
-    props.$TextFontSize ? props.TextFontSize : "16px"};
+    props.TextFontSize ? props.TextFontSize : "16px"};
   color: ${(props) => (props.color ? props.color : props.theme.color.white)};
   margin-bottom: 6px;
   margin-top: 0px;
@@ -70,7 +74,7 @@ const CommonInput = (props) => {
         type={type}
         width={width}
         height={height}
-        background={background}
+        $background={background}
         borderColor={borderColor}
         focusBorderColor={focusBorderColor}
         borderRadius={borderRadius}
