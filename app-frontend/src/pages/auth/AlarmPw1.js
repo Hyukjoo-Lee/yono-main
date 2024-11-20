@@ -1,5 +1,4 @@
 import CommonDialog from "../../common/CommonDialog";
-import CustomButton from "../../common/CommonButton";
 export function AlarmPw1() {
   return (
     <div>

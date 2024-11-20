@@ -107,8 +107,8 @@ const CommonDialog = (props) => {
               zIndex: "1001",
             }}
           >
-            <CustomButton text={text1} width={width1} height="40px" />
-            <CustomButton text={text2} width={width2} height="40px" />
+            <CustomButton text={text1} width={width1} height="30px" />
+            <CustomButton text={text2} width={width2} height="30px" />
           </div>
         </DialogInner>
       </DialogWrapper>
