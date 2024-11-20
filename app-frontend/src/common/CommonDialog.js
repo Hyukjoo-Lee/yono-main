@@ -68,7 +68,7 @@ const CommonDialog = (props) => {
   const {
     className,
     $visible,
-    content = "내용입력", //들어갈 내용 초기값
+    children, //들어갈 내용 초기값
     width,
     height,
     fontSize,
@@ -92,7 +92,7 @@ const CommonDialog = (props) => {
             $Contentwidth={$Contentwidth}
             $Contentheight={$Contentheight}
           >
-            {content}
+            {children}
           </ContentWrapper>
 
           <CloseButton>×</CloseButton>
