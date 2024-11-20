@@ -1,5 +1,5 @@
-import React from "react";
-import styled from "styled-components";
+import React from 'react';
+import styled from 'styled-components';
 
 const Root = styled.div`
   width: 100%;
@@ -19,7 +19,7 @@ const Root = styled.div`
 
 const CalendarDays = (props) => {
   const days = [];
-  const date = ["일", "월", "화", "수", "목", "금", "토"];
+  const date = ['일', '월', '화', '수', '목', '금', '토'];
 
   for (let i = 0; i < 7; i++) {
     days.push(<div key={i}>{date[i]}</div>);

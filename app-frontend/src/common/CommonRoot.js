@@ -1,4 +1,4 @@
-import styled from "styled-components";
+import styled from 'styled-components';
 
 const CommonRoot = styled.div`
   width: ${(props) => props.theme.display.lg};

@@ -1,10 +1,10 @@
-import React, { useState } from "react";
-import CommonTabs from "../../common/CommonTabs";
-import CardRegTab from "./CardRegTab";
-import CardRecTab from "./CardRecTab";
-import styled from "styled-components";
+import React, { useState } from 'react';
+import CommonTabs from '../../common/CommonTabs';
+import CardRegTab from './CardRegTab';
+import CardRecTab from './CardRecTab';
+import styled from 'styled-components';
 
-import CommonRoot from "../../common/CommonRoot";
+import CommonRoot from '../../common/CommonRoot';
 
 const RootIn = styled.div`
   width: ${(props) => props.theme.display.lg};
@@ -14,15 +14,12 @@ const RootIn = styled.div`
 
 export function MyCard() {
   const [selectedTab, setSelectedTab] = useState(0);
-  const items = [{text: "카드 등록"}, {text: "카드 추천"}]
+  const items = [{ text: '카드 등록' }, { text: '카드 추천' }];
 
   /**
    * 띄울 탭 페이지
    */
-  const panels = [
-    <CardRegTab />,
-    <CardRecTab />
-  ];
+  const panels = [<CardRegTab />, <CardRecTab />];
 
   return (
     <CommonRoot>

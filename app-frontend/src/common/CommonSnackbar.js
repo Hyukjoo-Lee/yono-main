@@ -1,30 +1,31 @@
-import React, { useState } from "react";
-import Box from "@mui/material/Box";
-import Snackbar from "@mui/material/Snackbar";
-import Alert from "@mui/material/Alert";
-import CommonButton from "./CommonButton";
-import styled from "styled-components";
+import React, { useState } from 'react';
+import Box from '@mui/material/Box';
+import Snackbar from '@mui/material/Snackbar';
+import Alert from '@mui/material/Alert';
+import CommonButton from './CommonButton';
+import styled from 'styled-components';
 
 const CommonSnackbarStyle = styled(Snackbar)`
-  max-width: ${(props) => props.maxWidth || "400px"};
-  width: ${(props) => props.width || "100%"};
-  height: ${(props) => props.height || "auto"};
-  border-radius: ${(props) => props.borderRadius || "8px"} !important;
+  max-width: ${(props) => props.maxWidth || '400px'};
+  width: ${(props) => props.width || '100%'};
+  height: ${(props) => props.height || 'auto'};
+  border-radius: ${(props) => props.borderRadius || '8px'} !important;
 `;
 
 const CustomAlert = styled(Alert)`
-  background-color: ${(props) => props.background || props.theme.color.lightBlue} !important;
-  color: ${(props) => props.color || "black"} !important;
+  background-color: ${(props) =>
+    props.background || props.theme.color.lightBlue} !important;
+  color: ${(props) => props.color || 'black'} !important;
   width: 100%;
   height: 100%;
 `;
 
 const CommonSnackbar = ({
-  buttonText = "Snackbar 테스트",
-  buttonTextSize = "14px",
-  message = "기본 메시지",
-  type = "success",
-  position = { vertical: "top", horizontal: "center" },
+  buttonText = 'Snackbar 테스트',
+  buttonTextSize = '14px',
+  message = '기본 메시지',
+  type = 'success',
+  position = { vertical: 'top', horizontal: 'center' },
   duration = 3000,
   maxWidth,
   width,
@@ -32,7 +33,7 @@ const CommonSnackbar = ({
   borderRadius,
   background,
   color,
-  marginTop
+  marginTop,
 }) => {
   const [openSnackbar, setOpenSnackbar] = useState(false);
 
@@ -47,14 +48,18 @@ const CommonSnackbar = ({
   return (
     <Box
       sx={{
-        display: "flex",
-        justifyContent: "center",
-        alignItems: "center",
+        display: 'flex',
+        justifyContent: 'center',
+        alignItems: 'center',
         marginTop: marginTop,
       }}
     >
-      <CommonButton text={buttonText} fontSize={buttonTextSize} onClick={handleOpenSnackbar} />
-      
+      <CommonButton
+        text={buttonText}
+        fontSize={buttonTextSize}
+        onClick={handleOpenSnackbar}
+      />
+
       <CommonSnackbarStyle
         open={openSnackbar}
         onClose={handleCloseSnackbar}

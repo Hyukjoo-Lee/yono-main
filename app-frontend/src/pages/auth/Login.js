@@ -1,13 +1,13 @@
-import React from "react";
-import styled from "styled-components";
-import CommonInput from "../../common/CommonInput";
-import CustomButton from "../../common/CommonButton";
-import image from "./images/or.png";
-import kakaoimage from "./images/kakao.png";
-import google from "./images/google.png";
-import IconButton from "./Component/IconButton"; // IButton을 정확히 import
-import CommonRoot from "../../common/CommonRoot";
-import { Link } from "react-router-dom";
+import React from 'react';
+import styled from 'styled-components';
+import CommonInput from '../../common/CommonInput';
+import CustomButton from '../../common/CommonButton';
+import image from './images/or.png';
+import kakaoimage from './images/kakao.png';
+import google from './images/google.png';
+import IconButton from './Component/IconButton'; // IButton을 정확히 import
+import CommonRoot from '../../common/CommonRoot';
+import { Link } from 'react-router-dom';
 
 const Rootin = styled.div`
   display: flex;
@@ -66,7 +66,7 @@ const LineStyle = styled.p`
   font-size: 13px;
   color: #464646;
 `;
-const StyledCheckbox = styled.input.attrs({ type: "checkbox" })`
+const StyledCheckbox = styled.input.attrs({ type: 'checkbox' })`
   margin-right: -30px;
 `;
 const Label = styled.label`
@@ -82,7 +82,7 @@ const LowContainer = styled.div`
 `;
 const IconButtonContainer = styled.div`
   margin-top: 10px;
-  width:80px;
+  width: 80px;
   display: flex;
   flex-direction: flex-end;
   justify-content: space-between;
@@ -91,8 +91,8 @@ const img = styled.image``;
 
 export function Login() {
   const list = [
-    { label: "아이디찾기", path: "/find-id" },
-    { label: "비밀번호찾기", path: "/find-pwd" },
+    { label: '아이디찾기', path: '/find-id' },
+    { label: '비밀번호찾기', path: '/find-pwd' },
   ];
 
   return (

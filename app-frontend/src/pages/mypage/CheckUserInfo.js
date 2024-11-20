@@ -1,13 +1,13 @@
-import React, { useState } from "react";
-import CustomButton from "../../common/CommonButton";
-import CommonInput from "../../common/CommonInput";
-import ImageGallery from "./ImageSelect";
-import styled from "styled-components";
+import React, { useState } from 'react';
+import CustomButton from '../../common/CommonButton';
+import CommonInput from '../../common/CommonInput';
+import ImageGallery from './ImageSelect';
+import styled from 'styled-components';
 
-import image1 from "../../assets/images/Character1.png";
-import image2 from "../../assets/images/Character2.png";
-import image3 from "../../assets/images/Character3.png";
-import image4 from "../../assets/images/Character4.png";
+import image1 from '../../assets/images/Character1.png';
+import image2 from '../../assets/images/Character2.png';
+import image3 from '../../assets/images/Character3.png';
+import image4 from '../../assets/images/Character4.png';
 
 // 리팩토링 필요
 // 수정할 비밀번호 -> 답변 맞으면 (버튼 누르면) 나오는 형태로 수정
@@ -58,46 +58,46 @@ const InlineWrapper = styled.div`
 const HiddenSection = styled.div`
   margin-top: 10px;
   width: 350px;
-  display: ${({ $visible }) => ($visible ? "flex" : "none")};
+  display: ${({ $visible }) => ($visible ? 'flex' : 'none')};
   flex-direction: column;
   gap: 15px;
 `;
 
 const CheckUserInfo = ({
-  userName = "사용자 이름",
-  userId = "아이디",
-  password = "비밀번호",
-  email = "이메일",
-  nickname = "닉네임",
-  Target_Expenditure_Amout = "테스트 목표 지출금액",
+  userName = '사용자 이름',
+  userId = '아이디',
+  password = '비밀번호',
+  email = '이메일',
+  nickname = '닉네임',
+  Target_Expenditure_Amout = '테스트 목표 지출금액',
 }) => {
   const [inputDisabled, setInputDisabled] = useState(true);
-  const [backgroundColor, setBackgroundColor] = useState("#F5F5F5");
+  const [backgroundColor, setBackgroundColor] = useState('#F5F5F5');
   const [showPasswordQuestion, setShowPasswordQuestion] = useState(false);
   const [showPasswordEdited, setShowPasswordEdited] = useState(false);
 
   const modify = () => {
     setInputDisabled(false);
-    setBackgroundColor("#F8F9FE");
+    setBackgroundColor('#F8F9FE');
   };
 
   const togglePasswordQuestion = () => {
     setShowPasswordQuestion(!showPasswordQuestion);
   };
 
-  const togglePasswordEdit= () => {
+  const togglePasswordEdit = () => {
     setShowPasswordEdited(!showPasswordEdited);
   };
 
   const commonInputProps = {
     disabled: inputDisabled,
     background: backgroundColor,
-    width: "350px",
+    width: '350px',
   };
 
   const commonButtonProps = {
-    width: "100px",
-    height: "38px",
+    width: '100px',
+    height: '38px',
   };
 
   return (
@@ -105,23 +105,19 @@ const CheckUserInfo = ({
       <CommonInput
         placeholder={userName}
         text="이름"
-        disabled= {true}
+        disabled={true}
         background="#F5F5F5"
         width="350px"
       />
 
-      <CommonInput
-        placeholder={nickname}
-        text="닉네임"
-        {...commonInputProps}
-      />
+      <CommonInput placeholder={nickname} text="닉네임" {...commonInputProps} />
 
       <StyledHr />
 
       <CommonInput
         placeholder={userId}
         text="아이디"
-        disabled= {true}
+        disabled={true}
         background="#F5F5F5"
         width="350px"
       />
@@ -143,17 +139,13 @@ const CheckUserInfo = ({
       <HiddenSection $visible={showPasswordQuestion}>
         <CommonInput
           placeholder="비밀번호 질문"
-          disabled= {true}
+          disabled={true}
           text="질문"
           width="350px"
         />
 
         <InlineWrapper>
-          <CommonInput
-            placeholder="비밀번호 답변"
-            text="답변"
-            width="350px"
-          />
+          <CommonInput placeholder="비밀번호 답변" text="답변" width="350px" />
           <CustomButton
             text="확인"
             onClick={togglePasswordEdit}
@@ -171,7 +163,7 @@ const CheckUserInfo = ({
       <CommonInput
         placeholder={email}
         text="이메일"
-        disabled= {true}
+        disabled={true}
         background="#F5F5F5"
         width="350px"
       />
@@ -186,15 +178,11 @@ const CheckUserInfo = ({
         캐릭터 선택
         <ImageGallery images={images} />
       </Root2>
-      
-      <Button>
-        <CustomButton
-          text="저장"
-          onClick={modify}
-          {...commonButtonProps}
-        />
 
-        <CustomButton 
+      <Button>
+        <CustomButton text="저장" onClick={modify} {...commonButtonProps} />
+
+        <CustomButton
           text="회원 탈퇴"
           // onClick={}
           {...commonButtonProps}
