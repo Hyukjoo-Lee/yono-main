@@ -98,7 +98,7 @@ export function Login() {
     <CommonRoot>
       <Rootin>
         <HighContainer>
-          <Title>로그인</Title>
+          <CommonPageInfo title="로그인" text={<p></p>} />
 
           <CommonInput
             text="아이디"

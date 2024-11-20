@@ -58,7 +58,7 @@ export function SignUp() {
   return (
     <CommonRoot>
       <FullContainer>
-        <Title>회원가입</Title>
+        <CommonPageInfo title="회원가입" text={<p></p>} />
         <MiddleContainer>
           <MiddleTitle>회원정보입력</MiddleTitle>
           <StyledHr />

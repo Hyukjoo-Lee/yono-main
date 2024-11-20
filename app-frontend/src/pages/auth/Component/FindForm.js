@@ -53,7 +53,7 @@ const FindForm = ({ find }) => {
     <CommonRoot>
       <Rootin>
         <FullContainer>
-          <Title>{find}</Title>
+          <CommonPageInfo title={find} text={<p></p>} />
 
           <MiddleContainer>
             <CommonSelect
