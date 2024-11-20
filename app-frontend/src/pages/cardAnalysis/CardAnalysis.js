@@ -4,6 +4,7 @@ import MonthlyStatistics from "./monthlyStatistics/MonthlyStatistics";
 import CommonPageInfo from "../../common/CommonPageInfo";
 import CommonRoot from "../../common/CommonRoot";
 import CommonTabs from "../../common/CommonTabs";
+import CategoryStatics from "./CategoryStatics/CategoryStatics";
 
 const CardAnalysis = () => {
   const [selectedTab, setSelectedTab] = useState(0);
@@ -16,7 +17,7 @@ const CardAnalysis = () => {
   const panels = [
     <DailyStatistics />,
     <MonthlyStatistics />,
-    <DailyStatistics />,
+    <CategoryStatics />,
   ];
   return (
     <CommonRoot>

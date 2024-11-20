@@ -7,6 +7,7 @@ const IconButton = ({ imgesRoute }) => {
       alt="사진"
       style={{
         background: "white",
+        width: "30px"
       }}
     />
   );
