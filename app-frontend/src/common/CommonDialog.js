@@ -1,6 +1,7 @@
 import React from 'react';
 import styled from 'styled-components';
 import CustomButton from './CommonButton';
+import { useEffect, useState } from 'react';
 
 const DialogOverlay = styled.div`
   box-sizing: border-box;

@@ -3,6 +3,8 @@ import styled from 'styled-components';
 import CommonInput from '../../common/CommonInput';
 import CommonButton from '../../common/CommonButton';
 import CommonSelect from '../../common/CommonSelect';
+import CommonPageInfo from '../../common/CommonPageInfo';
+
 const FullContainer = styled.div`
   display: flex;
   flex-direction: column;

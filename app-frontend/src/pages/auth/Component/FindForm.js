@@ -4,6 +4,7 @@ import styled from 'styled-components';
 import CustomButton from '../../../common/CommonButton';
 import CommonInput from '../../../common/CommonInput';
 import CommonRoot from '../../../common/CommonRoot';
+import CommonPageInfo from '../../../common/CommonPageInfo';
 
 const Rootin = styled.div`
   display: flex;

@@ -8,6 +8,7 @@ import google from './images/google.png';
 import IconButton from './Component/IconButton'; // IButton을 정확히 import
 import CommonRoot from '../../common/CommonRoot';
 import { Link } from 'react-router-dom';
+import CommonPageInfo from '../../common/CommonPageInfo';
 
 const Rootin = styled.div`
   display: flex;
