@@ -61,7 +61,7 @@ const MainIntro = () => {
         <MainButton />
       </StyledTextCon>
       <StyledMainImg>
-        <img src={Main_img} />
+        <img src={Main_img} alt="메인사진"/>
       </StyledMainImg>
     </StyledMainIntro>
   );
