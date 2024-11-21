@@ -87,7 +87,6 @@ const IconButtonContainer = styled.div`
   flex-direction: flex-end;
   justify-content: space-between;
 `;
-const img = styled.image``;
 
 export function Login() {
   const list = [
