@@ -67,7 +67,6 @@ const FindForm = ({ find }) => {
               width="300px"
               height="35px"
               focusBorderWidth="10px"
-              focusBorderColor="#4064E6"
             />
           </MiddleContainer>
 
