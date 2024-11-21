@@ -10,7 +10,6 @@ import MainIntro from "./MainIntro";
 
 const StyledWrap = styled.div`
   width: 1200px;
-  height: 1000px;
 `;
 
 export function MainPage() {

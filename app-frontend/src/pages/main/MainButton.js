@@ -23,7 +23,7 @@ const StyledBntTitle = styled.a`
 const MainButton = () => {
   return (
     <StyledButton>
-      <StyledBntTitle href="#" class="button">
+      <StyledBntTitle href="#" className="button">
         더 알아보기
       </StyledBntTitle>
     </StyledButton>
