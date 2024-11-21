@@ -11,12 +11,6 @@ const FullContainer = styled.div`
   justify-content: center;
   align-items: center;
 `;
-const Title = styled.div`
-  font-size: 36px;
-  color: #4064e6;
-  font-weight: bold;
-  margin-bottom: -20px;
-`;
 
 const StyledHr = styled.hr`
   width: 100%;

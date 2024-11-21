@@ -22,13 +22,6 @@ const FullContainer = styled.div`
   align-items: center;
 `;
 
-const Title = styled.div`
-  font-size: 36px;
-  font-family: Noto Sans;
-  color: #4064e6;
-  font-weight: bold;
-`;
-
 const MiddleContainer = styled.div`
   display: flex;
   flex-direction: column;
