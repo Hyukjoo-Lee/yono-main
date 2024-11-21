@@ -11,6 +11,7 @@ export function MainPage() {
         text="prop testing"
         fontSize="10px"
       />
+      CommonRoot
     </CommonRoot>
   );
 }

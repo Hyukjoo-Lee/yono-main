@@ -4,6 +4,7 @@ import styled from 'styled-components';
 import CustomButton from '../../../common/CommonButton';
 import CommonInput from '../../../common/CommonInput';
 import CommonRoot from '../../../common/CommonRoot';
+import CommonPageInfo from '../../../common/CommonPageInfo';
 
 const Rootin = styled.div`
   display: flex;
@@ -19,13 +20,6 @@ const FullContainer = styled.div`
   flex-direction: column;
   justify-content: center;
   align-items: center;
-`;
-
-const Title = styled.div`
-  font-size: 36px;
-  font-family: Noto Sans;
-  color: #4064e6;
-  font-weight: bold;
 `;
 
 const MiddleContainer = styled.div`
@@ -53,7 +47,7 @@ const FindForm = ({ find }) => {
     <CommonRoot>
       <Rootin>
         <FullContainer>
-          <Title>{find}</Title>
+          <CommonPageInfo title={find} text={<p></p>} />
 
           <MiddleContainer>
             <CommonSelect

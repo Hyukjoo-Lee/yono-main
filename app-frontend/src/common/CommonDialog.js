@@ -1,6 +1,7 @@
 import React from 'react';
 import styled from 'styled-components';
 import CustomButton from './CommonButton';
+import { useEffect, useState } from 'react';
 
 const DialogOverlay = styled.div`
   box-sizing: border-box;
@@ -64,6 +65,7 @@ const CloseButton = styled.button`
     color: blue;
   }
 `;
+
 const CommonDialog = (props) => {
   const {
     className,
@@ -80,10 +82,19 @@ const CommonDialog = (props) => {
     width1 = '100px',
     width2 = '100px',
   } = props;
+
+  const [isOpen, setIsOpen] = useState($visible); // 다이얼로그 상태 관리
+  useEffect(() => {
+    setIsOpen($visible);
+  }, [$visible]);
+  const handleClose = () => {
+    setIsOpen(false); // 다이얼로그 닫기
+  };
+
   return (
     <div>
       <DialogOverlay $visible={$visible} />
-      <DialogWrapper className={className} tabIndex="-1" $visible={$visible}>
+      <DialogWrapper className={className} tabIndex="-1" $visible={isOpen}>
         <DialogInner tabIndex="0" width={width} height={height}>
           <ContentWrapper
             fontSize={fontSize}
@@ -94,7 +105,9 @@ const CommonDialog = (props) => {
             {children}
           </ContentWrapper>
 
-          <CloseButton>×</CloseButton>
+          <CloseButton type="button" onClick={handleClose}>
+            ×
+          </CloseButton>
           <div
             style={{
               display: 'flex',

@@ -3,17 +3,13 @@ import styled from 'styled-components';
 import CommonInput from '../../common/CommonInput';
 import CommonButton from '../../common/CommonButton';
 import CommonSelect from '../../common/CommonSelect';
+import CommonPageInfo from '../../common/CommonPageInfo';
+
 const FullContainer = styled.div`
   display: flex;
   flex-direction: column;
   justify-content: center;
   align-items: center;
-`;
-const Title = styled.div`
-  font-size: 36px;
-  color: #4064e6;
-  font-weight: bold;
-  margin-bottom: -20px;
 `;
 
 const StyledHr = styled.hr`
@@ -58,7 +54,7 @@ export function SignUp() {
   return (
     <CommonRoot>
       <FullContainer>
-        <Title>회원가입</Title>
+        <CommonPageInfo title="회원가입" text={<p></p>} />
         <MiddleContainer>
           <MiddleTitle>회원정보입력</MiddleTitle>
           <StyledHr />

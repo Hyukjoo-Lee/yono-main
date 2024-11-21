@@ -8,6 +8,7 @@ import google from './images/google.png';
 import IconButton from './Component/IconButton'; // IButton을 정확히 import
 import CommonRoot from '../../common/CommonRoot';
 import { Link } from 'react-router-dom';
+import CommonPageInfo from '../../common/CommonPageInfo';
 
 const Rootin = styled.div`
   display: flex;
@@ -25,11 +26,7 @@ const HighContainer = styled.div`
   justify-content: center;
   align-items: center;
 `;
-const Title = styled.div`
-  font-size: 36px;
-  color: #4064e6;
-  font-weight: bold;
-`;
+
 const MiddleContainer = styled.div`
   margin-top: 10px;
   width: 25%;
@@ -98,7 +95,7 @@ export function Login() {
     <CommonRoot>
       <Rootin>
         <HighContainer>
-          <Title>로그인</Title>
+          <CommonPageInfo title="로그인" text={<p></p>} />
 
           <CommonInput
             text="아이디"
