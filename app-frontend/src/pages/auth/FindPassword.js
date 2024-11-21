@@ -1,9 +1,10 @@
-import CommonRoot from "../../common/CommonRoot";
-
+import React from "react";
+import  FindForm  from "./Component/FindForm";
 export function FindPassword() {
+  const find="비밀번호 찾기";
   return (
-    <CommonRoot>
-      <h1>비밀번호찾기</h1>
-    </CommonRoot>
+    <div>
+      <FindForm find={find}/>
+    </div>
   );
 }

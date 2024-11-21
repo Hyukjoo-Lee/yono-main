@@ -10,7 +10,8 @@ const ButtonStyle = styled(Button)`
       props.background ? props.background : props.theme.color.blue};
     border: ${(props) =>
       props.borderColor ? `1px solid ${props.borderColor}` : "0px"};
-    border-radius: ${(props) => (props.radius ? props.radius : "6px")};
+    border-radius: ${(props) =>
+      props.borderRadius ? props.borderRadius : "6px"};
     cursor: pointer;
     display: flex;
     align-items: center;
@@ -61,10 +62,10 @@ const CustomButton = (props) => {
       width={width}
       height={height}
       background={background}
-      borderColor={borderColor}
+      borderCe={borderColor}
       radius={borderRadius}
-      hoverBk={hoverBk}
-      hoverColor={hoverColor}
+      hover1={hoverBk}
+      hover2={hoverColor}
       onClick={disabled ? undefined : onClick}
       disabled={disabled}
       disableRipple

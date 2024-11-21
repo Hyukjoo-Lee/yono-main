@@ -1,23 +1,14 @@
 import * as React from 'react';
 import { ResponsivePie } from '@nivo/pie';
 
-const Piechart = () => {
+const Piechart = ({data}) => {
 
     return (
         // chart height이 100%이기 때문이 chart를 덮는 마크업 요소에 height 설정
-        <div className='piechart' style={{ width: '100%', height: '38rem', margin: '0 auto' }}>
+        <div className='piechart' style={{ width: '572px', height: '528px', margin: '0 auto' }}>
             <ResponsivePie
                 // chart에 사용될 데이터
-                data={[
-                    { id: '외향형', value: 1 },
-                    { id: '내향형', value: 2 },
-                    { id: '감각형', value: 3 },
-                    { id: '직관형', value: 4 },
-                    { id: '사고형', value: 5 },
-                    { id: '감정형', value: 6 },
-                    { id: '인식형', value: 7 },
-                    { id: '판단형', value: 8 },
-                ]}
+                data={data}
 
                 // chart margin
                 margin={{ top: 40, right: 80, bottom: 80, left: 80 }}
@@ -34,9 +25,10 @@ const Piechart = () => {
                 // chart 색상
                 // 1. 커스텀해서 사용할 때
                 // colors={['red', 'pink', 'orange', 'skyblue', 'violet', 'green', 'purple', 'yellow']}
+                colors = {['#DDEBF7', '#CBD6EF', '#9ECAE0', '#6BAED6', '#4292C6']}
 
                 // 2. nivo에서 제공해주는 색상 조합 사용할 때
-                colors={{ scheme: 'pastel1' }}
+                // colors={{ scheme: 'pastel1' }}
                 
                 // pad border 두께 설정
                 borderWidth={1}
@@ -94,7 +86,7 @@ const Piechart = () => {
                         justify: false, // 글씨, 색상간 간격 justify 적용 여부
                         translateX: 0, // chart와 X 간격
                         translateY: 80, // chart와 Y 간격
-                        itemsSpacing: 0, // item간 간격
+                        itemsSpacing: 10, // item간 간격
                         itemWidth: 100, // item width
                         itemHeight: 18, // item height
                         itemDirection: 'left-to-right', // item 내부에 그려지는 방향
