@@ -1,32 +1,28 @@
-import "./App.css";
-import {
-  BrowserRouter as Router,
-  Routes,
-  Route,
-} from "react-router-dom";
-import styled from "styled-components";
+import './App.css';
+import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
+import styled from 'styled-components';
 
-import { MainHeader } from "./common/MainHeader";
-import Footer from "./common/Footer";
+import { MainHeader } from './common/MainHeader';
+import Footer from './common/Footer';
 
-import { ThemeProvider } from "styled-components";
-import theme from "./theme/theme";
-import { MainPage } from "./pages/MainPage";
-import { Login } from "./pages/auth/Login";
-import { SignUp } from "./pages/auth/SignUp";
-import { FindID } from "./pages/auth/FindID";
-import { MyPage } from "./pages/mypage/MyPage";
-import { FindPassword } from "./pages/auth/FindPassword";
-import { Intro } from "./pages/intro/Intro";
-import { CardChallege } from "./pages/cardChallege/CardChallege";
-import CardAnalysis from "./pages/cardAnalysis/CardAnalysis";
-import { Community } from "./pages/community/Community";
-import  {CommunityFormBox} from "./pages/community/CommunityFormBox";
-import { MyCard } from "./pages/mycard/MyCard";
+import { ThemeProvider } from 'styled-components';
+import theme from './theme/theme';
+import { MainPage } from './pages/MainPage';
+import { Login } from './pages/auth/Login';
+import { SignUp } from './pages/auth/SignUp';
+import { FindID } from './pages/auth/FindID';
+import { MyPage } from './pages/mypage/MyPage';
+import { FindPassword } from './pages/auth/FindPassword';
+import { Intro } from './pages/intro/Intro';
+import { CardChallege } from './pages/cardChallege/CardChallege';
+import CardAnalysis from './pages/cardAnalysis/CardAnalysis';
+import { Community } from './pages/community/Community';
+import { CommunityFormBox } from './pages/community/CommunityFormBox';
+import { MyCard } from './pages/mycard/MyCard';
 const Root = styled.div`
   & *,
   p {
-    font-family: "Noto Sans KR";
+    font-family: 'Noto Sans KR';
   }
 `;
 

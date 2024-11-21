@@ -1,11 +1,11 @@
-import React from "react";
-import Slider from "react-slick";
-import "slick-carousel/slick/slick.css";
-import "slick-carousel/slick/slick-theme.css";
-import { ReactComponent as LeftArrowImage } from "../../assets/images/left_arrow.svg";
-import { ReactComponent as RightArrowImage } from "../../assets/images/right_arrow.svg";
-import styled from "styled-components";
-import CardDemoImage from "../../assets/images/card_demo.png";
+import React from 'react';
+import Slider from 'react-slick';
+import 'slick-carousel/slick/slick.css';
+import 'slick-carousel/slick/slick-theme.css';
+import { ReactComponent as LeftArrowImage } from '../../assets/images/left_arrow.svg';
+import { ReactComponent as RightArrowImage } from '../../assets/images/right_arrow.svg';
+import styled from 'styled-components';
+import CardDemoImage from '../../assets/images/card_demo.png';
 
 function CardSlider({ image, name }) {
   return (
@@ -54,7 +54,7 @@ const SlickArrowLeft = ({ currentSlide, slideCount, ...props }) => (
   <ArrowWrapper
     {...props}
     className={
-      "slick-prev slick-arrow" + (currentSlide === 0 ? " slick-disabled" : "")
+      'slick-prev slick-arrow' + (currentSlide === 0 ? ' slick-disabled' : '')
     }
   >
     <LeftArrowImage />
@@ -65,8 +65,8 @@ const SlickArrowRight = ({ currentSlide, slideCount, ...props }) => (
   <ArrowWrapper
     {...props}
     className={
-      "slick-next slick-arrow" +
-      (currentSlide === slideCount - 1 ? " slick-disabled" : "")
+      'slick-next slick-arrow' +
+      (currentSlide === slideCount - 1 ? ' slick-disabled' : '')
     }
   >
     <RightArrowImage />
@@ -77,7 +77,6 @@ const SliderContainer = styled.div`
   width: 80%;
   margin: 47px auto 0;
 `;
-
 
 function CustomSlides({ cardList }) {
   const settings = {
@@ -99,7 +98,7 @@ function CustomSlides({ cardList }) {
             <CardSlider key={index} image={card.image} name={card.name} />
           ))
         ) : (
-          <CardSlider image={CardDemoImage} name={"No cards available"} />
+          <CardSlider image={CardDemoImage} name={'No cards available'} />
         )}
       </Slider>
     </SliderContainer>

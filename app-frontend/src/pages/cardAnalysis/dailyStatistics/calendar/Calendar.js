@@ -1,9 +1,17 @@
+<<<<<<< HEAD
 import React, { useState } from "react";
 import styled from "styled-components";
 import CalendarHeader from "./CalendarHeader";
 import CalendarDays from "./CalendarDays";
 import CalendarBody from "./ClaendarBody";
 import { addMonths, subMonths, addYears, subYears } from "date-fns";
+=======
+import React, { useState } from 'react';
+import CalendarHeader from './CalendarHeader';
+import CalendarDays from './CalendarDays';
+import CalendarBody from './ClaendarBody';
+import { addMonths, subMonths, addYears, subYears } from 'date-fns';
+>>>>>>> origin
 
 const Root = styled.div`
   border-radius: 7px;
