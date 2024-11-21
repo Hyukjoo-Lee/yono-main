@@ -1,17 +1,17 @@
-import React from "react";
-import styled from "styled-components";
-import Button from "@mui/material/Button";
+import React from 'react';
+import styled from 'styled-components';
+import Button from '@mui/material/Button';
 
 const ButtonStyle = styled(Button)`
   &.MuiButtonBase-root {
-    min-width: ${(props) => (props.width ? props.width : "162px")};
-    height: ${(props) => (props.height ? props.height : "48px")};
+    min-width: ${(props) => (props.width ? props.width : '162px')};
+    height: ${(props) => (props.height ? props.height : '48px')};
     background-color: ${(props) =>
       props.background ? props.background : props.theme.color.blue};
     border: ${(props) =>
-      props.borderColor ? `1px solid ${props.borderColor}` : "0px"};
+      props.borderColor ? `1px solid ${props.borderColor}` : '0px'};
     border-radius: ${(props) =>
-      props.borderRadius ? props.borderRadius : "6px"};
+      props.borderRadius ? props.borderRadius : '6px'};
     cursor: pointer;
     display: flex;
     align-items: center;

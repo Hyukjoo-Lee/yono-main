@@ -1,5 +1,5 @@
-import React from "react";
-import styled from "styled-components";
+import React from 'react';
+import styled from 'styled-components';
 
 const Root = styled.div`
   width: 100%;
@@ -79,18 +79,18 @@ const ProfileBox = styled.div`
 
 const RankingTable = () => {
   const items = [
-    { number: 1, img: "", name: "한글이름님(영어아이디)", count: 65000 },
-    { number: 2, img: "", name: "한글이름님(영어아이디)", count: 50000 },
-    { number: 3, img: "", name: "한글이름님(영어아이디)", count: 40000 },
-    { number: 4, img: "", name: "한글이름님(영어아이디)", count: 5000 },
-    { number: 5, img: "", name: "한글이름님(영어아이디)", count: 5000 },
-    { number: 6, img: "", name: "한글이름님(영어아이디)", count: 5000 },
-    { number: 7, img: "", name: "한글이름님(영어아이디)", count: 400 },
-    { number: 8, img: "", name: "한글이름님(영어아이디)", count: 400 },
-    { number: 9, img: "", name: "한글이름님(영어아이디)", count: 400 },
-    { number: 10, img: "", name: "한글이름님(영어아이디)", count: 400 },
-    { number: 11, img: "", name: "한글이름님(영어아이디)", count: 400 },
-    { number: 12, img: "", name: "한글이름님(영어아이디)", count: 400 },
+    { number: 1, img: '', name: '한글이름님(영어아이디)', count: 65000 },
+    { number: 2, img: '', name: '한글이름님(영어아이디)', count: 50000 },
+    { number: 3, img: '', name: '한글이름님(영어아이디)', count: 40000 },
+    { number: 4, img: '', name: '한글이름님(영어아이디)', count: 5000 },
+    { number: 5, img: '', name: '한글이름님(영어아이디)', count: 5000 },
+    { number: 6, img: '', name: '한글이름님(영어아이디)', count: 5000 },
+    { number: 7, img: '', name: '한글이름님(영어아이디)', count: 400 },
+    { number: 8, img: '', name: '한글이름님(영어아이디)', count: 400 },
+    { number: 9, img: '', name: '한글이름님(영어아이디)', count: 400 },
+    { number: 10, img: '', name: '한글이름님(영어아이디)', count: 400 },
+    { number: 11, img: '', name: '한글이름님(영어아이디)', count: 400 },
+    { number: 12, img: '', name: '한글이름님(영어아이디)', count: 400 },
   ];
   return (
     <Root>

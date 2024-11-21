@@ -1,9 +1,9 @@
-import React from "react";
-import CommonSelect from "../../../common/CommonSelect";
-import styled from "styled-components";
-import CustomButton from "../../../common/CommonButton";
-import CommonInput from "../../../common/CommonInput";
-import CommonRoot from "../../../common/CommonRoot";
+import React from 'react';
+import CommonSelect from '../../../common/CommonSelect';
+import styled from 'styled-components';
+import CustomButton from '../../../common/CommonButton';
+import CommonInput from '../../../common/CommonInput';
+import CommonRoot from '../../../common/CommonRoot';
 
 const Rootin = styled.div`
   display: flex;
@@ -35,19 +35,18 @@ const MiddleContainer = styled.div`
   align-items: center;
 `;
 
-const ButtonContainer =styled.div`
+const ButtonContainer = styled.div`
   margin-top: 10px;
   display: flex;
   flex-direction: flex-end;
   justify-content: space-between;
-  width:45%;
-
+  width: 45%;
 `;
 const FindForm = ({ find }) => {
   const selectOptions = [
-    { value: "애완동물 이름은?", label: "애완동물 이름은?" },
-    { value: "당신의 생일은?", label: "당신의 생일은" },
-    { value: "당신이 좋아하는 음식은?", label: "당신이 좋아하는 음식은?" },
+    { value: '애완동물 이름은?', label: '애완동물 이름은?' },
+    { value: '당신의 생일은?', label: '당신의 생일은' },
+    { value: '당신이 좋아하는 음식은?', label: '당신이 좋아하는 음식은?' },
   ];
 
   return (
@@ -77,26 +76,26 @@ const FindForm = ({ find }) => {
               focusBorderColor="#4064E6"
             />
           </MiddleContainer>
- 
-         <ButtonContainer>
-          <CustomButton
-            text="확인"
-            width="50px"
-            height="30px"
-            background="#4064E6"
-            color="#ffffff"
-            // borderColor="#4064E6"
-            fontSize="20"
-          />
-          <CustomButton
-            text="취소"
-            width="50px"
-            height="30px"
-            background="#ffffff"
-            color="#4064E6"
-            // borderColor="1px"
-            fontSize="20"
-          />
+
+          <ButtonContainer>
+            <CustomButton
+              text="확인"
+              width="50px"
+              height="30px"
+              background="#4064E6"
+              color="#ffffff"
+              // borderColor="#4064E6"
+              fontSize="20"
+            />
+            <CustomButton
+              text="취소"
+              width="50px"
+              height="30px"
+              background="#ffffff"
+              color="#4064E6"
+              // borderColor="1px"
+              fontSize="20"
+            />
           </ButtonContainer>
         </FullContainer>
       </Rootin>

@@ -1,8 +1,8 @@
-import CommonRoot from "../../common/CommonRoot";
-import styled from "styled-components";
-import CommonInput from "../../common/CommonInput";
-import CommonButton from "../../common/CommonButton";
-import CommonSelect from "../../common/CommonSelect";
+import CommonRoot from '../../common/CommonRoot';
+import styled from 'styled-components';
+import CommonInput from '../../common/CommonInput';
+import CommonButton from '../../common/CommonButton';
+import CommonSelect from '../../common/CommonSelect';
 const FullContainer = styled.div`
   display: flex;
   flex-direction: column;
@@ -43,18 +43,17 @@ const IDContainer = styled.div`
   width: 103%;
 `;
 
-const ImgContainer=styled.img`
+const ImgContainer = styled.img`
   width: 100px;
   height: 100px;
   border: 1px solid #d7d7d7;
-
 `;
 
 export function SignUp() {
   const selectOptions = [
-    { value: "애완동물 이름은?", label: "애완동물 이름은?" },
-    { value: "당신의 생일은?", label: "당신의 생일은" },
-    { value: "당신이 좋아하는 음식은?", label: "당신이 좋아하는 음식은?" },
+    { value: '애완동물 이름은?', label: '애완동물 이름은?' },
+    { value: '당신의 생일은?', label: '당신의 생일은' },
+    { value: '당신이 좋아하는 음식은?', label: '당신이 좋아하는 음식은?' },
   ];
   return (
     <CommonRoot>
@@ -119,10 +118,7 @@ export function SignUp() {
             width="310px"
           />
           <StyledHr />
-          <ImgContainer>
-          
-          
-          </ImgContainer>
+          <ImgContainer></ImgContainer>
         </MiddleContainer>
       </FullContainer>
     </CommonRoot>
