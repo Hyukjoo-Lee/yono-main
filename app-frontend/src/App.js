@@ -1,24 +1,24 @@
-import './App.css';
-import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
+import { Route, BrowserRouter as Router, Routes } from 'react-router-dom';
 import styled from 'styled-components';
+import './App.css';
 
-import { MainHeader } from './common/MainHeader';
 import Footer from './common/Footer';
+import { MainHeader } from './common/MainHeader';
 
 import { ThemeProvider } from 'styled-components';
-import theme from './theme/theme';
-import { MainPage } from './pages/MainPage';
+import { FindID } from './pages/auth/FindID';
+import { FindPassword } from './pages/auth/FindPassword';
 import { Login } from './pages/auth/Login';
 import { SignUp } from './pages/auth/SignUp';
-import { FindID } from './pages/auth/FindID';
-import { MyPage } from './pages/mypage/MyPage';
-import { FindPassword } from './pages/auth/FindPassword';
-import { Intro } from './pages/intro/Intro';
-import { CardChallege } from './pages/cardChallege/CardChallege';
 import CardAnalysis from './pages/cardAnalysis/CardAnalysis';
+import { CardChallege } from './pages/cardChallege/CardChallege';
 import { Community } from './pages/community/Community';
 import { CommunityFormBox } from './pages/community/CommunityFormBox';
+import { Intro } from './pages/intro/Intro';
+import { MainPage } from './pages/main/MainPage';
 import { MyCard } from './pages/mycard/MyCard';
+import { MyPage } from './pages/mypage/MyPage';
+import theme from './theme/theme';
 const Root = styled.div`
   & *,
   p {
