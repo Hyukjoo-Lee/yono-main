@@ -1,5 +1,5 @@
-import React from "react";
-import styled from "styled-components";
+import React from 'react';
+import styled from 'styled-components';
 import {
   format,
   isSameDay,
@@ -8,7 +8,7 @@ import {
   endOfMonth,
   startOfWeek,
   endOfWeek,
-} from "date-fns";
+} from 'date-fns';
 
 const Root = styled.div``;
 
@@ -25,7 +25,7 @@ const DaysBox = styled.div`
   padding: 5px 10px;
   box-sizing: border-box;
   background: ${(props) =>
-    props.$selected ? "#eee" : props.theme.color.white};
+    props.$selected ? '#eee' : props.theme.color.white};
   &:last-child {
     border-right: 0px;
   }
@@ -36,12 +36,12 @@ const DayBox = styled.div`
   text-align: center;
   color: ${(props) =>
     props.$today
-      ? "red"
+      ? 'red'
       : props.$lastMonth
-      ? props.theme.color.brightGray
-      : props.$selected
-      ? props.theme.color.blue
-      : props.theme.color.black};
+        ? props.theme.color.brightGray
+        : props.$selected
+          ? props.theme.color.blue
+          : props.theme.color.black};
 `;
 
 const HistoryBox = styled.div`
@@ -70,16 +70,16 @@ const CalendarBody = ({ currentMonth, selectedDate, onDateClick }) => {
   const rows = [];
   let days = [];
   let day = startDate;
-  let formattedDate = "";
+  let formattedDate = '';
 
   while (day <= endDate) {
     for (let i = 0; i < 7; i++) {
-      formattedDate = format(day, "d");
+      formattedDate = format(day, 'd');
       const cloneDay = day;
       const history =
-        format(day, "MM-dd") === "10-03" ||
-        format(day, "MM-dd") === "10-02" ||
-        format(day, "MM-dd") === "10-04";
+        format(day, 'MM-dd') === '10-03' ||
+        format(day, 'MM-dd') === '10-02' ||
+        format(day, 'MM-dd') === '10-04';
 
       days.push(
         <DaysBox
@@ -90,20 +90,20 @@ const CalendarBody = ({ currentMonth, selectedDate, onDateClick }) => {
           <DayBox
             $today={isSameDay(day, new Date())}
             $selected={isSameDay(day, selectedDate)}
-            $lastMonth={format(currentMonth, "M") !== format(day, "M")}
+            $lastMonth={format(currentMonth, 'M') !== format(day, 'M')}
           >
             {formattedDate}
           </DayBox>
           {history && (
             <HistoryBox>
               <div />
-              <div style={{ background: "red" }} />
-              <div style={{ background: "pink" }} />
-              <div style={{ background: "green" }} />
-              <div style={{ background: "orange" }} />
+              <div style={{ background: 'red' }} />
+              <div style={{ background: 'pink' }} />
+              <div style={{ background: 'green' }} />
+              <div style={{ background: 'orange' }} />
             </HistoryBox>
           )}
-        </DaysBox>
+        </DaysBox>,
       );
       day = addDays(day, 1);
     }

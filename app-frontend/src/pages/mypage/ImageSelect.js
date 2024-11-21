@@ -1,6 +1,6 @@
-import React, { useState } from "react";
-import styled from "styled-components";
-import checkIcon from "../../assets/images/checkIcon.svg";
+import React, { useState } from 'react';
+import styled from 'styled-components';
+import checkIcon from '../../assets/images/checkIcon.svg';
 
 const Container = styled.div`
   display: flex;
@@ -25,7 +25,8 @@ const Thumbnail = styled.img`
   height: 50px;
   object-fit: cover;
   cursor: pointer;
-  border: 2px solid ${(props) => (props.$isSelected ? "#4064e6" : "transparent")};
+  border: 2px solid
+    ${(props) => (props.$isSelected ? '#4064e6' : 'transparent')};
   &:hover {
     border-color: #4064e6;
   }
@@ -66,7 +67,9 @@ const ImageGallery = ({ images }) => {
               $isSelected={image === selectedImage}
               onClick={() => handleThumbnailClick(image)}
             />
-            {image === selectedImage && <CheckIcon src={checkIcon} alt="Check" />}
+            {image === selectedImage && (
+              <CheckIcon src={checkIcon} alt="Check" />
+            )}
           </ThumbnailWrapper>
         ))}
       </ThumbnailContainer>

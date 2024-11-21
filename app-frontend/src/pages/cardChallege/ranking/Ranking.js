@@ -1,7 +1,7 @@
-import React from "react";
-import styled from "styled-components";
-import RankingComponent from "./RankingComponent";
-import RankingTable from "./RankingTable";
+import React from 'react';
+import styled from 'styled-components';
+import RankingComponent from './RankingComponent';
+import RankingTable from './RankingTable';
 
 const Root = styled.div``;
 

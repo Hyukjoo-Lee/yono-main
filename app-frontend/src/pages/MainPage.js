@@ -1,6 +1,6 @@
-import { ReactComponent as HandsClapping } from "../assets/images/HandsClapping.svg";
-import CustomButton from "../common/CommonButton";
-import CommonRoot from "../common/CommonRoot";
+import { ReactComponent as HandsClapping } from '../assets/images/HandsClapping.svg';
+import CustomButton from '../common/CommonButton';
+import CommonRoot from '../common/CommonRoot';
 
 export function MainPage() {
   return (

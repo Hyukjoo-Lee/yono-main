@@ -1,5 +1,5 @@
-import React from "react";
-import styled from "styled-components";
+import React from 'react';
+import styled from 'styled-components';
 
 const ButtonStyle = styled.button`
   width: 162px;
@@ -21,9 +21,9 @@ const TextStyle = styled.p`
 export default function Test() {
   return (
     <>
-        <ButtonStyle>
-          <TextStyle>더 알아보기</TextStyle>
-        </ButtonStyle>
+      <ButtonStyle>
+        <TextStyle>더 알아보기</TextStyle>
+      </ButtonStyle>
     </>
   );
 }

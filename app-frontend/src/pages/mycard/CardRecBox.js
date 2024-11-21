@@ -1,10 +1,10 @@
-import styled from "styled-components";
-import { Box } from "@mui/material";
-import CommonButton from "../../common/CommonButton";
-import theme from "../../theme/theme";
-import LiveTvIcon from "@mui/icons-material/LiveTv";
-import CoffeeIcon from "@mui/icons-material/Coffee";
-import BusIcon from "@mui/icons-material/DirectionsBusFilled";
+import styled from 'styled-components';
+import { Box } from '@mui/material';
+import CommonButton from '../../common/CommonButton';
+import theme from '../../theme/theme';
+import LiveTvIcon from '@mui/icons-material/LiveTv';
+import CoffeeIcon from '@mui/icons-material/Coffee';
+import BusIcon from '@mui/icons-material/DirectionsBusFilled';
 
 const Root = styled(Box)`
   width: 100%;
@@ -76,11 +76,12 @@ const CardRecBox = ({ cardTitle, cardImg, cardInfo }) => {
         <BenefitList>
           {cardInfo.map((benefit, index) => (
             <BenefitItem key={index}>
-              {benefit.label === "스타벅스 할인" && <CoffeeIcon />}
-              {benefit.label === "대중교통 할인" && <BusIcon />}
-              {benefit.label === "영화 쿠폰 제공" && <LiveTvIcon />}
+              {benefit.label === '스타벅스 할인' && <CoffeeIcon />}
+              {benefit.label === '대중교통 할인' && <BusIcon />}
+              {benefit.label === '영화 쿠폰 제공' && <LiveTvIcon />}
               <p>
-                {benefit.label} <strong>{benefit.value}</strong> ({benefit.additional})
+                {benefit.label} <strong>{benefit.value}</strong> (
+                {benefit.additional})
               </p>
             </BenefitItem>
           ))}
