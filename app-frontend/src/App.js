@@ -39,7 +39,12 @@ function Layout({ children }) {
 function App() {
   return (
     <ThemeProvider theme={theme}>
-      <Router>
+      <Router
+        future={{
+          v7_startTransition: true,
+          v7_relativeSplatPath: true,
+        }}
+      >
         <Layout>
           <Routes>
             <Route path="/" element={<MainPage />} />
