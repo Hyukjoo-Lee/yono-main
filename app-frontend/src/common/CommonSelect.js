@@ -104,6 +104,7 @@ const CommonSelect = ({
           borderRadius={borderRadius}
           hoverBackground={hoverBackground}
           isDefault={isDefault}
+          onSelect={onSelect}
         >
           {isDefault && (
             <MenuItem value="default" disabled>

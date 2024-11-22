@@ -5,6 +5,8 @@ import CustomButton from '../../../common/CommonButton';
 import CommonInput from '../../../common/CommonInput';
 import CommonRoot from '../../../common/CommonRoot';
 import CommonPageInfo from '../../../common/CommonPageInfo';
+import { useNavigate } from 'react-router-dom';
+import { useState } from 'react';
 
 const Rootin = styled.div`
   display: flex;
@@ -29,6 +31,16 @@ const MiddleContainer = styled.div`
   align-items: center;
 `;
 
+const HiddenBox = styled.div`
+  display: flex;
+  margin-left: 58%;
+  margin-bottom: 2%;
+`;
+const ErrorMessage = styled.div`
+  color: red;
+  font-size: 13px;
+`;
+
 const ButtonContainer = styled.div`
   margin-top: 10px;
   display: flex;
@@ -36,12 +48,41 @@ const ButtonContainer = styled.div`
   justify-content: space-between;
   width: 45%;
 `;
-const FindForm = ({ find }) => {
+const FindForm = ({ find, address }) => {
+  const [selectedQuestion, setSelectedQuestion] = useState('');
+  const [answer, setAnswer] = useState('');
+  const [errorMessage, setErrorMessage] = useState('');
+  const navigate = useNavigate();
   const selectOptions = [
     { value: '애완동물 이름은?', label: '애완동물 이름은?' },
     { value: '당신의 생일은?', label: '당신의 생일은' },
     { value: '당신이 좋아하는 음식은?', label: '당신이 좋아하는 음식은?' },
   ];
+  const answers = {
+    '애완동물 이름은?': '멍멍이',
+    '당신의 생일은?': '0103',
+    '당신이 좋아하는 음식은?': '떡볶이',
+  };
+
+  const handleConfirm = () => {
+    console.log('selectedQuestion:', selectedQuestion); // 로그 추가
+    console.log('answer:', answer);
+
+    if (selectedQuestion && answers[selectedQuestion]) {
+      const Correctanswer = answers[selectedQuestion]; // 올바른 답을 가져옴
+
+      if (answer === Correctanswer) {
+        navigate(address);
+      } else {
+        setErrorMessage('답변이 틀렸습니다.');
+      }
+    } else {
+      setErrorMessage('답변을 입력해 주세요.');
+    }
+  };
+  const CancleConfirm = () => {
+    navigate('/');
+  };
 
   return (
     <CommonRoot>
@@ -57,8 +98,9 @@ const FindForm = ({ find }) => {
               padding="10px"
               color="#464646"
               labelColor="#464646"
-              options={selectOptions}
               find="질문을 선택하세요"
+              options={selectOptions}
+              onSelect={setSelectedQuestion} //질문선택 시 상태 업데이트
             />
 
             <CommonInput
@@ -67,8 +109,13 @@ const FindForm = ({ find }) => {
               width="300px"
               height="35px"
               focusBorderWidth="10px"
+              value={answer}
+              onChange={(e) => setAnswer(e.target.value)} //질문답변 시 상태 업데이트
             />
           </MiddleContainer>
+          <HiddenBox>
+            {errorMessage && <ErrorMessage>{errorMessage}</ErrorMessage>}
+          </HiddenBox>
 
           <ButtonContainer>
             <CustomButton
@@ -77,8 +124,8 @@ const FindForm = ({ find }) => {
               height="30px"
               background="#4064E6"
               color="#ffffff"
-              // borderColor="#4064E6"
               fontSize="20"
+              onClick={handleConfirm}
             />
             <CustomButton
               text="취소"
@@ -86,8 +133,8 @@ const FindForm = ({ find }) => {
               height="30px"
               background="#ffffff"
               color="#4064E6"
-              // borderColor="1px"
               fontSize="20"
+              onClick={CancleConfirm}
             />
           </ButtonContainer>
         </FullContainer>

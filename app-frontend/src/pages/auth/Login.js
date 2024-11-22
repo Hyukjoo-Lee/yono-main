@@ -14,7 +14,6 @@ import {
   EMAIL_VERIFIED_ERROR,
   PASSWORD_VERIFIED_ERROR,
 } from '../auth/Component/ErrorMessage';
-import CommonDialog from '../../common/CommonDialog';
 
 const Rootin = styled.div`
   display: flex;
@@ -130,7 +129,7 @@ export function Login() {
       : setPwerrorMessage(PASSWORD_VERIFIED_ERROR);
 
     if (username === dummyUser.username && password === dummyUser.password) {
-      navigate('/Mainpage');
+      navigate('/');
     }
   };
   const list = [
@@ -209,7 +208,6 @@ export function Login() {
             <IconButton imgesRoute={google} />
           </IconButtonContainer>
         </LowContainer>
-        <CommonDialog $visible="true" />
       </Rootin>
     </CommonRoot>
   );
