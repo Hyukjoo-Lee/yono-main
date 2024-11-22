@@ -2,6 +2,7 @@ import React from 'react';
 import styled from 'styled-components';
 import CustomButton from './CommonButton';
 import { useEffect, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 
 const DialogOverlay = styled.div`
   box-sizing: border-box;
@@ -81,19 +82,33 @@ const CommonDialog = (props) => {
     text2 = '취소',
     width1 = '100px',
     width2 = '100px',
+    value,
+    onChange,
+    onClick,
+    navigateTo,
+    navigateMain,
   } = props;
 
   const [isOpen, setIsOpen] = useState($visible); // 다이얼로그 상태 관리
+  const navigate = useNavigate();
   useEffect(() => {
     setIsOpen($visible);
   }, [$visible]);
   const handleClose = () => {
     setIsOpen(false); // 다이얼로그 닫기
+    navigate('/MainPage');
+  };
+  const handleClick = () => {
+    if (text1) {
+      navigate(navigateTo); // 확인 버튼 클릭 시 navigateTo 경로로 이동
+    } else if (text2) {
+      navigate(navigateMain); // 취소 버튼 클릭 시 navigateMain 경로로 이동
+    }
   };
 
   return (
     <div>
-      <DialogOverlay $visible={$visible} />
+      <DialogOverlay $visible={isOpen} />
       <DialogWrapper className={className} tabIndex="-1" $visible={isOpen}>
         <DialogInner tabIndex="0" width={width} height={height}>
           <ContentWrapper
@@ -101,6 +116,8 @@ const CommonDialog = (props) => {
             color={color}
             $Contentwidth={$Contentwidth}
             $Contentheight={$Contentheight}
+            onChange={onChange}
+            value={value}
           >
             {children}
           </ContentWrapper>
@@ -119,8 +136,18 @@ const CommonDialog = (props) => {
               zIndex: '1001',
             }}
           >
-            <CustomButton text={text1} width={width1} height="30px" />
-            <CustomButton text={text2} width={width2} height="30px" />
+            <CustomButton
+              text={text1}
+              width={width1}
+              height="30px"
+              onClick={onClick}
+            />
+            <CustomButton
+              text={text2}
+              width={width2}
+              height="30px"
+              onClick={handleClick}
+            />
           </div>
         </DialogInner>
       </DialogWrapper>

@@ -1,5 +1,5 @@
 import CommonDialog from '../../common/CommonDialog';
-export function CompeleteChangePw() {
+export function CompleteChangePw() {
   return (
     <div style={{ position: 'relative' }}>
       <CommonDialog
@@ -16,4 +16,4 @@ export function CompeleteChangePw() {
     </div>
   );
 }
-export default CompeleteChangePw;
+export default CompleteChangePw;
