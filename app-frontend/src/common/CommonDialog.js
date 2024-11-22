@@ -108,7 +108,7 @@ const CommonDialog = (props) => {
 
   return (
     <div>
-      <DialogOverlay $visible={$visible} />
+      <DialogOverlay $visible={isOpen} />
       <DialogWrapper className={className} tabIndex="-1" $visible={isOpen}>
         <DialogInner tabIndex="0" width={width} height={height}>
           <ContentWrapper
