@@ -93,6 +93,7 @@ const CommonCardListBox = ({
   cardInfo,
   data,
   showDetailed,
+  onCardSelect,
 }) => {
   return (
     <>
@@ -123,6 +124,7 @@ const CommonCardListBox = ({
                       fontSize="16px"
                       width="100px"
                       height="30px"
+                      onClick={() => onCardSelect(card)}
                     />
                   </HoverButtonContainer>
 
