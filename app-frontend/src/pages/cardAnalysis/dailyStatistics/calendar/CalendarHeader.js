@@ -49,7 +49,7 @@ const CalendarHeader = ({
     <Root>
       <Box>
         <TextStyle>
-          {format(currentMonth, "yyyy")}년 {format(currentMonth, "M")}월
+          {format(currentMonth, 'yyyy')}년 {format(currentMonth, 'M')}월
         </TextStyle>
       </Box>
       <Box>
@@ -59,16 +59,6 @@ const CalendarHeader = ({
         <IconButton onClick={prevMonth}>
           <ArrowIcon />
         </IconButton>
-<<<<<<< HEAD
-=======
-      </Box>
-      <Box>
-        <TextStyle>
-          {format(currentMonth, 'yyyy')}년 {format(currentMonth, 'M')}월
-        </TextStyle>
-      </Box>
-      <Box>
->>>>>>> origin
         <IconButton onClick={nextMonth}>
           <ArrowIcon style={{ transform: 'scaleX(-1)' }} />
         </IconButton>
