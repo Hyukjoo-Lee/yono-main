@@ -80,13 +80,13 @@ const CommonDialog = (props) => {
     $Contentheight,
     text1 = '확인',
     text2 = '취소',
-    width1 = '100px',
-    width2 = '100px',
+    width1 = '100px', //확인 버튼 너비
+    width2 = '100px', //취소 버튼 너비
     value,
     onChange,
     onClick,
-    navigateTo,
-    navigateMain,
+    navigateTo = '/',
+    navigateMain = '/',
   } = props;
 
   const [isOpen, setIsOpen] = useState($visible); // 다이얼로그 상태 관리
@@ -96,14 +96,10 @@ const CommonDialog = (props) => {
   }, [$visible]);
   const handleClose = () => {
     setIsOpen(false); // 다이얼로그 닫기
-    navigate('/MainPage');
+    navigate(navigateMain);
   };
   const handleClick = () => {
-    if (text1) {
-      navigate(navigateTo); // 확인 버튼 클릭 시 navigateTo 경로로 이동
-    } else if (text2) {
-      navigate(navigateMain); // 취소 버튼 클릭 시 navigateMain 경로로 이동
-    }
+    navigate(navigateTo);
   };
 
   return (
@@ -140,13 +136,13 @@ const CommonDialog = (props) => {
               text={text1}
               width={width1}
               height="30px"
-              onClick={onClick}
+              onClick={handleClick}
             />
             <CustomButton
               text={text2}
               width={width2}
               height="30px"
-              onClick={handleClick}
+              onClick={handleClose}
             />
           </div>
         </DialogInner>

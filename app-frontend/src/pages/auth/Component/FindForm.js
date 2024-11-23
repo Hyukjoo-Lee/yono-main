@@ -7,6 +7,7 @@ import CommonRoot from '../../../common/CommonRoot';
 import CommonPageInfo from '../../../common/CommonPageInfo';
 import { useNavigate } from 'react-router-dom';
 import { useState } from 'react';
+import AlarmID from '../AlarmID';
 
 const Rootin = styled.div`
   display: flex;
@@ -52,7 +53,12 @@ const FindForm = ({ find, address }) => {
   const [selectedQuestion, setSelectedQuestion] = useState('');
   const [answer, setAnswer] = useState('');
   const [errorMessage, setErrorMessage] = useState('');
+  const [isDialogVisible, setIsDialogVisible] = useState(false); //다이어로그 최초상태
   const navigate = useNavigate();
+
+  const CancleConfirm = () => {
+    navigate('/');
+  };
   const selectOptions = [
     { value: '애완동물 이름은?', label: '애완동물 이름은?' },
     { value: '당신의 생일은?', label: '당신의 생일은' },
@@ -65,23 +71,19 @@ const FindForm = ({ find, address }) => {
   };
 
   const handleConfirm = () => {
-    console.log('selectedQuestion:', selectedQuestion); // 로그 추가
-    console.log('answer:', answer);
-
     if (selectedQuestion && answers[selectedQuestion]) {
       const Correctanswer = answers[selectedQuestion]; // 올바른 답을 가져옴
 
       if (answer === Correctanswer) {
-        navigate(address);
+        setIsDialogVisible(true);
       } else {
         setErrorMessage('답변이 틀렸습니다.');
+        setIsDialogVisible(false);
       }
     } else {
       setErrorMessage('답변을 입력해 주세요.');
+      setIsDialogVisible(false);
     }
-  };
-  const CancleConfirm = () => {
-    navigate('/');
   };
 
   return (
@@ -138,6 +140,7 @@ const FindForm = ({ find, address }) => {
             />
           </ButtonContainer>
         </FullContainer>
+        <AlarmID $visible={isDialogVisible} onClick={handleConfirm} />
       </Rootin>
     </CommonRoot>
   );

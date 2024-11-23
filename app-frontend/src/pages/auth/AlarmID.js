@@ -1,19 +1,21 @@
 import CommonDialog from '../../common/CommonDialog';
-export function AlarmID() {
+const AlarmID = (props) => {
+  const { $visible } = props;
+
   return (
     <div>
       <CommonDialog
-        $visible={true}
+        $visible={$visible}
         width="500px"
         height="200px"
-        text2="취소"
-        width1="100px"
-        content="000님의 아이디는 000입니다"
+        children="000님의 아이디는 000입니다"
         $Contentwidth="450px"
         $Contentheight="90px"
         fontSize="20px"
+        navigateTo="/"
+        navigateMain="/"
       />
     </div>
   );
-}
+};
 export default AlarmID;
