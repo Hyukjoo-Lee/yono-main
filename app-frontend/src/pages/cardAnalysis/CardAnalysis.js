@@ -1,22 +1,23 @@
-import React, { useState } from "react";
-import DailyStatistics from "./dailyStatistics/DailyStatistics";
-import MonthlyStatistics from "./monthlyStatistics/MonthlyStatistics";
-import CommonPageInfo from "../../common/CommonPageInfo";
-import CommonRoot from "../../common/CommonRoot";
-import CommonTabs from "../../common/CommonTabs";
+import React, { useState } from 'react';
+import DailyStatistics from './dailyStatistics/DailyStatistics';
+import MonthlyStatistics from './monthlyStatistics/MonthlyStatistics';
+import CommonPageInfo from '../../common/CommonPageInfo';
+import CommonRoot from '../../common/CommonRoot';
+import CommonTabs from '../../common/CommonTabs';
+import CategoryStatics from './CategoryStatics/CategoryStatics';
 
 const CardAnalysis = () => {
   const [selectedTab, setSelectedTab] = useState(0);
   const items = [
-    { text: "일별 통계" },
-    { text: "월별 통계" },
-    { text: "목차별 통계" },
+    { text: '일별 통계' },
+    { text: '월별 통계' },
+    { text: '목차별 통계' },
   ];
 
   const panels = [
     <DailyStatistics />,
     <MonthlyStatistics />,
-    <DailyStatistics />,
+    <CategoryStatics />,
   ];
   return (
     <CommonRoot>
@@ -28,10 +29,10 @@ const CardAnalysis = () => {
       <CommonPageInfo
         title={
           selectedTab === 0
-            ? "일별통계(캘린더)"
+            ? '일별통계(캘린더)'
             : selectedTab === 1
-            ? "월별통계(막대그래프)"
-            : "목차별통계(원형그래프)"
+              ? '월별통계(막대그래프)'
+              : '목차별통계(원형그래프)'
         }
         text={
           selectedTab === 0 ? (

@@ -1,4 +1,4 @@
-import React from "react";
+import React from 'react';
 
 const IconButton = ({ imgesRoute }) => {
   return (
@@ -6,7 +6,8 @@ const IconButton = ({ imgesRoute }) => {
       src={imgesRoute}
       alt="사진"
       style={{
-        background: "white",
+        background: 'white',
+        width: '30px',
       }}
     />
   );

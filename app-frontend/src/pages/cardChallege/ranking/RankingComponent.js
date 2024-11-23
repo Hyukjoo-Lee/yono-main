@@ -1,9 +1,9 @@
-import React from "react";
-import styled from "styled-components";
-import { ReactComponent as Badge } from "../../../assets/images/Badge.svg";
-import { ReactComponent as Badge1 } from "../../../assets/images/Badge1.svg";
-import { ReactComponent as Badge2 } from "../../../assets/images/Badge2.svg";
-import { ReactComponent as Badge3 } from "../../../assets/images/Badge3.svg";
+import React from 'react';
+import styled from 'styled-components';
+import { ReactComponent as Badge } from '../../../assets/images/Badge.svg';
+import { ReactComponent as Badge1 } from '../../../assets/images/Badge1.svg';
+import { ReactComponent as Badge2 } from '../../../assets/images/Badge2.svg';
+import { ReactComponent as Badge3 } from '../../../assets/images/Badge3.svg';
 
 const Root = styled.div`
   width: 100%;
@@ -20,7 +20,7 @@ const BoxStyle = styled.div`
 `;
 
 const CircleBox = styled.div`
-  width: ${(props) => (props.$rank === 1 ? "190px" : "150px")};
+  width: ${(props) => (props.$rank === 1 ? '190px' : '150px')};
   aspect-ratio: 1;
   border-radius: 50%;
   background: ${(props) => props.theme.color.brightGray};
@@ -51,9 +51,9 @@ const Box = styled.div`
 
 const RankingComponent = () => {
   const list = [
-    { rank: 2, name: "한글이름님 (영어아이디)", number: 500 },
-    { rank: 1, name: "한글이름님 (영어아이디)", number: 65000 },
-    { rank: 3, name: "한글이름님 (영어아이디)", number: 300 },
+    { rank: 2, name: '한글이름님 (영어아이디)', number: 500 },
+    { rank: 1, name: '한글이름님 (영어아이디)', number: 65000 },
+    { rank: 3, name: '한글이름님 (영어아이디)', number: 300 },
   ];
   return (
     <Root>

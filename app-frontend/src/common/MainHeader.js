@@ -1,6 +1,6 @@
-import { Link } from "react-router-dom";
-import styled from "styled-components";
-import { ReactComponent as Logo } from "../assets/images/MickleMuckleLogo.svg";
+import { Link } from 'react-router-dom';
+import styled from 'styled-components';
+import { ReactComponent as Logo } from '../assets/images/MickleMuckleLogo.svg';
 
 const Nav = styled.nav`
   position: fixed;
@@ -88,19 +88,19 @@ const MenuStyledLink = styled(Link)`
 
 export function MainHeader() {
   const list = [
-    { label: "로그인", path: "/login" },
-    { label: "회원가입", path: "/signup" },
-    { label: "마이페이지", path: "/mypage" },
-    { label: "아이디찾기", path: "/find-id" },
-    { label: "비밀번호찾기", path: "/find-pwd" },
+    { label: '로그인', path: '/login' },
+    { label: '회원가입', path: '/signup' },
+    { label: '마이페이지', path: '/mypage' },
+    { label: '아이디찾기', path: '/find-id' },
+    { label: '비밀번호찾기', path: '/find-pwd' },
   ];
 
   const menuList = [
-    { label: "미클머클", path: "/intro" },
-    { label: "카드챌린지", path: "/card-challege" },
-    { label: "소비패턴분석", path: "/card-analysis" },
-    { label: "마이카드", path: "/mycard" },
-    { label: "커뮤니티", path: "/community" },
+    { label: '미클머클', path: '/intro' },
+    { label: '카드챌린지', path: '/card-challege' },
+    { label: '소비패턴분석', path: '/card-analysis' },
+    { label: '마이카드', path: '/mycard' },
+    { label: '커뮤니티', path: '/community' },
   ];
 
   return (

@@ -1,36 +1,36 @@
-import React, { useState } from "react";
-import Box from "@mui/material/Box";
-import Select from "@mui/material/Select";
-import MenuItem from "@mui/material/MenuItem";
-import FormControl from "@mui/material/FormControl";
-import styled from "styled-components";
+import React, { useState } from 'react';
+import Box from '@mui/material/Box';
+import Select from '@mui/material/Select';
+import MenuItem from '@mui/material/MenuItem';
+import FormControl from '@mui/material/FormControl';
+import styled from 'styled-components';
 
 const StyledSelect = styled(Select).withConfig({
-  shouldForwardProp: (prop) => prop !== "isDefault",
+  shouldForwardProp: (prop) => prop !== 'isDefault',
 })`
   &.MuiOutlinedInput-root {
-    width: ${(props) => props.width || "218px"};
-    height: ${(props) => props.height || "38px"};
-    background-color: ${(props) => props.background || "#F8F9FE"};
-    color: ${(props) => (props.isDefault ? "#b0b0b0" : "#000000")};
-    border-radius: ${(props) => props.borderRadius || "5px"};
-    font-size: ${(props) => props.fontSize || "16px"};
+    width: ${(props) => props.width || '218px'};
+    height: ${(props) => props.height || '38px'};
+    background-color: ${(props) => props.background || '#F8F9FE'};
+    color: ${(props) => (props.isDefault ? '#b0b0b0' : '#000000')};
+    border-radius: ${(props) => props.borderRadius || '5px'};
+    font-size: ${(props) => props.fontSize || '16px'};
 
     & fieldset {
-      border-color: ${(props) => props.fieldBorderColor || "#D7D7D7"};
-      border-width: ${(props) => props.focusBorderWidth || "1px"};
+      border-color: ${(props) => props.fieldBorderColor || '#D7D7D7'};
+      border-width: ${(props) => props.focusBorderWidth || '1px'};
       padding: 0px;
     }
 
     &:hover fieldset {
-      border-color: ${(props) => props.fieldHoverBorderColor || "#D7D7D7"};
-      border-width: ${(props) => props.focusBorderWidth || "1px"};
+      border-color: ${(props) => props.fieldHoverBorderColor || '#D7D7D7'};
+      border-width: ${(props) => props.focusBorderWidth || '1px'};
     }
   }
 
   &.MuiInputBase-root.Mui-focused .MuiOutlinedInput-notchedOutline {
-    border-width: ${(props) => props.focusBorderWidth || "1px"};
-    border-color: #1976D2;
+    border-width: ${(props) => props.focusBorderWidth || '1px'};
+    border-color: #1976d2;
   }
 
   & .MuiSelect-select {
@@ -39,14 +39,15 @@ const StyledSelect = styled(Select).withConfig({
 `;
 
 const TextStyle = styled.p`
-  font-size: ${(props) => (props.fontSize ? props.fontSize : "16px")};
+  font-size: ${(props) => (props.fontSize ? props.fontSize : '16px')};
   color: ${(props) => (props.color ? props.color : props.theme.color.white)};
   margin-bottom: 6px;
   margin-top: 0px;
+  display: ${(props) => (props.display ? props.display : '')};
 `;
 
 const CommonSelect = ({
-  text,
+  text = '카드를 선택하세요',
   height,
   options = [],
   width,
@@ -61,33 +62,34 @@ const CommonSelect = ({
   focusBorderWidth,
   fieldHoverBorderColor,
   fieldFocusedBorderColor,
+  display,
   onSelect,
-  find="카드를 선택하세요"
+  find = '카드를 선택하세요',
 }) => {
-  const [selectedValue, setSelectedValue] = useState("");
+  const [selectedValue, setSelectedValue] = useState('');
 
   const handleChange = (event) => {
     setSelectedValue(event.target.value);
     if (onSelect) onSelect(event.target.value);
   };
 
-  const isDefault = selectedValue === "";
+  const isDefault = selectedValue === '';
 
   return (
     <Box
       sx={{
-        display: "flex",
-        justifyContent: "center",
-        alignItems: "center",
+        display: 'flex',
+        justifyContent: 'center',
+        alignItems: 'center',
       }}
     >
       <FormControl variant="outlined">
-        <TextStyle color={labelColor} fontSize={fontSize}>
+        <TextStyle color={labelColor} fontSize={fontSize} display={display}>
           {text}
         </TextStyle>
 
         <StyledSelect
-          value={isDefault ? "default" : selectedValue}
+          value={isDefault ? 'default' : selectedValue}
           onChange={handleChange}
           width={width}
           height={height}

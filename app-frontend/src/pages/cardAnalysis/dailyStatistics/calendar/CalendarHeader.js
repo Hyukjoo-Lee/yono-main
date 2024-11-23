@@ -1,8 +1,8 @@
-import React from "react";
-import styled from "styled-components";
-import { format } from "date-fns";
-import { ReactComponent as ArrowIcon } from "../../../../assets/images/ArrowIcon.svg";
-import { ReactComponent as ArrowsIcon } from "../../../../assets/images/ArrowsIcon.svg";
+import React from 'react';
+import styled from 'styled-components';
+import { format } from 'date-fns';
+import { ReactComponent as ArrowIcon } from '../../../../assets/images/ArrowIcon.svg';
+import { ReactComponent as ArrowsIcon } from '../../../../assets/images/ArrowsIcon.svg';
 
 const Root = styled.div`
   width: 100%;
@@ -59,15 +59,15 @@ const CalendarHeader = ({
       </Box>
       <Box>
         <TextStyle>
-          {format(currentMonth, "yyyy")}년 {format(currentMonth, "M")}월
+          {format(currentMonth, 'yyyy')}년 {format(currentMonth, 'M')}월
         </TextStyle>
       </Box>
       <Box>
         <IconButton onClick={nextMonth}>
-          <ArrowIcon style={{ transform: "scaleX(-1)" }} />
+          <ArrowIcon style={{ transform: 'scaleX(-1)' }} />
         </IconButton>
         <IconButton onClick={nextYear}>
-          <ArrowsIcon style={{ transform: "scaleX(-1)" }} />
+          <ArrowsIcon style={{ transform: 'scaleX(-1)' }} />
         </IconButton>
       </Box>
     </Root>
