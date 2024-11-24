@@ -1,111 +1,50 @@
 import React from 'react';
-
-import styled from 'styled-components';
 import Paper from '@mui/material/Paper';
 import Table from '@mui/material/Table';
 import TableBody from '@mui/material/TableBody';
 import TableCell from '@mui/material/TableCell';
 import TableRow from '@mui/material/TableRow';
 import { TableContainer, TableHead } from '@mui/material';
+import styled from 'styled-components';
 import Pagination from '@mui/material/Pagination';
 import PaginationItem from '@mui/material/PaginationItem';
-import CommonButton from '../../common/CommonButton';
-import { useNavigate } from 'react-router-dom';
 import { Link } from 'react-router-dom';
-import CommonInput from '../../common/CommonInput';
 
 const Root = styled.div`
   width: ${(props) => props.theme.display.lg};
-  margin: 0 auto;
   box-sizing: border-box;
   margin-top: 70px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 `;
 
 const columns = [
-  { id: 'Category', label: '카테고리 ', minWidth: 50, align: 'center' },
   { id: 'title', label: '제목 ', minWidth: 150, align: 'center' },
-  { id: 'author', label: '작성자 ', minWidth: 100, align: 'center' },
   { id: 'day', label: '등록일', minWidth: 100, align: 'center' },
-  { id: 'check', label: '조회', minWidth: 50, align: 'center' },
 ];
-
-function createData(Category, title, author, day, check) {
-  return { Category, title, author, day, check };
+function createData(title, day) {
+  return { title, day };
 }
 
 const rows = [
   //임시로 데이터
-  createData(
-    '공유',
-    '자유게시판 서비스 중단 소식을 알려드립니다',
-    '정해인',
-    '2024-10-28',
-    '5',
-  ),
-  createData(
-    '기타문의',
-    '자유게시판 서비스 중단 소식을 알려드립니다',
-    '2024-10-28',
-  ),
-  createData(
-    '정보공유',
-    '자유게시판 서비스 중단 소식을 알려드립니다',
-    '2024-10-28',
-  ),
-  createData(
-    '기타문의',
-    '자유게시판 서비스 중단 소식을 알려드립니다',
-    '2024-10-28',
-  ),
-  createData(
-    '정보공유',
-    '자유게시판 서비스 중단 소식을 알려드립니다',
-    '2024-10-28',
-  ),
-  createData(
-    '기타문의',
-    '자유게시판 서비스 중단 소식을 알려드립니다',
-    '2024-10-28',
-  ),
-  createData(
-    '정보공유',
-    '자유게시판 서비스 중단 소식을 알려드립니다',
-    '2024-10-28',
-  ),
-  createData(
-    '기타문의',
-    '자유게시판 서비스 중단 소식을 알려드립니다',
-    '2024-10-28',
-  ),
-  createData(
-    '정보공유',
-    '자유게시판 서비스 중단 소식을 알려드립니다',
-    '2024-10-28',
-  ),
-  createData(
-    '기타문의',
-    '자유게시판 서비스 중단 소식을 알려드립니다',
-    '2024-10-28',
-  ),
-  createData(
-    '정보공유',
-    '자유게시판 서비스 중단 소식을 알려드립니다',
-    '2024-10-28',
-  ),
+  createData('공지사항을 알려드립니다', '2024-10-28'),
+  createData('공지사항을 알려드립니다', '2024-10-28'),
+  createData('공지사항을 알려드립니다', '2024-10-28'),
+  createData('공지사항을 알려드립니다', '2024-10-28'),
+  createData('공지사항을 알려드립니다', '2024-10-28'),
+  createData('공지사항을 알려드립니다', '2024-10-28'),
+  createData('공지사항을 알려드립니다', '2024-10-28'),
+  createData('공지사항을 알려드립니다', '2024-10-28'),
+  createData('공지사항을 알려드립니다', '2024-10-28'),
+  createData('공지사항을 알려드립니다', '2024-10-28'),
+  createData('공지사항을 알려드립니다', '2024-10-28'),
 ];
 
 const TableContainerStyle = styled(TableContainer)`
   max-height: 440px;
   overflow-y: auto;
-`;
-
-const Container = styled.div`
-  display: flex;
-  align-items: center;
-  justify-content: flex-end;
-  margin-bottom: 15px;
-  width: 100%;
-  margin-left: -20px;
 `;
 
 const PaginationStyle = styled(Pagination)`
@@ -118,56 +57,19 @@ const PaginationStyle = styled(Pagination)`
     color: #3563e9;
   }
 `;
-const Box = styled.div`
-  display: flex;
-  justify-content: start;
-  align-items: center;
-  margin-right: 10px;
-  margin-bottom: -40px;
-  & Button {
-    margin-top: 6px;
-    margin-left: 10px;
-  }
-`;
-export function CommunityTable() {
-  const [page, setPage] = React.useState(0);
+
+export function NoticeTable() {
+  const [page, setPage] = React.useState(1);
   const rowsPerPage = 10;
-  const navigate = useNavigate();
 
   const handleChangePage = (event, newPage) => {
     setPage(newPage - 1);
   };
-  const handleButtonClick = () => {
-    navigate('/CommunityFormBox');
-  };
+
   return (
     <>
       <Root>
-        <Box>
-          <CommonInput
-            width="228px"
-            height="39px"
-            placeholder="검색어를 입력하세요"
-          />
-          <CommonButton
-            width="74px"
-            height="39px"
-            background-color="#3563E9"
-            color="white"
-            text="검색"
-            borderRadius="5px"
-          />
-        </Box>
-
-        <Container>
-          <CommonButton
-            width="100px"
-            height="39px"
-            text="글등록"
-            onClick={handleButtonClick}
-          />
-        </Container>
-        <Paper sx={{ width: '100%', overflow: 'hidden', boxShadow: 'none' }}>
+        <Paper sx={{ width: '918px', overflow: 'hidden', boxShadow: 'none' }}>
           <TableContainerStyle>
             <Table stickyHeader aria-label="sticky table">
               <TableHead>
@@ -177,13 +79,16 @@ export function CommunityTable() {
                       key={column.id}
                       align={column.align}
                       style={{ minWidth: column.minWidth }}
-                      sx={{ borderBottom: '1px solid #000000' }}
+                      sx={{
+                        borderBottom: '1px solid #000000',
+                      }}
                     >
                       {column.label}
                     </TableCell>
                   ))}
                 </TableRow>
               </TableHead>
+
               <TableBody>
                 {rows
                   .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
@@ -199,7 +104,7 @@ export function CommunityTable() {
                               sx={{ borderBottom: '0.5px solid #757575' }}
                             >
                               <Link
-                                to="/CommunityPost"
+                                to="/NoticePost"
                                 state={{ rowData: row }}
                                 style={{
                                   textDecoration: 'none',
@@ -231,4 +136,4 @@ export function CommunityTable() {
     </>
   );
 }
-export default CommunityTable;
+export default NoticeTable;
