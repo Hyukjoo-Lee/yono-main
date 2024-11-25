@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import CommonSelect from '../../../common/CommonSelect';
 import styled from 'styled-components';
 import CustomButton from '../../../common/CommonButton';
@@ -7,8 +7,8 @@ import CommonRoot from '../../../common/CommonRoot';
 import CommonPageInfo from '../../../common/CommonPageInfo';
 import { useNavigate } from 'react-router-dom';
 import { useState } from 'react';
-import AlarmID from '../AlarmID';
-import AlarmPw from '../AlarmPw';
+import { AlarmID } from '../AlarmID';
+import { AlarmPw } from '../AlarmPw';
 
 const Rootin = styled.div`
   display: flex;
@@ -71,7 +71,11 @@ const FindForm = (props) => {
     '당신의 생일은?': '0103',
     '당신이 좋아하는 음식은?': '떡볶이',
   };
-
+  useEffect(() => {
+    if (isDialogIDVisible || isDialogPWVisible) {
+      console.log('ID or Pw Dialog visible');
+    }
+  }, [isDialogIDVisible, isDialogPWVisible]); //상태 변경 시 마다
   const handleConfirm = () => {
     if (selectedQuestion && answers[selectedQuestion]) {
       const Correctanswer = answers[selectedQuestion]; // 올바른 답을 가져옴
@@ -148,13 +152,9 @@ const FindForm = (props) => {
             />
           </ButtonContainer>
         </FullContainer>
-        {isDialogIDVisible && (
-          <AlarmID $visible={isDialogIDVisible || $visibleID} />
-        )}
-        {isDialogPWVisible && (
-          <AlarmPw $visible={isDialogPWVisible || $visiblePW} />
-        )}
       </Rootin>
+      {isDialogIDVisible && <AlarmID $visibleID={isDialogIDVisible} />}
+      {isDialogPWVisible && <AlarmPw $visiblePW={isDialogPWVisible} />}
     </CommonRoot>
   );
 };

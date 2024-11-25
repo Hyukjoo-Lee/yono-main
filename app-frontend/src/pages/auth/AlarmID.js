@@ -1,11 +1,9 @@
 import CommonDialog from '../../common/CommonDialog';
-const AlarmID = (props) => {
-  const { $visible } = props;
-
+export const AlarmID = ($visibleID) => {
   return (
     <div>
       <CommonDialog
-        $visible={$visible}
+        $visible={$visibleID}
         width="500px"
         height="200px"
         children="000님의 아이디는 000입니다"
@@ -18,4 +16,3 @@ const AlarmID = (props) => {
     </div>
   );
 };
-export default AlarmID;

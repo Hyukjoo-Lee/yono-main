@@ -1,19 +1,19 @@
 import CommonDialog from '../../common/CommonDialog';
-export function SuccessLogin() {
+const SuccessLogin = (props) => {
+  const { $visible } = props;
+
   return (
     <div>
       <CommonDialog
-        $visible={true}
+        $visible={$visible}
         width="500px"
         height="200px"
-        text2="취소"
-        width1="100px"
-        content="로그인 성공하였습니다."
+        children="환영합니다."
         Contentwidth="450px"
         $Contentheight="90px"
-        $fontSize="20px"
+        fontSize="16px"
       />
     </div>
   );
-}
+};
 export default SuccessLogin;

@@ -1,8 +1,7 @@
 import CommonDialog from '../../common/CommonDialog';
 import AlarmChangePw from '../auth/AlarmChangePw';
 import { useState } from 'react';
-const AlarmPw = (props) => {
-  const { $visible } = props;
+export const AlarmPw = ($visiblePW) => {
   const [isDialogPWVisible, setIsDialogPWVisible] = useState(false);
   const [isConfirmClicked, setIsConfirmClicked] = useState(false);
 
@@ -14,7 +13,7 @@ const AlarmPw = (props) => {
   return (
     <div>
       <CommonDialog
-        $visible={$visible}
+        $visible={$visiblePW}
         width="500px"
         height="200px"
         children="000님의 임시 비밀번호는 000입니다."
@@ -28,4 +27,3 @@ const AlarmPw = (props) => {
     </div>
   );
 };
-export default AlarmPw;

@@ -14,6 +14,7 @@ import {
   EMAIL_VERIFIED_ERROR,
   PASSWORD_VERIFIED_ERROR,
 } from '../auth/Component/ErrorMessage';
+import SuccessLogin from './SuccessLogin';
 
 const Rootin = styled.div`
   display: flex;
@@ -100,11 +101,13 @@ const ErrorMessage = styled.div`
 `;
 // 더미 데이터 (아이디와 비밀번호)
 
-export function Login() {
+export function Login(props) {
+  const { $visible } = props;
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
   const [IderrorMessage, setIderrorMessage] = useState('');
   const [PwerrorMessage, setPwerrorMessage] = useState('');
+  const [successVisible, setsuccessVisible] = useState(false);
 
   const navigate = useNavigate();
   const dummyUser = {
@@ -121,15 +124,17 @@ export function Login() {
   };
 
   const handleLogin = () => {
-    username === dummyUser.username
-      ? setIderrorMessage('')
-      : setIderrorMessage(EMAIL_VERIFIED_ERROR);
-    password === dummyUser.password
-      ? setPwerrorMessage('')
-      : setPwerrorMessage(PASSWORD_VERIFIED_ERROR);
-
     if (username === dummyUser.username && password === dummyUser.password) {
-      navigate('/');
+      setIderrorMessage('');
+      setsuccessVisible(true);
+    } else if (username === dummyUser.username) {
+      setPwerrorMessage(PASSWORD_VERIFIED_ERROR);
+      setsuccessVisible(false);
+    } else if (password === dummyUser.password) {
+      setIderrorMessage(EMAIL_VERIFIED_ERROR);
+      setsuccessVisible(false);
+    } else {
+      setIderrorMessage('아이디,비밀번호를 입력하세요');
     }
   };
   const list = [
@@ -202,12 +207,12 @@ export function Login() {
             alt="Or"
             width="63%"
           />
-
           <IconButtonContainer>
             <IconButton imgesRoute={kakaoimage} />
             <IconButton imgesRoute={google} />
           </IconButtonContainer>
         </LowContainer>
+        <SuccessLogin $visible={successVisible || $visible} />
       </Rootin>
     </CommonRoot>
   );
