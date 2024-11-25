@@ -8,6 +8,7 @@ import CommonPageInfo from '../../../common/CommonPageInfo';
 import { useNavigate } from 'react-router-dom';
 import { useState } from 'react';
 import AlarmID from '../AlarmID';
+import AlarmPw from '../AlarmPw';
 
 const Rootin = styled.div`
   display: flex;
@@ -49,13 +50,14 @@ const ButtonContainer = styled.div`
   justify-content: space-between;
   width: 45%;
 `;
-const FindForm = ({ find, address }) => {
+const FindForm = (props) => {
+  const { find, onClick, $visibleID, $visiblePW } = props;
   const [selectedQuestion, setSelectedQuestion] = useState('');
   const [answer, setAnswer] = useState('');
   const [errorMessage, setErrorMessage] = useState('');
-  const [isDialogVisible, setIsDialogVisible] = useState(false); //다이어로그 최초상태
+  const [isDialogIDVisible, setIsDialogIDVisible] = useState(false);
+  const [isDialogPWVisible, setIsDialogPWVisible] = useState(false);
   const navigate = useNavigate();
-
   const CancleConfirm = () => {
     navigate('/');
   };
@@ -75,14 +77,17 @@ const FindForm = ({ find, address }) => {
       const Correctanswer = answers[selectedQuestion]; // 올바른 답을 가져옴
 
       if (answer === Correctanswer) {
-        setIsDialogVisible(true);
+        setIsDialogIDVisible(true);
+        setIsDialogPWVisible(true);
       } else {
         setErrorMessage('답변이 틀렸습니다.');
-        setIsDialogVisible(false);
+        setIsDialogIDVisible(false);
+        setIsDialogPWVisible(false);
       }
     } else {
       setErrorMessage('답변을 입력해 주세요.');
-      setIsDialogVisible(false);
+      setIsDialogIDVisible(false);
+      setIsDialogPWVisible(false);
     }
   };
 
@@ -127,7 +132,10 @@ const FindForm = ({ find, address }) => {
               background="#4064E6"
               color="#ffffff"
               fontSize="20"
-              onClick={handleConfirm}
+              onClick={() => {
+                handleConfirm();
+                if (onClick) onClick();
+              }}
             />
             <CustomButton
               text="취소"
@@ -140,7 +148,12 @@ const FindForm = ({ find, address }) => {
             />
           </ButtonContainer>
         </FullContainer>
-        <AlarmID $visible={isDialogVisible} onClick={handleConfirm} />
+        {isDialogIDVisible && (
+          <AlarmID $visible={isDialogIDVisible || $visibleID} />
+        )}
+        {isDialogPWVisible && (
+          <AlarmPw $visible={isDialogPWVisible || $visiblePW} />
+        )}
       </Rootin>
     </CommonRoot>
   );

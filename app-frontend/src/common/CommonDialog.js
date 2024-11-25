@@ -87,18 +87,26 @@ const CommonDialog = (props) => {
     onClick,
     navigateTo = '/',
     navigateMain = '/',
+    disabled = false,
   } = props;
 
   const [isOpen, setIsOpen] = useState($visible); // 다이얼로그 상태 관리
+  const [isConfirmClicked, setIScomfirmClicked] = useState(false);
   const navigate = useNavigate();
   useEffect(() => {
     setIsOpen($visible);
   }, [$visible]);
   const handleClose = () => {
-    setIsOpen(false); // 다이얼로그 닫기
-    navigate(navigateMain);
+    if (!isConfirmClicked) {
+      setIsOpen(false);
+      navigate(navigateMain);
+    }
   };
   const handleClick = () => {
+    if (onClick) {
+      onClick();
+    }
+    setIScomfirmClicked(true);
     navigate(navigateTo);
   };
 
@@ -137,12 +145,14 @@ const CommonDialog = (props) => {
               width={width1}
               height="30px"
               onClick={handleClick}
+              disabled={disabled}
             />
             <CustomButton
               text={text2}
               width={width2}
               height="30px"
               onClick={handleClose}
+              disabled={disabled}
             />
           </div>
         </DialogInner>
