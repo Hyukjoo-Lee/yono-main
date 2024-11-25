@@ -4,6 +4,20 @@ import HorizonLine from './HorizontalLine';
 import CommonButton from '../../common/CommonButton';
 import CommonInput from '../../common/CommonInput';
 import { useNavigate } from 'react-router-dom';
+import characterImg from '../../assets/images/Character1.png';
+
+const comments = [
+  {
+    name: '한교동',
+    time: '1시간전',
+    comment: '안녕하세요. 반갑습니다~!',
+  },
+  {
+    name: '포차코',
+    time: '30분전',
+    comment: '안녕하세요. 반갑습니다~!',
+  },
+];
 const Root = styled.div`
   width: ${(props) => props.theme.display.sm};
   margin: 0 auto;
@@ -35,32 +49,47 @@ const Listbox = styled.div`
     margin-left: 10px;
   }
 `;
+const CommentBox = styled.div`
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
 
-const styles = {
-  wrapper: {
-    margin: 8,
-    padding: 8,
-    display: 'flex',
-    flexDirection: 'row',
-    border: '1px solid #D7D7D7',
-    borderRadius: 5,
-  },
-  contentContainer: {
-    marginLeft: 8,
-    display: 'flex',
-    flexDirection: 'column',
-    justifyContent: 'center',
-  },
-  nameText: {
-    color: 'black',
-    fontSize: 16,
-    fontWeight: 'bold',
-  },
-  commentText: {
-    color: 'black',
-    fontSize: 16,
-  },
-};
+  & > div {
+    padding-left: 20px;
+    height: 100px;
+    border: 1px solid #d7d7d7;
+    border-radius: 20px;
+    flex-direction: column;
+    gap: 5px;
+  }
+`;
+const TopRow = styled.div`
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  height: 50px;
+`;
+const ImageBox = styled.div`
+width:auto;
+  & > img {
+    width: 80px;
+    height: 80px;
+    margin-top: 20px;
+    margin-left:0px;
+}
+  }
+`;
+const TimeText = styled.span`
+  color: ${(props) => props.theme.color.lightGray};
+  font-size: 12px;
+  margin-left: 8px;
+`;
+const TextBox = styled.div`
+  & > p {
+    color: ${(props) => props.theme.color.black};
+    margin-left: 25px;
+  }
+`;
 const BackBox = styled.div`
   margin: 20px 0px 20px 0px;
 `;
@@ -92,18 +121,27 @@ export function CommunityPost() {
           text="등록"
         />
       </Listbox>
-      <div style={styles.wrapper}>
-        <div style={styles.contentContainer}>
-          <span style={styles.nameText}>한교동</span>
-          <span stlye={styles.commentText}>안녕하세요~!</span>
-        </div>
-      </div>
-      <div style={styles.wrapper}>
-        <div style={styles.contentContainer}>
-          <span style={styles.nameText}>포차코</span>
-          <span stlyr={styles.commentText}>안녕하세요~!</span>
-        </div>
-      </div>
+
+      <CommentBox>
+        {comments.map((comment, index) => {
+          return (
+            <div key={index}>
+              <TopRow>
+                <ImageBox>
+                  <img src={characterImg} alt="character" />
+                </ImageBox>
+                <h3>
+                  {comment.name} <TimeText>{comment.time}</TimeText>
+                </h3>
+              </TopRow>
+              <TextBox>
+                <p>{comment.comment}</p>
+              </TextBox>
+            </div>
+          );
+        })}
+      </CommentBox>
+
       <BackBox>
         <CommonButton
           text="목록으로 돌아가기"
