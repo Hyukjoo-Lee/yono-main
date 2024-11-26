@@ -7,8 +7,12 @@ export const FindPassword = () => {
   const [isDialogPWVisible, setIsDialogPWVisible] = useState(false);
   const [answer, setAnswer] = useState('');
   const [selectedQuestion, setSelectedQuestion] = useState('');
-  const [correctanswer, setCorrectanswer] = useState('');
   const [errorMessage, setErrorMessage] = useState('');
+
+  // const handleChange = (event) => {
+  //   setSelectedQuestion(event.target.value);
+  //   // if (onSelect) onSelect(event.target.value);
+  // };
 
   const selectOptions = [
     { value: '애완동물 이름은?', label: '애완동물 이름은?' },
@@ -22,10 +26,11 @@ export const FindPassword = () => {
   };
 
   const handleConfirm = () => {
+    console.log(answer);
     if (selectedQuestion && answers[selectedQuestion]) {
-      correctanswer = answers[selectedQuestion]; // 올바른 답을 가져옴
+      const correctanswer = answers[selectedQuestion]; // 올바른 답을 가져옴
 
-      if (answers === correctanswer) {
+      if (answer === correctanswer) {
         setIsDialogPWVisible(true);
       } else {
         setErrorMessage('답변이 틀렸습니다.');
@@ -46,10 +51,11 @@ export const FindPassword = () => {
         setIsDialogPWVisible={setIsDialogPWVisible}
         handleConfirm={handleConfirm}
         selectOptions={selectOptions}
-        answers={answers}
+        answer={answer}
         errorMessage={errorMessage}
-        setSelectedQuestion={setSelectedQuestion}
         setAnswer={setAnswer}
+        selectedValue={selectedQuestion}
+        setSelectedValue={setSelectedQuestion}
       />
       {isDialogPWVisible && <AlarmPw $visible={isDialogPWVisible} />}
     </div>
