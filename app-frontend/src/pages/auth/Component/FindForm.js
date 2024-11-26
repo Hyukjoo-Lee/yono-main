@@ -1,4 +1,3 @@
-import React, { useEffect } from 'react';
 import CommonSelect from '../../../common/CommonSelect';
 import styled from 'styled-components';
 import CustomButton from '../../../common/CommonButton';
@@ -7,8 +6,8 @@ import CommonRoot from '../../../common/CommonRoot';
 import CommonPageInfo from '../../../common/CommonPageInfo';
 import { useNavigate } from 'react-router-dom';
 import { useState } from 'react';
-import { AlarmID } from '../AlarmID';
-import { AlarmPw } from '../AlarmPw';
+import { FindID } from '../FindID';
+import { FindPassword } from '../FindPassword';
 
 const Rootin = styled.div`
   display: flex;
@@ -51,48 +50,22 @@ const ButtonContainer = styled.div`
   width: 45%;
 `;
 const FindForm = (props) => {
-  const { find, onClick, $visibleID, $visiblePW } = props;
-  const [selectedQuestion, setSelectedQuestion] = useState('');
-  const [answer, setAnswer] = useState('');
-  const [errorMessage, setErrorMessage] = useState('');
-  const [isDialogIDVisible, setIsDialogIDVisible] = useState(false);
-  const [isDialogPWVisible, setIsDialogPWVisible] = useState(false);
+  const {
+    find,
+    onClick,
+    answers,
+    selectOptions,
+    handleConfirm,
+    errorMessage,
+    setSelectedQuestion,
+    setAnswer,
+  } = props;
+
+  // const [isDialogIDVisible, setIsDialogIDVisible] = useState(false);
+  // const [isDialogPWVisible, setIsDialogPWVisible] = useState(false);
   const navigate = useNavigate();
   const CancleConfirm = () => {
     navigate('/');
-  };
-  const selectOptions = [
-    { value: '애완동물 이름은?', label: '애완동물 이름은?' },
-    { value: '당신의 생일은?', label: '당신의 생일은' },
-    { value: '당신이 좋아하는 음식은?', label: '당신이 좋아하는 음식은?' },
-  ];
-  const answers = {
-    '애완동물 이름은?': '멍멍이',
-    '당신의 생일은?': '0103',
-    '당신이 좋아하는 음식은?': '떡볶이',
-  };
-  useEffect(() => {
-    if (isDialogIDVisible || isDialogPWVisible) {
-      console.log('ID or Pw Dialog visible');
-    }
-  }, [isDialogIDVisible, isDialogPWVisible]); //상태 변경 시 마다
-  const handleConfirm = () => {
-    if (selectedQuestion && answers[selectedQuestion]) {
-      const Correctanswer = answers[selectedQuestion]; // 올바른 답을 가져옴
-
-      if (answer === Correctanswer) {
-        setIsDialogIDVisible(true);
-        setIsDialogPWVisible(true);
-      } else {
-        setErrorMessage('답변이 틀렸습니다.');
-        setIsDialogIDVisible(false);
-        setIsDialogPWVisible(false);
-      }
-    } else {
-      setErrorMessage('답변을 입력해 주세요.');
-      setIsDialogIDVisible(false);
-      setIsDialogPWVisible(false);
-    }
   };
 
   return (
@@ -120,7 +93,6 @@ const FindForm = (props) => {
               width="300px"
               height="35px"
               focusBorderWidth="10px"
-              value={answer}
               onChange={(e) => setAnswer(e.target.value)} //질문답변 시 상태 업데이트
             />
           </MiddleContainer>
@@ -153,8 +125,6 @@ const FindForm = (props) => {
           </ButtonContainer>
         </FullContainer>
       </Rootin>
-      {isDialogIDVisible && <AlarmID $visibleID={isDialogIDVisible} />}
-      {isDialogPWVisible && <AlarmPw $visiblePW={isDialogPWVisible} />}
     </CommonRoot>
   );
 };

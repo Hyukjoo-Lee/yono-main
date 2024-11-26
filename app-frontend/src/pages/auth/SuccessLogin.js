@@ -11,7 +11,7 @@ const SuccessLogin = (props) => {
         children="환영합니다."
         Contentwidth="450px"
         $Contentheight="90px"
-        fontSize="16px"
+        fontSize="20px"
       />
     </div>
   );
