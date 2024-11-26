@@ -1,6 +1,7 @@
 import React from "react";
 import styled from "styled-components";
-import Cat_img from "./cat.jpg";
+import MainBox1_img from "../../assets/images/main_box1.svg";
+import MainBox2_img from "../../assets/images/main_box2.svg";
 
 const StyledMainBox = styled.div`
   display: flex;
@@ -44,9 +45,13 @@ const StyledBoxImg = styled.div`
   width: 120px;
   height: 120px;
   padding-top: 10px;
+  box-sizing:border-box;
   overflow: hidden;
+  display:flex;
+  
   & img {
-    width: 100%;
+    width: 90%;
+
   }
 `;
 const MainComponent = () => {
@@ -54,14 +59,14 @@ const MainComponent = () => {
     {
       title: `카드등록`,
       subtitle: `나의 카드 등록하기`,
-      imgSrc: Cat_img,
+      imgSrc: MainBox1_img,
       link: `#`,
     },
 
     {
       title: `패턴분석`,
       subtitle: `나의 카드 분석하기`,
-      imgSrc: `#`,
+      imgSrc: MainBox2_img,
       link: `#`,
     },
     {
