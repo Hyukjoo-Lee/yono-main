@@ -1,14 +1,14 @@
 import CommonDialog from '../../common/CommonDialog';
-export function AlarmPw1() {
+export function CompleteChangePw() {
   return (
-    <div>
+    <div style={{ position: 'relative' }}>
       <CommonDialog
         $visible={true}
         width="500px"
         height="200px"
         text2="취소"
         width1="100px"
-        content="000님의 임시 비밀번호는 000입니다."
+        children="비밀번호가 변경되었습니다"
         $Contentwidth="450px"
         $Contentheight="90px"
         fontSize="20px"
@@ -16,4 +16,4 @@ export function AlarmPw1() {
     </div>
   );
 }
-export default AlarmPw1;
+export default CompleteChangePw;

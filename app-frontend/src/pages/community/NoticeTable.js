@@ -1,15 +1,16 @@
-import React from 'react';
-import Paper from '@mui/material/Paper';
-import Table from '@mui/material/Table';
-import TableBody from '@mui/material/TableBody';
-import TableCell from '@mui/material/TableCell';
-import TableRow from '@mui/material/TableRow';
-import { TableContainer, TableHead } from '@mui/material';
+import React, { useState } from 'react';
+import {
+  Paper,
+  Table,
+  TableBody,
+  TableCell,
+  TableRow,
+  Pagination,
+  PaginationItem,
+} from '@mui/material';
 import styled from 'styled-components';
-import Pagination from '@mui/material/Pagination';
-import PaginationItem from '@mui/material/PaginationItem';
 import { Link } from 'react-router-dom';
-
+import { TableContainer, TableHead } from '@mui/material';
 const Root = styled.div`
   width: ${(props) => props.theme.display.lg};
   box-sizing: border-box;
@@ -59,7 +60,7 @@ const PaginationStyle = styled(Pagination)`
 `;
 
 export function NoticeTable() {
-  const [page, setPage] = React.useState(1);
+  const [page, setPage] = useState(1);
   const rowsPerPage = 10;
 
   const handleChangePage = (event, newPage) => {

@@ -1,18 +1,20 @@
-import React from 'react';
+import React, { useState } from 'react';
 
 import styled from 'styled-components';
-import Paper from '@mui/material/Paper';
-import Table from '@mui/material/Table';
-import TableBody from '@mui/material/TableBody';
-import TableCell from '@mui/material/TableCell';
-import TableRow from '@mui/material/TableRow';
-import { TableContainer, TableHead } from '@mui/material';
-import Pagination from '@mui/material/Pagination';
-import PaginationItem from '@mui/material/PaginationItem';
+import {
+  Paper,
+  Table,
+  Pagination,
+  PaginationItem,
+  TableBody,
+  TableCell,
+  TableRow,
+} from '@mui/material';
 import CommonButton from '../../common/CommonButton';
 import { useNavigate } from 'react-router-dom';
 import { Link } from 'react-router-dom';
 import CommonInput from '../../common/CommonInput';
+import { TableContainer, TableHead } from '@mui/material';
 
 const Root = styled.div`
   width: ${(props) => props.theme.display.lg};
@@ -130,7 +132,7 @@ const Box = styled.div`
   }
 `;
 export function CommunityTable() {
-  const [page, setPage] = React.useState(0);
+  const [page, setPage] = useState(0);
   const rowsPerPage = 10;
   const navigate = useNavigate();
 
@@ -138,7 +140,7 @@ export function CommunityTable() {
     setPage(newPage - 1);
   };
   const handleButtonClick = () => {
-    navigate('/CommunityFormBox');
+    navigate('/communityFormBox');
   };
   return (
     <>

@@ -1,10 +1,17 @@
 import styled from 'styled-components';
+<<<<<<< HEAD
 
+=======
+>>>>>>> c95cb3f7c0e1485fc67579079db971330fd01630
 import CommonButton from '../../common/CommonButton';
 import CommonInput from '../../common/CommonInput';
 import { useNavigate } from 'react-router-dom';
 import characterImg from '../../assets/images/Character1.png';
+<<<<<<< HEAD
 import CommonHr from '../../common/CommonHr';
+=======
+import HorizonLine from './HorizontalLine';
+>>>>>>> c95cb3f7c0e1485fc67579079db971330fd01630
 
 const comments = [
   {
@@ -96,7 +103,7 @@ const BackBox = styled.div`
 export function CommunityPost() {
   const navigate = useNavigate();
   const handleButtonClick = () => {
-    navigate('/Community');
+    navigate('/community');
   };
   return (
     <Root>

@@ -7,7 +7,14 @@ import kakaoimage from './images/kakao.png';
 import google from './images/google.png';
 import IconButton from './Component/IconButton'; // IButton을 정확히 import
 import CommonRoot from '../../common/CommonRoot';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
+import CommonPageInfo from '../../common/CommonPageInfo';
+import { useState } from 'react';
+import {
+  EMAIL_VERIFIED_ERROR,
+  PASSWORD_VERIFIED_ERROR,
+} from '../auth/Component/ErrorMessage';
+import CommonDialog from '../../common/CommonDialog';
 
 const Rootin = styled.div`
   display: flex;
@@ -25,11 +32,7 @@ const HighContainer = styled.div`
   justify-content: center;
   align-items: center;
 `;
-const Title = styled.div`
-  font-size: 36px;
-  color: #4064e6;
-  font-weight: bold;
-`;
+
 const MiddleContainer = styled.div`
   margin-top: 10px;
   width: 25%;
@@ -87,8 +90,49 @@ const IconButtonContainer = styled.div`
   flex-direction: flex-end;
   justify-content: space-between;
 `;
+const HiddenBox = styled.div`
+  display: flex;
+  margin-left: 28%;
+  margin-bottom: 2%;
+`;
+const ErrorMessage = styled.div`
+  color: red;
+  font-size: 13px;
+`;
+// 더미 데이터 (아이디와 비밀번호)
 
 export function Login() {
+  const [username, setUsername] = useState('');
+  const [password, setPassword] = useState('');
+  const [IderrorMessage, setIderrorMessage] = useState('');
+  const [PwerrorMessage, setPwerrorMessage] = useState('');
+
+  const navigate = useNavigate();
+  const dummyUser = {
+    username: 'user', // 아이디
+    password: 'password', // 비밀번호
+  };
+
+  const handleUsernameChange = (e) => {
+    setUsername(e.target.value);
+  };
+
+  const handlePasswordChange = (e) => {
+    setPassword(e.target.value);
+  };
+
+  const handleLogin = () => {
+    username === dummyUser.username
+      ? setIderrorMessage('')
+      : setIderrorMessage(EMAIL_VERIFIED_ERROR);
+    password === dummyUser.password
+      ? setPwerrorMessage('')
+      : setPwerrorMessage(PASSWORD_VERIFIED_ERROR);
+
+    if (username === dummyUser.username && password === dummyUser.password) {
+      navigate('/Mainpage');
+    }
+  };
   const list = [
     { label: '아이디찾기', path: '/find-id' },
     { label: '비밀번호찾기', path: '/find-pwd' },
@@ -98,7 +142,7 @@ export function Login() {
     <CommonRoot>
       <Rootin>
         <HighContainer>
-          <Title>로그인</Title>
+          <CommonPageInfo title="로그인" text={<p></p>} />
 
           <CommonInput
             text="아이디"
@@ -107,6 +151,8 @@ export function Login() {
             color="#464646"
             width="300px"
             height="35px"
+            value={username}
+            onChange={handleUsernameChange}
           />
           <CommonInput
             text="비밀번호"
@@ -115,6 +161,8 @@ export function Login() {
             color="#464646"
             width="300px"
             height="35px"
+            value={password}
+            onChange={handlePasswordChange}
           />
         </HighContainer>
 
@@ -131,8 +179,15 @@ export function Login() {
             ))}
           </FindBox>
         </MiddleContainer>
-
         <LowContainer>
+          <HiddenBox>
+            {IderrorMessage && <ErrorMessage>{IderrorMessage}</ErrorMessage>}
+
+            {PwerrorMessage && !IderrorMessage && (
+              <ErrorMessage>{PwerrorMessage}</ErrorMessage>
+            )}
+          </HiddenBox>
+
           <CustomButton
             text="로그인"
             width="300px"
@@ -140,6 +195,7 @@ export function Login() {
             background="#4064E6"
             color="#ffffff"
             fontSize="20"
+            onClick={handleLogin}
           />
 
           <img
@@ -153,6 +209,7 @@ export function Login() {
             <IconButton imgesRoute={google} />
           </IconButtonContainer>
         </LowContainer>
+        <CommonDialog $visible="true" />
       </Rootin>
     </CommonRoot>
   );
