@@ -3,7 +3,7 @@ import styled from 'styled-components';
 import CommonInput from '../../common/CommonInput';
 import CommonButton from '../../common/CommonButton';
 import CommonSelect from '../../common/CommonSelect';
-import CommonPageInfo from '../../common/CommonPageInfo';
+import CommonHr from '../../common/CommonHr';
 
 const FullContainer = styled.div`
   display: flex;
@@ -12,14 +12,6 @@ const FullContainer = styled.div`
   align-items: center;
 `;
 
-const StyledHr = styled.hr`
-  width: 100%;
-  border: none;
-  border-top: 1px solid #e0e0e0;
-  margin: 5px;
-  margin-top: 10px;
-  margin-bottom: 10px;
-`;
 const MiddleContainer = styled.div`
   margin-top: 20px;
   display: flex;
@@ -54,10 +46,9 @@ export function SignUp() {
   return (
     <CommonRoot>
       <FullContainer>
-        <CommonPageInfo title="회원가입" text={<p></p>} />
         <MiddleContainer>
           <MiddleTitle>회원정보입력</MiddleTitle>
-          <StyledHr />
+          <CommonHr />
           <IDContainer>
             <CommonInput
               placeholder="아이디를 입력하세요"
@@ -73,28 +64,28 @@ export function SignUp() {
               color="#757575"
             />
           </IDContainer>
-          <StyledHr />
+          <CommonHr />
           <CommonInput
             placeholder="비밀번호를 입력하세요"
             text="비밀번호"
             background="#F5F5F5"
             width="310px"
           />
-          <StyledHr />
+          <CommonHr />
           <CommonInput
             placeholder="비밀번호 확인해주세요"
             text="비밀번호 확인"
             background="#F5F5F5"
             width="310px"
           />
-          <StyledHr />
+          <CommonHr />
           <CommonInput
             placeholder="닉네임을 적어주세요"
             text="닉네임"
             background="#F5F5F5"
             width="310px"
           />
-          <StyledHr />
+          <CommonHr />
 
           <CommonSelect
             text="질문선택"
@@ -106,14 +97,14 @@ export function SignUp() {
             options={selectOptions}
             find="질문을 선택하세요"
           />
-          <StyledHr />
+          <CommonHr />
           <CommonInput
             placeholder="답변을 적어주세요"
             text="답변"
             background="#F5F5F5"
             width="310px"
           />
-          <StyledHr />
+          <CommonHr />
           <ImgContainer></ImgContainer>
         </MiddleContainer>
       </FullContainer>
