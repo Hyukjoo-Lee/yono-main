@@ -17,8 +17,8 @@ const images = [image1, image2, image3, image4];
 const StyledHr = styled.hr`
   width: 100%;
   border: none;
-  border-top: 1px solid #e0e0e0; /* 색상 조정 */
-  margin: 15px 0; /* 위아래 여백 */
+  border-top: 1px solid #e0e0e0;
+  margin: 15px 0;
 `;
 
 const Root = styled.div`
@@ -45,8 +45,10 @@ const Button = styled.div`
   display: flex;
   flex-direction: row;
   justify-content: center;
+  align-items: center;
   margin-top: 30px;
   gap: 15px;
+  width: 100%;
 `;
 
 const InlineWrapper = styled.div`
@@ -71,27 +73,23 @@ const CheckUserInfo = ({
   nickname = '닉네임',
   Target_Expenditure_Amout = '테스트 목표 지출금액',
 }) => {
-  const [inputDisabled, setInputDisabled] = useState(true);
-  const [backgroundColor, setBackgroundColor] = useState('#F5F5F5');
   const [showPasswordQuestion, setShowPasswordQuestion] = useState(false);
-  const [showPasswordEdited, setShowPasswordEdited] = useState(false);
 
-  const modify = () => {
-    setInputDisabled(false);
-    setBackgroundColor('#F8F9FE');
-  };
+  const modify = () => {};
+
+  const checkPassword = () => {};
 
   const togglePasswordQuestion = () => {
     setShowPasswordQuestion(!showPasswordQuestion);
   };
 
-  const togglePasswordEdit = () => {
-    setShowPasswordEdited(!showPasswordEdited);
+  const disabledIntputProps = {
+    disabled: true,
+    background: '#F5F5F5',
+    width: '350px',
   };
 
-  const commonInputProps = {
-    disabled: inputDisabled,
-    background: backgroundColor,
+  const abledInputProps = {
     width: '350px',
   };
 
@@ -109,8 +107,7 @@ const CheckUserInfo = ({
         background="#F5F5F5"
         width="350px"
       />
-
-      <CommonInput placeholder={nickname} text="닉네임" {...commonInputProps} />
+      <CommonInput placeholder={nickname} text="닉네임" {...abledInputProps} />
 
       <StyledHr />
 
@@ -126,7 +123,7 @@ const CheckUserInfo = ({
         <CommonInput
           placeholder={password}
           text="비밀번호"
-          {...commonInputProps}
+          {...disabledIntputProps}
         />
         <CustomButton
           text="비밀번호 변경"
@@ -138,40 +135,34 @@ const CheckUserInfo = ({
 
       <HiddenSection $visible={showPasswordQuestion}>
         <CommonInput
-          placeholder="비밀번호 질문"
-          disabled={true}
-          text="질문"
-          width="350px"
+          placeholder="기존 비밀번호"
+          text="기존 비밀번호 입력"
+          {...abledInputProps}
         />
 
         <InlineWrapper>
-          <CommonInput placeholder="비밀번호 답변" text="답변" width="350px" />
+          <CommonInput
+            placeholder="새로운 비밀번호"
+            text="새로운 비밀번호 입력"
+            {...abledInputProps}
+          />
           <CustomButton
             text="확인"
-            onClick={togglePasswordEdit}
             width="140px"
             height="38px"
+            onClick={checkPassword}
           />
         </InlineWrapper>
-        <CommonInput
-          placeholder="수정할 비밀번호"
-          text="수정할 비밀번호를 입력하세요"
-          width="350px"
-        />
+
+        <StyledHr />
       </HiddenSection>
 
-      <CommonInput
-        placeholder={email}
-        text="이메일"
-        disabled={true}
-        background="#F5F5F5"
-        width="350px"
-      />
+      <CommonInput placeholder={email} text="이메일" {...abledInputProps} />
 
       <CommonInput
         placeholder={Target_Expenditure_Amout}
         text="이번 달 목표 지출금액"
-        {...commonInputProps}
+        {...abledInputProps}
       />
 
       <Root2>

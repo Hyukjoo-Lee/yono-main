@@ -2,9 +2,8 @@ import styled from 'styled-components';
 import CommonInput from '../../common/CommonInput';
 import CommonSelect from '../../common/CommonSelect';
 import CommonButton from '../../common/CommonButton';
-import { useState } from 'react';
 import CommonPageInfo from '../../common/CommonPageInfo';
-import HorizonLine from './HorizontalLine';
+import CommonHr from '../../common/CommonHr';
 
 const Root = styled.div`
   width: ${(props) => props.theme.display.lg};
@@ -18,7 +17,7 @@ const FormBox = styled.div`
   align-items: center;
   justify-content: center;
   width: 100%;
-  max-width: 800px;
+  max-width: 1000px;
   margin: 0 auto;
 `;
 
@@ -49,12 +48,6 @@ const Row = styled.div`
   }
 `;
 
-const Row1 = styled.div`
-  display: flex;
-  justify-content: center;
-  margin: 0 auto;
-`;
-
 const Box1 = styled.div`
   display: flex;
   justify-content: center;
@@ -63,18 +56,15 @@ const Box1 = styled.div`
 `;
 
 export function CommunityFormBox() {
-  const [isAgreed, setIsAgreed] = useState(false);
-
-  const handleAgreeChange = (e) => {
-    setIsAgreed(e.target.checked);
-    if (e.target.checked) {
-    }
-  };
-
   return (
     <Root>
       <CommonPageInfo title={'고객게시판'} text={<p></p>} />
-      <HorizonLine />
+      <CommonHr
+        width="918px"
+        borderWidth="2px"
+        borderColor="black"
+        margin="10px auto 20px"
+      />
       <FormBox>
         <Row>
           <span>제목</span>
@@ -104,27 +94,22 @@ export function CommunityFormBox() {
           <textarea cols="59" rows="15"></textarea>
         </Row>
         <Row>
-          <span>파일</span>
-          <CommonInput width="390px" height="40px" placeholder="파일 첨부" />
+          <span>사진</span>
+          <CommonInput width="390px" height="40px" placeholder="사진 첨부" />
           <CommonButton
-            text="파일찾기"
+            text="사진 찾기"
             width="100px"
             height="40px"
             font-size="10px"
           />
         </Row>
       </FormBox>
-      <HorizonLine />
-      <Row1>
-        <label>
-          <input
-            type="checkbox"
-            checked={isAgreed}
-            onChange={handleAgreeChange}
-          />
-          이용약관에 동의합니다.
-        </label>
-      </Row1>
+      <CommonHr
+        width="918px"
+        borderWidth="2px"
+        borderColor="black"
+        margin="10px auto 20px"
+      />
       <Box1>
         <CommonButton
           text="문의하기"
