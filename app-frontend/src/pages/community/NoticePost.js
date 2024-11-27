@@ -1,8 +1,8 @@
 import styled from 'styled-components';
 import CommonPageInfo from '../../common/CommonPageInfo';
-import HorizonLine from './HorizontalLine';
 import CommonButton from '../../common/CommonButton';
 import { useNavigate } from 'react-router-dom';
+import CommonHr from '../../common/CommonHr';
 
 const Root = styled.div`
   width: ${(props) => props.theme.display.sm};
@@ -21,14 +21,15 @@ const Box = styled.div`
   margin: 0 auto;
   & > label.title {
     margin-top: 20px;
-    font-weight: bold; 
+    font-weight: bold;
     font-size: 25px;
-
   }
   & > label.date {
     color: ${(props) => props.theme.color.gray};
     margin-top: 20px;
+  }
 `;
+
 const DataBox = styled.div`
   display: flex;
   justify-content: flex-start;
@@ -51,7 +52,7 @@ export function NoticePost() {
         <label className="title">점검시간을 알려드립니다</label>
         <label className="date">2024.11.22</label>
       </Box>
-      <HorizonLine />
+      <CommonHr />
       <DataBox>공지사항에 대해서 알려드리겠습니다</DataBox>
 
       <div>
