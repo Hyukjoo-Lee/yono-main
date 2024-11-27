@@ -1,10 +1,9 @@
 import styled from 'styled-components';
-
-import HorizonLine from './HorizontalLine';
 import CommonButton from '../../common/CommonButton';
 import CommonInput from '../../common/CommonInput';
 import { useNavigate } from 'react-router-dom';
 import characterImg from '../../assets/images/Character1.png';
+import HorizonLine from './HorizontalLine';
 
 const comments = [
   {
@@ -96,7 +95,7 @@ const BackBox = styled.div`
 export function CommunityPost() {
   const navigate = useNavigate();
   const handleButtonClick = () => {
-    navigate('/Community');
+    navigate('/community');
   };
   return (
     <Root>

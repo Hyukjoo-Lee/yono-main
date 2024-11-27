@@ -1,5 +1,4 @@
-import React from 'react';
-
+import React, { useState } from 'react';
 import styled from 'styled-components';
 import CommonTabs from '../../common/CommonTabs';
 import CommunityTable from './CommunityTable';
@@ -20,7 +19,7 @@ const TabStyle = styled.div`
 `;
 
 export function Community() {
-  const [selectedTab, setSelectedTab] = React.useState(0);
+  const [selectedTab, setSelectedTab] = useState(0);
   const items = [{ text: '커뮤니티' }, { text: '공지사항' }];
 
   const panels = [<CommunityTable />, <NoticeTable />];

@@ -1,8 +1,8 @@
 import styled from 'styled-components';
 import CommonPageInfo from '../../common/CommonPageInfo';
-import HorizonLine from './HorizontalLine';
 import CommonButton from '../../common/CommonButton';
 import { useNavigate } from 'react-router-dom';
+import HorizonLine from './HorizontalLine';
 
 const Root = styled.div`
   width: ${(props) => props.theme.display.sm};
@@ -42,7 +42,7 @@ const BackBox = styled.div`
 export function NoticePost() {
   const navigate = useNavigate();
   const handleButtonClick = () => {
-    navigate('/Community');
+    navigate('/community');
   };
   return (
     <Root>
