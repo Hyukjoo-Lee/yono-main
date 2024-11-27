@@ -3,11 +3,7 @@ import styled from 'styled-components';
 import CommonInput from '../../common/CommonInput';
 import CommonButton from '../../common/CommonButton';
 import CommonSelect from '../../common/CommonSelect';
-<<<<<<< HEAD
 import CommonHr from '../../common/CommonHr';
-=======
-import CommonPageInfo from '../../common/CommonPageInfo';
->>>>>>> c95cb3f7c0e1485fc67579079db971330fd01630
 
 const FullContainer = styled.div`
   display: flex;
@@ -50,7 +46,6 @@ export function SignUp() {
   return (
     <CommonRoot>
       <FullContainer>
-        <CommonPageInfo title="회원가입" text={<p></p>} />
         <MiddleContainer>
           <MiddleTitle>회원정보입력</MiddleTitle>
           <CommonHr />
