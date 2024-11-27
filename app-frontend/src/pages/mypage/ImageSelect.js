@@ -19,11 +19,7 @@ const Thumbnail = styled.img`
   object-fit: cover;
   cursor: pointer;
   border: 2px solid
-<<<<<<< HEAD
-    ${(props) => (props.$isSelected ? "#4064e6" : "transparent")};
-=======
     ${(props) => (props.$isSelected ? '#4064e6' : 'transparent')};
->>>>>>> origin
   &:hover {
     border-color: #4064e6;
   }
