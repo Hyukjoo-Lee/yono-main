@@ -4,7 +4,7 @@ import checkIcon from '../../assets/images/checkIcon.svg';
 
 const ThumbnailContainer = styled.div`
   display: flex;
-  gap: 10px; /* 간격을 조절할 수 있어 */
+  gap: 10px;
 `;
 
 const ThumbnailWrapper = styled.div`

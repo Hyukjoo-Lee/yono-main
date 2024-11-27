@@ -9,9 +9,6 @@ import image2 from '../../assets/images/Character2.png';
 import image3 from '../../assets/images/Character3.png';
 import image4 from '../../assets/images/Character4.png';
 
-// 리팩토링 필요
-// 수정할 비밀번호 -> 답변 맞으면 (버튼 누르면) 나오는 형태로 수정
-
 const images = [image1, image2, image3, image4];
 
 const StyledHr = styled.hr`
@@ -75,9 +72,9 @@ const CheckUserInfo = ({
 }) => {
   const [showPasswordQuestion, setShowPasswordQuestion] = useState(false);
 
-  const modify = () => {};
-
+  const save = () => {};
   const checkPassword = () => {};
+  const deleteId = () => {};
 
   const togglePasswordQuestion = () => {
     setShowPasswordQuestion(!showPasswordQuestion);
@@ -103,9 +100,7 @@ const CheckUserInfo = ({
       <CommonInput
         placeholder={userName}
         text="이름"
-        disabled={true}
-        background="#F5F5F5"
-        width="350px"
+        {...disabledIntputProps}
       />
       <CommonInput placeholder={nickname} text="닉네임" {...abledInputProps} />
 
@@ -114,9 +109,7 @@ const CheckUserInfo = ({
       <CommonInput
         placeholder={userId}
         text="아이디"
-        disabled={true}
-        background="#F5F5F5"
-        width="350px"
+        {...disabledIntputProps}
       />
 
       <InlineWrapper>
@@ -171,11 +164,11 @@ const CheckUserInfo = ({
       </Root2>
 
       <Button>
-        <CustomButton text="저장" onClick={modify} {...commonButtonProps} />
+        <CustomButton text="저장" onClick={save} {...commonButtonProps} />
 
         <CustomButton
           text="회원 탈퇴"
-          // onClick={}
+          onClick={deleteId}
           {...commonButtonProps}
         />
       </Button>
