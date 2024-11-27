@@ -60,6 +60,8 @@ const CommonInput = (props) => {
     disabled,
     hoverBk,
     hoverColor,
+    value,
+    onChange,
   } = props;
 
   return (
@@ -82,6 +84,8 @@ const CommonInput = (props) => {
         hoverBk={hoverBk}
         hoverColor={hoverColor}
         disabled={disabled}
+        value={value}
+        onChange={onChange}
       />
     </div>
   );
