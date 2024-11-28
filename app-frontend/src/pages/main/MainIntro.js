@@ -46,6 +46,25 @@ const StyledTextCon = styled.div`
   gap: 10px;
 `;
 
+const StyledButton = styled.div`
+  width:162px;
+  height:48px;
+  background-color:#2357A2;
+  border-radius:50px;
+  display:flex;
+  align-items: center;
+  justify-content: center;
+`
+const StyledButtonA = styled.a`
+  color:white;
+  text-decoration:none;
+  font-size:20px;
+  font-weight:500;
+  display:flex;
+  align-items: center;
+  justify-content: center;
+`
+
 const MainIntro = () => {
   return (
     <StyledMainIntro>
@@ -58,6 +77,9 @@ const MainIntro = () => {
           <br />
           챌린지로 뱃지 받고 절약을 재밌게 하세요(멘트바꿀예정)
         </StyledSubTitle>
+        <StyledButton>
+        <StyledButtonA href="#">더 알아보기</StyledButtonA>
+        </StyledButton>
       </StyledTextCon>
       <StyledMainImg>
         <img src={Main_img} alt="메인사진"/>

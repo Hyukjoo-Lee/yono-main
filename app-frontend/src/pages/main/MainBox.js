@@ -2,6 +2,10 @@ import React from "react";
 import styled from "styled-components";
 import MainBox1_img from "../../assets/images/main_box1.svg";
 import MainBox2_img from "../../assets/images/main_box2.svg";
+import MainBox3_img from "../../assets/images/main_box3.svg";
+import MainBox4_img from "../../assets/images/main_box4.svg";
+import MainBox5_img from "../../assets/images/main_box5.svg";
+
 
 const StyledMainBox = styled.div`
   display: flex;
@@ -66,25 +70,25 @@ const MainComponent = () => {
     {
       title: `패턴분석`,
       subtitle: `나의 카드 분석하기`,
-      imgSrc: MainBox2_img,
+      imgSrc: MainBox3_img,
       link: `#`,
     },
     {
       title: `카드추천`,
       subtitle: `나의 카드 등록하기`,
-      imgSrc: `#`,
+      imgSrc: MainBox2_img,
       link: `#`,
     },
     {
       title: `랭킹확인`,
       subtitle: `나의 랭킹 확인하기`,
-      imgSrc: `#`,
+      imgSrc: MainBox4_img,
       link: `#`,
     },
     {
       title: `커뮤니티`,
       subtitle: `나만의 꿀팁 공유하기`,
-      imgSrc: `#`,
+      imgSrc: MainBox5_img,
       link: `#`,
     },
   ];
