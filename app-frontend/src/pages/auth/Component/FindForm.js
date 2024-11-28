@@ -62,9 +62,6 @@ const FindForm = (props) => {
     selectedValue,
   } = props;
 
-  // const [isDialogIDVisible, setIsDialogIDVisible] = useState(false);
-  // const [isDialogPWVisible, setIsDialogPWVisible] = useState(false);
-
   const navigate = useNavigate();
   const CancleConfirm = () => {
     navigate('/');
@@ -87,7 +84,6 @@ const FindForm = (props) => {
               find="질문을 선택하세요"
               value={answer}
               options={selectOptions}
-              // onSelect={setSelectedQuestion} //질문선택 시 상태 업데이트
               selectedValue={selectedValue}
               setSelectedValue={setSelectedValue}
             />

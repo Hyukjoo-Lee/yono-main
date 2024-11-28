@@ -9,11 +9,6 @@ export const FindPassword = () => {
   const [selectedQuestion, setSelectedQuestion] = useState('');
   const [errorMessage, setErrorMessage] = useState('');
 
-  // const handleChange = (event) => {
-  //   setSelectedQuestion(event.target.value);
-  //   // if (onSelect) onSelect(event.target.value);
-  // };
-
   const selectOptions = [
     { value: '애완동물 이름은?', label: '애완동물 이름은?' },
     { value: '당신의 생일은?', label: '당신의 생일은' },
@@ -26,7 +21,6 @@ export const FindPassword = () => {
   };
 
   const handleConfirm = () => {
-    console.log(answer);
     if (selectedQuestion && answers[selectedQuestion]) {
       const correctanswer = answers[selectedQuestion]; // 올바른 답을 가져옴
 
@@ -37,7 +31,6 @@ export const FindPassword = () => {
         setIsDialogPWVisible(false);
       }
     } else {
-      console.log(selectedQuestion);
       setErrorMessage('답변을 입력해 주세요.');
       setIsDialogPWVisible(false);
     }
