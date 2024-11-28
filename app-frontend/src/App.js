@@ -19,10 +19,17 @@ import { MainPage } from './pages/main/MainPage';
 import { MyCard } from './pages/mycard/MyCard';
 import { MyPage } from './pages/mypage/MyPage';
 import theme from './theme/theme';
+import { CommunityPost } from './pages/community/CommunityPost';
+import { NoticePost } from './pages/community/NoticePost';
+
 const Root = styled.div`
   & *,
   p {
     font-family: 'Noto Sans KR';
+  }
+  ,
+  & > div {
+    min-height: calc(100vh - 110px);
   }
 `;
 
@@ -39,7 +46,12 @@ function Layout({ children }) {
 function App() {
   return (
     <ThemeProvider theme={theme}>
-      <Router>
+      <Router
+        future={{
+          v7_startTransition: true,
+          v7_relativeSplatPath: true,
+        }}
+      >
         <Layout>
           <Routes>
             <Route path="/" element={<MainPage />} />
@@ -54,6 +66,8 @@ function App() {
             <Route path="/community" element={<Community />} />
             <Route path="/CommunityFormBox" element={<CommunityFormBox />} />
             <Route path="/mycard" element={<MyCard />} />
+            <Route path="/communityPost" element={<CommunityPost />} />
+            <Route path="/noticePost" element={<NoticePost />} />
           </Routes>
         </Layout>
       </Router>
