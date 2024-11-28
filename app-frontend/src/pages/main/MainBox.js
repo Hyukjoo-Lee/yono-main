@@ -78,13 +78,13 @@ const MainComponent = () => {
     {
       title: `랭킹확인`,
       subtitle: `나의 랭킹 확인하기`,
-      imgScr: `#`,
+      imgSrc: `#`,
       link: `#`,
     },
     {
       title: `커뮤니티`,
       subtitle: `나만의 꿀팁 공유하기`,
-      imgScr: `#`,
+      imgSrc: `#`,
       link: `#`,
     },
   ];
