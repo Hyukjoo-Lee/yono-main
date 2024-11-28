@@ -3,6 +3,14 @@ import CalendarHeader from './CalendarHeader';
 import CalendarDays from './CalendarDays';
 import CalendarBody from './ClaendarBody';
 import { addMonths, subMonths, addYears, subYears } from 'date-fns';
+import styled from 'styled-components';
+
+const Root = styled.div`
+  border-radius: 7px;
+  box-sizing: border-box;
+  border: 1px solid ${(props) => props.theme.color.brightGray};
+  overflow: hidden;
+`;
 
 const Calendar = () => {
   const [currentMonth, setCurrentMonth] = useState(new Date());
@@ -29,7 +37,7 @@ const Calendar = () => {
   };
 
   return (
-    <div>
+    <Root>
       <CalendarHeader
         currentMonth={currentMonth}
         prevMonth={prevMonth}
@@ -43,7 +51,7 @@ const Calendar = () => {
         selectedDate={selectedDate}
         onDateClick={onDateClick}
       />
-    </div>
+    </Root>
   );
 };
 
