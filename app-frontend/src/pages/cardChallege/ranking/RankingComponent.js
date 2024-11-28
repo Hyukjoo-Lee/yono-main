@@ -11,6 +11,15 @@ const Root = styled.div`
   display: flex;
   justify-content: space-around;
   align-items: flex-end;
+  & > div:nth-child(1) {
+    order: 2;
+  }
+  & > div:nth-child(2) {
+    order: 1;
+  }
+  & > div:nth-child(3) {
+    order: 3;
+  }
 `;
 
 const BoxStyle = styled.div`
@@ -51,8 +60,8 @@ const Box = styled.div`
 
 const RankingComponent = () => {
   const list = [
-    { rank: 2, name: '한글이름님 (영어아이디)', number: 500 },
     { rank: 1, name: '한글이름님 (영어아이디)', number: 65000 },
+    { rank: 2, name: '한글이름님 (영어아이디)', number: 500 },
     { rank: 3, name: '한글이름님 (영어아이디)', number: 300 },
   ];
   return (
