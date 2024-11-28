@@ -5,9 +5,6 @@ import CommonInput from '../../../common/CommonInput';
 import CommonRoot from '../../../common/CommonRoot';
 import CommonPageInfo from '../../../common/CommonPageInfo';
 import { useNavigate } from 'react-router-dom';
-import { useState } from 'react';
-import { FindID } from '../FindID';
-import { FindPassword } from '../FindPassword';
 
 const Rootin = styled.div`
   display: flex;

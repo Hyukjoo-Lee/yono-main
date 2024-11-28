@@ -109,7 +109,6 @@ export function Login(props) {
   const [PwerrorMessage, setPwerrorMessage] = useState('');
   const [successVisible, setsuccessVisible] = useState(false);
 
-  const navigate = useNavigate();
   const dummyUser = {
     username: 'user', // 아이디
     password: 'password', // 비밀번호
