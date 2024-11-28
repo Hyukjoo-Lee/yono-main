@@ -6,13 +6,13 @@ const StyledCardContainer = styled.div`
   height: 285px;
   display: flex;
   align-items: center;
-`;
+`
 
 const StyledCard1 = styled.div`
   display: flex;
   align-items: center;
   margin-right: 30px;
-`;
+`
 
 const StyledCardInfo = styled.div`
   display: flex;
@@ -21,27 +21,26 @@ const StyledCardInfo = styled.div`
   margin-left: 120px;
   align-items: flex-start;
   height: 100%;
-`;
+`
 
 const StyledCardInfo1 = styled.p`
   font-size: 28px;
   font-weight: 700;
   margin: 0px 0px 15px 0px;
-`;
+`
 
 const StyledCardInfo2 = styled.p`
   font-size: 22px;
   font-weight: 500;
   margin: 0px 0px 15px 0px;
-}
-`;
+`
 
 const StyledCardInfo3 = styled.p`
   font-size: 18px;
   font-weight: 200;
   line-height: 25px;
   margin: 0px;
-`;
+`
 
 const MainCardComponent = () => {
   return (
