@@ -31,6 +31,10 @@ const BoxStyle = styled.div`
   }
 `;
 
+const BoxInStyle = styled.div`
+  width: calc(100% - 60px - 60px);
+`;
+
 const CardName = styled.p`
   margin: 0px;
   font-size: 20px;
@@ -40,7 +44,8 @@ const CardName = styled.p`
 `;
 
 const InfoRow = styled.div`
-  width: 256px;
+  min-width: 256px;
+  width: 100%;
   display: flex;
   justify-content: space-between;
   margin-bottom: 3px;
@@ -140,7 +145,7 @@ const CommonCardListBox = ({
       ) : (
         <BoxStyle>
           <img src={cardImg} alt="카드이미지" />
-          <div>
+          <BoxInStyle>
             <CardName>{cardTitle}</CardName>
             {cardInfo.map((item, index) => (
               <InfoRow key={index}>
@@ -148,7 +153,7 @@ const CommonCardListBox = ({
                 <TextStyle>{item.value}</TextStyle>
               </InfoRow>
             ))}
-          </div>
+          </BoxInStyle>
         </BoxStyle>
       )}
     </>
