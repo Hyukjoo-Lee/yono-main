@@ -23,7 +23,7 @@ const CommonPageInfo = ({ title, text }) => {
   return (
     <Root>
       <TitleStyle>{title}</TitleStyle>
-      {text}
+      {text ? text : <p></p>}
     </Root>
   );
 };
