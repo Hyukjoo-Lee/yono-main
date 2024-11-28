@@ -55,19 +55,19 @@ const MainCardComponent = () => {
   ];
   return (
     <StyledCardContainer>
-      {mainCardData.map((box, index) => (
+      {mainCardData.map((item) => (
         <StyledCard1>
-          <img src={box.imgSrc} alt="메인카드" />
+          <img src={item.imgSrc} alt="메인카드" />
 
           <StyledCardInfo>
-            <StyledCardInfo1>{box.title}</StyledCardInfo1>
-            <StyledCardInfo2>{box.subtitle}</StyledCardInfo2>
+            <StyledCardInfo1>{item.title}</StyledCardInfo1>
+            <StyledCardInfo2>{item.subtitle}</StyledCardInfo2>
             <StyledCardInfo3>
-              {box.info1}
+              {item.info1}
               <br />
-              {box.info2}
+              {item.info2}
               <br />
-              {box.info3}
+              {item.info3}
               <br />
             </StyledCardInfo3>
           </StyledCardInfo>
