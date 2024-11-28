@@ -40,7 +40,7 @@ const ImgContainer = styled.img`
 export function SignUp() {
   const selectOptions = [
     { value: '애완동물 이름은?', label: '애완동물 이름은?' },
-    { value: '당신의 생일은?', label: '당신의 생일은' },
+    { value: '당신의 생일은?', label: '당신의 생일은?' },
     { value: '당신이 좋아하는 음식은?', label: '당신이 좋아하는 음식은?' },
   ];
   return (
