@@ -1,7 +1,6 @@
 import React from "react";
 import styled from "styled-components";
-import Main_img from "./main_img.png";
-import MainButton from "./MainButton";
+import Main_img from "../../assets/images/main_img.png";
 
 const StyledMainIntro = styled.div`
   display: flex;
@@ -36,6 +35,7 @@ const StyledMainImg = styled.div`
   font-size: 30px;
   & img {
     width: 100%;
+    padding-top: 15px;
   }
 `;
 
@@ -45,6 +45,25 @@ const StyledTextCon = styled.div`
   justify-content: center;
   gap: 10px;
 `;
+
+const StyledButton = styled.div`
+  width:162px;
+  height:48px;
+  background-color:#2357A2;
+  border-radius:50px;
+  display:flex;
+  align-items: center;
+  justify-content: center;
+`
+const StyledButtonA = styled.a`
+  color:white;
+  text-decoration:none;
+  font-size:20px;
+  font-weight:500;
+  display:flex;
+  align-items: center;
+  justify-content: center;
+`
 
 const MainIntro = () => {
   return (
@@ -58,7 +77,9 @@ const MainIntro = () => {
           <br />
           챌린지로 뱃지 받고 절약을 재밌게 하세요(멘트바꿀예정)
         </StyledSubTitle>
-        <MainButton />
+        <StyledButton>
+        <StyledButtonA href="#">더 알아보기</StyledButtonA>
+        </StyledButton>
       </StyledTextCon>
       <StyledMainImg>
         <img src={Main_img} alt="메인사진"/>
