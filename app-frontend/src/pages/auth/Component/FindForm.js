@@ -6,7 +6,7 @@ import CommonInput from '../../../common/CommonInput';
 import CommonRoot from '../../../common/CommonRoot';
 import CommonPageInfo from '../../../common/CommonPageInfo';
 
-const Rootin = styled.div`
+const RootIn = styled.div`
   display: flex;
   flex-direction: column;
   justify-content: center;
@@ -39,13 +39,13 @@ const ButtonContainer = styled.div`
 const FindForm = ({ find }) => {
   const selectOptions = [
     { value: '애완동물 이름은?', label: '애완동물 이름은?' },
-    { value: '당신의 생일은?', label: '당신의 생일은' },
+    { value: '당신의 생일은?', label: '당신의 생일은?' },
     { value: '당신이 좋아하는 음식은?', label: '당신이 좋아하는 음식은?' },
   ];
 
   return (
     <CommonRoot>
-      <Rootin>
+      <RootIn>
         <FullContainer>
           <CommonPageInfo title={find} text={<p></p>} />
 
@@ -91,7 +91,7 @@ const FindForm = ({ find }) => {
             />
           </ButtonContainer>
         </FullContainer>
-      </Rootin>
+      </RootIn>
     </CommonRoot>
   );
 };
