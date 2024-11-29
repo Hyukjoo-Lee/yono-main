@@ -31,9 +31,7 @@ const BoxStyle = styled.div`
   }
 `;
 
-const BoxInStyle = styled.div`
-  width: calc(100% - 60px - 60px);
-`;
+const BoxInStyle = styled.div``;
 
 const CardName = styled.p`
   margin: 0px;
