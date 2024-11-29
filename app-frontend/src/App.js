@@ -22,8 +22,6 @@ import theme from './theme/theme';
 import { CommunityPost } from './pages/community/CommunityPost';
 import { NoticePost } from './pages/community/NoticePost';
 
-import { CommunityPost } from './pages/community/CommunityPost';
-import { NoticePost } from './pages/community/NoticePost';
 const Root = styled.div`
   & *,
   p {
