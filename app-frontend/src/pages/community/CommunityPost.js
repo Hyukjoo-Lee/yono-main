@@ -89,13 +89,21 @@ const TextBox = styled.div`
     margin-left: 25px;
   }
 `;
-const BackBox = styled.div`
+const BottomBox = styled.div`
+  display: flex;
   margin: 20px 0px 20px 0px;
+  justify-content: flex-end;
+  & > button {
+    margin-right: 15px;
+  }
 `;
 export function CommunityPost() {
   const navigate = useNavigate();
-  const handleButtonClick = () => {
+  const handleNavigateToCommunity = () => {
     navigate('/community');
+  };
+  const handleNavigateToEditForm = () => {
+    navigate('/editFormBox');
   };
   return (
     <Root>
@@ -141,15 +149,23 @@ export function CommunityPost() {
         })}
       </CommentBox>
 
-      <BackBox>
+      <BottomBox>
         <CommonButton
-          text="목록으로 돌아가기"
-          width="100px"
-          height="40px"
+          text="목록"
+          width="80px"
+          height="50px"
           font-size="20px"
-          onClick={handleButtonClick}
+          onClick={handleNavigateToCommunity}
         />
-      </BackBox>
+        <CommonButton
+          text="수정"
+          width="80px"
+          height="50px"
+          font-size="20px"
+          onClick={handleNavigateToEditForm}
+        />
+        <CommonButton text="삭제" width="80px" height="50px" font-size="20px" />
+      </BottomBox>
     </Root>
   );
 }
