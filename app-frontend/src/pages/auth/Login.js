@@ -2,9 +2,9 @@ import React from 'react';
 import styled from 'styled-components';
 import CommonInput from '../../common/CommonInput';
 import CustomButton from '../../common/CommonButton';
-import image from './images/or.png';
-import kakaoimage from './images/kakao.png';
-import google from './images/google.png';
+import or from '../../assets/images/or.png';
+import kakao from '../../assets/images/kakao.png';
+import google from '../../assets/images/google.png';
 import IconButton from './Component/IconButton'; // IButton을 정확히 import
 import CommonRoot from '../../common/CommonRoot';
 import { Link, useNavigate } from 'react-router-dom';
@@ -16,7 +16,7 @@ import {
 } from '../auth/Component/ErrorMessage';
 import SuccessLogin from './SuccessLogin';
 
-const Rootin = styled.div`
+const RootIn = styled.div`
   display: flex;
   flex-direction: column;
   justify-content: center;
@@ -143,7 +143,7 @@ export function Login(props) {
 
   return (
     <CommonRoot>
-      <Rootin>
+      <RootIn>
         <HighContainer>
           <CommonPageInfo title="로그인" text={<p></p>} />
 
@@ -202,16 +202,16 @@ export function Login(props) {
           />
 
           <img
-            src={image} // import한 이미지 경로 사용
+            src={or} // import한 이미지 경로 사용
             alt="Or"
             width="63%"
           />
           <IconButtonContainer>
-            <IconButton imagesRoute={kakaoimage} />
-            <IconButton imagesRoute={google} />
+            <IconButton imgesRoute={kakaoimage} />
+            <IconButton imgesRoute={google} />
           </IconButtonContainer>
         </LowContainer>
-        <SuccessLogin Open={successVisible || Open} />
+        <CommonDialog $visible="true" />
       </Rootin>
     </CommonRoot>
   );

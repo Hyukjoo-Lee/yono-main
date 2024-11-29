@@ -6,7 +6,7 @@ import CommonRoot from '../../../common/CommonRoot';
 import CommonPageInfo from '../../../common/CommonPageInfo';
 import { useNavigate } from 'react-router-dom';
 
-const Rootin = styled.div`
+const RootIn = styled.div`
   display: flex;
   flex-direction: column;
   justify-content: center;
@@ -46,27 +46,16 @@ const ButtonContainer = styled.div`
   justify-content: space-between;
   width: 45%;
 `;
-const FindForm = (props) => {
-  const {
-    find,
-    onClick,
-    answer,
-    selectOptions,
-    handleConfirm,
-    errorMessage,
-    setAnswer,
-    setSelectedValue,
-    selectedValue,
-  } = props;
-
-  const navigate = useNavigate();
-  const CancleConfirm = () => {
-    navigate('/');
-  };
+const FindForm = ({ find }) => {
+  const selectOptions = [
+    { value: '애완동물 이름은?', label: '애완동물 이름은?' },
+    { value: '당신의 생일은?', label: '당신의 생일은' },
+    { value: '당신이 좋아하는 음식은?', label: '당신이 좋아하는 음식은?' },
+  ];
 
   return (
     <CommonRoot>
-      <Rootin>
+      <RootIn>
         <FullContainer>
           <CommonPageInfo title={find} text={<p></p>} />
 
@@ -122,7 +111,7 @@ const FindForm = (props) => {
             />
           </ButtonContainer>
         </FullContainer>
-      </Rootin>
+      </RootIn>
     </CommonRoot>
   );
 };

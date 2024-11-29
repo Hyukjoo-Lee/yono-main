@@ -60,7 +60,7 @@ const PaginationStyle = styled(Pagination)`
 `;
 
 export function NoticeTable() {
-  const [page, setPage] = useState(1);
+  const [page, setPage] = useState(0);
   const rowsPerPage = 10;
 
   const handleChangePage = (event, newPage) => {
