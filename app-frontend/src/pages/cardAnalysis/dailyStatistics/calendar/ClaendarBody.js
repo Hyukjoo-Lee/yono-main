@@ -8,11 +8,11 @@ import {
   endOfMonth,
   startOfWeek,
   endOfWeek,
-} from "date-fns";
-import { ReactComponent as Coins1 } from "../../../../assets/images/Coins1.svg";
-import { ReactComponent as Coins2 } from "../../../../assets/images/Coins2.svg";
-import { ReactComponent as Coins3 } from "../../../../assets/images/Coins3.svg";
-import { ReactComponent as Coins4 } from "../../../../assets/images/Coins4.svg";
+} from 'date-fns';
+import { ReactComponent as ExcellentCoin } from '../../../../assets/images/ExcellentCoin.svg';
+import { ReactComponent as VeryGoodCoin } from '../../../../assets/images/VeryGoodCoin.svg';
+import { ReactComponent as GoodCoin } from '../../../../assets/images/GoodCoin.svg';
+import { ReactComponent as BadCoin } from '../../../../assets/images/BadCoin.svg';
 
 const Root = styled.div``;
 
@@ -41,8 +41,8 @@ const DaysBox = styled.div`
     }
   }
   & svg {
-    width: 22px;
-    height: 22px;
+    width: 20px;
+    height: 20px;
   }
 `;
 
@@ -58,10 +58,10 @@ const DayBox = styled.div`
     props.$today
       ? props.theme.color.blue
       : props.$selected
-      ? props.theme.color.white
-      : props.theme.color.black};
+        ? props.theme.color.white
+        : props.theme.color.black};
   background: ${(props) =>
-    props.$selected ? props.theme.color.blue : "transpernt"};
+    props.$selected ? props.theme.color.blue : 'transpernt'};
 `;
 
 const CalendarBody = ({ currentMonth, selectedDate, onDateClick }) => {
@@ -80,13 +80,13 @@ const CalendarBody = ({ currentMonth, selectedDate, onDateClick }) => {
       formattedDate = format(day, 'd');
       const cloneDay = day;
 
-      const history = format(day, "MM-dd") === "11-10";
+      const history = format(day, 'MM-dd') === '12-10';
       const history2 =
-        format(day, "MM-dd") === "11-06" || format(day, "MM-dd") === "11-08";
+        format(day, 'MM-dd') === '12-06' || format(day, 'MM-dd') === '12-08';
 
-      const history3 = format(day, "MM-dd") === "11-18";
+      const history3 = format(day, 'MM-dd') === '12-18';
       const history4 =
-        format(day, "MM-dd") === "11-24" || format(day, "MM-dd") === "11-04";
+        format(day, 'MM-dd') === '12-24' || format(day, 'MM-dd') === '12-04';
 
       days.push(
         <DaysBox
@@ -97,27 +97,27 @@ const CalendarBody = ({ currentMonth, selectedDate, onDateClick }) => {
           <DayBox
             $today={isSameDay(day, new Date())}
             $selected={isSameDay(day, selectedDate)}
-            $lastMonth={format(currentMonth, "M") !== format(day, "M")}
+            $lastMonth={format(currentMonth, 'M') !== format(day, 'M')}
             style={{
               color: isSameDay(day, selectedDate)
-                ? "#FFFFFF"
-                : format(currentMonth, "M") !== format(day, "M")
-                ? "#d0d0d0"
-                : "",
+                ? '#FFFFFF'
+                : format(currentMonth, 'M') !== format(day, 'M')
+                  ? '#d0d0d0'
+                  : '',
             }}
           >
             {formattedDate}
           </DayBox>
           {history ? (
-            <Coins1 />
+            <ExcellentCoin />
           ) : history2 ? (
-            <Coins2 />
+            <VeryGoodCoin />
           ) : history3 ? (
-            <Coins3 />
+            <GoodCoin />
           ) : history4 ? (
-            <Coins4 />
+            <BadCoin />
           ) : (
-            ""
+            ''
           )}
         </DaysBox>,
       );
