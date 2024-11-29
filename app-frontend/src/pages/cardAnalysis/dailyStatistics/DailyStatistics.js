@@ -3,20 +3,46 @@ import Calendar from './calendar/Calendar';
 import styled from 'styled-components';
 import CommonCardListBox from '../../../common/CommonCardListBox';
 import CardImage from '../../../assets/images/CardImage.png';
+import { ReactComponent as ExcellentCoin } from '../../../assets/images/ExcellentCoin.svg';
+import { ReactComponent as VeryGoodCoin } from '../../../assets/images/VeryGoodCoin.svg';
+import { ReactComponent as GoodCoin } from '../../../assets/images/GoodCoin.svg';
+import { ReactComponent as BadCoin } from '../../../assets/images/BadCoin.svg';
 
 const Root = styled.div`
   width: 100%;
-  display: flex;
-  justify-content: space-between;
+  display: grid;
+  grid-template-columns: 740px 1fr;
+  gap: 30px;
   box-sizing: border-box;
 `;
 const CalendarBox = styled.div`
-  width: 740px;
+  display: flex;
+  flex-direction: column;
+`;
+
+const CalendarBottomBox = styled.div`
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  box-sizing: border-box;
+  margin-top: 5px;
+  & div {
+    display: flex;
+    align-items: center;
+  }
+  & p {
+    margin: 0 0 0 8px;
+    font-size: ${(props) => props.theme.fontSize.sm};
+    color: ${(props) => props.theme.color.lightGray};
+  }
+  & svg {
+    width: 20px;
+    height: 20px;
+  }
 `;
 
 const ListBox = styled.div`
-  width: 430px;
-  height: 530px;
+  height: 541px;
   overflow-y: auto;
   &::-webkit-scrollbar {
     width: 0;
@@ -67,11 +93,35 @@ const DailyStatistics = () => {
         { label: '카테고리', value: '식당' },
       ],
     },
+    {
+      title: '현대카드(신용)',
+      cardImage: CardImage,
+      info: [
+        { label: '날짜', value: '2024.10.20' },
+        { label: '사용처', value: 'kg쌀국수' },
+        { label: '카테고리', value: '식당' },
+      ],
+    },
+  ];
+
+  const Lists = [
+    { icon: <BadCoin />, text: '0~25% 소비절약' },
+    { icon: <GoodCoin />, text: '26~50% 소비절약' },
+    { icon: <VeryGoodCoin />, text: '51~75% 소비절약' },
+    { icon: <ExcellentCoin />, text: '76~100% 소비절약' },
   ];
   return (
     <Root>
       <CalendarBox>
         <Calendar />
+        <CalendarBottomBox>
+          {Lists.map((item, index) => (
+            <div key={index}>
+              {item.icon}
+              <p>{item.text}</p>
+            </div>
+          ))}
+        </CalendarBottomBox>
       </CalendarBox>
       <ListBox>
         {cardList.map((item, index) => (

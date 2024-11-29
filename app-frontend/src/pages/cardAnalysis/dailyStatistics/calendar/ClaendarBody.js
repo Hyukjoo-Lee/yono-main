@@ -9,6 +9,10 @@ import {
   startOfWeek,
   endOfWeek,
 } from 'date-fns';
+import { ReactComponent as ExcellentCoin } from '../../../../assets/images/ExcellentCoin.svg';
+import { ReactComponent as VeryGoodCoin } from '../../../../assets/images/VeryGoodCoin.svg';
+import { ReactComponent as GoodCoin } from '../../../../assets/images/GoodCoin.svg';
+import { ReactComponent as BadCoin } from '../../../../assets/images/BadCoin.svg';
 
 const Root = styled.div``;
 
@@ -24,41 +28,40 @@ const DaysBox = styled.div`
   cursor: pointer;
   padding: 5px 10px;
   box-sizing: border-box;
-  background: ${(props) =>
-    props.$selected ? '#eee' : props.theme.color.white};
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  background: ${(props) => props.theme.color.white};
   &:last-child {
     border-right: 0px;
+  }
+  &:first-child {
+    & > div {
+      color: red;
+    }
+  }
+  & svg {
+    width: 20px;
+    height: 20px;
   }
 `;
 
 const DayBox = styled.div`
+  width: 28px;
+  height: 28px;
   font-size: ${(props) => props.theme.fontSize.base};
   text-align: center;
+  display: inline-block;
+  border-radius: 50%;
+  margin-bottom: 4px;
   color: ${(props) =>
     props.$today
-      ? 'red'
-      : props.$lastMonth
-        ? props.theme.color.brightGray
-        : props.$selected
-          ? props.theme.color.blue
-          : props.theme.color.black};
-`;
-
-const HistoryBox = styled.div`
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  margin-top: 10px;
-  & div {
-    border-radius: 50%;
-    background: ${(props) => props.theme.color.blue};
-    width: 8px;
-    height: 8px;
-    margin-right: 3px;
-    &:last-child {
-      margin-right: 0px;
-    }
-  }
+      ? props.theme.color.blue
+      : props.$selected
+        ? props.theme.color.white
+        : props.theme.color.black};
+  background: ${(props) =>
+    props.$selected ? props.theme.color.blue : 'transpernt'};
 `;
 
 const CalendarBody = ({ currentMonth, selectedDate, onDateClick }) => {
@@ -76,10 +79,14 @@ const CalendarBody = ({ currentMonth, selectedDate, onDateClick }) => {
     for (let i = 0; i < 7; i++) {
       formattedDate = format(day, 'd');
       const cloneDay = day;
-      const history =
-        format(day, 'MM-dd') === '10-03' ||
-        format(day, 'MM-dd') === '10-02' ||
-        format(day, 'MM-dd') === '10-04';
+
+      const history = format(day, 'MM-dd') === '12-10';
+      const history2 =
+        format(day, 'MM-dd') === '12-06' || format(day, 'MM-dd') === '12-08';
+
+      const history3 = format(day, 'MM-dd') === '12-18';
+      const history4 =
+        format(day, 'MM-dd') === '12-24' || format(day, 'MM-dd') === '12-04';
 
       days.push(
         <DaysBox
@@ -91,17 +98,26 @@ const CalendarBody = ({ currentMonth, selectedDate, onDateClick }) => {
             $today={isSameDay(day, new Date())}
             $selected={isSameDay(day, selectedDate)}
             $lastMonth={format(currentMonth, 'M') !== format(day, 'M')}
+            style={{
+              color: isSameDay(day, selectedDate)
+                ? '#FFFFFF'
+                : format(currentMonth, 'M') !== format(day, 'M')
+                  ? '#d0d0d0'
+                  : '',
+            }}
           >
             {formattedDate}
           </DayBox>
-          {history && (
-            <HistoryBox>
-              <div />
-              <div style={{ background: 'red' }} />
-              <div style={{ background: 'pink' }} />
-              <div style={{ background: 'green' }} />
-              <div style={{ background: 'orange' }} />
-            </HistoryBox>
+          {history ? (
+            <ExcellentCoin />
+          ) : history2 ? (
+            <VeryGoodCoin />
+          ) : history3 ? (
+            <GoodCoin />
+          ) : history4 ? (
+            <BadCoin />
+          ) : (
+            ''
           )}
         </DaysBox>,
       );
