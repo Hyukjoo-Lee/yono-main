@@ -3,7 +3,7 @@ import CommonButton from '../../common/CommonButton';
 import CommonInput from '../../common/CommonInput';
 import { useNavigate } from 'react-router-dom';
 import characterImg from '../../assets/images/Character1.png';
-import HorizonLine from './HorizontalLine';
+import CommonHr from '../../common/CommonHr';
 
 const comments = [
   {
@@ -108,7 +108,12 @@ export function CommunityPost() {
   return (
     <Root>
       <label>제목</label>
-      <HorizonLine />
+      <CommonHr
+        width="918px"
+        borderWidth="2px"
+        borderColor="black"
+        margin="10px auto 20px"
+      />
       <Detailbox>
         <label>2024.11.22 | 작성자 OOO |조회수 n</label>
       </Detailbox>

@@ -3,7 +3,7 @@ import CommonInput from '../../common/CommonInput';
 import CommonSelect from '../../common/CommonSelect';
 import CommonButton from '../../common/CommonButton';
 import CommonPageInfo from '../../common/CommonPageInfo';
-import HorizonLine from './HorizontalLine';
+import CommonHr from '../../common/CommonHr';
 
 const Root = styled.div`
   width: ${(props) => props.theme.display.lg};
@@ -59,7 +59,12 @@ export function CommunityFormBox() {
   return (
     <Root>
       <CommonPageInfo title={'고객게시판'} text={<p></p>} />
-      <HorizonLine />
+      <CommonHr
+        width="918px"
+        borderWidth="2px"
+        borderColor="black"
+        margin="10px auto 20px"
+      />
       <FormBox>
         <Row>
           <span>제목</span>
@@ -99,7 +104,12 @@ export function CommunityFormBox() {
           />
         </Row>
       </FormBox>
-      <HorizonLine />
+      <CommonHr
+        width="918px"
+        borderWidth="2px"
+        borderColor="black"
+        margin="10px auto 20px"
+      />
       <Box1>
         <CommonButton
           text="문의하기"
