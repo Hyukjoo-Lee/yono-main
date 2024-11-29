@@ -7,7 +7,6 @@ const Root = styled.div`
   align-items: center;
   justify-content: space-between;
   box-sizing: border-box;
-  //background: ${(props) => props.theme.color.lightBlue};
   margin-bottom: 10px;
   & > div {
     padding: 5px 10px;
