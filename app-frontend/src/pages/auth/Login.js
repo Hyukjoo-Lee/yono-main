@@ -102,12 +102,12 @@ const ErrorMessage = styled.div`
 // 더미 데이터 (아이디와 비밀번호)
 
 export function Login(props) {
-  const { $visible } = props;
+  const { Open } = props;
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
-  const [IderrorMessage, setIderrorMessage] = useState('');
-  const [PwerrorMessage, setPwerrorMessage] = useState('');
-  const [successVisible, setsuccessVisible] = useState(false);
+  const [IDerrorMessage, setIDerrorMessage] = useState('');
+  const [PWerrorMessage, setPWerrorMessage] = useState('');
+  const [successVisible, setSuccessVisible] = useState(false);
 
   const dummyUser = {
     username: 'user', // 아이디
@@ -124,16 +124,16 @@ export function Login(props) {
 
   const handleLogin = () => {
     if (username === dummyUser.username && password === dummyUser.password) {
-      setIderrorMessage('');
-      setsuccessVisible(true);
+      setIDerrorMessage('');
+      setSuccessVisible(true);
     } else if (username === dummyUser.username) {
-      setPwerrorMessage(PASSWORD_VERIFIED_ERROR);
-      setsuccessVisible(false);
+      setPWerrorMessage(PASSWORD_VERIFIED_ERROR);
+      setSuccessVisible(false);
     } else if (password === dummyUser.password) {
-      setIderrorMessage(EMAIL_VERIFIED_ERROR);
-      setsuccessVisible(false);
+      setIDerrorMessage(EMAIL_VERIFIED_ERROR);
+      setSuccessVisible(false);
     } else {
-      setIderrorMessage('아이디,비밀번호를 입력하세요');
+      setIDerrorMessage('아이디,비밀번호를 입력하세요');
     }
   };
   const list = [
@@ -184,10 +184,10 @@ export function Login(props) {
         </MiddleContainer>
         <LowContainer>
           <HiddenBox>
-            {IderrorMessage && <ErrorMessage>{IderrorMessage}</ErrorMessage>}
+            {IDerrorMessage && <ErrorMessage>{IDerrorMessage}</ErrorMessage>}
 
-            {PwerrorMessage && !IderrorMessage && (
-              <ErrorMessage>{PwerrorMessage}</ErrorMessage>
+            {PWerrorMessage && !IDerrorMessage && (
+              <ErrorMessage>{PWerrorMessage}</ErrorMessage>
             )}
           </HiddenBox>
 
@@ -207,11 +207,11 @@ export function Login(props) {
             width="63%"
           />
           <IconButtonContainer>
-            <IconButton imgesRoute={kakaoimage} />
-            <IconButton imgesRoute={google} />
+            <IconButton imagesRoute={kakaoimage} />
+            <IconButton imagesRoute={google} />
           </IconButtonContainer>
         </LowContainer>
-        <SuccessLogin $visible={successVisible || $visible} />
+        <SuccessLogin Open={successVisible || Open} />
       </Rootin>
     </CommonRoot>
   );

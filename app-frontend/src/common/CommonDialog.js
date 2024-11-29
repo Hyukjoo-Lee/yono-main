@@ -1,12 +1,10 @@
 import React from 'react';
 import styled from 'styled-components';
 import CustomButton from './CommonButton';
-import { useEffect, useState } from 'react';
-import { useNavigate } from 'react-router-dom';
 
 const DialogOverlay = styled.div`
   box-sizing: border-box;
-  display: ${(props) => (props.$visible ? 'block' : 'none')};
+  display: ${(props) => (props.open ? 'block' : 'none')};
   position: fixed;
   top: 0;
   left: 0;
@@ -17,7 +15,7 @@ const DialogOverlay = styled.div`
 `;
 
 const DialogWrapper = styled.div`
-  display: ${(props) => (props.$visible ? 'flex' : 'none')};
+  display: ${(props) => (props.open ? 'flex' : 'none')};
   justify-content: center;
   align-items: flex-start;
   position: fixed;
@@ -34,12 +32,9 @@ const DialogInner = styled.div`
   box-shadow: 0 0 6px 0 rgba(0, 0, 0, 0.5);
   background-color: #fff;
   border-radius: 10px;
-  width: ${(props) => (props.width ? props.width : '500px')};
-  height: ${(props) => (props.height ? props.height : '500px')};
-  max-width: 500px;
-  max-height: 500px;
+  width: ${(props) => props.width || '500px'};
   margin: 0 auto;
-  padding: 40px 20px;
+  padding: 40px 20px 20px;
 `;
 
 const ContentWrapper = styled.div`
@@ -47,10 +42,12 @@ const ContentWrapper = styled.div`
   justify-content: center;
   flex-direction: column;
   align-items: center;
-  width: ${(props) => (props.$Contentwidth ? props.$Contentwidth : '460px')};
-  height: ${(props) => (props.$Contentheight ? props.$Contentheight : '400px')};
-  font-size: ${(props) => (props.fontSize ? props.fontSize : '28px')};
-  color: ${(props) => (props.color ? props.color : props.theme.color.blue)};
+  min-width: 450px;
+  min-height: 120px;
+  padding: 16px;
+  box-sizing: border-box;
+  font-size: ${(props) => props.fontSize || '28px'};
+  color: ${(props) => props.color || props.theme.color.blue};
 `;
 
 const CloseButton = styled.button`
@@ -67,94 +64,54 @@ const CloseButton = styled.button`
   }
 `;
 
+const ButtonBox = styled.div`
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+`;
+
 const CommonDialog = (props) => {
   const {
     className,
-    $visible,
+    open,
     children, //들어갈 내용 초기값
     width,
-    height,
+    // height,
     fontSize,
     color,
-    $Contentwidth,
-    $Contentheight,
     text1 = '확인',
     text2 = '취소',
-    width1 = '100px', //확인 버튼 너비
-    width2 = '100px', //취소 버튼 너비
+    // width1 = '100px', //확인 버튼 너비
+    // width2 = '100px', //취소 버튼 너비
     value,
     onChange,
     onClick,
-    navigateTo = '/',
-    navigateMain = '/',
-    disabled = false,
+    onClose,
+    // navigateMain = '/',
   } = props;
-
-  const [isOpen, setIsOpen] = useState($visible); // 다이얼로그 상태 관리
-  const [isConfirmClicked, setIScomfirmClicked] = useState(false);
-  const navigate = useNavigate();
-  useEffect(() => {
-    setIsOpen($visible);
-  }, [$visible]);
-  const handleClose = () => {
-    if (!isConfirmClicked) {
-      setIsOpen(false);
-      navigate(navigateMain);
-    }
-  };
-  const handleClick = () => {
-    if (onClick) {
-      onClick();
-    }
-    setIScomfirmClicked(true);
-    navigate(navigateTo);
-  };
 
   return (
     <div>
-      <DialogOverlay $visible={isOpen} />
-      <DialogWrapper className={className} tabIndex="-1" $visible={isOpen}>
-        <DialogInner tabIndex="0" width={width} height={height}>
+      <DialogOverlay open={open} />
+      <DialogWrapper className={className} tabIndex="-1" open={open}>
+        <DialogInner tabIndex="0" width={width}>
           <ContentWrapper
             fontSize={fontSize}
             color={color}
-            $Contentwidth={$Contentwidth}
-            $Contentheight={$Contentheight}
             onChange={onChange}
             value={value}
           >
             {children}
           </ContentWrapper>
 
-          <CloseButton type="button" onClick={handleClose}>
+          <CloseButton type="button" onClick={onClose}>
             ×
           </CloseButton>
-          <div
-            style={{
-              display: 'flex',
-              position: 'absolute',
-              bottom: '10%',
-              left: '50%',
-              transform: 'translateX(-50%)',
-              gap: '10px',
-              zIndex: '1001',
-            }}
-          >
-            <CustomButton
-              text={text1}
-              width={width1}
-              height="30px"
-              onClick={handleClick}
-              disabled={disabled}
-            />
-            <CustomButton
-              text={text2}
-              width={width2}
-              height="30px"
-              onClick={handleClose}
-              disabled={disabled}
-            />
-          </div>
+          <ButtonBox>
+            <CustomButton text={text1} height="30px" onClick={onClick} />
+            <CustomButton text={text2} height="30px" onClick={onClose} />
+          </ButtonBox>
         </DialogInner>
       </DialogWrapper>
     </div>

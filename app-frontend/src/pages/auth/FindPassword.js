@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import FindForm from './Component/FindForm';
-import { AlarmPw } from './AlarmPw';
+import AlarmPw from './AlarmPw';
 
 export const FindPassword = () => {
   const find = '비밀번호 찾기';
@@ -37,7 +37,7 @@ export const FindPassword = () => {
   };
 
   return (
-    <div>
+    <>
       <FindForm
         find={find}
         isDialogPWVisible={isDialogPWVisible}
@@ -50,7 +50,10 @@ export const FindPassword = () => {
         selectedValue={selectedQuestion}
         setSelectedValue={setSelectedQuestion}
       />
-      {isDialogPWVisible && <AlarmPw $visible={isDialogPWVisible} />}
-    </div>
+      <AlarmPw
+        open={isDialogPWVisible}
+        $setIsDialogPWVisible={setIsDialogPWVisible}
+      />
+    </>
   );
 };

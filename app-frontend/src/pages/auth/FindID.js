@@ -20,11 +20,11 @@ export const FindID = () => {
     '당신이 좋아하는 음식은?': '떡볶이',
   };
 
-  const handleConfirm = () => {
+  const handleConfirm = (isDialogIDVisible) => {
     if (selectedQuestion && answers[selectedQuestion]) {
-      const correctanswer = answers[selectedQuestion];
+      const correctAnswer = answers[selectedQuestion];
 
-      if (answer === correctanswer) {
+      if (answer === correctAnswer) {
         setIsDialogIDVisible(true);
       } else {
         setErrorMessage('답변이 틀렸습니다.');
@@ -49,7 +49,7 @@ export const FindID = () => {
         selectedValue={selectedQuestion}
         setSelectedValue={setSelectedQuestion}
       />
-      {isDialogIDVisible && <AlarmID $visible={isDialogIDVisible} />}
+      {<AlarmID Open={isDialogIDVisible} />}
     </div>
   );
 };
