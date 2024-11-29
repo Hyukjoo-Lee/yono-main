@@ -22,6 +22,8 @@ import theme from './theme/theme';
 import { CommunityPost } from './pages/community/CommunityPost';
 import { NoticePost } from './pages/community/NoticePost';
 
+import { CommunityPost } from './pages/community/CommunityPost';
+import { NoticePost } from './pages/community/NoticePost';
 const Root = styled.div`
   & *,
   p {
@@ -64,7 +66,7 @@ function App() {
             <Route path="/card-challege" element={<CardChallege />} />
             <Route path="/card-analysis" element={<CardAnalysis />} />
             <Route path="/community" element={<Community />} />
-            <Route path="/CommunityFormBox" element={<CommunityFormBox />} />
+            <Route path="/communityFormBox" element={<CommunityFormBox />} />
             <Route path="/mycard" element={<MyCard />} />
             <Route path="/communityPost" element={<CommunityPost />} />
             <Route path="/noticePost" element={<NoticePost />} />
