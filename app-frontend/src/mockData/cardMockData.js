@@ -18,6 +18,7 @@ export const card_images = {
       my1: require('../assets/images/cards/kb/kb-my1.png'),
       my2: require('../assets/images/cards/kb/kb-my2.png'),
       my3: require('../assets/images/cards/kb/kb-my3.png'),
+      my4: require('../assets/images/cards/kb/kb-my4.png'),
     },
   },
   '0302': {
@@ -42,6 +43,7 @@ export const card_images = {
       byul1: require('../assets/images/cards/nh/nh-byul1.png'),
       byul2: require('../assets/images/cards/nh/nh-byul2.png'),
       byul3: require('../assets/images/cards/nh/nh-byul3.png'),
+      byul4: require('../assets/images/cards/nh/nh-byul4.png'),
     },
   },
   '0306': {

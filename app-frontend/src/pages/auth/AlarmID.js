@@ -1,15 +1,6 @@
 import CommonDialog from '../../common/CommonDialog';
-import { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
 
 export const AlarmID = ({ Open }) => {
-  const navigate = useNavigate();
-  const [isOpen, setIsOpen] = useState(Open); // 다이얼로그 상태 관리
-
-  const handleClick = () => {
-    setIsOpen(true);
-    navigate('/');
-  };
   return (
     <div>
       <CommonDialog
