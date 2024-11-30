@@ -2,7 +2,11 @@ import styled from 'styled-components';
 import CardRegFormBox from './CardRegFormBox';
 import CommonCardListBox from '../../common/CommonCardListBox';
 import CommonPageInfo from '../../common/CommonPageInfo';
-import { cardMockData } from '../../mockData/cardMockData.js';
+import {
+  registeredCardData,
+  card_images,
+} from '../../mockData/cardMockData.js';
+import { useState, useEffect } from 'react';
 
 const Root = styled.div`
   width: 100%;
@@ -14,7 +18,7 @@ const Root = styled.div`
 
 const ListBox = styled.div`
   width: 100%;
-  height: 628px;
+  height: 729px;
   overflow-y: auto;
 
   &::-webkit-scrollbar {
@@ -23,6 +27,32 @@ const ListBox = styled.div`
 `;
 
 const CardRegTab = () => {
+  // 등록된 카드 데이터
+  const [cardData, setCardData] = useState([]);
+  // 카드사 별 이미지 데이터
+  const [cardImg, setCardImg] = useState(card_images);
+  const [isLoaded, setIsLoaded] = useState(false);
+
+  useEffect(() => {
+    if (isLoaded) return;
+
+    const fetchCardData = async () => {
+      try {
+        setCardData(registeredCardData);
+        setCardImg(card_images);
+        setIsLoaded(true);
+      } catch (error) {
+        console.error('등록한 카드 데이터 로딩 실패: ', error);
+      }
+    };
+    fetchCardData();
+  }, [isLoaded]);
+
+  const handleCardSelect = (card) => {
+    // TODO: 카드 선택 로직 추가: 선택되면 카드 챌린지 페이지에 적용되는 카드가 변경됨
+    console.log(card);
+  };
+
   return (
     <>
       <CommonPageInfo
@@ -35,9 +65,14 @@ const CardRegTab = () => {
         }
       />
       <Root>
-        <CardRegFormBox />
+        <CardRegFormBox cardImg={cardImg} />
         <ListBox>
-          <CommonCardListBox data={cardMockData} showDetailed={true} />
+          <CommonCardListBox
+            data={cardData}
+            cardImg={cardImg}
+            showDetailed={true}
+            onCardSelect={handleCardSelect}
+          />
         </ListBox>
       </Root>
     </>
