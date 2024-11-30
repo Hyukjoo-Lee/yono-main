@@ -1,9 +1,9 @@
 import React from 'react';
 
-const IconButton = ({ imgesRoute }) => {
+const IconButton = ({ imagesRoute }) => {
   return (
     <img
-      src={imgesRoute}
+      src={imagesRoute}
       alt="사진"
       style={{
         background: 'white',
