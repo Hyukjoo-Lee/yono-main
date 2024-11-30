@@ -3,11 +3,11 @@ import styled from 'styled-components';
 import CommonInput from '../../common/CommonInput';
 import CustomButton from '../../common/CommonButton';
 import or from '../../assets/images/or.png';
-import kakao from '../../assets/images/kakao.png';
+import kakaotalk from '../../assets/images/kakao.png';
 import google from '../../assets/images/google.png';
 import IconButton from './Component/IconButton'; // IButton을 정확히 import
 import CommonRoot from '../../common/CommonRoot';
-import { Link, useNavigate } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 import CommonPageInfo from '../../common/CommonPageInfo';
 import { useState } from 'react';
 import {
@@ -101,8 +101,7 @@ const ErrorMessage = styled.div`
 `;
 // 더미 데이터 (아이디와 비밀번호)
 
-export function Login(props) {
-  const { Open } = props;
+export function Login() {
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
   const [IDerrorMessage, setIDerrorMessage] = useState('');
@@ -136,6 +135,7 @@ export function Login(props) {
       setIDerrorMessage('아이디,비밀번호를 입력하세요');
     }
   };
+
   const list = [
     { label: '아이디찾기', path: '/find-id' },
     { label: '비밀번호찾기', path: '/find-pwd' },
@@ -207,12 +207,12 @@ export function Login(props) {
             width="63%"
           />
           <IconButtonContainer>
-            <IconButton imgesRoute={kakaoimage} />
-            <IconButton imgesRoute={google} />
+            <IconButton imagesRoute={kakaotalk} />
+            <IconButton imagesRoute={google} />
           </IconButtonContainer>
         </LowContainer>
-        <CommonDialog $visible="true" />
-      </Rootin>
+        <SuccessLogin open={successVisible} />
+      </RootIn>
     </CommonRoot>
   );
 }
