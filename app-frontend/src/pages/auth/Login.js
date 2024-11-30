@@ -14,7 +14,7 @@ import {
   EMAIL_VERIFIED_ERROR,
   PASSWORD_VERIFIED_ERROR,
 } from '../auth/Component/ErrorMessage';
-import CommonDialog from '../../common/CommonDialog';
+import SuccessLogin from './SuccessLogin';
 
 const RootIn = styled.div`
   display: flex;
@@ -101,13 +101,14 @@ const ErrorMessage = styled.div`
 `;
 // 더미 데이터 (아이디와 비밀번호)
 
-export function Login() {
+export function Login(props) {
+  const { Open } = props;
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
-  const [IderrorMessage, setIderrorMessage] = useState('');
-  const [PwerrorMessage, setPwerrorMessage] = useState('');
+  const [IDerrorMessage, setIDerrorMessage] = useState('');
+  const [PWerrorMessage, setPWerrorMessage] = useState('');
+  const [successVisible, setSuccessVisible] = useState(false);
 
-  const navigate = useNavigate();
   const dummyUser = {
     username: 'user', // 아이디
     password: 'password', // 비밀번호
@@ -122,15 +123,17 @@ export function Login() {
   };
 
   const handleLogin = () => {
-    username === dummyUser.username
-      ? setIderrorMessage('')
-      : setIderrorMessage(EMAIL_VERIFIED_ERROR);
-    password === dummyUser.password
-      ? setPwerrorMessage('')
-      : setPwerrorMessage(PASSWORD_VERIFIED_ERROR);
-
     if (username === dummyUser.username && password === dummyUser.password) {
-      navigate('/Mainpage');
+      setIDerrorMessage('');
+      setSuccessVisible(true);
+    } else if (username === dummyUser.username) {
+      setPWerrorMessage(PASSWORD_VERIFIED_ERROR);
+      setSuccessVisible(false);
+    } else if (password === dummyUser.password) {
+      setIDerrorMessage(EMAIL_VERIFIED_ERROR);
+      setSuccessVisible(false);
+    } else {
+      setIDerrorMessage('아이디,비밀번호를 입력하세요');
     }
   };
   const list = [
@@ -181,10 +184,10 @@ export function Login() {
         </MiddleContainer>
         <LowContainer>
           <HiddenBox>
-            {IderrorMessage && <ErrorMessage>{IderrorMessage}</ErrorMessage>}
+            {IDerrorMessage && <ErrorMessage>{IDerrorMessage}</ErrorMessage>}
 
-            {PwerrorMessage && !IderrorMessage && (
-              <ErrorMessage>{PwerrorMessage}</ErrorMessage>
+            {PWerrorMessage && !IDerrorMessage && (
+              <ErrorMessage>{PWerrorMessage}</ErrorMessage>
             )}
           </HiddenBox>
 
@@ -203,13 +206,13 @@ export function Login() {
             alt="Or"
             width="63%"
           />
-
           <IconButtonContainer>
-            <IconButton imgesRoute={kakao} />
+            <IconButton imgesRoute={kakaoimage} />
             <IconButton imgesRoute={google} />
           </IconButtonContainer>
         </LowContainer>
-      </RootIn>
+        <CommonDialog $visible="true" />
+      </Rootin>
     </CommonRoot>
   );
 }

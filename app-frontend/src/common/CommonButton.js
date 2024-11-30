@@ -4,7 +4,7 @@ import Button from '@mui/material/Button';
 
 const ButtonStyle = styled(Button)`
   &.MuiButtonBase-root {
-    min-width: ${(props) => props.width || '162px'};
+    min-width: ${(props) => props.width || '64px'};
     height: ${(props) => props.height || '48px'};
     background-color: ${(props) =>
       props.background ? props.background : props.theme.color.blue};
