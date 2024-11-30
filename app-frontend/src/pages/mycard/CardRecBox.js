@@ -66,6 +66,26 @@ const BenefitItem = styled.div`
   }
 `;
 
+const ButtonWrapper = styled(Box)`
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-top: 10px;
+`;
+
+const BenefitIcon = ({ benefit }) => {
+  switch (benefit) {
+    case '스타벅스 할인':
+      return <CoffeeIcon />;
+    case '대중교통 할인':
+      return <BusIcon />;
+    case '영화 쿠폰 제공':
+      return <LiveTvIcon />;
+    default:
+      return null;
+  }
+};
+
 const CardRecBox = ({ cardTitle, cardImg, cardInfo }) => {
   return (
     <Root>
@@ -76,9 +96,7 @@ const CardRecBox = ({ cardTitle, cardImg, cardInfo }) => {
         <BenefitList>
           {cardInfo.map((benefit, index) => (
             <BenefitItem key={index}>
-              {benefit.label === '스타벅스 할인' && <CoffeeIcon />}
-              {benefit.label === '대중교통 할인' && <BusIcon />}
-              {benefit.label === '영화 쿠폰 제공' && <LiveTvIcon />}
+              <BenefitIcon benefit={benefit.label} />
               <p>
                 {benefit.label} <strong>{benefit.value}</strong> (
                 {benefit.additional})
@@ -86,14 +104,14 @@ const CardRecBox = ({ cardTitle, cardImg, cardInfo }) => {
             </BenefitItem>
           ))}
         </BenefitList>
-        <Box display="flex" justifyContent="center" alignItems="center">
+        <ButtonWrapper>
           <CommonButton
             fontSize={theme.fontSize.base}
             width="150px"
             height="40px"
             text="카드사 바로가기"
           />
-        </Box>
+        </ButtonWrapper>
       </RootIn>
     </Root>
   );

@@ -27,7 +27,7 @@ const Root = styled.div`
   p {
     font-family: 'Noto Sans KR';
   }
-  ,
+
   & > div {
     min-height: calc(100vh - 110px);
   }
