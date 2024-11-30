@@ -2,11 +2,7 @@ import styled from 'styled-components';
 import CardRecBox from './CardRecBox';
 import CommonCardListBox from '../../common/CommonCardListBox';
 import CommonPageInfo from '../../common/CommonPageInfo';
-import {
-  cardMockData,
-  CARD_COMPANIES,
-  getCardByCompany,
-} from '../../mockData/cardMockData.js';
+import { cardMockData } from '../../mockData/cardMockData.js';
 import { useState } from 'react';
 
 const Root = styled.div`
@@ -28,9 +24,7 @@ const ListBox = styled.div`
 `;
 
 const CardRecTab = () => {
-  const [selectedCard, setSelectedCard] = useState(
-    getCardByCompany(CARD_COMPANIES.SAMSUNG),
-  );
+  const [selectedCard, setSelectedCard] = useState(cardMockData[2]);
 
   const handleCardSelect = (card) => {
     setSelectedCard(card);

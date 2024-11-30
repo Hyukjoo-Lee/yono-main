@@ -51,6 +51,7 @@ const CustomButton = (props) => {
     hoverColor,
     startIcon,
     endIcon,
+    type,
   } = props;
 
   return (
@@ -65,6 +66,7 @@ const CustomButton = (props) => {
       onClick={disabled ? undefined : onClick}
       disabled={disabled}
       disableRipple
+      type={type}
     >
       {startIcon && startIcon}
       <TextStyle color={color} fontSize={fontSize}>
