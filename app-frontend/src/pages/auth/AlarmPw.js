@@ -3,7 +3,7 @@ import { useState } from 'react';
 import CommonInput from '../../common/CommonInput';
 import { PASSWORD2_CONFORM_ERROR } from '../auth/Component/ErrorMessage';
 import styled from 'styled-components';
-import CommonPageInfo from '../../common/CommonPageInfo';
+import { useNavigate } from 'react-router-dom';
 
 const HiddenBox = styled.div`
   display: flex;
@@ -21,15 +21,11 @@ const CorrectMsg = styled.div`
 const AlarmPw = ({ open, $setIsDialogPWVisible }) => {
   const [isConfirmClicked, setIsConfirmClicked] = useState(false);
   const [isChangeClicked, setIsChangeClicked] = useState(false);
-
+  const [successChangePW, setSuccessChangePW] = useState(false);
   const [password, setPassword] = useState('');
   const [newPassword, setNewPassword] = useState('');
   const [ErrorMessage, setErrorMessage] = useState('');
-  const [CorrectMessage, setCorrectMessage] = useState('');
-  const dummyPassword = {
-    password: '123',
-    newPassword: '123',
-  };
+  const navigate = useNavigate();
 
   const ConfirmPWDialog = () => {
     $setIsDialogPWVisible(false);
@@ -46,14 +42,22 @@ const AlarmPw = ({ open, $setIsDialogPWVisible }) => {
   };
 
   const ReChangePWDialogClose = () => {
+    setIsConfirmClicked(false);
     setIsChangeClicked(false);
   };
 
   const RegisterChangePassword = () => {
-    password === dummyPassword.password &&
-    newPassword === dummyPassword.newPassword
-      ? setCorrectMessage('비밀번호가 일치합니다')
-      : setErrorMessage(PASSWORD2_CONFORM_ERROR);
+    if (password === '' || newPassword === '') {
+      setErrorMessage('답변을 입력해 주세요');
+      setSuccessChangePW(false);
+    } else if (password !== newPassword) {
+      setErrorMessage(PASSWORD2_CONFORM_ERROR);
+      setSuccessChangePW(false);
+    } else {
+      setErrorMessage('');
+      setIsChangeClicked(false);
+      setSuccessChangePW(true);
+    }
   };
 
   const RegisterChangePasswordClose = () => {
@@ -67,8 +71,11 @@ const AlarmPw = ({ open, $setIsDialogPWVisible }) => {
     setNewPassword(e.target.value);
   };
 
+  const changepwclose = () => {
+    navigate('/');
+  };
+
   const pwDialogProps = {
-    width: '500px',
     height: '200px',
     fontSize: '20px',
   };
@@ -84,10 +91,8 @@ const AlarmPw = ({ open, $setIsDialogPWVisible }) => {
       />
       <CommonDialog
         open={isConfirmClicked}
-        text2="취소"
-        width1="160px"
-        children="비밀번호를 재설정 하십시오"
         text1="비밀번호 재설정"
+        children="비밀번호를 재설정 하십시오"
         onClick={ReChangePWDialog}
         onClose={ReChangePWDialogClose}
         {...pwDialogProps}
@@ -95,13 +100,11 @@ const AlarmPw = ({ open, $setIsDialogPWVisible }) => {
 
       <CommonDialog
         open={isChangeClicked}
-        width="600px"
-        height="300px"
-        text2="취소"
-        width1="100px"
+        height="200px"
+        fontSize="25px"
         children={
           <>
-            <CommonPageInfo title="비밀번호 재설정" />
+            <p>비밀번호 재설정</p>
 
             <CommonInput
               text="비밀번호"
@@ -123,14 +126,18 @@ const AlarmPw = ({ open, $setIsDialogPWVisible }) => {
               onChange={handleChangePassword}
             />
             <HiddenBox>
-              {CorrectMessage && <CorrectMsg>{CorrectMessage}</CorrectMsg>}
               {ErrorMessage && <ErrorMsg>{ErrorMessage}</ErrorMsg>}
             </HiddenBox>
           </>
         }
-        fontSize="20px"
         onClick={RegisterChangePassword}
         onClose={RegisterChangePasswordClose}
+      />
+      <CommonDialog
+        open={successChangePW}
+        children="비밀번호가 변경되었습니다"
+        onClick={changepwclose}
+        {...pwDialogProps}
       />
     </>
   );

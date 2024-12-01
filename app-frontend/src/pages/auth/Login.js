@@ -135,6 +135,7 @@ export function Login(props) {
       setIDerrorMessage('아이디,비밀번호를 입력하세요');
     }
   };
+
   const list = [
     { label: '아이디찾기', path: '/find-id' },
     { label: '비밀번호찾기', path: '/find-pwd' },
@@ -208,6 +209,10 @@ export function Login(props) {
             <IconButton imagesRoute={google} />
           </IconButtonContainer>
         </LowContainer>
+        <SuccessLogin
+          open={successVisible}
+          setSuccessVisible={setSuccessVisible}
+        />
       </RootIn>
     </CommonRoot>
   );

@@ -65,11 +65,9 @@ const CommonSelect = ({
   display,
   onSelect,
   find = '카드를 선택하세요',
-  selectedValue,
-  setSelectedValue
+  selectedValue = '',
+  setSelectedValue,
 }) => {
-  // const [selectedValue, setSelectedValue] = useState('');
-
   const handleChange = (event) => {
     setSelectedValue(event.target.value);
     if (onSelect) onSelect(event.target.value);

@@ -42,7 +42,7 @@ const ContentWrapper = styled.div`
   justify-content: center;
   flex-direction: column;
   align-items: center;
-  min-width: 450px;
+  min-width: 200px;
   min-height: 120px;
   padding: 16px;
   box-sizing: border-box;

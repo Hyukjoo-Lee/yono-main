@@ -1,5 +1,5 @@
-import React from 'react';
-import styled from 'styled-components';
+import React from "react";
+import styled from "styled-components";
 
 const FooterStyle = styled.footer`
   width: 100%;
@@ -27,3 +27,5 @@ const Footer = () => {
 };
 
 export default Footer;
+
+

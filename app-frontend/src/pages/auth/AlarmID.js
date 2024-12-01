@@ -17,11 +17,9 @@ export const AlarmID = ({ open, $setIsDialogIDVisible }) => {
     <div>
       <CommonDialog
         open={open}
-        width="500px"
         height="200px"
+        width1="100px"
         children="000님의 아이디는 000입니다"
-        ContentWidth="450px"
-        ContentHeight="90px"
         fontSize="20px"
         onClick={ConfirmIDDialog}
         onClose={ConfirmIDDialogClose}
