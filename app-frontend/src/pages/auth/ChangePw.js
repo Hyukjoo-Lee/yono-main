@@ -43,7 +43,7 @@ export function ChangePw() {
   return (
     <div style={{ position: 'relative' }}>
       <CommonDialog
-        $visible={true}
+        open={true}
         width="600px"
         height="300px"
         text2="취소"
@@ -78,8 +78,8 @@ export function ChangePw() {
             </HiddenBox>
           </>
         }
-        $Contentwidth="450px"
-        $Contentheight="150px"
+        contentWidth="450px"
+        contentHeight="150px"
         fontSize="20px"
         onClick={ChangePassword}
         navigateTo={'/CompleteChangePw'}

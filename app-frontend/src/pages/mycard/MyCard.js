@@ -16,9 +16,6 @@ export function MyCard() {
   const [selectedTab, setSelectedTab] = useState(0);
   const items = [{ text: '카드 등록' }, { text: '카드 추천' }];
 
-  /**
-   * 띄울 탭 페이지
-   */
   const panels = [<CardRegTab />, <CardRecTab />];
 
   return (

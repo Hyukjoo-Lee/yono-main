@@ -31,9 +31,7 @@ const BoxStyle = styled.div`
   }
 `;
 
-const BoxInStyle = styled.div`
-  width: calc(100% - 60px - 60px);
-`;
+const BoxInStyle = styled.div``;
 
 const CardName = styled.p`
   margin: 0px;
@@ -98,6 +96,7 @@ const CommonCardListBox = ({
   cardInfo,
   data,
   showDetailed,
+  onCardSelect,
 }) => {
   return (
     <>
@@ -128,6 +127,7 @@ const CommonCardListBox = ({
                       fontSize="16px"
                       width="100px"
                       height="30px"
+                      onClick={() => onCardSelect(card)}
                     />
                   </HoverButtonContainer>
 

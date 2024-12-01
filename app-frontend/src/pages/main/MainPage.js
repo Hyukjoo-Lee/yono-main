@@ -6,6 +6,7 @@ import styled from "styled-components";
 import CommonRoot from "../../common/CommonRoot";
 import MainBox from "./MainBox";
 import MainIntro from "./MainIntro";
+import MainLoginBox from "./MainLoginBox";
 // import {SignUp} from "./auth/SignUp";
 
 const StyledWrap = styled.div`
@@ -18,6 +19,7 @@ export function MainPage() {
       <StyledWrap>
         <MainIntro/>
         <MainBox/>
+        <MainLoginBox/>
       </StyledWrap>
     </CommonRoot>
   );

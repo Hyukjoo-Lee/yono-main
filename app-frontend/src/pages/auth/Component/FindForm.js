@@ -1,12 +1,12 @@
-import React from 'react';
 import CommonSelect from '../../../common/CommonSelect';
 import styled from 'styled-components';
 import CustomButton from '../../../common/CommonButton';
 import CommonInput from '../../../common/CommonInput';
 import CommonRoot from '../../../common/CommonRoot';
 import CommonPageInfo from '../../../common/CommonPageInfo';
+import { useState } from 'react';
 
-const Rootin = styled.div`
+const RootIn = styled.div`
   display: flex;
   flex-direction: column;
   justify-content: center;
@@ -29,6 +29,16 @@ const MiddleContainer = styled.div`
   align-items: center;
 `;
 
+const HiddenBox = styled.div`
+  display: flex;
+  margin-left: 58%;
+  margin-bottom: 2%;
+`;
+const ErrorMessage = styled.div`
+  color: red;
+  font-size: 13px;
+`;
+
 const ButtonContainer = styled.div`
   margin-top: 10px;
   display: flex;
@@ -36,7 +46,26 @@ const ButtonContainer = styled.div`
   justify-content: space-between;
   width: 45%;
 `;
-const FindForm = ({ find }) => {
+const FindForm = ({ find, onClick }) => {
+  const [selectedValue, setSelectedValue] = useState('');
+  const [answer, setAnswer] = useState('');
+  const [errorMessage, setErrorMessage] = useState('');
+
+  const handleConfirm = () => {
+    if (!selectedValue || !answer) {
+      setErrorMessage('모든 필드를 입력해주세요');
+      return;
+    }
+    setErrorMessage('');
+    // 여기에 확인 로직 추가해야함 e.g. 비밀번호 찾기 로직
+  };
+
+  const confirmCancle = () => {
+    setSelectedValue('');
+    setAnswer('');
+    setErrorMessage('');
+  };
+
   const selectOptions = [
     { value: '애완동물 이름은?', label: '애완동물 이름은?' },
     { value: '당신의 생일은?', label: '당신의 생일은' },
@@ -45,7 +74,7 @@ const FindForm = ({ find }) => {
 
   return (
     <CommonRoot>
-      <Rootin>
+      <RootIn>
         <FullContainer>
           <CommonPageInfo title={find} text={<p></p>} />
 
@@ -57,8 +86,11 @@ const FindForm = ({ find }) => {
               padding="10px"
               color="#464646"
               labelColor="#464646"
-              options={selectOptions}
               find="질문을 선택하세요"
+              value={answer}
+              options={selectOptions}
+              selectedValue={selectedValue}
+              setSelectedValue={setSelectedValue}
             />
 
             <CommonInput
@@ -67,8 +99,12 @@ const FindForm = ({ find }) => {
               width="300px"
               height="35px"
               focusBorderWidth="10px"
+              onChange={(e) => setAnswer(e.target.value)} //질문답변 시 상태 업데이트
             />
           </MiddleContainer>
+          <HiddenBox>
+            {errorMessage && <ErrorMessage>{errorMessage}</ErrorMessage>}
+          </HiddenBox>
 
           <ButtonContainer>
             <CustomButton
@@ -77,8 +113,11 @@ const FindForm = ({ find }) => {
               height="30px"
               background="#4064E6"
               color="#ffffff"
-              // borderColor="#4064E6"
               fontSize="20"
+              onClick={() => {
+                handleConfirm();
+                if (onClick) onClick();
+              }}
             />
             <CustomButton
               text="취소"
@@ -86,12 +125,12 @@ const FindForm = ({ find }) => {
               height="30px"
               background="#ffffff"
               color="#4064E6"
-              // borderColor="1px"
               fontSize="20"
+              onClick={confirmCancle}
             />
           </ButtonContainer>
         </FullContainer>
-      </Rootin>
+      </RootIn>
     </CommonRoot>
   );
 };
