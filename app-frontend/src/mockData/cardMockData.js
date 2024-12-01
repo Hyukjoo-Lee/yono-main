@@ -181,6 +181,60 @@ export const recommendedCardData = [
   },
 ];
 
+// 일별통계 데이터
+export const dailyStatisticsCardData = [
+  {
+    id: '0301',
+    title: `${CARD_COMPANIES.KB} My WE:SH카드 (${CARD_TYPES.CREDIT})`,
+    cardImage: card_images['0301'].my.my1,
+    info: [
+      { label: '날짜', value: '2024.10.20' },
+      { label: '사용처', value: '88맥주집' },
+      { label: '카테고리', value: '식당' },
+    ],
+  },
+  {
+    id: '0302',
+    title: `${CARD_COMPANIES.HYUNDAI} M카드 (${CARD_TYPES.CREDIT})`,
+    cardImage: card_images['0302'].m.m1,
+    info: [
+      { label: '날짜', value: '2024.10.20' },
+      { label: '사용처', value: '삼겹살' },
+      { label: '카테고리', value: '식당' },
+    ],
+  },
+  {
+    id: '0303',
+    title: `${CARD_COMPANIES.SAMSUNG}iD SIMPLE카드 (${CARD_TYPES.CREDIT})`,
+    cardImage: card_images['0303'].id.id1,
+    info: [
+      { label: '날짜', value: '2024.10.20' },
+      { label: '사용처', value: 'kg중국집' },
+      { label: '카테고리', value: '식당' },
+    ],
+  },
+  {
+    id: '0304',
+    title: `${CARD_COMPANIES.NONGHYUP} 별다줄카드 (${CARD_TYPES.CREDIT})`,
+    cardImage: card_images['0304'].byul.byul1,
+    info: [
+      { label: '날짜', value: '2024.10.20' },
+      { label: '사용처', value: 'kg쌀국수' },
+      { label: '카테고리', value: '식당' },
+    ],
+  },
+  {
+    id: '0306',
+    title: `${CARD_COMPANIES.SHINHAN} 처음카드 (${CARD_TYPES.CREDIT})`,
+    cardImage: card_images['0306'].first.first1,
+    info: [
+      { label: '날짜', value: '2024.10.20' },
+      { label: '사용처', value: 'kg쌀국수' },
+      { label: '카테고리', value: '식당' },
+    ],
+  },
+];
+
 // 모든 카드 데이터
 export const cardMockData = [...registeredCardData];
 

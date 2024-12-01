@@ -72,6 +72,10 @@ const CardImage = styled.img`
   height: auto;
 `;
 
+const SmallCardImage = styled(CardImage)`
+  width: 48px;
+`;
+
 const CardInfoContainer = styled.div`
   display: flex;
   flex-direction: column;
@@ -144,7 +148,7 @@ const CommonCardListBox = ({
         </>
       ) : (
         <BoxStyle>
-          <img src={cardImg} alt="카드이미지" />
+          <SmallCardImage src={cardImg} alt="카드이미지" />
           <BoxInStyle>
             <CardName>{cardTitle}</CardName>
             {cardInfo.map((item, index) => (
