@@ -19,7 +19,7 @@ const MonthComparision = () => {
       <div style={{ width: 700 }}>
         <Calendar />
       </div>
-
+      {/* 위치질문있음! */}
       <Piechart data={piechart_data} />
     </Root>
   );
