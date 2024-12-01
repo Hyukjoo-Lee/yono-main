@@ -73,7 +73,7 @@ const CardImage = styled.img`
 `;
 
 const SmallCardImage = styled(CardImage)`
-  width: 48px;
+  width: 60px;
 `;
 
 const CardInfoContainer = styled.div`
