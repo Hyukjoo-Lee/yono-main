@@ -1,8 +1,9 @@
 import React, { useState } from 'react';
+import styled from 'styled-components';
 import CommonPageInfo from '../../common/CommonPageInfo';
 import CommonTabs from '../../common/CommonTabs';
+import MonthComparision from './monthComparison/MonthComparison';
 import Ranking from './ranking/Ranking';
-import styled from 'styled-components';
 
 const Root = styled.div`
   width: 100%;
@@ -22,7 +23,7 @@ export function CardChallege() {
   const [selectedTab, setSelectedTab] = useState(0);
   const items = [{ text: '전월비교' }, { text: '뱃지랭킹' }];
 
-  const panels = [<Ranking />, <Ranking />];
+  const panels = [<MonthComparision />, <Ranking />];
   return (
     <Root>
       <RootIn>
