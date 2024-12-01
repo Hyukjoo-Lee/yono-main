@@ -105,6 +105,9 @@ const CommonSelect = ({
           borderRadius={borderRadius}
           hoverBackground={hoverBackground}
           isDefault={isDefault}
+          MenuProps={{
+            disableScrollLock: true,
+          }}
         >
           {isDefault && (
             <MenuItem value="default" disabled>

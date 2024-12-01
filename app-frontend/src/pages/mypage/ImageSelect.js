@@ -31,6 +31,7 @@ const CheckIcon = styled.img`
   right: 0;
   width: 15px;
   height: 15px;
+  margin-top: 5px;
 `;
 
 const ImageGallery = ({ images }) => {
