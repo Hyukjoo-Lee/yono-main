@@ -4,7 +4,7 @@ import CustomButton from '../../../common/CommonButton';
 import CommonInput from '../../../common/CommonInput';
 import CommonRoot from '../../../common/CommonRoot';
 import CommonPageInfo from '../../../common/CommonPageInfo';
-import { useNavigate } from 'react-router-dom';
+import { useState } from 'react';
 
 const RootIn = styled.div`
   display: flex;
@@ -46,7 +46,26 @@ const ButtonContainer = styled.div`
   justify-content: space-between;
   width: 45%;
 `;
-const FindForm = ({ find }) => {
+const FindForm = ({ find, onClick }) => {
+  const [selectedValue, setSelectedValue] = useState('');
+  const [answer, setAnswer] = useState('');
+  const [errorMessage, setErrorMessage] = useState('');
+
+  const handleConfirm = () => {
+    if (!selectedValue || !answer) {
+      setErrorMessage('모든 필드를 입력해주세요');
+      return;
+    }
+    setErrorMessage('');
+    // 여기에 확인 로직 추가해야함 e.g. 비밀번호 찾기 로직
+  };
+
+  const confirmCancle = () => {
+    setSelectedValue('');
+    setAnswer('');
+    setErrorMessage('');
+  };
+
   const selectOptions = [
     { value: '애완동물 이름은?', label: '애완동물 이름은?' },
     { value: '당신의 생일은?', label: '당신의 생일은' },
@@ -107,7 +126,7 @@ const FindForm = ({ find }) => {
               background="#ffffff"
               color="#4064E6"
               fontSize="20"
-              onClick={CancleConfirm}
+              onClick={confirmCancle}
             />
           </ButtonContainer>
         </FullContainer>
