@@ -31,9 +31,7 @@ const MiddleTitle = styled.div`
   font-size: 16px;
   color: #757575;
 `;
-const IDContainer = styled.div`
-  margin-bottom: 10px;
-`;
+
 const HiddenBox = styled.div`
   display: ${(props) => (props.$isVisible ? 'flex' : 'none')};
   flex-direction: flex-end;
@@ -44,26 +42,13 @@ const HiddenBox = styled.div`
 `;
 const ErrorMessage = styled.div`
   margin-top: 5px;
-  color: ${(props) =>
-    props.errorMessage === '사용 가능한 아이디 입니다.' ? 'blue' : 'red'};
+  color: red;
 
   font-size: 13px;
 `;
-const PWContainer = styled.div`
-  margin-bottom: 10px;
-`;
-const PWCheckContainer = styled.div`
-  margin-bottom: 10px;
-`;
-const NicName = styled.div`
-  margin-bottom: 10px;
-`;
-const Select = styled.div`
-  margin-bottom: 10px;
-`;
-const Answer = styled.div`
-  margin-bottom: 10px;
-`;
+const ContainerProps = {
+  marginBottom: '5px',
+};
 
 const ImgContainer = styled.div`
   width: 350px;
@@ -116,15 +101,16 @@ export function SignUp() {
           <CommonPageInfo title="회원가입" text={<p></p>} />
           <MiddleTitle>회원정보입력</MiddleTitle>
           <CommonHr />
-          <IDContainer>
-            <CommonInput
-              placeholder="아이디를 입력하세요"
-              text="아이디"
-              background="#F5F5F5"
-              width="310px"
-              onChange={handleInputChange}
-            />
-          </IDContainer>
+          <div style={ContainerProps} />
+          <CommonInput
+            placeholder="아이디를 입력하세요"
+            text="아이디"
+            background="#F5F5F5"
+            width="310px"
+            onChange={handleInputChange}
+          />
+          <div style={ContainerProps} />
+          <CommonHr />
           <HiddenBox $isVisible={isInputVisible}>
             <CommonInput
               placeholder="아이디 중복 확인"
@@ -145,55 +131,56 @@ export function SignUp() {
           </HiddenBox>
           {errorMessage && <ErrorMessage>{errorMessage}</ErrorMessage>}
           <CommonHr />
-          <PWContainer>
-            <CommonInput
-              placeholder="비밀번호를 입력하세요"
-              text="비밀번호"
-              background="#F5F5F5"
-              width="310px"
-            />
-          </PWContainer>
+          <div style={ContainerProps} />
+          <CommonInput
+            placeholder="비밀번호를 입력하세요"
+            text="비밀번호"
+            background="#F5F5F5"
+            width="310px"
+          />
+          <div style={ContainerProps} />
           <CommonHr />
-          <PWCheckContainer>
-            <CommonInput
-              placeholder="비밀번호 확인해주세요"
-              text="비밀번호 확인"
-              background="#F5F5F5"
-              width="310px"
-            />
-          </PWCheckContainer>
+          <div style={ContainerProps} />
+          <CommonInput
+            placeholder="비밀번호 확인해주세요"
+            text="비밀번호 확인"
+            background="#F5F5F5"
+            width="310px"
+          />
+          <div style={ContainerProps} />
           <CommonHr />
-          <NicName>
-            <CommonInput
-              placeholder="닉네임을 적어주세요"
-              text="닉네임"
-              background="#F5F5F5"
-              width="310px"
-            />
-          </NicName>
+          <div style={ContainerProps} />
+          <CommonInput
+            placeholder="닉네임을 적어주세요"
+            text="닉네임"
+            background="#F5F5F5"
+            width="310px"
+          />
+          <div style={ContainerProps} />
           <CommonHr />
-          <Select>
-            <CommonSelect
-              text="질문선택"
-              height="35px"
-              width="300px"
-              padding="10px"
-              color="#464646"
-              labelColor="#464646"
-              options={selectOptions}
-              find="질문을 선택하세요"
-            />
-          </Select>
+          <div style={ContainerProps} />{' '}
+          <CommonSelect
+            text="질문선택"
+            height="35px"
+            width="300px"
+            padding="10px"
+            color="#464646"
+            labelColor="#464646"
+            options={selectOptions}
+            find="질문을 선택하세요"
+          />
+          <div style={ContainerProps} />
           <CommonHr />
-          <Answer>
-            <CommonInput
-              placeholder="답변을 적어주세요"
-              text="답변"
-              background="#F5F5F5"
-              width="310px"
-            />
-          </Answer>
+          <div style={ContainerProps} />{' '}
+          <CommonInput
+            placeholder="답변을 적어주세요"
+            text="답변"
+            background="#F5F5F5"
+            width="310px"
+          />
+          <div style={ContainerProps} />
           <CommonHr />
+          <div style={ContainerProps} />{' '}
           <ImgContainer>캐릭터 선택</ImgContainer>
           <ImageGallery images={images} />
         </MiddleContainer>

@@ -9,11 +9,6 @@ export const FindPassword = () => {
   const [selectedQuestion, setSelectedQuestion] = useState('');
   const [errorMessage, setErrorMessage] = useState('');
 
-  const selectOptions = [
-    { value: '애완동물 이름은?', label: '애완동물 이름은?' },
-    { value: '당신의 생일은?', label: '당신의 생일은' },
-    { value: '당신이 좋아하는 음식은?', label: '당신이 좋아하는 음식은?' },
-  ];
   const answers = {
     '애완동물 이름은?': '멍멍이',
     '당신의 생일은?': '0103',
@@ -22,11 +17,14 @@ export const FindPassword = () => {
 
   const handleConfirm = () => {
     if (selectedQuestion && answers[selectedQuestion]) {
-      const correctanswer = answers[selectedQuestion]; // 올바른 답을 가져옴
+      const correctAnswer = answers[selectedQuestion]; // 올바른 답을 가져옴
 
-      if (answer === correctanswer) {
+      if (answer === correctAnswer) {
         setIsDialogPWVisible(true);
-      } else {
+      } else if (answer === null || answer === '') {
+        setErrorMessage('답변을 입력해 주세요.');
+        setIsDialogPWVisible(false);
+      } else if (answer !== correctAnswer) {
         setErrorMessage('답변이 틀렸습니다.');
         setIsDialogPWVisible(false);
       }
@@ -35,20 +33,20 @@ export const FindPassword = () => {
       setIsDialogPWVisible(false);
     }
   };
+  const UpdateAnswer = (e) => {
+    setAnswer(e.target.value);
+  };
 
   return (
     <>
       <FindForm
         find={find}
-        isDialogPWVisible={isDialogPWVisible}
-        setIsDialogPWVisible={setIsDialogPWVisible}
-        handleConfirm={handleConfirm}
-        selectOptions={selectOptions}
         answer={answer}
         errorMessage={errorMessage}
-        setAnswer={setAnswer}
         selectedValue={selectedQuestion}
         setSelectedValue={setSelectedQuestion}
+        onChange={UpdateAnswer}
+        onClick={handleConfirm}
       />
       <AlarmPw
         open={isDialogPWVisible}
