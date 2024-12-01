@@ -69,8 +69,6 @@ const CommonSelect = ({
   selectedValue = '',
   setSelectedValue,
 }) => {
-  // const [selectedValue, setSelectedValue] = useState('');
-
   const handleChange = (event) => {
     setSelectedValue(event.target.value);
     if (onSelect) onSelect(event.target.value);
