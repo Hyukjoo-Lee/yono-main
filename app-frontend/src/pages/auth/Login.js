@@ -2,21 +2,21 @@ import React from 'react';
 import styled from 'styled-components';
 import CommonInput from '../../common/CommonInput';
 import CustomButton from '../../common/CommonButton';
-import image from './images/or.png';
-import kakaoimage from './images/kakao.png';
-import google from './images/google.png';
+import or from '../../assets/images/or.png';
+import kakaotalk from '../../assets/images/kakao.png';
+import google from '../../assets/images/google.png';
 import IconButton from './Component/IconButton'; // IButton을 정확히 import
 import CommonRoot from '../../common/CommonRoot';
-import { Link, useNavigate } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 import CommonPageInfo from '../../common/CommonPageInfo';
 import { useState } from 'react';
 import {
   EMAIL_VERIFIED_ERROR,
   PASSWORD_VERIFIED_ERROR,
 } from '../auth/Component/ErrorMessage';
-import CommonDialog from '../../common/CommonDialog';
+import SuccessLogin from './SuccessLogin';
 
-const Rootin = styled.div`
+const RootIn = styled.div`
   display: flex;
   flex-direction: column;
   justify-content: center;
@@ -104,10 +104,10 @@ const ErrorMessage = styled.div`
 export function Login() {
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
-  const [IderrorMessage, setIderrorMessage] = useState('');
-  const [PwerrorMessage, setPwerrorMessage] = useState('');
+  const [IDerrorMessage, setIDerrorMessage] = useState('');
+  const [PWerrorMessage, setPWerrorMessage] = useState('');
+  const [successVisible, setSuccessVisible] = useState(false);
 
-  const navigate = useNavigate();
   const dummyUser = {
     username: 'user', // 아이디
     password: 'password', // 비밀번호
@@ -122,17 +122,20 @@ export function Login() {
   };
 
   const handleLogin = () => {
-    username === dummyUser.username
-      ? setIderrorMessage('')
-      : setIderrorMessage(EMAIL_VERIFIED_ERROR);
-    password === dummyUser.password
-      ? setPwerrorMessage('')
-      : setPwerrorMessage(PASSWORD_VERIFIED_ERROR);
-
     if (username === dummyUser.username && password === dummyUser.password) {
-      navigate('/Mainpage');
+      setIDerrorMessage('');
+      setSuccessVisible(true);
+    } else if (username === dummyUser.username) {
+      setPWerrorMessage(PASSWORD_VERIFIED_ERROR);
+      setSuccessVisible(false);
+    } else if (password === dummyUser.password) {
+      setIDerrorMessage(EMAIL_VERIFIED_ERROR);
+      setSuccessVisible(false);
+    } else {
+      setIDerrorMessage('아이디,비밀번호를 입력하세요');
     }
   };
+
   const list = [
     { label: '아이디찾기', path: '/find-id' },
     { label: '비밀번호찾기', path: '/find-pwd' },
@@ -140,7 +143,7 @@ export function Login() {
 
   return (
     <CommonRoot>
-      <Rootin>
+      <RootIn>
         <HighContainer>
           <CommonPageInfo title="로그인" text={<p></p>} />
 
@@ -181,10 +184,10 @@ export function Login() {
         </MiddleContainer>
         <LowContainer>
           <HiddenBox>
-            {IderrorMessage && <ErrorMessage>{IderrorMessage}</ErrorMessage>}
+            {IDerrorMessage && <ErrorMessage>{IDerrorMessage}</ErrorMessage>}
 
-            {PwerrorMessage && !IderrorMessage && (
-              <ErrorMessage>{PwerrorMessage}</ErrorMessage>
+            {PWerrorMessage && !IDerrorMessage && (
+              <ErrorMessage>{PWerrorMessage}</ErrorMessage>
             )}
           </HiddenBox>
 
@@ -199,18 +202,17 @@ export function Login() {
           />
 
           <img
-            src={image} // import한 이미지 경로 사용
+            src={or} // import한 이미지 경로 사용
             alt="Or"
             width="63%"
           />
-
           <IconButtonContainer>
-            <IconButton imgesRoute={kakaoimage} />
-            <IconButton imgesRoute={google} />
+            <IconButton imagesRoute={kakaotalk} />
+            <IconButton imagesRoute={google} />
           </IconButtonContainer>
         </LowContainer>
-        <CommonDialog $visible="true" />
-      </Rootin>
+        <SuccessLogin open={successVisible} />
+      </RootIn>
     </CommonRoot>
   );
 }

@@ -65,8 +65,10 @@ const CommonSelect = ({
   display,
   onSelect,
   find = '카드를 선택하세요',
+  selectedValue = '',
+  setSelectedValue,
 }) => {
-  const [selectedValue, setSelectedValue] = useState('');
+  // const [selectedValue, setSelectedValue] = useState('');
 
   const handleChange = (event) => {
     setSelectedValue(event.target.value);
@@ -104,6 +106,7 @@ const CommonSelect = ({
           borderRadius={borderRadius}
           hoverBackground={hoverBackground}
           isDefault={isDefault}
+          onSelect={onSelect}
         >
           {isDefault && (
             <MenuItem value="default" disabled>

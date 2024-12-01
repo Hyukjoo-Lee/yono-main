@@ -1,19 +1,69 @@
-import React from 'react';
+import React, { useRef, useEffect } from 'react';
 import Slider from 'react-slick';
 import 'slick-carousel/slick/slick.css';
 import 'slick-carousel/slick/slick-theme.css';
-import { ReactComponent as LeftArrowImage } from '../../assets/images/left_arrow.svg';
-import { ReactComponent as RightArrowImage } from '../../assets/images/right_arrow.svg';
+import { ReactComponent as ArrowImage } from '../../assets/images/arrow-slider.svg';
 import styled from 'styled-components';
+
 import CardDemoImage from '../../assets/images/card_demo.png';
 
-function CardSlider({ image, name }) {
+const SliderContainer = styled.div`
+  width: 80%;
+  margin: 47px auto 0;
+`;
+
+const CardInfo = styled.div`
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  margin-left: 120px;
+  align-items: flex-start;
+  height: 100%;
+`;
+
+const CardTitle = styled.h3`
+  font-size: 28px;
+  font-weight: 700;
+  margin: 0px 0px 15px 0px;
+`;
+
+const CardMainBenfit = styled.p`
+  font-size: 22px;
+  font-weight: 500;
+  margin: 0px 0px 15px 0px;
+`;
+
+const CardBenefit = styled.p`
+  font-size: 18px;
+  font-weight: 200;
+  line-height: 25px;
+  margin: 0px;
+`;
+
+const CardSlider = ({ showDetailed, cardImages, cardTitle, cardInfo }) => {
   return (
-    <SlideContainer>
-      <img src={image} alt={name} />
-    </SlideContainer>
+    <>
+      {showDetailed && cardTitle && cardInfo ? (
+        <SlideContainer>
+          <img src={cardImages} alt="card" />
+          <CardInfo>
+            <CardTitle>{cardTitle}</CardTitle>
+            <CardMainBenfit>국내외 가맹점 0.8% 할인</CardMainBenfit>
+            {cardInfo.map((info, index) => (
+              <CardBenefit key={index}>
+                {info.label} {info.value} ({info.additional})
+              </CardBenefit>
+            ))}
+          </CardInfo>
+        </SlideContainer>
+      ) : (
+        <SlideContainer>
+          <img src={cardImages} alt="card" />
+        </SlideContainer>
+      )}
+    </>
   );
-}
+};
 
 const SlideContainer = styled.div`
   display: flex;
@@ -21,9 +71,8 @@ const SlideContainer = styled.div`
   justify-content: center;
 
   img {
-    width: 280px;
-    height: 180px;
-    border-radius: 8px;
+    width: 185px;
+    height: 285px;
   }
 `;
 
@@ -35,6 +84,10 @@ const ArrowWrapper = styled.div`
   height: 45px;
   cursor: pointer;
   z-index: 1;
+
+  &.slick-prev svg {
+    transform: rotate(180deg);
+  }
 
   path {
     stroke: ${(props) => props.theme.color.gray};
@@ -57,7 +110,7 @@ const SlickArrowLeft = ({ currentSlide, slideCount, ...props }) => (
       'slick-prev slick-arrow' + (currentSlide === 0 ? ' slick-disabled' : '')
     }
   >
-    <LeftArrowImage />
+    <ArrowImage />
   </ArrowWrapper>
 );
 
@@ -69,16 +122,19 @@ const SlickArrowRight = ({ currentSlide, slideCount, ...props }) => (
       (currentSlide === slideCount - 1 ? ' slick-disabled' : '')
     }
   >
-    <RightArrowImage />
+    <ArrowImage />
   </ArrowWrapper>
 );
 
-const SliderContainer = styled.div`
-  width: 80%;
-  margin: 47px auto 0;
-`;
+const CustomSlides = ({ cardImages, showDetailed, cardData }) => {
+  const sliderRef = useRef(null);
 
-function CustomSlides({ cardList }) {
+  useEffect(() => {
+    if (sliderRef.current) {
+      sliderRef.current.slickGoTo(0);
+    }
+  }, [cardImages]);
+
   const settings = {
     dots: true,
     infinite: false,
@@ -92,17 +148,30 @@ function CustomSlides({ cardList }) {
 
   return (
     <SliderContainer>
-      <Slider {...settings}>
-        {cardList && cardList.length > 0 ? (
-          cardList.map((card, index) => (
-            <CardSlider key={index} image={card.image} name={card.name} />
+      <Slider ref={sliderRef} {...settings}>
+        {showDetailed && cardData ? (
+          cardData.map((card, index) => (
+            <div key={index} style={{ display: 'flex' }}>
+              <CardSlider
+                showDetailed={showDetailed}
+                cardTitle={card.cardTitle}
+                cardInfo={card.cardInfo}
+                cardImages={card.cardImg}
+              />
+            </div>
+          ))
+        ) : cardImages ? (
+          cardImages.map((card, index) => (
+            <div key={index} style={{ display: 'flex' }}>
+              <CardSlider cardImages={card} />
+            </div>
           ))
         ) : (
-          <CardSlider image={CardDemoImage} name={'No cards available'} />
+          <CardSlider cardImages={CardDemoImage} />
         )}
       </Slider>
     </SliderContainer>
   );
-}
+};
 
 export default CustomSlides;

@@ -1,5 +1,6 @@
 import CommonDialog from '../../common/CommonDialog';
-export function AlarmID() {
+
+export const AlarmID = ({ Open }) => {
   return (
     <div>
       <CommonDialog
@@ -15,5 +16,4 @@ export function AlarmID() {
       />
     </div>
   );
-}
-export default AlarmID;
+};

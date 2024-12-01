@@ -4,7 +4,7 @@ import Button from '@mui/material/Button';
 
 const ButtonStyle = styled(Button)`
   &.MuiButtonBase-root {
-    min-width: ${(props) => props.width || '162px'};
+    min-width: ${(props) => props.width || '64px'};
     height: ${(props) => props.height || '48px'};
     background-color: ${(props) =>
       props.background ? props.background : props.theme.color.blue};
@@ -51,6 +51,7 @@ const CustomButton = (props) => {
     hoverColor,
     startIcon,
     endIcon,
+    type,
   } = props;
 
   return (
@@ -65,6 +66,7 @@ const CustomButton = (props) => {
       onClick={disabled ? undefined : onClick}
       disabled={disabled}
       disableRipple
+      type={type}
     >
       {startIcon && startIcon}
       <TextStyle color={color} fontSize={fontSize}>

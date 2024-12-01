@@ -1,9 +1,17 @@
+<<<<<<< HEAD
 import React, { useState } from 'react';
 import styled from 'styled-components';
 import CommonPageInfo from '../../common/CommonPageInfo';
 import CommonTabs from '../../common/CommonTabs';
 import MonthComparision from './monthComparison/MonthComparison';
 import Ranking from './ranking/Ranking';
+=======
+import React, { useState } from "react";
+import CommonPageInfo from "../../common/CommonPageInfo";
+import CommonTabs from "../../common/CommonTabs";
+import Ranking from "./ranking/Ranking";
+import styled from "styled-components";
+>>>>>>> origin
 
 const Root = styled.div`
   width: 100%;
@@ -21,7 +29,7 @@ const RootIn = styled.div`
 `;
 export function CardChallege() {
   const [selectedTab, setSelectedTab] = useState(0);
-  const items = [{ text: '전월비교' }, { text: '뱃지랭킹' }];
+  const items = [{ text: "전월비교" }, { text: "뱃지랭킹" }];
 
   const panels = [<MonthComparision />, <Ranking />];
   return (
@@ -33,7 +41,7 @@ export function CardChallege() {
           selectedTab={setSelectedTab}
         />
         <CommonPageInfo
-          title={selectedTab === 0 ? '전월비교' : '뱃지 랭킹확인'}
+          title={selectedTab === 0 ? "전월비교" : "뱃지 랭킹확인"}
           text={
             selectedTab === 0 ? (
               <p>

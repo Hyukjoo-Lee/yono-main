@@ -1,8 +1,12 @@
 import styled from 'styled-components';
-import CardImage from '../../assets/images/CardImage.png';
 import CardRegFormBox from './CardRegFormBox';
 import CommonCardListBox from '../../common/CommonCardListBox';
 import CommonPageInfo from '../../common/CommonPageInfo';
+import {
+  registeredCardData,
+  card_images,
+} from '../../mockData/cardMockData.js';
+import { useState, useEffect } from 'react';
 
 const Root = styled.div`
   width: 100%;
@@ -14,7 +18,7 @@ const Root = styled.div`
 
 const ListBox = styled.div`
   width: 100%;
-  height: 628px;
+  height: 729px;
   overflow-y: auto;
 
   &::-webkit-scrollbar {
@@ -23,68 +27,31 @@ const ListBox = styled.div`
 `;
 
 const CardRegTab = () => {
-  const cardData = [
-    {
-      cardTitle: '현대카드(신용)',
-      cardImg: CardImage,
-      cardNumber: '0000 0000 0000 0000',
-      cardInfo: [
-        { label: '스타벅스 할인', value: '50%', additional: '월 1회' },
-        { label: '대중교통 할인', value: '20%', additional: '청구할인' },
-        { label: '영화 쿠폰 제공', value: '무료', additional: '연 12회' },
-      ],
-    },
-    {
-      cardTitle: '신한카드(신용)',
-      cardImg: CardImage,
-      cardNumber: '0000 0000 0000 0000',
-      cardInfo: [
-        { label: '스타벅스 할인', value: '20%', additional: '월 2회' },
-        { label: '대중교통 할인', value: '10%', additional: '청구할인' },
-        { label: '영화 쿠폰 제공', value: '무료', additional: '연 12회' },
-      ],
-    },
-    {
-      cardTitle: '농협카드(신용)',
-      cardImg: CardImage,
-      cardNumber: '0000 0000 0000 0000',
-      cardInfo: [
-        { label: '스타벅스 할인', value: '50%', additional: '월 1회' },
-        { label: '대중교통 할인', value: '20%', additional: '청구할인' },
-        { label: '영화 쿠폰 제공', value: '무료', additional: '연 12회' },
-      ],
-    },
-    {
-      cardTitle: '현대카드(체크)',
-      cardImg: CardImage,
-      cardNumber: '0000 0000 0000 0000',
-      cardInfo: [
-        { label: '스타벅스 할인', value: '50%', additional: '월 1회' },
-        { label: '대중교통 할인', value: '20%', additional: '청구할인' },
-        { label: '영화 쿠폰 제공', value: '무료', additional: '연 12회' },
-      ],
-    },
-    {
-      cardTitle: '하나카드(신용)',
-      cardImg: CardImage,
-      cardNumber: '0000 0000 0000 0000',
-      cardInfo: [
-        { label: '스타벅스 할인', value: '50%', additional: '월 1회' },
-        { label: '대중교통 할인', value: '20%', additional: '청구할인' },
-        { label: '영화 쿠폰 제공', value: '무료', additional: '연 8회' },
-      ],
-    },
-    {
-      cardTitle: '현대카드(신용)',
-      cardImg: CardImage,
-      cardNumber: '0000 0000 0000 0000',
-      cardInfo: [
-        { label: '스타벅스 할인', value: '50%', additional: '월 1회' },
-        { label: '대중교통 할인', value: '20%', additional: '청구할인' },
-        { label: '영화 쿠폰 제공', value: '무료', additional: '연 12회' },
-      ],
-    },
-  ];
+  // 등록된 카드 데이터
+  const [cardData, setCardData] = useState([]);
+  // 카드사 별 이미지 데이터
+  const [cardImg, setCardImg] = useState(card_images);
+  const [isLoaded, setIsLoaded] = useState(false);
+
+  useEffect(() => {
+    if (isLoaded) return;
+
+    const fetchCardData = async () => {
+      try {
+        setCardData(registeredCardData);
+        setCardImg(card_images);
+        setIsLoaded(true);
+      } catch (error) {
+        console.error('등록한 카드 데이터 로딩 실패: ', error);
+      }
+    };
+    fetchCardData();
+  }, [isLoaded]);
+
+  const handleCardSelect = (card) => {
+    // TODO: 카드 선택 로직 추가: 선택되면 카드 챌린지 페이지에 적용되는 카드가 변경됨
+    console.log(card);
+  };
 
   return (
     <>
@@ -98,9 +65,14 @@ const CardRegTab = () => {
         }
       />
       <Root>
-        <CardRegFormBox />
+        <CardRegFormBox cardImg={cardImg} />
         <ListBox>
-          <CommonCardListBox data={cardData} showDetailed={true} />
+          <CommonCardListBox
+            data={cardData}
+            cardImg={cardImg}
+            showDetailed={true}
+            onCardSelect={handleCardSelect}
+          />
         </ListBox>
       </Root>
     </>
