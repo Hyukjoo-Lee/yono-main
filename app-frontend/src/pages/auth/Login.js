@@ -3,11 +3,11 @@ import styled from 'styled-components';
 import CommonInput from '../../common/CommonInput';
 import CustomButton from '../../common/CommonButton';
 import or from '../../assets/images/or.png';
-import kakao from '../../assets/images/kakao.png';
+import kakaO from '../../assets/images/kakaO.png';
 import google from '../../assets/images/google.png';
 import IconButton from './Component/IconButton'; // IButton을 정확히 import
 import CommonRoot from '../../common/CommonRoot';
-import { Link, useNavigate } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 import CommonPageInfo from '../../common/CommonPageInfo';
 import { useState } from 'react';
 import {
@@ -102,7 +102,6 @@ const ErrorMessage = styled.div`
 // 더미 데이터 (아이디와 비밀번호)
 
 export function Login(props) {
-  const { Open } = props;
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
   const [IDerrorMessage, setIDerrorMessage] = useState('');
@@ -140,6 +139,12 @@ export function Login(props) {
     { label: '아이디찾기', path: '/find-id' },
     { label: '비밀번호찾기', path: '/find-pwd' },
   ];
+  const inputProps = {
+    background: '#FFFFFF',
+    color: '#464646',
+    width: '300px',
+    height: '35px',
+  };
 
   return (
     <CommonRoot>
@@ -149,23 +154,15 @@ export function Login(props) {
 
           <CommonInput
             text="아이디"
-            background="#FFFFFF"
-            fontSize="16px"
-            color="#464646"
-            width="300px"
-            height="35px"
             value={username}
             onChange={handleUsernameChange}
+            {...inputProps}
           />
           <CommonInput
             text="비밀번호"
-            background="#FFFFFF"
-            fontSize="16px"
-            color="#464646"
-            width="300px"
-            height="35px"
             value={password}
             onChange={handlePasswordChange}
+            {...inputProps}
           />
         </HighContainer>
 
@@ -207,12 +204,11 @@ export function Login(props) {
             width="63%"
           />
           <IconButtonContainer>
-            <IconButton imgesRoute={kakaoimage} />
-            <IconButton imgesRoute={google} />
+            <IconButton imagesRoute={kakaO} />
+            <IconButton imagesRoute={google} />
           </IconButtonContainer>
         </LowContainer>
-        <CommonDialog $visible="true" />
-      </Rootin>
+      </RootIn>
     </CommonRoot>
   );
 }

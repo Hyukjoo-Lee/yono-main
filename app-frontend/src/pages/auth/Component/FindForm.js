@@ -46,12 +46,26 @@ const ButtonContainer = styled.div`
   justify-content: space-between;
   width: 45%;
 `;
-const FindForm = ({ find }) => {
+const FindForm = ({
+  find,
+  answer,
+  selectedValue,
+  setSelectedValue,
+  errorMessage,
+  onClick,
+  onClose,
+  onChange,
+}) => {
   const selectOptions = [
     { value: '애완동물 이름은?', label: '애완동물 이름은?' },
-    { value: '당신의 생일은?', label: '당신의 생일은' },
+    { value: '당신의 생일은?', label: '당신의 생일은?' },
     { value: '당신이 좋아하는 음식은?', label: '당신이 좋아하는 음식은?' },
   ];
+  const navigate = useNavigate();
+
+  const handleClose = () => {
+    navigate('/');
+  };
 
   return (
     <CommonRoot>
@@ -80,7 +94,7 @@ const FindForm = ({ find }) => {
               width="300px"
               height="35px"
               focusBorderWidth="10px"
-              onChange={(e) => setAnswer(e.target.value)} //질문답변 시 상태 업데이트
+              onChange={onChange} //질문답변 시 상태 업데이트
             />
           </MiddleContainer>
           <HiddenBox>
@@ -95,19 +109,18 @@ const FindForm = ({ find }) => {
               background="#4064E6"
               color="#ffffff"
               fontSize="20"
-              onClick={() => {
-                handleConfirm();
-                if (onClick) onClick();
-              }}
+              onClick={onClick}
             />
             <CustomButton
               text="취소"
               width="50px"
               height="30px"
               background="#ffffff"
+              borderColor="#4064E6"
               color="#4064E6"
+              hoverBk="#ffffff"
               fontSize="20"
-              onClick={CancleConfirm}
+              onClick={handleClose}
             />
           </ButtonContainer>
         </FullContainer>

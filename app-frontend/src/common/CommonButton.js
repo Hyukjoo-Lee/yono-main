@@ -58,7 +58,7 @@ const CustomButton = (props) => {
       width={width}
       height={height}
       background={background}
-      borderCe={borderColor}
+      borderColor={borderColor}
       radius={borderRadius}
       hover1={hoverBk}
       hover2={hoverColor}
