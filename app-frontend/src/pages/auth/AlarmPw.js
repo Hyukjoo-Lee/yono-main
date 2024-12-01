@@ -14,10 +14,10 @@ const ErrorMsg = styled.div`
   color: red;
   font-size: 13px;
 `;
-const CorrectMsg = styled.div`
-  color: blue;
-  font-size: 13px;
-`;
+// const CorrectMsg = styled.div`
+//   color: blue;
+//   font-size: 13px;
+// `;
 const AlarmPw = ({ open, $setIsDialogPWVisible }) => {
   const [isConfirmClicked, setIsConfirmClicked] = useState(false);
   const [isChangeClicked, setIsChangeClicked] = useState(false);
