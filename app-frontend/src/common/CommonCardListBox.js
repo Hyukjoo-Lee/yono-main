@@ -101,6 +101,7 @@ const CommonCardListBox = ({
   data,
   showDetailed,
   onCardSelect,
+  buttonText = '카드 선택',
 }) => {
   return (
     <>
@@ -127,7 +128,7 @@ const CommonCardListBox = ({
                 <CardInfoContainer>
                   <HoverButtonContainer>
                     <CommonButton
-                      text="카드 선택"
+                      text={buttonText}
                       fontSize="16px"
                       width="100px"
                       height="30px"
