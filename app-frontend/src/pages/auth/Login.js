@@ -3,7 +3,7 @@ import styled from 'styled-components';
 import CommonInput from '../../common/CommonInput';
 import CustomButton from '../../common/CommonButton';
 import or from '../../assets/images/or.png';
-import kakaotalk from '../../assets/images/kakao.png';
+import kakaO from '../../assets/images/kakao.png';
 import google from '../../assets/images/google.png';
 import IconButton from './Component/IconButton'; // IButton을 정확히 import
 import CommonRoot from '../../common/CommonRoot';
@@ -101,7 +101,7 @@ const ErrorMessage = styled.div`
 `;
 // 더미 데이터 (아이디와 비밀번호)
 
-export function Login() {
+export function Login(props) {
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
   const [IDerrorMessage, setIDerrorMessage] = useState('');
@@ -140,6 +140,12 @@ export function Login() {
     { label: '아이디찾기', path: '/find-id' },
     { label: '비밀번호찾기', path: '/find-pwd' },
   ];
+  const inputProps = {
+    background: '#FFFFFF',
+    color: '#464646',
+    width: '300px',
+    height: '35px',
+  };
 
   return (
     <CommonRoot>
@@ -149,23 +155,15 @@ export function Login() {
 
           <CommonInput
             text="아이디"
-            background="#FFFFFF"
-            fontSize="16px"
-            color="#464646"
-            width="300px"
-            height="35px"
             value={username}
             onChange={handleUsernameChange}
+            {...inputProps}
           />
           <CommonInput
             text="비밀번호"
-            background="#FFFFFF"
-            fontSize="16px"
-            color="#464646"
-            width="300px"
-            height="35px"
             value={password}
             onChange={handlePasswordChange}
+            {...inputProps}
           />
         </HighContainer>
 
@@ -207,11 +205,14 @@ export function Login() {
             width="63%"
           />
           <IconButtonContainer>
-            <IconButton imagesRoute={kakaotalk} />
+            <IconButton imagesRoute={kakaO} />
             <IconButton imagesRoute={google} />
           </IconButtonContainer>
         </LowContainer>
-        <SuccessLogin open={successVisible} />
+        <SuccessLogin
+          open={successVisible}
+          setSuccessVisible={setSuccessVisible}
+        />
       </RootIn>
     </CommonRoot>
   );

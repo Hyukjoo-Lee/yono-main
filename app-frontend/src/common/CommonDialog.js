@@ -42,7 +42,7 @@ const ContentWrapper = styled.div`
   justify-content: center;
   flex-direction: column;
   align-items: center;
-  min-width: 450px;
+  min-width: 200px;
   min-height: 120px;
   padding: 16px;
   box-sizing: border-box;
@@ -75,20 +75,16 @@ const CommonDialog = (props) => {
   const {
     className,
     open,
-    children, //들어갈 내용 초기값
+    children,
     width,
-    // height,
     fontSize,
     color,
     text1 = '확인',
     text2 = '취소',
-    // width1 = '100px', //확인 버튼 너비
-    // width2 = '100px', //취소 버튼 너비
     value,
     onChange,
     onClick,
     onClose,
-    // navigateMain = '/',
   } = props;
 
   return (

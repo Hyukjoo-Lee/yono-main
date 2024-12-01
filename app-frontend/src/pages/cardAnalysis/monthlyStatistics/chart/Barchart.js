@@ -1,5 +1,12 @@
 import React from 'react';
+import styled from 'styled-components';
 import { ResponsiveBar } from '@nivo/bar';
+
+const StyledChart = styled.div`
+  width: 618px;
+  height: 567px;
+  margin: 0 auto;
+`;
 
 const Barchart = ({ data }) => {
   const handle = {
@@ -12,7 +19,7 @@ const Barchart = ({ data }) => {
   };
 
   return (
-    <div style={{ width: '618px', height: '567px', margin: '0 auto' }}>
+    <StyledChart>
       <ResponsiveBar
         data={data}
         keys={['외식', '의류', '온라인쇼핑', '주류', '전자제품']}
@@ -61,12 +68,12 @@ const Barchart = ({ data }) => {
           },
         }}
         axisBottom={{
-          tickSize: 5, // 값 설명하기 위해 튀어나오는 점 크기
+          tickSize: 5,
           tickPadding: 0,
           tickRotation: 0,
           legend: '',
           legendPosition: 'middle',
-          legendOffset: 40, // 글씨와 chart간 간격
+          legendOffset: 40,
         }}
         axisLeft={{
           tickSize: 5,
@@ -76,9 +83,7 @@ const Barchart = ({ data }) => {
           legendPosition: 'middle',
           legendOffset: -60,
         }}
-        // label 안보이게 할 기준 width
         labelSkipWidth={36}
-        // label 안보이게 할 기준 height
         labelSkipHeight={12}
         // 토탈 값 표시
         // enableTotals = {true}
@@ -99,7 +104,6 @@ const Barchart = ({ data }) => {
             symbolSize: 20,
             effects: [
               {
-                // 추가 효과 설정 (hover하면 item opacity 1로 변경)
                 on: 'hover',
                 style: {
                   itemOpacity: 1,
@@ -110,7 +114,7 @@ const Barchart = ({ data }) => {
           },
         ]}
       />
-    </div>
+    </StyledChart>
   );
 };
 
