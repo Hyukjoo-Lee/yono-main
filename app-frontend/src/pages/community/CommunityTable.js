@@ -24,11 +24,11 @@ const Root = styled.div`
 `;
 
 const columns = [
-  { id: 'Category', label: '카테고리 ', minWidth: 50, align: 'center' },
-  { id: 'title', label: '제목 ', minWidth: 150, align: 'center' },
-  { id: 'author', label: '작성자 ', minWidth: 100, align: 'center' },
-  { id: 'day', label: '등록일', minWidth: 100, align: 'center' },
-  { id: 'check', label: '조회', minWidth: 50, align: 'center' },
+  { id: 'Category', label: '카테고리 ', minWidth: 50 },
+  { id: 'title', label: '제목 ', minWidth: 150 },
+  { id: 'author', label: '작성자 ', minWidth: 100 },
+  { id: 'day', label: '등록일', minWidth: 100 },
+  { id: 'check', label: '조회', minWidth: 50 },
 ];
 
 function createData(Category, title, author, day, check) {
@@ -177,7 +177,7 @@ export function CommunityTable() {
                   {columns.map((column) => (
                     <TableCell
                       key={column.id}
-                      align={column.align}
+                      align="center"
                       style={{ minWidth: column.minWidth }}
                       sx={{ borderBottom: '1px solid #000000' }}
                     >
@@ -197,7 +197,7 @@ export function CommunityTable() {
                           return (
                             <TableCell
                               key={column.id}
-                              align={column.align}
+                              align="center"
                               sx={{ borderBottom: '0.5px solid #757575' }}
                             >
                               <Link

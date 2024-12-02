@@ -40,6 +40,9 @@ const Row = styled.div`
     border: 1px solid #d7d7d7;
     resize: none;
     font-size: 16px;
+    width: 500px;
+    height: 390px;
+    box-sizing: border-box;
   }
 
   & textarea:focus {
@@ -91,7 +94,7 @@ export function CommunityFormBox() {
 
         <Row>
           <span>내용</span>
-          <textarea cols="59" rows="15"></textarea>
+          <textarea></textarea>
         </Row>
         <Row>
           <span>사진</span>

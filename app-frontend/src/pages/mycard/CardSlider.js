@@ -83,14 +83,15 @@ const DefaultImageContainer = styled.div`
   margin: 47px auto 0;
 `;
 
-const SlickArrow = ({ direction, ...props }) => {
+const SlickArrow = ({ currentSlide, slideCount, direction, ...props }) => {
   const isLeft = direction === 'left';
   return (
     <ArrowWrapper
       {...props}
-      className={`slick-${isLeft ? 'prev' : 'next'} slick-arrow${
-        props.className.includes('slick-disabled') ? ' slick-disabled' : ''
-      }`}
+      className={
+        `slick-${isLeft ? 'prev' : 'next'}` +
+        (currentSlide === slideCount - 1 ? ' slick-disabled' : '')
+      }
     >
       <ArrowImage />
     </ArrowWrapper>

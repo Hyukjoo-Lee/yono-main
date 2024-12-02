@@ -11,7 +11,7 @@ import { dailyStatisticsCardData } from '../../../mockData/cardMockData.js';
 const Root = styled.div`
   width: 100%;
   display: grid;
-  grid-template-columns: 740px 1fr;
+  grid-template-columns: 700px 1fr;
   gap: 30px;
   box-sizing: border-box;
 `;
