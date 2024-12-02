@@ -9,9 +9,6 @@ import image2 from '../../assets/images/Character2.png';
 import image3 from '../../assets/images/Character3.png';
 import image4 from '../../assets/images/Character4.png';
 
-// 리팩토링 필요
-// 수정할 비밀번호 -> 답변 맞으면 (버튼 누르면) 나오는 형태로 수정
-
 const images = [image1, image2, image3, image4];
 
 const StyledHr = styled.hr`
@@ -41,6 +38,10 @@ const Root2 = styled.div`
   gap: 5px;
 `;
 
+const Section = styled.div`
+  width: 100%;
+`;
+
 const Button = styled.div`
   display: flex;
   flex-direction: row;
@@ -51,37 +52,91 @@ const Button = styled.div`
   width: 100%;
 `;
 
-const InlineWrapper = styled.div`
-  display: flex;
-  align-items: flex-end;
-  gap: 10px;
+const TitleStyle = styled.p`
+  font-size: 16px;
+  margin-bottom: 6px;
+  margin-top: 0px;
 `;
 
-const HiddenSection = styled.div`
-  margin-top: 10px;
-  width: 350px;
-  display: ${({ $visible }) => ($visible ? 'flex' : 'none')};
-  flex-direction: column;
-  gap: 15px;
+const TextStyle = styled.p`
+  font-size: 16px;
+  margin-bottom: 0px;
+  margin-top: 0px;
+`;
+
+const ErrorText = styled.p`
+  color: red;
+  font-size: 14px;
+  margin: 5px 0 0;
+  text-align: center;
+  width: 100%;
 `;
 
 const CheckUserInfo = ({
-  userName = '사용자 이름',
-  userId = '아이디',
-  password = '비밀번호',
-  email = '이메일',
-  nickname = '닉네임',
-  Target_Expenditure_Amout = '테스트 목표 지출금액',
+  userName,
+  userId,
+  originPassword,
+  email,
+  nickname,
+  Target_Expenditure_Amout,
 }) => {
-  const [showPasswordQuestion, setShowPasswordQuestion] = useState(false);
+  const [isEditing, setIsEditing] = useState(true);
+  const [passwordError, setPasswordError] = useState('');
+  const [userInfo, setUserInfo] = useState({
+    userName: userName || ``,
+    nickname: nickname || ``,
+    userId: userId || '',
+    email: email || '',
+    Target_Expenditure_Amout: Target_Expenditure_Amout || '',
+    password: '',
+    newPassword: '',
+    confirmPassword: '',
+  });
 
-  const modify = () => {};
-
-  const checkPassword = () => {};
-
-  const togglePasswordQuestion = () => {
-    setShowPasswordQuestion(!showPasswordQuestion);
+  const toggleEdit = () => {
+    setIsEditing(!isEditing);
+    setPasswordError('');
   };
+
+  const cancelEdit = () => {
+    userInfo.userName = userName;
+    userInfo.nickname = nickname;
+    userInfo.userId = userId;
+    userInfo.email = email;
+    userInfo.Target_Expenditure_Amout = Target_Expenditure_Amout;
+    userInfo.password = '';
+    userInfo.newPassword = '';
+    userInfo.confirmPassword = '';
+    setIsEditing(!isEditing);
+  };
+
+  const isFormValid = () => {
+    for (const key in userInfo) {
+      if (userInfo[key].trim() === '') {
+        return 1;
+      }
+    }
+
+    if (userInfo.newPassword !== userInfo.confirmPassword) {
+      return 2;
+    }
+  };
+
+  const save = () => {
+    if (isFormValid() === 1) {
+      setPasswordError('모든 정보를 입력해주세요!');
+      return;
+    } else if (originPassword !== userInfo.password) {
+      setPasswordError('기존 비밀번호가 일치하지 않습니다!');
+      return;
+    } else if (isFormValid() === 2) {
+      setPasswordError('비밀번호 확인이 일치하지 않습니다!');
+      return;
+    }
+    // 수정사항 저장 로직 추가 필요
+    setIsEditing(!isEditing);
+  };
+  const deleteId = () => {};
 
   const disabledIntputProps = {
     disabled: true,
@@ -93,6 +148,16 @@ const CheckUserInfo = ({
     width: '350px',
   };
 
+  const handleChange = (key, value) => {
+    setUserInfo((prev) => ({
+      ...prev,
+      [key]: value,
+    }));
+    if (key === 'newPassword' || key === 'confirmPassword') {
+      setPasswordError('');
+    }
+  };
+
   const commonButtonProps = {
     width: '100px',
     height: '38px',
@@ -100,82 +165,119 @@ const CheckUserInfo = ({
 
   return (
     <Root>
-      <CommonInput
-        placeholder={userName}
-        text="이름"
-        disabled={true}
-        background="#F5F5F5"
-        width="350px"
-      />
-      <CommonInput placeholder={nickname} text="닉네임" {...abledInputProps} />
-
-      <StyledHr />
-
-      <CommonInput
-        placeholder={userId}
-        text="아이디"
-        disabled={true}
-        background="#F5F5F5"
-        width="350px"
-      />
-
-      <InlineWrapper>
-        <CommonInput
-          placeholder={password}
-          text="비밀번호"
-          {...disabledIntputProps}
-        />
-        <CustomButton
-          text="비밀번호 변경"
-          onClick={togglePasswordQuestion}
-          width="140px"
-          height="38px"
-        />
-      </InlineWrapper>
-
-      <HiddenSection $visible={showPasswordQuestion}>
-        <CommonInput
-          placeholder="기존 비밀번호"
-          text="기존 비밀번호 입력"
-          {...abledInputProps}
-        />
-
-        <InlineWrapper>
+      {isEditing ? (
+        <Section>
+          <>
+            <TitleStyle>이름</TitleStyle>
+            <TextStyle>{userName}</TextStyle>
+          </>
+          <StyledHr />
+          <>
+            <TitleStyle>닉네임</TitleStyle>
+            <TextStyle>{nickname}</TextStyle>
+          </>
+          <StyledHr />
+          <>
+            <TitleStyle>아이디</TitleStyle>
+            <TextStyle>{userId}</TextStyle>
+          </>
+          <StyledHr />
+          <>
+            <TitleStyle>이메일</TitleStyle>
+            <TextStyle>{email}</TextStyle>
+          </>
+          <StyledHr />
+          <>
+            <TitleStyle>이번 달 목표 지출금액</TitleStyle>
+            <TextStyle>{Target_Expenditure_Amout}</TextStyle>
+          </>
+        </Section>
+      ) : (
+        <>
           <CommonInput
-            placeholder="새로운 비밀번호"
-            text="새로운 비밀번호 입력"
+            value={userInfo.userName}
+            placeholder="이름을 입력하세요"
+            text="이름"
+            {...disabledIntputProps}
+          />
+          <CommonInput
+            value={userInfo.nickname}
+            placeholder="닉네임을 입력하세요"
+            text="닉네임"
+            onChange={(e) => handleChange('nickname', e.target.value)}
             {...abledInputProps}
           />
-          <CustomButton
-            text="확인"
-            width="140px"
-            height="38px"
-            onClick={checkPassword}
+
+          <StyledHr />
+
+          <CommonInput
+            value={userInfo.userId}
+            placeholder="아이디를 입력하세요"
+            text="아이디"
+            {...disabledIntputProps}
           />
-        </InlineWrapper>
 
-        <StyledHr />
-      </HiddenSection>
+          <CommonInput
+            text="기존 비밀번호 입력"
+            placeholder="기존 비밀번호 입력하세요"
+            value={userInfo.password}
+            onChange={(e) => handleChange('password', e.target.value)}
+            {...abledInputProps}
+          />
 
-      <CommonInput placeholder={email} text="이메일" {...abledInputProps} />
+          <CommonInput
+            text="새로운 비밀번호 입력"
+            placeholder="새로운 비밀번호를 입력하세요"
+            value={userInfo.newPassword}
+            onChange={(e) => handleChange('newPassword', e.target.value)}
+            {...abledInputProps}
+          />
 
-      <CommonInput
-        placeholder={Target_Expenditure_Amout}
-        text="이번 달 목표 지출금액"
-        {...abledInputProps}
-      />
+          <CommonInput
+            text="비밀번호 확인"
+            placeholder="비밀번호 확인"
+            value={userInfo.confirmPassword}
+            onChange={(e) => handleChange('confirmPassword', e.target.value)}
+            {...abledInputProps}
+          />
 
-      <Root2>
-        캐릭터 선택
-        <ImageGallery images={images} />
-      </Root2>
+          <CommonInput
+            value={userInfo.email}
+            text="이메일"
+            placeholder="이메일을 입력하세요"
+            onChange={(e) => handleChange('email', e.target.value)}
+            {...abledInputProps}
+          />
+
+          <CommonInput
+            value={userInfo.Target_Expenditure_Amout}
+            text="이번 달 목표 지출금액"
+            placeholder="이번 달 목표 지출금액을 입력하세요"
+            onChange={(e) =>
+              handleChange('Target_Expenditure_Amout', e.target.value)
+            }
+            {...abledInputProps}
+          />
+
+          <Root2>
+            캐릭터 선택
+            <ImageGallery images={images} />
+          </Root2>
+
+          {passwordError && <ErrorText>{passwordError}</ErrorText>}
+        </>
+      )}
 
       <Button>
-        <CustomButton text="저장" onClick={modify} {...commonButtonProps} />
+        <CustomButton
+          text={isEditing ? '수정' : '저장'}
+          onClick={isEditing ? toggleEdit : save}
+          {...commonButtonProps}
+        />
 
         <CustomButton
-          text="회원 탈퇴"
-          // onClick={}
+          text={isEditing ? '회원 탈퇴' : '취소'}
+          onClick={isEditing ? deleteId : cancelEdit}
           {...commonButtonProps}
         />
       </Button>

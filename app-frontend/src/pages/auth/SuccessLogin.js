@@ -1,19 +1,25 @@
 import CommonDialog from '../../common/CommonDialog';
-export function SuccessLogin() {
+import { useNavigate } from 'react-router-dom';
+const SuccessLogin = ({ open, setSuccessVisible }) => {
+  const navigate = useNavigate();
+  const closeLogin = () => {
+    setSuccessVisible(false);
+    navigate('/');
+  };
   return (
     <div>
       <CommonDialog
-        $visible={true}
-        width="500px"
-        height="200px"
-        text2="취소"
-        width1="100px"
-        content="로그인 성공하였습니다."
-        Contentwidth="450px"
-        $Contentheight="90px"
-        $fontSize="20px"
+        open={open}
+        width="400px"
+        height="120px"
+        children="환영합니다."
+        ContentWidth="450px"
+        ContentHeight="90px"
+        fontSize="26px"
+        onClose={closeLogin}
+        onClick={closeLogin}
       />
     </div>
   );
-}
+};
 export default SuccessLogin;

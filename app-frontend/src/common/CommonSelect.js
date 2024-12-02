@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React from 'react';
 import Box from '@mui/material/Box';
 import Select from '@mui/material/Select';
 import MenuItem from '@mui/material/MenuItem';
@@ -12,7 +12,8 @@ const StyledSelect = styled(Select).withConfig({
     width: ${(props) => props.width || '218px'};
     height: ${(props) => props.height || '38px'};
     background-color: ${(props) => props.background || '#F8F9FE'};
-    color: ${(props) => (props.isDefault ? '#b0b0b0' : '#000000')};
+    color: ${(props) =>
+      props.isDefault ? '#b0b0b0' : props.theme.color.black};
     border-radius: ${(props) => props.borderRadius || '5px'};
     font-size: ${(props) => props.fontSize || '16px'};
 
@@ -39,11 +40,11 @@ const StyledSelect = styled(Select).withConfig({
 `;
 
 const TextStyle = styled.p`
-  font-size: ${(props) => (props.fontSize ? props.fontSize : '16px')};
-  color: ${(props) => (props.color ? props.color : props.theme.color.white)};
+  font-size: ${(props) => props.fontSize || '16px'};
+  color: ${(props) => props.color || props.theme.color.white};
   margin-bottom: 6px;
   margin-top: 0px;
-  display: ${(props) => (props.display ? props.display : '')};
+  display: ${(props) => props.display || ''};
 `;
 
 const CommonSelect = ({
@@ -65,9 +66,9 @@ const CommonSelect = ({
   display,
   onSelect,
   find = '카드를 선택하세요',
+  selectedValue = '',
+  setSelectedValue,
 }) => {
-  const [selectedValue, setSelectedValue] = useState('');
-
   const handleChange = (event) => {
     setSelectedValue(event.target.value);
     if (onSelect) onSelect(event.target.value);
@@ -104,6 +105,10 @@ const CommonSelect = ({
           borderRadius={borderRadius}
           hoverBackground={hoverBackground}
           isDefault={isDefault}
+          MenuProps={{
+            disableScrollLock: true,
+          }}
+          onSelect={onSelect}
         >
           {isDefault && (
             <MenuItem value="default" disabled>

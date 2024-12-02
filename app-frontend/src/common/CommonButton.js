@@ -4,12 +4,12 @@ import Button from '@mui/material/Button';
 
 const ButtonStyle = styled(Button)`
   &.MuiButtonBase-root {
-    min-width: ${(props) => props.width || '162px'};
+    min-width: ${(props) => props.width || '64px'};
     height: ${(props) => props.height || '48px'};
     background-color: ${(props) =>
       props.background ? props.background : props.theme.color.blue};
     border: ${(props) =>
-      props.borderColor ? `1px solid ${props.borderColor}` : '0px'};
+      props.$borderColor ? `1px solid ${props.$borderColor}` : '0px'};
     border-radius: ${(props) => props.borderRadius || '6px'};
     cursor: pointer;
     display: flex;
@@ -42,7 +42,7 @@ const CustomButton = (props) => {
     height,
     background,
     color,
-    borderColor,
+    $borderColor,
     borderRadius,
     fontSize,
     disabled,
@@ -51,6 +51,7 @@ const CustomButton = (props) => {
     hoverColor,
     startIcon,
     endIcon,
+    type,
   } = props;
 
   return (
@@ -58,13 +59,14 @@ const CustomButton = (props) => {
       width={width}
       height={height}
       background={background}
-      borderCe={borderColor}
+      $borderColor={$borderColor}
       radius={borderRadius}
       hover1={hoverBk}
       hover2={hoverColor}
       onClick={disabled ? undefined : onClick}
       disabled={disabled}
       disableRipple
+      type={type}
     >
       {startIcon && startIcon}
       <TextStyle color={color} fontSize={fontSize}>

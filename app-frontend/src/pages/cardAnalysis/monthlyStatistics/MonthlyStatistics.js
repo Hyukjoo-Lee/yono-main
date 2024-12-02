@@ -1,4 +1,5 @@
 import React from 'react';
+import styled from 'styled-components';
 import Piechart from '../../../pages/cardAnalysis/monthlyStatistics/chart/Piechart';
 import Barchart from '../../../pages/cardAnalysis/monthlyStatistics/chart/Barchart';
 
@@ -37,18 +38,18 @@ const piechart_data = [
   { id: '전자제품', value: 3 },
 ];
 
+const Root = styled.div`
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+`;
+
 const MonthlyStatistics = () => {
   return (
-    <div
-      style={{
-        display: 'flex',
-        justifyContent: 'space-around',
-        alignItems: 'center',
-      }}
-    >
+    <Root>
       <Barchart data={barchart_data} />
       <Piechart data={piechart_data} />
-    </div>
+    </Root>
   );
 };
 

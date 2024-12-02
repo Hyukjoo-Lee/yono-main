@@ -1,9 +1,9 @@
 import styled from 'styled-components';
-import CardImage from '../../assets/images/CardImage.png';
 import CardRecBox from './CardRecBox';
 import CommonCardListBox from '../../common/CommonCardListBox';
 import CommonPageInfo from '../../common/CommonPageInfo';
-import CardDemoImage from '../../assets/images/SamsungCard.png';
+import { recommendedCardData } from '../../mockData/cardMockData.js';
+import { useState } from 'react';
 
 const Root = styled.div`
   width: 100%;
@@ -24,62 +24,11 @@ const ListBox = styled.div`
 `;
 
 const CardRecTab = () => {
-  const cardData = [
-    {
-      cardTitle: '삼성카드(신용)',
-      cardImg: CardDemoImage,
-      cardInfo: [
-        { label: '스타벅스 할인', value: '50%', additional: '월 1회' },
-        { label: '대중교통 할인', value: '20%', additional: '청구할인' },
-        { label: '영화 쿠폰 제공', value: '무료', additional: '연 12회' },
-      ],
-    },
-    {
-      cardTitle: '신한카드(신용)',
-      cardImg: CardImage,
-      cardInfo: [
-        { label: '스타벅스 할인', value: '20%', additional: '월 2회' },
-        { label: '대중교통 할인', value: '10%', additional: '청구할인' },
-        { label: '영화 쿠폰 제공', value: '무료', additional: '연 12회' },
-      ],
-    },
-    {
-      cardTitle: '농협카드(신용)',
-      cardImg: CardImage,
-      cardInfo: [
-        { label: '스타벅스 할인', value: '50%', additional: '월 1회' },
-        { label: '대중교통 할인', value: '20%', additional: '청구할인' },
-        { label: '영화 쿠폰 제공', value: '무료', additional: '연 12회' },
-      ],
-    },
-    {
-      cardTitle: '현대카드(체크)',
-      cardImg: CardImage,
-      cardInfo: [
-        { label: '스타벅스 할인', value: '50%', additional: '월 1회' },
-        { label: '대중교통 할인', value: '20%', additional: '청구할인' },
-        { label: '영화 쿠폰 제공', value: '무료', additional: '연 12회' },
-      ],
-    },
-    {
-      cardTitle: '하나카드(신용)',
-      cardImg: CardImage,
-      cardInfo: [
-        { label: '스타벅스 할인', value: '50%', additional: '월 1회' },
-        { label: '대중교통 할인', value: '20%', additional: '청구할인' },
-        { label: '영화 쿠폰 제공', value: '무료', additional: '연 8회' },
-      ],
-    },
-    {
-      cardTitle: '현대카드(신용)',
-      cardImg: CardImage,
-      cardInfo: [
-        { label: '스타벅스 할인', value: '50%', additional: '월 1회' },
-        { label: '대중교통 할인', value: '20%', additional: '청구할인' },
-        { label: '영화 쿠폰 제공', value: '무료', additional: '연 12회' },
-      ],
-    },
-  ];
+  const [selectedCard, setSelectedCard] = useState(recommendedCardData[2]);
+
+  const handleCardSelect = (card) => {
+    setSelectedCard(card);
+  };
 
   return (
     <>
@@ -93,14 +42,19 @@ const CardRecTab = () => {
         }
       />
       <Root>
-        {/* 첫 번째 카드에 대해서만 예시로 전달: 나중에 리스트에서 선택된 카드로 설정필요 */}
         <CardRecBox
-          cardTitle={cardData[0].cardTitle}
-          cardImg={cardData[0].cardImg}
-          cardInfo={cardData[0].cardInfo}
+          cardTitle={selectedCard.cardTitle}
+          cardImg={selectedCard.cardImg}
+          cardInfo={selectedCard.cardInfo}
+          cardMainBenefit={selectedCard.mainBenefit}
         />
         <ListBox>
-          <CommonCardListBox data={cardData} showDetailed={true} />
+          <CommonCardListBox
+            data={recommendedCardData}
+            showDetailed={true}
+            onCardSelect={handleCardSelect}
+            buttonText="자세히보기"
+          />
         </ListBox>
       </Root>
     </>

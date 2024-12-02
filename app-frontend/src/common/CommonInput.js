@@ -2,21 +2,18 @@ import React from 'react';
 import styled from 'styled-components';
 
 const InputStyle = styled.input`
-  width: ${(props) => (props.width ? props.width : '218px')};
-  height: ${(props) => (props.height ? props.height : '38px')};
-  background-color: ${(props) =>
-    props.$background ? props.$background : '#F8F9FE'};
+  width: ${(props) => props.width || '218px'};
+  height: ${(props) => props.height || '38px'};
+  background-color: ${(props) => props.$background || '#F8F9FE'};
   border: 1px solid ${(props) => props.borderColor || '#D7D7D7'};
-  border-radius: ${(props) =>
-    props.borderRadius ? props.borderRadius : '5px'};
+  border-radius: ${(props) => props.borderRadius || '5px'};
   cursor: pointer;
   padding: 0 10px;
   box-sizing: border-box;
   font-size: ${(props) => props.fontSize || '16px'};
 
   &::placeholder {
-    font-size: ${(props) =>
-      props.placeholderFontSize ? props.placeholderFontSize : '16px'};
+    font-size: ${(props) => props.placeholderFontSize || '16px'};
     color: #b0b0b0;
   }
   &:focus {
@@ -36,7 +33,7 @@ const InputStyle = styled.input`
 `;
 
 const TextStyle = styled.p`
-  font-size: ${(props) => (props.TextFontSize ? props.TextFontSize : '16px')};
+  font-size: ${(props) => props.TextFontSize || '16px'};
   color: ${(props) => (props.color ? props.color : props.theme.color.white)};
   margin-bottom: 6px;
   margin-top: 0px;

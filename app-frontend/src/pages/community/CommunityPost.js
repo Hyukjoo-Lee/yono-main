@@ -89,13 +89,23 @@ const TextBox = styled.div`
     margin-left: 25px;
   }
 `;
-const BackBox = styled.div`
+const BottomBox = styled.div`
+  display: flex;
   margin: 20px 0px 20px 0px;
+  justify-content: flex-end;
+  gap: 15px;
 `;
+const commonButtonProps = {
+  width: '80px',
+  height: '50px',
+};
 export function CommunityPost() {
   const navigate = useNavigate();
-  const handleButtonClick = () => {
+  const handleNavigateToCommunity = () => {
     navigate('/community');
+  };
+  const handleNavigateToEditForm = () => {
+    navigate('/editFormBox');
   };
   return (
     <Root>
@@ -113,16 +123,15 @@ export function CommunityPost() {
 
       <Listbox>
         <CommonInput
-          width="790px"
+          width="810px"
           height="50px"
           placeholder="댓글을 입력해주세요."
         />
         <CommonButton
-          width="100px"
-          height="50px"
           background-color="#3563E9"
           color="white"
           text="등록"
+          {...commonButtonProps}
         />
       </Listbox>
 
@@ -146,15 +155,21 @@ export function CommunityPost() {
         })}
       </CommentBox>
 
-      <BackBox>
+      <BottomBox>
         <CommonButton
-          text="목록으로 돌아가기"
-          width="100px"
-          height="40px"
+          text="목록"
           font-size="20px"
-          onClick={handleButtonClick}
+          onClick={handleNavigateToCommunity}
+          {...commonButtonProps}
         />
-      </BackBox>
+        <CommonButton
+          text="수정"
+          font-size="20px"
+          onClick={handleNavigateToEditForm}
+          {...commonButtonProps}
+        />
+        <CommonButton text="삭제" font-size="20px" {...commonButtonProps} />
+      </BottomBox>
     </Root>
   );
 }

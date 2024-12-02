@@ -1,19 +1,29 @@
 import CommonDialog from '../../common/CommonDialog';
-export function AlarmID() {
+import { useNavigate } from 'react-router-dom';
+
+export const AlarmID = ({ open, $setIsDialogIDVisible }) => {
+  const navigate = useNavigate();
+
+  const ConfirmIDDialog = () => {
+    $setIsDialogIDVisible(true);
+    navigate('/');
+  };
+  const ConfirmIDDialogClose = () => {
+    $setIsDialogIDVisible(false);
+    navigate('/');
+  };
+
   return (
     <div>
       <CommonDialog
-        $visible={true}
-        width="500px"
+        open={open}
         height="200px"
-        text2="취소"
         width1="100px"
-        content="000님의 아이디는 000입니다"
-        $Contentwidth="450px"
-        $Contentheight="90px"
+        children="000님의 아이디는 000입니다"
         fontSize="20px"
+        onClick={ConfirmIDDialog}
+        onClose={ConfirmIDDialogClose}
       />
     </div>
   );
-}
-export default AlarmID;
+};
