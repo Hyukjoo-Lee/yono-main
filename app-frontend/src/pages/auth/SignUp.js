@@ -33,31 +33,42 @@ const MiddleTitle = styled.div`
   margin-left: 5px;
 `;
 
-const HiddenBox = styled.div`
+const HiddenIDBox = styled.div`
   display: ${(props) => (props.$isVisible ? 'flex' : 'none')};
   flex-direction: column;
   align-items: flex-start;
   gap: 10px;
 `;
 
-const InputBox = styled.div`
+const InputIDBox = styled.div`
   display: flex;
   flex-direction: row;
   justify-content: space-between;
   align-items: flex-end;
-  width: 277px;
-  margin-bottom: 10px;
+  width: 350px;
+`;
+const HiddenPWBox = styled.div`
+  display: ${(props) => (props.$isVisible ? 'flex' : 'none')};
+  flex-direction: column;
+  align-items: flex-start;
+`;
+const InputPWBox = styled.div`
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: flex-end;
+  width: 350px;
 `;
 
 const ErrorMessage = styled.div`
-  margin-top: 5px;
   color: red;
   font-size: 13px;
+  margin-left: 5px;
 `;
 const CorrectMessage = styled.div`
-  margin-top: 5px;
   color: blue;
   font-size: 13px;
+  margin-left: 5px;
 `;
 const ContainerProps = {
   marginBottom: '13px',
@@ -73,42 +84,72 @@ const ImgContainer = styled.div`
   margin-top: 5px;
   margin-bottom: 10px;
 `;
-
+const InputProps = {
+  width: '350px',
+  $borderColor: 'transparent',
+  background: 'transparent',
+  $focusBorderColor: 'transparent',
+  $marginLeft: '7px',
+};
+const ButtonProps = {
+  width: '73px',
+  height: '37px',
+  background: '#F5F5F5',
+  text: '확인',
+  color: '#757575',
+};
 export function SignUp() {
   const selectOptions = [
     { value: '애완동물 이름은?', label: '애완동물 이름은?' },
     { value: '당신의 생일은?', label: '당신의 생일은?' },
     { value: '당신이 좋아하는 음식은?', label: '당신이 좋아하는 음식은?' },
   ];
-  const [isInputVisible, setIsInputVisible] = useState(false); // 상태 추가
-  const [errorMessage, setErrorMessage] = useState('');
-  const [correctMessage, setCorrectMessage] = useState('');
-  const [correctAnswer, setCorrectAnswer] = useState('');
-  const [answer, setAnswer] = useState('');
+  const [isIDVisible, setIsIDVisible] = useState(false); // 상태 추가
+  const [errorIDMessage, setErrorIDMessage] = useState('');
+  const [correctIDMessage, setCorrectIDMessage] = useState('');
+  const [correctIDAnswer, setCorrectIDAnswer] = useState('');
+  const [answerID, setAnswerID] = useState('');
+  const [isPWVisible, setIsPWVisible] = useState(false); // 상태 추가
+  const [errorPWMessage, setErrorPWMessage] = useState('');
+  const [correctPWMessage, setCorrectPWMessage] = useState('');
+  const [correctPWAnswer, setCorrectPWAnswer] = useState('');
+  const [answerPW, setAnswerPW] = useState('');
 
-  const handleInputChange = (e) => {
+  const handleIDChange = (e) => {
     const value = e.target.value;
-    setAnswer(value);
-    setIsInputVisible(value.length > 0); // 입력이 있으면 `true`, 없으면 `false`
-  };
-  const InputProps = {
-    width: '350px',
-    $borderColor: 'transparent',
-    background: 'transparent',
-    $focusBorderColor: 'transparent',
-    $marginLeft: '7px',
+    setAnswerID(value);
+    setIsIDVisible(value.length > 0); // 입력이 있으면 `true`, 없으면 `false`
   };
 
-  const handleConfirm = () => {
-    if (answer === correctAnswer) {
-      setErrorMessage('');
-      setCorrectMessage('사용가능한 아이디 입니다');
-    } else if (correctAnswer.length === 0) {
-      setErrorMessage('아이디를 입력해 주세요');
-      setCorrectMessage('');
+  const handleIDConfirm = () => {
+    if (answerID === correctIDAnswer) {
+      setErrorIDMessage('');
+      setCorrectIDMessage('사용가능한 아이디 입니다');
+    } else if (correctIDAnswer.length === 0) {
+      setErrorIDMessage('아이디를 입력해 주세요');
+      setCorrectIDMessage('');
     } else {
-      setErrorMessage('아이디가 일치하지 않습니다');
-      setCorrectMessage('');
+      setErrorIDMessage('아이디가 일치하지 않습니다');
+      setCorrectIDMessage('');
+    }
+  };
+
+  const handlePWChange = (e) => {
+    const value = e.target.value;
+    setAnswerPW(value);
+    setIsPWVisible(value.length > 0); // 입력이 있으면 `true`, 없으면 `false`
+  };
+
+  const handlePWConfirm = () => {
+    if (answerPW === correctPWAnswer) {
+      setErrorPWMessage('');
+      setCorrectPWMessage('사용가능한 비밀번호 입니다');
+    } else if (correctPWAnswer.length === 0) {
+      setErrorPWMessage('비밀번호를 입력해 주세요');
+      setCorrectPWMessage('');
+    } else {
+      setErrorPWMessage('비밀번호가 일치하지 않습니다');
+      setCorrectPWMessage('');
     }
   };
 
@@ -123,48 +164,51 @@ export function SignUp() {
           <CommonInput
             placeholder="아이디를 입력하세요"
             text="아이디"
-            onChange={handleInputChange}
-            value={answer}
+            onChange={handleIDChange}
+            value={answerID}
             {...InputProps}
           />
           <CommonHr />
-          <HiddenBox $isVisible={isInputVisible}>
-            <InputBox>
+          <HiddenIDBox $isVisible={isIDVisible}>
+            <InputIDBox>
               <CommonInput
                 placeholder="아이디를 확인해주세요"
                 text="아이디 중복확인"
-                value={correctAnswer}
-                onChange={(e) => setCorrectAnswer(e.target.value)}
+                value={correctIDAnswer}
+                onChange={(e) => setCorrectIDAnswer(e.target.value)}
                 {...InputProps}
               />
-              <CommonButton
-                width="73px"
-                height="37px"
-                background="#F5F5F5"
-                text="확인"
-                color="#757575"
-                onClick={handleConfirm}
-              />
-            </InputBox>
-            {errorMessage && <ErrorMessage>{errorMessage}</ErrorMessage>}
-            {correctMessage && (
-              <CorrectMessage>{correctMessage}</CorrectMessage>
+              <CommonButton {...ButtonProps} onClick={handleIDConfirm} />
+            </InputIDBox>
+            {errorIDMessage && <ErrorMessage>{errorIDMessage}</ErrorMessage>}
+            {correctIDMessage && (
+              <CorrectMessage>{correctIDMessage}</CorrectMessage>
             )}
-          </HiddenBox>
+          </HiddenIDBox>
           <div style={ContainerProps} />
           <CommonInput
             placeholder="비밀번호를 입력하세요"
             text="비밀번호"
+            onChange={handlePWChange}
             {...InputProps}
           />
           <CommonHr />
-          <div style={ContainerProps} />
-          <CommonInput
-            placeholder="비밀번호 확인해주세요"
-            text="비밀번호 확인"
-            {...InputProps}
-          />
-          <CommonHr />
+          <HiddenPWBox $isVisible={isPWVisible}>
+            <InputPWBox>
+              <div style={ContainerProps} />
+              <CommonInput
+                placeholder="비밀번호 확인해주세요"
+                text="비밀번호 확인"
+                onChange={(e) => setCorrectPWAnswer(e.target.value)}
+                {...InputProps}
+              />
+              <CommonButton {...ButtonProps} onClick={handlePWConfirm} />
+            </InputPWBox>
+            {errorPWMessage && <ErrorMessage>{errorPWMessage}</ErrorMessage>}
+            {correctPWMessage && (
+              <CorrectMessage>{correctPWMessage}</CorrectMessage>
+            )}
+          </HiddenPWBox>
           <div style={ContainerProps} />
           <CommonInput
             placeholder="닉네임을 적어주세요"
