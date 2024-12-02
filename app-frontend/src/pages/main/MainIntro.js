@@ -1,6 +1,6 @@
-import React from "react";
-import styled from "styled-components";
-import Main_img from "../../assets/images/main_img.png";
+import React from 'react';
+import styled from 'styled-components';
+import Main_img from '../../assets/images/main_img.png';
 
 const StyledMainIntro = styled.div`
   display: flex;
@@ -29,13 +29,10 @@ const StyledSubTitle = styled.p`
 `;
 
 const StyledMainImg = styled.div`
-  width: 533px;
-  height: 400px;
-  overflow: hidden;
   font-size: 30px;
   & img {
     width: 100%;
-    padding-top: 15px;
+    padding-top: 25px;
   }
 `;
 
@@ -47,23 +44,24 @@ const StyledTextCon = styled.div`
 `;
 
 const StyledButton = styled.div`
-  width:162px;
-  height:48px;
-  background-color:#2357A2;
-  border-radius:50px;
-  display:flex;
+  width: 162px;
+  height: 48px;
+  background-color: #2357a2;
+  border-radius: 50px;
+  display: flex;
   align-items: center;
   justify-content: center;
-`
+  margin-top: 10px;
+`;
 const StyledButtonA = styled.a`
-  color:white;
-  text-decoration:none;
-  font-size:20px;
-  font-weight:500;
-  display:flex;
+  color: white;
+  text-decoration: none;
+  font-size: 20px;
+  font-weight: 500;
+  display: flex;
   align-items: center;
   justify-content: center;
-`
+`;
 
 const MainIntro = () => {
   return (
@@ -78,11 +76,11 @@ const MainIntro = () => {
           챌린지로 뱃지 받고 절약을 재밌게 하세요(멘트바꿀예정)
         </StyledSubTitle>
         <StyledButton>
-        <StyledButtonA href="#">더 알아보기</StyledButtonA>
+          <StyledButtonA href="/intro">더 알아보기</StyledButtonA>
         </StyledButton>
       </StyledTextCon>
       <StyledMainImg>
-        <img src={Main_img} alt="메인사진"/>
+        <img src={Main_img} alt="메인사진" />
       </StyledMainImg>
     </StyledMainIntro>
   );
