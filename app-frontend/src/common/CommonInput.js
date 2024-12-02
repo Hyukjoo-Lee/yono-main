@@ -6,7 +6,7 @@ const InputStyle = styled.input`
   height: ${(props) => (props.height ? props.height : '38px')};
   background-color: ${(props) =>
     props.$background ? props.$background : '#F8F9FE'};
-  border: 1px solid ${(props) => props.borderColor || '#D7D7D7'};
+  border: 1px solid ${(props) => props.$borderColor || '#D7D7D7'};
   border-radius: ${(props) =>
     props.borderRadius ? props.borderRadius : '5px'};
   cursor: pointer;
