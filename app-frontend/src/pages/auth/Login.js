@@ -3,7 +3,7 @@ import styled from 'styled-components';
 import CommonInput from '../../common/CommonInput';
 import CustomButton from '../../common/CommonButton';
 import or from '../../assets/images/or.png';
-import kakaO from '../../assets/images/kakao.png';
+import kakaO from '../../assets/images/kakaO.png';
 import google from '../../assets/images/google.png';
 import IconButton from './Component/IconButton'; // IButton을 정확히 import
 import CommonRoot from '../../common/CommonRoot';

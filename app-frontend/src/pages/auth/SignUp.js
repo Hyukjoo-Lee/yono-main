@@ -30,24 +30,37 @@ const MiddleContainer = styled.div`
 const MiddleTitle = styled.div`
   font-size: 16px;
   color: #757575;
+  margin-left: 5px;
 `;
 
 const HiddenBox = styled.div`
   display: ${(props) => (props.$isVisible ? 'flex' : 'none')};
-  flex-direction: flex-end;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 10px;
+`;
+
+const InputBox = styled.div`
+  display: flex;
+  flex-direction: row;
   justify-content: space-between;
   align-items: flex-end;
-  width: 103%;
+  width: 277px;
   margin-bottom: 10px;
 `;
+
 const ErrorMessage = styled.div`
   margin-top: 5px;
   color: red;
-
+  font-size: 13px;
+`;
+const CorrectMessage = styled.div`
+  margin-top: 5px;
+  color: blue;
   font-size: 13px;
 `;
 const ContainerProps = {
-  marginBottom: '5px',
+  marginBottom: '13px',
 };
 
 const ImgContainer = styled.div`
@@ -69,28 +82,33 @@ export function SignUp() {
   ];
   const [isInputVisible, setIsInputVisible] = useState(false); // 상태 추가
   const [errorMessage, setErrorMessage] = useState('');
-  const [correct, setCorrect] = useState('');
+  const [correctMessage, setCorrectMessage] = useState('');
+  const [correctAnswer, setCorrectAnswer] = useState('');
+  const [answer, setAnswer] = useState('');
 
-  const correctAnswer = {
-    123: '123',
-  };
   const handleInputChange = (e) => {
     const value = e.target.value;
+    setAnswer(value);
     setIsInputVisible(value.length > 0); // 입력이 있으면 `true`, 없으면 `false`
+  };
+  const InputProps = {
+    width: '350px',
+    $borderColor: 'transparent',
+    background: 'transparent',
+    $focusBorderColor: 'transparent',
+    $marginLeft: '7px',
   };
 
   const handleConfirm = () => {
-    setIsInputVisible(true);
-    if (correct && correctAnswer[correct]) {
-      const correctAnswerValue = correctAnswer[correct];
-
-      if (correctAnswerValue === correct) {
-        setErrorMessage('사용 가능한 아이디 입니다.');
-      } else {
-        setErrorMessage('아이디가 다릅니다.');
-      }
+    if (answer === correctAnswer) {
+      setErrorMessage('');
+      setCorrectMessage('사용가능한 아이디 입니다');
+    } else if (correctAnswer.length === 0) {
+      setErrorMessage('아이디를 입력해 주세요');
+      setCorrectMessage('');
     } else {
-      setErrorMessage('아이디가 다릅니다.');
+      setErrorMessage('아이디가 일치하지 않습니다');
+      setCorrectMessage('');
     }
   };
 
@@ -105,80 +123,76 @@ export function SignUp() {
           <CommonInput
             placeholder="아이디를 입력하세요"
             text="아이디"
-            background="#F5F5F5"
-            width="310px"
             onChange={handleInputChange}
+            value={answer}
+            {...InputProps}
           />
-          <div style={ContainerProps} />
           <CommonHr />
           <HiddenBox $isVisible={isInputVisible}>
-            <CommonInput
-              placeholder="아이디 중복 확인"
-              text="아이디 중복확인"
-              background="#F5F5F5"
-              width="310px"
-              value={correct}
-              onChange={(e) => setCorrect(e.target.value)}
-            />
-            <CommonButton
-              width="73px"
-              height="37px"
-              background="#F5F5F5"
-              text="중복확인"
-              color="#757575"
-              onClick={handleConfirm}
-            />
+            <InputBox>
+              <CommonInput
+                placeholder="아이디를 확인해주세요"
+                text="아이디 중복확인"
+                value={correctAnswer}
+                onChange={(e) => setCorrectAnswer(e.target.value)}
+                {...InputProps}
+              />
+              <CommonButton
+                width="73px"
+                height="37px"
+                background="#F5F5F5"
+                text="확인"
+                color="#757575"
+                onClick={handleConfirm}
+              />
+            </InputBox>
+            {errorMessage && <ErrorMessage>{errorMessage}</ErrorMessage>}
+            {correctMessage && (
+              <CorrectMessage>{correctMessage}</CorrectMessage>
+            )}
           </HiddenBox>
-          {errorMessage && <ErrorMessage>{errorMessage}</ErrorMessage>}
-          <CommonHr />
           <div style={ContainerProps} />
           <CommonInput
             placeholder="비밀번호를 입력하세요"
             text="비밀번호"
-            background="#F5F5F5"
-            width="310px"
+            {...InputProps}
           />
-          <div style={ContainerProps} />
           <CommonHr />
           <div style={ContainerProps} />
           <CommonInput
             placeholder="비밀번호 확인해주세요"
             text="비밀번호 확인"
-            background="#F5F5F5"
-            width="310px"
+            {...InputProps}
           />
-          <div style={ContainerProps} />
           <CommonHr />
           <div style={ContainerProps} />
           <CommonInput
             placeholder="닉네임을 적어주세요"
             text="닉네임"
-            background="#F5F5F5"
-            width="310px"
+            {...InputProps}
           />
-          <div style={ContainerProps} />
           <CommonHr />
-          <div style={ContainerProps} />{' '}
+          <div style={ContainerProps} />
           <CommonSelect
             text="질문선택"
             height="35px"
-            width="300px"
+            width="350px"
             padding="10px"
             color="#464646"
             labelColor="#464646"
             options={selectOptions}
             find="질문을 선택하세요"
+            $fieldBorderColor="transparent"
+            background="transparent"
+            $marginLeft="7px"
           />
-          <div style={ContainerProps} />
           <CommonHr />
           <div style={ContainerProps} />{' '}
           <CommonInput
             placeholder="답변을 적어주세요"
             text="답변"
-            background="#F5F5F5"
-            width="310px"
+            {...InputProps}
           />
-          <div style={ContainerProps} />
           <CommonHr />
           <div style={ContainerProps} />{' '}
           <ImgContainer>캐릭터 선택</ImgContainer>
