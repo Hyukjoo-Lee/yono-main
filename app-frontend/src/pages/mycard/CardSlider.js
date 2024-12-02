@@ -40,7 +40,13 @@ const CardBenefit = styled.p`
   margin: 0px;
 `;
 
-const CardSlider = ({ showDetailed, cardImages, cardTitle, cardInfo }) => {
+const CardSlider = ({
+  showDetailed,
+  cardImages,
+  cardTitle,
+  cardMainBenefit,
+  cardInfo,
+}) => {
   return (
     <>
       {showDetailed && cardTitle && cardInfo ? (
@@ -48,7 +54,7 @@ const CardSlider = ({ showDetailed, cardImages, cardTitle, cardInfo }) => {
           <img src={cardImages} alt="card" />
           <CardInfo>
             <CardTitle>{cardTitle}</CardTitle>
-            <CardMainBenfit>국내외 가맹점 0.8% 할인</CardMainBenfit>
+            <CardMainBenfit>{cardMainBenefit}</CardMainBenfit>
             {cardInfo.map((info, index) => (
               <CardBenefit key={index}>
                 {info.label} {info.value} ({info.additional})
@@ -137,7 +143,7 @@ const CustomSlides = ({ cardImages, showDetailed, cardData }) => {
 
   const settings = {
     dots: true,
-    infinite: false,
+    infinite: true,
     speed: 500,
     slidesToShow: 1,
     slidesToScroll: 1,
@@ -155,6 +161,7 @@ const CustomSlides = ({ cardImages, showDetailed, cardData }) => {
               <CardSlider
                 showDetailed={showDetailed}
                 cardTitle={card.cardTitle}
+                cardMainBenefit={card.mainBenefit}
                 cardInfo={card.cardInfo}
                 cardImages={card.cardImg}
               />

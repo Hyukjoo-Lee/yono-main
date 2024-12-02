@@ -5,7 +5,7 @@ import theme from '../../theme/theme';
 import LiveTvIcon from '@mui/icons-material/LiveTv';
 import CoffeeIcon from '@mui/icons-material/Coffee';
 import BusIcon from '@mui/icons-material/DirectionsBusFilled';
-
+import StarIcon from '@mui/icons-material/Star';
 const Root = styled(Box)`
   width: 100%;
   border-radius: 5px;
@@ -19,7 +19,7 @@ const Root = styled(Box)`
 `;
 
 const RootIn = styled.div`
-  width: 300px;
+  width: 100%;
   padding: 20px;
   text-align: center;
   position: relative;
@@ -73,6 +73,26 @@ const ButtonWrapper = styled(Box)`
   margin-top: 10px;
 `;
 
+const CardMainBenefit = styled.p`
+  font-size: ${(props) => props.theme.fontSize.md};
+  font-weight: 500;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  margin: 0px 0px 8px 0px;
+
+  & > p {
+    margin: 0 0 0 0;
+  }
+
+  & > svg {
+    margin-right: 5px;
+    color: #ffd900;
+    font-size: ${(props) => props.theme.fontSize.lg};
+  }
+`;
+
 const BenefitIcon = ({ benefit }) => {
   switch (benefit) {
     case '스타벅스 할인':
@@ -86,13 +106,17 @@ const BenefitIcon = ({ benefit }) => {
   }
 };
 
-const CardRecBox = ({ cardTitle, cardImg, cardInfo }) => {
+const CardRecBox = ({ cardTitle, cardImg, cardInfo, cardMainBenefit }) => {
   return (
     <Root>
       <RootIn>
         <CardImage src={cardImg} alt="카드 이미지" />
         <CardTitle>{cardTitle}</CardTitle>
         <CardSubTitle>카드 혜택</CardSubTitle>
+        <CardMainBenefit>
+          <StarIcon />
+          {cardMainBenefit}
+        </CardMainBenefit>
         <BenefitList>
           {cardInfo.map((benefit, index) => (
             <BenefitItem key={index}>
