@@ -3,7 +3,7 @@ import CommonInput from '../../common/CommonInput';
 import CommonSelect from '../../common/CommonSelect';
 import CommonButton from '../../common/CommonButton';
 import CommonPageInfo from '../../common/CommonPageInfo';
-import HorizonLine from './HorizontalLine';
+import CommonHr from '../../common/CommonHr';
 import { useNavigate } from 'react-router-dom';
 
 const Root = styled.div`
@@ -65,7 +65,7 @@ export function EditFormBox() {
   return (
     <Root>
       <CommonPageInfo title={'수정게시판'} text={<p></p>} />
-      <HorizonLine />
+      <CommonHr />
       <FormBox>
         <Row>
           <span>제목</span>
@@ -105,7 +105,7 @@ export function EditFormBox() {
           />
         </Row>
       </FormBox>
-      <HorizonLine />
+      <CommonHr />
       <Box1>
         <CommonButton text="저장" width="80px" height="50px" font-size="20px" />
         <CommonButton

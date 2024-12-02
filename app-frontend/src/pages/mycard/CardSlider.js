@@ -4,12 +4,22 @@ import 'slick-carousel/slick/slick.css';
 import 'slick-carousel/slick/slick-theme.css';
 import { ReactComponent as ArrowImage } from '../../assets/images/arrow-slider.svg';
 import styled from 'styled-components';
-
-import CardDemoImage from '../../assets/images/card_demo.png';
+import CardDemoImage from '../../assets/images/cards/default-card.png';
 
 const SliderContainer = styled.div`
   width: 80%;
   margin: 47px auto 0;
+`;
+
+const SlideContainer = styled.div`
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  img {
+    width: 185px;
+    height: 285px;
+  }
 `;
 
 const CardInfo = styled.div`
@@ -27,7 +37,7 @@ const CardTitle = styled.h3`
   margin: 0px 0px 15px 0px;
 `;
 
-const CardMainBenfit = styled.p`
+const CardMainBenefit = styled.p`
   font-size: 22px;
   font-weight: 500;
   margin: 0px 0px 15px 0px;
@@ -37,49 +47,7 @@ const CardBenefit = styled.p`
   font-size: 18px;
   font-weight: 200;
   line-height: 25px;
-  margin: 0px;
-`;
-
-const CardSlider = ({
-  showDetailed,
-  cardImages,
-  cardTitle,
-  cardMainBenefit,
-  cardInfo,
-}) => {
-  return (
-    <>
-      {showDetailed && cardTitle && cardInfo ? (
-        <SlideContainer>
-          <img src={cardImages} alt="card" />
-          <CardInfo>
-            <CardTitle>{cardTitle}</CardTitle>
-            <CardMainBenfit>{cardMainBenefit}</CardMainBenfit>
-            {cardInfo.map((info, index) => (
-              <CardBenefit key={index}>
-                {info.label} {info.value} ({info.additional})
-              </CardBenefit>
-            ))}
-          </CardInfo>
-        </SlideContainer>
-      ) : (
-        <SlideContainer>
-          <img src={cardImages} alt="card" />
-        </SlideContainer>
-      )}
-    </>
-  );
-};
-
-const SlideContainer = styled.div`
-  display: flex;
-  align-items: center;
-  justify-content: center;
-
-  img {
-    width: 185px;
-    height: 285px;
-  }
+  margin: 0;
 `;
 
 const ArrowWrapper = styled.div`
@@ -109,28 +77,51 @@ const ArrowWrapper = styled.div`
   }
 `;
 
-const SlickArrowLeft = ({ currentSlide, slideCount, ...props }) => (
-  <ArrowWrapper
-    {...props}
-    className={
-      'slick-prev slick-arrow' + (currentSlide === 0 ? ' slick-disabled' : '')
-    }
-  >
-    <ArrowImage />
-  </ArrowWrapper>
-);
+const DefaultImageContainer = styled.div`
+  width: 185px;
+  height: 285px;
+  margin: 47px auto 0;
+`;
 
-const SlickArrowRight = ({ currentSlide, slideCount, ...props }) => (
-  <ArrowWrapper
-    {...props}
-    className={
-      'slick-next slick-arrow' +
-      (currentSlide === slideCount - 1 ? ' slick-disabled' : '')
-    }
-  >
-    <ArrowImage />
-  </ArrowWrapper>
-);
+const SlickArrow = ({ currentSlide, slideCount, direction, ...props }) => {
+  const isLeft = direction === 'left';
+  return (
+    <ArrowWrapper
+      {...props}
+      className={
+        `slick-${isLeft ? 'prev' : 'next'}` +
+        (currentSlide === slideCount - 1 ? ' slick-disabled' : '')
+      }
+    >
+      <ArrowImage />
+    </ArrowWrapper>
+  );
+};
+
+const CardSlider = ({
+  cardImages,
+  showDetailed,
+  cardTitle,
+  cardMainBenefit,
+  cardInfo,
+}) => {
+  return (
+    <SlideContainer>
+      <img src={cardImages || CardDemoImage} alt="card" />
+      {showDetailed && cardTitle && cardInfo && (
+        <CardInfo>
+          <CardTitle>{cardTitle}</CardTitle>
+          <CardMainBenefit>{cardMainBenefit}</CardMainBenefit>
+          {cardInfo.map((info, index) => (
+            <CardBenefit key={index}>
+              {info.label} {info.value} ({info.additional})
+            </CardBenefit>
+          ))}
+        </CardInfo>
+      )}
+    </SlideContainer>
+  );
+};
 
 const CustomSlides = ({ cardImages, showDetailed, cardData }) => {
   const sliderRef = useRef(null);
@@ -148,34 +139,40 @@ const CustomSlides = ({ cardImages, showDetailed, cardData }) => {
     slidesToShow: 1,
     slidesToScroll: 1,
     arrows: true,
-    nextArrow: <SlickArrowRight />,
-    prevArrow: <SlickArrowLeft />,
+    nextArrow: <SlickArrow direction="right" />,
+    prevArrow: <SlickArrow direction="left" />,
   };
+
+  if (!cardImages && !cardData) {
+    return (
+      <SlideContainer>
+        <DefaultImageContainer>
+          <img src={CardDemoImage} alt="default card" />
+        </DefaultImageContainer>
+      </SlideContainer>
+    );
+  }
 
   return (
     <SliderContainer>
       <Slider ref={sliderRef} {...settings}>
-        {showDetailed && cardData ? (
-          cardData.map((card, index) => (
-            <div key={index} style={{ display: 'flex' }}>
-              <CardSlider
-                showDetailed={showDetailed}
-                cardTitle={card.cardTitle}
-                cardMainBenefit={card.mainBenefit}
-                cardInfo={card.cardInfo}
-                cardImages={card.cardImg}
-              />
-            </div>
-          ))
-        ) : cardImages ? (
-          cardImages.map((card, index) => (
-            <div key={index} style={{ display: 'flex' }}>
-              <CardSlider cardImages={card} />
-            </div>
-          ))
-        ) : (
-          <CardSlider cardImages={CardDemoImage} />
-        )}
+        {showDetailed && cardData
+          ? cardData.map((card, index) => (
+              <div key={index}>
+                <CardSlider
+                  showDetailed={showDetailed}
+                  cardTitle={card.cardTitle}
+                  cardMainBenefit={card.mainBenefit}
+                  cardInfo={card.cardInfo}
+                  cardImages={card.cardImg}
+                />
+              </div>
+            ))
+          : cardImages?.map((card, index) => (
+              <div key={index}>
+                <CardSlider cardImages={card} />
+              </div>
+            ))}
       </Slider>
     </SliderContainer>
   );
