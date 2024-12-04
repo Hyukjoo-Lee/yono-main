@@ -55,6 +55,13 @@ const StyledBoxImg = styled.div`
   & img {
     width: 90%;
   }
+  & img:nth-of-type(1) {
+    padding-left: 8px;
+  }
+  & img:nth-of-type(2) {
+    width: 100px;
+    height: 100px;
+  }
 `;
 const MainComponent = () => {
   const mainBoxData = [
