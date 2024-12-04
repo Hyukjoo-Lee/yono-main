@@ -53,7 +53,6 @@ const FindForm = ({
   setSelectedValue,
   errorMessage,
   onClick,
-  onClose,
   onChange,
 }) => {
   const selectOptions = [
