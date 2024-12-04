@@ -214,7 +214,7 @@ export function SignUp() {
           )}
           <div style={ContainerProps} />
           <CommonInput
-            placeholder="닉네임을 적어주세요"
+            placeholder="닉네임을 입력하세요"
             text="닉네임"
             {...InputProps}
           />
@@ -236,7 +236,7 @@ export function SignUp() {
           <CommonHr />
           <div style={ContainerProps} />{' '}
           <CommonInput
-            placeholder="답변을 적어주세요"
+            placeholder="답변을 입력하세요"
             text="답변"
             {...InputProps}
           />
