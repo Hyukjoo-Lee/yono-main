@@ -151,7 +151,7 @@ export function SignUp() {
           <CommonHr />
           <div style={ContainerProps} />
           <CommonInput
-            placeholder="닉네임을 적어주세요"
+            placeholder="닉네임을 입력하세요"
             text="닉네임"
             background="#F5F5F5"
             width="310px"
@@ -173,7 +173,7 @@ export function SignUp() {
           <CommonHr />
           <div style={ContainerProps} />{' '}
           <CommonInput
-            placeholder="답변을 적어주세요"
+            placeholder="답변을 입력하세요"
             text="답변"
             background="#F5F5F5"
             width="310px"
