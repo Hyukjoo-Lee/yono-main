@@ -2,7 +2,7 @@ import styled from 'styled-components';
 import CardRecBox from './CardRecBox';
 import CommonCardListBox from '../../common/CommonCardListBox';
 import CommonPageInfo from '../../common/CommonPageInfo';
-import { cardMockData } from '../../mockData/cardMockData.js';
+import { recommendedCardData } from '../../mockData/cardMockData.js';
 import { useState } from 'react';
 
 const Root = styled.div`
@@ -24,7 +24,7 @@ const ListBox = styled.div`
 `;
 
 const CardRecTab = () => {
-  const [selectedCard, setSelectedCard] = useState(cardMockData[2]);
+  const [selectedCard, setSelectedCard] = useState(recommendedCardData[2]);
 
   const handleCardSelect = (card) => {
     setSelectedCard(card);
@@ -46,12 +46,14 @@ const CardRecTab = () => {
           cardTitle={selectedCard.cardTitle}
           cardImg={selectedCard.cardImg}
           cardInfo={selectedCard.cardInfo}
+          cardMainBenefit={selectedCard.mainBenefit}
         />
         <ListBox>
           <CommonCardListBox
-            data={cardMockData}
+            data={recommendedCardData}
             showDetailed={true}
             onCardSelect={handleCardSelect}
+            buttonText="자세히보기"
           />
         </ListBox>
       </Root>

@@ -2,16 +2,16 @@ import React from 'react';
 import Calendar from './calendar/Calendar';
 import styled from 'styled-components';
 import CommonCardListBox from '../../../common/CommonCardListBox';
-import CardImage from '../../../assets/images/CardImage.png';
 import { ReactComponent as ExcellentCoin } from '../../../assets/images/ExcellentCoin.svg';
 import { ReactComponent as VeryGoodCoin } from '../../../assets/images/VeryGoodCoin.svg';
 import { ReactComponent as GoodCoin } from '../../../assets/images/GoodCoin.svg';
 import { ReactComponent as BadCoin } from '../../../assets/images/BadCoin.svg';
+import { dailyStatisticsCardData } from '../../../mockData/cardMockData.js';
 
 const Root = styled.div`
   width: 100%;
   display: grid;
-  grid-template-columns: 740px 1fr;
+  grid-template-columns: 700px 1fr;
   gap: 30px;
   box-sizing: border-box;
 `;
@@ -56,54 +56,6 @@ const ListBox = styled.div`
 `;
 
 const DailyStatistics = () => {
-  const cardList = [
-    {
-      title: '현대카드(신용)',
-      cardImage: CardImage,
-      info: [
-        { label: '날짜', value: '2024.10.20' },
-        { label: '사용처', value: '88맥주집' },
-        { label: '카테고리', value: '식당' },
-      ],
-    },
-    {
-      title: '신한카드(체크)',
-      cardImage: CardImage,
-      info: [
-        { label: '날짜', value: '2024.10.20' },
-        { label: '사용처', value: '삼겹살' },
-        { label: '카테고리', value: '식당' },
-      ],
-    },
-    {
-      title: '국민카드(신용)',
-      cardImage: CardImage,
-      info: [
-        { label: '날짜', value: '2024.10.20' },
-        { label: '사용처', value: 'kg중국집' },
-        { label: '카테고리', value: '식당' },
-      ],
-    },
-    {
-      title: '현대카드(신용)',
-      cardImage: CardImage,
-      info: [
-        { label: '날짜', value: '2024.10.20' },
-        { label: '사용처', value: 'kg쌀국수' },
-        { label: '카테고리', value: '식당' },
-      ],
-    },
-    {
-      title: '현대카드(신용)',
-      cardImage: CardImage,
-      info: [
-        { label: '날짜', value: '2024.10.20' },
-        { label: '사용처', value: 'kg쌀국수' },
-        { label: '카테고리', value: '식당' },
-      ],
-    },
-  ];
-
   const Lists = [
     { icon: <BadCoin />, text: '0~25% 소비절약' },
     { icon: <GoodCoin />, text: '26~50% 소비절약' },
@@ -124,9 +76,9 @@ const DailyStatistics = () => {
         </CalendarBottomBox>
       </CalendarBox>
       <ListBox>
-        {cardList.map((item, index) => (
+        {dailyStatisticsCardData.map((item, index) => (
           <CommonCardListBox
-            key={index}
+            key={item.id}
             cardTitle={item.title}
             cardImg={item.cardImage}
             cardInfo={item.info}

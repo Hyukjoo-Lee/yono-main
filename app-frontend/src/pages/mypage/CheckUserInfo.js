@@ -64,32 +64,75 @@ const TextStyle = styled.p`
   margin-top: 0px;
 `;
 
+const ErrorText = styled.p`
+  color: red;
+  font-size: 14px;
+  margin: 5px 0 0;
+  text-align: center;
+  width: 100%;
+`;
+
 const CheckUserInfo = ({
   userName,
   userId,
-  password,
+  originPassword,
   email,
   nickname,
   Target_Expenditure_Amout,
 }) => {
   const [isEditing, setIsEditing] = useState(true);
+  const [passwordError, setPasswordError] = useState('');
   const [userInfo, setUserInfo] = useState({
     userName: userName || ``,
     nickname: nickname || ``,
     userId: userId || '',
-    email: email || ``,
+    email: email || '',
     Target_Expenditure_Amout: Target_Expenditure_Amout || '',
+    password: '',
+    newPassword: '',
+    confirmPassword: '',
   });
 
   const toggleEdit = () => {
     setIsEditing(!isEditing);
+    setPasswordError('');
   };
 
   const cancelEdit = () => {
+    userInfo.userName = userName;
+    userInfo.nickname = nickname;
+    userInfo.userId = userId;
+    userInfo.email = email;
+    userInfo.Target_Expenditure_Amout = Target_Expenditure_Amout;
+    userInfo.password = '';
+    userInfo.newPassword = '';
+    userInfo.confirmPassword = '';
     setIsEditing(!isEditing);
   };
 
+  const isFormValid = () => {
+    for (const key in userInfo) {
+      if (userInfo[key].trim() === '') {
+        return 1;
+      }
+    }
+
+    if (userInfo.newPassword !== userInfo.confirmPassword) {
+      return 2;
+    }
+  };
+
   const save = () => {
+    if (isFormValid() === 1) {
+      setPasswordError('모든 정보를 입력해주세요!');
+      return;
+    } else if (originPassword !== userInfo.password) {
+      setPasswordError('기존 비밀번호가 일치하지 않습니다!');
+      return;
+    } else if (isFormValid() === 2) {
+      setPasswordError('비밀번호 확인이 일치하지 않습니다!');
+      return;
+    }
     // 수정사항 저장 로직 추가 필요
     setIsEditing(!isEditing);
   };
@@ -110,6 +153,9 @@ const CheckUserInfo = ({
       ...prev,
       [key]: value,
     }));
+    if (key === 'newPassword' || key === 'confirmPassword') {
+      setPasswordError('');
+    }
   };
 
   const commonButtonProps = {
@@ -174,18 +220,24 @@ const CheckUserInfo = ({
           <CommonInput
             text="기존 비밀번호 입력"
             placeholder="기존 비밀번호 입력하세요"
+            value={userInfo.password}
+            onChange={(e) => handleChange('password', e.target.value)}
             {...abledInputProps}
           />
 
           <CommonInput
             text="새로운 비밀번호 입력"
             placeholder="새로운 비밀번호를 입력하세요"
+            value={userInfo.newPassword}
+            onChange={(e) => handleChange('newPassword', e.target.value)}
             {...abledInputProps}
           />
 
           <CommonInput
             text="비밀번호 확인"
             placeholder="비밀번호 확인"
+            value={userInfo.confirmPassword}
+            onChange={(e) => handleChange('confirmPassword', e.target.value)}
             {...abledInputProps}
           />
 
@@ -211,6 +263,8 @@ const CheckUserInfo = ({
             캐릭터 선택
             <ImageGallery images={images} />
           </Root2>
+
+          {passwordError && <ErrorText>{passwordError}</ErrorText>}
         </>
       )}
 

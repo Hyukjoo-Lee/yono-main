@@ -70,7 +70,8 @@ export const registeredCardData = [
     type: CARD_TYPES.CREDIT,
     cardNumber: '0000-0000-0000-0000',
     cardTitle: `${CARD_COMPANIES.KB} My WE:SH카드 (${CARD_TYPES.CREDIT})`,
-    cardImg: card_images['0301'].my.my1,
+    cardImg: card_images['0301'].my.my2,
+    mainBenefit: '국내외 가맹점 0.8% 할인',
     cardInfo: [
       { label: '스타벅스 할인', value: '50%', additional: '월 1회' },
       { label: '대중교통 할인', value: '20%', additional: '청구할인' },
@@ -82,7 +83,8 @@ export const registeredCardData = [
     cardNumber: '0000-0000-0000-0000',
     type: CARD_TYPES.CREDIT,
     cardTitle: `${CARD_COMPANIES.HYUNDAI} M카드 (${CARD_TYPES.CREDIT})`,
-    cardImg: card_images['0302'].m.m1,
+    cardImg: card_images['0302'].m.m2,
+    mainBenefit: '통신·구독·멤버십 최대 20% 적립',
     cardInfo: [
       { label: '스타벅스 할인', value: '50%', additional: '월 1회' },
       { label: '대중교통 할인', value: '20%', additional: '청구할인' },
@@ -94,7 +96,8 @@ export const registeredCardData = [
     type: CARD_TYPES.CREDIT,
     cardNumber: '0000-0000-0000-0000',
     cardTitle: `${CARD_COMPANIES.SAMSUNG}iD SIMPLE카드 (${CARD_TYPES.CREDIT})`,
-    cardImg: card_images['0303'].id.id1,
+    cardImg: card_images['0303'].id.id2,
+    mainBenefit: '온라인 쇼핑 최대 10% 할인',
     cardInfo: [
       { label: '스타벅스 할인', value: '50%', additional: '월 1회' },
       { label: '대중교통 할인', value: '20%', additional: '청구할인' },
@@ -106,7 +109,8 @@ export const registeredCardData = [
     type: CARD_TYPES.CREDIT,
     cardNumber: '0000-0000-0000-0000',
     cardTitle: `${CARD_COMPANIES.NONGHYUP} 별다줄카드 (${CARD_TYPES.CREDIT})`,
-    cardImg: card_images['0304'].byul.byul1,
+    cardImg: card_images['0304'].byul.byul2,
+    mainBenefit: '온라인 쇼핑 최대 5% 할인',
     cardInfo: [
       { label: '스타벅스 할인', value: '50%', additional: '월 1회' },
       { label: '대중교통 할인', value: '20%', additional: '청구할인' },
@@ -118,7 +122,8 @@ export const registeredCardData = [
     type: CARD_TYPES.CREDIT,
     cardNumber: '0000-0000-0000-0000',
     cardTitle: `${CARD_COMPANIES.SHINHAN} 처음카드 (${CARD_TYPES.CREDIT})`,
-    cardImg: card_images['0306'].first.first1,
+    cardImg: card_images['0306'].first.first2,
+    mainBenefit: '캐시백 최대 5% 제공',
     cardInfo: [
       { label: '스타벅스 할인', value: '50%', additional: '월 1회' },
       { label: '대중교통 할인', value: '20%', additional: '청구할인' },
@@ -132,7 +137,8 @@ export const recommendedCardData = [
   {
     id: '0301',
     cardTitle: `${CARD_COMPANIES.KB} My WE:SH카드 (${CARD_TYPES.CREDIT})`,
-    cardImg: card_images['0301'].my,
+    cardImg: card_images['0301'].my.my1,
+    mainBenefit: '국내외 가맹점 0.8% 할인',
     cardInfo: [
       { label: '스타벅스 할인', value: '50%', additional: '월 1회' },
       { label: '대중교통 할인', value: '20%', additional: '청구할인' },
@@ -142,7 +148,8 @@ export const recommendedCardData = [
   {
     id: '0302',
     cardTitle: `${CARD_COMPANIES.HYUNDAI} M카드 (${CARD_TYPES.CREDIT})`,
-    cardImg: card_images['0302'].m,
+    cardImg: card_images['0302'].m.m1,
+    mainBenefit: '통신·구독·멤버십 최대 20% 적립',
     cardInfo: [
       { label: '스타벅스 할인', value: '50%', additional: '월 1회' },
       { label: '대중교통 할인', value: '20%', additional: '청구할인' },
@@ -152,7 +159,8 @@ export const recommendedCardData = [
   {
     id: '0303',
     cardTitle: `${CARD_COMPANIES.SAMSUNG}iD SIMPLE카드 (${CARD_TYPES.CREDIT})`,
-    cardImg: card_images['0303'].id,
+    cardImg: card_images['0303'].id.id1,
+    mainBenefit: '온라인 쇼핑 최대 10% 할인',
     cardInfo: [
       { label: '스타벅스 할인', value: '50%', additional: '월 1회' },
       { label: '대중교통 할인', value: '20%', additional: '청구할인' },
@@ -162,7 +170,8 @@ export const recommendedCardData = [
   {
     id: '0304',
     cardTitle: `${CARD_COMPANIES.NONGHYUP} 별다줄카드 (${CARD_TYPES.CREDIT})`,
-    cardImg: card_images['0304'].byul,
+    cardImg: card_images['0304'].byul.byul1,
+    mainBenefit: '온라인 쇼핑 최대 5% 할인',
     cardInfo: [
       { label: '스타벅스 할인', value: '50%', additional: '월 1회' },
       { label: '대중교통 할인', value: '20%', additional: '청구할인' },
@@ -172,11 +181,71 @@ export const recommendedCardData = [
   {
     id: '0306',
     cardTitle: `${CARD_COMPANIES.SHINHAN} 처음카드 (${CARD_TYPES.CREDIT})`,
-    cardImg: card_images['0306'].first,
+    cardImg: card_images['0306'].first.first1,
+    mainBenefit: '캐시백 최대 5% 제공',
     cardInfo: [
       { label: '스타벅스 할인', value: '50%', additional: '월 1회' },
       { label: '대중교통 할인', value: '20%', additional: '청구할인' },
       { label: '영화 쿠폰 제공', value: '무료', additional: '연 12회' },
+    ],
+  },
+];
+
+// 일별통계 데이터
+export const dailyStatisticsCardData = [
+  {
+    id: '0301',
+    title: `${CARD_COMPANIES.KB} My WE:SH카드 (${CARD_TYPES.CREDIT})`,
+    cardImage: card_images['0301'].my.my1,
+    info: [
+      { label: '날짜', value: '2024.10.20' },
+      { label: '사용처', value: '88맥주집' },
+      { label: '카테고리', value: '식당' },
+      { label: '사용금액', value: '80,000' },
+    ],
+  },
+  {
+    id: '0302',
+    title: `${CARD_COMPANIES.HYUNDAI} M카드 (${CARD_TYPES.CREDIT})`,
+    cardImage: card_images['0302'].m.m1,
+    info: [
+      { label: '날짜', value: '2024.10.20' },
+      { label: '사용처', value: '삼겹살' },
+      { label: '카테고리', value: '식당' },
+      { label: '사용금액', value: '35,000' },
+    ],
+  },
+  {
+    id: '0303',
+    title: `${CARD_COMPANIES.SAMSUNG}iD SIMPLE카드 (${CARD_TYPES.CREDIT})`,
+    cardImage: card_images['0303'].id.id1,
+    info: [
+      { label: '날짜', value: '2024.10.20' },
+      { label: '사용처', value: 'kg중국집' },
+      { label: '카테고리', value: '식당' },
+      { label: '사용금액', value: '12,000' },
+    ],
+  },
+  {
+    id: '0304',
+    title: `${CARD_COMPANIES.NONGHYUP} 별다줄카드 (${CARD_TYPES.CREDIT})`,
+    cardImage: card_images['0304'].byul.byul1,
+    info: [
+      { label: '날짜', value: '2024.10.20' },
+      { label: '사용처', value: 'kg쌀국수' },
+      { label: '카테고리', value: '식당' },
+      { label: '사용금액', value: '8,000' },
+    ],
+  },
+  {
+    id: '0306',
+    title: `${CARD_COMPANIES.SHINHAN} 처음카드 (${CARD_TYPES.CREDIT})`,
+    cardImage: card_images['0306'].first.first1,
+    info: [
+      { label: '날짜', value: '2024.10.20' },
+      { label: '사용처', value: 'kg쌀국수' },
+      { label: '카테고리', value: '식당' },
+      { label: '사용금액', value: '2,000' },
     ],
   },
 ];
