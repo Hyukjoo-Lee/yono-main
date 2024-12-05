@@ -47,6 +47,7 @@ const CardRecTab = () => {
           cardImg={selectedCard.cardImg}
           cardInfo={selectedCard.cardInfo}
           cardMainBenefit={selectedCard.mainBenefit}
+          cardApplyLink={selectedCard.cardApplyLink}
         />
         <ListBox>
           <CommonCardListBox
