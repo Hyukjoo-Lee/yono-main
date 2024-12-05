@@ -3,7 +3,7 @@ import styled from 'styled-components';
 import CommonInput from '../../common/CommonInput';
 import CustomButton from '../../common/CommonButton';
 import or from '../../assets/images/or.png';
-import kakaO from '../../assets/images/kakaO.png';
+import kakao from '../../assets/images/kakao.png';
 import google from '../../assets/images/google.png';
 import IconButton from './Component/IconButton'; // IButton을 정확히 import
 import CommonRoot from '../../common/CommonRoot';
@@ -122,17 +122,35 @@ export function Login(props) {
   };
 
   const handleLogin = () => {
-    if (username === dummyUser.username && password === dummyUser.password) {
-      setIDerrorMessage('');
-      setSuccessVisible(true);
-    } else if (username === dummyUser.username) {
-      setPWerrorMessage(PASSWORD_VERIFIED_ERROR);
-      setSuccessVisible(false);
-    } else if (password === dummyUser.password) {
+    // Check if either username or password is empty
+    if (username === '' || password === '') {
+      if (username === '' && password === '') {
+        setIDerrorMessage('아이디,비밀번호를 입력하세요');
+        setPWerrorMessage('아이디,비밀번호를 입력하세요');
+      } else {
+        // If only username is empty
+        if (username === '') {
+          setIDerrorMessage('아이디를 입력하세요');
+        }
+
+        // If only password is empty
+        if (password === '') {
+          setPWerrorMessage('비밀번호를 입력하세요');
+        }
+      }
+    } else if (username !== dummyUser.username) {
+      // If username is incorrect
       setIDerrorMessage(EMAIL_VERIFIED_ERROR);
-      setSuccessVisible(false);
+      setPWerrorMessage(''); // Clear password error if username is wrong
+    } else if (password !== dummyUser.password) {
+      // If password is incorrect
+      setPWerrorMessage(PASSWORD_VERIFIED_ERROR);
+      setIDerrorMessage(''); // Clear username error if password is wrong
     } else {
-      setIDerrorMessage('아이디,비밀번호를 입력하세요');
+      // If both username and password are correct
+      setSuccessVisible(true);
+      setIDerrorMessage('');
+      setPWerrorMessage('');
     }
   };
 
@@ -140,6 +158,7 @@ export function Login(props) {
     { label: '아이디찾기', path: '/find-id' },
     { label: '비밀번호찾기', path: '/find-pwd' },
   ];
+
   const inputProps = {
     background: '#FFFFFF',
     color: '#464646',
@@ -205,7 +224,7 @@ export function Login(props) {
             width="63%"
           />
           <IconButtonContainer>
-            <IconButton imagesRoute={kakaO} />
+            <IconButton imagesRoute={kakao} />
             <IconButton imagesRoute={google} />
           </IconButtonContainer>
         </LowContainer>
