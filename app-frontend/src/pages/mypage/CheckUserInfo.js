@@ -1,21 +1,14 @@
 import React, { useState } from 'react';
 import CustomButton from '../../common/CommonButton';
 import CommonInput from '../../common/CommonInput';
-import ImageGallery from './ImageSelect';
 import styled from 'styled-components';
-
-import image1 from '../../assets/images/Character1.png';
-import image2 from '../../assets/images/Character2.png';
-import image3 from '../../assets/images/Character3.png';
-import image4 from '../../assets/images/Character4.png';
-
-const images = [image1, image2, image3, image4];
+import { ReactComponent as Profile } from '../../assets/images/Profile.svg';
 
 const StyledHr = styled.hr`
   width: 100%;
   border: none;
   border-top: 1px solid #e0e0e0;
-  margin: 15px 0;
+  margin: 5px;
 `;
 
 const Root = styled.div`
@@ -23,23 +16,16 @@ const Root = styled.div`
   flex-direction: column;
   align-items: flex-start;
   justify-content: center;
-  gap: 15px;
   width: 350px;
   margin: 0 auto;
 `;
 
-const Root2 = styled.div`
-  width: 350px;
-  display: flex;
-  flex-direction: column;
-  justify-content: flex-start;
-  align-items: flex-start;
-  margin-top: 10px;
-  gap: 5px;
-`;
-
 const Section = styled.div`
   width: 100%;
+`;
+
+const InnerSection = styled.div`
+  margin-bottom: 15px;
 `;
 
 const Button = styled.div`
@@ -56,12 +42,14 @@ const TitleStyle = styled.p`
   font-size: 16px;
   margin-bottom: 6px;
   margin-top: 0px;
+  margin-left: 5px;
 `;
 
 const TextStyle = styled.p`
-  font-size: 18px;
+  font-size: 16px;
   margin-bottom: 0px;
   margin-top: 0px;
+  margin-left: 5px;
 `;
 
 const ErrorText = styled.p`
@@ -70,6 +58,45 @@ const ErrorText = styled.p`
   margin: 5px 0 0;
   text-align: center;
   width: 100%;
+`;
+
+const ProfileContainer = styled.div`
+  position: relative;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 150px;
+  height: 150px;
+  border-radius: 50%;
+  overflow: hidden;
+  background-color: #f5f5f5;
+  margin: 0 auto 20px;
+  & svg {
+    width: 70%;
+    height: 70%;
+  }
+`;
+
+const ProfileButton = styled.button`
+  position: absolute;
+  bottom: -5px;
+  right: -5px;
+  width: 30px;
+  height: 30px;
+  border: none;
+  border-radius: 50%;
+  background-color: #007bff;
+  color: white;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  cursor: pointer;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+  transform: translate(50%, 50%);
+  z-index: 10;
+  &:hover {
+    background-color: #0056b3;
+  }
 `;
 
 const CheckUserInfo = ({
@@ -140,12 +167,19 @@ const CheckUserInfo = ({
 
   const disabledIntputProps = {
     disabled: true,
-    background: '#F5F5F5',
+    background: '#f5f5f5',
     width: '350px',
+    $borderColor: 'transparent',
+    $marginLeft: '10px',
+    $focusBorderColor: 'transparent',
   };
 
   const abledInputProps = {
     width: '350px',
+    background: 'transparent',
+    $borderColor: 'transparent',
+    $marginLeft: '10px',
+    $focusBorderColor: 'transparent',
   };
 
   const handleChange = (key, value) => {
@@ -167,102 +201,116 @@ const CheckUserInfo = ({
     <Root>
       {isEditing ? (
         <Section>
-          <>
+          <InnerSection>
             <TitleStyle>이름</TitleStyle>
             <TextStyle>{userName}</TextStyle>
-          </>
-          <StyledHr />
-          <>
+            <StyledHr />
+          </InnerSection>
+          <InnerSection>
             <TitleStyle>닉네임</TitleStyle>
             <TextStyle>{nickname}</TextStyle>
-          </>
-          <StyledHr />
-          <>
+            <StyledHr />
+          </InnerSection>
+          <InnerSection>
             <TitleStyle>아이디</TitleStyle>
             <TextStyle>{userId}</TextStyle>
-          </>
-          <StyledHr />
-          <>
+            <StyledHr />
+          </InnerSection>
+          <InnerSection>
             <TitleStyle>이메일</TitleStyle>
             <TextStyle>{email}</TextStyle>
-          </>
-          <StyledHr />
-          <>
+            <StyledHr />
+          </InnerSection>
+          <InnerSection>
             <TitleStyle>이번 달 목표 지출금액</TitleStyle>
             <TextStyle>{Target_Expenditure_Amout}</TextStyle>
-          </>
+          </InnerSection>
         </Section>
       ) : (
         <>
-          <CommonInput
-            value={userInfo.userName}
-            placeholder="이름을 입력하세요"
-            text="이름"
-            {...disabledIntputProps}
-          />
-          <CommonInput
-            value={userInfo.nickname}
-            placeholder="닉네임을 입력하세요"
-            text="닉네임"
-            onChange={(e) => handleChange('nickname', e.target.value)}
-            {...abledInputProps}
-          />
+          <ProfileContainer>
+            <Profile />
+            <ProfileButton onClick={() => console.log('프로필 버튼 클릭!')}>
+              +
+            </ProfileButton>
+          </ProfileContainer>
 
-          <StyledHr />
+          <InnerSection>
+            <CommonInput
+              value={userInfo.userId}
+              placeholder="아이디를 입력하세요"
+              text="아이디"
+              {...disabledIntputProps}
+            />
+            <StyledHr />
+          </InnerSection>
 
-          <CommonInput
-            value={userInfo.userId}
-            placeholder="아이디를 입력하세요"
-            text="아이디"
-            {...disabledIntputProps}
-          />
+          <InnerSection>
+            <CommonInput
+              text="기존 비밀번호 입력"
+              placeholder="기존 비밀번호 입력하세요"
+              value={userInfo.password}
+              onChange={(e) => handleChange('password', e.target.value)}
+              {...abledInputProps}
+            />
+            <StyledHr />
+          </InnerSection>
 
-          <CommonInput
-            text="기존 비밀번호 입력"
-            placeholder="기존 비밀번호 입력하세요"
-            value={userInfo.password}
-            onChange={(e) => handleChange('password', e.target.value)}
-            {...abledInputProps}
-          />
+          <InnerSection>
+            <CommonInput
+              text="새로운 비밀번호 입력"
+              placeholder="새로운 비밀번호를 입력하세요"
+              value={userInfo.newPassword}
+              onChange={(e) => handleChange('newPassword', e.target.value)}
+              {...abledInputProps}
+            />
+            <StyledHr />
+          </InnerSection>
 
-          <CommonInput
-            text="새로운 비밀번호 입력"
-            placeholder="새로운 비밀번호를 입력하세요"
-            value={userInfo.newPassword}
-            onChange={(e) => handleChange('newPassword', e.target.value)}
-            {...abledInputProps}
-          />
+          <InnerSection>
+            <CommonInput
+              text="비밀번호 확인"
+              placeholder="비밀번호 확인"
+              value={userInfo.confirmPassword}
+              onChange={(e) => handleChange('confirmPassword', e.target.value)}
+              {...abledInputProps}
+            />
+            <StyledHr />
+          </InnerSection>
 
-          <CommonInput
-            text="비밀번호 확인"
-            placeholder="비밀번호 확인"
-            value={userInfo.confirmPassword}
-            onChange={(e) => handleChange('confirmPassword', e.target.value)}
-            {...abledInputProps}
-          />
+          <InnerSection>
+            <CommonInput
+              value={userInfo.userName}
+              text="이름"
+              placeholder="이름을 입력하세요"
+              {...disabledIntputProps}
+            />
+            <StyledHr />
+          </InnerSection>
 
-          <CommonInput
-            value={userInfo.email}
-            text="이메일"
-            placeholder="이메일을 입력하세요"
-            onChange={(e) => handleChange('email', e.target.value)}
-            {...abledInputProps}
-          />
+          <InnerSection>
+            <CommonInput
+              value={userInfo.email}
+              text="이메일"
+              placeholder="이메일을 입력하세요"
+              onChange={(e) => handleChange('email', e.target.value)}
+              {...abledInputProps}
+            />
+            <StyledHr />
+          </InnerSection>
 
-          <CommonInput
-            value={userInfo.Target_Expenditure_Amout}
-            text="이번 달 목표 지출금액"
-            placeholder="이번 달 목표 지출금액을 입력하세요"
-            onChange={(e) =>
-              handleChange('Target_Expenditure_Amout', e.target.value)
-            }
-            {...abledInputProps}
-          />
-
-          <Root2>
-            캐릭터 선택
-            <ImageGallery images={images} />
-          </Root2>
+          <InnerSection>
+            <CommonInput
+              value={userInfo.Target_Expenditure_Amout}
+              text="이번 달 목표 지출금액"
+              placeholder="이번 달 목표 지출금액을 입력하세요"
+              onChange={(e) =>
+                handleChange('Target_Expenditure_Amout', e.target.value)
+              }
+              {...abledInputProps}
+            />
+            <StyledHr />
+          </InnerSection>
 
           {passwordError && <ErrorText>{passwordError}</ErrorText>}
         </>
