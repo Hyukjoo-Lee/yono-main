@@ -44,8 +44,17 @@ const rows = [
 ];
 
 const TableContainerStyle = styled(TableContainer)`
-  max-height: 440px;
+  max-height: 600px;
   overflow-y: auto;
+  &::-webkit-scrollbar {
+    width: 0;
+  }
+  &::-webkit-scrollbar-thumb {
+    background: transparent;
+  }
+  &::-webkit-scrollbar-track {
+    background: transparent;
+  }
 `;
 
 const PaginationStyle = styled(Pagination)`

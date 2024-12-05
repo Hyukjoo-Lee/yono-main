@@ -80,7 +80,7 @@ const MainComponent = () => {
     },
     {
       title: `카드추천`,
-      subtitle: `나의 카드 등록하기`,
+      subtitle: `나의 카드 추천보기`,
       imgSrc: MainBox2_img,
       link: `/mycard`,
       // 카드추천으로 넘어가는거 질문
