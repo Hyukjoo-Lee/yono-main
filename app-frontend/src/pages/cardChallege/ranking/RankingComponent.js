@@ -72,9 +72,9 @@ const Box = styled.div`
 
 const RankingComponent = () => {
   const list = [
-    { rank: 1, img: image1, name: '한글이름님 (영어아이디)', number: 65000 },
-    { rank: 2, img: image2, name: '한글이름님 (영어아이디)', number: 5000 },
-    { rank: 3, img: image3, name: '한글이름님 (영어아이디)', number: 4000 },
+    { rank: 1, img: image1, name: '변우석 (abc123)', number: 65000 },
+    { rank: 2, img: image2, name: '수지 (abc124)', number: 5000 },
+    { rank: 3, img: image3, name: '이지은 (abc1235)', number: 4000 },
   ];
   return (
     <Root>

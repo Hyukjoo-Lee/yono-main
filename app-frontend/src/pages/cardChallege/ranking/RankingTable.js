@@ -1,5 +1,8 @@
 import React from 'react';
 import styled from 'styled-components';
+import { ReactComponent as Medal1 } from '../../../assets/images/Medal1.svg';
+import { ReactComponent as Medal2 } from '../../../assets/images/Medal2.svg';
+import { ReactComponent as Medal3 } from '../../../assets/images/Medal3.svg';
 import image1 from '../../../assets/images/Image1.jpg';
 import image2 from '../../../assets/images/Image2.jpg';
 import image3 from '../../../assets/images/Image3.png';
@@ -20,7 +23,7 @@ const BoxStyle = styled.div`
   & > div:nth-child(1) {
     background: ${(props) => props.theme.color.lightBlue} !important;
     & p {
-      font-weight: normal !important;
+      font-weight: bold !important;
       color: ${(props) => props.theme.color.gray} !important;
     }
   }
@@ -61,6 +64,10 @@ const TextBox = styled.div`
   align-items: center;
 `;
 
+const MedalBox = styled.div`
+  min-width: 50px;
+`;
+
 const TextStyle = styled.p`
   min-width: 50px;
   font-size: ${(props) => props.theme.fontSize.base};
@@ -92,18 +99,18 @@ const ProfileBox = styled.div`
 
 const RankingTable = () => {
   const items = [
-    { number: 1, img: image1, name: '한글이름님(영어아이디)', count: 65000 },
-    { number: 2, img: image2, name: '한글이름님(영어아이디)', count: 50000 },
-    { number: 3, img: image3, name: '한글이름님(영어아이디)', count: 40000 },
-    { number: 4, img: image4, name: '한글이름님(영어아이디)', count: 5000 },
-    { number: 5, img: image1, name: '한글이름님(영어아이디)', count: 5000 },
-    { number: 6, img: image2, name: '한글이름님(영어아이디)', count: 5000 },
-    { number: 7, img: image3, name: '한글이름님(영어아이디)', count: 400 },
-    { number: 8, img: image4, name: '한글이름님(영어아이디)', count: 400 },
-    { number: 9, img: image1, name: '한글이름님(영어아이디)', count: 400 },
-    { number: 10, img: image2, name: '한글이름님(영어아이디)', count: 400 },
-    { number: 11, img: image3, name: '한글이름님(영어아이디)', count: 400 },
-    { number: 12, img: image4, name: '한글이름님(영어아이디)', count: 400 },
+    { number: 1, img: image1, name: '변우석(abc123)', count: 65000 },
+    { number: 2, img: image2, name: '수지(abc124)', count: 50000 },
+    { number: 3, img: image3, name: '이지은(abc1235)', count: 40000 },
+    { number: 4, img: image4, name: '홍길동(abc555)', count: 5000 },
+    { number: 5, img: image1, name: '이순신(bbb4584)', count: 5000 },
+    { number: 6, img: image2, name: '강감찬(bbb4584)', count: 5000 },
+    { number: 7, img: image3, name: '이지은(bbb4584)', count: 400 },
+    { number: 8, img: image4, name: '김석진(bbb4584)', count: 400 },
+    { number: 9, img: image1, name: '변우석(bbb4584)', count: 400 },
+    { number: 10, img: image2, name: '수지(bbb4584)', count: 400 },
+    { number: 11, img: image3, name: '이지은(bbb4584)', count: 400 },
+    { number: 12, img: image4, name: '김석진(bbb4584)', count: 400 },
   ];
   return (
     <Root>
@@ -114,7 +121,7 @@ const RankingTable = () => {
             <ProfileBox>
               <img src={image4} alt="image1" />
             </ProfileBox>
-            <TextStyle>한글이름님(영어아이디)</TextStyle>
+            <TextStyle>김석진(btsbest777)</TextStyle>
           </TextBox>
           <NumberText>200</NumberText>
         </BoxIn>
@@ -122,7 +129,22 @@ const RankingTable = () => {
           {items.map((item, index) => (
             <BoxIn key={index}>
               <TextBox>
-                <TextStyle>{item.number}</TextStyle>
+                {item.number === 1 ? (
+                  <MedalBox>
+                    <Medal1 />
+                  </MedalBox>
+                ) : item.number === 2 ? (
+                  <MedalBox>
+                    <Medal2 />
+                  </MedalBox>
+                ) : item.number === 3 ? (
+                  <MedalBox>
+                    <Medal3 />
+                  </MedalBox>
+                ) : (
+                  <TextStyle>{item.number}</TextStyle>
+                )}
+
                 <ProfileBox>
                   <img src={item.img} alt={item.name} />
                 </ProfileBox>
