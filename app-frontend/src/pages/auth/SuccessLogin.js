@@ -11,11 +11,8 @@ const SuccessLogin = ({ open, setSuccessVisible }) => {
       <CommonDialog
         open={open}
         width="400px"
-        height="120px"
         children="환영합니다."
-        ContentWidth="450px"
-        ContentHeight="90px"
-        fontSize="26px"
+        fontSize="23px"
         onClose={closeLogin}
         onClick={closeLogin}
       />

@@ -18,7 +18,7 @@ const StyledSelect = styled(Select).withConfig({
     font-size: ${(props) => props.fontSize || '16px'};
 
     & fieldset {
-      border-color: ${(props) => props.fieldBorderColor || '#D7D7D7'};
+      border-color: ${(props) => props.$fieldBorderColor || '#D7D7D7'};
       border-width: ${(props) => props.focusBorderWidth || '1px'};
       padding: 0px;
     }
@@ -45,6 +45,7 @@ const TextStyle = styled.p`
   margin-bottom: 6px;
   margin-top: 0px;
   display: ${(props) => props.display || ''};
+  margin-left: ${(props) => (props.$marginLeft ? props.$marginLeft : '0px')};
 `;
 
 const CommonSelect = ({
@@ -59,7 +60,7 @@ const CommonSelect = ({
   borderRadius,
   hoverBackground,
   fontSize,
-  fieldBorderColor,
+  $fieldBorderColor,
   focusBorderWidth,
   fieldHoverBorderColor,
   fieldFocusedBorderColor,
@@ -68,6 +69,7 @@ const CommonSelect = ({
   find = '카드를 선택하세요',
   selectedValue = '',
   setSelectedValue,
+  $marginLeft,
 }) => {
   const handleChange = (event) => {
     setSelectedValue(event.target.value);
@@ -85,7 +87,12 @@ const CommonSelect = ({
       }}
     >
       <FormControl variant="outlined">
-        <TextStyle color={labelColor} fontSize={fontSize} display={display}>
+        <TextStyle
+          color={labelColor}
+          fontSize={fontSize}
+          display={display}
+          $marginLeft={$marginLeft}
+        >
           {text}
         </TextStyle>
 
@@ -97,7 +104,7 @@ const CommonSelect = ({
           padding={padding}
           background={background}
           fontSize={fontSize}
-          fieldBorderColor={fieldBorderColor}
+          $fieldBorderColor={$fieldBorderColor}
           focusBorderWidth={focusBorderWidth}
           fieldHoverBorderColor={fieldHoverBorderColor}
           fieldFocusedBorderColor={fieldFocusedBorderColor}
