@@ -139,6 +139,8 @@ export const recommendedCardData = [
     cardTitle: `${CARD_COMPANIES.KB} My WE:SH카드 (${CARD_TYPES.CREDIT})`,
     cardImg: card_images['0301'].my.my1,
     mainBenefit: '국내외 가맹점 0.8% 할인',
+    cardApplyLink:
+      'https://m.kbcard.com/CRD/DVIEW/MCAMCXHIACRC0002?mainCC=b&allianceCode=09123',
     cardInfo: [
       { label: '스타벅스 할인', value: '50%', additional: '월 1회' },
       { label: '대중교통 할인', value: '20%', additional: '청구할인' },
@@ -150,6 +152,8 @@ export const recommendedCardData = [
     cardTitle: `${CARD_COMPANIES.HYUNDAI} M카드 (${CARD_TYPES.CREDIT})`,
     cardImg: card_images['0302'].m.m1,
     mainBenefit: '통신·구독·멤버십 최대 20% 적립',
+    cardApplyLink:
+      'https://www.hyundaicard.com/cpc/ma/CPCMA0101_01.hc?cardflag=PT',
     cardInfo: [
       { label: '스타벅스 할인', value: '50%', additional: '월 1회' },
       { label: '대중교통 할인', value: '20%', additional: '청구할인' },
@@ -161,6 +165,8 @@ export const recommendedCardData = [
     cardTitle: `${CARD_COMPANIES.SAMSUNG}iD SIMPLE카드 (${CARD_TYPES.CREDIT})`,
     cardImg: card_images['0303'].id.id1,
     mainBenefit: '온라인 쇼핑 최대 10% 할인',
+    cardApplyLink:
+      'https://www.samsungcard.com/home/card/cardinfo/PGHPPCCCardCardinfoDetails001?code=AAP1767',
     cardInfo: [
       { label: '스타벅스 할인', value: '50%', additional: '월 1회' },
       { label: '대중교통 할인', value: '20%', additional: '청구할인' },
@@ -172,6 +178,7 @@ export const recommendedCardData = [
     cardTitle: `${CARD_COMPANIES.NONGHYUP} 별다줄카드 (${CARD_TYPES.CREDIT})`,
     cardImg: card_images['0304'].byul.byul1,
     mainBenefit: '온라인 쇼핑 최대 5% 할인',
+    cardApplyLink: 'https://card.nonghyup.com/IpCc2021R.act',
     cardInfo: [
       { label: '스타벅스 할인', value: '50%', additional: '월 1회' },
       { label: '대중교통 할인', value: '20%', additional: '청구할인' },
@@ -183,6 +190,8 @@ export const recommendedCardData = [
     cardTitle: `${CARD_COMPANIES.SHINHAN} 처음카드 (${CARD_TYPES.CREDIT})`,
     cardImg: card_images['0306'].first.first1,
     mainBenefit: '캐시백 최대 5% 제공',
+    cardApplyLink:
+      'https://www.shinhancard.com/mob/MOBFM038N/MOBFM038C47.shc?EntryLoc=3464&tmEntryLoc=&empSeq=2&targetID=&datakey=&agcCd=',
     cardInfo: [
       { label: '스타벅스 할인', value: '50%', additional: '월 1회' },
       { label: '대중교통 할인', value: '20%', additional: '청구할인' },
