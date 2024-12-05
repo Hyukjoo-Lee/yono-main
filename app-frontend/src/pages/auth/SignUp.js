@@ -283,12 +283,12 @@ export function SignUp() {
           )}
           <CommonHr />
           <div style={ContainerProps} />{' '}
-          <CommonButton {...ButtonProps} text="완료" onClick={handleSubmit} />
-          <SuccessSignUp
-            open={isDialogPWVisible}
-            setSuccessVisible={setIsDialogPWVisible}
-          />
         </MiddleContainer>
+        <CommonButton {...ButtonProps} text="완료" onClick={handleSubmit} />
+        <SuccessSignUp
+          open={isDialogPWVisible}
+          setSuccessVisible={setIsDialogPWVisible}
+        />
       </FullContainer>
     </CommonRoot>
   );
