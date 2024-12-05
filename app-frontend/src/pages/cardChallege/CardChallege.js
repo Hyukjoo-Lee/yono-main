@@ -15,7 +15,7 @@ const Root = styled.div`
 `;
 
 const RootIn = styled.div`
-  width: ${(props) => props.theme.display.sm};
+  width: ${(props) => props.theme.display.lg};
   margin: 0 auto;
   box-sizing: border-box;
 `;
@@ -44,7 +44,7 @@ export function CardChallege() {
               </p>
             ) : (
               <p>
-                나만의 소비 패턴을 분석하고, 절약을 통해 뱃지를 획득하세요. {' '}
+                나만의 소비 패턴을 분석하고, 절약을 통해 뱃지를 획득하세요.
                 <br />
                 다른 유저들과 함께 경쟁하며, 더 나은 소비 습관을 만들어가세요.
               </p>

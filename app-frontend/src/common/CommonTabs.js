@@ -20,7 +20,7 @@ const TabStyle = styled(Tab)`
     font-size: 18px;
     padding: 0px 25px 10px 25px;
     min-width: 117px;
-    font-weight: black;
+    font-weight: bold;
 
     &.Mui-selected {
       color: #4064e6;
