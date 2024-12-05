@@ -11,6 +11,7 @@ import image3 from '../../assets/images/Character3.png';
 import image4 from '../../assets/images/Character4.png';
 import CommonPageInfo from '../../common/CommonPageInfo';
 import { useState } from 'react';
+import SuccessSignUp from './SuccessSignUp';
 const images = [image1, image2, image3, image4];
 
 const FullContainer = styled.div`
@@ -73,6 +74,12 @@ const ImgContainer = styled.div`
   margin-top: 5px;
   margin-bottom: 10px;
 `;
+const InnerContainer = styled.div`
+  flex-direction: column;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+`;
 const InputProps = {
   width: '350px',
   $borderColor: 'transparent',
@@ -96,6 +103,9 @@ export function SignUp() {
   const [correctPWAnswer, setCorrectPWAnswer] = useState('');
   const [answerPW, setAnswerPW] = useState('');
   const [selectedQuestion, setSelectedQuestion] = useState('');
+  const [isDialogPWVisible, setIsDialogPWVisible] = useState(false);
+  const [isFull, setIsFull] = useState(false);
+
   const selectOptions = [
     { value: '애완동물 이름은?', label: '애완동물 이름은?' },
     { value: '당신의 생일은?', label: '당신의 생일은?' },
@@ -114,15 +124,12 @@ export function SignUp() {
     if (answerID.length === 0) {
       // 먼저 빈 문자열을 체크
       setErrorIDMessage('아이디를 입력해 주세요');
-      setCorrectIDMessage('');
     } else if (answerID === dummyId) {
       // 아이디가 일치하는지 확인
-      setErrorIDMessage('');
       setCorrectIDMessage('사용가능한 아이디 입니다');
     } else {
       // 아이디가 일치하지 않으면
       setErrorIDMessage('사용중인 아이디 입니다');
-      setCorrectIDMessage('');
     }
   };
 
@@ -139,16 +146,16 @@ export function SignUp() {
     if (answerPW === '' || correctPWAnswer === '') {
       // 둘 중 하나라도 비어 있으면
       setErrorPWMessage('비밀번호를 입력해 주세요');
-      setCorrectPWMessage('');
     } else if (answerPW === correctPWAnswer) {
       // 비밀번호가 일치하는 경우
-      setErrorPWMessage('');
       setCorrectPWMessage('사용가능한 비밀번호 입니다');
     } else {
       // 비밀번호가 일치하지 않는 경우
       setErrorPWMessage('비밀번호가 일치하지 않습니다');
-      setCorrectPWMessage('');
     }
+  };
+  const completeSignUp = () => {
+    setIsDialogPWVisible(true);
   };
 
   return (
@@ -232,9 +239,21 @@ export function SignUp() {
             {...InputProps}
           />
           <CommonHr />
-          <div style={ContainerProps} />{' '}
-          <ImgContainer>캐릭터 선택</ImgContainer>
-          <ImageGallery images={images} />
+          <InnerContainer>
+            <div style={ContainerProps} />{' '}
+            <ImgContainer>캐릭터 선택</ImgContainer>
+            <ImageGallery images={images} />
+            <div style={ContainerProps} />{' '}
+            <CommonButton
+              {...ButtonProps}
+              text="완료"
+              onClick={completeSignUp}
+            />
+          </InnerContainer>
+          <SuccessSignUp
+            open={isDialogPWVisible}
+            setSuccessVisible={setIsDialogPWVisible}
+          />
         </MiddleContainer>
       </FullContainer>
     </CommonRoot>
