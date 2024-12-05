@@ -47,58 +47,87 @@ const rows = [
   createData(
     '기타문의',
     '자유게시판 서비스 중단 소식을 알려드립니다',
+    '익명',
     '2024-10-28',
+    '0',
   ),
   createData(
     '정보공유',
     '자유게시판 서비스 중단 소식을 알려드립니다',
+    '익명',
     '2024-10-28',
+    '0',
   ),
   createData(
     '기타문의',
     '자유게시판 서비스 중단 소식을 알려드립니다',
+    '익명',
     '2024-10-28',
+    '0',
   ),
   createData(
     '정보공유',
     '자유게시판 서비스 중단 소식을 알려드립니다',
+    '익명',
     '2024-10-28',
+    '0',
   ),
   createData(
     '기타문의',
     '자유게시판 서비스 중단 소식을 알려드립니다',
+    '익명',
     '2024-10-28',
+    '0',
   ),
   createData(
     '정보공유',
     '자유게시판 서비스 중단 소식을 알려드립니다',
+    '익명',
     '2024-10-28',
+    '0',
   ),
   createData(
     '기타문의',
     '자유게시판 서비스 중단 소식을 알려드립니다',
+    '익명',
     '2024-10-28',
+    '0',
   ),
   createData(
     '정보공유',
     '자유게시판 서비스 중단 소식을 알려드립니다',
+    '익명',
     '2024-10-28',
+    '0',
   ),
   createData(
     '기타문의',
     '자유게시판 서비스 중단 소식을 알려드립니다',
+    '익명',
     '2024-10-28',
+    '0',
   ),
   createData(
     '정보공유',
     '자유게시판 서비스 중단 소식을 알려드립니다',
+    '익명',
     '2024-10-28',
+    '0',
   ),
 ];
 
 const TableContainerStyle = styled(TableContainer)`
-  max-height: 440px;
+  max-height: 590px;
   overflow-y: auto;
+  &::-webkit-scrollbar {
+    width: 0;
+  }
+  &::-webkit-scrollbar-thumb {
+    background: transparent;
+  }
+  &::-webkit-scrollbar-track {
+    background: transparent;
+  }
 `;
 
 const Container = styled.div`
