@@ -104,7 +104,7 @@ export function SignUp() {
   const [answerPW, setAnswerPW] = useState('');
   const [selectedQuestion, setSelectedQuestion] = useState('');
   const [isDialogPWVisible, setIsDialogPWVisible] = useState(false);
-  const [isFull, setIsFull] = useState(false);
+  // const [isFull, setIsFull] = useState(false);
 
   const selectOptions = [
     { value: '애완동물 이름은?', label: '애완동물 이름은?' },
