@@ -15,7 +15,7 @@ const Root = styled.div`
 `;
 
 const RootIn = styled.div`
-  width: ${(props) => props.theme.display.sm};
+  width: ${(props) => props.theme.display.lg};
   margin: 0 auto;
   box-sizing: border-box;
 `;

@@ -3,7 +3,18 @@ import styled from 'styled-components';
 import Calendar from '../../cardAnalysis/dailyStatistics/calendar/Calendar';
 import Barchart from '../../cardAnalysis/monthlyStatistics/chart/Barchart';
 
-const Root = styled.div``;
+const Root = styled.div`
+  width: 100%;
+  height: 545px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+`;
+
+const CalendarWrap = styled.div`
+  width: 720px;
+  margin-right: 30px;
+`;
 
 const barchart_data = [
   {
@@ -35,10 +46,9 @@ const barchart_data = [
 const MonthComparision = () => {
   return (
     <Root>
-      <div style={{ width: 700 }}>
+      <CalendarWrap>
         <Calendar />
-      </div>
-      {/* 위치질문있음! */}
+      </CalendarWrap>
       <Barchart data={barchart_data} />
     </Root>
   );
