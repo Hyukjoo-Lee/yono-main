@@ -59,7 +59,7 @@ const TitleStyle = styled.p`
 `;
 
 const TextStyle = styled.p`
-  font-size: 16px;
+  font-size: 18px;
   margin-bottom: 0px;
   margin-top: 0px;
 `;

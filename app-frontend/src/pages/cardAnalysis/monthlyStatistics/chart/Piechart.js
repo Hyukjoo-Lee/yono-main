@@ -3,8 +3,8 @@ import styled from 'styled-components';
 import { ResponsivePie } from '@nivo/pie';
 
 const StyledChart = styled.div`
-  width: 572px;
-  height: 528px;
+  width: 582px;
+  height: 600px;
   margin: 0 auto;
 `;
 
@@ -13,7 +13,7 @@ const Piechart = ({ data }) => {
     <StyledChart>
       <ResponsivePie
         data={data}
-        margin={{ top: 40, right: 80, bottom: 80, left: 80 }}
+        margin={{ top: 40, right: 120, bottom: 80, left: 80 }}
         innerRadius={0.5}
         padAngle={1}
         cornerRadius={3}

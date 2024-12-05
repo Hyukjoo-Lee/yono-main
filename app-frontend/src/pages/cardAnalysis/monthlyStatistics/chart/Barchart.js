@@ -3,8 +3,8 @@ import styled from 'styled-components';
 import { ResponsiveBar } from '@nivo/bar';
 
 const StyledChart = styled.div`
-  width: 618px;
-  height: 567px;
+  width: 582px;
+  height: 600px;
   margin: 0 auto;
 `;
 
@@ -24,7 +24,7 @@ const Barchart = ({ data }) => {
         data={data}
         keys={['외식', '의류', '온라인쇼핑', '주류', '전자제품']}
         indexBy="bottle"
-        margin={{ top: 50, right: 130, bottom: 50, left: 80 }}
+        margin={{ top: 40, right: 120, bottom: 80, left: 80 }}
         padding={0.3}
         groupMode="grouped"
         // colors={{ scheme: 'blues' }}
@@ -39,14 +39,14 @@ const Barchart = ({ data }) => {
           // label style (bar 에 표현되는 글씨)
           labels: {
             text: {
-              fontSize: 14,
+              fontSize: '0.8rem',
               fill: '#000000',
             },
           },
           // legend style (default 로 우측 하단에 있는 색상별 key 표시)
           legends: {
             text: {
-              fontSize: 12,
+              fontSize: '1rem',
               fill: '#000000',
             },
           },
@@ -91,17 +91,17 @@ const Barchart = ({ data }) => {
         legends={[
           {
             dataFrom: 'keys',
-            anchor: 'bottom-right',
-            direction: 'column',
+            anchor: 'bottom',
+            direction: 'row',
             justify: false,
-            translateX: 120,
-            translateY: 0,
-            itemsSpacing: 2,
+            translateX: 0,
+            translateY: 80,
+            itemsSpacing: 10,
             itemWidth: 100,
-            itemHeight: 20,
+            itemHeight: 18,
             itemDirection: 'left-to-right',
             itemOpacity: 0.85,
-            symbolSize: 20,
+            symbolSize: 15,
             effects: [
               {
                 on: 'hover',
