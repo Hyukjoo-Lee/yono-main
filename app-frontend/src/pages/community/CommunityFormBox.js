@@ -74,7 +74,7 @@ export function CommunityFormBox() {
   const handleButtonClick = () => {
     navigate('/community');
   };
-  const [ListData, setListData] = useState('');
+  const [categoryOption, setcategoryOption] = useState('');
 
   return (
     <Root>
@@ -100,10 +100,10 @@ export function CommunityFormBox() {
             options={OptionList}
             width="500px"
             height="40px"
-            find="문의를 선택해주세요"
+            find="카테고리를 선택해 주세요"
             display="none"
-            selectedValue={ListData}
-            setSelectedValue={(value) => setListData(value)}
+            selectedValue={categoryOption}
+            setSelectedValue={(value) => setcategoryOption(value)}
           />
         </Row>
 
@@ -130,7 +130,7 @@ export function CommunityFormBox() {
       />
       <Box1>
         <CommonButton
-          text="문의하기"
+          text="등록하기"
           width="200px"
           height="50px"
           font-size="20px"

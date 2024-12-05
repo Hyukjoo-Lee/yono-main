@@ -71,7 +71,7 @@ export function EditFormBox() {
   const handleNavigateToList = () => {
     navigate('/community');
   };
-  const [ListData, setListData] = useState('');
+  const [categoryOption, setcategoryOption] = useState('');
   return (
     <Root>
       <CommonPageInfo title={'수정게시판'} text={<p></p>} />
@@ -91,10 +91,10 @@ export function EditFormBox() {
             options={OptionList}
             width="500px"
             height="40px"
-            find="문의를 선택해주세요"
+            find="카테고리를 선택해 주세요"
             display="none"
-            selectedValue={ListData}
-            setSelectedValue={(value) => setListData(value)}
+            selectedValue={categoryOption}
+            setSelectedValue={(value) => setcategoryOption(value)}
           />
         </Row>
 
