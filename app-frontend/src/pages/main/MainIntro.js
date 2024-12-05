@@ -1,6 +1,6 @@
-import React from "react";
-import styled from "styled-components";
-import Main_img from "../../assets/images/main_img.png";
+import React from 'react';
+import styled from 'styled-components';
+import Main_img from '../../assets/images/main_img.png';
 
 const StyledMainIntro = styled.div`
   display: flex;
@@ -21,21 +21,21 @@ const StyledTitle = styled.p`
 `;
 
 const StyledSubTitle = styled.p`
-  font-size: 22px;
+  font-size: 20px;
   font-weight: 200;
   padding: 15px 0px;
-  margin: 0;
   padding: 0;
+
+  & span {
+    color: 'red';
+  }
 `;
 
 const StyledMainImg = styled.div`
-  width: 533px;
-  height: 400px;
-  overflow: hidden;
   font-size: 30px;
   & img {
     width: 100%;
-    padding-top: 15px;
+    padding-top: 25px;
   }
 `;
 
@@ -47,23 +47,24 @@ const StyledTextCon = styled.div`
 `;
 
 const StyledButton = styled.div`
-  width:162px;
-  height:48px;
-  background-color:#2357A2;
-  border-radius:50px;
-  display:flex;
+  width: 162px;
+  height: 48px;
+  background-color: #2357a2;
+  border-radius: 50px;
+  display: flex;
   align-items: center;
   justify-content: center;
-`
+  margin-top: 10px;
+`;
 const StyledButtonA = styled.a`
-  color:white;
-  text-decoration:none;
-  font-size:20px;
-  font-weight:500;
-  display:flex;
+  color: white;
+  text-decoration: none;
+  font-size: 20px;
+  font-weight: 500;
+  display: flex;
   align-items: center;
   justify-content: center;
-`
+`;
 
 const MainIntro = () => {
   return (
@@ -71,18 +72,18 @@ const MainIntro = () => {
       <StyledTextCon>
         <StyledTitle>Mickle Muckle Launching</StyledTitle>
         <StyledSubTitle>
-          미클머클이 2024년 새롭게 출시 되었습니다!
+          <span>미클머클 2024, 새로운 시작!</span>
           <br />
-          미클머클과 함께 절약 해서 부자 되세요
+          지혜로운 소비로 더 나은 미래를 준비하세요.
           <br />
-          챌린지로 뱃지 받고 절약을 재밌게 하세요(멘트바꿀예정)
+          챌린지를 통해 뱃지를 획득하고, 절약을 재미있게 즐겨보세요.
         </StyledSubTitle>
         <StyledButton>
-        <StyledButtonA href="#">더 알아보기</StyledButtonA>
+          <StyledButtonA href="/intro">더 알아보기</StyledButtonA>
         </StyledButton>
       </StyledTextCon>
       <StyledMainImg>
-        <img src={Main_img} alt="메인사진"/>
+        <img src={Main_img} alt="메인사진" />
       </StyledMainImg>
     </StyledMainIntro>
   );
