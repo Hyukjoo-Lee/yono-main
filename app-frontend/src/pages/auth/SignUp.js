@@ -30,24 +30,37 @@ const MiddleContainer = styled.div`
 const MiddleTitle = styled.div`
   font-size: 16px;
   color: #757575;
+  margin-left: 5px;
 `;
 
-const HiddenBox = styled.div`
-  display: ${(props) => (props.$isVisible ? 'flex' : 'none')};
-  flex-direction: flex-end;
+const InputIDBox = styled.div`
+  display: flex;
+  flex-direction: row;
   justify-content: space-between;
   align-items: flex-end;
-  width: 103%;
-  margin-bottom: 10px;
+  width: 350px;
 `;
-const ErrorMessage = styled.div`
-  margin-top: 5px;
-  color: red;
 
+const InputPWBox = styled.div`
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: flex-end;
+  width: 350px;
+`;
+
+const ErrorMessage = styled.div`
+  color: red;
   font-size: 13px;
+  margin-left: 5px;
+`;
+const CorrectMessage = styled.div`
+  color: blue;
+  font-size: 13px;
+  margin-left: 5px;
 `;
 const ContainerProps = {
-  marginBottom: '5px',
+  marginBottom: '13px',
 };
 
 const ImgContainer = styled.div`
@@ -60,37 +73,81 @@ const ImgContainer = styled.div`
   margin-top: 5px;
   margin-bottom: 10px;
 `;
-
+const InputProps = {
+  width: '350px',
+  $borderColor: 'transparent',
+  background: 'transparent',
+  $focusBorderColor: 'transparent',
+  $marginLeft: '7px',
+};
+const ButtonProps = {
+  width: '73px',
+  height: '37px',
+  background: '#F5F5F5',
+  text: '확인',
+  color: '#757575',
+};
 export function SignUp() {
   const selectOptions = [
     { value: '애완동물 이름은?', label: '애완동물 이름은?' },
     { value: '당신의 생일은?', label: '당신의 생일은?' },
     { value: '당신이 좋아하는 음식은?', label: '당신이 좋아하는 음식은?' },
   ];
-  const [isInputVisible, setIsInputVisible] = useState(false); // 상태 추가
-  const [errorMessage, setErrorMessage] = useState('');
-  const [correct, setCorrect] = useState('');
+  const [errorIDMessage, setErrorIDMessage] = useState('');
+  const [correctIDMessage, setCorrectIDMessage] = useState('');
+  const [answerID, setAnswerID] = useState('');
+  const [errorPWMessage, setErrorPWMessage] = useState('');
+  const [correctPWMessage, setCorrectPWMessage] = useState('');
+  const [correctPWAnswer, setCorrectPWAnswer] = useState('');
+  const [answerPW, setAnswerPW] = useState('');
 
-  const correctAnswer = {
-    123: '123',
-  };
-  const handleInputChange = (e) => {
+  const handleIDChange = (e) => {
     const value = e.target.value;
-    setIsInputVisible(value.length > 0); // 입력이 있으면 `true`, 없으면 `false`
+    setAnswerID(value);
+    if (value.length === 0) {
+      setErrorIDMessage('');
+      setCorrectIDMessage('');
+    }
+  };
+  const dummyId = 'lhk883@naver.com';
+  const handleIDConfirm = () => {
+    if (answerID.length === 0) {
+      // 먼저 빈 문자열을 체크
+      setErrorIDMessage('아이디를 입력해 주세요');
+      setCorrectIDMessage('');
+    } else if (answerID === dummyId) {
+      // 아이디가 일치하는지 확인
+      setErrorIDMessage('');
+      setCorrectIDMessage('사용가능한 아이디 입니다');
+    } else {
+      // 아이디가 일치하지 않으면
+      setErrorIDMessage('사용중인 아이디 입니다');
+      setCorrectIDMessage('');
+    }
   };
 
-  const handleConfirm = () => {
-    setIsInputVisible(true);
-    if (correct && correctAnswer[correct]) {
-      const correctAnswerValue = correctAnswer[correct];
+  const handlePWChange = (e) => {
+    const value = e.target.value;
+    setAnswerPW(value);
+    if (value.length === 0) {
+      setErrorPWMessage('');
+      setCorrectPWMessage('');
+    }
+  };
 
-      if (correctAnswerValue === correct) {
-        setErrorMessage('사용 가능한 아이디 입니다.');
-      } else {
-        setErrorMessage('아이디가 다릅니다.');
-      }
+  const handlePWConfirm = () => {
+    if (answerPW === '' || correctPWAnswer === '') {
+      // 둘 중 하나라도 비어 있으면
+      setErrorPWMessage('비밀번호를 입력해 주세요');
+      setCorrectPWMessage('');
+    } else if (answerPW === correctPWAnswer) {
+      // 비밀번호가 일치하는 경우
+      setErrorPWMessage('');
+      setCorrectPWMessage('사용가능한 비밀번호 입니다');
     } else {
-      setErrorMessage('아이디가 다릅니다.');
+      // 비밀번호가 일치하지 않는 경우
+      setErrorPWMessage('비밀번호가 일치하지 않습니다');
+      setCorrectPWMessage('');
     }
   };
 
@@ -102,83 +159,76 @@ export function SignUp() {
           <MiddleTitle>회원정보입력</MiddleTitle>
           <CommonHr />
           <div style={ContainerProps} />
-          <CommonInput
-            placeholder="아이디를 입력하세요"
-            text="아이디"
-            background="#F5F5F5"
-            width="310px"
-            onChange={handleInputChange}
-          />
-          <div style={ContainerProps} />
-          <CommonHr />
-          <HiddenBox $isVisible={isInputVisible}>
+          <InputIDBox>
             <CommonInput
-              placeholder="아이디 중복 확인"
-              text="아이디 중복확인"
-              background="#F5F5F5"
-              width="310px"
-              value={correct}
-              onChange={(e) => setCorrect(e.target.value)}
+              placeholder="아이디를 입력하세요"
+              text="아이디(이메일)"
+              onChange={handleIDChange}
+              {...InputProps}
             />
             <CommonButton
-              width="73px"
-              height="37px"
-              background="#F5F5F5"
+              {...ButtonProps}
               text="중복확인"
-              color="#757575"
-              onClick={handleConfirm}
+              width="100px"
+              onClick={handleIDConfirm}
             />
-          </HiddenBox>
-          {errorMessage && <ErrorMessage>{errorMessage}</ErrorMessage>}
+          </InputIDBox>
           <CommonHr />
+          {errorIDMessage && <ErrorMessage>{errorIDMessage}</ErrorMessage>}
+          {correctIDMessage && (
+            <CorrectMessage>{correctIDMessage}</CorrectMessage>
+          )}
           <div style={ContainerProps} />
           <CommonInput
             placeholder="비밀번호를 입력하세요"
             text="비밀번호"
-            background="#F5F5F5"
-            width="310px"
+            onChange={handlePWChange}
+            {...InputProps}
           />
-          <div style={ContainerProps} />
           <CommonHr />
+          <InputPWBox>
+            <div style={ContainerProps} />
+            <CommonInput
+              placeholder="비밀번호 확인해주세요"
+              text="비밀번호 확인"
+              onChange={(e) => setCorrectPWAnswer(e.target.value)}
+              {...InputProps}
+            />
+            <CommonButton {...ButtonProps} onClick={handlePWConfirm} />
+          </InputPWBox>
+          <CommonHr />
+          {errorPWMessage && <ErrorMessage>{errorPWMessage}</ErrorMessage>}
+          {correctPWMessage && (
+            <CorrectMessage>{correctPWMessage}</CorrectMessage>
+          )}
           <div style={ContainerProps} />
           <CommonInput
-            placeholder="비밀번호 확인해주세요"
-            text="비밀번호 확인"
-            background="#F5F5F5"
-            width="310px"
-          />
-          <div style={ContainerProps} />
-          <CommonHr />
-          <div style={ContainerProps} />
-          <CommonInput
-            placeholder="닉네임을 적어주세요"
+            placeholder="닉네임을 입력하세요"
             text="닉네임"
-            background="#F5F5F5"
-            width="310px"
+            {...InputProps}
           />
-          <div style={ContainerProps} />
           <CommonHr />
-          <div style={ContainerProps} />{' '}
+          <div style={ContainerProps} />
           <CommonSelect
             text="질문선택"
             height="35px"
-            width="300px"
+            width="350px"
             padding="10px"
             color="#464646"
             labelColor="#464646"
             options={selectOptions}
             find="질문을 선택하세요"
+            $fieldBorderColor="transparent"
+            background="transparent"
+            $marginLeft="7px"
           />
-          <div style={ContainerProps} />
           <CommonHr />
           <div style={ContainerProps} />{' '}
           <CommonInput
-            placeholder="답변을 적어주세요"
+            placeholder="답변을 입력하세요"
             text="답변"
-            background="#F5F5F5"
-            width="310px"
+            {...InputProps}
           />
-          <div style={ContainerProps} />
           <CommonHr />
           <div style={ContainerProps} />{' '}
           <ImgContainer>캐릭터 선택</ImgContainer>

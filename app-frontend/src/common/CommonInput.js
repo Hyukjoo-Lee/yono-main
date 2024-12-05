@@ -6,7 +6,7 @@ const InputStyle = styled.input`
   height: ${(props) => (props.height ? props.height : '38px')};
   background-color: ${(props) =>
     props.$background ? props.$background : '#F8F9FE'};
-  border: 1px solid ${(props) => props.borderColor || '#D7D7D7'};
+  border: 1px solid ${(props) => props.$borderColor || '#D7D7D7'};
   border-radius: ${(props) =>
     props.borderRadius ? props.borderRadius : '5px'};
   cursor: pointer;
@@ -15,12 +15,11 @@ const InputStyle = styled.input`
   font-size: ${(props) => props.fontSize || '16px'};
 
   &::placeholder {
-    font-size: ${(props) =>
-      props.placeholderFontSize ? props.placeholderFontSize : '16px'};
+    font-size: ${(props) => props.placeholderFontSize || '16px'};
     color: #b0b0b0;
   }
   &:focus {
-    border: 1px solid ${(props) => props.focusBorderColor || '#1976D2'};
+    border: 1px solid ${(props) => props.$focusBorderColor || '#1976D2'};
     outline: none;
   }
   &:hover {
@@ -30,16 +29,17 @@ const InputStyle = styled.input`
     }
   }
   &:focus {
-    border: 1px solid ${(props) => props.focusBorderColor || '#1976D2'};
+    border: 1px solid ${(props) => props.$focusBorderColor || '#1976D2'};
     outline: none;
   }
 `;
 
 const TextStyle = styled.p`
-  font-size: ${(props) => (props.TextFontSize ? props.TextFontSize : '16px')};
+  font-size: ${(props) => props.TextFontSize || '16px'};
   color: ${(props) => (props.color ? props.color : props.theme.color.white)};
   margin-bottom: 6px;
   margin-top: 0px;
+  margin-left: ${(props) => (props.$marginLeft ? props.$marginLeft : '0px')};
 `;
 
 const CommonInput = (props) => {
@@ -52,8 +52,8 @@ const CommonInput = (props) => {
     height,
     background,
     color = '#4A4A4A',
-    borderColor,
-    focusBorderColor,
+    $borderColor,
+    $focusBorderColor,
     borderRadius,
     fontSize,
     TextFontSize,
@@ -62,11 +62,16 @@ const CommonInput = (props) => {
     hoverColor,
     value,
     onChange,
+    $marginLeft,
   } = props;
 
   return (
     <div>
-      <TextStyle color={color} TextFontSize={TextFontSize}>
+      <TextStyle
+        color={color}
+        TextFontSize={TextFontSize}
+        $marginLeft={$marginLeft}
+      >
         {text}
       </TextStyle>
 
@@ -77,8 +82,8 @@ const CommonInput = (props) => {
         width={width}
         height={height}
         $background={background}
-        borderColor={borderColor}
-        focusBorderColor={focusBorderColor}
+        $borderColor={$borderColor}
+        $focusBorderColor={$focusBorderColor}
         borderRadius={borderRadius}
         fontSize={fontSize}
         hoverBk={hoverBk}

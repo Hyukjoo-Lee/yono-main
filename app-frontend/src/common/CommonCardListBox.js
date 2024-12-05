@@ -31,14 +31,19 @@ const BoxStyle = styled.div`
   }
 `;
 
-const BoxInStyle = styled.div``;
+const BoxInStyle = styled.div`
+  width: calc(100% - 80px - 24px);
+`;
 
 const CardName = styled.p`
   margin: 0px;
   font-size: 20px;
   color: #212121;
   font-weight: bold;
-  margin-bottom: 0 0 8px 0;
+`;
+
+const DailyCardName = styled(CardName)`
+  margin-bottom: 8px;
 `;
 
 const InfoRow = styled.div`
@@ -73,7 +78,7 @@ const CardImage = styled.img`
 `;
 
 const SmallCardImage = styled(CardImage)`
-  width: 60px;
+  width: 80px;
 `;
 
 const CardInfoContainer = styled.div`
@@ -151,7 +156,7 @@ const CommonCardListBox = ({
         <BoxStyle>
           <SmallCardImage src={cardImg} alt="카드이미지" />
           <BoxInStyle>
-            <CardName>{cardTitle}</CardName>
+            <DailyCardName>{cardTitle}</DailyCardName>
             {cardInfo.map((item, index) => (
               <InfoRow key={index}>
                 <TitleStyle>{item.label}</TitleStyle>

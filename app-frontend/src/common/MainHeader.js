@@ -91,8 +91,8 @@ export function MainHeader() {
     { label: '로그인', path: '/login' },
     { label: '회원가입', path: '/signup' },
     { label: '마이페이지', path: '/mypage' },
-    { label: '아이디찾기', path: '/find-id' },
-    { label: '비밀번호찾기', path: '/find-pwd' },
+    // { label: '아이디찾기', path: '/find-id' },
+    // { label: '비밀번호찾기', path: '/find-pwd' },
   ];
 
   const menuList = [

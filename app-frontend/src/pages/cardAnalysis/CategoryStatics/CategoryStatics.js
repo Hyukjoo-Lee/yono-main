@@ -1,7 +1,7 @@
 import CommonCardListBox from '../../../common/CommonCardListBox';
 import Piechart from '../monthlyStatistics/chart/Piechart';
 import styled from 'styled-components';
-import CardImage from '../../../assets/images/CardImage.png';
+import { dailyStatisticsCardData } from '../../../mockData/cardMockData';
 
 const ChartBoard = styled.div`
   width: 100%;
@@ -24,7 +24,7 @@ const ListBox = styled.div`
   }
 `;
 
-const piechart_data = [
+const pieChart_data = [
   { id: '분식', value: 3 },
   { id: '의류', value: 1 },
   { id: '온라인쇼핑', value: 2 },
@@ -33,58 +33,11 @@ const piechart_data = [
 ];
 
 const CategoryStatics = () => {
-  const cardList = [
-    {
-      title: '현대카드(신용)',
-      cardImage: CardImage,
-      info: [
-        { label: '날짜', value: '2024.10.20' },
-        { label: '사용처', value: '88맥주집' },
-        { label: '카테고리', value: '식당' },
-      ],
-    },
-    {
-      title: '신한카드(체크)',
-      cardImage: CardImage,
-      info: [
-        { label: '날짜', value: '2024.10.20' },
-        { label: '사용처', value: '삼겹살' },
-        { label: '카테고리', value: '식당' },
-      ],
-    },
-    {
-      title: '국민카드(신용)',
-      cardImage: CardImage,
-      info: [
-        { label: '날짜', value: '2024.10.20' },
-        { label: '사용처', value: 'kg중국집' },
-        { label: '카테고리', value: '식당' },
-      ],
-    },
-    {
-      title: '현대카드(신용)',
-      cardImage: CardImage,
-      info: [
-        { label: '날짜', value: '2024.10.20' },
-        { label: '사용처', value: 'kg쌀국수' },
-        { label: '카테고리', value: '식당' },
-      ],
-    },
-    {
-      title: '현대카드(신용)',
-      cardImage: CardImage,
-      info: [
-        { label: '날짜', value: '2024.10.20' },
-        { label: '사용처', value: 'kg쌀국수' },
-        { label: '카테고리', value: '식당' },
-      ],
-    },
-  ];
   return (
     <ChartBoard>
-      <Piechart data={piechart_data} />
+      <Piechart data={pieChart_data} />
       <ListBox>
-        {cardList.map((item, index) => (
+        {dailyStatisticsCardData.map((item, index) => (
           <CommonCardListBox
             key={index}
             cardTitle={item.title}

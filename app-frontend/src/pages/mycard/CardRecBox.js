@@ -6,6 +6,7 @@ import LiveTvIcon from '@mui/icons-material/LiveTv';
 import CoffeeIcon from '@mui/icons-material/Coffee';
 import BusIcon from '@mui/icons-material/DirectionsBusFilled';
 import StarIcon from '@mui/icons-material/Star';
+
 const Root = styled(Box)`
   width: 100%;
   border-radius: 5px;
@@ -106,7 +107,14 @@ const BenefitIcon = ({ benefit }) => {
   }
 };
 
-const CardRecBox = ({ cardTitle, cardImg, cardInfo, cardMainBenefit }) => {
+const CardRecBox = ({
+  cardTitle,
+  cardImg,
+  cardInfo,
+  cardMainBenefit,
+  cardApplyLink,
+}) => {
+  console.log(cardApplyLink, cardMainBenefit);
   return (
     <Root>
       <RootIn>
@@ -128,12 +136,14 @@ const CardRecBox = ({ cardTitle, cardImg, cardInfo, cardMainBenefit }) => {
             </BenefitItem>
           ))}
         </BenefitList>
+
         <ButtonWrapper>
           <CommonButton
             fontSize={theme.fontSize.base}
             width="150px"
             height="40px"
             text="카드사 바로가기"
+            onClick={() => window.open(cardApplyLink, '_blank')}
           />
         </ButtonWrapper>
       </RootIn>

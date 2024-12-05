@@ -24,11 +24,11 @@ const Root = styled.div`
 `;
 
 const columns = [
-  { id: 'Category', label: '카테고리 ', minWidth: 50, align: 'center' },
-  { id: 'title', label: '제목 ', minWidth: 150, align: 'center' },
-  { id: 'author', label: '작성자 ', minWidth: 100, align: 'center' },
-  { id: 'day', label: '등록일', minWidth: 100, align: 'center' },
-  { id: 'check', label: '조회', minWidth: 50, align: 'center' },
+  { id: 'Category', label: '카테고리 ', minWidth: 50 },
+  { id: 'title', label: '제목 ', minWidth: 150 },
+  { id: 'author', label: '작성자 ', minWidth: 100 },
+  { id: 'day', label: '등록일', minWidth: 100 },
+  { id: 'check', label: '조회', minWidth: 50 },
 ];
 
 function createData(Category, title, author, day, check) {
@@ -47,58 +47,87 @@ const rows = [
   createData(
     '기타문의',
     '자유게시판 서비스 중단 소식을 알려드립니다',
+    '익명',
     '2024-10-28',
+    '0',
   ),
   createData(
     '정보공유',
     '자유게시판 서비스 중단 소식을 알려드립니다',
+    '익명',
     '2024-10-28',
+    '0',
   ),
   createData(
     '기타문의',
     '자유게시판 서비스 중단 소식을 알려드립니다',
+    '익명',
     '2024-10-28',
+    '0',
   ),
   createData(
     '정보공유',
     '자유게시판 서비스 중단 소식을 알려드립니다',
+    '익명',
     '2024-10-28',
+    '0',
   ),
   createData(
     '기타문의',
     '자유게시판 서비스 중단 소식을 알려드립니다',
+    '익명',
     '2024-10-28',
+    '0',
   ),
   createData(
     '정보공유',
     '자유게시판 서비스 중단 소식을 알려드립니다',
+    '익명',
     '2024-10-28',
+    '0',
   ),
   createData(
     '기타문의',
     '자유게시판 서비스 중단 소식을 알려드립니다',
+    '익명',
     '2024-10-28',
+    '0',
   ),
   createData(
     '정보공유',
     '자유게시판 서비스 중단 소식을 알려드립니다',
+    '익명',
     '2024-10-28',
+    '0',
   ),
   createData(
     '기타문의',
     '자유게시판 서비스 중단 소식을 알려드립니다',
+    '익명',
     '2024-10-28',
+    '0',
   ),
   createData(
     '정보공유',
     '자유게시판 서비스 중단 소식을 알려드립니다',
+    '익명',
     '2024-10-28',
+    '0',
   ),
 ];
 
 const TableContainerStyle = styled(TableContainer)`
-  max-height: 440px;
+  max-height: 590px;
   overflow-y: auto;
+  &::-webkit-scrollbar {
+    width: 0;
+  }
+  &::-webkit-scrollbar-thumb {
+    background: transparent;
+  }
+  &::-webkit-scrollbar-track {
+    background: transparent;
+  }
 `;
 
 const Container = styled.div`
@@ -177,7 +206,7 @@ export function CommunityTable() {
                   {columns.map((column) => (
                     <TableCell
                       key={column.id}
-                      align={column.align}
+                      align="center"
                       style={{ minWidth: column.minWidth }}
                       sx={{ borderBottom: '1px solid #000000' }}
                     >
@@ -197,7 +226,7 @@ export function CommunityTable() {
                           return (
                             <TableCell
                               key={column.id}
-                              align={column.align}
+                              align="center"
                               sx={{ borderBottom: '0.5px solid #757575' }}
                             >
                               <Link
