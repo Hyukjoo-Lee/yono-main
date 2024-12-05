@@ -28,17 +28,17 @@ const Root = styled.div`
   p {
     font-family: 'Noto Sans KR';
   }
+`;
 
-  & > div {
-    min-height: calc(100vh - 110px);
-  }
+const ContentsBox = styled.div`
+  min-height: calc(100vh - 110px);
 `;
 
 function Layout({ children }) {
   return (
     <Root>
       <MainHeader />
-      {children}
+      <ContentsBox>{children}</ContentsBox>
       <Footer />
     </Root>
   );
