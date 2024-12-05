@@ -209,7 +209,7 @@ export const dailyStatisticsCardData = [
     info: [
       { label: '날짜', value: '2024.10.20' },
       { label: '사용처', value: '88맥주집' },
-      { label: '카테고리', value: '식당' },
+      { label: '카테고리', value: '식비' },
       { label: '사용금액', value: '80,000' },
     ],
   },
@@ -220,7 +220,7 @@ export const dailyStatisticsCardData = [
     info: [
       { label: '날짜', value: '2024.10.20' },
       { label: '사용처', value: '삼겹살' },
-      { label: '카테고리', value: '식당' },
+      { label: '카테고리', value: '식비' },
       { label: '사용금액', value: '35,000' },
     ],
   },
@@ -231,7 +231,7 @@ export const dailyStatisticsCardData = [
     info: [
       { label: '날짜', value: '2024.10.20' },
       { label: '사용처', value: 'kg중국집' },
-      { label: '카테고리', value: '식당' },
+      { label: '카테고리', value: '식비' },
       { label: '사용금액', value: '12,000' },
     ],
   },
@@ -242,7 +242,7 @@ export const dailyStatisticsCardData = [
     info: [
       { label: '날짜', value: '2024.10.20' },
       { label: '사용처', value: 'kg쌀국수' },
-      { label: '카테고리', value: '식당' },
+      { label: '카테고리', value: '식비' },
       { label: '사용금액', value: '8,000' },
     ],
   },
@@ -253,7 +253,7 @@ export const dailyStatisticsCardData = [
     info: [
       { label: '날짜', value: '2024.10.20' },
       { label: '사용처', value: 'kg쌀국수' },
-      { label: '카테고리', value: '식당' },
+      { label: '카테고리', value: '식비' },
       { label: '사용금액', value: '2,000' },
     ],
   },

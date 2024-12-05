@@ -22,7 +22,7 @@ const Barchart = ({ data }) => {
     <StyledChart>
       <ResponsiveBar
         data={data}
-        keys={['외식', '의류', '온라인쇼핑', '주류', '전자제품']}
+        keys={['식비', '교통비', '쇼핑', '문화', '전자제품']}
         indexBy="bottle"
         margin={{ top: 50, right: 130, bottom: 50, left: 80 }}
         padding={0.3}

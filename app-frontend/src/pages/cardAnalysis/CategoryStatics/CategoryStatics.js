@@ -25,10 +25,10 @@ const ListBox = styled.div`
 `;
 
 const pieChart_data = [
-  { id: '분식', value: 3 },
-  { id: '의류', value: 1 },
-  { id: '온라인쇼핑', value: 2 },
-  { id: '주류', value: 8 },
+  { id: '식비', value: 3 },
+  { id: '교통비', value: 1 },
+  { id: '쇼핑', value: 2 },
+  { id: '문화', value: 8 },
   { id: '전자제품', value: 3 },
 ];
 
