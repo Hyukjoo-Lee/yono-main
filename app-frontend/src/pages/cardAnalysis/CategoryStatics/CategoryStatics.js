@@ -2,6 +2,7 @@ import CommonCardListBox from '../../../common/CommonCardListBox';
 import Piechart from '../monthlyStatistics/chart/Piechart';
 import styled from 'styled-components';
 import CardImage from '../../../assets/images/CardImage.png';
+import { dailyStatisticsCardData } from '../../../mockData/cardMockData';
 
 const ChartBoard = styled.div`
   width: 100%;
@@ -84,7 +85,7 @@ const CategoryStatics = () => {
     <ChartBoard>
       <Piechart data={piechart_data} />
       <ListBox>
-        {cardList.map((item, index) => (
+        {dailyStatisticsCardData.map((item, index) => (
           <CommonCardListBox
             key={index}
             cardTitle={item.title}
