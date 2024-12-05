@@ -88,11 +88,6 @@ const ButtonProps = {
   color: '#757575',
 };
 export function SignUp() {
-  const selectOptions = [
-    { value: '애완동물 이름은?', label: '애완동물 이름은?' },
-    { value: '당신의 생일은?', label: '당신의 생일은?' },
-    { value: '당신이 좋아하는 음식은?', label: '당신이 좋아하는 음식은?' },
-  ];
   const [errorIDMessage, setErrorIDMessage] = useState('');
   const [correctIDMessage, setCorrectIDMessage] = useState('');
   const [answerID, setAnswerID] = useState('');
@@ -100,7 +95,12 @@ export function SignUp() {
   const [correctPWMessage, setCorrectPWMessage] = useState('');
   const [correctPWAnswer, setCorrectPWAnswer] = useState('');
   const [answerPW, setAnswerPW] = useState('');
-
+  const [selectedQuestion, setSelectedQuestion] = useState('');
+  const selectOptions = [
+    { value: '애완동물 이름은?', label: '애완동물 이름은?' },
+    { value: '당신의 생일은?', label: '당신의 생일은?' },
+    { value: '당신이 좋아하는 음식은?', label: '당신이 좋아하는 음식은?' },
+  ];
   const handleIDChange = (e) => {
     const value = e.target.value;
     setAnswerID(value);
@@ -217,6 +217,8 @@ export function SignUp() {
             color="#464646"
             labelColor="#464646"
             options={selectOptions}
+            selectedValue={selectedQuestion}
+            setSelectedValue={(value) => setSelectedQuestion(value)}
             find="질문을 선택하세요"
             $fieldBorderColor="transparent"
             background="transparent"
