@@ -5,6 +5,7 @@ import CommonButton from '../../common/CommonButton';
 import CommonPageInfo from '../../common/CommonPageInfo';
 import CommonHr from '../../common/CommonHr';
 import { useNavigate } from 'react-router-dom';
+import { useState } from 'react';
 
 const Root = styled.div`
   width: ${(props) => props.theme.display.lg};
@@ -47,6 +48,9 @@ const Row = styled.div`
     border: 1px solid #1976d2;
     outline: none;
   }
+  & > button {
+    margin-top: 5px;
+  }
 `;
 
 const Box1 = styled.div`
@@ -56,12 +60,18 @@ const Box1 = styled.div`
   margin: 20px;
   gap: 30px;
 `;
+const OptionList = [
+  { value: 'option_1', label: '정보공유' },
+  { value: 'option_2', label: '질문' },
+  { value: 'option_3', label: '기타 문의' },
+];
 
 export function EditFormBox() {
   const navigate = useNavigate();
   const handleNavigateToList = () => {
     navigate('/community');
   };
+  const [ListData, setListData] = useState('');
   return (
     <Root>
       <CommonPageInfo title={'수정게시판'} text={<p></p>} />
@@ -78,15 +88,13 @@ export function EditFormBox() {
         <Row>
           <span> 카테고리</span>
           <CommonSelect
-            options={[
-              { value: 'option_1', label: '정보공유' },
-              { value: 'option_2', label: '질문' },
-              { value: 'option_3', label: '기타 문의' },
-            ]}
+            options={OptionList}
             width="500px"
             height="40px"
-            text="문의를 선택해주세요"
+            find="문의를 선택해주세요"
             display="none"
+            selectedValue={ListData}
+            setSelectedValue={(value) => setListData(value)}
           />
         </Row>
 
