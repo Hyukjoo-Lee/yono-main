@@ -33,13 +33,6 @@ const MiddleTitle = styled.div`
   margin-left: 5px;
 `;
 
-const HiddenIDBox = styled.div`
-  display: ${(props) => (props.$isVisible ? 'flex' : 'none')};
-  flex-direction: column;
-  align-items: flex-start;
-  gap: 10px;
-`;
-
 const InputIDBox = styled.div`
   display: flex;
   flex-direction: row;
@@ -47,11 +40,7 @@ const InputIDBox = styled.div`
   align-items: flex-end;
   width: 350px;
 `;
-const HiddenPWBox = styled.div`
-  display: ${(props) => (props.$isVisible ? 'flex' : 'none')};
-  flex-direction: column;
-  align-items: flex-start;
-`;
+
 const InputPWBox = styled.div`
   display: flex;
   flex-direction: row;

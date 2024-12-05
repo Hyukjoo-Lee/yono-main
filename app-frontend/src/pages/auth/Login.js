@@ -139,15 +139,12 @@ export function Login(props) {
         }
       }
     } else if (username !== dummyUser.username) {
-      // If username is incorrect
       setIDerrorMessage(EMAIL_VERIFIED_ERROR);
-      setPWerrorMessage(''); // Clear password error if username is wrong
+      setPWerrorMessage('');
     } else if (password !== dummyUser.password) {
-      // If password is incorrect
       setPWerrorMessage(PASSWORD_VERIFIED_ERROR);
-      setIDerrorMessage(''); // Clear username error if password is wrong
+      setIDerrorMessage('');
     } else {
-      // If both username and password are correct
       setSuccessVisible(true);
       setIDerrorMessage('');
       setPWerrorMessage('');
