@@ -21,6 +21,7 @@ import { MyPage } from './pages/mypage/MyPage';
 import theme from './theme/theme';
 import { CommunityPost } from './pages/community/CommunityPost';
 import { NoticePost } from './pages/community/NoticePost';
+import { EditFormBox } from './pages/community/EditFormBox';
 
 const Root = styled.div`
   & *,
@@ -68,6 +69,7 @@ function App() {
             <Route path="/mycard" element={<MyCard />} />
             <Route path="/communityPost" element={<CommunityPost />} />
             <Route path="/noticePost" element={<NoticePost />} />
+            <Route path="/editFormBox" element={<EditFormBox />} />
           </Routes>
         </Layout>
       </Router>

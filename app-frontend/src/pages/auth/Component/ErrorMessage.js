@@ -9,8 +9,8 @@ const PASSWORD2_CONFORM_ERROR = '비밀번호가 일치하지 않습니다';
 export const PASSWORD_REGEX_ERROR =
   'Password should be between 8 to 16 characters';
 export const EMAIL_REGEX_ERROR = 'Please enter a valid email address';
-const EMAIL_VERIFIED_ERROR = '아이디가 존재하지 않습니다.';
-const PASSWORD_VERIFIED_ERROR = '비밀번호가 틀립니다.';
+const EMAIL_VERIFIED_ERROR = '아이디를 확인해 주세요.';
+const PASSWORD_VERIFIED_ERROR = '비밀번호를 확인해 주세요.';
 
 export {
   EMAIL_VERIFIED_ERROR,
