@@ -24,15 +24,15 @@ const Root = styled.div`
 `;
 
 const columns = [
-  { id: 'Category', label: '카테고리 ', minWidth: 50 },
+  { id: 'category', label: '카테고리 ', minWidth: 50 },
   { id: 'title', label: '제목 ', minWidth: 150 },
   { id: 'author', label: '작성자 ', minWidth: 100 },
   { id: 'day', label: '등록일', minWidth: 100 },
   { id: 'check', label: '조회', minWidth: 50 },
 ];
 
-function createData(Category, title, author, day, check) {
-  return { Category, title, author, day, check };
+function createData(category, title, author, day, check) {
+  return { category, title, author, day, check };
 }
 
 const rows = [
