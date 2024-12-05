@@ -72,7 +72,7 @@ export function SignUp() {
 
   const inputRegexs = {
     // 아이디 : 문자로 시작하여, 영문자, 숫자, 하이픈(-), 언더바(_)를 사용하여 3~20자 이내
-    idRegex: /^[a-zA-Z][a-zA-Z0-9_-]{2,19}$/,
+    idRegex: /^[a-zA-Z][a-zA-Z0-9]{2,19}$/,
     // 비밀번호 : 최소 8자 이상, 최소한 하나의 대문자, 하나의 소문자, 하나의 숫자, 하나의 특수문자를 포함, 공백 허용하지 않음
     pwRegex: /^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[@#$%^&+=!])(?!.*\s).{8,}$/,
     // 닉네임 : 영어 대/소문자, 숫자, 한글 자모음 조합, 2~10자 이내
@@ -127,16 +127,18 @@ export function SignUp() {
     inputValue.emailAddress && // 이메일 도메인 주소를 선택하였는가?
     inputValue.validEmail; // 이메일이 인증되었는가?
 
-  const checkIdDuplication = async () => {
-    // 이 부분은 실제 API를 호출하여 ID 중복을 확인하는 코드로 대체해야 합니다.
-    // 예시로 임의로 'takenId'를 이미 사용 중인 ID로 설정
-    const isDuplicate = inputValue.id === 'takenId';
-    if (isDuplicate) {
-      setAlertMessage({ ...alertMessage, id: '이미 사용 중인 아이디입니다' });
-      setInputValue({ ...inputValue, nonIdDuplication: false });
+  const validateId = () => {
+    if (!inputValue.id.match(inputRegexs.idRegex)) {
+      setAlertMessage((prev) => ({
+        ...prev,
+        id: '문자로 시작하여, 영문자, 숫자를 사용하여 3~20자 이내로 작성하세요',
+      }));
+      setPassMessage((prev) => ({ ...prev, id: '' }));
+      return false;
     } else {
-      setAlertMessage({ ...alertMessage, id: '사용 가능한 아이디입니다' });
-      setInputValue({ ...inputValue, nonIdDuplication: true });
+      setAlertMessage((prev) => ({ ...prev, id: '' }));
+      setPassMessage((prev) => ({ ...prev, id: '사용 가능한 아이디 입니다' }));
+      return true;
     }
   };
 
@@ -148,51 +150,60 @@ export function SignUp() {
     let newAlertMessages = { ...alertMessage };
     let newCorrectMessages = { ...passMessage };
 
-    if (!inputValue.id || !inputValue.id.match(inputRegexs.idRegex)) {
-      newAlertMessages.id = '아이디를 정확히 입력해주세요.';
+    // 아이디 유효성 검사
+    if (inputValue.id === '') {
+      newAlertMessages.pw = '아이디 입력해주세요';
       isValid = false;
-    } else {
-      newCorrectMessages.id = '사용 가능한 아이디 입니다';
     }
 
-    if (!inputValue.pw || !inputValue.pw.match(inputRegexs.pwRegex)) {
-      newAlertMessages.pw = '비밀번호를 정확히 입력해주세요.';
+    // 비밀번호 유효성 검사
+    if (inputValue.pw === '') {
+      newAlertMessages.pw = '비밀번호 입력해주세요';
       isValid = false;
-    } else {
-      newCorrectMessages.pw = '사용 가능한 비밀번호 입니다';
+    } else if (!inputValue.pw.match(inputRegexs.pwRegex)) {
+      newAlertMessages.pw =
+        '최소 8자 이상, 최소한 하나의 대문자, 하나의 소문자, 하나의 숫자, 하나의 특수문자를 포함, 공백 허용하지 않습니다';
+      isValid = false;
     }
 
-    if (inputValue.pw !== inputValue.pwCheck) {
+    // 비밀번호 확인
+    if (inputValue.pwCheck === '') {
+      newAlertMessages.pwCheck = '비밀번호 확인을 입력해주세요';
+      isValid = false;
+    } else if (inputValue.pw !== inputValue.pwCheck) {
       newAlertMessages.pwCheck = '비밀번호가 일치하지 않습니다.';
       isValid = false;
     } else {
       newCorrectMessages.pwCheck = '비밀번호가 일치합니다';
     }
 
-    if (
-      !inputValue.nickname ||
-      !inputValue.nickname.match(inputRegexs.nicknameRegex)
-    ) {
-      newAlertMessages.nickname = '닉네임을 정확히 입력해주세요.';
+    // 닉네임 유효성 검사
+    if (!inputValue.nickname) {
+      newAlertMessages.nickname = '닉네임을 입력해주세요';
       isValid = false;
-    } else {
-      newCorrectMessages.nickname = '사용가능한 닉네임입니다';
+    } else if (!inputValue.nickname.match(inputRegexs.nicknameRegex)) {
+      newAlertMessages.nickname =
+        '영어 대/소문자, 숫자, 한글 자모음 조합, 2~10자 이내로 입력해주세요';
+      isValid = false;
     }
 
-    if (!inputValue.email || !inputValue.emailAddress) {
-      newAlertMessages.email = '이메일을 정확히 입력해주세요.';
+    // 이메일 유효성 검사
+    if (inputValue.email === '') {
+      newAlertMessages.email = '이메일을 입력해주세요'; // 이메일이 비어 있을 때 경고 메시지
       isValid = false;
-    } else {
-      newCorrectMessages.email = '사용가능한 이메일 입니다';
+    } else if (!inputValue.email.match(inputRegexs.emailRegex)) {
+      newAlertMessages.email = '이메일 형식이 올바르지 않습니다.'; // 이메일 형식이 잘못됐을 때 경고 메시지
+      isValid = false;
     }
 
     setAlertMessage(newAlertMessages); // 상태 업데이트
+    setPassMessage(newCorrectMessages); // 상태 업데이트
 
+    // 모든 유효성 검사 통과 시
     if (isValid) {
       setIsDialogPWVisible(true); // 조건 만족 시 다이얼로그 표시
     }
   };
-
   return (
     <CommonRoot>
       <FullContainer>
@@ -204,7 +215,7 @@ export function SignUp() {
           <InputIDBox>
             <CommonInput
               placeholder="아이디를 입력하세요"
-              text="아이디(이메일)"
+              text="아이디"
               onChange={(e) =>
                 setInputValue({ ...inputValue, id: e.target.value })
               }
@@ -214,7 +225,7 @@ export function SignUp() {
               {...ButtonProps}
               text="중복확인"
               width="100px"
-              onClick={checkIdDuplication}
+              onClick={validateId}
             />
           </InputIDBox>
           {alertMessage.id && <ErrorMessage>{alertMessage.id}</ErrorMessage>}
@@ -228,6 +239,7 @@ export function SignUp() {
             }
             {...InputProps}
           />
+          {alertMessage.id && <ErrorMessage>{alertMessage.pw}</ErrorMessage>}
           <CommonHr />
           <InputPWBox>
             <div style={ContainerProps} />
@@ -239,12 +251,11 @@ export function SignUp() {
               }
               {...InputProps}
             />
-            <CommonButton {...ButtonProps} onClick={() => {}} />
           </InputPWBox>
-          <CommonHr />
           {alertMessage.pwCheck && (
             <ErrorMessage>{alertMessage.pwCheck}</ErrorMessage>
           )}
+          <CommonHr />
           <div style={ContainerProps} />
           <CommonInput
             placeholder="닉네임을 입력하세요"
@@ -267,6 +278,9 @@ export function SignUp() {
             }
             {...InputProps}
           />
+          {alertMessage.email && (
+            <ErrorMessage>{alertMessage.email}</ErrorMessage>
+          )}
           <CommonHr />
           <div style={ContainerProps} />{' '}
           <CommonButton {...ButtonProps} text="완료" onClick={handleSubmit} />
