@@ -15,6 +15,7 @@ import {
   PASSWORD_VERIFIED_ERROR,
 } from '../auth/Component/ErrorMessage';
 import SuccessLogin from './SuccessLogin';
+import CommonHr from '../../common/CommonHr';
 
 const RootIn = styled.div`
   display: flex;
@@ -159,8 +160,11 @@ export function Login(props) {
   const inputProps = {
     background: '#FFFFFF',
     color: '#464646',
+    $borderColor: 'transparent',
+    $focusBorderColor: 'transparent',
     width: '300px',
     height: '35px',
+    $marginLeft: '7px',
   };
 
   return (
@@ -171,16 +175,21 @@ export function Login(props) {
 
           <CommonInput
             text="아이디"
+            placeholder="아이디를 입력하세요"
             value={username}
             onChange={handleUsernameChange}
             {...inputProps}
           />
+          <CommonHr />
+
           <CommonInput
             text="비밀번호"
+            placeholder="비밀번호를 입력하세요"
             value={password}
             onChange={handlePasswordChange}
             {...inputProps}
           />
+          <CommonHr />
         </HighContainer>
 
         <MiddleContainer>
