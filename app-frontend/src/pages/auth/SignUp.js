@@ -112,20 +112,20 @@ export function SignUp() {
     email: '',
   });
 
-  // 조건을 모두 충족할 시 제출 버튼 활성화
-  const submitRequirements =
-    inputValue.id && // 아이디가 입력되었는가?
-    inputValue.validId && // 아이디가 정규식에 부합하는가?
-    inputValue.nonIdDuplication && // 아이디가 중복되지 않았는가?
-    inputValue.pw && // 비밀번호가 입력되었는가?
-    inputValue.validPw && // 비밀번호가 정규식에 부합하는가?
-    inputValue.pwCheck && // 비밀번호 확인이 입력되었는가?
-    inputValue.correctPwCheck && // 비밀번호 확인이 비밀번호와 일치하는가?
-    inputValue.nickname && // 닉네임이 입력되었는가?
-    inputValue.nicknameDuplication && // 닉네임이 중복되지 않았는가?
-    inputValue.emailId && // 이메일 아이디를 입력하였는가?
-    inputValue.emailAddress && // 이메일 도메인 주소를 선택하였는가?
-    inputValue.validEmail; // 이메일이 인증되었는가?
+  // // 조건을 모두 충족할 시 제출 버튼 활성화
+  // const submitRequirements =
+  //   inputValue.id && // 아이디가 입력되었는가?
+  //   inputValue.validId && // 아이디가 정규식에 부합하는가?
+  //   inputValue.nonIdDuplication && // 아이디가 중복되지 않았는가?
+  //   inputValue.pw && // 비밀번호가 입력되었는가?
+  //   inputValue.validPw && // 비밀번호가 정규식에 부합하는가?
+  //   inputValue.pwCheck && // 비밀번호 확인이 입력되었는가?
+  //   inputValue.correctPwCheck && // 비밀번호 확인이 비밀번호와 일치하는가?
+  //   inputValue.nickname && // 닉네임이 입력되었는가?
+  //   inputValue.nicknameDuplication && // 닉네임이 중복되지 않았는가?
+  //   inputValue.emailId && // 이메일 아이디를 입력하였는가?
+  //   inputValue.emailAddress && // 이메일 도메인 주소를 선택하였는가?
+  //   inputValue.validEmail; // 이메일이 인증되었는가?
 
   const validateId = () => {
     if (!inputValue.id.match(inputRegexs.idRegex)) {
