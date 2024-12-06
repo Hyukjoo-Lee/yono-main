@@ -2,17 +2,10 @@ import CommonRoot from '../../common/CommonRoot';
 import styled from 'styled-components';
 import CommonInput from '../../common/CommonInput';
 import CommonButton from '../../common/CommonButton';
-import CommonSelect from '../../common/CommonSelect';
 import CommonHr from '../../common/CommonHr';
-import ImageGallery from '../mypage/ImageSelect';
-import image1 from '../../assets/images/Character1.png';
-import image2 from '../../assets/images/Character2.png';
-import image3 from '../../assets/images/Character3.png';
-import image4 from '../../assets/images/Character4.png';
 import CommonPageInfo from '../../common/CommonPageInfo';
 import { useState } from 'react';
 import SuccessSignUp from './SuccessSignUp';
-const images = [image1, image2, image3, image4];
 
 const FullContainer = styled.div`
   display: flex;
@@ -55,31 +48,11 @@ const ErrorMessage = styled.div`
   font-size: 13px;
   margin-left: 5px;
 `;
-const CorrectMessage = styled.div`
-  color: blue;
-  font-size: 13px;
-  margin-left: 5px;
-`;
+
 const ContainerProps = {
   marginBottom: '13px',
 };
 
-const ImgContainer = styled.div`
-  width: 350px;
-  display: flex;
-  flex-direction: column;
-  justify-content: flex-start;
-  align-items: flex-start;
-  gap: 5px;
-  margin-top: 5px;
-  margin-bottom: 10px;
-`;
-const InnerContainer = styled.div`
-  flex-direction: column;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-`;
 const InputProps = {
   width: '350px',
   $borderColor: 'transparent',
@@ -95,69 +68,142 @@ const ButtonProps = {
   color: '#757575',
 };
 export function SignUp() {
-  const [errorIDMessage, setErrorIDMessage] = useState('');
-  const [correctIDMessage, setCorrectIDMessage] = useState('');
-  const [answerID, setAnswerID] = useState('');
-  const [errorPWMessage, setErrorPWMessage] = useState('');
-  const [correctPWMessage, setCorrectPWMessage] = useState('');
-  const [correctPWAnswer, setCorrectPWAnswer] = useState('');
-  const [answerPW, setAnswerPW] = useState('');
-  const [selectedQuestion, setSelectedQuestion] = useState('');
   const [isDialogPWVisible, setIsDialogPWVisible] = useState(false);
-  // const [isFull, setIsFull] = useState(false);
 
-  const selectOptions = [
-    { value: '애완동물 이름은?', label: '애완동물 이름은?' },
-    { value: '당신의 생일은?', label: '당신의 생일은?' },
-    { value: '당신이 좋아하는 음식은?', label: '당신이 좋아하는 음식은?' },
-  ];
-  const handleIDChange = (e) => {
-    const value = e.target.value;
-    setAnswerID(value);
-    if (value.length === 0) {
-      setErrorIDMessage('');
-      setCorrectIDMessage('');
-    }
+  const inputRegexs = {
+    // 아이디 : 문자로 시작하여, 영문자, 숫자, 하이픈(-), 언더바(_)를 사용하여 3~20자 이내
+    idRegex: /^[a-zA-Z][a-zA-Z0-9]{2,19}$/,
+    // 비밀번호 : 최소 8자 이상, 최소한 하나의 대문자, 하나의 소문자, 하나의 숫자, 하나의 특수문자를 포함, 공백 허용하지 않음
+    pwRegex: /^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[@#$%^&+=!])(?!.*\s).{8,}$/,
+    // 닉네임 : 영어 대/소문자, 숫자, 한글 자모음 조합, 2~10자 이내
+    nicknameRegex: /^[a-zA-Z0-9ㄱ-ㅎㅏ-ㅣ가-힣]{2,10}$/,
   };
-  const dummyId = 'lhk883@naver.com';
-  const handleIDConfirm = () => {
-    if (answerID.length === 0) {
-      // 먼저 빈 문자열을 체크
-      setErrorIDMessage('아이디를 입력해 주세요');
-    } else if (answerID === dummyId) {
-      // 아이디가 일치하는지 확인
-      setCorrectIDMessage('사용가능한 아이디 입니다');
+  const [inputValue, setInputValue] = useState({
+    id: '', // 입력된 아이디 데이터
+    validId: false, // 아이디 정규식 충족 여부
+    nonIdDuplication: false, // 아이디 중복확인 여부
+    pw: '', // 입력된 패스워드 데이터
+    validPw: false, // 패스워드 정규식 충족 여부
+    pwCheck: '', // 입력된 패스워드 확인 데이터
+    correctPwCheck: false, // 패드워드 데이터와 일치하는지 여부
+    nickname: '', // 입력된 닉네임 데이터
+    validNickname: false, // 닉네임 정규식 충족 여부
+    email: '', // 입력된 이메일 아이디 데이터
+    emailAddress: '', // 선댁된 이메일 도메인 데이터
+    validEmail: true, // 이메일 인증 여부 (미구현이라 true가 초기값, 추후 리팩토링 예정)
+    profileImage: '', // 업로드된 프로필 이미지 (선택사항)
+    agree: false, // 정보 제공 동의 여부
+  });
+  // 조건에 부합할 경우 초록글씨 경고 문구
+  const [passMessage, setPassMessage] = useState({
+    id: '',
+    pw: '',
+    pwCheck: '',
+    nickname: '',
+    email: '',
+  });
+
+  // 조건에 부합하지 않는 경우 빨간글씨 경고 문구
+  const [alertMessage, setAlertMessage] = useState({
+    id: '',
+    pw: '',
+    pwCheck: '',
+    nickname: '',
+    email: '',
+  });
+
+  // 조건을 모두 충족할 시 제출 버튼 활성화
+  const submitRequirements =
+    inputValue.id && // 아이디가 입력되었는가?
+    inputValue.validId && // 아이디가 정규식에 부합하는가?
+    inputValue.nonIdDuplication && // 아이디가 중복되지 않았는가?
+    inputValue.pw && // 비밀번호가 입력되었는가?
+    inputValue.validPw && // 비밀번호가 정규식에 부합하는가?
+    inputValue.pwCheck && // 비밀번호 확인이 입력되었는가?
+    inputValue.correctPwCheck && // 비밀번호 확인이 비밀번호와 일치하는가?
+    inputValue.nickname && // 닉네임이 입력되었는가?
+    inputValue.nicknameDuplication && // 닉네임이 중복되지 않았는가?
+    inputValue.emailId && // 이메일 아이디를 입력하였는가?
+    inputValue.emailAddress && // 이메일 도메인 주소를 선택하였는가?
+    inputValue.validEmail; // 이메일이 인증되었는가?
+
+  const validateId = () => {
+    if (!inputValue.id.match(inputRegexs.idRegex)) {
+      setAlertMessage((prev) => ({
+        ...prev,
+        id: '문자로 시작하여, 영문자, 숫자를 사용하여 3~20자 이내로 작성하세요',
+      }));
+      setPassMessage((prev) => ({ ...prev, id: '' }));
+      return false;
     } else {
-      // 아이디가 일치하지 않으면
-      setErrorIDMessage('사용중인 아이디 입니다');
+      setAlertMessage((prev) => ({ ...prev, id: '' }));
+      setPassMessage((prev) => ({ ...prev, id: '사용 가능한 아이디 입니다' }));
+      return true;
     }
   };
 
-  const handlePWChange = (e) => {
-    const value = e.target.value;
-    setAnswerPW(value);
-    if (value.length === 0) {
-      setErrorPWMessage('');
-      setCorrectPWMessage('');
-    }
-  };
+  const handleSubmit = (e) => {
+    e.preventDefault(); // 폼 제출 방지
 
-  const handlePWConfirm = () => {
-    if (answerPW === '' || correctPWAnswer === '') {
-      // 둘 중 하나라도 비어 있으면
-      setErrorPWMessage('비밀번호를 입력해 주세요');
-    } else if (answerPW === correctPWAnswer) {
-      // 비밀번호가 일치하는 경우
-      setCorrectPWMessage('사용가능한 비밀번호 입니다');
+    // 유효성 검사 (모든 항목을 검사)
+    let isValid = true;
+    let newAlertMessages = { ...alertMessage };
+    let newCorrectMessages = { ...passMessage };
+
+    // 아이디 유효성 검사
+    if (inputValue.id === '') {
+      newAlertMessages.pw = '아이디 입력해주세요';
+      isValid = false;
+    }
+
+    // 비밀번호 유효성 검사
+    if (inputValue.pw === '') {
+      newAlertMessages.pw = '비밀번호 입력해주세요';
+      isValid = false;
+    } else if (!inputValue.pw.match(inputRegexs.pwRegex)) {
+      newAlertMessages.pw =
+        '최소 8자 이상, 최소한 하나의 대문자, 하나의 소문자, 하나의 숫자, 하나의 특수문자를 포함, 공백 허용하지 않습니다';
+      isValid = false;
+    }
+
+    // 비밀번호 확인
+    if (inputValue.pwCheck === '') {
+      newAlertMessages.pwCheck = '비밀번호 확인을 입력해주세요';
+      isValid = false;
+    } else if (inputValue.pw !== inputValue.pwCheck) {
+      newAlertMessages.pwCheck = '비밀번호가 일치하지 않습니다.';
+      isValid = false;
     } else {
-      // 비밀번호가 일치하지 않는 경우
-      setErrorPWMessage('비밀번호가 일치하지 않습니다');
+      newCorrectMessages.pwCheck = '비밀번호가 일치합니다';
+    }
+
+    // 닉네임 유효성 검사
+    if (!inputValue.nickname) {
+      newAlertMessages.nickname = '닉네임을 입력해주세요';
+      isValid = false;
+    } else if (!inputValue.nickname.match(inputRegexs.nicknameRegex)) {
+      newAlertMessages.nickname =
+        '영어 대/소문자, 숫자, 한글 자모음 조합, 2~10자 이내로 입력해주세요';
+      isValid = false;
+    }
+
+    // 이메일 유효성 검사
+    if (inputValue.email === '') {
+      newAlertMessages.email = '이메일을 입력해주세요'; // 이메일이 비어 있을 때 경고 메시지
+      isValid = false;
+    } else if (!inputValue.email.match(inputRegexs.emailRegex)) {
+      newAlertMessages.email = '이메일 형식이 올바르지 않습니다.'; // 이메일 형식이 잘못됐을 때 경고 메시지
+      isValid = false;
+    }
+
+    setAlertMessage(newAlertMessages); // 상태 업데이트
+    setPassMessage(newCorrectMessages); // 상태 업데이트
+
+    // 모든 유효성 검사 통과 시
+    if (isValid) {
+      setIsDialogPWVisible(true); // 조건 만족 시 다이얼로그 표시
     }
   };
-  const completeSignUp = () => {
-    setIsDialogPWVisible(true);
-  };
-
   return (
     <CommonRoot>
       <FullContainer>
@@ -169,92 +215,80 @@ export function SignUp() {
           <InputIDBox>
             <CommonInput
               placeholder="아이디를 입력하세요"
-              text="아이디(이메일)"
-              onChange={handleIDChange}
+              text="아이디"
+              onChange={(e) =>
+                setInputValue({ ...inputValue, id: e.target.value })
+              }
               {...InputProps}
             />
             <CommonButton
               {...ButtonProps}
               text="중복확인"
               width="100px"
-              onClick={handleIDConfirm}
+              onClick={validateId}
             />
           </InputIDBox>
+          {alertMessage.id && <ErrorMessage>{alertMessage.id}</ErrorMessage>}
           <CommonHr />
-          {errorIDMessage && <ErrorMessage>{errorIDMessage}</ErrorMessage>}
-          {correctIDMessage && (
-            <CorrectMessage>{correctIDMessage}</CorrectMessage>
-          )}
           <div style={ContainerProps} />
           <CommonInput
             placeholder="비밀번호를 입력하세요"
             text="비밀번호"
-            onChange={handlePWChange}
+            onChange={(e) =>
+              setInputValue({ ...inputValue, pw: e.target.value })
+            }
             {...InputProps}
           />
+          {alertMessage.id && <ErrorMessage>{alertMessage.pw}</ErrorMessage>}
           <CommonHr />
           <InputPWBox>
             <div style={ContainerProps} />
             <CommonInput
               placeholder="비밀번호 확인해주세요"
               text="비밀번호 확인"
-              onChange={(e) => setCorrectPWAnswer(e.target.value)}
+              onChange={(e) =>
+                setInputValue({ ...inputValue, pwCheck: e.target.value })
+              }
               {...InputProps}
             />
-            <CommonButton {...ButtonProps} onClick={handlePWConfirm} />
           </InputPWBox>
-          <CommonHr />
-          {errorPWMessage && <ErrorMessage>{errorPWMessage}</ErrorMessage>}
-          {correctPWMessage && (
-            <CorrectMessage>{correctPWMessage}</CorrectMessage>
+          {alertMessage.pwCheck && (
+            <ErrorMessage>{alertMessage.pwCheck}</ErrorMessage>
           )}
+          <CommonHr />
           <div style={ContainerProps} />
           <CommonInput
             placeholder="닉네임을 입력하세요"
             text="닉네임"
+            onChange={(e) =>
+              setInputValue({ ...inputValue, nickname: e.target.value })
+            }
             {...InputProps}
           />
+          {alertMessage.nickname && (
+            <ErrorMessage>{alertMessage.nickname}</ErrorMessage>
+          )}
           <CommonHr />
           <div style={ContainerProps} />
-          <CommonSelect
-            text="질문선택"
-            height="35px"
-            width="350px"
-            padding="10px"
-            color="#464646"
-            labelColor="#464646"
-            options={selectOptions}
-            selectedValue={selectedQuestion}
-            setSelectedValue={(value) => setSelectedQuestion(value)}
-            find="질문을 선택하세요"
-            $fieldBorderColor="transparent"
-            background="transparent"
-            $marginLeft="7px"
-          />
-          <CommonHr />
-          <div style={ContainerProps} />{' '}
           <CommonInput
-            placeholder="답변을 입력하세요"
-            text="답변"
+            placeholder="이메일을 입력하세요"
+            text="이메일"
+            onChange={(e) =>
+              setInputValue({ ...inputValue, email: e.target.value })
+            }
             {...InputProps}
           />
+          {alertMessage.email && (
+            <ErrorMessage>{alertMessage.email}</ErrorMessage>
+          )}
           <CommonHr />
-          <InnerContainer>
-            <div style={ContainerProps} />{' '}
-            <ImgContainer>캐릭터 선택</ImgContainer>
-            <ImageGallery images={images} />
-            <div style={ContainerProps} />{' '}
-            <CommonButton
-              {...ButtonProps}
-              text="완료"
-              onClick={completeSignUp}
-            />
-          </InnerContainer>
-          <SuccessSignUp
-            open={isDialogPWVisible}
-            setSuccessVisible={setIsDialogPWVisible}
-          />
+          <div style={ContainerProps} />{' '}
         </MiddleContainer>
+        <CommonButton {...ButtonProps} text="완료" onClick={handleSubmit} />
+        <SuccessSignUp
+          open={isDialogPWVisible}
+          setSuccessVisible={setIsDialogPWVisible}
+        />
       </FullContainer>
     </CommonRoot>
   );
