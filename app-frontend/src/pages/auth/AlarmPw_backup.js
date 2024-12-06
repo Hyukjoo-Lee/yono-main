@@ -15,7 +15,7 @@ const ErrorMsg = styled.div`
   font-size: 13px;
 `;
 
-const AlarmPw = ({ open, $setIsDialogPWVisible }) => {
+const AlarmPw_backup = ({ open, $setIsDialogPWVisible }) => {
   const [isConfirmClicked, setIsConfirmClicked] = useState(false);
   const [isChangeClicked, setIsChangeClicked] = useState(false);
   const [successChangePW, setSuccessChangePW] = useState(false);
@@ -140,4 +140,4 @@ const AlarmPw = ({ open, $setIsDialogPWVisible }) => {
   );
 };
 
-export default AlarmPw;
+export default AlarmPw_backup;

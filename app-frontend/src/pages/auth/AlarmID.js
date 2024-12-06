@@ -6,11 +6,11 @@ export const AlarmID = ({ open, $setIsDialogIDVisible }) => {
 
   const ConfirmIDDialog = () => {
     $setIsDialogIDVisible(true);
-    navigate('/');
+    navigate(-1);
   };
   const ConfirmIDDialogClose = () => {
     $setIsDialogIDVisible(false);
-    navigate('/');
+    navigate(-1);
   };
 
   return (

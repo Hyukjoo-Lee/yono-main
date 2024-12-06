@@ -73,7 +73,7 @@ export const FindID = () => {
     setIsDialogIDVisible(true);
   };
   const handleClose = () => {
-    navigate('/Login');
+    navigate(-1);
   };
   return (
     <CommonRoot>
