@@ -1,9 +1,11 @@
 import React from 'react';
 import styled from 'styled-components';
-import { ReactComponent as Badge } from '../../../assets/images/Badge.svg';
-import { ReactComponent as Badge1 } from '../../../assets/images/Badge1.svg';
-import { ReactComponent as Badge2 } from '../../../assets/images/Badge2.svg';
-import { ReactComponent as Badge3 } from '../../../assets/images/Badge3.svg';
+import { ReactComponent as Medal1 } from '../../../assets/images/Medal1.svg';
+import { ReactComponent as Medal2 } from '../../../assets/images/Medal2.svg';
+import { ReactComponent as Medal3 } from '../../../assets/images/Medal3.svg';
+import image1 from '../../../assets/images/Image1.jpg';
+import image2 from '../../../assets/images/Image2.jpg';
+import image3 from '../../../assets/images/Image3.png';
 
 const Root = styled.div`
   width: 100%;
@@ -11,6 +13,15 @@ const Root = styled.div`
   display: flex;
   justify-content: space-around;
   align-items: flex-end;
+  & > div:nth-child(1) {
+    order: 2;
+  }
+  & > div:nth-child(2) {
+    order: 1;
+  }
+  & > div:nth-child(3) {
+    order: 3;
+  }
 `;
 
 const BoxStyle = styled.div`
@@ -23,8 +34,18 @@ const CircleBox = styled.div`
   width: ${(props) => (props.$rank === 1 ? '190px' : '150px')};
   aspect-ratio: 1;
   border-radius: 50%;
-  background: ${(props) => props.theme.color.brightGray};
+  border: 1px solid ${(props) => props.theme.color.brightGray};
   margin: 20px 0px;
+  overflow: hidden;
+  background: ${(props) => props.theme.color.white};
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  & img {
+    width: 130%;
+    height: 130%;
+    object-fit: cover;
+  }
 `;
 
 const NameStyle = styled.p`
@@ -51,26 +72,27 @@ const Box = styled.div`
 
 const RankingComponent = () => {
   const list = [
-    { rank: 2, name: '한글이름님 (영어아이디)', number: 500 },
-    { rank: 1, name: '한글이름님 (영어아이디)', number: 65000 },
-    { rank: 3, name: '한글이름님 (영어아이디)', number: 300 },
+    { rank: 1, img: image1, name: '변우석 (abc123)', number: 65000 },
+    { rank: 2, img: image2, name: '수지 (abc124)', number: 5000 },
+    { rank: 3, img: image3, name: '이지은 (abc1235)', number: 4000 },
   ];
   return (
     <Root>
       {list.map((item, index) => (
         <BoxStyle key={index}>
-          {item.rank === 1 ? (
-            <Badge1 />
-          ) : item.rank === 2 ? (
-            <Badge2 />
-          ) : (
-            <Badge3 />
-          )}
-          <CircleBox $rank={item.rank}></CircleBox>
+          <CircleBox $rank={item.rank}>
+            <img src={item.img} alt={item.name} />
+          </CircleBox>
           <NameStyle>{item.name}</NameStyle>
           <Box>
-            <Badge />
-            <p>{item.number}</p>
+            {item.rank === 1 ? (
+              <Medal1 />
+            ) : item.rank === 2 ? (
+              <Medal2 />
+            ) : (
+              <Medal3 />
+            )}
+            <p>{item.number.toLocaleString()}</p>
           </Box>
         </BoxStyle>
       ))}

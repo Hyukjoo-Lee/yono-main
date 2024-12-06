@@ -5,6 +5,7 @@ import CommonInput from '../../../common/CommonInput';
 import CommonRoot from '../../../common/CommonRoot';
 import CommonPageInfo from '../../../common/CommonPageInfo';
 import { useNavigate } from 'react-router-dom';
+import CommonHr from '../../../common/CommonHr';
 
 const RootIn = styled.div`
   display: flex;
@@ -46,6 +47,15 @@ const ButtonContainer = styled.div`
   justify-content: space-between;
   width: 45%;
 `;
+const styleProps = {
+  height: '35px',
+  width: '300px',
+  background: 'transparent',
+  $marginLeft: '7px',
+};
+const ContainerProps = {
+  marginBottom: '3px',
+};
 const FindForm = ({
   find,
   answer,
@@ -75,26 +85,33 @@ const FindForm = ({
           <MiddleContainer>
             <CommonSelect
               text="질문선택"
-              height="35px"
-              width="300px"
+              find="질문을 선택하세요"
               padding="10px"
               color="#464646"
               labelColor="#464646"
-              find="질문을 선택하세요"
+              $fieldBorderColor="transparent"
+              {...styleProps}
               value={answer}
               options={selectOptions}
               selectedValue={selectedValue}
               setSelectedValue={setSelectedValue}
             />
+            <div style={ContainerProps} />
+
+            <CommonHr />
+            <div style={ContainerProps} />
 
             <CommonInput
               text="답변"
               color="#464646"
-              width="300px"
-              height="35px"
+              placeholder="답변을 입력하세요"
               focusBorderWidth="10px"
-              onChange={onChange} //질문답변 시 상태 업데이트
+              $borderColor="transparent"
+              $focusBorderColor="transparent"
+              {...styleProps}
+              onChange={onChange}
             />
+            <CommonHr />
           </MiddleContainer>
           <HiddenBox>
             {errorMessage && <ErrorMessage>{errorMessage}</ErrorMessage>}
