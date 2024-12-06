@@ -2,7 +2,7 @@ import styled from 'styled-components';
 import CommonButton from '../../common/CommonButton';
 import CommonInput from '../../common/CommonInput';
 import { useNavigate } from 'react-router-dom';
-import characterImg from '../../assets/images/Character1.png';
+import { ReactComponent as Profile } from '../../assets/images/Profile.svg';
 import CommonHr from '../../common/CommonHr';
 
 const comments = [
@@ -63,18 +63,16 @@ const CommentBox = styled.div`
   }
 `;
 const TopRow = styled.div`
+  margin-top: 5px;
   display: flex;
   align-items: center;
   gap: 5px;
   height: 50px;
 `;
 const ImageBox = styled.div`
-width:auto;
-  & > img {
-    width: 80px;
-    height: 80px;
-    margin-top: 20px;
-    margin-left:0px;
+  & > svg {
+    width: 50px;
+    height: 50px;
 }
   }
 `;
@@ -82,6 +80,7 @@ const TimeText = styled.span`
   color: ${(props) => props.theme.color.lightGray};
   font-size: 12px;
   margin-left: 8px;
+  margin-button: 5px;
 `;
 const TextBox = styled.div`
   & > p {
@@ -141,7 +140,7 @@ export function CommunityPost() {
             <div key={index}>
               <TopRow>
                 <ImageBox>
-                  <img src={characterImg} alt="character" />
+                  <Profile />
                 </ImageBox>
                 <h3>
                   {comment.name} <TimeText>{comment.time}</TimeText>
