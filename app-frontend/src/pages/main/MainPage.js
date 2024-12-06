@@ -4,8 +4,8 @@ import React from 'react';
 import styled from 'styled-components';
 import CommonRoot from '../../common/CommonRoot';
 import MainBox from './MainBox';
-import MainIntro from './MainIntro';
 import MainCardBox from './MainCardBox';
+import MainIntro from './MainIntro';
 // import {SignUp} from "./auth/SignUp";
 
 const StyledWrap = styled.div`

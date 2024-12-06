@@ -51,16 +51,13 @@ const StyledBoxImg = styled.div`
   box-sizing: border-box;
   overflow: hidden;
   display: flex;
+  justify-content: center;
+  align-items: center;
 
   & img {
-    width: 90%;
-  }
-  & img:nth-of-type(1) {
-    padding-left: 8px;
-  }
-  & img:nth-of-type(2) {
-    width: 100px;
-    height: 100px;
+    max-width: 90%;
+    object-fit: contain;
+    padding: 0px;
   }
 `;
 const MainComponent = () => {
@@ -75,15 +72,14 @@ const MainComponent = () => {
     {
       title: `패턴분석`,
       subtitle: `나의 카드 분석하기`,
-      imgSrc: MainBox3_img,
+      imgSrc: MainBox2_img,
       link: `/card-analysis`,
     },
     {
       title: `카드추천`,
       subtitle: `나의 카드 추천보기`,
-      imgSrc: MainBox2_img,
+      imgSrc: MainBox3_img,
       link: `/mycard`,
-      // 카드추천으로 넘어가는거 질문
     },
     {
       title: `랭킹확인`,
