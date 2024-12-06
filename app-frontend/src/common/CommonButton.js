@@ -18,6 +18,9 @@ const ButtonStyle = styled(Button)`
     padding: 0 10px;
     box-sizing: border-box;
     &:hover {
+      transition:
+        background-color 0.6s ease,
+        color 0.6s ease;
       background: ${(props) => props.hoverBk || props.theme.color.blue};
       & p {
         color: ${(props) => props.hoverColor || props.theme.color.white};
