@@ -8,6 +8,7 @@ const IconButton = ({ imagesRoute }) => {
       style={{
         background: 'white',
         width: '30px',
+        cursor: 'pointer',
       }}
     />
   );
