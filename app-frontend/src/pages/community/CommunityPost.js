@@ -73,14 +73,14 @@ const ImageBox = styled.div`
   & > svg {
     width: 50px;
     height: 50px;
-}
   }
 `;
+
 const TimeText = styled.span`
   color: ${(props) => props.theme.color.lightGray};
   font-size: 12px;
   margin-left: 8px;
-  margin-button: 5px;
+  margin-bottom: 5px;
 `;
 const TextBox = styled.div`
   & > p {
