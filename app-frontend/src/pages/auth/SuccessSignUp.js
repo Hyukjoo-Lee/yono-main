@@ -11,7 +11,7 @@ const SuccessSignUp = ({ open, setSuccessVisible }) => {
       <CommonDialog
         open={open}
         width="400px"
-        children="회원가입 되었습니다."
+        children="회원가입이 완료되었습니다."
         fontSize="23px"
         onClose={closeLogin}
         onClick={closeLogin}
