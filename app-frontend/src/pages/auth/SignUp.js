@@ -6,6 +6,9 @@ import CommonButton from '../../common/CommonButton';
 import CommonHr from '../../common/CommonHr';
 import CommonPageInfo from '../../common/CommonPageInfo';
 import SuccessSignUp from './SuccessSignUp';
+import FailSignUp from './SuccessSignUp';
+
+import axios from 'axios';
 
 const FullContainer = styled.div`
   display: flex;
@@ -34,6 +37,12 @@ const ErrorMessage = styled.div`
   margin-left: 5px;
 `;
 
+const ValidMessage = styled.div`
+  color: blue;
+  font-size: 13px;
+  margin-left: 5px;
+`;
+
 const ContainerProps = {
   marginBottom: '13px',
 };
@@ -46,6 +55,18 @@ const InputProps = {
   $marginLeft: '7px',
 };
 
+const InputEmailBox = styled.div`
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: flex-end;
+  width: 350px;
+
+  & > *:not(:last-child) {
+    margin-right: -95px; /* 오른쪽 마진 */
+  }
+`;
+
 const ButtonProps = {
   width: '73px',
   height: '37px',
@@ -55,24 +76,24 @@ const ButtonProps = {
 };
 
 export function SignUp() {
-  const [isDialogPWVisible, setIsDialogPWVisible] = useState(false);
+  const [isSignUpSuccessVisible, setIsSignUpSuccessVisible] = useState(false);
+  const [isSignUpFailVisible, setIsSignUpFailVisible] = useState(false);
+  const [isEmailValidated, setIsEmailValidated] = useState(false);
 
   const inputRegexs = {
-    username: /^[a-zA-Z][a-zA-Z0-9]{2,19}$/,
     password: /^(?=.*[a-z])(?=.*\d)(?=.*[*@#$%^&+=!]).{8,}$/,
     email: /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/,
   };
 
   const [formData, setFormData] = useState({
-    username: '',
     password: '',
     confirmPassword: '',
     name: '',
     email: '',
+    address: 'temp_address',
   });
 
   const [alertMessage, setAlertMessage] = useState({
-    username: '',
     password: '',
     confirmPassword: '',
     name: '',
@@ -86,11 +107,11 @@ export function SignUp() {
   const validateForm = () => {
     const errors = {};
 
-    if (!formData.username) {
-      errors.username = '아이디를 입력해주세요.';
-    } else if (!inputRegexs.username.test(formData.username)) {
-      errors.username =
-        '사용자명은 영문자로 시작하고 영문자와 숫자로 이루어진 3자 이상 20자 이하로 입력해주세요.';
+    if (!formData.email) {
+      errors.email = '이메일을 입력해주세요.';
+    } else if (!inputRegexs.email.test(formData.email)) {
+      errors.email =
+        '올바른 이메일 형식으로 입력해주세요. 예: example@domain.com';
     }
 
     if (!formData.password) {
@@ -108,32 +129,96 @@ export function SignUp() {
       errors.name = '이름을 입력해주세요.';
     }
 
-    if (!formData.email) {
-      errors.email = '이메일을 입력해주세요.';
-    } else if (!inputRegexs.email.test(formData.email)) {
-      errors.email =
-        '올바른 이메일 형식으로 입력해주세요. 예: example@domain.com.';
-    }
-
     return errors;
   };
 
-  const handleSubmit = (e) => {
-    e.preventDefault();
-    const errors = validateForm();
-    setAlertMessage(errors);
+  const validateEmail = async () => {
+    // 이메일 형식 체크
+    if (!formData.email) {
+      setAlertMessage({
+        ...alertMessage,
+        email: '이메일을 입력해주세요.',
+      });
+      setIsEmailValidated(false);
+      return;
+    } else if (!inputRegexs.email.test(formData.email)) {
+      setAlertMessage({
+        ...alertMessage,
+        email: '올바른 이메일 형식으로 입력해주세요. 예: example@domain.com.',
+      });
+      setIsEmailValidated(false);
+      return;
+    }
 
-    if (Object.keys(errors).length === 0) {
-      // 성공 처리
-      setIsDialogPWVisible(true);
+    // 이메일 중복 체크
+    try {
+      const response = await axios.post('/user/check-email-exists', {
+        email: formData.email,
+      });
+
+      if (response.data.emailAvailable) {
+        setAlertMessage({
+          ...alertMessage,
+          email: '사용 가능한 이메일입니다.',
+        });
+        setIsEmailValidated(true);
+      } else {
+        setAlertMessage({
+          ...alertMessage,
+          email: '이미 등록된 이메일입니다.',
+        });
+        setIsEmailValidated(false);
+      }
+    } catch (error) {
+      console.error('중복 확인 실패:', error);
+      setAlertMessage({
+        ...alertMessage,
+        email: '서버와의 통신 중 문제가 발생했습니다.',
+      });
+      setIsEmailValidated(false);
     }
   };
 
-  const renderInputField = (field, placeholder, text) => (
+  /**
+   * 중복 확인 버튼을 누르면 유효성 검사 후 중복체크
+   * 회원 가입 버튼을 누르면 중복 확인이 되었는지 검사 후
+   * 회원 가입 요청
+   */
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+
+    const errors = validateForm();
+    setAlertMessage(errors);
+
+    if (Object.keys(errors).length > 0) {
+      return;
+    }
+
+    if (!isEmailValidated) {
+      setAlertMessage({
+        ...alertMessage,
+        email: '이메일 중복 확인을 해주세요.',
+      });
+      return;
+    }
+
+    // 회원가입 요청
+    try {
+      const response = await axios.post('/user/signup', formData);
+      console.log('회원가입 성공:', response.data);
+      setIsSignUpSuccessVisible(true);
+    } catch (error) {
+      console.error('회원가입 실패:', error);
+      setIsSignUpFailVisible(true);
+    }
+  };
+
+  const renderInputField = (field, placeholder, text, type) => (
     <>
       <CommonInput
         placeholder={placeholder}
         text={text}
+        type={type}
         onChange={(e) => handleInputChange(e, field)}
         {...InputProps}
       />
@@ -149,18 +234,42 @@ export function SignUp() {
     <CommonRoot>
       <FullContainer>
         <MiddleContainer>
-          <CommonPageInfo title="회원가입" text="" />
+          <CommonPageInfo title="회원가입" text={<p></p>} />
           <MiddleTitle>회원정보입력</MiddleTitle>
           <CommonHr />
-          {renderInputField('username', '아이디를 입력하세요', '아이디')}
-          {renderInputField('password', '비밀번호를 입력하세요', '비밀번호')}
+          <div style={ContainerProps} />
+          <InputEmailBox>
+            <CommonInput
+              placeholder="아이디(이메일)를 입력하세요."
+              text="아이디"
+              onChange={(e) => handleInputChange(e, 'email')}
+              {...InputProps}
+            />
+            <CommonButton
+              {...ButtonProps}
+              text="중복확인"
+              width="100px"
+              onClick={validateEmail}
+            />
+          </InputEmailBox>
+          {alertMessage.email ? (
+            <ErrorMessage>{alertMessage.email}</ErrorMessage>
+          ) : (
+            <ValidMessage>{alertMessage.email}</ValidMessage>
+          )}
+          <CommonHr />
+          {renderInputField(
+            'password',
+            '비밀번호를 입력하세요',
+            '비밀번호',
+            // 'password',
+          )}
           {renderInputField(
             'confirmPassword',
             '비밀번호를 입력하세요',
             '비밀번호 확인',
           )}
           {renderInputField('name', '이름을 입력하세요', '이름')}
-          {renderInputField('email', '이메일을 입력하세요', '이메일')}
         </MiddleContainer>
 
         <div style={{ marginTop: '20px' }}>
@@ -172,8 +281,12 @@ export function SignUp() {
         </div>
 
         <SuccessSignUp
-          open={isDialogPWVisible}
-          setSuccessVisible={setIsDialogPWVisible}
+          open={isSignUpSuccessVisible}
+          setSuccessVisible={setIsSignUpSuccessVisible}
+        />
+        <FailSignUp
+          open={isSignUpFailVisible}
+          setSuccessVisible={setIsSignUpFailVisible}
         />
       </FullContainer>
     </CommonRoot>
