@@ -1,14 +1,14 @@
 server:
-  port: 8065
+  port: ${SERVER_PORT}
 
 spring:
+  application:
+    name: MickleMuckle
   datasource:
     driver-class-name: oracle.jdbc.OracleDriver
-    url: jdbc:oracle:thin:@localhost:1521:ORCLCDB
-    # 윈도우 사용할 경우 아래의 url 주석을 해제하고 위의 url을 주석 처리
-    # url: jdbc:oracle:thin:@localhost:1521:xe
-    username: mmk
-    password: 1234
+    url: ${ORACLE_DB_URL}
+    username: ${ORACLE_DB_USERNAME}
+    password: ${ORACLE_DB_PASSWORD}
   thymeleaf:
     cache: false
   jpa:
