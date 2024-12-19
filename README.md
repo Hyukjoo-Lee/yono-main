@@ -1,4 +1,4 @@
-# Mickle Muckle (2024년 10월 23일 기준)
+# Mickle Muckle (2024년 12월 19일 기준)
 
 Mickle Muckle은 사용자들의 카드 소비를 분석하고 절약을 도와주는 핀테크 프로젝트입니다.
 
@@ -10,21 +10,38 @@ Mickle Muckle은 사용자들의 카드 소비를 분석하고 절약을 도와�
 git clone https://github.com/Hyukjoo-Lee/mickle-muckle.git
 ```
 
-### 2. `app-frontend` 폴더로 이동
+### 2. .env 파일 설정
+
+.env.example 파일의 값을 적절히 채운 후에 .example 확장자를 제거하여 .env 파일로 변경합니다.
+
+#### 프론트엔드 환경변수 설정
+
+- **`REACT_EDITOR`**: 기본값은 `code`로 설정되어 있습니다. 사용하고자 하는 에디터로 변경 가능합니다.  
+  (예: VSCode를 사용하는 경우 기본값 유지)
+- **`REACT_APP_API_URL`**: 기본값은 `http://localhost:8080`으로 설정되어 있습니다. 필요에 따라 백엔드 서버의 포트 번호를 수정합니다.
+
+#### 백엔드 환경변수 설정
+
+- **`SERVER_PORT`**: 프론트엔드와 통신할 서버의 포트 번호를 입력합니다.  
+  (예: `8080` 또는 원하는 포트 번호)
+- **`ORACLE_DB_URL`**: 오라클 데이터베이스의 URL을 입력합니다.  
+  (예: `jdbc:oracle:thin:@localhost:1521:xe`)
+- **`ORACLE_DB_USERNAME`**: 오라클 데이터베이스 사용자 이름을 입력합니다.
+- **`ORACLE_DB_PASSWORD`**: 오라클 데이터베이스 비밀번호를 입력합니다.
+
+### 3. `app-frontend` 폴더로 이동
 
 ```bash
 cd app-frontend
 ```
 
-- 현재까지는 백엔드가 연동되지 않았습니다.
-
-### 3. Dependencies 설치
+### 4. Dependencies 설치
 
 ```bash
 npm install
 ```
 
-### 4. 프로젝트 실행
+### 5. 프로젝트 실행
 
 ```bash
 npm start
@@ -34,9 +51,9 @@ npm start
 
 ## 협업 방식
 
-### 1. Main 브랜치에 '절대' 푸쉬하지 말 것
+### 1. main 브랜치에 '절대' 푸쉬하지 말 것
 
-- Main 브랜치는 최근 검사된 프로젝트를 유지합니다.
+- main 브랜치는 최근 검사된 프로젝트를 유지합니다.
 
 ### 2. 기능별 브랜치 작업
 
@@ -76,44 +93,20 @@ npm start
    git merge main  # 메인 브랜치에서 가져온 최신 코드 병합
    ```
 
-3. **작업이 끝난 후 - 최신 메인 코드 반영**
+3. **작업 진행**
 
-   작업이 끝난 후 push하기 전에, 메인 브랜치에서 다시 최신 코드를 가져와 충돌을 방지합니다.
+   병합된 상태에서 작업을 진행하고 완료합니다.
 
-   ```bash
-   git checkout main
-   git pull origin main
-   ```
-
-4. **업데이트된 메인 코드를 작업 브랜치에 병합하기**
-
-   최신 메인 브랜치 코드를 가져온 후, 다시 작업 브랜치로 돌아가 병합된 상태에서 작업을 마무리합니다.
+4. **작업 후 작업 내용 원격 저장소에 commit & push**
 
    ```bash
-   git checkout hj/CommonComponent생성
-   ```
-
-5. **작업 내용 원격 저장소에 push**
-
-   이제 작업 내용을 원격 저장소에 push할 수 있습니다.
-
-   ```bash
-   git push origin hj/CommonComponent생성
+   git commit -m "커밋메시지"
+   git push
    ```
 
 ---
 
-### 4. Git 경로 설정 주의
-
-- **git 작업은 반드시 `mickle-muckle` 폴더에서 진행해야 합니다.**
-  - `../mickle-muckle/app-frontend # git` ❌
-  - `../mickle-muckle # git` ✅
-
-* 만약 상위 폴더(../mickle-muckle)가 이미 Git 저장소로 설정되어 있는데
-* 그 내부 폴더(app-frontend)에서도 git init이나 git clone 같은 작업을 하면,
-* app-frontend 를 새로운 저장소로 인식하기 때문에 동일한 저장소의 중복된 복사본이 생성될 수 있습니다.
-
-### 5. 커밋 메시지 규칙
+### 4. 커밋 메시지 규칙
 
 - 명확하고 일관된 커밋 메시지를 작성합니다:
   ```bash
@@ -132,10 +125,4 @@ npm start
   - `Update`: 기능 보완
   - `Move`: 파일이나 코드 이동
   - `Fix`: 버그 수정
-  - `Chore`: 기타 작업(리팩토링, 주석 추가 등)
   - `Docs`: 문서 수정
-
-### 6. Pull Request (PR) 규칙
-
-- 기능이나 페이지 구현이 완료되면 **Pull Request**를 생성하여 팀장이나 팀원에게 코드 리뷰를 요청합니다.
-- 팀장은 코드 최종 리뷰 후 Main 브랜치로 병합합니다.
