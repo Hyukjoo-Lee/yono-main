@@ -26,15 +26,18 @@ public class UserInfoVO {
 
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "user_seq_generator")
-    @Column(name = "user_id")
-    private int userId;
+    @Column(name = "user_num")
+    private int userNum;
 
-    @Column(name = "email", unique = true, nullable = false)
-    private String email;
-
+    @Column(name = "id", nullable = false)
+    private String id;
+    
     @Column(name = "password", nullable = false)
     private String password;
 
+    @Column(name = "email", unique = true, nullable = false)
+    private String email;
+    
     @Column(name = "name", nullable = false)
     private String name;
 
@@ -43,7 +46,10 @@ public class UserInfoVO {
     private String address = "temp_address";
 
     @Column(name = "spending_target", columnDefinition = "int default 0")
-    private int spendingTarget;
+    private int spendingTarget = 0;
+
+    @Column(name = "profile")
+    private String profile;
 
     // todo: 프로필 사진 필드 추가
     @CreationTimestamp

@@ -4,9 +4,9 @@ server:
 spring:
   datasource:
     driver-class-name: oracle.jdbc.OracleDriver
-    url: jdbc:oracle:thin:@localhost:1521:ORCLCDB
+    # url: jdbc:oracle:thin:@localhost:1521:ORCLCDB
     # 윈도우 사용할 경우 아래의 url 주석을 해제하고 위의 url을 주석 처리
-    # url: jdbc:oracle:thin:@localhost:1521:xe
+    url: jdbc:oracle:thin:@localhost:1521:xe
     username: mmk
     password: 1234
   thymeleaf:
