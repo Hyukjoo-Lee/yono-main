@@ -14,18 +14,25 @@ git clone https://github.com/Hyukjoo-Lee/mickle-muckle.git
 
 .env.example 파일의 값을 적절히 채운 후에 .example 확장자를 제거하여 .env 파일로 변경합니다.
 
-#### 프론트엔드 환경변수 설정
+#### 프론트엔드 환경변수 설정 (app-frontend/.env.example)
 
 - **`REACT_EDITOR`**: 기본값은 `code`로 설정되어 있습니다. 사용하고자 하는 에디터로 변경 가능합니다.  
   (예: VSCode를 사용하는 경우 기본값 유지)
 - **`REACT_APP_API_URL`**: 기본값은 `http://localhost:8080`으로 설정되어 있습니다. 필요에 따라 백엔드 서버의 포트 번호를 수정합니다.
 
-#### 백엔드 환경변수 설정
+#### 백엔드 환경변수 설정 (app-backend/src/main/resources/.env.example)
+
+```env
+  SERVER_PORT=8080
+
+  ORACLE_DB_URL=URL
+  ORACLE_DB_USERNAME=USERNAME
+  ORACLE_DB_PASSWORD=PASSWORD
+```
 
 - **`SERVER_PORT`**: 프론트엔드와 통신할 서버의 포트 번호를 입력합니다.  
   (예: `8080` 또는 원하는 포트 번호)
 - **`ORACLE_DB_URL`**: 오라클 데이터베이스의 URL을 입력합니다.  
-  (예: `jdbc:oracle:thin:@localhost:1521:xe`)
 - **`ORACLE_DB_USERNAME`**: 오라클 데이터베이스 사용자 이름을 입력합니다.
 - **`ORACLE_DB_PASSWORD`**: 오라클 데이터베이스 비밀번호를 입력합니다.
 
