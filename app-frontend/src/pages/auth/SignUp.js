@@ -9,6 +9,7 @@ import SuccessSignUp from './SuccessSignUp';
 import FailSignUp from './SuccessSignUp';
 
 import axios from 'axios';
+import SearchAddressModal from './Component/SearchAddressModal';
 
 const FullContainer = styled.div`
   display: flex;
@@ -55,7 +56,7 @@ const InputProps = {
   $marginLeft: '7px',
 };
 
-const InputEmailBox = styled.div`
+const InputUserIdBox = styled.div`
   display: flex;
   flex-direction: row;
   justify-content: space-between;
@@ -63,7 +64,7 @@ const InputEmailBox = styled.div`
   width: 350px;
 
   & > *:not(:last-child) {
-    margin-right: -95px; /* 오른쪽 마진 */
+    margin-right: 10px;
   }
 `;
 
@@ -78,34 +79,51 @@ const ButtonProps = {
 export function SignUp() {
   const [isSignUpSuccessVisible, setIsSignUpSuccessVisible] = useState(false);
   const [isSignUpFailVisible, setIsSignUpFailVisible] = useState(false);
-  const [isEmailValidated, setIsEmailValidated] = useState(false);
+  const [isAddressModalOpen, setIsAddressModalOpen] = useState(false);
+  const [isUserIdValidated, setIsUserIdValidated] = useState(false);
 
   const inputRegexs = {
-    password: /^(?=.*[a-z])(?=.*\d)(?=.*[*@#$%^&+=!]).{8,}$/,
+    userId: /^[a-z][a-z0-9]{3,15}$/,
     email: /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/,
+    password: /^(?=.*[a-z])(?=.*\d)(?=.*[*@#$%^&+=!]).{8,}$/,
   };
 
   const [formData, setFormData] = useState({
+    userId: '',
     password: '',
     confirmPassword: '',
     name: '',
     email: '',
-    address: 'temp_address',
+    address: '',
   });
 
   const [alertMessage, setAlertMessage] = useState({
+    userId: '',
     password: '',
     confirmPassword: '',
     name: '',
     email: '',
+    address: '',
   });
 
   const handleInputChange = (e, field) => {
     setFormData((prev) => ({ ...prev, [field]: e.target.value }));
+    setAlertMessage((prev) => ({ ...prev, [field]: '' }));
   };
 
   const validateForm = () => {
     const errors = {};
+
+    if (!formData.userId) {
+      errors.userId = '아이디를 입력해주세요.';
+    } else if (!inputRegexs.userId.test(formData.userId)) {
+      errors.userId =
+        '아이디는 영문 소문자와 숫자로만 작성하며, 4~16자로 입력해주세요.';
+    }
+
+    if (!formData.address) {
+      errors.address = '주소를 등록해주세요.';
+    }
 
     if (!formData.email) {
       errors.email = '이메일을 입력해주세요.';
@@ -132,61 +150,68 @@ export function SignUp() {
     return errors;
   };
 
-  const validateEmail = async () => {
-    // 이메일 형식 체크
-    if (!formData.email) {
+  const validateUserId = async () => {
+    // 아이디 형식 체크
+    if (!formData.userId) {
       setAlertMessage({
         ...alertMessage,
-        email: '이메일을 입력해주세요.',
+        userId: '아이디를 입력해주세요.',
       });
-      setIsEmailValidated(false);
+      setIsUserIdValidated(false);
       return;
-    } else if (!inputRegexs.email.test(formData.email)) {
+    } else if (!inputRegexs.userId.test(formData.userId)) {
       setAlertMessage({
         ...alertMessage,
-        email: '올바른 이메일 형식으로 입력해주세요. 예: example@domain.com.',
+        userId:
+          '아이디는 영문 소문자와 숫자로만 작성하며, 4~16자로 입력해주세요.',
       });
-      setIsEmailValidated(false);
+      setIsUserIdValidated(false);
       return;
     }
 
-    // 이메일 중복 체크
+    // 아이디 중복 체크
     try {
-      const response = await axios.post('/user/check-email-exists', {
-        email: formData.email,
+      const response = await axios.post('/user/check-exists', {
+        field: 'userId',
+        value: formData.userId,
       });
 
-      if (response.data.emailAvailable) {
+      if (response.data.userIdAvailable) {
         setAlertMessage({
           ...alertMessage,
-          email: '사용 가능한 이메일입니다.',
+          userId: '사용 가능한 아이디입니다.',
         });
-        setIsEmailValidated(true);
+        setIsUserIdValidated(true);
       } else {
         setAlertMessage({
           ...alertMessage,
-          email: '이미 등록된 이메일입니다.',
+          userId: '이미 등록된 아이디입니다.',
         });
-        setIsEmailValidated(false);
+        setIsUserIdValidated(false);
       }
     } catch (error) {
       console.error('중복 확인 실패:', error);
       setAlertMessage({
         ...alertMessage,
-        email: '서버와의 통신 중 문제가 발생했습니다.',
+        userId: '서버와의 통신 중 문제가 발생했습니다.',
       });
-      setIsEmailValidated(false);
+      setIsUserIdValidated(false);
     }
   };
 
+  const handleAddressSelect = (address) => {
+    console.log(address);
+    setFormData((prev) => ({ ...prev, address }));
+    setIsAddressModalOpen(false);
+  };
+
   /**
-   * 중복 확인 버튼을 누르면 유효성 검사 후 중복체크
+   * 중복 확인 버튼을 누르면 유효성 검사 후 아이디 중복체크
    * 회원 가입 버튼을 누르면 중복 확인이 되었는지 검사 후
    * 회원 가입 요청
    */
   const handleSubmit = async (e) => {
     e.preventDefault();
-
     const errors = validateForm();
     setAlertMessage(errors);
 
@@ -194,10 +219,10 @@ export function SignUp() {
       return;
     }
 
-    if (!isEmailValidated) {
+    if (!isUserIdValidated) {
       setAlertMessage({
         ...alertMessage,
-        email: '이메일 중복 확인을 해주세요.',
+        userId: '아이디 중복 확인을 해주세요.',
       });
       return;
     }
@@ -238,38 +263,63 @@ export function SignUp() {
           <MiddleTitle>회원정보입력</MiddleTitle>
           <CommonHr />
           <div style={ContainerProps} />
-          <InputEmailBox>
+          <InputUserIdBox>
             <CommonInput
-              placeholder="아이디(이메일)를 입력하세요."
+              placeholder="아이디를 입력하세요."
               text="아이디"
-              onChange={(e) => handleInputChange(e, 'email')}
+              onChange={(e) => handleInputChange(e, 'userId')}
               {...InputProps}
             />
             <CommonButton
               {...ButtonProps}
               text="중복확인"
               width="100px"
-              onClick={validateEmail}
+              onClick={validateUserId}
             />
-          </InputEmailBox>
-          {alertMessage.email ? (
-            <ErrorMessage>{alertMessage.email}</ErrorMessage>
+          </InputUserIdBox>
+          {!isUserIdValidated ? (
+            <ErrorMessage>{alertMessage.userId}</ErrorMessage>
           ) : (
-            <ValidMessage>{alertMessage.email}</ValidMessage>
+            <ValidMessage>{alertMessage.userId}</ValidMessage>
           )}
           <CommonHr />
+
+          <InputUserIdBox>
+            <CommonInput
+              placeholder="주소를 입력하세요."
+              text="주소"
+              value={formData.address}
+              onChange={(e) => handleInputChange(e, 'address')}
+              {...InputProps}
+            />
+            <CommonButton
+              {...ButtonProps}
+              text="주소찾기"
+              width="100px"
+              onClick={() => setIsAddressModalOpen(true)}
+            />
+          </InputUserIdBox>
+          {alertMessage.address ? (
+            <ErrorMessage>{alertMessage.address}</ErrorMessage>
+          ) : (
+            <ValidMessage>{alertMessage.address}</ValidMessage>
+          )}
+          <CommonHr />
+
           {renderInputField(
             'password',
             '비밀번호를 입력하세요',
             '비밀번호',
-            // 'password',
+            'password',
           )}
           {renderInputField(
             'confirmPassword',
             '비밀번호를 입력하세요',
             '비밀번호 확인',
+            'password',
           )}
           {renderInputField('name', '이름을 입력하세요', '이름')}
+          {renderInputField('email', '이메일을 입력하세요', '이메일')}
         </MiddleContainer>
 
         <div style={{ marginTop: '20px' }}>
@@ -287,6 +337,10 @@ export function SignUp() {
         <FailSignUp
           open={isSignUpFailVisible}
           setSuccessVisible={setIsSignUpFailVisible}
+        />
+        <SearchAddressModal
+          open={isAddressModalOpen}
+          onCompletePost={handleAddressSelect}
         />
       </FullContainer>
     </CommonRoot>
