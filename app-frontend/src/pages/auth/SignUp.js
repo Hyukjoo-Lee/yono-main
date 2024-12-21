@@ -187,7 +187,6 @@ export function SignUp() {
         setIsUserIdValidated(false);
       }
     } catch (error) {
-      console.error('아이디 중복 확인 실패:', error);
       setAlertMessage({
         ...alertMessage,
         userId: '서버와의 통신 중 문제가 발생했습니다.',
@@ -197,7 +196,6 @@ export function SignUp() {
   };
 
   const handleAddressSelect = (address) => {
-    console.log(address);
     setFormData((prev) => ({ ...prev, address }));
     setIsAddressModalOpen(false);
   };
@@ -225,11 +223,9 @@ export function SignUp() {
     }
 
     try {
-      const result = await signUpUser(formData);
-      console.log('회원가입 성공:', result);
+      await signUpUser(formData);
       setIsSignUpSuccessVisible(true);
     } catch (error) {
-      console.error('회원가입 실패:', error);
       setIsSignUpFailVisible(true);
     }
   };
