@@ -8,8 +8,9 @@ import CommonPageInfo from '../../common/CommonPageInfo';
 import SuccessSignUp from './SuccessSignUp';
 import FailSignUp from './SuccessSignUp';
 
-import axios from 'axios';
 import SearchAddressModal from './Component/SearchAddressModal';
+
+import { checkUserIdExists, signUpUser } from '../../apis/userApi';
 
 const FullContainer = styled.div`
   display: flex;
@@ -171,12 +172,8 @@ export function SignUp() {
 
     // 아이디 중복 체크
     try {
-      const response = await axios.post('/user/check-exists', {
-        field: 'userId',
-        value: formData.userId,
-      });
-
-      if (response.data.userIdAvailable) {
+      const result = await checkUserIdExists(formData.userId);
+      if (result.userIdAvailable) {
         setAlertMessage({
           ...alertMessage,
           userId: '사용 가능한 아이디입니다.',
@@ -190,7 +187,7 @@ export function SignUp() {
         setIsUserIdValidated(false);
       }
     } catch (error) {
-      console.error('중복 확인 실패:', error);
+      console.error('아이디 중복 확인 실패:', error);
       setAlertMessage({
         ...alertMessage,
         userId: '서버와의 통신 중 문제가 발생했습니다.',
@@ -227,10 +224,9 @@ export function SignUp() {
       return;
     }
 
-    // 회원가입 요청
     try {
-      const response = await axios.post('/user/signup', formData);
-      console.log('회원가입 성공:', response.data);
+      const result = await signUpUser(formData);
+      console.log('회원가입 성공:', result);
       setIsSignUpSuccessVisible(true);
     } catch (error) {
       console.error('회원가입 실패:', error);
