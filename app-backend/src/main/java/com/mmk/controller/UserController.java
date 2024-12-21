@@ -21,7 +21,6 @@ import org.springframework.web.bind.annotation.RestController;
 import com.mmk.common.ApiResponse;
 import com.mmk.dao.UserRepository;
 import com.mmk.service.UserService;
-// import com.mmk.service.UserService;
 import com.mmk.vo.UserInfoVO;
 
 @RestController
@@ -33,9 +32,9 @@ public class UserController {
     @Autowired
     private UserService userService;
 
-    // GET API 시작
-    // id 기반으로 유저 정보를 검색
-    @GetMapping("/id/{id}") // user/id/{id}
+    // GET API
+    // id(기본키) 기반으로 유저 정보를 검색
+    @GetMapping("/{id}")
     public ResponseEntity<ApiResponse<UserInfoVO>> getUserDetails(@PathVariable("id") int id) {
         Optional<UserInfoVO> user = userRepository.findById(id);
 
@@ -48,8 +47,22 @@ public class UserController {
         }
     }
 
-    // email 을 기반으로 유저 정보를 검색
-    @GetMapping("/email") // /user/username?username={}
+    // 유저 아이디 기반으로 유저 정보를 검색
+    @GetMapping("/by-user-id")
+    public ResponseEntity<ApiResponse<UserInfoVO>> getUserByUserId(@RequestParam("userId") String userId) {
+        UserInfoVO user = userRepository.findUserVOByUserId(userId);
+
+        if (user == null) {
+            ApiResponse<UserInfoVO> response = new ApiResponse<>(404, "유저 정보 찾을 수 없음", null);
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(response);
+        }
+
+        ApiResponse<UserInfoVO> response = new ApiResponse<>(200, "유저 검색 성공", user);
+        return ResponseEntity.ok(response);
+    }
+
+    // 이메일 기반으로 유저 정보를 검색
+    @GetMapping("/by-email")
     public ResponseEntity<ApiResponse<UserInfoVO>> getUserByEmail(@RequestParam("email") String email) {
         UserInfoVO user = userRepository.findUserVOByEmail(email);
 
@@ -74,7 +87,8 @@ public class UserController {
         return ResponseEntity.ok(new ApiResponse<>(200, "전체 유저 검색 성공", uList));
     }
 
-    // POST API 시작
+    // POST API
+    // 회원가입
     @PostMapping("/signup")
     public ResponseEntity<ApiResponse<UserInfoVO>> createUser(@RequestBody UserInfoVO userVO) {
         UserInfoVO createdUser = userService.createUser(userVO);
@@ -82,25 +96,48 @@ public class UserController {
         return ResponseEntity.status(HttpStatus.CREATED).body(response);
     }
 
-    @PostMapping("/check-email-exists")
-    public ResponseEntity<Map<String, Boolean>> checkEmailExists(@RequestBody Map<String, String> request) {
-        String email = request.get("email");
-        System.out.println("email sent from react: " + email);
-        boolean emailExists = userRepository.existsByEmail(email);
+    // 중복 체크 (필드, 값 조합)
+    @PostMapping("/check-exists")
+    public ResponseEntity<Map<String, Boolean>> checkFieldExists(@RequestBody Map<String, String> request) {
+        String field = request.get("field");
+        String value = request.get("value");
+        boolean exists;
+        System.out.println("field: " + field + "value: " + value);
+        switch (field) {
+            case "userId":
+                exists = userRepository.existsByUserId(value);
+                break;
+            case "email":
+                exists = userRepository.existsByEmail(value);
+                break;
+            default:
+                throw new IllegalArgumentException("Invalid field: " + field);
+        }
 
         Map<String, Boolean> response = new HashMap<>();
-        response.put("emailAvailable", !emailExists);
+        response.put(field + "Available", !exists);
         return ResponseEntity.ok(response);
     }
 
-    @PostMapping("/update")
+    // 유저 정보 업데이트
+    @PostMapping("/{id}")
     public void updateUser(@RequestBody UserInfoVO uv) {
         userRepository.save(uv);
     }
 
-    // DELETE API 시작
-    @DeleteMapping("/id")
-    public void deleteUser(@RequestParam("id") int id) {
+    // DELETE API
+    // 유저 정보 삭제
+    @DeleteMapping("/{id}")
+    public ResponseEntity<ApiResponse<Object>> deleteUser(@RequestParam("id") int id) {
+        Optional<UserInfoVO> user = userRepository.findById(id);
 
+        if (user.isEmpty()) {
+            throw new NoSuchElementException("유저를 찾을 수 없습니다. ID: " + id);
+        }
+
+        userRepository.deleteById(id);
+        ApiResponse<Object> response = new ApiResponse<>(200, "유저 삭제 성공", null);
+        return ResponseEntity.ok(response);
     }
+
 };
