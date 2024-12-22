@@ -341,6 +341,7 @@ export function SignUp() {
         />
         <SearchAddressModal
           open={isAddressModalOpen}
+          setModalVisible={setIsAddressModalOpen}
           onCompletePost={handleAddressSelect}
         />
       </FullContainer>
