@@ -1,21 +1,20 @@
-import React from 'react';
+import React, { useState } from 'react';
 import styled from 'styled-components';
 import CommonInput from '../../common/CommonInput';
 import CustomButton from '../../common/CommonButton';
 import or from '../../assets/images/or.png';
 import kakao from '../../assets/images/kakao.png';
 import google from '../../assets/images/google.png';
-import IconButton from './Component/IconButton'; // IButton을 정확히 import
+import IconButton from './Component/IconButton';
 import CommonRoot from '../../common/CommonRoot';
 import { Link } from 'react-router-dom';
 import CommonPageInfo from '../../common/CommonPageInfo';
-import { useState } from 'react';
-import {
-  EMAIL_VERIFIED_ERROR,
-  PASSWORD_VERIFIED_ERROR,
-} from '../auth/Component/ErrorMessage';
 import SuccessLogin from './SuccessLogin';
 import CommonHr from '../../common/CommonHr';
+import {
+  PASSWORD_VERIFIED_ERROR,
+  USERID_VERIFIED_ERROR,
+} from './Component/Message';
 
 const RootIn = styled.div`
   display: flex;
@@ -42,11 +41,13 @@ const MiddleContainer = styled.div`
   justify-content: space-between;
   align-items: center;
 `;
+
 const FindBox = styled.div`
   display: flex;
   flex-direction: flex-end;
   justify-content: space-between;
 `;
+
 const StyledLink = styled(Link)`
   color: #464646;
   text-decoration: none;
@@ -70,13 +71,16 @@ const LineStyle = styled.p`
   font-size: 13px;
   color: #464646;
 `;
+
 const StyledCheckbox = styled.input.attrs({ type: 'checkbox' })`
   margin-right: -30px;
 `;
+
 const Label = styled.label`
   font-size: 13px;
   color: #464646;
 `;
+
 const LowContainer = styled.div`
   margin-top: 10px;
   display: flex;
@@ -84,6 +88,7 @@ const LowContainer = styled.div`
   justify-content: center;
   align-items: center;
 `;
+
 const IconButtonContainer = styled.div`
   margin-top: 10px;
   width: 80px;
@@ -91,65 +96,61 @@ const IconButtonContainer = styled.div`
   flex-direction: flex-end;
   justify-content: space-between;
 `;
-const HiddenBox = styled.div`
-  display: flex;
-  margin-left: 28%;
-  margin-bottom: 2%;
-`;
+
 const ErrorMessage = styled.div`
   color: red;
   font-size: 13px;
 `;
-// 더미 데이터 (아이디와 비밀번호)
 
 export function Login(props) {
-  const [username, setUsername] = useState('');
-  const [password, setPassword] = useState('');
-  const [IDerrorMessage, setIDerrorMessage] = useState('');
-  const [PWerrorMessage, setPWerrorMessage] = useState('');
+  const [formData, setFormData] = useState({
+    username: '',
+    password: '',
+  });
+  const [errors, setErrors] = useState({});
   const [successVisible, setSuccessVisible] = useState(false);
 
   const dummyUser = {
-    username: 'user', // 아이디
-    password: 'password', // 비밀번호
+    username: 'user',
+    password: 'password',
   };
 
-  const handleUsernameChange = (e) => {
-    setUsername(e.target.value);
+  const handleChange = (field) => (event) => {
+    setFormData((prev) => ({
+      ...prev,
+      [field]: event.target.value,
+    }));
+    setErrors((prev) => ({
+      ...prev,
+      [field]: '',
+    }));
   };
 
-  const handlePasswordChange = (e) => {
-    setPassword(e.target.value);
+  const validateForm = () => {
+    const { username, password } = formData;
+    const newErrors = {};
+
+    if (!username) newErrors.username = '아이디를 입력하세요.';
+    if (!password) newErrors.password = '비밀번호를 입력하세요.';
+
+    setErrors(newErrors);
+    return Object.keys(newErrors).length === 0;
   };
 
   const handleLogin = () => {
-    // Check if either username or password is empty
-    if (username === '' || password === '') {
-      if (username === '' && password === '') {
-        setIDerrorMessage('아이디,비밀번호를 입력하세요');
-        setPWerrorMessage('아이디,비밀번호를 입력하세요');
-      } else {
-        // If only username is empty
-        if (username === '') {
-          setIDerrorMessage('아이디를 입력하세요');
-        }
+    if (!validateForm()) return;
 
-        // If only password is empty
-        if (password === '') {
-          setPWerrorMessage('비밀번호를 입력하세요');
-        }
-      }
-    } else if (username !== dummyUser.username) {
-      setIDerrorMessage(EMAIL_VERIFIED_ERROR);
-      setPWerrorMessage('');
-    } else if (password !== dummyUser.password) {
-      setPWerrorMessage(PASSWORD_VERIFIED_ERROR);
-      setIDerrorMessage('');
-    } else {
-      setSuccessVisible(true);
-      setIDerrorMessage('');
-      setPWerrorMessage('');
+    if (formData.username !== dummyUser.username) {
+      setErrors({ username: USERID_VERIFIED_ERROR });
+      return;
     }
+
+    if (formData.password !== dummyUser.password) {
+      setErrors({ password: PASSWORD_VERIFIED_ERROR });
+      return;
+    }
+
+    setSuccessVisible(true);
   };
 
   const list = [
@@ -176,19 +177,22 @@ export function Login(props) {
           <CommonInput
             text="아이디"
             placeholder="아이디를 입력하세요"
-            value={username}
-            onChange={handleUsernameChange}
+            value={formData.username}
+            onChange={handleChange('username')}
             {...inputProps}
           />
+          {errors.username && <ErrorMessage>{errors.username}</ErrorMessage>}
           <CommonHr />
 
           <CommonInput
             text="비밀번호"
             placeholder="비밀번호를 입력하세요"
-            value={password}
-            onChange={handlePasswordChange}
+            type="password"
+            value={formData.password}
+            onChange={handleChange('password')}
             {...inputProps}
           />
+          {errors.password && <ErrorMessage>{errors.password}</ErrorMessage>}
           <CommonHr />
         </HighContainer>
 
@@ -205,15 +209,8 @@ export function Login(props) {
             ))}
           </FindBox>
         </MiddleContainer>
+
         <LowContainer>
-          <HiddenBox>
-            {IDerrorMessage && <ErrorMessage>{IDerrorMessage}</ErrorMessage>}
-
-            {PWerrorMessage && !IDerrorMessage && (
-              <ErrorMessage>{PWerrorMessage}</ErrorMessage>
-            )}
-          </HiddenBox>
-
           <CustomButton
             text="로그인"
             width="300px"
@@ -224,11 +221,7 @@ export function Login(props) {
             onClick={handleLogin}
           />
 
-          <img
-            src={or} // import한 이미지 경로 사용
-            alt="Or"
-            width="63%"
-          />
+          <img src={or} alt="Or" width="63%" />
           <IconButtonContainer>
             <IconButton imagesRoute={kakao} />
             <IconButton imagesRoute={google} />

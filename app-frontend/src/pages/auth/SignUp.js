@@ -11,6 +11,21 @@ import FailSignUp from './SuccessSignUp';
 import SearchAddressModal from './Component/SearchAddressModal';
 
 import { checkUserIdExists, signUpUser } from '../../apis/userApi';
+import {
+  EMAIL_REGEX_ERROR,
+  EMPTY_ADDRESS_ERROR,
+  EMPTY_EMAIL_ERROR,
+  EMPTY_NAME_ERROR,
+  EMPTY_PASSWORD_ERROR,
+  EMPTY_USERID_ERROR,
+  PASSWORD_MISMATCH_ERROR,
+  PASSWORD_REGEX_ERROR,
+  SERVER_ERROR,
+  USERID_AVAILABLE_MESSAGE,
+  USERID_DUPLICATE_ERROR,
+  USERID_REGEX_ERROR,
+  USERID_VERIFY_PROMPT,
+} from './Component/Message';
 
 const FullContainer = styled.div`
   display: flex;
@@ -113,55 +128,51 @@ export function SignUp() {
     const errors = {};
 
     if (!formData.userId) {
-      errors.userId = '아이디를 입력해주세요.';
+      errors.userId = EMPTY_USERID_ERROR;
     } else if (!inputRegexs.userId.test(formData.userId)) {
-      errors.userId =
-        '아이디는 영문 소문자와 숫자로만 작성하며, 4~16자로 입력해주세요.';
+      errors.userId = USERID_REGEX_ERROR;
     }
 
     if (!formData.address) {
-      errors.address = '주소를 등록해주세요.';
+      errors.address = EMPTY_ADDRESS_ERROR;
     }
 
     if (!formData.email) {
-      errors.email = '이메일을 입력해주세요.';
+      errors.email = EMPTY_EMAIL_ERROR;
     } else if (!inputRegexs.email.test(formData.email)) {
-      errors.email =
-        '올바른 이메일 형식으로 입력해주세요. 예: example@domain.com';
+      errors.email = EMAIL_REGEX_ERROR;
     }
 
     if (!formData.password) {
-      errors.password = '비밀번호를 입력해주세요.';
+      errors.password = EMPTY_PASSWORD_ERROR;
     } else if (!inputRegexs.password.test(formData.password)) {
-      errors.password =
-        '비밀번호는 소문자, 숫자, 특수문자(@#$%^&+=!)를 포함해 8자 이상으로 입력해주세요.';
+      errors.password = PASSWORD_REGEX_ERROR;
     }
 
     if (formData.password !== formData.confirmPassword) {
-      errors.confirmPassword = '비밀번호가 일치하지 않습니다.';
+      errors.confirmPassword = PASSWORD_MISMATCH_ERROR;
     }
 
     if (!formData.name) {
-      errors.name = '이름을 입력해주세요.';
+      errors.name = EMPTY_NAME_ERROR;
     }
 
     return errors;
   };
 
+  // 아이디 중복 체크 클릭시
   const validateUserId = async () => {
-    // 아이디 형식 체크
     if (!formData.userId) {
       setAlertMessage({
         ...alertMessage,
-        userId: '아이디를 입력해주세요.',
+        userId: EMPTY_USERID_ERROR,
       });
       setIsUserIdValidated(false);
       return;
     } else if (!inputRegexs.userId.test(formData.userId)) {
       setAlertMessage({
         ...alertMessage,
-        userId:
-          '아이디는 영문 소문자와 숫자로만 작성하며, 4~16자로 입력해주세요.',
+        userId: USERID_REGEX_ERROR,
       });
       setIsUserIdValidated(false);
       return;
@@ -173,20 +184,20 @@ export function SignUp() {
       if (result.userIdAvailable) {
         setAlertMessage({
           ...alertMessage,
-          userId: '사용 가능한 아이디입니다.',
+          userId: USERID_AVAILABLE_MESSAGE,
         });
         setIsUserIdValidated(true);
       } else {
         setAlertMessage({
           ...alertMessage,
-          userId: '이미 등록된 아이디입니다.',
+          userId: USERID_DUPLICATE_ERROR,
         });
         setIsUserIdValidated(false);
       }
     } catch (error) {
       setAlertMessage({
         ...alertMessage,
-        userId: '서버와의 통신 중 문제가 발생했습니다.',
+        userId: SERVER_ERROR,
       });
       setIsUserIdValidated(false);
     }
@@ -214,7 +225,7 @@ export function SignUp() {
     if (!isUserIdValidated) {
       setAlertMessage({
         ...alertMessage,
-        userId: '아이디 중복 확인을 해주세요.',
+        userId: USERID_VERIFY_PROMPT,
       });
       return;
     }
@@ -312,7 +323,12 @@ export function SignUp() {
         </MiddleContainer>
 
         <div style={{ marginTop: '5px' }}>
-          <CommonButton text="회원가입" onClick={handleSubmit} />
+          <CommonButton
+            {...ButtonProps}
+            text="회원가입"
+            width="100px"
+            onClick={handleSubmit}
+          />
         </div>
 
         <SuccessSignUp
