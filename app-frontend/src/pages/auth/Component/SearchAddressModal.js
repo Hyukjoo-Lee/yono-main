@@ -1,7 +1,21 @@
+import { useEffect, useState } from 'react';
 import CommonDialog from '../../../common/CommonDialog';
 import DaumPostcode from 'react-daum-postcode';
 
-const SearchAddressModal = ({ open, onClose, onCompletePost }) => {
+const SearchAddressModal = ({ open, setModalVisible, onCompletePost }) => {
+  const [visible, setVisible] = useState(false);
+
+  useEffect(() => {
+    if (open) {
+      setVisible(true);
+    }
+  }, [open]);
+
+  const closeModal = () => {
+    setVisible(false);
+    setModalVisible(false);
+  };
+
   const handlePostCode = (data) => {
     let fullAddress = data.address;
     let extraAddress = '';
@@ -22,15 +36,16 @@ const SearchAddressModal = ({ open, onClose, onCompletePost }) => {
       onCompletePost(fullAddress);
     }
 
-    if (onClose) {
-      onClose();
-    }
+    setVisible(false);
+    setModalVisible(false);
   };
 
   return (
-    <CommonDialog open={open} onClose={onClose}>
-      <DaumPostcode onComplete={handlePostCode} />
-    </CommonDialog>
+    visible && (
+      <CommonDialog open={open} onClose={closeModal} onClick={closeModal}>
+        <DaumPostcode onComplete={handlePostCode} />
+      </CommonDialog>
+    )
   );
 };
 
