@@ -72,9 +72,6 @@ const InputUserIdBox = styled.div`
 const ButtonProps = {
   width: '73px',
   height: '37px',
-  background: '#F5F5F5',
-  text: '확인',
-  color: '#757575',
 };
 
 export function SignUp() {
@@ -314,12 +311,8 @@ export function SignUp() {
           {renderInputField('email', '이메일을 입력하세요', '이메일')}
         </MiddleContainer>
 
-        <div style={{ marginTop: '20px' }}>
-          <CommonButton
-            {...ButtonProps}
-            text="회원가입"
-            onClick={handleSubmit}
-          />
+        <div style={{ marginTop: '5px' }}>
+          <CommonButton text="회원가입" onClick={handleSubmit} />
         </div>
 
         <SuccessSignUp
