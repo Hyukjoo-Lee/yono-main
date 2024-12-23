@@ -3,9 +3,9 @@ import CommonInput from '../../common/CommonInput';
 import CommonSelect from '../../common/CommonSelect';
 import CommonButton from '../../common/CommonButton';
 import CommonPageInfo from '../../common/CommonPageInfo';
+import { useNavigate } from 'react-router-dom';
 import CommonHr from '../../common/CommonHr';
 import { useState } from 'react';
-import axios from 'axios';
 
 const Root = styled.div`
   width: ${(props) => props.theme.display.lg};
@@ -21,7 +21,6 @@ const FormBox = styled.div`
   width: 100%;
   max-width: 1000px;
   margin: 0 auto;
-  gap: 20px;
 `;
 
 const Row = styled.div`
@@ -64,13 +63,6 @@ const Box1 = styled.div`
   margin: 30px;
   gap: 30px;
 `;
-
-const ErrorMessage = styled.div`
-  color: red;
-  font-size: 13px;
-  margin-top: 5px;
-`;
-
 const OptionList = [
   { value: 'option_1', label: '정보공유' },
   { value: 'option_2', label: '질문' },
@@ -78,87 +70,12 @@ const OptionList = [
 ];
 
 export function CommunityFormBox() {
+  const navigate = useNavigate();
+  const handleButtonClick = () => {
+    navigate('/community');
+  };
   const [categoryOption, setcategoryOption] = useState('');
-  const [postFormData, setpostFormData] = useState({
-    title: '',
-    category: '',
-    content: '',
-    file: null,
-  });
 
-  const [alertMessage, setAlertMessage] = useState({
-    title: '',
-    category: '',
-    content: '',
-    file: '',
-  });
-
-  const validateForm = () => {
-    const errors = {};
-
-    if (!postFormData.title) {
-      errors.title = '1자 이상 50자 이내로 입력해주세요';
-    }
-    if (!postFormData.category) {
-      errors.category = '카테고리를 입력해주세요';
-    }
-    if (!postFormData.content) {
-      errors.content = '10자 이상 2000자 이하로 입력 해주세요요';
-    }
-    return errors;
-  };
-
-  const FileUpload = () => {
-    const [file, setFile] = useState('');
-
-    //파일 크기 제한
-    const maxSize = 5 * 1024 * 1024;
-    if (file.size > maxSize) {
-      setAlertMessage({
-        ...alertMessage,
-        file: '파일 크기는 5MB 이하만 허용됩니다.',
-      });
-      return;
-    }
-
-    //파일 확장자 검사
-    const allowedExtensions = ['jpg', 'jpeg', 'png', 'gif'];
-    const fileExtendsion = file.name.split('.').pop().toLowerCase();
-    if (!allowedExtensions.includes(fileExtendsion)) {
-      setAlertMessage({
-        ...alertMessage,
-        file: '허용되지 않는 파일 형식입니다,',
-      });
-      return;
-    }
-
-    //파일 상태 저장
-    setpostFormData({ ...postFormData, file: file });
-    setAlertMessage({
-      ...alertMessage,
-      file: '',
-    });
-    console.log('파일 업로드 성공');
-  };
-
-  const handleSubmit = async (e) => {
-    e.preventDefault();
-
-    const errors = validateForm();
-    setAlertMessage(errors);
-
-    if (Object.keys(errors).length > 0) {
-      return;
-    }
-
-    //서버로 데이터 전송
-    try {
-      const response = await axios.post('/community/create-post', postFormData);
-      console.log('게시글 등록 성공: ', response.data);
-    } catch (error) {
-      console.log('게시글 등록 실패:', error);
-    }
-  };
   return (
     <Root>
       <CommonPageInfo title={'고객게시판'} text={<p></p>} />
@@ -175,14 +92,7 @@ export function CommunityFormBox() {
             width="500px"
             height="40px"
             placeholder="제목을 입력해주세요"
-            value={postFormData.title}
-            onChange={(e) =>
-              setpostFormData((prev) => ({ ...prev, title: e.target.value }))
-            }
           />
-          {alertMessage.title && (
-            <ErrorMessage>{alertMessage.title}</ErrorMessage>
-          )}
         </Row>
         <Row>
           <span> 카테고리</span>
@@ -194,36 +104,16 @@ export function CommunityFormBox() {
             display="none"
             selectedValue={categoryOption}
             setSelectedValue={(value) => setcategoryOption(value)}
-            onChange={(e) =>
-              setpostFormData((prev) => ({ ...prev, category: e.target.value }))
-            }
-            value={postFormData.category}
           />
-          {alertMessage.category && (
-            <ErrorMessage>{alertMessage.category}</ErrorMessage>
-          )}
         </Row>
 
         <Row>
           <span>내용</span>
-          <textarea
-            value={postFormData.content}
-            onChange={(e) =>
-              setpostFormData((prev) => ({ ...prev, content: e.target.value }))
-            }
-          />
-          {alertMessage.content && (
-            <ErrorMessage>{alertMessage.content}</ErrorMessage>
-          )}
+          <textarea></textarea>
         </Row>
         <Row>
           <span>사진</span>
-          <CommonInput
-            width="390px"
-            height="40px"
-            placeholder="사진 첨부"
-            accept=".jpg, jepg, .png, .gif"
-          />
+          <CommonInput width="390px" height="40px" placeholder="사진 첨부" />
           <CommonButton
             text="사진 찾기"
             width="100px"
@@ -236,7 +126,7 @@ export function CommunityFormBox() {
         width="918px"
         borderWidth="2px"
         borderColor="black"
-        margin="20px auto 20px"
+        margin="10px auto 20px"
       />
       <Box1>
         <CommonButton
@@ -244,7 +134,7 @@ export function CommunityFormBox() {
           width="200px"
           height="50px"
           font-size="20px"
-          onClick={handleSubmit}
+          onClick={handleButtonClick}
         />
       </Box1>
     </Root>

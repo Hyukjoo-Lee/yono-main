@@ -26,13 +26,13 @@ const Root = styled.div`
 const columns = [
   { id: 'category', label: '카테고리 ', minWidth: 50 },
   { id: 'title', label: '제목 ', minWidth: 150 },
-  { id: 'id', label: '작성자 ', minWidth: 100 },
+  { id: 'author', label: '작성자 ', minWidth: 100 },
   { id: 'day', label: '등록일', minWidth: 100 },
   { id: 'check', label: '조회', minWidth: 50 },
 ];
 
-function createData(category, title, id, day, check) {
-  return { category, title, id, day, check };
+function createData(category, title, author, day, check) {
+  return { category, title, author, day, check };
 }
 
 const rows = [
