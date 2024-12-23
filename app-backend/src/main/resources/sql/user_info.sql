@@ -26,4 +26,3 @@ values (user_seq.nextval, 'hktestid', '이현경', 'hk@google.com','1234', '집'
 commit;
 select * from user_info where email = 'hk@google.com';
 
-drop table user_info;

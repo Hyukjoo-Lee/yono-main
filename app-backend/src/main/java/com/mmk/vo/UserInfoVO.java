@@ -58,4 +58,5 @@ public class UserInfoVO {
     @UpdateTimestamp
     @Column(name = "updated_at")
     private Timestamp updatedAt;
+    
 }
