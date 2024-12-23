@@ -12,6 +12,11 @@ public class UserDAOImpl implements UserDAO {
     UserRepository userRepository;
 
     @Override
+    public boolean existsByUserId(String userId) {
+        return this.userRepository.existsByUserId(userId);
+    }
+
+    @Override
     public boolean existsByEmail(String email) {
         return this.userRepository.existsByEmail(email);
     }

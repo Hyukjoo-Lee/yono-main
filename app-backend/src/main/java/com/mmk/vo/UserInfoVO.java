@@ -29,27 +29,27 @@ public class UserInfoVO {
     @Column(name = "user_num")
     private int userNum;
 
-    @Column(name = "id", nullable = false)
-    private String id;
+    @Column(name = "user_id", nullable = false, unique = true)
+    private String userId;
 
+    @ToString.Exclude
     @Column(name = "password", nullable = false)
     private String password;
 
-    @Column(name = "email", unique = true, nullable = false)
+    @Column(name = "email", nullable = false)
     private String email;
 
     @Column(name = "name", nullable = false)
     private String name;
 
-    // todo: 카카오 지도 API 연동 이후 처리 현재는 기본 값을 temp_address 로 지정함
-    @Column(name = "address", nullable = false, columnDefinition = "varchar(255) default 'temp_address'")
-    private String address = "temp_address";
+    @Column(name = "address", nullable = false)
+    private String address;
 
     @Column(name = "spending_target", columnDefinition = "int default 0")
     private int spendingTarget = 0;
 
-    @Column(name = "profile")
-    private String profile;
+    @Column(name = "profile", columnDefinition = "varchar2(255) default 'temp_profile'")
+    private String profile = "temp_profile";
 
     @CreationTimestamp
     @Column(name = "created_at")

@@ -17,12 +17,11 @@ public class UserServiceImpl implements UserService {
     public UserDAO userDAO;
 
     public UserInfoVO createUser(UserInfoVO userVO) {
-        if (userVO.getEmail() == null || userVO.getPassword() == null) {
+        if (userVO.getUserId() == null || userVO.getPassword() == null) {
             throw new IllegalArgumentException("입력값이 유효하지 않습니다.");
         }
-        // 지훈, 지은누나, 민경
-        if (userRepository.existsByEmail(userVO.getEmail())) {
-            throw new IllegalArgumentException("이미 존재하는 이메일입니다.");
+        if (userRepository.existsByUserId(userVO.getUserId())) {
+            throw new IllegalArgumentException("이미 존재하는 아이디입니다.");
         }
         return userRepository.save(userVO);
     }

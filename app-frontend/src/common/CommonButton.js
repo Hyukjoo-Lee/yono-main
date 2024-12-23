@@ -63,9 +63,9 @@ const CustomButton = (props) => {
       height={height}
       background={background}
       $borderColor={$borderColor}
-      radius={borderRadius}
-      hover1={hoverBk}
-      hover2={hoverColor}
+      borderRadius={borderRadius}
+      hoverBk={hoverBk}
+      hoverColor={hoverColor}
       onClick={disabled ? undefined : onClick}
       disabled={disabled}
       disableRipple
@@ -79,4 +79,5 @@ const CustomButton = (props) => {
     </ButtonStyle>
   );
 };
+
 export default CustomButton;

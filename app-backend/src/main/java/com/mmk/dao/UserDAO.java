@@ -12,6 +12,14 @@ public interface UserDAO {
     void createUser(UserInfoVO uv);
 
     /**
+     * 아이디 정보 중복 확인
+     * 
+     * @param userId
+     * @return 중복 여부 (true, false)
+     */
+    boolean existsByUserId(String userId);
+
+    /**
      * 이메일 정보 중복 확인
      * 
      * @param email

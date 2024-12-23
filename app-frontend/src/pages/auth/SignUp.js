@@ -8,7 +8,25 @@ import CommonPageInfo from '../../common/CommonPageInfo';
 import SuccessSignUp from './SuccessSignUp';
 import FailSignUp from './SuccessSignUp';
 
-import axios from 'axios';
+import SearchAddressModal from './Component/SearchAddressModal';
+
+import { checkUserIdExists, signUpUser } from '../../apis/userApi';
+import {
+  EMAIL_REGEX_ERROR,
+  EMPTY_ADDRESS_ERROR,
+  EMPTY_EMAIL_ERROR,
+  EMPTY_NAME_ERROR,
+  EMPTY_PASSWORD_ERROR,
+  EMPTY_USERID_ERROR,
+  PASSWORD_MISMATCH_ERROR,
+  PASSWORD_REGEX_ERROR,
+  SERVER_ERROR,
+  USERID_AVAILABLE_MESSAGE,
+  USERID_DUPLICATE_ERROR,
+  USERID_REGEX_ERROR,
+  USERID_VERIFY_PROMPT,
+} from './Component/Message';
+import theme from '../../theme/theme';
 
 const FullContainer = styled.div`
   display: flex;
@@ -18,29 +36,21 @@ const FullContainer = styled.div`
 `;
 
 const MiddleContainer = styled.div`
-  margin-top: 20px;
   display: flex;
   flex-direction: column;
   justify-content: flex-start;
   align-items: flex-start;
 `;
 
-const MiddleTitle = styled.div`
-  font-size: 16px;
-  color: #757575;
-  margin-left: 5px;
-`;
-
 const ErrorMessage = styled.div`
-  color: red;
+  color: ${theme.color.red};
   font-size: 13px;
-  margin-left: 5px;
 `;
 
 const ValidMessage = styled.div`
-  color: blue;
+  color: ${theme.color.blue};
   font-size: 13px;
-  margin-left: 5px;
+  margin-left: 10px;
 `;
 
 const ContainerProps = {
@@ -52,10 +62,10 @@ const InputProps = {
   $borderColor: 'transparent',
   background: 'transparent',
   $focusBorderColor: 'transparent',
-  $marginLeft: '7px',
+  $marginLeft: '10px',
 };
 
-const InputEmailBox = styled.div`
+const InputUserIdBox = styled.div`
   display: flex;
   flex-direction: row;
   justify-content: space-between;
@@ -63,130 +73,145 @@ const InputEmailBox = styled.div`
   width: 350px;
 
   & > *:not(:last-child) {
-    margin-right: -95px; /* 오른쪽 마진 */
+    margin-right: 10px;
   }
+`;
+
+const MessageBox = styled.div`
+  margin-left: 10px;
 `;
 
 const ButtonProps = {
   width: '73px',
   height: '37px',
-  background: '#F5F5F5',
-  text: '확인',
-  color: '#757575',
 };
 
 export function SignUp() {
   const [isSignUpSuccessVisible, setIsSignUpSuccessVisible] = useState(false);
   const [isSignUpFailVisible, setIsSignUpFailVisible] = useState(false);
-  const [isEmailValidated, setIsEmailValidated] = useState(false);
+  const [isAddressModalOpen, setIsAddressModalOpen] = useState(false);
+  const [isUserIdValidated, setIsUserIdValidated] = useState(false);
 
   const inputRegexs = {
-    password: /^(?=.*[a-z])(?=.*\d)(?=.*[*@#$%^&+=!]).{8,}$/,
+    userId: /^[a-z][a-z0-9]{3,15}$/,
     email: /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/,
+    password: /^(?=.*[a-z])(?=.*\d)(?=.*[*@#$%^&+=!]).{8,}$/,
   };
 
   const [formData, setFormData] = useState({
+    userId: '',
     password: '',
     confirmPassword: '',
     name: '',
     email: '',
-    address: 'temp_address',
+    address: '',
   });
 
   const [alertMessage, setAlertMessage] = useState({
+    userId: '',
     password: '',
     confirmPassword: '',
     name: '',
     email: '',
+    address: '',
   });
 
   const handleInputChange = (e, field) => {
     setFormData((prev) => ({ ...prev, [field]: e.target.value }));
+    setAlertMessage((prev) => ({ ...prev, [field]: '' }));
   };
 
   const validateForm = () => {
     const errors = {};
 
+    if (!formData.userId) {
+      errors.userId = EMPTY_USERID_ERROR;
+    } else if (!inputRegexs.userId.test(formData.userId)) {
+      errors.userId = USERID_REGEX_ERROR;
+    }
+
+    if (!formData.address) {
+      errors.address = EMPTY_ADDRESS_ERROR;
+    }
+
     if (!formData.email) {
-      errors.email = '이메일을 입력해주세요.';
+      errors.email = EMPTY_EMAIL_ERROR;
     } else if (!inputRegexs.email.test(formData.email)) {
-      errors.email =
-        '올바른 이메일 형식으로 입력해주세요. 예: example@domain.com';
+      errors.email = EMAIL_REGEX_ERROR;
     }
 
     if (!formData.password) {
-      errors.password = '비밀번호를 입력해주세요.';
+      errors.password = EMPTY_PASSWORD_ERROR;
     } else if (!inputRegexs.password.test(formData.password)) {
-      errors.password =
-        '비밀번호는 소문자, 숫자, 특수문자(@#$%^&+=!)를 포함해 8자 이상으로 입력해주세요.';
+      errors.password = PASSWORD_REGEX_ERROR;
     }
 
     if (formData.password !== formData.confirmPassword) {
-      errors.confirmPassword = '비밀번호가 일치하지 않습니다.';
+      errors.confirmPassword = PASSWORD_MISMATCH_ERROR;
     }
 
     if (!formData.name) {
-      errors.name = '이름을 입력해주세요.';
+      errors.name = EMPTY_NAME_ERROR;
     }
 
     return errors;
   };
 
-  const validateEmail = async () => {
-    // 이메일 형식 체크
-    if (!formData.email) {
+  // 아이디 중복 체크 클릭시
+  const validateUserId = async () => {
+    if (!formData.userId) {
       setAlertMessage({
         ...alertMessage,
-        email: '이메일을 입력해주세요.',
+        userId: EMPTY_USERID_ERROR,
       });
-      setIsEmailValidated(false);
+      setIsUserIdValidated(false);
       return;
-    } else if (!inputRegexs.email.test(formData.email)) {
+    } else if (!inputRegexs.userId.test(formData.userId)) {
       setAlertMessage({
         ...alertMessage,
-        email: '올바른 이메일 형식으로 입력해주세요. 예: example@domain.com.',
+        userId: USERID_REGEX_ERROR,
       });
-      setIsEmailValidated(false);
+      setIsUserIdValidated(false);
       return;
     }
 
-    // 이메일 중복 체크
+    // 아이디 중복 체크
     try {
-      const response = await axios.post('/user/check-email-exists', {
-        email: formData.email,
-      });
-
-      if (response.data.emailAvailable) {
+      const result = await checkUserIdExists(formData.userId);
+      if (result.userIdAvailable) {
         setAlertMessage({
           ...alertMessage,
-          email: '사용 가능한 이메일입니다.',
+          userId: USERID_AVAILABLE_MESSAGE,
         });
-        setIsEmailValidated(true);
+        setIsUserIdValidated(true);
       } else {
         setAlertMessage({
           ...alertMessage,
-          email: '이미 등록된 이메일입니다.',
+          userId: USERID_DUPLICATE_ERROR,
         });
-        setIsEmailValidated(false);
+        setIsUserIdValidated(false);
       }
     } catch (error) {
-      console.error('중복 확인 실패:', error);
       setAlertMessage({
         ...alertMessage,
-        email: '서버와의 통신 중 문제가 발생했습니다.',
+        userId: SERVER_ERROR,
       });
-      setIsEmailValidated(false);
+      setIsUserIdValidated(false);
     }
   };
 
+  const handleAddressSelect = (address) => {
+    setFormData((prev) => ({ ...prev, address }));
+    setIsAddressModalOpen(false);
+  };
+
   /**
-   * 중복 확인 버튼을 누르면 유효성 검사 후 중복체크
+   * 중복 확인 버튼을 누르면 유효성 검사 후 아이디 중복체크
    * 회원 가입 버튼을 누르면 중복 확인이 되었는지 검사 후
    * 회원 가입 요청
    */
   const handleSubmit = async (e) => {
     e.preventDefault();
-
     const errors = validateForm();
     setAlertMessage(errors);
 
@@ -194,21 +219,18 @@ export function SignUp() {
       return;
     }
 
-    if (!isEmailValidated) {
+    if (!isUserIdValidated) {
       setAlertMessage({
         ...alertMessage,
-        email: '이메일 중복 확인을 해주세요.',
+        userId: USERID_VERIFY_PROMPT,
       });
       return;
     }
 
-    // 회원가입 요청
     try {
-      const response = await axios.post('/user/signup', formData);
-      console.log('회원가입 성공:', response.data);
+      await signUpUser(formData);
       setIsSignUpSuccessVisible(true);
     } catch (error) {
-      console.error('회원가입 실패:', error);
       setIsSignUpFailVisible(true);
     }
   };
@@ -223,7 +245,9 @@ export function SignUp() {
         {...InputProps}
       />
       {alertMessage[field] && (
-        <ErrorMessage>{alertMessage[field]}</ErrorMessage>
+        <MessageBox>
+          <ErrorMessage>{alertMessage[field]}</ErrorMessage>
+        </MessageBox>
       )}
       <CommonHr />
       <div style={ContainerProps} />
@@ -234,48 +258,78 @@ export function SignUp() {
     <CommonRoot>
       <FullContainer>
         <MiddleContainer>
-          <CommonPageInfo title="회원가입" text={<p></p>} />
-          <MiddleTitle>회원정보입력</MiddleTitle>
-          <CommonHr />
-          <div style={ContainerProps} />
-          <InputEmailBox>
+          <CommonPageInfo title="회원가입" />
+          <InputUserIdBox>
             <CommonInput
-              placeholder="아이디(이메일)를 입력하세요."
+              placeholder="아이디를 입력하세요."
               text="아이디"
-              onChange={(e) => handleInputChange(e, 'email')}
+              onChange={(e) => handleInputChange(e, 'userId')}
               {...InputProps}
             />
-            <CommonButton
-              {...ButtonProps}
-              text="중복확인"
-              width="100px"
-              onClick={validateEmail}
-            />
-          </InputEmailBox>
-          {alertMessage.email ? (
-            <ErrorMessage>{alertMessage.email}</ErrorMessage>
-          ) : (
-            <ValidMessage>{alertMessage.email}</ValidMessage>
-          )}
+            <div style={{ marginLeft: '5px' }}>
+              <CommonButton
+                {...ButtonProps}
+                text="중복확인"
+                width="100px"
+                onClick={validateUserId}
+              />
+            </div>
+          </InputUserIdBox>
+          <MessageBox>
+            {!isUserIdValidated ? (
+              <ErrorMessage>{alertMessage.userId}</ErrorMessage>
+            ) : (
+              <ValidMessage>{alertMessage.userId}</ValidMessage>
+            )}
+          </MessageBox>
           <CommonHr />
+          <InputUserIdBox>
+            <CommonInput
+              placeholder="주소를 입력하세요."
+              text="주소"
+              value={formData.address}
+              onChange={(e) => handleInputChange(e, 'address')}
+              {...InputProps}
+            />
+            <div style={{ marginLeft: '5px' }}>
+              <CommonButton
+                {...ButtonProps}
+                text="주소찾기"
+                width="100px"
+                onClick={() => setIsAddressModalOpen(true)}
+              />
+            </div>
+          </InputUserIdBox>
+          <MessageBox>
+            {alertMessage.address ? (
+              <ErrorMessage>{alertMessage.address}</ErrorMessage>
+            ) : (
+              <ValidMessage>{alertMessage.address}</ValidMessage>
+            )}
+          </MessageBox>
+          <CommonHr />
+
           {renderInputField(
             'password',
             '비밀번호를 입력하세요',
             '비밀번호',
-            // 'password',
+            'password',
           )}
           {renderInputField(
             'confirmPassword',
             '비밀번호를 입력하세요',
             '비밀번호 확인',
+            'password',
           )}
           {renderInputField('name', '이름을 입력하세요', '이름')}
+          {renderInputField('email', '이메일을 입력하세요', '이메일')}
         </MiddleContainer>
 
-        <div style={{ marginTop: '20px' }}>
+        <div style={{ marginTop: '5px' }}>
           <CommonButton
             {...ButtonProps}
             text="회원가입"
+            width="100px"
             onClick={handleSubmit}
           />
         </div>
@@ -287,6 +341,11 @@ export function SignUp() {
         <FailSignUp
           open={isSignUpFailVisible}
           setSuccessVisible={setIsSignUpFailVisible}
+        />
+        <SearchAddressModal
+          open={isAddressModalOpen}
+          setModalVisible={setIsAddressModalOpen}
+          onCompletePost={handleAddressSelect}
         />
       </FullContainer>
     </CommonRoot>

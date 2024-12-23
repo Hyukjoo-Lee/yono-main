@@ -1,243 +1,228 @@
-import React from 'react';
+import React, { useState } from 'react';
 import styled from 'styled-components';
-import CommonInput from '../../common/CommonInput';
-import CustomButton from '../../common/CommonButton';
-import or from '../../assets/images/or.png';
-import kakao from '../../assets/images/kakao.png';
-import google from '../../assets/images/google.png';
-import IconButton from './Component/IconButton'; // IButton을 정확히 import
-import CommonRoot from '../../common/CommonRoot';
-import { Link } from 'react-router-dom';
 import CommonPageInfo from '../../common/CommonPageInfo';
-import { useState } from 'react';
-import {
-  EMAIL_VERIFIED_ERROR,
-  PASSWORD_VERIFIED_ERROR,
-} from '../auth/Component/ErrorMessage';
+import CommonRoot from '../../common/CommonRoot';
+import CommonInput from '../../common/CommonInput';
+import CommonButton from '../../common/CommonButton';
+import theme from '../../theme/theme';
+import { EMPTY_PASSWORD_ERROR, EMPTY_USERID_ERROR } from './Component/Message';
 import SuccessLogin from './SuccessLogin';
-import CommonHr from '../../common/CommonHr';
 
 const RootIn = styled.div`
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-  width: 100%;
+  width: ${(props) => props.theme.display.lg};
   margin: 0 auto;
   box-sizing: border-box;
 `;
 
-const HighContainer = styled.div`
+const FormBox = styled.form`
+  width: 100%;
+  display: flex;
+  justify-content: center;
+`;
+
+const FormWrapper = styled.div`
+  width: 350px;
   display: flex;
   flex-direction: column;
   justify-content: center;
   align-items: center;
 `;
 
-const MiddleContainer = styled.div`
-  margin-top: 10px;
-  width: 25%;
+const InputWrapper = styled.div`
+  width: 100%;
+  margin-bottom: 20px;
+`;
+
+const OptionsWrapper = styled.div`
+  width: 100%;
   display: flex;
-  flex-direction: row;
   justify-content: space-between;
   align-items: center;
+  margin-bottom: 20px;
 `;
-const FindBox = styled.div`
-  display: flex;
-  flex-direction: flex-end;
-  justify-content: space-between;
+
+const CheckBoxWrapper = styled.div``;
+
+const StyledCheckbox = styled.input`
+  margin: 5px 5px 0 0;
 `;
-const StyledLink = styled(Link)`
+
+const Label = styled.label`
+  font-size: 14px;
+`;
+
+const ErrorMessage = styled.div`
+  color: ${theme.color.red};
+  font-size: 13px;
+`;
+
+const LinkText = styled.a`
+  font-size: 14px;
   color: #464646;
   text-decoration: none;
-  font-size: 13px;
-  font-weight: 500;
-  padding: 0;
-  display: flex;
-  align-items: center;
+  cursor: pointer;
+  margin-right: 10px;
+  margin-left: 10px;
 
   &:hover {
-    background-color: transparent;
-    color: #4064e6;
-  }
-  &:active {
-    background-color: transparent;
+    color: ${theme.color.blue};
   }
 `;
 
-const LineStyle = styled.p`
-  margin: 0px 10px;
-  font-size: 13px;
-  color: #464646;
-`;
-const StyledCheckbox = styled.input.attrs({ type: 'checkbox' })`
-  margin-right: -30px;
-`;
-const Label = styled.label`
-  font-size: 13px;
-  color: #464646;
-`;
-const LowContainer = styled.div`
-  margin-top: 10px;
+const Divider = styled.div`
+  width: 100%;
   display: flex;
-  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  margin: 20px 0;
+
+  &::before,
+  &::after {
+    content: '';
+    flex: 1;
+    height: 1px;
+    background-color: #ccc;
+  }
+
+  span {
+    margin: 0 10px;
+    color: #aaa;
+  }
+`;
+
+const SocialLoginWrapper = styled.div`
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  gap: 20px;
+`;
+
+const SocialButton = styled.div`
+  width: 50px;
+  height: 50px;
+  border-radius: 50%;
+  display: flex;
   justify-content: center;
   align-items: center;
+  border: 1px solid #ccc;
+  cursor: pointer;
 `;
-const IconButtonContainer = styled.div`
-  margin-top: 10px;
-  width: 80px;
-  display: flex;
-  flex-direction: flex-end;
-  justify-content: space-between;
-`;
-const HiddenBox = styled.div`
-  display: flex;
-  margin-left: 28%;
-  margin-bottom: 2%;
-`;
-const ErrorMessage = styled.div`
-  color: red;
-  font-size: 13px;
-`;
-// 더미 데이터 (아이디와 비밀번호)
 
-export function Login(props) {
-  const [username, setUsername] = useState('');
-  const [password, setPassword] = useState('');
-  const [IDerrorMessage, setIDerrorMessage] = useState('');
-  const [PWerrorMessage, setPWerrorMessage] = useState('');
-  const [successVisible, setSuccessVisible] = useState(false);
+export function Login() {
+  const [formData, setFormData] = useState({
+    userId: '',
+    password: '',
+  });
 
-  const dummyUser = {
-    username: 'user', // 아이디
-    password: 'password', // 비밀번호
+  const [alertMessage, setAlertMessage] = useState({
+    userId: '',
+    password: '',
+  });
+
+  const [isLoginSuccessVisible, setIsLoginSuccessVisible] = useState(false);
+
+  const handleInputChange = (e, field) => {
+    setFormData((prev) => ({ ...prev, [field]: e.target.value }));
+    setAlertMessage((prev) => ({ ...prev, [field]: '' }));
   };
 
-  const handleUsernameChange = (e) => {
-    setUsername(e.target.value);
-  };
+  const validateForm = () => {
+    const errors = {};
 
-  const handlePasswordChange = (e) => {
-    setPassword(e.target.value);
-  };
-
-  const handleLogin = () => {
-    // Check if either username or password is empty
-    if (username === '' || password === '') {
-      if (username === '' && password === '') {
-        setIDerrorMessage('아이디,비밀번호를 입력하세요');
-        setPWerrorMessage('아이디,비밀번호를 입력하세요');
-      } else {
-        // If only username is empty
-        if (username === '') {
-          setIDerrorMessage('아이디를 입력하세요');
-        }
-
-        // If only password is empty
-        if (password === '') {
-          setPWerrorMessage('비밀번호를 입력하세요');
-        }
-      }
-    } else if (username !== dummyUser.username) {
-      setIDerrorMessage(EMAIL_VERIFIED_ERROR);
-      setPWerrorMessage('');
-    } else if (password !== dummyUser.password) {
-      setPWerrorMessage(PASSWORD_VERIFIED_ERROR);
-      setIDerrorMessage('');
-    } else {
-      setSuccessVisible(true);
-      setIDerrorMessage('');
-      setPWerrorMessage('');
+    if (!formData.userId) {
+      errors.userId = EMPTY_USERID_ERROR;
     }
+
+    if (!formData.password) {
+      errors.password = EMPTY_PASSWORD_ERROR;
+    }
+
+    return errors;
   };
 
-  const list = [
-    { label: '아이디찾기', path: '/find-id' },
-    { label: '비밀번호찾기', path: '/find-pwd' },
-  ];
+  const handleLogin = async (e) => {
+    e.preventDefault();
+    const errors = validateForm();
+    setAlertMessage(errors);
 
-  const inputProps = {
-    background: '#FFFFFF',
-    color: '#464646',
-    $borderColor: 'transparent',
-    $focusBorderColor: 'transparent',
-    width: '300px',
-    height: '35px',
-    $marginLeft: '7px',
+    if (Object.keys(errors).length > 0) {
+      console.log('there is an error');
+      return;
+    }
+
+    try {
+      // 로그인 api 요청
+      setIsLoginSuccessVisible(true);
+    } catch (error) {
+      console.log(error);
+    }
   };
 
   return (
     <CommonRoot>
       <RootIn>
-        <HighContainer>
-          <CommonPageInfo title="로그인" text={<p></p>} />
-
-          <CommonInput
-            text="아이디"
-            placeholder="아이디를 입력하세요"
-            value={username}
-            onChange={handleUsernameChange}
-            {...inputProps}
+        <FormBox onSubmit={handleLogin}>
+          <FormWrapper>
+            <CommonPageInfo title="로그인" />
+            <InputWrapper>
+              <CommonInput
+                background={theme.color.white}
+                placeholder="아이디를 입력하세요."
+                text="아이디"
+                width="100%"
+                onChange={(e) => handleInputChange(e, 'userId')}
+              />
+              {alertMessage.userId && (
+                <ErrorMessage>{alertMessage.userId}</ErrorMessage>
+              )}
+            </InputWrapper>
+            <InputWrapper>
+              <CommonInput
+                background={theme.color.white}
+                placeholder="비밀번호를 입력하세요."
+                text="비밀번호"
+                width="100%"
+                type="password"
+                onChange={(e) => handleInputChange(e, 'password')}
+              />
+              {alertMessage.password && (
+                <ErrorMessage>{alertMessage.password}</ErrorMessage>
+              )}
+            </InputWrapper>
+            <OptionsWrapper>
+              <CheckBoxWrapper>
+                <StyledCheckbox htmlFor="save" type="checkbox" />
+                <Label id="save">아이디 저장</Label>
+              </CheckBoxWrapper>
+              <div>
+                <LinkText>아이디찾기</LinkText>
+                <span>|</span>
+                <LinkText>비밀번호찾기</LinkText>
+              </div>
+            </OptionsWrapper>
+            <CommonButton
+              type="submit"
+              text="로그인"
+              width="100%"
+              height="40px"
+            />
+            <Divider>
+              <span>OR</span>
+            </Divider>
+            <SocialLoginWrapper>
+              <SocialButton>
+                {/* <img src={kakaoLogo} alt="카카오 로그인" /> */}
+              </SocialButton>
+              <SocialButton>
+                {/* <img src={googleLogo} alt="구글 로그인" /> */}
+              </SocialButton>
+            </SocialLoginWrapper>
+          </FormWrapper>
+          <SuccessLogin
+            open={isLoginSuccessVisible}
+            setSuccessVisible={setIsLoginSuccessVisible}
           />
-          <CommonHr />
-
-          <CommonInput
-            text="비밀번호"
-            placeholder="비밀번호를 입력하세요"
-            value={password}
-            onChange={handlePasswordChange}
-            {...inputProps}
-          />
-          <CommonHr />
-        </HighContainer>
-
-        <MiddleContainer>
-          <StyledCheckbox id="saveId" />
-          <Label htmlFor="saveId">아이디저장</Label>
-
-          <FindBox>
-            {list.map((item, index) => (
-              <StyledLink to={item.path} key={index}>
-                {item.label}
-                {index !== list.length - 1 && <LineStyle>|</LineStyle>}
-              </StyledLink>
-            ))}
-          </FindBox>
-        </MiddleContainer>
-        <LowContainer>
-          <HiddenBox>
-            {IDerrorMessage && <ErrorMessage>{IDerrorMessage}</ErrorMessage>}
-
-            {PWerrorMessage && !IDerrorMessage && (
-              <ErrorMessage>{PWerrorMessage}</ErrorMessage>
-            )}
-          </HiddenBox>
-
-          <CustomButton
-            text="로그인"
-            width="300px"
-            height="35px"
-            background="#4064E6"
-            color="#ffffff"
-            fontSize="20"
-            onClick={handleLogin}
-          />
-
-          <img
-            src={or} // import한 이미지 경로 사용
-            alt="Or"
-            width="63%"
-          />
-          <IconButtonContainer>
-            <IconButton imagesRoute={kakao} />
-            <IconButton imagesRoute={google} />
-          </IconButtonContainer>
-        </LowContainer>
-        <SuccessLogin
-          open={successVisible}
-          setSuccessVisible={setSuccessVisible}
-        />
+        </FormBox>
       </RootIn>
     </CommonRoot>
   );
