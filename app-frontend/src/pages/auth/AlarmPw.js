@@ -1,9 +1,9 @@
 import CommonDialog from '../../common/CommonDialog';
 import { useState } from 'react';
 import CommonInput from '../../common/CommonInput';
-import { PASSWORD2_CONFORM_ERROR } from '../auth/Component/ErrorMessage';
 import styled from 'styled-components';
 import { useNavigate } from 'react-router-dom';
+import { PASSWORD_VERIFIED_ERROR } from './Component/Message';
 
 const HiddenBox = styled.div`
   display: flex;
@@ -48,7 +48,7 @@ const AlarmPw = ({ open, $setIsDialogPWVisible }) => {
       setErrorMessage('답변을 입력해 주세요');
       setSuccessChangePW(false);
     } else if (password !== newPassword) {
-      setErrorMessage(PASSWORD2_CONFORM_ERROR);
+      setErrorMessage(PASSWORD_VERIFIED_ERROR);
       setSuccessChangePW(false);
     } else {
       setErrorMessage('');
