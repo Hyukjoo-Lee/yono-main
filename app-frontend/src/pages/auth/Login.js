@@ -1,10 +1,12 @@
-import React from 'react';
+import React, { useState } from 'react';
 import styled from 'styled-components';
 import CommonPageInfo from '../../common/CommonPageInfo';
 import CommonRoot from '../../common/CommonRoot';
 import CommonInput from '../../common/CommonInput';
 import CommonButton from '../../common/CommonButton';
 import theme from '../../theme/theme';
+import { EMPTY_PASSWORD_ERROR, EMPTY_USERID_ERROR } from './Component/Message';
+import SuccessLogin from './SuccessLogin';
 
 const RootIn = styled.div`
   width: ${(props) => props.theme.display.lg};
@@ -49,7 +51,10 @@ const Label = styled.label`
   font-size: 14px;
 `;
 
-const FindGroup = styled.div``;
+const ErrorMessage = styled.div`
+  color: ${theme.color.red};
+  font-size: 13px;
+`;
 
 const LinkText = styled.a`
   font-size: 14px;
@@ -103,16 +108,60 @@ const SocialButton = styled.div`
   cursor: pointer;
 `;
 
-const onSubmit = (e) => {
-  e.preventDefault();
-  console.log('로그인 요청');
-};
-
 export function Login() {
+  const [formData, setFormData] = useState({
+    userId: '',
+    password: '',
+  });
+
+  const [alertMessage, setAlertMessage] = useState({
+    userId: '',
+    password: '',
+  });
+
+  const [isLoginSuccessVisible, setIsLoginSuccessVisible] = useState(false);
+
+  const handleInputChange = (e, field) => {
+    setFormData((prev) => ({ ...prev, [field]: e.target.value }));
+    setAlertMessage((prev) => ({ ...prev, [field]: '' }));
+  };
+
+  const validateForm = () => {
+    const errors = {};
+
+    if (!formData.userId) {
+      errors.userId = EMPTY_USERID_ERROR;
+    }
+
+    if (!formData.password) {
+      errors.password = EMPTY_PASSWORD_ERROR;
+    }
+
+    return errors;
+  };
+
+  const handleLogin = async (e) => {
+    e.preventDefault();
+    const errors = validateForm();
+    setAlertMessage(errors);
+
+    if (Object.keys(errors).length > 0) {
+      console.log('there is an error');
+      return;
+    }
+
+    try {
+      // 로그인 api 요청
+      setIsLoginSuccessVisible(true);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
   return (
     <CommonRoot>
       <RootIn>
-        <FormBox onSubmit={onSubmit}>
+        <FormBox onSubmit={handleLogin}>
           <FormWrapper>
             <CommonPageInfo title="로그인" />
             <InputWrapper>
@@ -121,7 +170,11 @@ export function Login() {
                 placeholder="아이디를 입력하세요."
                 text="아이디"
                 width="100%"
+                onChange={(e) => handleInputChange(e, 'userId')}
               />
+              {alertMessage.userId && (
+                <ErrorMessage>{alertMessage.userId}</ErrorMessage>
+              )}
             </InputWrapper>
             <InputWrapper>
               <CommonInput
@@ -130,20 +183,29 @@ export function Login() {
                 text="비밀번호"
                 width="100%"
                 type="password"
+                onChange={(e) => handleInputChange(e, 'password')}
               />
+              {alertMessage.password && (
+                <ErrorMessage>{alertMessage.password}</ErrorMessage>
+              )}
             </InputWrapper>
             <OptionsWrapper>
               <CheckBoxWrapper>
                 <StyledCheckbox htmlFor="save" type="checkbox" />
                 <Label id="save">아이디 저장</Label>
               </CheckBoxWrapper>
-              <FindGroup>
+              <div>
                 <LinkText>아이디찾기</LinkText>
                 <span>|</span>
                 <LinkText>비밀번호찾기</LinkText>
-              </FindGroup>
+              </div>
             </OptionsWrapper>
-            <CommonButton text="로그인" width="100%" height="40px" />
+            <CommonButton
+              type="submit"
+              text="로그인"
+              width="100%"
+              height="40px"
+            />
             <Divider>
               <span>OR</span>
             </Divider>
@@ -156,6 +218,10 @@ export function Login() {
               </SocialButton>
             </SocialLoginWrapper>
           </FormWrapper>
+          <SuccessLogin
+            open={isLoginSuccessVisible}
+            setSuccessVisible={setIsLoginSuccessVisible}
+          />
         </FormBox>
       </RootIn>
     </CommonRoot>

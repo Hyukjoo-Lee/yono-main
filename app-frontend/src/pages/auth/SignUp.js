@@ -45,7 +45,6 @@ const MiddleContainer = styled.div`
 const ErrorMessage = styled.div`
   color: ${theme.color.red};
   font-size: 13px;
-  margin-left: 10px;
 `;
 
 const ValidMessage = styled.div`
@@ -79,7 +78,7 @@ const InputUserIdBox = styled.div`
 `;
 
 const MessageBox = styled.div`
-  /* margin-left: '100px'; */
+  margin-left: 10px;
 `;
 
 const ButtonProps = {
@@ -246,7 +245,9 @@ export function SignUp() {
         {...InputProps}
       />
       {alertMessage[field] && (
-        <ErrorMessage>{alertMessage[field]}</ErrorMessage>
+        <MessageBox>
+          <ErrorMessage>{alertMessage[field]}</ErrorMessage>
+        </MessageBox>
       )}
       <CommonHr />
       <div style={ContainerProps} />
@@ -265,12 +266,14 @@ export function SignUp() {
               onChange={(e) => handleInputChange(e, 'userId')}
               {...InputProps}
             />
-            <CommonButton
-              {...ButtonProps}
-              text="중복확인"
-              width="100px"
-              onClick={validateUserId}
-            />
+            <div style={{ marginLeft: '5px' }}>
+              <CommonButton
+                {...ButtonProps}
+                text="중복확인"
+                width="100px"
+                onClick={validateUserId}
+              />
+            </div>
           </InputUserIdBox>
           <MessageBox>
             {!isUserIdValidated ? (
@@ -288,18 +291,22 @@ export function SignUp() {
               onChange={(e) => handleInputChange(e, 'address')}
               {...InputProps}
             />
-            <CommonButton
-              {...ButtonProps}
-              text="주소찾기"
-              width="100px"
-              onClick={() => setIsAddressModalOpen(true)}
-            />
+            <div style={{ marginLeft: '5px' }}>
+              <CommonButton
+                {...ButtonProps}
+                text="주소찾기"
+                width="100px"
+                onClick={() => setIsAddressModalOpen(true)}
+              />
+            </div>
           </InputUserIdBox>
-          {alertMessage.address ? (
-            <ErrorMessage>{alertMessage.address}</ErrorMessage>
-          ) : (
-            <ValidMessage>{alertMessage.address}</ValidMessage>
-          )}
+          <MessageBox>
+            {alertMessage.address ? (
+              <ErrorMessage>{alertMessage.address}</ErrorMessage>
+            ) : (
+              <ValidMessage>{alertMessage.address}</ValidMessage>
+            )}
+          </MessageBox>
           <CommonHr />
 
           {renderInputField(
