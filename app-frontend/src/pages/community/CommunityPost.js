@@ -4,11 +4,24 @@ import CommonInput from '../../common/CommonInput';
 import { useNavigate } from 'react-router-dom';
 import { ReactComponent as Profile } from '../../assets/images/Profile.svg';
 import CommonHr from '../../common/CommonHr';
+import HeartImg from '../../assets/images/HeartImg.png';
+import EmptyHeartImg from '../../assets/images/EmptyHeartImg.png';
+import { useState } from 'react';
 
 const comments = [
   {
     name: '한교동',
     time: '1시간전',
+    comment: '안녕하세요. 반갑습니다~!',
+  },
+  {
+    name: '포차코',
+    time: '30분전',
+    comment: '안녕하세요. 반갑습니다~!',
+  },
+  {
+    name: '포차코',
+    time: '30분전',
     comment: '안녕하세요. 반갑습니다~!',
   },
   {
@@ -52,7 +65,6 @@ const CommentBox = styled.div`
   display: flex;
   flex-direction: column;
   gap: 10px;
-
   & > div {
     padding-left: 20px;
     height: 100px;
@@ -82,12 +94,38 @@ const TimeText = styled.span`
   margin-left: 8px;
   margin-bottom: 5px;
 `;
+
+const BottomRow = styled.div`
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+`;
 const TextBox = styled.div`
   & > p {
     color: ${(props) => props.theme.color.black};
     margin-left: 25px;
   }
 `;
+const LikeBox = styled.div`
+  border: 1px solid lightGray;
+  width: 50px;
+  height: 28px;
+  display: flex;
+  align-items: center;
+  margin: 0 20px 20px 0;
+  & > p {
+    margin-left: 5px;
+  }
+`;
+const Heart = styled.img`
+  margin-left: 5px;
+  width: 20px;
+  height: 20px;
+`;
+
+const HeartButton = ({ like, onClick }) => {
+  return <Heart src={like ? HeartImg : EmptyHeartImg} onClick={onClick} />;
+};
 const BottomBox = styled.div`
   display: flex;
   margin: 20px 0px 20px 0px;
@@ -106,6 +144,24 @@ export function CommunityPost() {
   const handleNavigateToEditForm = () => {
     navigate('/editFormBox');
   };
+  const [like, setLike] = useState(false);
+  const [count, setCount] = useState(0);
+
+  const toggleLike = () => {
+    setLike((prev) => {
+      const newLiked = !prev;
+      setCount((prevCount) => {
+        if (newLiked && prevCount === 0) {
+          return prevCount + 1;
+        } else if (!newLiked && prevCount > 0) {
+          return prevCount - 1;
+        }
+        return prevCount;
+      });
+      return newLiked;
+    });
+  };
+
   return (
     <Root>
       <label>제목</label>
@@ -146,9 +202,16 @@ export function CommunityPost() {
                   {comment.name} <TimeText>{comment.time}</TimeText>
                 </h3>
               </TopRow>
-              <TextBox>
-                <p>{comment.comment}</p>
-              </TextBox>
+              <BottomRow>
+                <TextBox>
+                  <p>{comment.comment}</p>
+                </TextBox>
+
+                <LikeBox>
+                  <HeartButton like={like} onClick={toggleLike} />
+                  <p>{count}</p>
+                </LikeBox>
+              </BottomRow>
             </div>
           );
         })}
