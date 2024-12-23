@@ -29,9 +29,10 @@ public class UserInfoVO {
     @Column(name = "user_num")
     private int userNum;
 
-    @Column(name = "user_id", nullable = false)
+    @Column(name = "user_id", nullable = false, unique = true)
     private String userId;
 
+    @ToString.Exclude
     @Column(name = "password", nullable = false)
     private String password;
 
