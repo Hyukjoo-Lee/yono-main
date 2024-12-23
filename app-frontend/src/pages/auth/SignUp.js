@@ -26,6 +26,7 @@ import {
   USERID_REGEX_ERROR,
   USERID_VERIFY_PROMPT,
 } from './Component/Message';
+import theme from '../../theme/theme';
 
 const FullContainer = styled.div`
   display: flex;
@@ -35,29 +36,22 @@ const FullContainer = styled.div`
 `;
 
 const MiddleContainer = styled.div`
-  margin-top: 20px;
   display: flex;
   flex-direction: column;
   justify-content: flex-start;
   align-items: flex-start;
 `;
 
-const MiddleTitle = styled.div`
-  font-size: 16px;
-  color: #757575;
-  margin-left: 5px;
-`;
-
 const ErrorMessage = styled.div`
-  color: red;
+  color: ${theme.color.red};
   font-size: 13px;
-  margin-left: 5px;
+  margin-left: 10px;
 `;
 
 const ValidMessage = styled.div`
-  color: blue;
+  color: ${theme.color.blue};
   font-size: 13px;
-  margin-left: 5px;
+  margin-left: 10px;
 `;
 
 const ContainerProps = {
@@ -69,7 +63,7 @@ const InputProps = {
   $borderColor: 'transparent',
   background: 'transparent',
   $focusBorderColor: 'transparent',
-  $marginLeft: '7px',
+  $marginLeft: '10px',
 };
 
 const InputUserIdBox = styled.div`
@@ -82,6 +76,10 @@ const InputUserIdBox = styled.div`
   & > *:not(:last-child) {
     margin-right: 10px;
   }
+`;
+
+const MessageBox = styled.div`
+  /* margin-left: '100px'; */
 `;
 
 const ButtonProps = {
@@ -259,10 +257,7 @@ export function SignUp() {
     <CommonRoot>
       <FullContainer>
         <MiddleContainer>
-          <CommonPageInfo title="회원가입" text={<p></p>} />
-          <MiddleTitle>회원정보입력</MiddleTitle>
-          <CommonHr />
-          <div style={ContainerProps} />
+          <CommonPageInfo title="회원가입" />
           <InputUserIdBox>
             <CommonInput
               placeholder="아이디를 입력하세요."
@@ -277,13 +272,14 @@ export function SignUp() {
               onClick={validateUserId}
             />
           </InputUserIdBox>
-          {!isUserIdValidated ? (
-            <ErrorMessage>{alertMessage.userId}</ErrorMessage>
-          ) : (
-            <ValidMessage>{alertMessage.userId}</ValidMessage>
-          )}
+          <MessageBox>
+            {!isUserIdValidated ? (
+              <ErrorMessage>{alertMessage.userId}</ErrorMessage>
+            ) : (
+              <ValidMessage>{alertMessage.userId}</ValidMessage>
+            )}
+          </MessageBox>
           <CommonHr />
-
           <InputUserIdBox>
             <CommonInput
               placeholder="주소를 입력하세요."

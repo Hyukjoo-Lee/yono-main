@@ -1,236 +1,162 @@
-import React, { useState } from 'react';
+import React from 'react';
 import styled from 'styled-components';
-import CommonInput from '../../common/CommonInput';
-import CustomButton from '../../common/CommonButton';
-import or from '../../assets/images/or.png';
-import kakao from '../../assets/images/kakao.png';
-import google from '../../assets/images/google.png';
-import IconButton from './Component/IconButton';
-import CommonRoot from '../../common/CommonRoot';
-import { Link } from 'react-router-dom';
 import CommonPageInfo from '../../common/CommonPageInfo';
-import SuccessLogin from './SuccessLogin';
-import CommonHr from '../../common/CommonHr';
-import {
-  PASSWORD_VERIFIED_ERROR,
-  USERID_VERIFIED_ERROR,
-} from './Component/Message';
+import CommonRoot from '../../common/CommonRoot';
+import CommonInput from '../../common/CommonInput';
+import CommonButton from '../../common/CommonButton';
+import theme from '../../theme/theme';
 
 const RootIn = styled.div`
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-  width: 100%;
+  width: ${(props) => props.theme.display.lg};
   margin: 0 auto;
   box-sizing: border-box;
 `;
 
-const HighContainer = styled.div`
+const FormBox = styled.form`
+  width: 100%;
+  display: flex;
+  justify-content: center;
+`;
+
+const FormWrapper = styled.div`
+  width: 350px;
   display: flex;
   flex-direction: column;
   justify-content: center;
   align-items: center;
 `;
 
-const MiddleContainer = styled.div`
-  margin-top: 10px;
-  width: 25%;
+const InputWrapper = styled.div`
+  width: 100%;
+  margin-bottom: 20px;
+`;
+
+const OptionsWrapper = styled.div`
+  width: 100%;
   display: flex;
-  flex-direction: row;
   justify-content: space-between;
   align-items: center;
+  margin-bottom: 20px;
 `;
 
-const FindBox = styled.div`
-  display: flex;
-  flex-direction: flex-end;
-  justify-content: space-between;
-`;
+const CheckBoxWrapper = styled.div``;
 
-const StyledLink = styled(Link)`
-  color: #464646;
-  text-decoration: none;
-  font-size: 13px;
-  font-weight: 500;
-  padding: 0;
-  display: flex;
-  align-items: center;
-
-  &:hover {
-    background-color: transparent;
-    color: #4064e6;
-  }
-  &:active {
-    background-color: transparent;
-  }
-`;
-
-const LineStyle = styled.p`
-  margin: 0px 10px;
-  font-size: 13px;
-  color: #464646;
-`;
-
-const StyledCheckbox = styled.input.attrs({ type: 'checkbox' })`
-  margin-right: -30px;
+const StyledCheckbox = styled.input`
+  margin: 5px 5px 0 0;
 `;
 
 const Label = styled.label`
-  font-size: 13px;
-  color: #464646;
+  font-size: 14px;
 `;
 
-const LowContainer = styled.div`
-  margin-top: 10px;
+const FindGroup = styled.div``;
+
+const LinkText = styled.a`
+  font-size: 14px;
+  color: #464646;
+  text-decoration: none;
+  cursor: pointer;
+  margin-right: 10px;
+  margin-left: 10px;
+
+  &:hover {
+    color: ${theme.color.blue};
+  }
+`;
+
+const Divider = styled.div`
+  width: 100%;
   display: flex;
-  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  margin: 20px 0;
+
+  &::before,
+  &::after {
+    content: '';
+    flex: 1;
+    height: 1px;
+    background-color: #ccc;
+  }
+
+  span {
+    margin: 0 10px;
+    color: #aaa;
+  }
+`;
+
+const SocialLoginWrapper = styled.div`
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  gap: 20px;
+`;
+
+const SocialButton = styled.div`
+  width: 50px;
+  height: 50px;
+  border-radius: 50%;
+  display: flex;
   justify-content: center;
   align-items: center;
+  border: 1px solid #ccc;
+  cursor: pointer;
 `;
 
-const IconButtonContainer = styled.div`
-  margin-top: 10px;
-  width: 80px;
-  display: flex;
-  flex-direction: flex-end;
-  justify-content: space-between;
-`;
+const onSubmit = (e) => {
+  e.preventDefault();
+  console.log('로그인 요청');
+};
 
-const ErrorMessage = styled.div`
-  color: red;
-  font-size: 13px;
-`;
-
-export function Login(props) {
-  const [formData, setFormData] = useState({
-    username: '',
-    password: '',
-  });
-  const [errors, setErrors] = useState({});
-  const [successVisible, setSuccessVisible] = useState(false);
-
-  const dummyUser = {
-    username: 'user',
-    password: 'password',
-  };
-
-  const handleChange = (field) => (event) => {
-    setFormData((prev) => ({
-      ...prev,
-      [field]: event.target.value,
-    }));
-    setErrors((prev) => ({
-      ...prev,
-      [field]: '',
-    }));
-  };
-
-  const validateForm = () => {
-    const { username, password } = formData;
-    const newErrors = {};
-
-    if (!username) newErrors.username = '아이디를 입력하세요.';
-    if (!password) newErrors.password = '비밀번호를 입력하세요.';
-
-    setErrors(newErrors);
-    return Object.keys(newErrors).length === 0;
-  };
-
-  const handleLogin = () => {
-    if (!validateForm()) return;
-
-    if (formData.username !== dummyUser.username) {
-      setErrors({ username: USERID_VERIFIED_ERROR });
-      return;
-    }
-
-    if (formData.password !== dummyUser.password) {
-      setErrors({ password: PASSWORD_VERIFIED_ERROR });
-      return;
-    }
-
-    setSuccessVisible(true);
-  };
-
-  const list = [
-    { label: '아이디찾기', path: '/find-id' },
-    { label: '비밀번호찾기', path: '/find-pwd' },
-  ];
-
-  const inputProps = {
-    background: '#FFFFFF',
-    color: '#464646',
-    $borderColor: 'transparent',
-    $focusBorderColor: 'transparent',
-    width: '300px',
-    height: '35px',
-    $marginLeft: '7px',
-  };
-
+export function Login() {
   return (
     <CommonRoot>
       <RootIn>
-        <HighContainer>
-          <CommonPageInfo title="로그인" text={<p></p>} />
-
-          <CommonInput
-            text="아이디"
-            placeholder="아이디를 입력하세요"
-            value={formData.username}
-            onChange={handleChange('username')}
-            {...inputProps}
-          />
-          {errors.username && <ErrorMessage>{errors.username}</ErrorMessage>}
-          <CommonHr />
-
-          <CommonInput
-            text="비밀번호"
-            placeholder="비밀번호를 입력하세요"
-            type="password"
-            value={formData.password}
-            onChange={handleChange('password')}
-            {...inputProps}
-          />
-          {errors.password && <ErrorMessage>{errors.password}</ErrorMessage>}
-          <CommonHr />
-        </HighContainer>
-
-        <MiddleContainer>
-          <StyledCheckbox id="saveId" />
-          <Label htmlFor="saveId">아이디저장</Label>
-
-          <FindBox>
-            {list.map((item, index) => (
-              <StyledLink to={item.path} key={index}>
-                {item.label}
-                {index !== list.length - 1 && <LineStyle>|</LineStyle>}
-              </StyledLink>
-            ))}
-          </FindBox>
-        </MiddleContainer>
-
-        <LowContainer>
-          <CustomButton
-            text="로그인"
-            width="300px"
-            height="35px"
-            background="#4064E6"
-            color="#ffffff"
-            fontSize="20"
-            onClick={handleLogin}
-          />
-
-          <img src={or} alt="Or" width="63%" />
-          <IconButtonContainer>
-            <IconButton imagesRoute={kakao} />
-            <IconButton imagesRoute={google} />
-          </IconButtonContainer>
-        </LowContainer>
-        <SuccessLogin
-          open={successVisible}
-          setSuccessVisible={setSuccessVisible}
-        />
+        <FormBox onSubmit={onSubmit}>
+          <FormWrapper>
+            <CommonPageInfo title="로그인" />
+            <InputWrapper>
+              <CommonInput
+                background={theme.color.white}
+                placeholder="아이디를 입력하세요."
+                text="아이디"
+                width="100%"
+              />
+            </InputWrapper>
+            <InputWrapper>
+              <CommonInput
+                background={theme.color.white}
+                placeholder="비밀번호를 입력하세요."
+                text="비밀번호"
+                width="100%"
+                type="password"
+              />
+            </InputWrapper>
+            <OptionsWrapper>
+              <CheckBoxWrapper>
+                <StyledCheckbox htmlFor="save" type="checkbox" />
+                <Label id="save">아이디 저장</Label>
+              </CheckBoxWrapper>
+              <FindGroup>
+                <LinkText>아이디찾기</LinkText>
+                <span>|</span>
+                <LinkText>비밀번호찾기</LinkText>
+              </FindGroup>
+            </OptionsWrapper>
+            <CommonButton text="로그인" width="100%" height="40px" />
+            <Divider>
+              <span>OR</span>
+            </Divider>
+            <SocialLoginWrapper>
+              <SocialButton>
+                {/* <img src={kakaoLogo} alt="카카오 로그인" /> */}
+              </SocialButton>
+              <SocialButton>
+                {/* <img src={googleLogo} alt="구글 로그인" /> */}
+              </SocialButton>
+            </SocialLoginWrapper>
+          </FormWrapper>
+        </FormBox>
       </RootIn>
     </CommonRoot>
   );

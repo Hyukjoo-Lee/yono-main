@@ -1,9 +1,9 @@
 // 입력값 누락 관련
-export const EMPTY_USERID_ERROR = '아이디를 입력해주세요.';
-export const EMPTY_EMAIL_ERROR = '이메일을 입력해주세요.';
-export const EMPTY_PASSWORD_ERROR = '비밀번호를 입력해주세요.';
-export const EMPTY_NAME_ERROR = '이름을 입력해주세요.';
-export const EMPTY_ADDRESS_ERROR = '주소를 등록해주세요.';
+export const EMPTY_USERID_ERROR = '아이디를 입력하세요.';
+export const EMPTY_EMAIL_ERROR = '이메일을 입력하세요.';
+export const EMPTY_PASSWORD_ERROR = '비밀번호를 입력하세요.';
+export const EMPTY_NAME_ERROR = '이름을 입력하세요.';
+export const EMPTY_ADDRESS_ERROR = '주소를 등록하세요.';
 
 // REGEX 관련
 export const USERID_REGEX_ERROR =
