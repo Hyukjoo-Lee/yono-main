@@ -81,6 +81,18 @@ const ContainerProps = {
   marginBottom: '3px',
 };
 
+const EmailValidMessageStyle = styled.p`
+  color: red;
+  margin: 5px;
+  font-size: 15px;
+`;
+
+const emailValidMessages = [
+  '인증 완료!',
+  '인증코드가 일치하지 않습니다!',
+  '이메일 인증을 확인하세요!',
+];
+
 export const FindPassword = () => {
   const find = '비밀번호 찾기';
   const navigate = useNavigate();
@@ -94,22 +106,6 @@ export const FindPassword = () => {
   // const [errorMessage, setErrorMessage] = useState('');
 
   let isEmailValid = false; // 백엔드에서 받아온 이메일인증 확인 결과값, 기본값 false;
-
-  const EmailValidMessageStyle = styled.p`
-    color: red;
-    margin: 5px;
-    font-size: 15px;
-  `;
-
-  const emailValidMessage = [
-    <EmailValidMessageStyle>인증 완료!</EmailValidMessageStyle>,
-    <EmailValidMessageStyle>
-      인증코드가 일치하지 않습니다!
-    </EmailValidMessageStyle>,
-    <EmailValidMessageStyle>
-      이메일 인증 혹은 아이디를 확인하세요!
-    </EmailValidMessageStyle>,
-  ];
 
   const handleSendCode = () => {
     setIsEmailCodeVisble(!isEmailCodeVisible);
@@ -200,13 +196,16 @@ export const FindPassword = () => {
                       background="#ffffff"
                       $borderColor="#4064E6"
                       color="#4064E6"
-                      hoverBk="#ffffff"
                       fontSize="20"
                       onClick={handleCheckCode}
                     />
                   </CodeButton>
                 </CodeContainer>
-                {emailValidVisible && emailValidMessage[emailValidMessageIndex]}
+                {emailValidVisible && (
+                  <EmailValidMessageStyle>
+                    {emailValidMessages[emailValidMessageIndex]}
+                  </EmailValidMessageStyle>
+                )}
               </>
             )}
           </MiddleContainer>
@@ -229,7 +228,6 @@ export const FindPassword = () => {
               background="#ffffff"
               $borderColor="#4064E6"
               color="#4064E6"
-              hoverBk="#ffffff"
               fontSize="20"
               onClick={handleClose}
             />
