@@ -1,13 +1,7 @@
 import React from 'react';
 import styled from 'styled-components';
 import CustomButton from './CommonButton';
-import {
-  Dialog,
-  DialogActions,
-  DialogContentText,
-  DialogTitle,
-  IconButton,
-} from '@mui/material';
+import { Dialog, DialogActions, DialogTitle, IconButton } from '@mui/material';
 import CloseIcon from '@mui/icons-material/Close';
 
 const DialogStyle = styled(Dialog)`
@@ -76,9 +70,7 @@ const CommonDialog = (props) => {
         </IconButtonStyle>
       </TitleBox>
 
-      <ContentsBox>
-        <DialogContentText>{children}</DialogContentText>
-      </ContentsBox>
+      <ContentsBox>{children}</ContentsBox>
 
       <DialogActionsStyle>
         <CustomButton
