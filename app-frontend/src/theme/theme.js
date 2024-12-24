@@ -10,6 +10,7 @@ const fontSize = {
   xs: '0.75rem', // 12px
   sm: '0.938rem', //15px
   base: '1rem', // 16px
+  eighteen: '1.125rem', // 18px
   md: '1.25rem', // 20px
   lg: '1.5rem', // 24px
   xl: '2rem', // 32px
