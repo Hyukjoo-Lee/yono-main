@@ -3,7 +3,7 @@ import CommonDialog from '../../../common/CommonDialog';
 import DaumPostcode from 'react-daum-postcode';
 
 const postCodeStyle = {
-  width: '100%',
+  minHeight: '43.5vh',
 };
 
 const SearchAddressModal = ({ open, setModalVisible, onCompletePost }) => {
@@ -12,7 +12,6 @@ const SearchAddressModal = ({ open, setModalVisible, onCompletePost }) => {
   useEffect(() => {
     if (open) {
       setVisible(true);
-      console.log('d');
     }
   }, [open]);
 
