@@ -1,10 +1,8 @@
-import React, { useState, useEffect } from 'react';
-import styled from 'styled-components';
-import { ReactComponent as Profile } from '../../assets/images/Profile.svg';
+import React, { useState } from 'react';
 import CustomButton from '../../common/CommonButton';
 import CommonInput from '../../common/CommonInput';
-
-import axios from 'axios';
+import styled from 'styled-components';
+import { ReactComponent as Profile } from '../../assets/images/Profile.svg';
 
 const StyledHr = styled.hr`
   width: 100%;
@@ -70,9 +68,14 @@ const ProfileContainer = styled.div`
   width: 150px;
   height: 150px;
   border-radius: 50%;
-  overflow: hidden;
   background-color: #f5f5f5;
-  margin: 0 auto 20px;
+  margin: 0 auto 40px;
+`;
+
+const ProfileImage = styled.div`
+  display: flex;
+  justify-content: center;
+  overflow: hidden;
   & svg {
     width: 70%;
     height: 70%;
@@ -81,13 +84,13 @@ const ProfileContainer = styled.div`
 
 const ProfileButton = styled.button`
   position: absolute;
-  bottom: -5px;
-  right: -5px;
+  bottom: 23px;
+  right: 23px;
   width: 30px;
   height: 30px;
   border: none;
   border-radius: 50%;
-  background-color: #007bff;
+  background-color: #4064e6;
   color: white;
   display: flex;
   justify-content: center;
@@ -102,40 +105,25 @@ const ProfileButton = styled.button`
 `;
 
 const CheckUserInfo = ({
-  user_id,
-  username,
-  password,
-  name,
+  userName,
+  userId,
+  originPassword,
   email,
-  address,
-  spending_target,
-  created_at,
+  nickname,
+  Target_Expenditure_Amout,
 }) => {
   const [isEditing, setIsEditing] = useState(true);
   const [passwordError, setPasswordError] = useState('');
   const [userInfo, setUserInfo] = useState({
-    username: username || '',
-    password: '',
-    name: name || '',
+    userName: userName || ``,
+    nickname: nickname || ``,
+    userId: userId || '',
     email: email || '',
-    address: address || '',
-    spending_target: spending_target || '',
+    Target_Expenditure_Amout: Target_Expenditure_Amout || '',
+    password: '',
     newPassword: '',
     confirmPassword: '',
   });
-
-  useEffect(() => {
-    setUserInfo({
-      username: username || '',
-      password: '',
-      name: name || '',
-      email: email || '',
-      address: address || '',
-      spending_target: spending_target || '',
-      newPassword: '',
-      confirmPassword: '',
-    });
-  }, [username, password, name, email, address, spending_target]);
 
   const toggleEdit = () => {
     setIsEditing(!isEditing);
@@ -143,23 +131,20 @@ const CheckUserInfo = ({
   };
 
   const cancelEdit = () => {
-    setUserInfo({
-      username: username,
-      password: '',
-      name: name,
-      email: email,
-      address: address,
-      spending_target: spending_target,
-      newPassword: '',
-      confirmPassword: '',
-    });
-
+    userInfo.userName = userName;
+    userInfo.nickname = nickname;
+    userInfo.userId = userId;
+    userInfo.email = email;
+    userInfo.Target_Expenditure_Amout = Target_Expenditure_Amout;
+    userInfo.password = '';
+    userInfo.newPassword = '';
+    userInfo.confirmPassword = '';
     setIsEditing(!isEditing);
   };
 
   const isFormValid = () => {
     for (const key in userInfo) {
-      if (('' + userInfo[key]).trim() === '') {
+      if (userInfo[key].trim() === '') {
         return 1;
       }
     }
@@ -173,32 +158,16 @@ const CheckUserInfo = ({
     if (isFormValid() === 1) {
       setPasswordError('모든 정보를 입력해주세요!');
       return;
-    } else if (password !== userInfo.password) {
+    } else if (originPassword !== userInfo.password) {
       setPasswordError('기존 비밀번호가 일치하지 않습니다!');
       return;
     } else if (isFormValid() === 2) {
       setPasswordError('비밀번호 확인이 일치하지 않습니다!');
       return;
     }
-    // 수정사항 저장 로직
-    axios
-      .post('/user/update', {
-        user_id: user_id,
-        username: userInfo.username,
-        password: userInfo.newPassword,
-        name: userInfo.name,
-        email: userInfo.email,
-        address: userInfo.address,
-        spending_target: userInfo.spending_target,
-        created_at: created_at,
-      })
-      .then((response) => {
-        console.log('저장 성공', response.data);
-        setIsEditing(!isEditing);
-      })
-      .catch((error) => console.log(error.response || error.message));
+    // 수정사항 저장 로직 추가 필요
+    setIsEditing(!isEditing);
   };
-
   const deleteId = () => {};
 
   const disabledIntputProps = {
@@ -238,40 +207,41 @@ const CheckUserInfo = ({
       {isEditing ? (
         <Section>
           <ProfileContainer>
-            <Profile />
-            <ProfileButton onClick={() => console.log('프로필 버튼 클릭!')}>
-              +
-            </ProfileButton>
+            <ProfileImage>
+              <Profile />
+            </ProfileImage>
           </ProfileContainer>
           <InnerSection>
             <TitleStyle>이름</TitleStyle>
-            <TextStyle>{userInfo.name}</TextStyle>
+            <TextStyle>{userName}</TextStyle>
+            <StyledHr />
+          </InnerSection>
+          <InnerSection>
+            <TitleStyle>닉네임</TitleStyle>
+            <TextStyle>{nickname}</TextStyle>
             <StyledHr />
           </InnerSection>
           <InnerSection>
             <TitleStyle>아이디</TitleStyle>
-            <TextStyle>{userInfo.username}</TextStyle>
+            <TextStyle>{userId}</TextStyle>
             <StyledHr />
           </InnerSection>
           <InnerSection>
             <TitleStyle>이메일</TitleStyle>
-            <TextStyle>{userInfo.email}</TextStyle>
+            <TextStyle>{email}</TextStyle>
             <StyledHr />
           </InnerSection>
           <InnerSection>
-            <TitleStyle>주소</TitleStyle>
-            <TextStyle>{userInfo.address}</TextStyle>
-            <StyledHr />
-          </InnerSection>
-          <InnerSection>
-            <TitleStyle>이번 달 목표 지출금액</TitleStyle>
-            <TextStyle>{userInfo.spending_target}</TextStyle>
+            <TitleStyle>일일 목표 지출금액</TitleStyle>
+            <TextStyle>{Target_Expenditure_Amout}</TextStyle>
           </InnerSection>
         </Section>
       ) : (
         <>
           <ProfileContainer>
-            <Profile />
+            <ProfileImage>
+              <Profile />
+            </ProfileImage>
             <ProfileButton onClick={() => console.log('프로필 버튼 클릭!')}>
               +
             </ProfileButton>
@@ -279,7 +249,7 @@ const CheckUserInfo = ({
 
           <InnerSection>
             <CommonInput
-              value={userInfo.username}
+              value={userInfo.userId}
               placeholder="아이디를 입력하세요"
               text="아이디"
               {...disabledIntputProps}
@@ -322,7 +292,7 @@ const CheckUserInfo = ({
 
           <InnerSection>
             <CommonInput
-              value={userInfo.name}
+              value={userInfo.userName}
               text="이름"
               placeholder="이름을 입력하세요"
               {...disabledIntputProps}
@@ -343,21 +313,12 @@ const CheckUserInfo = ({
 
           <InnerSection>
             <CommonInput
-              value={userInfo.address}
-              text="주소"
-              placeholder="주소를를 입력하세요"
-              onChange={(e) => handleChange('address', e.target.value)}
-              {...abledInputProps}
-            />
-            <StyledHr />
-          </InnerSection>
-
-          <InnerSection>
-            <CommonInput
-              value={userInfo.spending_target}
-              text="이번 달 목표 지출금액"
-              placeholder="이번 달 목표 지출금액을 입력하세요"
-              onChange={(e) => handleChange('spending_target', e.target.value)}
+              value={userInfo.Target_Expenditure_Amout}
+              text="일일 목표 지출금액"
+              placeholder="일일 목표 지출금액을 입력하세요"
+              onChange={(e) =>
+                handleChange('Target_Expenditure_Amout', e.target.value)
+              }
               {...abledInputProps}
             />
             <StyledHr />

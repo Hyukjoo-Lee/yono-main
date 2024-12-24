@@ -17,6 +17,7 @@ const fontSize = {
 
 const color = {
   blue: '#4064e6',
+  red: '#ff0000',
   lightBlue: '#EFF3FD',
   gray: '#464646',
   lightGray: '#757575',
