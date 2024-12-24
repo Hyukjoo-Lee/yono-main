@@ -17,6 +17,7 @@ const RootIn = styled.div`
   margin: 0 auto;
   box-sizing: border-box;
 `;
+
 const FullContainer = styled.div`
   display: flex;
   flex-direction: column;
@@ -48,12 +49,34 @@ const ButtonContainer = styled.div`
   justify-content: space-between;
   width: 45%;
 `;
+
+const CodeContainer = styled.div`
+  width: 300px;
+  display: flex;
+`;
+
+const CodeInput = styled.div`
+  width: 200px;
+`;
+
+const CodeButton = styled.div`
+  display: flex;
+  align-items: flex-end;
+  justify-content: flex-end;
+  width: 100px;
+  padding: 15px 5px;
+`;
+
 const styleProps = {
   height: '35px',
-  width: '300px',
   background: 'transparent',
   $marginLeft: '7px',
+  color: '#464646',
+  focusBorderWidth: '10px',
+  $borderColor: 'transparent',
+  $focusBorderColor: 'transparent',
 };
+
 const ContainerProps = {
   marginBottom: '3px',
 };
@@ -63,19 +86,60 @@ export const FindPassword = () => {
   const navigate = useNavigate();
 
   const [isDialogPWVisible, setIsDialogPWVisible] = useState(false);
+  const [isEmailCodeVisible, setIsEmailCodeVisble] = useState(false);
+  const [emailValidVisible, setEmailValidVisible] = useState(false);
+  const [emailValidMessageIndex, setEamilValidMessageIndex] = useState();
   // const [answer, setAnswer] = useState('');
   // const [selectedQuestion, setSelectedQuestion] = useState('');
   // const [errorMessage, setErrorMessage] = useState('');
 
-  const handleConfirm = () => {
-    setIsDialogPWVisible(true);
+  let isEmailValid = false; // 백엔드에서 받아온 이메일인증 확인 결과값, 기본값 false;
+
+  const EmailValidMessageStyle = styled.p`
+    color: red;
+    margin: 5px;
+    font-size: 15px;
+  `;
+
+  const emailValidMessage = [
+    <EmailValidMessageStyle>인증 완료!</EmailValidMessageStyle>,
+    <EmailValidMessageStyle>
+      인증코드가 일치하지 않습니다!
+    </EmailValidMessageStyle>,
+    <EmailValidMessageStyle>
+      이메일 인증 혹은 아이디를 확인하세요!
+    </EmailValidMessageStyle>,
+  ];
+
+  const handleSendCode = () => {
+    setIsEmailCodeVisble(!isEmailCodeVisible);
+    // setIsDialogIDVisible(true);
   };
+
+  const handleConfirmCode = () => {
+    if (!emailValidVisible) {
+      setEmailValidVisible(true);
+      setEamilValidMessageIndex(2);
+      // setIsDialogIDVisible(true);
+    } else if (emailValidVisible && !isEmailValid) {
+      setEamilValidMessageIndex(2);
+    } else if (emailValidVisible && isEmailValid) {
+      setIsDialogPWVisible(true);
+    }
+  };
+
   // const UpdateAnswer = (e) => {
   //   setAnswer(e.target.value);
   // };
   const handleClose = () => {
     navigate('/Login');
   };
+
+  const handleCheckCode = () => {
+    setEmailValidVisible(true);
+    setEamilValidMessageIndex(isEmailValid ? 0 : 1);
+  };
+
   return (
     <CommonRoot>
       <RootIn>
@@ -85,43 +149,66 @@ export const FindPassword = () => {
           <MiddleContainer>
             <CommonInput
               text="이름"
-              color="#464646"
               placeholder="이름을 입력하세요"
-              focusBorderWidth="10px"
-              $borderColor="transparent"
-              $focusBorderColor="transparent"
+              width="300px"
               {...styleProps}
               // onChange={onChange}
             />
             <div style={ContainerProps} />
 
             <CommonHr />
-            <div style={ContainerProps} />
 
-            <CommonInput
-              text="이메일"
-              color="#464646"
-              placeholder="이메일을 입력하세요"
-              focusBorderWidth="10px"
-              $borderColor="transparent"
-              $focusBorderColor="transparent"
-              {...styleProps}
-              // onChange={onChange}
-            />
-            <CommonHr />
             <div style={ContainerProps} />
 
             <CommonInput
               text="아이디"
-              color="#464646"
               placeholder="아이디를 입력하세요"
-              focusBorderWidth="10px"
-              $borderColor="transparent"
-              $focusBorderColor="transparent"
+              width="300px"
               {...styleProps}
               // onChange={onChange}
             />
             <CommonHr />
+
+            <div style={ContainerProps} />
+
+            <CommonInput
+              text="이메일"
+              placeholder="이메일을 입력하세요"
+              width="300px"
+              {...styleProps}
+              // onChange={onChange}
+            />
+            <CommonHr />
+
+            {isEmailCodeVisible && (
+              <>
+                <CodeContainer>
+                  <CodeInput>
+                    <CommonInput
+                      text="인증코드"
+                      placeholder="인증코드를 입력하세요"
+                      width="100%"
+                      {...styleProps}
+                    />
+                    <CommonHr />
+                  </CodeInput>
+                  <CodeButton>
+                    <CustomButton
+                      text="확인"
+                      width="50%"
+                      height="30px"
+                      background="#ffffff"
+                      $borderColor="#4064E6"
+                      color="#4064E6"
+                      hoverBk="#ffffff"
+                      fontSize="20"
+                      onClick={handleCheckCode}
+                    />
+                  </CodeButton>
+                </CodeContainer>
+                {emailValidVisible && emailValidMessage[emailValidMessageIndex]}
+              </>
+            )}
           </MiddleContainer>
           {/* <HiddenBox></HiddenBox> */}
 
@@ -133,7 +220,7 @@ export const FindPassword = () => {
               background="#4064E6"
               color="#ffffff"
               fontSize="20"
-              onClick={handleConfirm}
+              onClick={isEmailCodeVisible ? handleConfirmCode : handleSendCode}
             />
             <CustomButton
               text="취소"
