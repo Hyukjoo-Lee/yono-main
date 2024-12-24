@@ -68,9 +68,14 @@ const ProfileContainer = styled.div`
   width: 150px;
   height: 150px;
   border-radius: 50%;
-  overflow: hidden;
   background-color: #f5f5f5;
-  margin: 0 auto 20px;
+  margin: 0 auto 40px;
+`;
+
+const ProfileImage = styled.div`
+  display: flex;
+  justify-content: center;
+  overflow: hidden;
   & svg {
     width: 70%;
     height: 70%;
@@ -79,13 +84,13 @@ const ProfileContainer = styled.div`
 
 const ProfileButton = styled.button`
   position: absolute;
-  bottom: -5px;
-  right: -5px;
+  bottom: 23px;
+  right: 23px;
   width: 30px;
   height: 30px;
   border: none;
   border-radius: 50%;
-  background-color: #007bff;
+  background-color: #4064e6;
   color: white;
   display: flex;
   justify-content: center;
@@ -201,6 +206,11 @@ const CheckUserInfo = ({
     <Root>
       {isEditing ? (
         <Section>
+          <ProfileContainer>
+            <ProfileImage>
+              <Profile />
+            </ProfileImage>
+          </ProfileContainer>
           <InnerSection>
             <TitleStyle>이름</TitleStyle>
             <TextStyle>{userName}</TextStyle>
@@ -222,14 +232,16 @@ const CheckUserInfo = ({
             <StyledHr />
           </InnerSection>
           <InnerSection>
-            <TitleStyle>이번 달 목표 지출금액</TitleStyle>
+            <TitleStyle>일일 목표 지출금액</TitleStyle>
             <TextStyle>{Target_Expenditure_Amout}</TextStyle>
           </InnerSection>
         </Section>
       ) : (
         <>
           <ProfileContainer>
-            <Profile />
+            <ProfileImage>
+              <Profile />
+            </ProfileImage>
             <ProfileButton onClick={() => console.log('프로필 버튼 클릭!')}>
               +
             </ProfileButton>
@@ -302,8 +314,8 @@ const CheckUserInfo = ({
           <InnerSection>
             <CommonInput
               value={userInfo.Target_Expenditure_Amout}
-              text="이번 달 목표 지출금액"
-              placeholder="이번 달 목표 지출금액을 입력하세요"
+              text="일일 목표 지출금액"
+              placeholder="일일 목표 지출금액을 입력하세요"
               onChange={(e) =>
                 handleChange('Target_Expenditure_Amout', e.target.value)
               }
