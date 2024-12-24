@@ -3,31 +3,35 @@ import CommonRoot from '../../common/CommonRoot';
 import CheckUserInfo from './CheckUserInfo';
 
 import { useState, useEffect } from 'react';
-import axios from 'axios';
+import { findById } from '../../apis/userApi';
 
 export function MyPage() {
   const [users, setUsers] = useState(null);
 
   useEffect(() => {
-    axios
-      .get('/user/id')
-      .then((response) => {
-        setUsers(response.data);
-        console.log(response.data);
-      })
-      .catch((error) => console.log(error.response || error.message));
+    const fetchUser = async () => {
+      try {
+        const user = await findById(29); // 29 는 현재 로그인한 유저의 userNum
+        setUsers(user.data);
+      } catch (error) {
+        console.error('유저 정보를 불러오는 중 오류 발생:', error);
+        setUsers(null);
+      }
+    };
+
+    fetchUser();
   }, []);
 
   const userInfo = users
     ? {
-        user_id: users.user_id,
-        username: users.username,
-        password: users.password,
-        name: users.name,
+        userId: users.userId,
+        originPassword: users.password,
         email: users.email,
+        name: users.name,
         address: users.address,
-        spending_target: users.spending_target,
-        created_at: users.created_at,
+        spendingTarget: users.spendingTarget,
+        profile: users.profile,
+        createdAt: users.createdAt,
       }
     : null;
 

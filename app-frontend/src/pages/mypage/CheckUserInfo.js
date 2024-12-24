@@ -105,24 +105,26 @@ const ProfileButton = styled.button`
 `;
 
 const CheckUserInfo = ({
-  userName,
   userId,
-  originPassword,
+  password,
   email,
-  nickname,
-  Target_Expenditure_Amout,
+  name,
+  spendingTarget,
+  profile,
+  createdAt,
 }) => {
   const [isEditing, setIsEditing] = useState(true);
   const [passwordError, setPasswordError] = useState('');
   const [userInfo, setUserInfo] = useState({
-    userName: userName || ``,
-    nickname: nickname || ``,
     userId: userId || '',
-    email: email || '',
-    Target_Expenditure_Amout: Target_Expenditure_Amout || '',
-    password: '',
+    originPassword: '',
     newPassword: '',
     confirmPassword: '',
+    email: email || '',
+    name: name || '',
+    spending_target: spendingTarget || '',
+    profile: profile || '',
+    createdAt: createdAt,
   });
 
   const toggleEdit = () => {
@@ -131,14 +133,13 @@ const CheckUserInfo = ({
   };
 
   const cancelEdit = () => {
-    userInfo.userName = userName;
-    userInfo.nickname = nickname;
     userInfo.userId = userId;
-    userInfo.email = email;
-    userInfo.Target_Expenditure_Amout = Target_Expenditure_Amout;
-    userInfo.password = '';
+    userInfo.originPassword = '';
     userInfo.newPassword = '';
     userInfo.confirmPassword = '';
+    userInfo.email = email;
+    userInfo.name = name;
+    userInfo.spending_target = spendingTarget;
     setIsEditing(!isEditing);
   };
 
@@ -158,7 +159,7 @@ const CheckUserInfo = ({
     if (isFormValid() === 1) {
       setPasswordError('모든 정보를 입력해주세요!');
       return;
-    } else if (originPassword !== userInfo.password) {
+    } else if (password !== userInfo.originPassword) {
       setPasswordError('기존 비밀번호가 일치하지 않습니다!');
       return;
     } else if (isFormValid() === 2) {
@@ -213,12 +214,7 @@ const CheckUserInfo = ({
           </ProfileContainer>
           <InnerSection>
             <TitleStyle>이름</TitleStyle>
-            <TextStyle>{userName}</TextStyle>
-            <StyledHr />
-          </InnerSection>
-          <InnerSection>
-            <TitleStyle>닉네임</TitleStyle>
-            <TextStyle>{nickname}</TextStyle>
+            <TextStyle>{name}</TextStyle>
             <StyledHr />
           </InnerSection>
           <InnerSection>
@@ -233,7 +229,7 @@ const CheckUserInfo = ({
           </InnerSection>
           <InnerSection>
             <TitleStyle>일일 목표 지출금액</TitleStyle>
-            <TextStyle>{Target_Expenditure_Amout}</TextStyle>
+            <TextStyle>{spendingTarget}</TextStyle>
           </InnerSection>
         </Section>
       ) : (
@@ -261,8 +257,8 @@ const CheckUserInfo = ({
             <CommonInput
               text="기존 비밀번호 입력"
               placeholder="기존 비밀번호 입력하세요"
-              value={userInfo.password}
-              onChange={(e) => handleChange('password', e.target.value)}
+              value={userInfo.originPassword}
+              onChange={(e) => handleChange('originPassword', e.target.value)}
               {...abledInputProps}
             />
             <StyledHr />
@@ -292,7 +288,7 @@ const CheckUserInfo = ({
 
           <InnerSection>
             <CommonInput
-              value={userInfo.userName}
+              value={userInfo.name}
               text="이름"
               placeholder="이름을 입력하세요"
               {...disabledIntputProps}
@@ -313,12 +309,10 @@ const CheckUserInfo = ({
 
           <InnerSection>
             <CommonInput
-              value={userInfo.Target_Expenditure_Amout}
+              value={userInfo.spending_target}
               text="일일 목표 지출금액"
               placeholder="일일 목표 지출금액을 입력하세요"
-              onChange={(e) =>
-                handleChange('Target_Expenditure_Amout', e.target.value)
-              }
+              onChange={(e) => handleChange('spendingTarget', e.target.value)}
               {...abledInputProps}
             />
             <StyledHr />
