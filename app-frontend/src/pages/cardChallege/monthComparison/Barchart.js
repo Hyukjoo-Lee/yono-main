@@ -22,13 +22,13 @@ const Barchart = ({ data }) => {
     <StyledChart>
       <ResponsiveBar
         data={data}
-        keys={['식비', '교통비', '쇼핑', '문화', '전자제품']}
+        keys={['목표금액', '사용금액']}
         indexBy="bottle"
         margin={{ top: 40, right: 120, bottom: 80, left: 80 }}
         padding={0.3}
         groupMode="grouped"
         // colors={{ scheme: 'blues' }}
-        colors={['#DDEBF7', '#CBD6EF', '#9ECAE0', '#6BAED6', '#4292C6']}
+        colors={['#9ECAE0', '#4292C6']}
         // colors = {['olive', 'brown', 'orange']} -> 커스텀하여 사용할 때
         // colors = {{ scheme: 'nivo' }} -> nivo 에서 제공해주는 색상 조합 사용할 때
         colorBy="id"
