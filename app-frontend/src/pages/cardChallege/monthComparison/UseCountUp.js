@@ -15,7 +15,7 @@ export default function useCountUp(end, start = 0, duration = 2000) {
 
     let currentNumber = start;
 
-    const increaseAmount = end >= 1000 ? 1000 : 1;
+    const increaseAmount = end >= 10000 ? 10000 : 1;
 
     const counter = setInterval(() => {
       currentNumber += increaseAmount;
@@ -23,7 +23,7 @@ export default function useCountUp(end, start = 0, duration = 2000) {
 
       // 목표 값에 도달했으면 카운터 종료
       if (
-        (increaseAmount === 1000 && currentNumber >= end) ||
+        (increaseAmount === 10000 && currentNumber >= end) ||
         (increaseAmount === 1 && currentNumber >= end)
       ) {
         clearInterval(counter);
