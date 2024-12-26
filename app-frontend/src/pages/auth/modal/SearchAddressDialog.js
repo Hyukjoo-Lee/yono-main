@@ -6,7 +6,7 @@ const postCodeStyle = {
   minHeight: '43.5vh',
 };
 
-const SearchAddressModal = ({ open, setModalVisible, onCompletePost }) => {
+const SearchAddressDialog = ({ open, setModalVisible, onCompletePost }) => {
   const [visible, setVisible] = useState(false);
 
   useEffect(() => {
@@ -58,4 +58,4 @@ const SearchAddressModal = ({ open, setModalVisible, onCompletePost }) => {
   );
 };
 
-export default SearchAddressModal;
+export default SearchAddressDialog;

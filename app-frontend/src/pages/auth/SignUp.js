@@ -5,10 +5,10 @@ import CommonInput from '../../common/CommonInput';
 import CommonButton from '../../common/CommonButton';
 import CommonHr from '../../common/CommonHr';
 import CommonPageInfo from '../../common/CommonPageInfo';
-import SuccessSignUp from './SuccessSignUp';
-import FailSignUp from './SuccessSignUp';
 
-import SearchAddressModal from './Component/SearchAddressModal';
+import SignUpSuccessModal from './modal/SignUpSuccessDialog';
+import SignUpFailureDialog from './modal/SignUpFailureDialog';
+import SearchAddressDialog from './modal/SearchAddressDialog';
 
 import { checkUserIdExists, signUpUser } from '../../apis/userApi';
 import {
@@ -25,7 +25,7 @@ import {
   USERID_DUPLICATE_ERROR,
   USERID_REGEX_ERROR,
   USERID_VERIFY_PROMPT,
-} from './Component/Message';
+} from '../../common/Message';
 import theme from '../../theme/theme';
 
 const FullContainer = styled.div`
@@ -334,15 +334,15 @@ export function SignUp() {
           />
         </div>
 
-        <SuccessSignUp
+        <SignUpSuccessModal
           open={isSignUpSuccessVisible}
           setSuccessVisible={setIsSignUpSuccessVisible}
         />
-        <FailSignUp
+        <SignUpFailureDialog
           open={isSignUpFailVisible}
           setSuccessVisible={setIsSignUpFailVisible}
         />
-        <SearchAddressModal
+        <SearchAddressDialog
           open={isAddressModalOpen}
           setModalVisible={setIsAddressModalOpen}
           onCompletePost={handleAddressSelect}
