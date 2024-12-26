@@ -1,6 +1,7 @@
 import React from 'react';
 import styled from 'styled-components';
 import Barchart from './Barchart';
+import useCountUp from './UseCountUp';
 
 const Root = styled.div`
   width: 100%;
@@ -36,7 +37,6 @@ const Titlediv2 = styled.div`
 const barchart_data = [
   {
     bottle: '저번달',
-
     목표금액: 3000,
     사용금액: 2000,
   },
@@ -48,17 +48,21 @@ const barchart_data = [
 ];
 
 const MonthComparision = () => {
+  const previousMonthAmount = useCountUp(2000000); // 전달 금액
+  const currentMonthAmount = useCountUp(1000000); // 이번달 금액
+  const badgeCount = useCountUp(200); // 예상 뱃지 개수
+
   return (
     <Root>
       <TextWrap>
         <Titlediv>전달에 사용하신 금액은</Titlediv>
-        <Titlediv2>2,000,0000원 입니다.</Titlediv2>
+        <Titlediv2>{previousMonthAmount.toLocaleString()}원 입니다.</Titlediv2>
         <br />
         <Titlediv>이번달에 사용하신 금액은</Titlediv>
-        <Titlediv2>1,000,0000원 입니다.</Titlediv2>
+        <Titlediv2>{currentMonthAmount.toLocaleString()}원 입니다.</Titlediv2>
         <br />
         <Titlediv>이번달 예상 뱃지 갯수는</Titlediv>
-        <Titlediv2>200개 입니다.</Titlediv2>
+        <Titlediv2>{badgeCount.toLocaleString()}개 입니다.</Titlediv2>
       </TextWrap>
       <Barchart data={barchart_data} />
     </Root>

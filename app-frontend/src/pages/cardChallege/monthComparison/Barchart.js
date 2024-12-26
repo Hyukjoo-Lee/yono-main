@@ -28,7 +28,7 @@ const Barchart = ({ data }) => {
         padding={0.3}
         groupMode="grouped"
         // colors={{ scheme: 'blues' }}
-        colors={['#DDEBF7', '#CBD6EF', '#9ECAE0', '#6BAED6', '#4292C6']}
+        colors={['#9ECAE0', '#4292C6']}
         // colors = {['olive', 'brown', 'orange']} -> 커스텀하여 사용할 때
         // colors = {{ scheme: 'nivo' }} -> nivo 에서 제공해주는 색상 조합 사용할 때
         colorBy="id"
