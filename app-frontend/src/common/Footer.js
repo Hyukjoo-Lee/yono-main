@@ -21,7 +21,7 @@ const TextStyle = styled.div`
 const Footer = () => {
   return (
     <FooterStyle>
-      <TextStyle>© 2024 Mickle Muckle. All rights reserved.</TextStyle>
+      <TextStyle>© 2024 YONO. All rights reserved.</TextStyle>
     </FooterStyle>
   );
 };
