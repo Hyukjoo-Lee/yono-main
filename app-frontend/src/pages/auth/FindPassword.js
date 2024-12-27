@@ -1,5 +1,4 @@
 import React, { useState } from 'react';
-import AlarmPw from './AlarmPw';
 import styled from 'styled-components';
 import CustomButton from '../../common/CommonButton';
 import CommonInput from '../../common/CommonInput';
@@ -233,10 +232,6 @@ export const FindPassword = () => {
             />
           </ButtonContainer>
         </FullContainer>
-        <AlarmPw
-          open={isDialogPWVisible}
-          $setIsDialogPWVisible={setIsDialogPWVisible}
-        />
       </RootIn>
     </CommonRoot>
   );

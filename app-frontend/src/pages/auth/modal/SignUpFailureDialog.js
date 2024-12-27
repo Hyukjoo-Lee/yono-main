@@ -1,9 +1,10 @@
-import CommonDialog from '../../common/CommonDialog';
+import CommonDialog from '../../../common/CommonDialog';
 
-const FailSignUp = ({ open, setFailVisible }) => {
+const SignUpFailureDialog = ({ open, setFailVisible }) => {
   const closeLogin = () => {
-    setSuccessVisible(false);
+    setFailVisible(false);
   };
+
   return (
     <div>
       <CommonDialog
@@ -17,4 +18,4 @@ const FailSignUp = ({ open, setFailVisible }) => {
     </div>
   );
 };
-export default FailSignUp;
+export default SignUpFailureDialog;

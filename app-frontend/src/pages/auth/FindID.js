@@ -1,4 +1,3 @@
-import { AlarmID } from './AlarmID';
 import React, { useState } from 'react';
 import styled from 'styled-components';
 import CustomButton from '../../common/CommonButton';
@@ -139,7 +138,8 @@ export const FindID = () => {
     setEmailValidVisible(true);
     setEamilValidMessageIndex(isEmailValid ? 0 : 1);
   };
-
+  // TODO: ID 다이얼로그 생성 후 적용
+  console.log(isDialogIDVisible);
   return (
     <CommonRoot>
       <RootIn>
@@ -226,10 +226,6 @@ export const FindID = () => {
           </ButtonContainer>
         </FullContainer>
       </RootIn>
-      <AlarmID
-        open={isDialogIDVisible}
-        $setIsDialogIDVisible={setIsDialogIDVisible}
-      />
     </CommonRoot>
   );
 };
