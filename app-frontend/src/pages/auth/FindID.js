@@ -1,4 +1,3 @@
-import { AlarmID } from './AlarmID';
 import React, { useState } from 'react';
 import styled from 'styled-components';
 import CustomButton from '../../common/CommonButton';
@@ -226,10 +225,6 @@ export const FindID = () => {
           </ButtonContainer>
         </FullContainer>
       </RootIn>
-      <AlarmID
-        open={isDialogIDVisible}
-        $setIsDialogIDVisible={setIsDialogIDVisible}
-      />
     </CommonRoot>
   );
 };

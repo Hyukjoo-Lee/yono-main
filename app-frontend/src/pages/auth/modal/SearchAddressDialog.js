@@ -2,7 +2,11 @@ import { useEffect, useState } from 'react';
 import CommonDialog from '../../../common/CommonDialog';
 import DaumPostcode from 'react-daum-postcode';
 
-const SearchAddressModal = ({ open, setModalVisible, onCompletePost }) => {
+const postCodeStyle = {
+  minHeight: '43.5vh',
+};
+
+const SearchAddressDialog = ({ open, setModalVisible, onCompletePost }) => {
   const [visible, setVisible] = useState(false);
 
   useEffect(() => {
@@ -42,11 +46,16 @@ const SearchAddressModal = ({ open, setModalVisible, onCompletePost }) => {
 
   return (
     visible && (
-      <CommonDialog open={open} onClose={closeModal} onClick={closeModal}>
-        <DaumPostcode onComplete={handlePostCode} />
-      </CommonDialog>
+      <CommonDialog
+        open={open}
+        onClose={closeModal}
+        onClick={closeModal}
+        children={
+          <DaumPostcode style={postCodeStyle} onComplete={handlePostCode} />
+        }
+      />
     )
   );
 };
 
-export default SearchAddressModal;
+export default SearchAddressDialog;

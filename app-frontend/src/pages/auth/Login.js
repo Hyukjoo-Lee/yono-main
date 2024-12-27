@@ -5,8 +5,8 @@ import CommonRoot from '../../common/CommonRoot';
 import CommonInput from '../../common/CommonInput';
 import CommonButton from '../../common/CommonButton';
 import theme from '../../theme/theme';
-import { EMPTY_PASSWORD_ERROR, EMPTY_USERID_ERROR } from './Component/Message';
-import SuccessLogin from './SuccessLogin';
+import { EMPTY_PASSWORD_ERROR, EMPTY_USERID_ERROR } from '../../common/Message';
+import LoginSuccessDialog from './modal/LoginSuccessDialog';
 
 const RootIn = styled.div`
   width: ${(props) => props.theme.display.lg};
@@ -218,7 +218,7 @@ export function Login() {
               </SocialButton>
             </SocialLoginWrapper>
           </FormWrapper>
-          <SuccessLogin
+          <LoginSuccessDialog
             open={isLoginSuccessVisible}
             setSuccessVisible={setIsLoginSuccessVisible}
           />
