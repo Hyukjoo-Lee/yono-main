@@ -1,5 +1,6 @@
 import styled from 'styled-components';
-import InfoCard from './InfoCard'; // InfoCard 컴포넌트를 import
+import Info_icon from '../../assets/images/info_icon.svg';
+import InfoCard from './InfoCard';
 
 import CommonRoot from '../../common/CommonRoot';
 
@@ -28,6 +29,7 @@ const StyledInfo = styled.div`
 export function Intro() {
   const infoCardsData = [
     {
+      img: Info_icon,
       title: 'YONO 소개',
       subtitle:
         'YONO(You Need Only On)은 내가 사용하는 카드를 불러와 나의 소비패턴을 분석하고 절약이 필요한 부분을 알려줍니다.YONO의 주요 기능을 보시려면 해당하는 이모티콘을 클릭해보세요.',
@@ -62,6 +64,7 @@ export function Intro() {
             {infoCardsData.map((data, index) => (
               <InfoCard
                 key={index}
+                img={data.img}
                 title={data.title}
                 subtitle={data.subtitle}
               />
