@@ -6,8 +6,6 @@ import CommonButton from '../../common/CommonButton';
 import CommonHr from '../../common/CommonHr';
 import CommonPageInfo from '../../common/CommonPageInfo';
 
-import SignUpSuccessModal from './modal/SignUpSuccessDialog';
-import SignUpFailureDialog from './modal/SignUpFailureDialog';
 import SearchAddressDialog from './modal/SearchAddressDialog';
 
 import { checkUserIdExists, signUpUser } from '../../apis/userApi';
@@ -18,6 +16,7 @@ import {
   EMPTY_NAME_ERROR,
   EMPTY_PASSWORD_ERROR,
   EMPTY_USERID_ERROR,
+  NAME_REGEX_ERROR,
   PASSWORD_MISMATCH_ERROR,
   PASSWORD_REGEX_ERROR,
   SERVER_ERROR,
@@ -27,6 +26,8 @@ import {
   USERID_VERIFY_PROMPT,
 } from '../../common/Message';
 import ValidationMessage from '../../common/ValidationMessage';
+import CommonDialog from '../../common/CommonDialog';
+import { useNavigate } from 'react-router-dom';
 
 const FullContainer = styled.div`
   display: flex;
@@ -107,6 +108,7 @@ const FORM_FIELDS = {
     type: 'text',
     errorMessage: {
       empty: EMPTY_NAME_ERROR,
+      invalid: NAME_REGEX_ERROR,
     },
   },
   email: {
@@ -156,7 +158,10 @@ export function SignUp() {
     userId: /^[a-z][a-z0-9]{3,15}$/,
     email: /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/,
     password: /^(?=.*[a-z])(?=.*\d)(?=.*[*@#$%^&+=!]).{8,}$/,
+    name: /^[가-힣]{2,10}$/,
   };
+
+  const navigate = useNavigate();
 
   const handleInputChange = (e, field) => {
     setFormData((prev) => ({ ...prev, [field]: e.target.value }));
@@ -169,6 +174,8 @@ export function SignUp() {
     Object.keys(FORM_FIELDS).forEach((field) => {
       if (!formData[field]) {
         errors[field] = FORM_FIELDS[field].errorMessage.empty;
+      } else if (field === 'name' && !inputRegexs.name.test(formData.name)) {
+        errors[field] = FORM_FIELDS.name.errorMessage.invalid;
       } else if (field === 'email' && !inputRegexs.email.test(formData.email)) {
         errors[field] = FORM_FIELDS.email.errorMessage.invalid;
       } else if (
@@ -270,6 +277,15 @@ export function SignUp() {
     }
   };
 
+  const completeLogin = () => {
+    setIsSignUpSuccessVisible(false);
+    navigate('/');
+  };
+
+  const closeDialog = () => {
+    setIsSignUpFailVisible(false);
+  };
+
   const renderInputField = (field) => (
     <>
       <CommonInput
@@ -322,7 +338,7 @@ export function SignUp() {
           <InputUserIdBox>
             <CommonInput
               placeholder={FORM_FIELDS['address'].placeholder}
-              text={FORM_FIELDS['address'.type]}
+              text="주소"
               value={formData.address}
               onChange={(e) => handleInputChange(e, 'address')}
               {...InputProps}
@@ -360,13 +376,19 @@ export function SignUp() {
           {renderInputField('email', '이메일을 입력하세요', '이메일')}
         </MiddleContainer>
         <CommonButton {...ButtonProps} text="회원가입" onClick={handleSubmit} />
-        <SignUpSuccessModal
+        <CommonDialog
           open={isSignUpSuccessVisible}
-          setSuccessVisible={setIsSignUpSuccessVisible}
+          children={'회원가입에 성공했습니다!'}
+          onClose={completeLogin}
+          onClick={completeLogin}
         />
-        <SignUpFailureDialog
+        <CommonDialog
           open={isSignUpFailVisible}
-          setSuccessVisible={setIsSignUpFailVisible}
+          children={
+            '계정을 만드는 중 문제가 발생했습니다. 잠시 후 다시 시도해주세요.'
+          }
+          onClose={closeDialog}
+          onClick={closeDialog}
         />
         <SearchAddressDialog
           open={isAddressModalOpen}
