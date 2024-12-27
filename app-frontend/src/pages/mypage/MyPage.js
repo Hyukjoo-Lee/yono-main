@@ -11,7 +11,8 @@ export function MyPage() {
   useEffect(() => {
     const fetchUser = async () => {
       try {
-        const user = await findUserById(29); // 29 는 현재 로그인한 유저의 userNum
+        const userNum = 29; // 현재 로그인한 유저의 userNum
+        const user = await findUserById(userNum);
         setUsers(user.data);
       } catch (error) {
         console.error('유저 정보를 불러오는 중 오류 발생:', error);
@@ -24,8 +25,9 @@ export function MyPage() {
 
   const userInfo = users
     ? {
+        userNum: users.userNum,
         userId: users.userId,
-        originPassword: users.password,
+        password: users.password,
         email: users.email,
         name: users.name,
         address: users.address,

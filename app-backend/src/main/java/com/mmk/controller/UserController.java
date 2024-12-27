@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -119,12 +120,6 @@ public class UserController {
         return ResponseEntity.ok(response);
     }
 
-    // 유저 정보 업데이트
-    @PostMapping("/{id}")
-    public void updateUser(@RequestBody UserInfoVO uv) {
-        userRepository.save(uv);
-    }
-
     // DELETE API
     // 유저 정보 삭제
     @DeleteMapping("/{id}")
@@ -137,6 +132,15 @@ public class UserController {
 
         userRepository.deleteById(id);
         ApiResponse<Object> response = new ApiResponse<>(200, "유저 삭제 성공", null);
+        return ResponseEntity.ok(response);
+    }
+
+    // PUT API
+    // 유저 정보 업데이트
+    @PutMapping("/{userNum}")
+    public ResponseEntity<ApiResponse<UserInfoVO>> updateUser(@RequestBody UserInfoVO uv) {
+        userRepository.save(uv);
+        ApiResponse<UserInfoVO> response = new ApiResponse<>(201, "회원 정보 수정 성공", uv);
         return ResponseEntity.ok(response);
     }
 

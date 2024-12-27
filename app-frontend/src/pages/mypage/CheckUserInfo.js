@@ -1,8 +1,9 @@
-import React, { useState, useEffect } from 'react';
-import CustomButton from '../../common/CommonButton';
-import CommonInput from '../../common/CommonInput';
+import React, { useEffect, useState } from 'react';
 import styled from 'styled-components';
 import { ReactComponent as Profile } from '../../assets/images/Profile.svg';
+import CustomButton from '../../common/CommonButton';
+import CommonInput from '../../common/CommonInput';
+import { modifyUser } from '../../apis/userApi';
 
 const StyledHr = styled.hr`
   width: 100%;
@@ -105,10 +106,12 @@ const ProfileButton = styled.button`
 `;
 
 const CheckUserInfo = ({
+  userNum,
   userId,
   password,
   email,
   name,
+  address,
   spendingTarget,
   profile,
   createdAt,
@@ -116,30 +119,43 @@ const CheckUserInfo = ({
   const [isEditing, setIsEditing] = useState(true);
   const [passwordError, setPasswordError] = useState('');
   const [userInfo, setUserInfo] = useState({
+    userNum: userNum,
     userId: userId || '',
     originPassword: '',
     newPassword: '',
     confirmPassword: '',
     email: email || '',
     name: name || '',
-    spending_target: spendingTarget || '',
+    address: address || '',
+    spendingTarget: spendingTarget || '',
     profile: profile || '',
     createdAt: createdAt || '',
   });
 
   useEffect(() => {
     setUserInfo({
+      userNum: userNum,
       userId: userId || '',
       originPassword: '',
       newPassword: '',
       confirmPassword: '',
       email: email || '',
       name: name || '',
-      spending_target: spendingTarget || '',
+      address: address || '',
+      spendingTarget: spendingTarget || '',
       profile: profile || '',
       createdAt: createdAt || '',
     });
-  }, [userId, email, name, spendingTarget, profile, createdAt]);
+  }, [
+    userNum,
+    userId,
+    email,
+    name,
+    address,
+    spendingTarget,
+    profile,
+    createdAt,
+  ]);
 
   const toggleEdit = () => {
     setIsEditing(!isEditing);
@@ -153,13 +169,14 @@ const CheckUserInfo = ({
     userInfo.confirmPassword = '';
     userInfo.email = email;
     userInfo.name = name;
-    userInfo.spending_target = spendingTarget;
+    userInfo.address = address;
+    userInfo.spendingTarget = spendingTarget;
     setIsEditing(!isEditing);
   };
 
   const isFormValid = () => {
     for (const key in userInfo) {
-      if (userInfo[key].trim() === '') {
+      if ((userInfo[key] + '').trim() === '') {
         return 1;
       }
     }
@@ -180,8 +197,9 @@ const CheckUserInfo = ({
       setPasswordError('비밀번호 확인이 일치하지 않습니다!');
       return;
     }
-    // 수정사항 저장 로직 추가 필요
-    setIsEditing(!isEditing);
+
+    modifyUser({ ...userInfo, password: userInfo.newPassword });
+    window.location.reload();
   };
   const deleteId = () => {};
 
@@ -239,6 +257,11 @@ const CheckUserInfo = ({
           <InnerSection>
             <TitleStyle>이메일</TitleStyle>
             <TextStyle>{email}</TextStyle>
+            <StyledHr />
+          </InnerSection>
+          <InnerSection>
+            <TitleStyle>주소</TitleStyle>
+            <TextStyle>{address}</TextStyle>
             <StyledHr />
           </InnerSection>
           <InnerSection>
@@ -323,7 +346,18 @@ const CheckUserInfo = ({
 
           <InnerSection>
             <CommonInput
-              value={userInfo.spending_target}
+              value={userInfo.address}
+              text="주소"
+              placeholder="주소를 입력하세요"
+              onChange={(e) => handleChange('address', e.target.value)}
+              {...abledInputProps}
+            />
+            <StyledHr />
+          </InnerSection>
+
+          <InnerSection>
+            <CommonInput
+              value={userInfo.spendingTarget}
               text="일일 목표 지출금액"
               placeholder="일일 목표 지출금액을 입력하세요"
               onChange={(e) => handleChange('spendingTarget', e.target.value)}

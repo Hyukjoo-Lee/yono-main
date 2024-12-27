@@ -22,9 +22,9 @@ export const findUserById = async (id) => {
   return response.data;
 };
 
-// // 회원정보 수정
-// export const modifyUser = async (id) => {
-//   const response = await axios.post(`/user/${id}`, id);
-//   console.log(response.data);
-//   return response.data;
-// };
+// 회원정보 수정
+export const modifyUser = async (formData) => {
+  console.log(formData.userNum);
+  const response = await axios.put(`/user/${formData.userNum}`, formData);
+  console.log(response.data);
+};
