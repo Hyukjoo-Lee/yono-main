@@ -31,7 +31,7 @@ const Root = styled.div`
 `;
 
 const ContentsBox = styled.div`
-  min-height: calc(100vh - 129px);
+  min-height: calc(100vh - 84px);
 `;
 
 function Layout({ children }) {

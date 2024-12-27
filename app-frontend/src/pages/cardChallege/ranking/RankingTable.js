@@ -128,7 +128,7 @@ const RankingTable = () => {
       setIsLoading(true); // 데이터 로드 시작 시 로딩 상태 true
       try {
         const data = await fetchUserRanking(); // API 호출
-        const sortedList = data.sort((a, b) => b.badge - a.badge); // badge 기준 내림차순 정렬
+        const sortedList = data.sort((a, b) => b.totalBadges - a.totalBadges); // badge 기준 내림차순 정렬
         setList(sortedList); // 정렬된 데이터 상태로 저장
       } catch (error) {
         console.error('Error fetching rankings:', error);

@@ -82,7 +82,7 @@ const RankingComponent = () => {
         const data = await fetchUserRanking();
         // badge 기준 내림차순 정렬하고 상위 3개 추출
         const sortedList = data
-          .sort((a, b) => b.badge - a.badge) // badge 기준 내림차순 정렬
+          .sort((a, b) => b.totalBadges - a.totalBadges) // badge 기준 내림차순 정렬
           .slice(0, 3); // 상위 3개만 추출
 
         setList(sortedList);
@@ -96,27 +96,31 @@ const RankingComponent = () => {
 
   return (
     <Root>
-      {list.map((item, index) => (
-        <BoxStyle key={index}>
-          <CircleBox $rank={index}>
-            {item.rankingImgUrl ? (
-              <img
-                src={`http://localhost:8065${item.rankingImgUrl}`}
-                alt={item.userName}
-              />
-            ) : (
-              <Profile />
-            )}
-          </CircleBox>
-          <NameStyle>
-            {item.userName}({item.userId})
-          </NameStyle>
-          <Box>
-            {index === 0 ? <Medal1 /> : index === 1 ? <Medal2 /> : <Medal3 />}
-            <p>{item.totalBadges.toLocaleString()}</p>
-          </Box>
-        </BoxStyle>
-      ))}
+      {list.length === 0 ? (
+        <></>
+      ) : (
+        list.map((item, index) => (
+          <BoxStyle key={index}>
+            <CircleBox $rank={index}>
+              {item.rankingImgUrl ? (
+                <img
+                  src={`http://localhost:8065${item.rankingImgUrl}`}
+                  alt={item.userName}
+                />
+              ) : (
+                <Profile />
+              )}
+            </CircleBox>
+            <NameStyle>
+              {item.userName}({item.userId})
+            </NameStyle>
+            <Box>
+              {index === 0 ? <Medal1 /> : index === 1 ? <Medal2 /> : <Medal3 />}
+              <p>{item.totalBadges.toLocaleString()}</p>
+            </Box>
+          </BoxStyle>
+        ))
+      )}
     </Root>
   );
 };
