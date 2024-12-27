@@ -134,12 +134,6 @@ export function SignUp() {
   const [isAddressModalOpen, setIsAddressModalOpen] = useState(false);
   const [isUserIdValidated, setIsUserIdValidated] = useState(false);
 
-  const inputRegexs = {
-    userId: /^[a-z][a-z0-9]{3,15}$/,
-    email: /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/,
-    password: /^(?=.*[a-z])(?=.*\d)(?=.*[*@#$%^&+=!]).{8,}$/,
-  };
-
   const [formData, setFormData] = useState({
     userId: '',
     password: '',
@@ -149,7 +143,7 @@ export function SignUp() {
     address: '',
   });
 
-  const [alertMessage, setAlertMessage] = useState({
+  const [formMessage, setFormMessage] = useState({
     userId: '',
     password: '',
     confirmPassword: '',
@@ -158,9 +152,15 @@ export function SignUp() {
     address: '',
   });
 
+  const inputRegexs = {
+    userId: /^[a-z][a-z0-9]{3,15}$/,
+    email: /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/,
+    password: /^(?=.*[a-z])(?=.*\d)(?=.*[*@#$%^&+=!]).{8,}$/,
+  };
+
   const handleInputChange = (e, field) => {
     setFormData((prev) => ({ ...prev, [field]: e.target.value }));
-    setAlertMessage((prev) => ({ ...prev, [field]: '' }));
+    setFormMessage((prev) => ({ ...prev, [field]: '' }));
   };
 
   const validateForm = () => {
@@ -195,14 +195,14 @@ export function SignUp() {
   // 아이디 중복 체크 클릭시
   const validateUserId = async () => {
     if (!formData.userId) {
-      setAlertMessage((prev) => ({
+      setFormMessage((prev) => ({
         ...prev,
         userId: FORM_FIELDS.userId.errorMessage.empty,
       }));
       setIsUserIdValidated(false);
       return;
     } else if (!inputRegexs.userId.test(formData.userId)) {
-      setAlertMessage((prev) => ({
+      setFormMessage((prev) => ({
         ...prev,
         userId: FORM_FIELDS.userId.errorMessage.invalid,
       }));
@@ -214,20 +214,20 @@ export function SignUp() {
     try {
       const result = await checkUserIdExists(formData.userId);
       if (result.userIdAvailable) {
-        setAlertMessage((prev) => ({
+        setFormMessage((prev) => ({
           ...prev,
           userId: FORM_FIELDS.userId.errorMessage.available,
         }));
         setIsUserIdValidated(true);
       } else {
-        setAlertMessage((prev) => ({
+        setFormMessage((prev) => ({
           ...prev,
           userId: FORM_FIELDS.userId.errorMessage.duplicate,
         }));
         setIsUserIdValidated(false);
       }
     } catch {
-      setAlertMessage((prev) => ({
+      setFormMessage((prev) => ({
         ...prev,
         userId: SERVER_ERROR,
       }));
@@ -248,14 +248,14 @@ export function SignUp() {
   const handleSubmit = async (e) => {
     e.preventDefault();
     const errors = validateForm();
-    setAlertMessage(errors);
+    setFormMessage(errors);
 
     if (Object.keys(errors).length > 0) {
       return;
     }
 
     if (!isUserIdValidated) {
-      setAlertMessage((prev) => ({
+      setFormMessage((prev) => ({
         ...prev,
         userId: FORM_FIELDS.userId.errorMessage.verifyPrompt,
       }));
@@ -280,9 +280,9 @@ export function SignUp() {
         onChange={(e) => handleInputChange(e, field)}
         {...InputProps}
       />
-      {alertMessage[field] && (
+      {formMessage[field] && (
         <ValidationMessage
-          text={alertMessage[field]}
+          text={formMessage[field]}
           type={'error'}
           $margin="0 10px"
         />
@@ -314,7 +314,7 @@ export function SignUp() {
             </div>
           </InputUserIdBox>
           <ValidationMessage
-            text={alertMessage.userId}
+            text={formMessage.userId}
             type={isUserIdValidated ? 'success' : 'error'}
             $margin={'0 10px'}
           />
@@ -327,7 +327,7 @@ export function SignUp() {
               onChange={(e) => handleInputChange(e, 'address')}
               {...InputProps}
             />
-            <div style={{ marginLeft: '10px ' }}>
+            <div style={{ marginLeft: '10px' }}>
               <CommonButton
                 {...ButtonProps}
                 text="주소찾기"
@@ -336,7 +336,7 @@ export function SignUp() {
               />
             </div>
           </InputUserIdBox>
-          {alertMessage.address && (
+          {formMessage.address && (
             <ValidationMessage
               text={FORM_FIELDS['address'].errorMessage.empty}
               type={'error'}
