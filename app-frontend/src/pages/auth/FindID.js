@@ -138,7 +138,8 @@ export const FindID = () => {
     setEmailValidVisible(true);
     setEamilValidMessageIndex(isEmailValid ? 0 : 1);
   };
-
+  // TODO: ID 다이얼로그 생성 후 적용
+  console.log(isDialogIDVisible);
   return (
     <CommonRoot>
       <RootIn>

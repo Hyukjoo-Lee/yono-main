@@ -26,7 +26,7 @@ import {
   USERID_REGEX_ERROR,
   USERID_VERIFY_PROMPT,
 } from '../../common/Message';
-import theme from '../../theme/theme';
+import ValidationMessage from '../../common/ValidationMessage';
 
 const FullContainer = styled.div`
   display: flex;
@@ -40,17 +40,6 @@ const MiddleContainer = styled.div`
   flex-direction: column;
   justify-content: flex-start;
   align-items: flex-start;
-`;
-
-const ErrorMessage = styled.div`
-  color: ${theme.color.red};
-  font-size: 13px;
-`;
-
-const ValidMessage = styled.div`
-  color: ${theme.color.blue};
-  font-size: 13px;
-  margin-left: 10px;
 `;
 
 const ContainerProps = {
@@ -75,10 +64,6 @@ const InputUserIdBox = styled.div`
   & > *:not(:last-child) {
     margin-right: 10px;
   }
-`;
-
-const MessageBox = styled.div`
-  margin-left: 10px;
 `;
 
 const ButtonProps = {
@@ -245,9 +230,11 @@ export function SignUp() {
         {...InputProps}
       />
       {alertMessage[field] && (
-        <MessageBox>
-          <ErrorMessage>{alertMessage[field]}</ErrorMessage>
-        </MessageBox>
+        <ValidationMessage
+          text={alertMessage[field]}
+          type={'error'}
+          $margin="0 10px"
+        />
       )}
       <CommonHr />
       <div style={ContainerProps} />
@@ -275,13 +262,11 @@ export function SignUp() {
               />
             </div>
           </InputUserIdBox>
-          <MessageBox>
-            {!isUserIdValidated ? (
-              <ErrorMessage>{alertMessage.userId}</ErrorMessage>
-            ) : (
-              <ValidMessage>{alertMessage.userId}</ValidMessage>
-            )}
-          </MessageBox>
+          <ValidationMessage
+            text={alertMessage.userId}
+            type={isUserIdValidated ? 'success' : 'error'}
+            $margin={'0 10px'}
+          />
           <CommonHr />
           <InputUserIdBox>
             <CommonInput
@@ -300,15 +285,14 @@ export function SignUp() {
               />
             </div>
           </InputUserIdBox>
-          <MessageBox>
-            {alertMessage.address ? (
-              <ErrorMessage>{alertMessage.address}</ErrorMessage>
-            ) : (
-              <ValidMessage>{alertMessage.address}</ValidMessage>
-            )}
-          </MessageBox>
+          {alertMessage.address && (
+            <ValidationMessage
+              text={alertMessage.address}
+              type={'error'}
+              $margin="0 10px"
+            />
+          )}
           <CommonHr />
-
           {renderInputField(
             'password',
             '비밀번호를 입력하세요',
