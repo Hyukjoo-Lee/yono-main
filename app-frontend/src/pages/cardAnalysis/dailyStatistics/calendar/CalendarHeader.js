@@ -26,7 +26,7 @@ const IconButton = styled.button`
   border: 0px;
   border-radius: 4px;
   margin: 0 2px;
-  border: 1px solid ${(props) => props.theme.color.brightGray};
+  border: 1px solid ${(props) => props.theme.color.mediumGray};
   background: ${(props) => props.theme.color.white};
   cursor: pointer;
 `;

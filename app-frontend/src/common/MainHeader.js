@@ -1,6 +1,8 @@
 import { Link } from 'react-router-dom';
 import styled from 'styled-components';
-import { ReactComponent as Logo } from '../assets/images/MickleMuckleLogo.svg';
+// import { ReactComponent as Logo } from '../assets/images/MickleMuckleLogo.svg';
+
+import { ReactComponent as Logo } from '../assets/images/Logo.svg';
 
 const Nav = styled.nav`
   position: fixed;
