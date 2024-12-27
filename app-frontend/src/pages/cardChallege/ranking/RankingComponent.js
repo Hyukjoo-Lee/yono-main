@@ -1,11 +1,10 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import styled from 'styled-components';
 import { ReactComponent as Medal1 } from '../../../assets/images/Medal1.svg';
 import { ReactComponent as Medal2 } from '../../../assets/images/Medal2.svg';
 import { ReactComponent as Medal3 } from '../../../assets/images/Medal3.svg';
-import image1 from '../../../assets/images/Image1.jpg';
-import image2 from '../../../assets/images/Image2.jpg';
-import image3 from '../../../assets/images/Image3.png';
+import { ReactComponent as Profile } from '../../../assets/images/Profile.svg';
+import { fetchUserRanking } from '../../../apis/rankingApi';
 
 const Root = styled.div`
   width: 100%;
@@ -31,13 +30,13 @@ const BoxStyle = styled.div`
 `;
 
 const CircleBox = styled.div`
-  width: ${(props) => (props.$rank === 1 ? '190px' : '150px')};
+  width: ${(props) => (props.$rank === 0 ? '190px' : '150px')};
   aspect-ratio: 1;
   border-radius: 50%;
   border: 1px solid ${(props) => props.theme.color.brightGray};
   margin: 20px 0px;
   overflow: hidden;
-  background: ${(props) => props.theme.color.white};
+  background: ${(props) => props.theme.color.brightGray};
   display: flex;
   justify-content: center;
   align-items: center;
@@ -45,6 +44,10 @@ const CircleBox = styled.div`
     width: 130%;
     height: 130%;
     object-fit: cover;
+  }
+  & svg {
+    width: ${(props) => (props.$rank === 0 ? '120px' : '90px')};
+    height: ${(props) => (props.$rank === 0 ? '120px' : '90px')};
   }
 `;
 
@@ -71,28 +74,46 @@ const Box = styled.div`
 `;
 
 const RankingComponent = () => {
-  const list = [
-    { rank: 1, img: image1, name: '변우석 (abc123)', number: 65000 },
-    { rank: 2, img: image2, name: '수지 (abc124)', number: 5000 },
-    { rank: 3, img: image3, name: '이지은 (abc1235)', number: 4000 },
-  ];
+  const [list, setList] = useState([]);
+
+  useEffect(() => {
+    const getRanking = async () => {
+      try {
+        const data = await fetchUserRanking();
+        // badge 기준 내림차순 정렬하고 상위 3개 추출
+        const sortedList = data
+          .sort((a, b) => b.badge - a.badge) // badge 기준 내림차순 정렬
+          .slice(0, 3); // 상위 3개만 추출
+
+        setList(sortedList);
+      } catch (error) {
+        console.error('Error fetching rankings: ', error);
+      }
+    };
+
+    getRanking();
+  }, []);
+
   return (
     <Root>
       {list.map((item, index) => (
         <BoxStyle key={index}>
-          <CircleBox $rank={item.rank}>
-            <img src={item.img} alt={item.name} />
-          </CircleBox>
-          <NameStyle>{item.name}</NameStyle>
-          <Box>
-            {item.rank === 1 ? (
-              <Medal1 />
-            ) : item.rank === 2 ? (
-              <Medal2 />
+          <CircleBox $rank={index}>
+            {item.rankingImgUrl ? (
+              <img
+                src={`http://localhost:8065${item.rankingImgUrl}`}
+                alt={item.userName}
+              />
             ) : (
-              <Medal3 />
+              <Profile />
             )}
-            <p>{item.number.toLocaleString()}</p>
+          </CircleBox>
+          <NameStyle>
+            {item.userName}({item.userId})
+          </NameStyle>
+          <Box>
+            {index === 0 ? <Medal1 /> : index === 1 ? <Medal2 /> : <Medal3 />}
+            <p>{item.totalBadges.toLocaleString()}</p>
           </Box>
         </BoxStyle>
       ))}

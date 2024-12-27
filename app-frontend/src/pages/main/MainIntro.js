@@ -70,9 +70,9 @@ const MainIntro = () => {
   return (
     <StyledMainIntro>
       <StyledTextCon>
-        <StyledTitle>Mickle Muckle Launching</StyledTitle>
+        <StyledTitle>YONO Launching</StyledTitle>
         <StyledSubTitle>
-          <span>미클머클 2024, 새로운 시작!</span>
+          <span>YONO 2025, 새로운 시작!</span>
           <br />
           지혜로운 소비로 더 나은 미래를 준비하세요.
           <br />

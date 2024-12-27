@@ -1,6 +1,6 @@
 import { Link } from 'react-router-dom';
 import styled from 'styled-components';
-import { ReactComponent as Logo } from '../assets/images/MickleMuckleLogo.svg';
+import { ReactComponent as Logo } from '../assets/images/Logo.svg';
 
 const Nav = styled.nav`
   position: fixed;
@@ -96,8 +96,8 @@ export function MainHeader() {
   ];
 
   const menuList = [
-    { label: '미클머클', path: '/intro' },
-    { label: '카드챌린지', path: '/card-challege' },
+    { label: 'YONO', path: '/intro' },
+    { label: '소비챌린지', path: '/card-challege' },
     { label: '소비패턴분석', path: '/card-analysis' },
     { label: '마이카드', path: '/mycard' },
     { label: '커뮤니티', path: '/community' },

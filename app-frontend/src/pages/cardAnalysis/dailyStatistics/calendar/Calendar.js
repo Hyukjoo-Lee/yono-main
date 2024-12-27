@@ -8,7 +8,7 @@ import styled from 'styled-components';
 const Root = styled.div`
   border-radius: 7px;
   box-sizing: border-box;
-  border: 1px solid ${(props) => props.theme.color.brightGray};
+  border: 1px solid ${(props) => props.theme.color.mediumGray};
   overflow: hidden;
 `;
 

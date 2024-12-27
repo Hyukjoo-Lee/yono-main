@@ -22,7 +22,8 @@ const color = {
   lightBlue: '#EFF3FD',
   gray: '#464646',
   lightGray: '#757575',
-  brightGray: '#d0d0d0',
+  mediumGray: '#d0d0d0',
+  brightGray: '#f5f5f5',
   white: '#FFFFFF',
   black: '#000000',
 };
