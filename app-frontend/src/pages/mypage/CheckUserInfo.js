@@ -1,9 +1,10 @@
 import React, { useEffect, useState } from 'react';
 import styled from 'styled-components';
-import { ReactComponent as Profile } from '../../assets/images/Profile.svg';
+import { ReactComponent as DefaultProfile } from '../../assets/images/Profile.svg';
 import CustomButton from '../../common/CommonButton';
 import CommonInput from '../../common/CommonInput';
 import { modifyUser } from '../../apis/userApi';
+import Profile from './Profile';
 
 const StyledHr = styled.hr`
   width: 100%;
@@ -61,50 +62,6 @@ const ErrorText = styled.p`
   width: 100%;
 `;
 
-const ProfileContainer = styled.div`
-  position: relative;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  width: 150px;
-  height: 150px;
-  border-radius: 50%;
-  background-color: #f5f5f5;
-  margin: 0 auto 40px;
-`;
-
-const ProfileImage = styled.div`
-  display: flex;
-  justify-content: center;
-  overflow: hidden;
-  & svg {
-    width: 70%;
-    height: 70%;
-  }
-`;
-
-const ProfileButton = styled.button`
-  position: absolute;
-  bottom: 23px;
-  right: 23px;
-  width: 30px;
-  height: 30px;
-  border: none;
-  border-radius: 50%;
-  background-color: #4064e6;
-  color: white;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  cursor: pointer;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
-  transform: translate(50%, 50%);
-  z-index: 10;
-  &:hover {
-    background-color: #0056b3;
-  }
-`;
-
 const CheckUserInfo = ({
   userNum,
   userId,
@@ -116,6 +73,7 @@ const CheckUserInfo = ({
   profile,
   createdAt,
 }) => {
+  const [profileImage, setProfileImage] = useState(null);
   const [isEditing, setIsEditing] = useState(true);
   const [passwordError, setPasswordError] = useState('');
   const [userInfo, setUserInfo] = useState({
@@ -156,6 +114,17 @@ const CheckUserInfo = ({
     profile,
     createdAt,
   ]);
+
+  const handleProfileChange = (event) => {
+    const file = event.target.files[0];
+    if (file) {
+      const reader = new FileReader();
+      reader.onloadend = () => {
+        setProfileImage(reader.result);
+      };
+      reader.readAsDataURL(file);
+    }
+  };
 
   const toggleEdit = () => {
     setIsEditing(!isEditing);
@@ -298,11 +267,10 @@ const CheckUserInfo = ({
     <Root>
       {isEditing ? (
         <Section>
-          <ProfileContainer>
-            <ProfileImage>
-              <Profile />
-            </ProfileImage>
-          </ProfileContainer>
+          <Profile
+            profileImage={profileImage}
+            onImageChange={handleProfileChange}
+          />
 
           {nonEditField.map((field, index) => (
             <InnerSection key={index}>
@@ -314,14 +282,10 @@ const CheckUserInfo = ({
         </Section>
       ) : (
         <>
-          <ProfileContainer>
-            <ProfileImage>
-              <Profile />
-            </ProfileImage>
-            <ProfileButton onClick={() => console.log('프로필 버튼 클릭!')}>
-              +
-            </ProfileButton>
-          </ProfileContainer>
+          <Profile
+            profileImage={profileImage}
+            onImageChange={handleProfileChange}
+          />
 
           {editField.map((field, index) => (
             <InnerSection key={index}>
