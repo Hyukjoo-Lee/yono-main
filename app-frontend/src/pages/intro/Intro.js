@@ -1,6 +1,7 @@
+// import React, { useState } from 'react';
 import styled from 'styled-components';
 import Info_icon from '../../assets/images/info_icon.svg';
-import InfoCard from './InfoCard';
+import InfoInfo from './IntroInfo';
 
 import CommonRoot from '../../common/CommonRoot';
 
@@ -27,7 +28,15 @@ const StyledInfo = styled.div`
   height: 750px;
 `;
 export function Intro() {
-  const infoCardsData = [
+  // const [imageVisible, setImageVisible] = useState(false); // 이미지 보이기/숨기기
+  // const [imageSrc, setImageSrc] = useState(''); // 클릭한 이미지 경로
+
+  // // 클릭 시 이미지 보이기 및 해당 이미지 설정
+  // const handleIconClick = (imgSrc) => {
+  //   setImageSrc(imgSrc); // 해당 이미지를 설정
+  //   setImageVisible(true); // 이미지 표시
+  // };
+  const InfoInfoData = [
     {
       img: Info_icon,
       title: 'YONO 소개',
@@ -59,14 +68,19 @@ export function Intro() {
     <CommonRoot>
       <StyledWrap className="wrap">
         <StyledInfoMain className="info_main">
-          <StyledInfoImg className="info_img"></StyledInfoImg>
+          <StyledInfoImg
+            className="info_img"
+            // imageVisible={imageVisible}
+            // imageSrc={imageSrc}
+          ></StyledInfoImg>
           <StyledInfo className="info">
-            {infoCardsData.map((data, index) => (
-              <InfoCard
+            {InfoInfoData.map((data, index) => (
+              <InfoInfo
                 key={index}
                 img={data.img}
                 title={data.title}
                 subtitle={data.subtitle}
+                // onClick={() => handleIconClick(data.img)}
               />
             ))}
           </StyledInfo>

@@ -1,4 +1,3 @@
-import React from 'react';
 import styled from 'styled-components';
 
 const StyledInfoWrap = styled.div`
@@ -24,6 +23,7 @@ const StyledIconBox = styled.div`
   display: flex;
   justify-content: center;
   align-items: center;
+  cursor: pointer;
 `;
 
 const StyledBox = styled.div`
@@ -32,7 +32,7 @@ const StyledBox = styled.div`
 
 const StyledIcon = styled.img``;
 
-const InfoCard = ({ title, subtitle, img }) => {
+const InfoInfo = ({ title, subtitle, img }) => {
   return (
     <StyledInfoWrap className="info_wrap">
       <StyledBox className="box">
@@ -46,4 +46,4 @@ const InfoCard = ({ title, subtitle, img }) => {
   );
 };
 
-export default InfoCard;
+export default InfoInfo;
