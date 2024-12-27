@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import CustomButton from '../../common/CommonButton';
 import CommonInput from '../../common/CommonInput';
 import styled from 'styled-components';
@@ -124,8 +124,22 @@ const CheckUserInfo = ({
     name: name || '',
     spending_target: spendingTarget || '',
     profile: profile || '',
-    createdAt: createdAt,
+    createdAt: createdAt || '',
   });
+
+  useEffect(() => {
+    setUserInfo({
+      userId: userId || '',
+      originPassword: '',
+      newPassword: '',
+      confirmPassword: '',
+      email: email || '',
+      name: name || '',
+      spending_target: spendingTarget || '',
+      profile: profile || '',
+      createdAt: createdAt || '',
+    });
+  }, [userId, email, name, spendingTarget, profile, createdAt]);
 
   const toggleEdit = () => {
     setIsEditing(!isEditing);

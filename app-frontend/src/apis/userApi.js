@@ -17,7 +17,14 @@ export const signUpUser = async (formData) => {
 };
 
 // 회원번호로 회원정보 조회
-export const findById = async (id) => {
+export const findUserById = async (id) => {
   const response = await axios.get(`/user/${id}`);
   return response.data;
 };
+
+// // 회원정보 수정
+// export const modifyUser = async (id) => {
+//   const response = await axios.post(`/user/${id}`, id);
+//   console.log(response.data);
+//   return response.data;
+// };

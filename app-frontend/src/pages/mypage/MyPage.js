@@ -3,7 +3,7 @@ import CommonRoot from '../../common/CommonRoot';
 import CheckUserInfo from './CheckUserInfo';
 
 import { useState, useEffect } from 'react';
-import { findById } from '../../apis/userApi';
+import { findUserById } from '../../apis/userApi';
 
 export function MyPage() {
   const [users, setUsers] = useState(null);
@@ -11,7 +11,7 @@ export function MyPage() {
   useEffect(() => {
     const fetchUser = async () => {
       try {
-        const user = await findById(29); // 29 는 현재 로그인한 유저의 userNum
+        const user = await findUserById(29); // 29 는 현재 로그인한 유저의 userNum
         setUsers(user.data);
       } catch (error) {
         console.error('유저 정보를 불러오는 중 오류 발생:', error);
