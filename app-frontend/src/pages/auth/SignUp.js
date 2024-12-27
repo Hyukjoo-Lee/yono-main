@@ -71,17 +71,68 @@ const ButtonProps = {
   height: '37px',
 };
 
+const FORM_FIELDS = {
+  userId: {
+    placeholder: '아이디를 입력하세요.',
+    text: '아이디',
+    type: 'text',
+    errorMessage: {
+      empty: EMPTY_USERID_ERROR,
+      invalid: USERID_REGEX_ERROR,
+      duplicate: USERID_DUPLICATE_ERROR,
+      available: USERID_AVAILABLE_MESSAGE,
+      verifyPrompt: USERID_VERIFY_PROMPT,
+    },
+  },
+  password: {
+    placeholder: '비밀번호를 입력하세요.',
+    text: '비밀번호',
+    type: 'password',
+    errorMessage: {
+      empty: EMPTY_PASSWORD_ERROR,
+      invalid: PASSWORD_REGEX_ERROR,
+    },
+  },
+  confirmPassword: {
+    placeholder: '비밀번호를 다시 입력하세요.',
+    text: '비밀번호 확인',
+    type: 'password',
+    errorMessage: {
+      mismatch: PASSWORD_MISMATCH_ERROR,
+    },
+  },
+  name: {
+    placeholder: '이름을 입력하세요.',
+    text: '이름',
+    type: 'text',
+    errorMessage: {
+      empty: EMPTY_NAME_ERROR,
+    },
+  },
+  email: {
+    placeholder: '이메일을 입력하세요.',
+    text: '이메일',
+    type: 'email',
+    errorMessage: {
+      empty: EMPTY_EMAIL_ERROR,
+      invalid: EMAIL_REGEX_ERROR,
+    },
+  },
+  address: {
+    placeholder: '주소를 입력하세요.',
+    text: '주소',
+    type: 'text',
+    errorMessage: {
+      empty: EMPTY_ADDRESS_ERROR,
+    },
+  },
+};
+
 export function SignUp() {
   const [isSignUpSuccessVisible, setIsSignUpSuccessVisible] = useState(false);
   const [isSignUpFailVisible, setIsSignUpFailVisible] = useState(false);
   const [isAddressModalOpen, setIsAddressModalOpen] = useState(false);
   const [isUserIdValidated, setIsUserIdValidated] = useState(false);
-
-  const inputRegexs = {
-    userId: /^[a-z][a-z0-9]{3,15}$/,
-    email: /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/,
-    password: /^(?=.*[a-z])(?=.*\d)(?=.*[*@#$%^&+=!]).{8,}$/,
-  };
 
   const [formData, setFormData] = useState({
     userId: '',
@@ -92,7 +143,7 @@ export function SignUp() {
     address: '',
   });
 
-  const [alertMessage, setAlertMessage] = useState({
+  const [formMessage, setFormMessage] = useState({
     userId: '',
     password: '',
     confirmPassword: '',
@@ -101,42 +152,41 @@ export function SignUp() {
     address: '',
   });
 
+  const inputRegexs = {
+    userId: /^[a-z][a-z0-9]{3,15}$/,
+    email: /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/,
+    password: /^(?=.*[a-z])(?=.*\d)(?=.*[*@#$%^&+=!]).{8,}$/,
+  };
+
   const handleInputChange = (e, field) => {
     setFormData((prev) => ({ ...prev, [field]: e.target.value }));
-    setAlertMessage((prev) => ({ ...prev, [field]: '' }));
+    setFormMessage((prev) => ({ ...prev, [field]: '' }));
   };
 
   const validateForm = () => {
     const errors = {};
 
-    if (!formData.userId) {
-      errors.userId = EMPTY_USERID_ERROR;
-    } else if (!inputRegexs.userId.test(formData.userId)) {
-      errors.userId = USERID_REGEX_ERROR;
-    }
-
-    if (!formData.address) {
-      errors.address = EMPTY_ADDRESS_ERROR;
-    }
-
-    if (!formData.email) {
-      errors.email = EMPTY_EMAIL_ERROR;
-    } else if (!inputRegexs.email.test(formData.email)) {
-      errors.email = EMAIL_REGEX_ERROR;
-    }
-
-    if (!formData.password) {
-      errors.password = EMPTY_PASSWORD_ERROR;
-    } else if (!inputRegexs.password.test(formData.password)) {
-      errors.password = PASSWORD_REGEX_ERROR;
-    }
+    Object.keys(FORM_FIELDS).forEach((field) => {
+      if (!formData[field]) {
+        errors[field] = FORM_FIELDS[field].errorMessage.empty;
+      } else if (field === 'email' && !inputRegexs.email.test(formData.email)) {
+        errors[field] = FORM_FIELDS.email.errorMessage.invalid;
+      } else if (
+        field === 'password' &&
+        !inputRegexs.password.test(formData.password)
+      ) {
+        errors[field] = FORM_FIELDS.password.errorMessage.invalid;
+      } else if (
+        field === 'userId' &&
+        !inputRegexs.userId.test(formData.userId)
+      ) {
+        errors[field] = FORM_FIELDS.userId.errorMessage.invalid;
+      }
+    });
 
     if (formData.password !== formData.confirmPassword) {
-      errors.confirmPassword = PASSWORD_MISMATCH_ERROR;
-    }
-
-    if (!formData.name) {
-      errors.name = EMPTY_NAME_ERROR;
+      errors.confirmPassword =
+        FORM_FIELDS.confirmPassword.errorMessage.mismatch;
     }
 
     return errors;
@@ -145,17 +195,17 @@ export function SignUp() {
   // 아이디 중복 체크 클릭시
   const validateUserId = async () => {
     if (!formData.userId) {
-      setAlertMessage({
-        ...alertMessage,
-        userId: EMPTY_USERID_ERROR,
-      });
+      setFormMessage((prev) => ({
+        ...prev,
+        userId: FORM_FIELDS.userId.errorMessage.empty,
+      }));
       setIsUserIdValidated(false);
       return;
     } else if (!inputRegexs.userId.test(formData.userId)) {
-      setAlertMessage({
-        ...alertMessage,
-        userId: USERID_REGEX_ERROR,
-      });
+      setFormMessage((prev) => ({
+        ...prev,
+        userId: FORM_FIELDS.userId.errorMessage.invalid,
+      }));
       setIsUserIdValidated(false);
       return;
     }
@@ -164,23 +214,23 @@ export function SignUp() {
     try {
       const result = await checkUserIdExists(formData.userId);
       if (result.userIdAvailable) {
-        setAlertMessage({
-          ...alertMessage,
-          userId: USERID_AVAILABLE_MESSAGE,
-        });
+        setFormMessage((prev) => ({
+          ...prev,
+          userId: FORM_FIELDS.userId.errorMessage.available,
+        }));
         setIsUserIdValidated(true);
       } else {
-        setAlertMessage({
-          ...alertMessage,
-          userId: USERID_DUPLICATE_ERROR,
-        });
+        setFormMessage((prev) => ({
+          ...prev,
+          userId: FORM_FIELDS.userId.errorMessage.duplicate,
+        }));
         setIsUserIdValidated(false);
       }
-    } catch (error) {
-      setAlertMessage({
-        ...alertMessage,
+    } catch {
+      setFormMessage((prev) => ({
+        ...prev,
         userId: SERVER_ERROR,
-      });
+      }));
       setIsUserIdValidated(false);
     }
   };
@@ -198,17 +248,17 @@ export function SignUp() {
   const handleSubmit = async (e) => {
     e.preventDefault();
     const errors = validateForm();
-    setAlertMessage(errors);
+    setFormMessage(errors);
 
     if (Object.keys(errors).length > 0) {
       return;
     }
 
     if (!isUserIdValidated) {
-      setAlertMessage({
-        ...alertMessage,
-        userId: USERID_VERIFY_PROMPT,
-      });
+      setFormMessage((prev) => ({
+        ...prev,
+        userId: FORM_FIELDS.userId.errorMessage.verifyPrompt,
+      }));
       return;
     }
 
@@ -220,18 +270,19 @@ export function SignUp() {
     }
   };
 
-  const renderInputField = (field, placeholder, text, type) => (
+  const renderInputField = (field) => (
     <>
       <CommonInput
-        placeholder={placeholder}
-        text={text}
-        type={type}
+        placeholder={FORM_FIELDS[field].placeholder}
+        text={FORM_FIELDS[field].text}
+        type={FORM_FIELDS[field].type}
+        value={formData[field]}
         onChange={(e) => handleInputChange(e, field)}
         {...InputProps}
       />
-      {alertMessage[field] && (
+      {formMessage[field] && (
         <ValidationMessage
-          text={alertMessage[field]}
+          text={formMessage[field]}
           type={'error'}
           $margin="0 10px"
         />
@@ -253,7 +304,7 @@ export function SignUp() {
               onChange={(e) => handleInputChange(e, 'userId')}
               {...InputProps}
             />
-            <div style={{ marginLeft: '5px' }}>
+            <div style={{ marginLeft: '10px ' }}>
               <CommonButton
                 {...ButtonProps}
                 text="중복확인"
@@ -263,20 +314,20 @@ export function SignUp() {
             </div>
           </InputUserIdBox>
           <ValidationMessage
-            text={alertMessage.userId}
+            text={formMessage.userId}
             type={isUserIdValidated ? 'success' : 'error'}
             $margin={'0 10px'}
           />
           <CommonHr />
           <InputUserIdBox>
             <CommonInput
-              placeholder="주소를 입력하세요."
-              text="주소"
+              placeholder={FORM_FIELDS['address'].placeholder}
+              text={FORM_FIELDS['address'.type]}
               value={formData.address}
               onChange={(e) => handleInputChange(e, 'address')}
               {...InputProps}
             />
-            <div style={{ marginLeft: '5px' }}>
+            <div style={{ marginLeft: '10px' }}>
               <CommonButton
                 {...ButtonProps}
                 text="주소찾기"
@@ -285,9 +336,9 @@ export function SignUp() {
               />
             </div>
           </InputUserIdBox>
-          {alertMessage.address && (
+          {formMessage.address && (
             <ValidationMessage
-              text={alertMessage.address}
+              text={FORM_FIELDS['address'].errorMessage.empty}
               type={'error'}
               $margin="0 10px"
             />
@@ -308,16 +359,7 @@ export function SignUp() {
           {renderInputField('name', '이름을 입력하세요', '이름')}
           {renderInputField('email', '이메일을 입력하세요', '이메일')}
         </MiddleContainer>
-
-        <div style={{ marginTop: '5px' }}>
-          <CommonButton
-            {...ButtonProps}
-            text="회원가입"
-            width="100px"
-            onClick={handleSubmit}
-          />
-        </div>
-
+        <CommonButton {...ButtonProps} text="회원가입" onClick={handleSubmit} />
         <SignUpSuccessModal
           open={isSignUpSuccessVisible}
           setSuccessVisible={setIsSignUpSuccessVisible}
