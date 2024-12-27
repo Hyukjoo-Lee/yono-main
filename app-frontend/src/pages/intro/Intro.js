@@ -28,14 +28,6 @@ const StyledInfo = styled.div`
   height: 750px;
 `;
 export function Intro() {
-  // const [imageVisible, setImageVisible] = useState(false); // 이미지 보이기/숨기기
-  // const [imageSrc, setImageSrc] = useState(''); // 클릭한 이미지 경로
-
-  // // 클릭 시 이미지 보이기 및 해당 이미지 설정
-  // const handleIconClick = (imgSrc) => {
-  //   setImageSrc(imgSrc); // 해당 이미지를 설정
-  //   setImageVisible(true); // 이미지 표시
-  // };
   const InfoInfoData = [
     {
       img: Info_icon,
@@ -68,11 +60,7 @@ export function Intro() {
     <CommonRoot>
       <StyledWrap className="wrap">
         <StyledInfoMain className="info_main">
-          <StyledInfoImg
-            className="info_img"
-            // imageVisible={imageVisible}
-            // imageSrc={imageSrc}
-          ></StyledInfoImg>
+          <StyledInfoImg className="info_img"></StyledInfoImg>
           <StyledInfo className="info">
             {InfoInfoData.map((data, index) => (
               <InfoInfo
