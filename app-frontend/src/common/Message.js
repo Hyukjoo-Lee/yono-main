@@ -10,13 +10,15 @@ export const EMPTY_CVC_ERROR = 'CVC를 입력하세요.';
 export const EMPTY_VALIDITY_ERROR = '유효기간을 입력하세요.';
 export const EMPTY_ENGNAME_ERROR = '영문이름을 입력하세요.';
 
+export const EMPTY_EMAILCODE_ERROR = '인증 코드를 입력해주세요.';
 // REGEX 관련
 export const USERID_REGEX_ERROR =
   '아이디는 영문 소문자와 숫자로만 작성하며, 4~16자로 입력해주세요.';
-export const EMAIL_REGEX_ERROR =
-  '올바른 이메일 형식으로 입력해주세요. 예: example@domain.com';
+export const EMAIL_REGEX_ERROR = '올바른 이메일 형식으로 입력해주세요.';
 export const PASSWORD_REGEX_ERROR =
   '비밀번호는 소문자, 숫자, 특수문자(@#$%^&+=!)를 포함해 8자 이상으로 입력해주세요.';
+export const NAME_REGEX_ERROR =
+  '이름은 한글로 2자 이상, 10자 이하로 입력해주세요.';
 
 export const CARD_REGEX_ERROR =
   '카드번호는 16자리 숫자만 입력하세요. 하이픈(-)은 제외해주세요.';
