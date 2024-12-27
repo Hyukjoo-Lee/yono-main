@@ -235,6 +235,65 @@ const CheckUserInfo = ({
     height: '38px',
   };
 
+  const nonEditField = [
+    { title: '이름', value: name },
+    { title: '아이디', value: userId },
+    { title: '이메일', value: email },
+    { title: '주소', value: address },
+    { title: '일일 목표 지출금액', value: spendingTarget },
+  ];
+
+  const editField = [
+    {
+      name: 'userId',
+      text: '아이디',
+      placeholder: '아이디를 입력하세요',
+      disabled: true,
+    },
+    {
+      name: 'originPassword',
+      text: '기존 비밀번호 입력',
+      placeholder: '기존 비밀번호 입력하세요',
+      disabled: false,
+    },
+    {
+      name: 'newPassword',
+      text: '새로운 비밀번호 입력',
+      placeholder: '새로운 비밀번호를 입력하세요',
+      disabled: false,
+    },
+    {
+      name: 'confirmPassword',
+      text: '비밀번호 확인',
+      placeholder: '비밀번호 확인',
+      disabled: false,
+    },
+    {
+      name: 'name',
+      text: '이름',
+      placeholder: '이름을 입력하세요',
+      disabled: true,
+    },
+    {
+      name: 'email',
+      text: '이메일',
+      placeholder: '이메일을 입력하세요',
+      disabled: false,
+    },
+    {
+      name: 'address',
+      text: '주소',
+      placeholder: '주소를 입력하세요',
+      disabled: false,
+    },
+    {
+      name: 'spendingTarget',
+      text: '일일 목표 지출금액',
+      placeholder: '일일 목표 지출금액을 입력하세요',
+      disabled: false,
+    },
+  ];
+
   return (
     <Root>
       {isEditing ? (
@@ -244,30 +303,14 @@ const CheckUserInfo = ({
               <Profile />
             </ProfileImage>
           </ProfileContainer>
-          <InnerSection>
-            <TitleStyle>이름</TitleStyle>
-            <TextStyle>{name}</TextStyle>
-            <StyledHr />
-          </InnerSection>
-          <InnerSection>
-            <TitleStyle>아이디</TitleStyle>
-            <TextStyle>{userId}</TextStyle>
-            <StyledHr />
-          </InnerSection>
-          <InnerSection>
-            <TitleStyle>이메일</TitleStyle>
-            <TextStyle>{email}</TextStyle>
-            <StyledHr />
-          </InnerSection>
-          <InnerSection>
-            <TitleStyle>주소</TitleStyle>
-            <TextStyle>{address}</TextStyle>
-            <StyledHr />
-          </InnerSection>
-          <InnerSection>
-            <TitleStyle>일일 목표 지출금액</TitleStyle>
-            <TextStyle>{spendingTarget}</TextStyle>
-          </InnerSection>
+
+          {nonEditField.map((field, index) => (
+            <InnerSection key={index}>
+              <TitleStyle>{field.title}</TitleStyle>
+              <TextStyle>{field.value}</TextStyle>
+              <StyledHr />
+            </InnerSection>
+          ))}
         </Section>
       ) : (
         <>
@@ -280,91 +323,18 @@ const CheckUserInfo = ({
             </ProfileButton>
           </ProfileContainer>
 
-          <InnerSection>
-            <CommonInput
-              value={userInfo.userId}
-              placeholder="아이디를 입력하세요"
-              text="아이디"
-              {...disabledIntputProps}
-            />
-            <StyledHr />
-          </InnerSection>
-
-          <InnerSection>
-            <CommonInput
-              text="기존 비밀번호 입력"
-              placeholder="기존 비밀번호 입력하세요"
-              value={userInfo.originPassword}
-              onChange={(e) => handleChange('originPassword', e.target.value)}
-              {...abledInputProps}
-            />
-            <StyledHr />
-          </InnerSection>
-
-          <InnerSection>
-            <CommonInput
-              text="새로운 비밀번호 입력"
-              placeholder="새로운 비밀번호를 입력하세요"
-              value={userInfo.newPassword}
-              onChange={(e) => handleChange('newPassword', e.target.value)}
-              {...abledInputProps}
-            />
-            <StyledHr />
-          </InnerSection>
-
-          <InnerSection>
-            <CommonInput
-              text="비밀번호 확인"
-              placeholder="비밀번호 확인"
-              value={userInfo.confirmPassword}
-              onChange={(e) => handleChange('confirmPassword', e.target.value)}
-              {...abledInputProps}
-            />
-            <StyledHr />
-          </InnerSection>
-
-          <InnerSection>
-            <CommonInput
-              value={userInfo.name}
-              text="이름"
-              placeholder="이름을 입력하세요"
-              {...disabledIntputProps}
-            />
-            <StyledHr />
-          </InnerSection>
-
-          <InnerSection>
-            <CommonInput
-              value={userInfo.email}
-              text="이메일"
-              placeholder="이메일을 입력하세요"
-              onChange={(e) => handleChange('email', e.target.value)}
-              {...abledInputProps}
-            />
-            <StyledHr />
-          </InnerSection>
-
-          <InnerSection>
-            <CommonInput
-              value={userInfo.address}
-              text="주소"
-              placeholder="주소를 입력하세요"
-              onChange={(e) => handleChange('address', e.target.value)}
-              {...abledInputProps}
-            />
-            <StyledHr />
-          </InnerSection>
-
-          <InnerSection>
-            <CommonInput
-              value={userInfo.spendingTarget}
-              text="일일 목표 지출금액"
-              placeholder="일일 목표 지출금액을 입력하세요"
-              onChange={(e) => handleChange('spendingTarget', e.target.value)}
-              {...abledInputProps}
-            />
-            <StyledHr />
-          </InnerSection>
+          {editField.map((field, index) => (
+            <InnerSection key={index}>
+              <CommonInput
+                value={userInfo[field.name]}
+                text={field.text}
+                placeholder={field.placeholder}
+                onChange={(e) => handleChange(field.name, e.target.value)}
+                {...(field.disabled ? disabledIntputProps : abledInputProps)}
+              />
+              <StyledHr />
+            </InnerSection>
+          ))}
 
           {passwordError && <ErrorText>{passwordError}</ErrorText>}
         </>
