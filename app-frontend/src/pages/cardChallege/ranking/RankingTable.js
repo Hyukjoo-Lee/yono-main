@@ -5,6 +5,7 @@ import { ReactComponent as Medal2 } from '../../../assets/images/Medal2.svg';
 import { ReactComponent as Medal3 } from '../../../assets/images/Medal3.svg';
 import { ReactComponent as Profile } from '../../../assets/images/Profile.svg';
 import { fetchUserRanking } from '../../../apis/rankingApi';
+import CircularProgress from '@mui/material/CircularProgress';
 
 const Root = styled.div`
   width: 100%;
@@ -36,6 +37,13 @@ const EmptyBox = styled(BoxStyle)`
     margin: 0px;
     font-size: ${(props) => props.theme.fontSize.eighteen};
     color: ${(props) => props.theme.color.gray};
+  }
+`;
+
+const LoadingBox = styled(EmptyBox)`
+  flex-direction: column;
+  & p {
+    margin-top: 10px;
   }
 `;
 
@@ -113,15 +121,19 @@ const ProfileBox = styled.div`
 
 const RankingTable = () => {
   const [list, setList] = useState([]);
+  const [isLoading, setIsLoading] = useState(true); // 로딩 상태 추가
 
   useEffect(() => {
     const getRanking = async () => {
+      setIsLoading(true); // 데이터 로드 시작 시 로딩 상태 true
       try {
         const data = await fetchUserRanking(); // API 호출
         const sortedList = data.sort((a, b) => b.badge - a.badge); // badge 기준 내림차순 정렬
         setList(sortedList); // 정렬된 데이터 상태로 저장
       } catch (error) {
         console.error('Error fetching rankings:', error);
+      } finally {
+        setIsLoading(false); // 데이터 로드 완료 후 로딩 상태 false
       }
     };
 
@@ -130,7 +142,12 @@ const RankingTable = () => {
 
   return (
     <Root>
-      {list.length === 0 ? (
+      {isLoading ? (
+        <LoadingBox>
+          <CircularProgress />
+          <p>데이터 불러오는 중...</p>
+        </LoadingBox>
+      ) : list.length === 0 ? (
         <EmptyBox>
           <p>
             아직 집계된 데이터가 없습니다. (정해진 날짜가 지나지 않아 데이터가
