@@ -6,7 +6,8 @@ import CommonInput from '../../common/CommonInput';
 import CommonButton from '../../common/CommonButton';
 import theme from '../../theme/theme';
 import { EMPTY_PASSWORD_ERROR, EMPTY_USERID_ERROR } from '../../common/Message';
-import LoginSuccessDialog from './modal/LoginSuccessDialog';
+import { useNavigate } from 'react-router-dom';
+import CommonDialog from '../../common/CommonDialog';
 
 const RootIn = styled.div`
   width: ${(props) => props.theme.display.lg};
@@ -121,6 +122,21 @@ export function Login() {
 
   const [isLoginSuccessVisible, setIsLoginSuccessVisible] = useState(false);
 
+  const navigate = useNavigate();
+
+  const handleFindLink = (link) => {
+    if (link === 'id') {
+      navigate('/find-id');
+    } else {
+      navigate('/find-pwd');
+    }
+  };
+
+  const completeLogin = () => {
+    setIsLoginSuccessVisible(false);
+    navigate('/');
+  };
+
   const handleInputChange = (e, field) => {
     setFormData((prev) => ({ ...prev, [field]: e.target.value }));
     setAlertMessage((prev) => ({ ...prev, [field]: '' }));
@@ -195,9 +211,13 @@ export function Login() {
                 <Label id="save">아이디 저장</Label>
               </CheckBoxWrapper>
               <div>
-                <LinkText>아이디찾기</LinkText>
+                <LinkText href="#" onClick={() => handleFindLink('id')}>
+                  아이디찾기
+                </LinkText>
                 <span>|</span>
-                <LinkText>비밀번호찾기</LinkText>
+                <LinkText href="#" onClick={() => handleFindLink('password')}>
+                  비밀번호찾기
+                </LinkText>
               </div>
             </OptionsWrapper>
             <CommonButton
@@ -218,9 +238,11 @@ export function Login() {
               </SocialButton>
             </SocialLoginWrapper>
           </FormWrapper>
-          <LoginSuccessDialog
+          <CommonDialog
             open={isLoginSuccessVisible}
-            setSuccessVisible={setIsLoginSuccessVisible}
+            children={'로그인에 성공했습니다!'}
+            onClose={completeLogin}
+            onClick={completeLogin}
           />
         </FormBox>
       </RootIn>
