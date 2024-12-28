@@ -1,6 +1,5 @@
-import React, { useState } from 'react';
-import { Button } from '@mui/material';
-import { ReactComponent as ProfileIcon } from '../../assets/images/Profile.svg';
+import React from 'react';
+import { ReactComponent as DefaultProfile } from '../../assets/images/Profile.svg';
 import styled from 'styled-components';
 
 const ProfileContainer = styled.div`
@@ -59,7 +58,7 @@ const Profile = ({ profileImage, onImageChange }) => {
         {profileImage ? (
           <img src={profileImage} alt="Profile" />
         ) : (
-          <ProfileIcon />
+          <DefaultProfile />
         )}
       </ProfileImage>
       <ProfileButton

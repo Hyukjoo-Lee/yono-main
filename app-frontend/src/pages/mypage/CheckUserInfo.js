@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from 'react';
 import styled from 'styled-components';
-import { ReactComponent as DefaultProfile } from '../../assets/images/Profile.svg';
 import CustomButton from '../../common/CommonButton';
 import CommonInput from '../../common/CommonInput';
 import { modifyUser } from '../../apis/userApi';
