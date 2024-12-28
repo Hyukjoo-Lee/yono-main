@@ -11,7 +11,7 @@ export function MyPage() {
   useEffect(() => {
     const fetchUser = async () => {
       try {
-        const userNum = 29; // 현재 로그인한 유저의 userNum
+        const userNum = 41; // 현재 로그인한 유저의 userNum
         const user = await findUserById(userNum);
         setUsers(user.data);
       } catch (error) {
@@ -36,6 +36,10 @@ export function MyPage() {
         createdAt: users.createdAt,
       }
     : null;
+
+  if (!users) {
+    return <div>Loading...</div>;
+  }
 
   return (
     <CommonRoot>

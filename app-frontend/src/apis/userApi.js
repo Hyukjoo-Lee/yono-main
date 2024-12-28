@@ -24,7 +24,14 @@ export const findUserById = async (id) => {
 
 // 회원정보 수정
 export const modifyUser = async (formData) => {
-  console.log(formData.userNum);
-  const response = await axios.put(`/user/${formData.userNum}`, formData);
-  console.log(response.data);
+  try {
+    const response = await axios.put(`/user/${formData.userNum}`, formData, {
+      headers: {
+        'Content-Type': 'multipart/form-data',
+      },
+    });
+    console.log(response.data);
+  } catch (error) {
+    console.error('회원 정보 수정 실패', error);
+  }
 };

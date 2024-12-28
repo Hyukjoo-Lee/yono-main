@@ -18,12 +18,14 @@ const ProfileImage = styled.div`
   display: flex;
   justify-content: center;
   overflow: hidden;
+  border-radius: 50%;
   & svg {
     width: 70%;
     height: 70%;
+    object-fit: cover;
   }
   & img {
-    width: 100&;
+    width: 100%;
     height: 100%;
     object-fit: cover;
   }
@@ -51,30 +53,39 @@ const ProfileButton = styled.button`
   }
 `;
 
-const Profile = ({ profileImage, onImageChange }) => {
+const Profile = ({ profileImage, onProfileChange, isEditing }) => {
   return (
     <ProfileContainer>
       <ProfileImage>
         {profileImage ? (
-          <img src={profileImage} alt="Profile" />
+          typeof profileImage === 'string' &&
+          profileImage.startsWith('data:image') ? (
+            <img src={profileImage} alt="Profile" />
+          ) : (
+            <img
+              src={`${process.env.REACT_APP_API_URL}${profileImage}`}
+              alt="Profile"
+            />
+          )
         ) : (
           <DefaultProfile />
         )}
       </ProfileImage>
-      <ProfileButton
-        component="label"
-        htmlFor="profile-upload"
-        onClick={() => console.log('프로필 버튼 클릭!')}
-      >
-        +
-        <input
-          type="file"
-          id="profile-upload"
-          style={{ display: 'none' }}
-          accept="image/*"
-          onChange={onImageChange}
-        />
-      </ProfileButton>
+      {!isEditing && (
+        <ProfileButton
+          htmlFor="profile-upload"
+          onClick={() => document.getElementById('fileInput').click()}
+        >
+          +
+          <input
+            type="file"
+            id="fileInput"
+            style={{ display: 'none' }}
+            accept="image/*"
+            onChange={onProfileChange}
+          />
+        </ProfileButton>
+      )}
     </ProfileContainer>
   );
 };

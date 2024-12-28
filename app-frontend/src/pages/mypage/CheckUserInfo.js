@@ -72,7 +72,8 @@ const CheckUserInfo = ({
   profile,
   createdAt,
 }) => {
-  const [profileImage, setProfileImage] = useState(null);
+  const [profileImage, setProfileImage] = useState(profile);
+  const [previewImage, setPreviewImage] = useState(profile);
   const [isEditing, setIsEditing] = useState(true);
   const [passwordError, setPasswordError] = useState('');
   const [userInfo, setUserInfo] = useState({
@@ -103,6 +104,8 @@ const CheckUserInfo = ({
       profile: profile || '',
       createdAt: createdAt || '',
     });
+
+    setPreviewImage(profile);
   }, [
     userNum,
     userId,
@@ -114,12 +117,14 @@ const CheckUserInfo = ({
     createdAt,
   ]);
 
-  const handleProfileChange = (event) => {
-    const file = event.target.files[0];
+  const handleProfileChange = (e) => {
+    const file = e.target.files[0];
+    console.log(file);
     if (file) {
+      setProfileImage(file);
       const reader = new FileReader();
       reader.onloadend = () => {
-        setProfileImage(reader.result);
+        setPreviewImage(reader.result);
       };
       reader.readAsDataURL(file);
     }
@@ -131,6 +136,9 @@ const CheckUserInfo = ({
   };
 
   const cancelEdit = () => {
+    setProfileImage(profile);
+    setPreviewImage(profile);
+
     userInfo.userId = userId;
     userInfo.originPassword = '';
     userInfo.newPassword = '';
@@ -139,6 +147,7 @@ const CheckUserInfo = ({
     userInfo.name = name;
     userInfo.address = address;
     userInfo.spendingTarget = spendingTarget;
+    userInfo.profile = profile;
     setIsEditing(!isEditing);
   };
 
@@ -166,9 +175,22 @@ const CheckUserInfo = ({
       return;
     }
 
-    modifyUser({ ...userInfo, password: userInfo.newPassword });
+    const updatedUserInfo = {
+      ...userInfo,
+      password: userInfo.newPassword,
+      originPassword: undefined,
+      confirmPassword: undefined,
+      newPassword: undefined,
+    };
+
+    const formData = new FormData();
+    formData.append('userInfo', JSON.stringify(updatedUserInfo));
+    formData.append('profileImage', profileImage);
+
+    modifyUser(formData);
     window.location.reload();
   };
+
   const deleteId = () => {};
 
   const disabledIntputProps = {
@@ -269,6 +291,7 @@ const CheckUserInfo = ({
           <Profile
             profileImage={profileImage}
             onImageChange={handleProfileChange}
+            isEditing={isEditing}
           />
 
           {nonEditField.map((field, index) => (
@@ -282,8 +305,9 @@ const CheckUserInfo = ({
       ) : (
         <>
           <Profile
-            profileImage={profileImage}
-            onImageChange={handleProfileChange}
+            profileImage={previewImage}
+            onProfileChange={handleProfileChange}
+            isEditing={isEditing}
           />
 
           {editField.map((field, index) => (

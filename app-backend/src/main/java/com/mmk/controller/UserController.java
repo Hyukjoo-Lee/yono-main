@@ -1,10 +1,13 @@
 package com.mmk.controller;
 
+import java.io.File;
+import java.util.Calendar;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.NoSuchElementException;
 import java.util.Optional;
+import java.util.Random;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -18,11 +21,16 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.multipart.MultipartFile;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.mmk.common.ApiResponse;
 import com.mmk.dao.UserRepository;
 import com.mmk.service.UserService;
 import com.mmk.vo.UserInfoVO;
+
+import jakarta.servlet.http.HttpServletRequest;
 
 @RestController
 @RequestMapping("/user")
@@ -138,10 +146,64 @@ public class UserController {
     // PUT API
     // 유저 정보 업데이트
     @PutMapping("/{userNum}")
-    public ResponseEntity<ApiResponse<UserInfoVO>> updateUser(@RequestBody UserInfoVO uv) {
-        userRepository.save(uv);
-        ApiResponse<UserInfoVO> response = new ApiResponse<>(201, "회원 정보 수정 성공", uv);
-        return ResponseEntity.ok(response);
+    public ResponseEntity<ApiResponse<UserInfoVO>> updateUser(
+        @RequestParam("userInfo") String userInfoJson,
+        @RequestParam("profileImage") MultipartFile profileImage,
+        HttpServletRequest request) {
+
+            // String uploadFolder = request.getSession().getServletContext().getRealPath("/static/images");
+            String uploadFolder = System.getProperty("user.dir") + "/app-backend/src/main/resources/static/images";
+
+            try {
+                UserInfoVO uv = new ObjectMapper().readValue(userInfoJson, UserInfoVO.class);
+
+                if (!profileImage.isEmpty()) {
+                    String fileName = profileImage.getOriginalFilename();
+
+                    if (fileName == null || fileName.isEmpty()) {
+                        fileName = "default_filename.jpg";
+                    }
+
+                    Calendar cal = Calendar.getInstance();
+                    int year = cal.get(Calendar.YEAR);
+                    int month = cal.get(Calendar.MONTH) + 1;
+                    int date = cal.get(Calendar.DATE);
+    
+                    String homedir = uploadFolder + "/" + year + "-" + month + "-" + date;
+    
+                    File path = new File(homedir);
+                    if (!path.exists()) {
+                        path.mkdirs();
+                    }
+    
+                    Random r = new Random();
+                    int random = r.nextInt(100000000);
+                    int index = fileName.lastIndexOf(".");
+                    String fileExtension = fileName.substring(index + 1);
+                    String newFileName = "profile_" + year + month + date + random + "." + fileExtension;
+                    String fileDBName = "/images/" + year + "-" + month + "-" + date + "/" + newFileName;
+    
+                    File saveFile = new File(homedir + "/" + newFileName);
+                    System.out.println("파일 저장 경로: " + saveFile.getAbsolutePath());
+
+                    try {
+                        profileImage.transferTo(saveFile);
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
+    
+                    uv.setProfile(fileDBName);
+    
+                } 
+                userRepository.save(uv);
+
+                ApiResponse<UserInfoVO> response = new ApiResponse<>(201, "회원 정보 수정 성공", uv);
+                return ResponseEntity.ok(response);
+            } catch (JsonProcessingException e) {
+                e.printStackTrace();
+                ApiResponse<UserInfoVO> response = new ApiResponse<>(400, "회원 정보 수정 오류", null);
+                return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(response);
+            }
     }
 
 };
