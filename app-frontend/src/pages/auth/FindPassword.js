@@ -76,7 +76,7 @@ const styleProps = {
 
 const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
-export const FindPassword = () => {
+const FindPassword = () => {
   const navigate = useNavigate();
 
   const [formData, setFormData] = useState({

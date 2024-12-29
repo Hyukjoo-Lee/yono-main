@@ -14,3 +14,9 @@ export const signUpUser = async (formData) => {
   const response = await axios.post('/user/signup', formData);
   return response.data;
 };
+
+// 로그인
+export const login = async (formData) => {
+  const response = await axios.post('/user/login', formData);
+  return response.data;
+};

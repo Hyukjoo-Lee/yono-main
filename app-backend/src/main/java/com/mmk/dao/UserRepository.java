@@ -2,12 +2,12 @@ package com.mmk.dao;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 
-import com.mmk.entity.UserInfoEntity;
+import com.mmk.entity.UserEntity;
 
-public interface UserRepository extends JpaRepository<UserInfoEntity, Integer> {
-    UserInfoEntity findByUserId(String userId);
+public interface UserRepository extends JpaRepository<UserEntity, Integer> {
+    UserEntity findByUserId(String userId);
 
-    UserInfoEntity findByEmail(String email);
+    UserEntity findByEmail(String email);
 
     boolean existsByUserId(String userId);
 

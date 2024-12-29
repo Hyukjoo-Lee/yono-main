@@ -22,4 +22,6 @@ public interface UserService {
     boolean existsByUserId(String userId);
 
     boolean existsByEmail(String email);
+
+    boolean validateLogin(String userId, String password);
 }

@@ -5,7 +5,7 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
-import com.mmk.entity.UserInfoEntity;
+import com.mmk.entity.UserEntity;
 
 /**
  * DAO (Data Access Object): 데이터 베이스에 CRUD 작업을 하는 객체이다.
@@ -27,34 +27,34 @@ public class UserDAOImpl implements UserDAO {
     }
 
     @Override
-    public void createUser(UserInfoEntity userEntity) {
+    public void createUser(UserEntity userEntity) {
         userRepository.save(userEntity);
     }
 
     @Override
-    public UserInfoEntity getUserById(int id) {
-        UserInfoEntity userInfoEntity = userRepository.getReferenceById(id);
+    public UserEntity getUserById(int id) {
+        UserEntity userInfoEntity = userRepository.getReferenceById(id);
         return userInfoEntity;
     }
 
     @Override
-    public UserInfoEntity getUserByUserId(String userId) {
-        UserInfoEntity userInfoEntity = userRepository.findByUserId(userId);
+    public UserEntity getUserByUserId(String userId) {
+        UserEntity userInfoEntity = userRepository.findByUserId(userId);
         return userInfoEntity;
     }
 
     @Override
-    public UserInfoEntity getUserByEmail(String email) {
+    public UserEntity getUserByEmail(String email) {
         return userRepository.findByEmail(email);
     }
 
     @Override
-    public List<UserInfoEntity> getAllUsers() {
+    public List<UserEntity> getAllUsers() {
         return userRepository.findAll();
     }
 
     @Override
-    public void updateUser(UserInfoEntity userEntity) {
+    public void updateUser(UserEntity userEntity) {
         userRepository.save(userEntity);
     }
 

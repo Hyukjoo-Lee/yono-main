@@ -10,7 +10,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.mmk.dao.UserDAO;
 import com.mmk.dto.UserDTO;
-import com.mmk.entity.UserInfoEntity;
+import com.mmk.entity.UserEntity;
 
 @Service
 @Transactional
@@ -25,14 +25,14 @@ public class UserServiceImpl implements UserService {
             throw new IllegalArgumentException("이미 존재하는 아이디입니다.");
         }
 
-        UserInfoEntity userEntity = toEntity(userDTO);
+        UserEntity userEntity = toEntity(userDTO);
         userDAO.createUser(userEntity);
         return toDTO(userEntity);
     }
 
     @Override
     public UserDTO getUserById(int id) {
-        UserInfoEntity userEntity = userDAO.getUserById(id);
+        UserEntity userEntity = userDAO.getUserById(id);
         if (userEntity == null) {
             throw new NoSuchElementException("ID " + id + "에 해당하는 사용자가 없습니다.");
         }
@@ -41,7 +41,7 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public UserDTO getUserByUserId(String userId) {
-        UserInfoEntity userEntity = userDAO.getUserByUserId(userId);
+        UserEntity userEntity = userDAO.getUserByUserId(userId);
         if (userEntity == null) {
             throw new NoSuchElementException("아이디 " + userId + "에 해당하는 사용자가 없습니다.");
         }
@@ -50,7 +50,7 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public UserDTO getUserByEmail(String email) {
-        UserInfoEntity userEntity = userDAO.getUserByEmail(email);
+        UserEntity userEntity = userDAO.getUserByEmail(email);
         if (userEntity == null) {
             throw new NoSuchElementException("이메일 " + email + "에 해당하는 사용자가 없습니다.");
         }
@@ -59,7 +59,7 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public List<UserDTO> getAllUsers() {
-        List<UserInfoEntity> userEntities = userDAO.getAllUsers();
+        List<UserEntity> userEntities = userDAO.getAllUsers();
         if (userEntities.isEmpty()) {
             throw new NoSuchElementException("현재 등록된 유저가 없습니다.");
         }
@@ -68,7 +68,7 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public UserDTO updateUser(int id, UserDTO userDTO) {
-        UserInfoEntity userEntity = userDAO.getUserById(id);
+        UserEntity userEntity = userDAO.getUserById(id);
         if (userEntity == null) {
             throw new NoSuchElementException("ID " + id + "에 해당하는 사용자가 없습니다.");
         }
@@ -88,7 +88,7 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public void deleteUser(int id) {
-        UserInfoEntity userEntity = userDAO.getUserById(id);
+        UserEntity userEntity = userDAO.getUserById(id);
         if (userEntity == null) {
             throw new NoSuchElementException("ID " + id + "에 해당하는 사용자가 없습니다.");
         }
@@ -105,9 +105,19 @@ public class UserServiceImpl implements UserService {
         return userDAO.existsByEmail(email);
     }
 
+    public boolean validateLogin(String userId, String password) {
+        UserEntity userEntity = userDAO.getUserByUserId(userId);
+
+        if (userEntity != null && userEntity.getPassword().equals(password)) {
+            return true;
+        }
+
+        return false;
+    }
+
     // DTO → Entity 변환
-    private UserInfoEntity toEntity(UserDTO dto) {
-        UserInfoEntity entity = new UserInfoEntity();
+    private UserEntity toEntity(UserDTO dto) {
+        UserEntity entity = new UserEntity();
         entity.setUserId(dto.getUserId());
         entity.setPassword(dto.getPassword());
         entity.setEmail(dto.getEmail());
@@ -123,7 +133,7 @@ public class UserServiceImpl implements UserService {
     }
 
     // Entity → DTO 변환
-    private UserDTO toDTO(UserInfoEntity entity) {
+    private UserDTO toDTO(UserEntity entity) {
         UserDTO dto = new UserDTO();
         dto.setUserNum(entity.getUserNum());
         dto.setUserId(entity.getUserId());

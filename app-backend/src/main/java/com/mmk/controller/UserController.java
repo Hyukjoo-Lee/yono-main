@@ -84,6 +84,23 @@ public class UserController {
         return ResponseEntity.status(HttpStatus.CREATED).body(response);
     }
 
+    // 로그인
+    @PostMapping("/login")
+    public ResponseEntity<ApiResponse<UserDTO>> login(@RequestBody UserDTO userDTO) {
+        String userId = userDTO.getUserId();
+        String password = userDTO.getPassword();
+        boolean isLoginSuccessful = userService.validateLogin(userId, password);
+
+        if (isLoginSuccessful) {
+            UserDTO userInfo = userService.getUserByUserId(userId);
+            ApiResponse<UserDTO> response = new ApiResponse<>(200, "로그인 성공", userInfo);
+            return ResponseEntity.ok(response);
+        } else {
+            ApiResponse<UserDTO> response = new ApiResponse<>(401, "아이디 또는 비밀번호가 올바르지 않습니다. 다시 확인해주세요.", null);
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(response);
+        }
+    }
+
     // 중복 체크 (필드, 값 조합)
     @PostMapping("/check-exists")
     public ResponseEntity<Map<String, Boolean>> checkFieldExists(@RequestBody Map<String, String> request) {

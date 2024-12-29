@@ -22,7 +22,7 @@ import lombok.ToString;
 @Entity
 @SequenceGenerator(name = "user_seq_generator", sequenceName = "user_seq", initialValue = 1, allocationSize = 1)
 @Table(name = "user_info")
-public class UserInfoEntity {
+public class UserEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "user_seq_generator")
