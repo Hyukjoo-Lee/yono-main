@@ -154,7 +154,7 @@ export function SignUp() {
     email: '',
     address: '',
     detailAddress: '',
-    zoneCode: '',
+    postcode: '',
   });
 
   const [formMessage, setFormMessage] = useState({

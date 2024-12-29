@@ -24,10 +24,10 @@ const SearchAddressDialog = ({
     setModalVisible(false);
   };
 
-  const handlePostCode = (data) => {
+  const handleAddressSelect = (data) => {
     let fullAddress = data.address;
     let extraAddress = '';
-    let zoneCode = data.zonecode;
+    let postcode = data.zonecode;
 
     if (data.addressType === 'R') {
       if (data.bname) {
@@ -39,14 +39,14 @@ const SearchAddressDialog = ({
           : data.buildingName;
       }
       fullAddress += extraAddress ? ` (${extraAddress})` : '';
-      fullAddress += ' [' + zoneCode + ']';
+      fullAddress += ' [' + postcode + ']';
     }
 
     if (setFormData) {
       setFormData((prev) => ({
         ...prev,
         address: fullAddress,
-        zoneCode,
+        postcode,
       }));
     }
 
@@ -65,7 +65,10 @@ const SearchAddressDialog = ({
         onClose={closeModal}
         onClick={closeModal}
         children={
-          <DaumPostcode style={postCodeStyle} onComplete={handlePostCode} />
+          <DaumPostcode
+            style={postCodeStyle}
+            onComplete={handleAddressSelect}
+          />
         }
       />
     )
