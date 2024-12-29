@@ -117,6 +117,8 @@ public class UserServiceImpl implements UserService {
         entity.setPostcode(dto.getPostcode());
         entity.setSpendingTarget(dto.getSpendingTarget());
         entity.setProfile(dto.getProfile());
+        entity.setCreatedAt(dto.getCreatedAt());
+        entity.setUpdatedAt(dto.getUpdatedAt());
         return entity;
     }
 
@@ -133,6 +135,8 @@ public class UserServiceImpl implements UserService {
         dto.setPostcode(entity.getPostcode());
         dto.setSpendingTarget(entity.getSpendingTarget());
         dto.setProfile(entity.getProfile());
+        dto.setCreatedAt(entity.getCreatedAt());
+        dto.setUpdatedAt(entity.getUpdatedAt());
         return dto;
     }
 }
