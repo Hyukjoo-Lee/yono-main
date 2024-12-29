@@ -1,3 +1,4 @@
+import React from 'react';
 import styled from 'styled-components';
 
 const StyledInfoWrap = styled.div`
@@ -32,11 +33,11 @@ const StyledBox = styled.div`
 
 const StyledIcon = styled.img``;
 
-const IntroInfo = ({ title, subtitle, img }) => {
+const IntroInfo = ({ title, subtitle, img, onClick }) => {
   return (
     <StyledInfoWrap className="info_wrap">
       <StyledBox className="box">
-        <StyledIconBox className="icon_box">
+        <StyledIconBox className="icon_box" onClick={onClick}>
           <StyledIcon src={img} alt="아이콘" />
         </StyledIconBox>
         <StyledTitle className="title">{title}</StyledTitle>
