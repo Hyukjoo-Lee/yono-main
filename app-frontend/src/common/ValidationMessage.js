@@ -10,7 +10,7 @@ const MessageText = styled.p`
   color: ${(props) =>
     props.type === 'error'
       ? props.textColor || theme.color.red
-      : props.textColor || theme.color.green};
+      : props.textColor || theme.color.blue};
   font-size: ${(props) => props.fontSize || theme.fontSize.xs};
 `;
 

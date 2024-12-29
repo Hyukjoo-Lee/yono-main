@@ -8,11 +8,11 @@ import CommonPageInfo from '../../common/CommonPageInfo';
 import CommonRoot from '../../common/CommonRoot';
 import theme from '../../theme/theme';
 import {
-  EMAIL_REGEX_ERROR,
-  EMPTY_EMAIL_ERROR,
-  // EMPTY_EMAILCODE_ERROR,
-  EMPTY_NAME_ERROR,
-  NAME_REGEX_ERROR,
+  EMAIL_REGEX_MESSAGE,
+  EMPTY_EMAIL_MESSAGE,
+  // EMPTY_EMAILCODE_MESSAGE,
+  EMPTY_NAME_MESSAGE,
+  NAME_REGEX_MESSAGE,
 } from '../../common/Message';
 import ValidationMessage from '../../common/ValidationMessage';
 
@@ -134,13 +134,13 @@ export const FindID = () => {
     if (!formData.name) {
       setFormMessage((prev) => ({
         ...prev,
-        name: EMPTY_NAME_ERROR,
+        name: EMPTY_NAME_MESSAGE,
       }));
       isValid = false;
     } else if (!inputRegexs.name.test(formData.name)) {
       setFormMessage((prev) => ({
         ...prev,
-        name: NAME_REGEX_ERROR,
+        name: NAME_REGEX_MESSAGE,
       }));
       isValid = false;
     }
@@ -148,13 +148,13 @@ export const FindID = () => {
     if (!formData.email) {
       setFormMessage((prev) => ({
         ...prev,
-        email: EMPTY_EMAIL_ERROR,
+        email: EMPTY_EMAIL_MESSAGE,
       }));
       isValid = false;
     } else if (!inputRegexs.email.test(formData.email)) {
       setFormMessage((prev) => ({
         ...prev,
-        email: EMAIL_REGEX_ERROR,
+        email: EMAIL_REGEX_MESSAGE,
       }));
       isValid = false;
     }

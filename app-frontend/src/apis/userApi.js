@@ -25,6 +25,7 @@ export const findUserById = async (id) => {
 // 회원정보 수정
 export const modifyUser = async (formData) => {
   try {
+    console.log(`${formData.userNum}`);
     const response = await axios.put(`/user/${formData.userNum}`, formData, {
       headers: {
         'Content-Type': 'multipart/form-data',

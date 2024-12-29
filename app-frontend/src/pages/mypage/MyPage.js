@@ -11,9 +11,10 @@ export function MyPage() {
   useEffect(() => {
     const fetchUser = async () => {
       try {
-        const userNum = 41; // 현재 로그인한 유저의 userNum
+        const userNum = 59; // 현재 로그인한 유저의 userNum
         const user = await findUserById(userNum);
         setUsers(user.data);
+        console.log(user.data);
       } catch (error) {
         console.error('유저 정보를 불러오는 중 오류 발생:', error);
         setUsers(null);
@@ -31,9 +32,10 @@ export function MyPage() {
         email: users.email,
         name: users.name,
         address: users.address,
+        detailAddress: users.detailAddress,
+        postcode: users.postcode,
         spendingTarget: users.spendingTarget,
         profile: users.profile,
-        createdAt: users.createdAt,
       }
     : null;
 

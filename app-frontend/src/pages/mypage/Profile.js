@@ -60,7 +60,7 @@ const Profile = ({ profileImage, onProfileChange, isEditing }) => {
   return (
     <ProfileContainer>
       <ProfileImage>
-        {profileImage ? (
+        {profileImage && profileImage !== 'temp_profile' ? (
           typeof profileImage === 'string' &&
           profileImage.startsWith('data:image') ? (
             <img src={profileImage} alt="Profile" />

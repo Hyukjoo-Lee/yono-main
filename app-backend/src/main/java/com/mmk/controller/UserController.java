@@ -6,7 +6,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.NoSuchElementException;
-import java.util.Optional;
 import java.util.Random;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -26,17 +25,17 @@ import org.springframework.web.multipart.MultipartFile;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.mmk.common.ApiResponse;
-import com.mmk.dao.UserRepository;
+import com.mmk.dto.UserDTO;
 import com.mmk.service.UserService;
-import com.mmk.vo.UserInfoVO;
 
 import jakarta.servlet.http.HttpServletRequest;
 
+/**
+ * Controller: 사용자 요청의 값을 DTO 에 담아 Service 계층으로 전달함.
+ */
 @RestController
 @RequestMapping("/user")
 public class UserController {
-    @Autowired
-    private UserRepository userRepository;
 
     @Autowired
     private UserService userService;
@@ -44,64 +43,60 @@ public class UserController {
     // GET API
     // id(기본키) 기반으로 유저 정보를 검색
     @GetMapping("/{id}")
-    public ResponseEntity<ApiResponse<UserInfoVO>> getUserDetails(@PathVariable("id") int id) {
-        Optional<UserInfoVO> user = userRepository.findById(id);
-
-        if (user.isPresent()) {
-            ApiResponse<UserInfoVO> response = new ApiResponse<>(200, "유저 검색 성공", user.get());
+    public ResponseEntity<ApiResponse<UserDTO>> getUserDetails(@PathVariable("id") int id) {
+        UserDTO userDTO = userService.getUserById(id);
+        if (userDTO != null) {
+            ApiResponse<UserDTO> response = new ApiResponse<>(200, "유저 검색 성공", userDTO);
             return ResponseEntity.ok(response);
         } else {
-            ApiResponse<UserInfoVO> response = new ApiResponse<>(404, "유저 정보 찾을 수 없음", null);
+            ApiResponse<UserDTO> response = new ApiResponse<>(404, "유저 정보 찾을 수 없음", null);
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(response);
         }
     }
 
     // 유저 아이디 기반으로 유저 정보를 검색
     @GetMapping("/by-user-id")
-    public ResponseEntity<ApiResponse<UserInfoVO>> getUserByUserId(@RequestParam("userId") String userId) {
-        UserInfoVO user = userRepository.findUserVOByUserId(userId);
-
-        if (user == null) {
-            ApiResponse<UserInfoVO> response = new ApiResponse<>(404, "유저 정보 찾을 수 없음", null);
+    public ResponseEntity<ApiResponse<UserDTO>> getUserByUserId(@RequestParam("userId") String userId) {
+        UserDTO userDTO = userService.getUserByUserId(userId);
+        if (userDTO == null) {
+            ApiResponse<UserDTO> response = new ApiResponse<>(404, "유저 정보 찾을 수 없음", null);
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(response);
         }
 
-        ApiResponse<UserInfoVO> response = new ApiResponse<>(200, "유저 검색 성공", user);
+        ApiResponse<UserDTO> response = new ApiResponse<>(200, "유저 검색 성공", userDTO);
         return ResponseEntity.ok(response);
     }
 
     // 이메일 기반으로 유저 정보를 검색
     @GetMapping("/by-email")
-    public ResponseEntity<ApiResponse<UserInfoVO>> getUserByEmail(@RequestParam("email") String email) {
-        UserInfoVO user = userRepository.findUserVOByEmail(email);
-
-        if (user == null) {
-            ApiResponse<UserInfoVO> response = new ApiResponse<>(404, "유저 정보 찾을 수 없음", null);
+    public ResponseEntity<ApiResponse<UserDTO>> getUserByEmail(@RequestParam("email") String email) {
+        UserDTO userDTO = userService.getUserByEmail(email);
+        if (userDTO == null) {
+            ApiResponse<UserDTO> response = new ApiResponse<>(404, "유저 정보 찾을 수 없음", null);
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(response);
         }
 
-        ApiResponse<UserInfoVO> response = new ApiResponse<>(200, "유저 검색 성공", user);
+        ApiResponse<UserDTO> response = new ApiResponse<>(200, "유저 검색 성공", userDTO);
         return ResponseEntity.ok(response);
     }
 
     // 모든 유저 검색
     @GetMapping("/all")
-    public ResponseEntity<ApiResponse<List<UserInfoVO>>> getAllUsers() {
-        List<UserInfoVO> uList = userRepository.findAll();
-
-        if (uList.isEmpty()) {
+    public ResponseEntity<ApiResponse<List<UserDTO>>> getAllUsers() {
+        List<UserDTO> userDTOs = userService.getAllUsers();
+        if (userDTOs.isEmpty()) {
             throw new NoSuchElementException("현재 등록된 유저정보가 없습니다.");
         }
 
-        return ResponseEntity.ok(new ApiResponse<>(200, "전체 유저 검색 성공", uList));
+        return ResponseEntity.ok(new ApiResponse<>(200, "전체 유저 검색 성공", userDTOs));
     }
 
     // POST API
     // 회원가입
     @PostMapping("/signup")
-    public ResponseEntity<ApiResponse<UserInfoVO>> createUser(@RequestBody UserInfoVO userVO) {
-        UserInfoVO createdUser = userService.createUser(userVO);
-        ApiResponse<UserInfoVO> response = new ApiResponse<>(201, "유저 생성 성공", createdUser);
+    public ResponseEntity<ApiResponse<UserDTO>> createUser(@RequestBody UserDTO userDTO) {
+        UserDTO createdUser = userService.createUser(userDTO);
+        ApiResponse<UserDTO> response = new ApiResponse<>(201, "유저 생성 성공", createdUser);
         return ResponseEntity.status(HttpStatus.CREATED).body(response);
     }
 
@@ -111,13 +106,13 @@ public class UserController {
         String field = request.get("field");
         String value = request.get("value");
         boolean exists;
-        System.out.println("field: " + field + "value: " + value);
+
         switch (field) {
             case "userId":
-                exists = userRepository.existsByUserId(value);
+                exists = userService.existsByUserId(value);
                 break;
             case "email":
-                exists = userRepository.existsByEmail(value);
+                exists = userService.existsByEmail(value);
                 break;
             default:
                 throw new IllegalArgumentException("Invalid field: " + field);
@@ -131,14 +126,8 @@ public class UserController {
     // DELETE API
     // 유저 정보 삭제
     @DeleteMapping("/{id}")
-    public ResponseEntity<ApiResponse<Object>> deleteUser(@RequestParam("id") int id) {
-        Optional<UserInfoVO> user = userRepository.findById(id);
-
-        if (user.isEmpty()) {
-            throw new NoSuchElementException("유저를 찾을 수 없습니다. ID: " + id);
-        }
-
-        userRepository.deleteById(id);
+    public ResponseEntity<ApiResponse<Object>> deleteUser(@PathVariable("id") int id) {
+        userService.deleteUser(id);
         ApiResponse<Object> response = new ApiResponse<>(200, "유저 삭제 성공", null);
         return ResponseEntity.ok(response);
     }
@@ -146,7 +135,7 @@ public class UserController {
     // PUT API
     // 유저 정보 업데이트
     @PutMapping("/{userNum}")
-    public ResponseEntity<ApiResponse<UserInfoVO>> updateUser(
+    public ResponseEntity<ApiResponse<UserDTO>> updateUser(
         @RequestParam("userInfo") String userInfoJson,
         @RequestParam("profileImage") MultipartFile profileImage,
         HttpServletRequest request) {
@@ -155,7 +144,7 @@ public class UserController {
             String uploadFolder = System.getProperty("user.dir") + "/app-backend/src/main/resources/static/images";
 
             try {
-                UserInfoVO uv = new ObjectMapper().readValue(userInfoJson, UserInfoVO.class);
+                UserDTO uv = new ObjectMapper().readValue(userInfoJson, UserDTO.class);
 
                 if (!profileImage.isEmpty()) {
                     String fileName = profileImage.getOriginalFilename();
@@ -194,14 +183,16 @@ public class UserController {
     
                     uv.setProfile(fileDBName);
     
-                } 
-                userRepository.save(uv);
+                }
 
-                ApiResponse<UserInfoVO> response = new ApiResponse<>(201, "회원 정보 수정 성공", uv);
+                userService.updateUser(uv);
+                // userRepository.save(uv);
+
+                ApiResponse<UserDTO> response = new ApiResponse<>(201, "회원 정보 수정 성공", uv);
                 return ResponseEntity.ok(response);
             } catch (JsonProcessingException e) {
                 e.printStackTrace();
-                ApiResponse<UserInfoVO> response = new ApiResponse<>(400, "회원 정보 수정 오류", null);
+                ApiResponse<UserDTO> response = new ApiResponse<>(400, "회원 정보 수정 오류", null);
                 return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(response);
             }
     }

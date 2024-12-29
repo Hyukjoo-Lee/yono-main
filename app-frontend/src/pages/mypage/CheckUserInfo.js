@@ -154,6 +154,7 @@ const CheckUserInfo = ({
   const isFormValid = () => {
     for (const key in userInfo) {
       if ((userInfo[key] + '').trim() === '') {
+        console.log(key);
         return 1;
       }
     }
@@ -163,7 +164,7 @@ const CheckUserInfo = ({
     }
   };
 
-  const save = async () => {
+  const save = () => {
     if (isFormValid() === 1) {
       setPasswordError('모든 정보를 입력해주세요!');
       return;
@@ -187,13 +188,8 @@ const CheckUserInfo = ({
     formData.append('userInfo', JSON.stringify(updatedUserInfo));
     formData.append('profileImage', profileImage);
 
-    try {
-      await modifyUser(formData);
-      window.location.reload();
-    } catch (error) {
-      console.error('유저 정보 수정 비동기식 처리 중 오류 발생', error);
-      setPasswordError('유저 정보 수정 중에 오류 발생');
-    }
+    modifyUser(formData);
+    window.location.reload();
   };
 
   const deleteId = () => {};
