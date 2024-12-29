@@ -21,15 +21,17 @@ const StyledCardP = styled.p`
   font-weight: bold;
 `;
 
-const MainCardBox = () => {
+const MainCardBox = ({ isLoggedIn }) => {
   // 등록된 카드 데이터
   const cardData = registeredCardData;
 
+  if (!isLoggedIn) {
+    return null;
+  }
+
   return (
     <StyledWrap>
-      <StyledCardP>
-        나의 등록 카드 <span>(로그인시 가운데 배치)</span>
-      </StyledCardP>
+      <StyledCardP>나의 등록 카드</StyledCardP>
       <StyledCardContainer>
         <CustomSlides cardData={cardData} showDetailed={true} />
       </StyledCardContainer>

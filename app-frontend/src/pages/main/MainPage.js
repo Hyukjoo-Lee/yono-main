@@ -1,6 +1,6 @@
 // import { ReactComponent as HandsClapping } from "../assets/images/HandsClapping.svg";
 // import CustomButton from "../common/CommonButton";
-import React from 'react';
+import React, { useState } from 'react';
 import styled from 'styled-components';
 import CommonRoot from '../../common/CommonRoot';
 import MainBox from './MainBox';
@@ -13,12 +13,14 @@ const StyledWrap = styled.div`
 `;
 
 export function MainPage() {
+  const [isLoggedIn] = useState(false);
+
   return (
     <CommonRoot>
       <StyledWrap>
         <MainIntro />
         <MainBox />
-        <MainCardBox />
+        <MainCardBox isLoggedIn={isLoggedIn} />
       </StyledWrap>
     </CommonRoot>
   );
