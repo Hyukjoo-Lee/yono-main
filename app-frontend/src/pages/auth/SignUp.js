@@ -366,6 +366,7 @@ const SignUp = () => {
               placeholder={FORM_FIELDS['address'].placeholder}
               text="주소"
               value={formData.address}
+              readOnly={true}
               onChange={(e) => handleInputChange(e, 'address')}
               {...InputProps}
             />

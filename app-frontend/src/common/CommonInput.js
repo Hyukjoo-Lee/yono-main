@@ -63,6 +63,7 @@ const CommonInput = (props) => {
     value,
     onChange,
     $marginLeft,
+    readOnly,
   } = props;
 
   return (
@@ -91,6 +92,7 @@ const CommonInput = (props) => {
         disabled={disabled}
         value={value}
         onChange={onChange}
+        readOnly={readOnly}
       />
     </div>
   );
