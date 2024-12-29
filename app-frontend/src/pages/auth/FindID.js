@@ -1,11 +1,20 @@
 import React, { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
 import CustomButton from '../../common/CommonButton';
-import CommonInput from '../../common/CommonInput';
-import CommonRoot from '../../common/CommonRoot';
-import CommonPageInfo from '../../common/CommonPageInfo';
-import { useNavigate } from 'react-router-dom';
 import CommonHr from '../../common/CommonHr';
+import CommonInput from '../../common/CommonInput';
+import CommonPageInfo from '../../common/CommonPageInfo';
+import CommonRoot from '../../common/CommonRoot';
+import theme from '../../theme/theme';
+import {
+  EMAIL_REGEX_MESSAGE,
+  EMPTY_EMAIL_MESSAGE,
+  // EMPTY_EMAILCODE_MESSAGE,
+  EMPTY_NAME_MESSAGE,
+  NAME_REGEX_MESSAGE,
+} from '../../common/Message';
+import ValidationMessage from '../../common/ValidationMessage';
 
 const RootIn = styled.div`
   display: flex;
@@ -28,7 +37,6 @@ const MiddleContainer = styled.div`
   display: flex;
   flex-direction: column;
   justify-content: center;
-  align-items: center;
 `;
 
 // const HiddenBox = styled.div`
@@ -76,10 +84,6 @@ const styleProps = {
   $focusBorderColor: 'transparent',
 };
 
-const ContainerProps = {
-  marginBottom: '3px',
-};
-
 const EmailValidMessageStyle = styled.p`
   color: red;
   margin: 5px;
@@ -93,79 +97,138 @@ const emailValidMessages = [
 ];
 
 export const FindID = () => {
-  const find = '아이디 찾기';
   const navigate = useNavigate();
 
-  const [isDialogIDVisible, setIsDialogIDVisible] = useState(false);
+  const [formData, setFormData] = useState({
+    name: '',
+    email: '',
+    emailCode: '',
+  });
+
+  const [formMessage, setFormMessage] = useState({
+    name: '',
+    email: '',
+    emailCode: '',
+  });
+
+  const [isEmailSentDialog, setIsEmailSentDialog] = useState(false);
   const [isEmailCodeVisible, setIsEmailCodeVisble] = useState(false);
   const [emailValidVisible, setEmailValidVisible] = useState(false);
-  const [emailValidMessageIndex, setEamilValidMessageIndex] = useState();
+  const [emailValidMessageIndex, setEmailValidMessageIndex] = useState();
 
   let isEmailValid = false; // 백엔드에서 받아온 이메일인증 확인 결과값, 기본값 false;
 
-  // 이메일 인증코드 확인 결과값
-  // API 호출해서 전달받은 값 할당하는 로직 작성 필요
+  const inputRegexs = {
+    email: /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/,
+    name: /^[가-힣]{2,10}$/,
+  };
 
-  // const [answer, setAnswer] = useState('');
-  // const [selectedQuestion, setSelectedQuestion] = useState('');
-  // const [errorMessage, setErrorMessage] = useState('');
+  const handleInputChange = (e, field) => {
+    setFormData((prev) => ({ ...prev, [field]: e.target.value }));
+    setFormMessage((prev) => ({ ...prev, [field]: '' }));
+  };
 
-  // const UpdateAnswer = (e) => {
-  //   setAnswer(e.target.value);
-  // };
+  const validateField = () => {
+    let isValid = true;
+
+    if (!formData.name) {
+      setFormMessage((prev) => ({
+        ...prev,
+        name: EMPTY_NAME_MESSAGE,
+      }));
+      isValid = false;
+    } else if (!inputRegexs.name.test(formData.name)) {
+      setFormMessage((prev) => ({
+        ...prev,
+        name: NAME_REGEX_MESSAGE,
+      }));
+      isValid = false;
+    }
+
+    if (!formData.email) {
+      setFormMessage((prev) => ({
+        ...prev,
+        email: EMPTY_EMAIL_MESSAGE,
+      }));
+      isValid = false;
+    } else if (!inputRegexs.email.test(formData.email)) {
+      setFormMessage((prev) => ({
+        ...prev,
+        email: EMAIL_REGEX_MESSAGE,
+      }));
+      isValid = false;
+    }
+
+    return isValid;
+  };
 
   const handleSendCode = () => {
+    if (!validateField()) return;
+    setIsEmailSentDialog(!isEmailSentDialog);
     setIsEmailCodeVisble(!isEmailCodeVisible);
+
     // setIsDialogIDVisible(true);
   };
 
   const handleConfirmCode = () => {
     if (!emailValidVisible) {
       setEmailValidVisible(true);
-      setEamilValidMessageIndex(2);
+      setEmailValidMessageIndex(2);
     } else if (emailValidVisible && !isEmailValid) {
-      setEamilValidMessageIndex(2);
+      setEmailValidMessageIndex(2);
     } else if (emailValidVisible && isEmailValid) {
-      setIsDialogIDVisible(true);
+      setIsEmailSentDialog(true);
     }
   };
 
   const handleClose = () => {
-    navigate(-1);
+    navigate('/Login');
   };
 
   const handleCheckCode = () => {
     setEmailValidVisible(true);
-    setEamilValidMessageIndex(isEmailValid ? 0 : 1);
+    setEmailValidMessageIndex(isEmailValid ? 0 : 1);
   };
-  // TODO: ID 다이얼로그 생성 후 적용
-  console.log(isDialogIDVisible);
+
   return (
     <CommonRoot>
       <RootIn>
         <FullContainer>
-          <CommonPageInfo title={find} text={<p></p>} />
+          <CommonPageInfo title="아이디 찾기" />
 
           <MiddleContainer>
             <CommonInput
               text="이름"
               placeholder="이름을 입력하세요"
               width="300px"
+              onChange={(e) => handleInputChange(e, 'name')}
               {...styleProps}
-              // onChange={onChange}
             />
-            <div style={ContainerProps} />
+            {formMessage.name && (
+              <ValidationMessage
+                text={formMessage.name}
+                type={'error'}
+                $margin="0 10px"
+              />
+            )}
 
             <CommonHr />
-            <div style={ContainerProps} />
 
             <CommonInput
               text="이메일"
               placeholder="이메일을 입력하세요"
               width="300px"
+              onChange={(e) => handleInputChange(e, 'email')}
               {...styleProps}
-              // onChange={onChange}
             />
+            {formMessage.email && (
+              <ValidationMessage
+                text={formMessage.email}
+                type={'error'}
+                $margin="0 10px"
+              />
+            )}
+
             <CommonHr />
 
             {isEmailCodeVisible && (
@@ -185,10 +248,7 @@ export const FindID = () => {
                       text="확인"
                       width="50%"
                       height="30px"
-                      background="#ffffff"
-                      $borderColor="#4064E6"
-                      color="#4064E6"
-                      fontSize="20"
+                      fontSize={theme.fontSize.sm}
                       onClick={handleCheckCode}
                     />
                   </CodeButton>
@@ -208,19 +268,14 @@ export const FindID = () => {
               text="확인"
               width="50px"
               height="30px"
-              background="#4064E6"
-              color="#ffffff"
-              fontSize="20"
+              fontSize={theme.fontSize.sm}
               onClick={isEmailCodeVisible ? handleConfirmCode : handleSendCode}
             />
             <CustomButton
               text="취소"
               width="50px"
               height="30px"
-              background="#ffffff"
-              $borderColor="#4064E6"
-              color="#4064E6"
-              fontSize="20"
+              fontSize={theme.fontSize.sm}
               onClick={handleClose}
             />
           </ButtonContainer>
