@@ -10,24 +10,26 @@ import SearchAddressDialog from './modal/SearchAddressDialog';
 
 import { checkUserIdExists, signUpUser } from '../../apis/userApi';
 import {
-  EMAIL_REGEX_ERROR,
-  EMPTY_ADDRESS_ERROR,
-  EMPTY_EMAIL_ERROR,
-  EMPTY_NAME_ERROR,
-  EMPTY_PASSWORD_ERROR,
-  EMPTY_USERID_ERROR,
-  NAME_REGEX_ERROR,
-  PASSWORD_MISMATCH_ERROR,
-  PASSWORD_REGEX_ERROR,
-  SERVER_ERROR,
+  EMAIL_REGEX_MESSAGE,
+  EMPTY_ADDRESS_MESSAGE,
+  EMPTY_DETAILED_ADDRESS_MESSAGE,
+  EMPTY_EMAIL_MESSAGE,
+  EMPTY_NAME_MESSAGE,
+  EMPTY_PASSWORD_MESSAGE,
+  EMPTY_USERID_MESSAGE,
+  NAME_REGEX_MESSAGE,
+  PASSWORD_MISMATCH_MESSAGE,
+  PASSWORD_REGEX_MESSAGE,
+  SERVER_MESSAGE,
   USERID_AVAILABLE_MESSAGE,
-  USERID_DUPLICATE_ERROR,
-  USERID_REGEX_ERROR,
+  USERID_DUPLICATE_MESSAGE,
+  USERID_REGEX_MESSAGE,
   USERID_VERIFY_PROMPT,
 } from '../../common/Message';
 import ValidationMessage from '../../common/ValidationMessage';
 import CommonDialog from '../../common/CommonDialog';
 import { useNavigate } from 'react-router-dom';
+import theme from '../../theme/theme';
 
 const FullContainer = styled.div`
   display: flex;
@@ -47,29 +49,29 @@ const ContainerProps = {
   marginBottom: '13px',
 };
 
+const InputUserIdBox = styled.div`
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-end;
+  width: 490px;
+`;
+
+const ButtonWrapper = styled.div`
+  position: relative;
+  margin-left: 15px;
+`;
+
 const InputProps = {
-  width: '350px',
+  width: '380px',
   $borderColor: 'transparent',
   background: 'transparent',
   $focusBorderColor: 'transparent',
   $marginLeft: '10px',
 };
 
-const InputUserIdBox = styled.div`
-  display: flex;
-  flex-direction: row;
-  justify-content: space-between;
-  align-items: flex-end;
-  width: 350px;
-
-  & > *:not(:last-child) {
-    margin-right: 10px;
-  }
-`;
-
 const ButtonProps = {
-  width: '73px',
-  height: '37px',
+  width: '75px',
+  height: '40px',
 };
 
 const FORM_FIELDS = {
@@ -78,20 +80,20 @@ const FORM_FIELDS = {
     text: '아이디',
     type: 'text',
     errorMessage: {
-      empty: EMPTY_USERID_ERROR,
-      invalid: USERID_REGEX_ERROR,
-      duplicate: USERID_DUPLICATE_ERROR,
+      empty: EMPTY_USERID_MESSAGE,
+      invalid: USERID_REGEX_MESSAGE,
+      duplicate: USERID_DUPLICATE_MESSAGE,
       available: USERID_AVAILABLE_MESSAGE,
       verifyPrompt: USERID_VERIFY_PROMPT,
     },
   },
   password: {
-    placeholder: '비밀번호를 입력하세요.',
+    placeholder: EMPTY_PASSWORD_MESSAGE,
     text: '비밀번호',
     type: 'password',
     errorMessage: {
-      empty: EMPTY_PASSWORD_ERROR,
-      invalid: PASSWORD_REGEX_ERROR,
+      empty: EMPTY_PASSWORD_MESSAGE,
+      invalid: PASSWORD_REGEX_MESSAGE,
     },
   },
   confirmPassword: {
@@ -99,33 +101,41 @@ const FORM_FIELDS = {
     text: '비밀번호 확인',
     type: 'password',
     errorMessage: {
-      mismatch: PASSWORD_MISMATCH_ERROR,
+      mismatch: PASSWORD_MISMATCH_MESSAGE,
     },
   },
   name: {
-    placeholder: '이름을 입력하세요.',
+    placeholder: EMPTY_NAME_MESSAGE,
     text: '이름',
     type: 'text',
     errorMessage: {
-      empty: EMPTY_NAME_ERROR,
-      invalid: NAME_REGEX_ERROR,
+      empty: EMPTY_NAME_MESSAGE,
+      invalid: NAME_REGEX_MESSAGE,
     },
   },
   email: {
-    placeholder: '이메일을 입력하세요.',
+    placeholder: EMPTY_EMAIL_MESSAGE,
     text: '이메일',
     type: 'email',
     errorMessage: {
-      empty: EMPTY_EMAIL_ERROR,
-      invalid: EMAIL_REGEX_ERROR,
+      empty: EMPTY_EMAIL_MESSAGE,
+      invalid: EMAIL_REGEX_MESSAGE,
     },
   },
   address: {
-    placeholder: '주소를 입력하세요.',
+    placeholder: EMPTY_EMAIL_MESSAGE,
     text: '주소',
     type: 'text',
     errorMessage: {
-      empty: EMPTY_ADDRESS_ERROR,
+      empty: EMPTY_ADDRESS_MESSAGE,
+    },
+  },
+  detailedAddress: {
+    placeholder: EMPTY_DETAILED_ADDRESS_MESSAGE,
+    text: '상세주소',
+    type: 'text',
+    errorMessage: {
+      empty: EMPTY_DETAILED_ADDRESS_MESSAGE,
     },
   },
 };
@@ -143,6 +153,8 @@ export function SignUp() {
     name: '',
     email: '',
     address: '',
+    detailedAddress: '',
+    postCode: '',
   });
 
   const [formMessage, setFormMessage] = useState({
@@ -152,6 +164,7 @@ export function SignUp() {
     name: '',
     email: '',
     address: '',
+    detailedAddress: '',
   });
 
   const inputRegexs = {
@@ -162,7 +175,7 @@ export function SignUp() {
   };
 
   const navigate = useNavigate();
-
+  console.log(formData);
   const handleInputChange = (e, field) => {
     setFormData((prev) => ({ ...prev, [field]: e.target.value }));
     setFormMessage((prev) => ({ ...prev, [field]: '' }));
@@ -178,6 +191,10 @@ export function SignUp() {
         errors[field] = FORM_FIELDS.name.errorMessage.invalid;
       } else if (field === 'email' && !inputRegexs.email.test(formData.email)) {
         errors[field] = FORM_FIELDS.email.errorMessage.invalid;
+      } else if (field === 'address') {
+        errors[field] = FORM_FIELDS.address.errorMessage.empty;
+      } else if (field === 'detailedAddress') {
+        errors[field] = FORM_FIELDS.detailedAddress.errorMessage.empty;
       } else if (
         field === 'password' &&
         !inputRegexs.password.test(formData.password)
@@ -236,7 +253,7 @@ export function SignUp() {
     } catch {
       setFormMessage((prev) => ({
         ...prev,
-        userId: SERVER_ERROR,
+        userId: SERVER_MESSAGE,
       }));
       setIsUserIdValidated(false);
     }
@@ -320,21 +337,26 @@ export function SignUp() {
               onChange={(e) => handleInputChange(e, 'userId')}
               {...InputProps}
             />
-            <div style={{ marginLeft: '10px ' }}>
+            <ButtonWrapper>
               <CommonButton
                 {...ButtonProps}
                 text="중복확인"
                 width="100px"
                 onClick={validateUserId}
               />
-            </div>
+            </ButtonWrapper>
           </InputUserIdBox>
+
           <ValidationMessage
             text={formMessage.userId}
             type={isUserIdValidated ? 'success' : 'error'}
             $margin={'0 10px'}
           />
           <CommonHr />
+          {renderInputField('password')}
+          {renderInputField('confirmPassword')}
+          {renderInputField('name')}
+          {renderInputField('email')}
           <InputUserIdBox>
             <CommonInput
               placeholder={FORM_FIELDS['address'].placeholder}
@@ -343,37 +365,26 @@ export function SignUp() {
               onChange={(e) => handleInputChange(e, 'address')}
               {...InputProps}
             />
-            <div style={{ marginLeft: '10px' }}>
+            <ButtonWrapper>
+              {/* 아이콘으로 변경 예정 */}
               <CommonButton
                 {...ButtonProps}
-                text="주소찾기"
+                text="주소검색"
                 width="100px"
+                fontSize={theme.fontSize.base}
                 onClick={() => setIsAddressModalOpen(true)}
               />
-            </div>
+            </ButtonWrapper>
           </InputUserIdBox>
-          {formMessage.address && (
-            <ValidationMessage
-              text={FORM_FIELDS['address'].errorMessage.empty}
-              type={'error'}
-              $margin="0 10px"
-            />
-          )}
+          <ValidationMessage
+            text={formMessage.userId}
+            type={isUserIdValidated ? 'success' : 'error'}
+            $margin={'0 10px'}
+          />
           <CommonHr />
-          {renderInputField(
-            'password',
-            '비밀번호를 입력하세요',
-            '비밀번호',
-            'password',
-          )}
-          {renderInputField(
-            'confirmPassword',
-            '비밀번호를 입력하세요',
-            '비밀번호 확인',
-            'password',
-          )}
-          {renderInputField('name', '이름을 입력하세요', '이름')}
-          {renderInputField('email', '이메일을 입력하세요', '이메일')}
+          <div style={ContainerProps} />
+          {renderInputField('detailedAddress')}
+          <div style={{ marginBottom: '15px' }}></div>
         </MiddleContainer>
         <CommonButton {...ButtonProps} text="회원가입" onClick={handleSubmit} />
         <CommonDialog
@@ -394,6 +405,7 @@ export function SignUp() {
           open={isAddressModalOpen}
           setModalVisible={setIsAddressModalOpen}
           onCompletePost={handleAddressSelect}
+          setFormData={setFormData}
         />
       </FullContainer>
     </CommonRoot>

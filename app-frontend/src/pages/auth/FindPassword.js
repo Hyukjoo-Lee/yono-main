@@ -9,11 +9,11 @@ import CommonHr from '../../common/CommonHr';
 import theme from '../../theme/theme';
 import ValidationMessage from '../../common/ValidationMessage';
 import {
-  EMAIL_REGEX_ERROR,
-  EMPTY_EMAIL_ERROR,
-  EMPTY_EMAILCODE_ERROR,
-  EMPTY_NAME_ERROR,
-  EMPTY_USERID_ERROR,
+  EMAIL_REGEX_MESSAGE,
+  EMPTY_EMAIL_MESSAGE,
+  EMPTY_EMAILCODE_MESSAGE,
+  EMPTY_NAME_MESSAGE,
+  EMPTY_USERID_MESSAGE,
 } from '../../common/Message';
 
 const RootIn = styled.div`
@@ -97,13 +97,13 @@ export const FindPassword = () => {
 
   const validateField = (field, value) => {
     if (!value) {
-      if (field === 'name') return EMPTY_NAME_ERROR;
-      if (field === 'userId') return EMPTY_USERID_ERROR;
-      if (field === 'email') return EMPTY_EMAIL_ERROR;
-      if (field === 'emailCode') return EMPTY_EMAILCODE_ERROR;
+      if (field === 'name') return EMPTY_NAME_MESSAGE;
+      if (field === 'userId') return EMPTY_USERID_MESSAGE;
+      if (field === 'email') return EMPTY_EMAIL_MESSAGE;
+      if (field === 'emailCode') return EMPTY_EMAILCODE_MESSAGE;
     }
     if (field === 'email' && !emailRegex.test(value)) {
-      return EMAIL_REGEX_ERROR;
+      return EMAIL_REGEX_MESSAGE;
     }
     return '';
   };

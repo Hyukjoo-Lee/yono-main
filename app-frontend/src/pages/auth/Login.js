@@ -5,7 +5,10 @@ import CommonRoot from '../../common/CommonRoot';
 import CommonInput from '../../common/CommonInput';
 import CommonButton from '../../common/CommonButton';
 import theme from '../../theme/theme';
-import { EMPTY_PASSWORD_ERROR, EMPTY_USERID_ERROR } from '../../common/Message';
+import {
+  EMPTY_PASSWORD_MESSAGE,
+  EMPTY_USERID_MESSAGE,
+} from '../../common/Message';
 import { useNavigate } from 'react-router-dom';
 import CommonDialog from '../../common/CommonDialog';
 
@@ -146,11 +149,11 @@ export function Login() {
     const errors = {};
 
     if (!formData.userId) {
-      errors.userId = EMPTY_USERID_ERROR;
+      errors.userId = EMPTY_USERID_MESSAGE;
     }
 
     if (!formData.password) {
-      errors.password = EMPTY_PASSWORD_ERROR;
+      errors.password = EMPTY_PASSWORD_MESSAGE;
     }
 
     return errors;
