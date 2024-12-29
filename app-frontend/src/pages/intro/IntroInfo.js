@@ -32,7 +32,7 @@ const StyledBox = styled.div`
 
 const StyledIcon = styled.img``;
 
-const InfoInfo = ({ title, subtitle, img }) => {
+const IntroInfo = ({ title, subtitle, img }) => {
   return (
     <StyledInfoWrap className="info_wrap">
       <StyledBox className="box">
@@ -46,4 +46,4 @@ const InfoInfo = ({ title, subtitle, img }) => {
   );
 };
 
-export default InfoInfo;
+export default IntroInfo;
