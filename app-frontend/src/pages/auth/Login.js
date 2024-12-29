@@ -5,8 +5,14 @@ import CommonRoot from '../../common/CommonRoot';
 import CommonInput from '../../common/CommonInput';
 import CommonButton from '../../common/CommonButton';
 import theme from '../../theme/theme';
-import { EMPTY_PASSWORD_ERROR, EMPTY_USERID_ERROR } from '../../common/Message';
-import LoginSuccessDialog from './modal/LoginSuccessDialog';
+import {
+  EMPTY_PASSWORD_MESSAGE,
+  EMPTY_USERID_MESSAGE,
+  LOGIN_VERIFIED_MESSAGE,
+} from '../../common/Message';
+import { useNavigate } from 'react-router-dom';
+import CommonDialog from '../../common/CommonDialog';
+import { login } from '../../apis/userApi';
 
 const RootIn = styled.div`
   width: ${(props) => props.theme.display.lg};
@@ -108,33 +114,49 @@ const SocialButton = styled.div`
   cursor: pointer;
 `;
 
-export function Login() {
+const Login = () => {
   const [formData, setFormData] = useState({
     userId: '',
     password: '',
   });
 
-  const [alertMessage, setAlertMessage] = useState({
+  const [formMessage, setFormMessage] = useState({
     userId: '',
     password: '',
+    error: '',
   });
 
   const [isLoginSuccessVisible, setIsLoginSuccessVisible] = useState(false);
 
+  const navigate = useNavigate();
+
+  const handleFindLink = (link) => {
+    if (link === 'id') {
+      navigate('/find-id');
+    } else {
+      navigate('/find-pwd');
+    }
+  };
+
+  const completeLogin = () => {
+    setIsLoginSuccessVisible(false);
+    navigate('/');
+  };
+
   const handleInputChange = (e, field) => {
     setFormData((prev) => ({ ...prev, [field]: e.target.value }));
-    setAlertMessage((prev) => ({ ...prev, [field]: '' }));
+    setFormMessage((prev) => ({ ...prev, [field]: '' }));
   };
 
   const validateForm = () => {
     const errors = {};
 
     if (!formData.userId) {
-      errors.userId = EMPTY_USERID_ERROR;
+      errors.userId = EMPTY_USERID_MESSAGE;
     }
 
     if (!formData.password) {
-      errors.password = EMPTY_PASSWORD_ERROR;
+      errors.password = EMPTY_PASSWORD_MESSAGE;
     }
 
     return errors;
@@ -143,18 +165,19 @@ export function Login() {
   const handleLogin = async (e) => {
     e.preventDefault();
     const errors = validateForm();
-    setAlertMessage(errors);
+    setFormMessage(errors);
 
     if (Object.keys(errors).length > 0) {
-      console.log('there is an error');
       return;
     }
 
     try {
       // 로그인 api 요청
+      console.log(formData);
+      await login(formData);
       setIsLoginSuccessVisible(true);
     } catch (error) {
-      console.log(error);
+      setFormMessage({ error: LOGIN_VERIFIED_MESSAGE });
     }
   };
 
@@ -172,8 +195,8 @@ export function Login() {
                 width="100%"
                 onChange={(e) => handleInputChange(e, 'userId')}
               />
-              {alertMessage.userId && (
-                <ErrorMessage>{alertMessage.userId}</ErrorMessage>
+              {formMessage.userId && (
+                <ErrorMessage>{formMessage.userId}</ErrorMessage>
               )}
             </InputWrapper>
             <InputWrapper>
@@ -185,8 +208,11 @@ export function Login() {
                 type="password"
                 onChange={(e) => handleInputChange(e, 'password')}
               />
-              {alertMessage.password && (
-                <ErrorMessage>{alertMessage.password}</ErrorMessage>
+              {formMessage.password && (
+                <ErrorMessage>{formMessage.password}</ErrorMessage>
+              )}
+              {formMessage.error && (
+                <ErrorMessage>{formMessage.error}</ErrorMessage>
               )}
             </InputWrapper>
             <OptionsWrapper>
@@ -195,9 +221,13 @@ export function Login() {
                 <Label id="save">아이디 저장</Label>
               </CheckBoxWrapper>
               <div>
-                <LinkText>아이디찾기</LinkText>
+                <LinkText href="#" onClick={() => handleFindLink('id')}>
+                  아이디찾기
+                </LinkText>
                 <span>|</span>
-                <LinkText>비밀번호찾기</LinkText>
+                <LinkText href="#" onClick={() => handleFindLink('password')}>
+                  비밀번호찾기
+                </LinkText>
               </div>
             </OptionsWrapper>
             <CommonButton
@@ -218,12 +248,16 @@ export function Login() {
               </SocialButton>
             </SocialLoginWrapper>
           </FormWrapper>
-          <LoginSuccessDialog
+          <CommonDialog
             open={isLoginSuccessVisible}
-            setSuccessVisible={setIsLoginSuccessVisible}
+            children={'로그인에 성공했습니다!'}
+            onClose={completeLogin}
+            onClick={completeLogin}
           />
         </FormBox>
       </RootIn>
     </CommonRoot>
   );
-}
+};
+
+export default Login;

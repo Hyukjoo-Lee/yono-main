@@ -8,15 +8,16 @@ import { useState, useEffect } from 'react';
 import ValidationMessage from '../../common/ValidationMessage';
 import theme from '../../theme/theme';
 import {
-  CARD_DUPLICATE_ERROR,
-  CARD_REGEX_ERROR,
-  CVC_REGEX_ERROR,
-  EMPTY_CARDNUM_ERROR,
-  EMPTY_CVC_ERROR,
-  EMPTY_ENGNAME_ERROR,
-  EMPTY_VALIDITY_ERROR,
-  ENGNAME_REGEX_ERROR,
-  VALIDITY_REGEX_ERROR,
+  CARD_DUPLICATE_MESSAGE,
+  CARD_REGEX_MESSAGE,
+  CVC_REGEX_MESSAGE,
+  EMPTY_CARDNUM_MESSAGE,
+  EMPTY_CARDSELECT_MESSAGE,
+  EMPTY_CVC_MESSAGE,
+  EMPTY_ENGNAME_MESSAGE,
+  EMPTY_VALIDITY_MESSAGE,
+  ENGNAME_REGEX_MESSAGE,
+  VALIDITY_REGEX_MESSAGE,
 } from '../../common/Message';
 
 const FormBox = styled.form`
@@ -32,9 +33,9 @@ const FORM_FIELDS = {
     text: '카드번호',
     regex: /^\d{16}$/,
     errorMessage: {
-      empty: EMPTY_CARDNUM_ERROR,
-      invalid: CARD_REGEX_ERROR,
-      duplicate: CARD_DUPLICATE_ERROR,
+      empty: EMPTY_CARDNUM_MESSAGE,
+      invalid: CARD_REGEX_MESSAGE,
+      duplicate: CARD_DUPLICATE_MESSAGE,
     },
   },
   cvc: {
@@ -42,8 +43,8 @@ const FORM_FIELDS = {
     text: 'CVC',
     regex: /^\d{3}$/,
     errorMessage: {
-      empty: EMPTY_CVC_ERROR,
-      invalid: CVC_REGEX_ERROR,
+      empty: EMPTY_CVC_MESSAGE,
+      invalid: CVC_REGEX_MESSAGE,
     },
   },
   cardValidity: {
@@ -51,8 +52,8 @@ const FORM_FIELDS = {
     text: '유효기간',
     regex: /^(0[1-9]|1[0-2])\d{2}$/,
     errorMessage: {
-      empty: EMPTY_VALIDITY_ERROR,
-      invalid: VALIDITY_REGEX_ERROR,
+      empty: EMPTY_VALIDITY_MESSAGE,
+      invalid: VALIDITY_REGEX_MESSAGE,
     },
   },
   englishName: {
@@ -60,14 +61,14 @@ const FORM_FIELDS = {
     text: '영문이름',
     regex: /^[a-zA-Z\s]+$/,
     errorMessage: {
-      empty: EMPTY_ENGNAME_ERROR,
-      invalid: ENGNAME_REGEX_ERROR,
+      empty: EMPTY_ENGNAME_MESSAGE,
+      invalid: ENGNAME_REGEX_MESSAGE,
     },
   },
   selectedCardType: {
     text: '카드 선택',
     errorMessage: {
-      empty: '카드를 선택해주세요.',
+      empty: EMPTY_CARDSELECT_MESSAGE,
     },
   },
 };

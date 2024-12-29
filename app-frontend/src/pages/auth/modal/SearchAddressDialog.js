@@ -5,8 +5,12 @@ import DaumPostcode from 'react-daum-postcode';
 const postCodeStyle = {
   minHeight: '43.5vh',
 };
-
-const SearchAddressDialog = ({ open, setModalVisible, onCompletePost }) => {
+const SearchAddressDialog = ({
+  open,
+  setModalVisible,
+  onCompletePost,
+  setFormData,
+}) => {
   const [visible, setVisible] = useState(false);
 
   useEffect(() => {
@@ -20,9 +24,10 @@ const SearchAddressDialog = ({ open, setModalVisible, onCompletePost }) => {
     setModalVisible(false);
   };
 
-  const handlePostCode = (data) => {
+  const handleAddressSelect = (data) => {
     let fullAddress = data.address;
     let extraAddress = '';
+    let postcode = data.zonecode;
 
     if (data.addressType === 'R') {
       if (data.bname) {
@@ -34,6 +39,15 @@ const SearchAddressDialog = ({ open, setModalVisible, onCompletePost }) => {
           : data.buildingName;
       }
       fullAddress += extraAddress ? ` (${extraAddress})` : '';
+      fullAddress += ' [' + postcode + ']';
+    }
+
+    if (setFormData) {
+      setFormData((prev) => ({
+        ...prev,
+        address: fullAddress,
+        postcode,
+      }));
     }
 
     if (onCompletePost) {
@@ -51,7 +65,10 @@ const SearchAddressDialog = ({ open, setModalVisible, onCompletePost }) => {
         onClose={closeModal}
         onClick={closeModal}
         children={
-          <DaumPostcode style={postCodeStyle} onComplete={handlePostCode} />
+          <DaumPostcode
+            style={postCodeStyle}
+            onComplete={handleAddressSelect}
+          />
         }
       />
     )
