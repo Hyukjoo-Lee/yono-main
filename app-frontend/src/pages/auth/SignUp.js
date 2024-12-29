@@ -12,7 +12,7 @@ import { checkUserIdExists, signUpUser } from '../../apis/userApi';
 import {
   EMAIL_REGEX_MESSAGE,
   EMPTY_ADDRESS_MESSAGE,
-  EMPTY_DETAILED_ADDRESS_MESSAGE,
+  EMPTY_DETAIL_ADDRESS_MESSAGE,
   EMPTY_EMAIL_MESSAGE,
   EMPTY_NAME_MESSAGE,
   EMPTY_PASSWORD_MESSAGE,
@@ -123,19 +123,19 @@ const FORM_FIELDS = {
     },
   },
   address: {
-    placeholder: EMPTY_EMAIL_MESSAGE,
+    placeholder: EMPTY_ADDRESS_MESSAGE,
     text: '주소',
     type: 'text',
     errorMessage: {
       empty: EMPTY_ADDRESS_MESSAGE,
     },
   },
-  detailedAddress: {
-    placeholder: EMPTY_DETAILED_ADDRESS_MESSAGE,
+  detailAddress: {
+    placeholder: EMPTY_DETAIL_ADDRESS_MESSAGE,
     text: '상세주소',
     type: 'text',
     errorMessage: {
-      empty: EMPTY_DETAILED_ADDRESS_MESSAGE,
+      empty: EMPTY_DETAIL_ADDRESS_MESSAGE,
     },
   },
 };
@@ -153,8 +153,8 @@ export function SignUp() {
     name: '',
     email: '',
     address: '',
-    detailedAddress: '',
-    postCode: '',
+    detailAddress: '',
+    zoneCode: '',
   });
 
   const [formMessage, setFormMessage] = useState({
@@ -164,7 +164,7 @@ export function SignUp() {
     name: '',
     email: '',
     address: '',
-    detailedAddress: '',
+    detailAddress: '',
   });
 
   const inputRegexs = {
@@ -175,12 +175,10 @@ export function SignUp() {
   };
 
   const navigate = useNavigate();
-  console.log(formData);
   const handleInputChange = (e, field) => {
     setFormData((prev) => ({ ...prev, [field]: e.target.value }));
     setFormMessage((prev) => ({ ...prev, [field]: '' }));
   };
-
   const validateForm = () => {
     const errors = {};
 
@@ -191,10 +189,6 @@ export function SignUp() {
         errors[field] = FORM_FIELDS.name.errorMessage.invalid;
       } else if (field === 'email' && !inputRegexs.email.test(formData.email)) {
         errors[field] = FORM_FIELDS.email.errorMessage.invalid;
-      } else if (field === 'address') {
-        errors[field] = FORM_FIELDS.address.errorMessage.empty;
-      } else if (field === 'detailedAddress') {
-        errors[field] = FORM_FIELDS.detailedAddress.errorMessage.empty;
       } else if (
         field === 'password' &&
         !inputRegexs.password.test(formData.password)
@@ -211,6 +205,13 @@ export function SignUp() {
     if (formData.password !== formData.confirmPassword) {
       errors.confirmPassword =
         FORM_FIELDS.confirmPassword.errorMessage.mismatch;
+    }
+
+    if (!formData.address) {
+      errors.address = FORM_FIELDS.address.errorMessage.empty;
+    }
+    if (!formData.detailAddress) {
+      errors.detailAddress = FORM_FIELDS.detailAddress.errorMessage.empty;
     }
 
     return errors;
@@ -261,6 +262,7 @@ export function SignUp() {
 
   const handleAddressSelect = (address) => {
     setFormData((prev) => ({ ...prev, address }));
+    setFormMessage((prev) => ({ ...prev, address: '' }));
     setIsAddressModalOpen(false);
   };
 
@@ -366,7 +368,6 @@ export function SignUp() {
               {...InputProps}
             />
             <ButtonWrapper>
-              {/* 아이콘으로 변경 예정 */}
               <CommonButton
                 {...ButtonProps}
                 text="주소검색"
@@ -376,14 +377,16 @@ export function SignUp() {
               />
             </ButtonWrapper>
           </InputUserIdBox>
-          <ValidationMessage
-            text={formMessage.userId}
-            type={isUserIdValidated ? 'success' : 'error'}
-            $margin={'0 10px'}
-          />
+          {formMessage['address'] && (
+            <ValidationMessage
+              text={formMessage['address']}
+              type={'error'}
+              $margin="0 10px"
+            />
+          )}
           <CommonHr />
           <div style={ContainerProps} />
-          {renderInputField('detailedAddress')}
+          {renderInputField('detailAddress')}
           <div style={{ marginBottom: '15px' }}></div>
         </MiddleContainer>
         <CommonButton {...ButtonProps} text="회원가입" onClick={handleSubmit} />

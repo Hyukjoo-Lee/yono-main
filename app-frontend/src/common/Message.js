@@ -4,7 +4,7 @@ export const EMPTY_EMAIL_MESSAGE = '이메일을 입력하세요.';
 export const EMPTY_PASSWORD_MESSAGE = '비밀번호를 입력하세요.';
 export const EMPTY_NAME_MESSAGE = '이름을 입력하세요.';
 export const EMPTY_ADDRESS_MESSAGE = '주소를 등록하세요.';
-export const EMPTY_DETAILED_ADDRESS_MESSAGE = '상세주소를 입력하세요.';
+export const EMPTY_DETAIL_ADDRESS_MESSAGE = '상세주소를 입력하세요.';
 
 export const EMPTY_CARDNUM_MESSAGE = '카드번호를 입력하세요.';
 export const EMPTY_CVC_MESSAGE = 'CVC를 입력하세요.';

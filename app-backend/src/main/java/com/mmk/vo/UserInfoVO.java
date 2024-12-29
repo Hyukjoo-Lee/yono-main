@@ -45,6 +45,12 @@ public class UserInfoVO {
     @Column(name = "address", nullable = false)
     private String address;
 
+    @Column(name = "detail_address")
+    private String detailAddress;
+
+    @Column(name = "zonecode")
+    private String zoneCode;
+
     @Column(name = "spending_target", columnDefinition = "int default 0")
     private int spendingTarget = 0;
 
