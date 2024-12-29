@@ -30,7 +30,7 @@ export const modifyUser = async (formData) => {
         'Content-Type': 'multipart/form-data',
       },
     });
-    console.log(response.data);
+    console.log(response);
   } catch (error) {
     console.error('회원 정보 수정 실패', error);
   }

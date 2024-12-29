@@ -17,7 +17,10 @@ const ProfileContainer = styled.div`
 const ProfileImage = styled.div`
   display: flex;
   justify-content: center;
+  align-items: center;
   overflow: hidden;
+  width: 100%;
+  height: 100%;
   border-radius: 50%;
   & svg {
     width: 70%;
