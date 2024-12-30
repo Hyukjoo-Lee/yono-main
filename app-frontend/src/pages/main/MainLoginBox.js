@@ -10,7 +10,7 @@ const StyledWrap = styled.div`
 `;
 
 const StyledCardP = styled.p`
-  font-size: 30px;
+  font-size: ${(props) => props.theme.fontSize.xl};
   font-weight: bold;
   margin: 0;
   padding-bottom: 30px;
