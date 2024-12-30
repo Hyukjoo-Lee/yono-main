@@ -94,6 +94,7 @@ public class UserServiceImpl implements UserService {
     // DTO → Entity 변환
     private UserInfoEntity toEntity(UserDTO dto) {
         UserInfoEntity entity = new UserInfoEntity();
+        entity.setUserNum(dto.getUserNum());
         entity.setUserId(dto.getUserId());
         entity.setPassword(dto.getPassword());
         entity.setEmail(dto.getEmail());
@@ -103,6 +104,8 @@ public class UserServiceImpl implements UserService {
         entity.setPostcode(dto.getPostcode());
         entity.setSpendingTarget(dto.getSpendingTarget());
         entity.setProfile(dto.getProfile());
+        entity.setCreatedAt(dto.getCreatedAt());
+        entity.setUpdatedAt(dto.getUpdatedAt());
         return entity;
     }
 
@@ -119,6 +122,8 @@ public class UserServiceImpl implements UserService {
         dto.setPostcode(entity.getPostcode());
         dto.setSpendingTarget(entity.getSpendingTarget());
         dto.setProfile(entity.getProfile());
+        dto.setCreatedAt(entity.getCreatedAt());
+        dto.setUpdatedAt(entity.getUpdatedAt());
         return dto;
     }
 

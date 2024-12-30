@@ -36,6 +36,7 @@ export function MyPage() {
         postcode: users.postcode,
         spendingTarget: users.spendingTarget,
         profile: users.profile,
+        createdAt: users.createdAt,
       }
     : null;
 

@@ -85,7 +85,7 @@ const CheckUserInfo = ({
     email: email || '',
     name: name || '',
     address: address || '',
-    spendingTarget: spendingTarget || '',
+    spendingTarget: spendingTarget || 0,
     profile: profile || '',
     createdAt: createdAt || '',
   });
@@ -100,7 +100,7 @@ const CheckUserInfo = ({
       email: email || '',
       name: name || '',
       address: address || '',
-      spendingTarget: spendingTarget || '',
+      spendingTarget: spendingTarget || 0,
       profile: profile || '',
       createdAt: createdAt || '',
     });
@@ -139,15 +139,20 @@ const CheckUserInfo = ({
     setProfileImage(profile);
     setPreviewImage(profile);
 
-    userInfo.userId = userId;
-    userInfo.originPassword = '';
-    userInfo.newPassword = '';
-    userInfo.confirmPassword = '';
-    userInfo.email = email;
-    userInfo.name = name;
-    userInfo.address = address;
-    userInfo.spendingTarget = spendingTarget;
-    userInfo.profile = profile;
+    setUserInfo({
+      userNum: userNum,
+      userId: userId || '',
+      originPassword: '',
+      newPassword: '',
+      confirmPassword: '',
+      email: email || '',
+      name: name || '',
+      address: address || '',
+      spendingTarget: spendingTarget || '',
+      profile: profile || '',
+      createdAt: createdAt || '',
+    });
+
     setIsEditing(!isEditing);
   };
 
@@ -188,8 +193,10 @@ const CheckUserInfo = ({
     formData.append('userInfo', JSON.stringify(updatedUserInfo));
     formData.append('profileImage', profileImage);
 
+    formData.forEach((value, key) => console.log(key, value));
+
     modifyUser(formData);
-    window.location.reload();
+    // window.location.reload();
   };
 
   const deleteId = () => {};

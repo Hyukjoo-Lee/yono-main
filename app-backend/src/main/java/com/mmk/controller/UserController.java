@@ -137,16 +137,18 @@ public class UserController {
     @PutMapping("/{userNum}")
     public ResponseEntity<ApiResponse<UserDTO>> updateUser(
         @RequestParam("userInfo") String userInfoJson,
-        @RequestParam("profileImage") MultipartFile profileImage,
+        @RequestParam(value="profileImage", required=false) MultipartFile profileImage,
+        @RequestParam(value="profileImage", required=false) String profileText,
         HttpServletRequest request) {
 
             // String uploadFolder = request.getSession().getServletContext().getRealPath("/static/images");
             String uploadFolder = System.getProperty("user.dir") + "/app-backend/src/main/resources/static/images";
 
+            System.out.println("userInfoJson: " + userInfoJson);
             try {
                 UserDTO uv = new ObjectMapper().readValue(userInfoJson, UserDTO.class);
 
-                if (!profileImage.isEmpty()) {
+                if (profileImage != null && !profileImage.isEmpty()) {
                     String fileName = profileImage.getOriginalFilename();
 
                     if (fileName == null || fileName.isEmpty()) {
