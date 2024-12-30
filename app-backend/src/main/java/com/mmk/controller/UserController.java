@@ -155,9 +155,12 @@ public class UserController {
     public ResponseEntity<ApiResponse<UserDTO>> updateUser(
         @RequestParam("userInfo") String userInfoJson,
         @RequestParam(value="profileImage", required=false) MultipartFile profileImage,
-        @RequestParam(value="profileImage", required=false) String profileText,
-        HttpServletRequest request) {
+        @RequestParam(value="profileText", required=false) String profileText) {
 
+            System.out.println(profileImage);
+            System.out.println(profileText);
+            System.out.println(userInfoJson);
+            
             // String uploadFolder = request.getSession().getServletContext().getRealPath("/static/images");
             String uploadFolder = System.getProperty("user.dir") + "/app-backend/src/main/resources/static/images";
 
