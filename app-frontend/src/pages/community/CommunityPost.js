@@ -1,7 +1,7 @@
 import styled from 'styled-components';
 import CommonButton from '../../common/CommonButton';
 import CommonInput from '../../common/CommonInput';
-import { useNavigate } from 'react-router-dom';
+import { useLocation, useNavigate } from 'react-router-dom';
 import { ReactComponent as Profile } from '../../assets/images/Profile.svg';
 import CommonHr from '../../common/CommonHr';
 import HeartImg from '../../assets/images/HeartImg.png';
@@ -38,19 +38,6 @@ const Root = styled.div`
   height: 100%;
 `;
 
-const Box = styled.div`
-  display: flex;
-  justify-content: flex-end;
-  align-items: flex-start;
-  height: 300px;
-  border: 1px solid gray;
-  margin-top: 10px;
-`;
-const Detailbox = styled.div`
-  display: flex;
-  justify-content: flex-end;
-  align-items: flex-end;
-`;
 const Listbox = styled.div`
   margin: 20px 0px 20px 0px;
   display: flex;
@@ -137,7 +124,10 @@ const commonButtonProps = {
   height: '50px',
 };
 export function CommunityPost() {
+  const location = useLocation();
+  const { rowData } = location.state; // rowData에 상세 데이터가 들어 있음
   const navigate = useNavigate();
+
   const handleNavigateToCommunity = () => {
     navigate('/community');
   };
@@ -164,18 +154,17 @@ export function CommunityPost() {
 
   return (
     <Root>
-      <label>제목</label>
+      <h2>{rowData.title}</h2> {/* 전달된 데이터에서 제목을 표시 */}
       <CommonHr
         width="918px"
         borderWidth="2px"
         borderColor="black"
         margin="10px auto 20px"
       />
-      <Detailbox>
-        <label>2024.11.22 | 작성자 OOO |조회수 n</label>
-      </Detailbox>
-      <Box></Box>
-
+      <div style={{ textAlign: 'right' }}>
+        {rowData.author} | {rowData.regdate} | 조회수 {rowData.views}
+      </div>{' '}
+      <div style={{ width: '100%' }}>{rowData.content}</div> {/* 내용 표시 */}
       <Listbox>
         <CommonInput
           width="810px"
@@ -189,7 +178,6 @@ export function CommunityPost() {
           {...commonButtonProps}
         />
       </Listbox>
-
       <CommentBox>
         {comments.map((comment, index) => {
           return (
@@ -216,7 +204,6 @@ export function CommunityPost() {
           );
         })}
       </CommentBox>
-
       <BottomBox>
         <CommonButton
           text="목록"

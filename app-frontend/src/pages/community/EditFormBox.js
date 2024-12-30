@@ -74,7 +74,7 @@ export function EditFormBox() {
   const [categoryOption, setcategoryOption] = useState('');
   return (
     <Root>
-      <CommonPageInfo title={'수정게시판'} text={<p></p>} />
+      <CommonPageInfo title={'게시판 수정'} text={<p></p>} />
       <CommonHr />
       <FormBox>
         <Row>

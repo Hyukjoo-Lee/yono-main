@@ -118,6 +118,7 @@ public class UserServiceImpl implements UserService {
     // DTO → Entity 변환
     private UserEntity toEntity(UserDTO dto) {
         UserEntity entity = new UserEntity();
+        entity.setUserNum(dto.getUserNum());
         entity.setUserId(dto.getUserId());
         entity.setPassword(dto.getPassword());
         entity.setEmail(dto.getEmail());
