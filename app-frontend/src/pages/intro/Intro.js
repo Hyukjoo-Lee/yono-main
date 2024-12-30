@@ -21,6 +21,14 @@ const StyledInfoImg = styled.div`
   height: 750px;
   border-radius: 7px;
   background-color: #eff3fd;
+  display: flex;
+  justify-content: center;
+  align-items: center; /* 수직 중앙 정렬 */
+  & p {
+    font-size: 32px;
+    // font-weight: bold;
+    text-align: center; /* 텍스트 가운데 정렬 */
+  }
 `;
 
 const StyledInfo = styled.div`
@@ -75,7 +83,7 @@ export function Intro() {
                 style={{ width: '100%', height: 'auto' }}
               />
             ) : (
-              <p>왼쪽 아이콘 클릭!</p>
+              <p>왼쪽 아이콘을 클릭해보세요!</p>
             )}
           </StyledInfoImg>
           <StyledInfo className="info">
