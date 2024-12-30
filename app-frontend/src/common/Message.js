@@ -31,8 +31,8 @@ export const ENGNAME_REGEX_MESSAGE = '영문 이름을 정확히 입력해주세
 
 // 일치 여부 관련
 export const PASSWORD_MISMATCH_MESSAGE = '비밀번호가 일치하지 않습니다.';
-export const USERID_VERIFIED_MESSAGE = '아이디를 확인해 주세요.';
-export const PASSWORD_VERIFIED_MESSAGE = '비밀번호를 확인해 주세요.';
+export const LOGIN_VERIFIED_MESSAGE =
+  '아이디 또는 비밀번호가 일치하지 않습니다.';
 
 // 중복 확인 관련
 export const USERID_DUPLICATE_MESSAGE = '이미 등록된 아이디입니다.';

@@ -8,9 +8,11 @@ import theme from '../../theme/theme';
 import {
   EMPTY_PASSWORD_MESSAGE,
   EMPTY_USERID_MESSAGE,
+  LOGIN_VERIFIED_MESSAGE,
 } from '../../common/Message';
 import { useNavigate } from 'react-router-dom';
 import CommonDialog from '../../common/CommonDialog';
+import { login } from '../../apis/userApi';
 
 const RootIn = styled.div`
   width: ${(props) => props.theme.display.lg};
@@ -112,15 +114,16 @@ const SocialButton = styled.div`
   cursor: pointer;
 `;
 
-export function Login() {
+const Login = () => {
   const [formData, setFormData] = useState({
     userId: '',
     password: '',
   });
 
-  const [alertMessage, setAlertMessage] = useState({
+  const [formMessage, setFormMessage] = useState({
     userId: '',
     password: '',
+    error: '',
   });
 
   const [isLoginSuccessVisible, setIsLoginSuccessVisible] = useState(false);
@@ -142,7 +145,7 @@ export function Login() {
 
   const handleInputChange = (e, field) => {
     setFormData((prev) => ({ ...prev, [field]: e.target.value }));
-    setAlertMessage((prev) => ({ ...prev, [field]: '' }));
+    setFormMessage((prev) => ({ ...prev, [field]: '' }));
   };
 
   const validateForm = () => {
@@ -162,18 +165,19 @@ export function Login() {
   const handleLogin = async (e) => {
     e.preventDefault();
     const errors = validateForm();
-    setAlertMessage(errors);
+    setFormMessage(errors);
 
     if (Object.keys(errors).length > 0) {
-      console.log('there is an error');
       return;
     }
 
     try {
       // 로그인 api 요청
+      console.log(formData);
+      await login(formData);
       setIsLoginSuccessVisible(true);
     } catch (error) {
-      console.log(error);
+      setFormMessage({ error: LOGIN_VERIFIED_MESSAGE });
     }
   };
 
@@ -191,8 +195,8 @@ export function Login() {
                 width="100%"
                 onChange={(e) => handleInputChange(e, 'userId')}
               />
-              {alertMessage.userId && (
-                <ErrorMessage>{alertMessage.userId}</ErrorMessage>
+              {formMessage.userId && (
+                <ErrorMessage>{formMessage.userId}</ErrorMessage>
               )}
             </InputWrapper>
             <InputWrapper>
@@ -204,8 +208,11 @@ export function Login() {
                 type="password"
                 onChange={(e) => handleInputChange(e, 'password')}
               />
-              {alertMessage.password && (
-                <ErrorMessage>{alertMessage.password}</ErrorMessage>
+              {formMessage.password && (
+                <ErrorMessage>{formMessage.password}</ErrorMessage>
+              )}
+              {formMessage.error && (
+                <ErrorMessage>{formMessage.error}</ErrorMessage>
               )}
             </InputWrapper>
             <OptionsWrapper>
@@ -251,4 +258,6 @@ export function Login() {
       </RootIn>
     </CommonRoot>
   );
-}
+};
+
+export default Login;

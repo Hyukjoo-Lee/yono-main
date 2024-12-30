@@ -2,25 +2,25 @@ package com.mmk.dao;
 
 import java.util.List;
 
-import com.mmk.entity.UserInfoEntity;
+import com.mmk.entity.UserEntity;
 
 public interface UserDAO {
 
-    void createUser(UserInfoEntity uEntity);
+    void createUser(UserEntity uEntity);
 
-    UserInfoEntity getUserById(int id);
+    UserEntity getUserById(int id);
 
-    UserInfoEntity getUserByUserId(String userId);
+    UserEntity getUserByUserId(String userId);
 
-    UserInfoEntity getUserByEmail(String email);
+    UserEntity getUserByEmail(String email);
 
-    List<UserInfoEntity> getAllUsers();
+    List<UserEntity> getAllUsers();
 
     boolean existsByUserId(String userId);
 
     boolean existsByEmail(String email);
 
-    void updateUser(UserInfoEntity uEntity);
+    void updateUser(UserEntity uEntity);
 
     void deleteUser(int id);
 }

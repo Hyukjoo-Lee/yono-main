@@ -9,6 +9,16 @@
       "projectName": "app-backend",
       "args": "",
       "envFile": "${workspaceFolder}/.env"
+    },
+    {
+      "type": "java",
+      "name": "Spring Boot-Token<app-backend>",
+      "request": "launch",
+      "cwd": "${workspaceFolder}",
+      "mainClass": "com.mmk.codef.Token",
+      "projectName": "app-backend",
+      "args": "",
+      "envFile": "${workspaceFolder}/.env"
     }
   ]
 }

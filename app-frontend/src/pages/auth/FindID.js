@@ -39,16 +39,6 @@ const MiddleContainer = styled.div`
   justify-content: center;
 `;
 
-// const HiddenBox = styled.div`
-//   display: flex;
-//   margin-left: 58%;
-//   margin-bottom: 2%;
-// `;
-// const ErrorMessage = styled.div`
-//   color: red;
-//   font-size: 13px;
-// `;
-
 const ButtonContainer = styled.div`
   margin-top: 10px;
   display: flex;
@@ -96,7 +86,7 @@ const emailValidMessages = [
   '이메일 인증을 확인하세요!',
 ];
 
-export const FindID = () => {
+const FindID = () => {
   const navigate = useNavigate();
 
   const [formData, setFormData] = useState({
@@ -284,3 +274,5 @@ export const FindID = () => {
     </CommonRoot>
   );
 };
+
+export default FindID;
