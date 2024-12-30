@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import styled from 'styled-components';
+import { useNavigate } from 'react-router-dom';
 import CustomButton from '../../common/CommonButton';
 import CommonInput from '../../common/CommonInput';
 import { modifyUser } from '../../apis/userApi';
@@ -68,6 +69,8 @@ const CheckUserInfo = ({
   email,
   name,
   address,
+  detailAddress,
+  postcode,
   spendingTarget,
   profile,
   createdAt,
@@ -85,6 +88,8 @@ const CheckUserInfo = ({
     email: email || '',
     name: name || '',
     address: address || '',
+    detailAddress: detailAddress || '',
+    postcode: postcode || '',
     spendingTarget: spendingTarget || 0,
     profile: profile || '',
     createdAt: createdAt || '',
@@ -100,6 +105,8 @@ const CheckUserInfo = ({
       email: email || '',
       name: name || '',
       address: address || '',
+      detailAddress: detailAddress || '',
+      postcode: postcode || '',
       spendingTarget: spendingTarget || 0,
       profile: profile || '',
       createdAt: createdAt || '',
@@ -112,6 +119,8 @@ const CheckUserInfo = ({
     email,
     name,
     address,
+    detailAddress,
+    postcode,
     spendingTarget,
     profile,
     createdAt,
@@ -148,6 +157,8 @@ const CheckUserInfo = ({
       email: email || '',
       name: name || '',
       address: address || '',
+      detailAddress: detailAddress || '',
+      postcode: postcode || '',
       spendingTarget: spendingTarget || '',
       profile: profile || '',
       createdAt: createdAt || '',
@@ -168,6 +179,8 @@ const CheckUserInfo = ({
       return 2;
     }
   };
+
+  const navigate = useNavigate();
 
   const save = () => {
     if (isFormValid() === 1) {
@@ -191,11 +204,17 @@ const CheckUserInfo = ({
 
     const formData = new FormData();
     formData.append('userInfo', JSON.stringify(updatedUserInfo));
-    formData.append('profileImage', profileImage);
+    if (profileImage instanceof File) {
+      formData.append('profileImage', profileImage);
+    } else {
+      formData.append('profileText', profileImage);
+    }
 
     formData.forEach((value, key) => console.log(key, value));
 
-    modifyUser(formData);
+    modifyUser(formData).then((response) => {
+      navigate(0);
+    });
     // window.location.reload();
   };
 

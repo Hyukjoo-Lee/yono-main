@@ -11,7 +11,7 @@ export function MyPage() {
   useEffect(() => {
     const fetchUser = async () => {
       try {
-        const userNum = 68; // 현재 로그인한 유저의 userNum
+        const userNum = 71; // 현재 로그인한 유저의 userNum
         const user = await findUserById(userNum);
         setUsers(user.data);
         console.log(user.data);
@@ -24,21 +24,7 @@ export function MyPage() {
     fetchUser();
   }, []);
 
-  const userInfo = users
-    ? {
-        userNum: users.userNum,
-        userId: users.userId,
-        password: users.password,
-        email: users.email,
-        name: users.name,
-        address: users.address,
-        detailAddress: users.detailAddress,
-        postcode: users.postcode,
-        spendingTarget: users.spendingTarget,
-        profile: users.profile,
-        createdAt: users.createdAt,
-      }
-    : null;
+  const userInfo = users ? { ...users } : null;
 
   if (!users) {
     return <div>Loading...</div>;

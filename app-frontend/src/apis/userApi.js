@@ -27,6 +27,10 @@ export const modifyUser = async (formData) => {
   try {
     const parsedUserInfo = JSON.parse(formData.get('userInfo'));
     console.log(parsedUserInfo.userNum);
+
+    console.log('FormData userInfo:', formData.get('userInfo'));
+    console.log('Parsed userInfo:', parsedUserInfo);
+
     await axios.put(`/user/${parsedUserInfo.userNum}`, formData, {
       headers: {
         'Content-Type': 'multipart/form-data',
