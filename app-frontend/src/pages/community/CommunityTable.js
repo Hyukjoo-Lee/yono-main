@@ -183,7 +183,7 @@ export function CommunityTable() {
           <CommonButton
             width="74px"
             height="39px"
-            background-color="#3563E9"
+            background="#3563E9"
             color="white"
             text="검색"
             borderRadius="5px"

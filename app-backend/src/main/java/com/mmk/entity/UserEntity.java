@@ -1,4 +1,4 @@
-package com.mmk.vo;
+package com.mmk.entity;
 
 import java.sql.Timestamp;
 
@@ -22,7 +22,7 @@ import lombok.ToString;
 @Entity
 @SequenceGenerator(name = "user_seq_generator", sequenceName = "user_seq", initialValue = 1, allocationSize = 1)
 @Table(name = "user_info")
-public class UserInfoVO {
+public class UserEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "user_seq_generator")
@@ -44,6 +44,12 @@ public class UserInfoVO {
 
     @Column(name = "address", nullable = false)
     private String address;
+
+    @Column(name = "detail_address")
+    private String detailAddress;
+
+    @Column(name = "postcode")
+    private String postcode;
 
     @Column(name = "spending_target", columnDefinition = "int default 0")
     private int spendingTarget = 0;

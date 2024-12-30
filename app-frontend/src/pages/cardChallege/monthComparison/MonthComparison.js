@@ -1,5 +1,7 @@
 import React from 'react';
 import styled from 'styled-components';
+import Barchart from './Barchart';
+import useCountUp from './UseCountUp';
 import Barchart from '../../cardAnalysis/monthlyStatistics/chart/Barchart';
 import { useEffect, useState } from 'react';
 
@@ -11,6 +13,37 @@ const Root = styled.div`
   align-items: center;
 `;
 
+const TextWrap = styled.div`
+  width: 720px;
+  height: 530px;
+  margin-right: 30px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  // border: 1px solid rgba(169, 169, 169, 0.3);
+  // border-radius: 7px;
+`;
+
+const Titlediv = styled.div`
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: 30px;
+  // font-weight: bold;
+  padding-bottom: 30px;
+`;
+
+// const Titlediv2 = styled.div`
+//   display: flex;
+//   justify-content: center;
+//   align-items: center;
+//   font-size: 30px;
+// `;
+
+const BarchartWrap = styled.div`
+  width: 480px;
+  height: 530px;
 const Box = styled.div`
   display: flex;
   flex-direction: column;
@@ -28,12 +61,14 @@ const Box = styled.div`
 
 const barchart_data = [
   {
-    bottle: '9월',
-    식비: 1200,
-    교통비: 1000,
-    쇼핑: 1100,
-    문화: 3000,
-    전자제품: 1500,
+    bottle: '저번달',
+    목표금액: 3000,
+    사용금액: 2000,
+  },
+  {
+    bottle: '이번달',
+    목표금액: 2000,
+    사용금액: 1500,
   },
   {
     bottle: '10월',
@@ -52,6 +87,11 @@ const barchart_data = [
     전자제품: 10500,
   },
 ];
+
+const MonthComparision = () => {
+  const previousMonthAmount = useCountUp(2000000); // 전달 금액
+  const currentMonthAmount = useCountUp(1000000); // 이번달 금액
+  const badgeCount = useCountUp(200); // 예상 뱃지 개수
 
 const MonthComparision = ({ ...props }) => {
   // 임의의 초기값 지정 (UI만 확인하기 위한 고정값)
@@ -94,16 +134,28 @@ const MonthComparision = ({ ...props }) => {
 
   return (
     <Root>
-      <Box>
-        <div>
-          <h2>이번달 쓴 금액은 {animatedCurrentSpending} 입니다</h2>
-        </div>
-
-        <div>
-          <h2>저번달 쓴 금액은 {animatedLastSpending}입니다다</h2>
-        </div>
-      </Box>
-      <Barchart data={barchart_data} />
+      <TextWrap>
+        <Titlediv>
+          전달에 사용하신 금액은 &nbsp;{' '}
+          <b>{previousMonthAmount.toLocaleString()}원</b>&nbsp; 입니다.
+        </Titlediv>
+        {/* <Titlediv2>{previousMonthAmount.toLocaleString()}원 입니다.</Titlediv2> */}
+        <br />
+        <Titlediv>
+          이번달에 사용하신 금액은 &nbsp;
+          <b>{currentMonthAmount.toLocaleString()}원</b>&nbsp; 입니다.
+        </Titlediv>
+        {/* <Titlediv2>{currentMonthAmount.toLocaleString()}원 입니다.</Titlediv2> */}
+        <br />
+        <Titlediv>
+          이번달 예상 뱃지 갯수는 &nbsp; <b>{badgeCount.toLocaleString()}개</b>
+          &nbsp; 입니다.
+        </Titlediv>
+        {/* <Titlediv2>{badgeCount.toLocaleString()}개 입니다.</Titlediv2> */}
+      </TextWrap>
+      <BarchartWrap>
+        <Barchart data={barchart_data} />
+      </BarchartWrap>
     </Root>
   );
 };

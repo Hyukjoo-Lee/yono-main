@@ -1,12 +1,20 @@
 import React, { useState } from 'react';
-import AlarmPw from './AlarmPw';
 import styled from 'styled-components';
-import CustomButton from '../../common/CommonButton';
+import CommonButton from '../../common/CommonButton';
 import CommonInput from '../../common/CommonInput';
 import CommonRoot from '../../common/CommonRoot';
 import CommonPageInfo from '../../common/CommonPageInfo';
 import { useNavigate } from 'react-router-dom';
 import CommonHr from '../../common/CommonHr';
+import theme from '../../theme/theme';
+import ValidationMessage from '../../common/ValidationMessage';
+import {
+  EMAIL_REGEX_MESSAGE,
+  EMPTY_EMAIL_MESSAGE,
+  EMPTY_EMAILCODE_MESSAGE,
+  EMPTY_NAME_MESSAGE,
+  EMPTY_USERID_MESSAGE,
+} from '../../common/Message';
 
 const RootIn = styled.div`
   display: flex;
@@ -17,6 +25,7 @@ const RootIn = styled.div`
   margin: 0 auto;
   box-sizing: border-box;
 `;
+
 const FullContainer = styled.div`
   display: flex;
   flex-direction: column;
@@ -31,129 +40,204 @@ const MiddleContainer = styled.div`
   align-items: center;
 `;
 
-// const HiddenBox = styled.div`
-//   display: flex;
-//   margin-left: 58%;
-//   margin-bottom: 2%;
-// `;
-// const ErrorMessage = styled.div`
-//   color: red;
-//   font-size: 13px;
-// `;
-
 const ButtonContainer = styled.div`
   margin-top: 10px;
   display: flex;
-  flex-direction: flex-end;
   justify-content: space-between;
   width: 45%;
 `;
+
+const CodeContainer = styled.div`
+  width: 300px;
+  display: flex;
+`;
+
+const CodeInput = styled.div`
+  width: 200px;
+`;
+
+const CodeButton = styled.div`
+  display: flex;
+  align-items: flex-end;
+  justify-content: flex-end;
+  width: 100px;
+  padding: 15px 5px;
+`;
+
 const styleProps = {
   height: '35px',
-  width: '300px',
   background: 'transparent',
   $marginLeft: '7px',
-};
-const ContainerProps = {
-  marginBottom: '3px',
+  color: '#464646',
+  focusBorderWidth: '10px',
+  $borderColor: 'transparent',
+  $focusBorderColor: 'transparent',
 };
 
-export const FindPassword = () => {
-  const find = '비밀번호 찾기';
+const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+
+const FindPassword = () => {
   const navigate = useNavigate();
 
-  const [isDialogPWVisible, setIsDialogPWVisible] = useState(false);
-  // const [answer, setAnswer] = useState('');
-  // const [selectedQuestion, setSelectedQuestion] = useState('');
-  // const [errorMessage, setErrorMessage] = useState('');
+  const [formData, setFormData] = useState({
+    name: '',
+    userId: '',
+    email: '',
+    emailCode: '',
+  });
 
-  const handleConfirm = () => {
-    setIsDialogPWVisible(true);
+  const [formMessage, setFormMessage] = useState({
+    name: '',
+    userId: '',
+    email: '',
+    emailCode: '',
+  });
+
+  const [isEmailCodeVisible, setIsEmailCodeVisible] = useState(false);
+
+  const validateField = (field, value) => {
+    if (!value) {
+      if (field === 'name') return EMPTY_NAME_MESSAGE;
+      if (field === 'userId') return EMPTY_USERID_MESSAGE;
+      if (field === 'email') return EMPTY_EMAIL_MESSAGE;
+      if (field === 'emailCode') return EMPTY_EMAILCODE_MESSAGE;
+    }
+    if (field === 'email' && !emailRegex.test(value)) {
+      return EMAIL_REGEX_MESSAGE;
+    }
+    return '';
   };
-  // const UpdateAnswer = (e) => {
-  //   setAnswer(e.target.value);
-  // };
-  const handleClose = () => {
-    navigate('/Login');
+
+  const validateForm = () => {
+    const errors = {};
+    Object.keys(formData).forEach((field) => {
+      const error = validateField(field, formData[field]);
+      if (error) errors[field] = error;
+    });
+    setFormMessage(errors);
+    return Object.keys(errors).length === 0;
   };
+
+  const handleInputChange = (e, field) => {
+    setFormData((prev) => ({ ...prev, [field]: e.target.value }));
+    setFormMessage((prev) => ({ ...prev, [field]: '' }));
+  };
+
+  const handleSendCode = () => {
+    if (!formData.email || formMessage.email) return;
+    setIsEmailCodeVisible(true);
+  };
+
+  const handleConfirmCode = () => {
+    if (formData.emailCode === '1234') {
+      alert('인증 성공!');
+      navigate('/reset-password');
+    } else {
+      setFormMessage((prev) => ({
+        ...prev,
+        emailCode: '인증 코드가 일치하지 않습니다.',
+      }));
+    }
+  };
+
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    if (!validateForm()) return;
+    handleSendCode();
+  };
+
   return (
     <CommonRoot>
       <RootIn>
         <FullContainer>
-          <CommonPageInfo title={find} text={<p></p>} />
+          <CommonPageInfo title="비밀번호 찾기" />
 
           <MiddleContainer>
             <CommonInput
               text="이름"
-              color="#464646"
               placeholder="이름을 입력하세요"
-              focusBorderWidth="10px"
-              $borderColor="transparent"
-              $focusBorderColor="transparent"
+              width="300px"
+              value={formData.name}
+              onChange={(e) => handleInputChange(e, 'name')}
               {...styleProps}
-              // onChange={onChange}
             />
-            <div style={ContainerProps} />
-
+            {formMessage.name && <ValidationMessage text={formMessage.name} />}
             <CommonHr />
-            <div style={ContainerProps} />
-
-            <CommonInput
-              text="이메일"
-              color="#464646"
-              placeholder="이메일을 입력하세요"
-              focusBorderWidth="10px"
-              $borderColor="transparent"
-              $focusBorderColor="transparent"
-              {...styleProps}
-              // onChange={onChange}
-            />
-            <CommonHr />
-            <div style={ContainerProps} />
 
             <CommonInput
               text="아이디"
-              color="#464646"
               placeholder="아이디를 입력하세요"
-              focusBorderWidth="10px"
-              $borderColor="transparent"
-              $focusBorderColor="transparent"
+              width="300px"
+              value={formData.userId}
+              onChange={(e) => handleInputChange(e, 'userId')}
               {...styleProps}
-              // onChange={onChange}
             />
+            {formMessage.userId && (
+              <ValidationMessage text={formMessage.userId} />
+            )}
             <CommonHr />
+
+            <CommonInput
+              text="이메일"
+              placeholder="이메일을 입력하세요"
+              width="300px"
+              value={formData.email}
+              onChange={(e) => handleInputChange(e, 'email')}
+              {...styleProps}
+            />
+            {formMessage.email && (
+              <ValidationMessage text={formMessage.email} />
+            )}
+            <CommonHr />
+
+            {isEmailCodeVisible && (
+              <CodeContainer>
+                <CodeInput>
+                  <CommonInput
+                    text="인증코드"
+                    placeholder="인증코드를 입력하세요"
+                    width="100%"
+                    value={formData.emailCode}
+                    onChange={(e) => handleInputChange(e, 'emailCode')}
+                    {...styleProps}
+                  />
+                  {formMessage.emailCode && (
+                    <ValidationMessage text={formMessage.emailCode} />
+                  )}
+                </CodeInput>
+                <CodeButton>
+                  <CommonButton
+                    text="확인"
+                    width="50%"
+                    height="30px"
+                    fontSize={theme.fontSize.sm}
+                    onClick={handleConfirmCode}
+                  />
+                </CodeButton>
+              </CodeContainer>
+            )}
           </MiddleContainer>
-          {/* <HiddenBox></HiddenBox> */}
 
           <ButtonContainer>
-            <CustomButton
+            <CommonButton
               text="확인"
               width="50px"
               height="30px"
-              background="#4064E6"
-              color="#ffffff"
-              fontSize="20"
-              onClick={handleConfirm}
+              fontSize={theme.fontSize.sm}
+              onClick={handleSubmit}
             />
-            <CustomButton
+            <CommonButton
               text="취소"
               width="50px"
               height="30px"
-              background="#ffffff"
-              $borderColor="#4064E6"
-              color="#4064E6"
-              hoverBk="#ffffff"
-              fontSize="20"
-              onClick={handleClose}
+              fontSize={theme.fontSize.sm}
+              onClick={() => navigate('/login')}
             />
           </ButtonContainer>
         </FullContainer>
-        <AlarmPw
-          open={isDialogPWVisible}
-          $setIsDialogPWVisible={setIsDialogPWVisible}
-        />
       </RootIn>
     </CommonRoot>
   );
 };
+
 export default FindPassword;

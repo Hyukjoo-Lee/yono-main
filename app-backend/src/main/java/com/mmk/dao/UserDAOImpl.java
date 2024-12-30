@@ -1,37 +1,65 @@
 package com.mmk.dao;
 
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
-import com.mmk.vo.UserInfoVO;
+import com.mmk.entity.UserEntity;
 
+/**
+ * DAO (Data Access Object): 데이터 베이스에 CRUD 작업을 하는 객체이다.
+ */
 @Repository
 public class UserDAOImpl implements UserDAO {
 
     @Autowired
-    UserRepository userRepository;
+    private UserRepository userRepository;
 
     @Override
     public boolean existsByUserId(String userId) {
-        return this.userRepository.existsByUserId(userId);
+        return userRepository.existsByUserId(userId);
     }
 
     @Override
     public boolean existsByEmail(String email) {
-        return this.userRepository.existsByEmail(email);
+        return userRepository.existsByEmail(email);
     }
 
     @Override
-    public void createUser(UserInfoVO uv) {
-        this.userRepository.save(uv);
+    public void createUser(UserEntity userEntity) {
+        userRepository.save(userEntity);
+    }
+
+    @Override
+    public UserEntity getUserById(int id) {
+        UserEntity userInfoEntity = userRepository.getReferenceById(id);
+        return userInfoEntity;
+    }
+
+    @Override
+    public UserEntity getUserByUserId(String userId) {
+        UserEntity userInfoEntity = userRepository.findByUserId(userId);
+        return userInfoEntity;
+    }
+
+    @Override
+    public UserEntity getUserByEmail(String email) {
+        return userRepository.findByEmail(email);
+    }
+
+    @Override
+    public List<UserEntity> getAllUsers() {
+        return userRepository.findAll();
+    }
+
+    @Override
+    public void updateUser(UserEntity userEntity) {
+        userRepository.save(userEntity);
     }
 
     @Override
     public void deleteUser(int id) {
+        userRepository.deleteById(id);
     }
-
-    @Override
-    public void updateUser(UserInfoVO uv) {
-    }
-
 }
