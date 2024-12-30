@@ -10,8 +10,6 @@ const TextWrap = styled.div`
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  // border: 1px solid rgba(169, 169, 169, 0.3);
-  // border-radius: 7px;
 `;
 
 const Titlediv = styled.div`
@@ -24,28 +22,28 @@ const Titlediv = styled.div`
   width: 335px;
   height: 235px;
   margin-top: 20px;
-  background-color: #eff3fd;
+  background-color: ${(props) => props.theme.color.lightBlue};
   & p {
     padding-bottom: 30px;
-    font-size: 20px;
+    font-size: ${(props) => props.theme.fontSize.md};
     margin: 0px;
   }
   & span {
-    font-size: 30px;
+    font-size: ${(props) => props.theme.fontSize.xl};
     font-weight: bold;
   }
 `;
 
 const TitleGroup = styled.div`
   display: flex;
-  justify-content: space-between; /* 두 Titlediv를 좌우로 배치 */
+  justify-content: space-between;
   width: 100%;
 `;
 
 const MonthComparisionTable = () => {
   const previousMonthAmount = useCountUp(2000000); // 전달 금액
   const currentMonthAmount = useCountUp(1000000); // 이번달 금액
-  const previousbadgeCount = useCountUp(200); // 예상 뱃지 개수
+  const previousbadgeCount = useCountUp(200); // 전달 뱃지 갯수
   const currentbadgeCount = useCountUp(300); // 예상 뱃지 개수
 
   return (
