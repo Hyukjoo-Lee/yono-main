@@ -12,7 +12,8 @@ import {
 } from '../../common/Message';
 import { useNavigate } from 'react-router-dom';
 import CommonDialog from '../../common/CommonDialog';
-import { login } from '../../apis/userApi';
+import { useDispatch, useSelector } from 'react-redux';
+import { loginUser } from '../../redux/actions/userAction';
 
 const RootIn = styled.div`
   width: ${(props) => props.theme.display.lg};
@@ -128,7 +129,9 @@ const Login = () => {
 
   const [isLoginSuccessVisible, setIsLoginSuccessVisible] = useState(false);
 
+  const dispatch = useDispatch();
   const navigate = useNavigate();
+  const { user, isLoggedIn } = useSelector((state) => state.user);
 
   const handleFindLink = (link) => {
     if (link === 'id') {
@@ -172,10 +175,10 @@ const Login = () => {
     }
 
     try {
-      // 로그인 api 요청
-      console.log(formData);
-      await login(formData);
-      setIsLoginSuccessVisible(true);
+      const result = await dispatch(loginUser(formData));
+      if (loginUser.fulfilled.match(result)) {
+        setIsLoginSuccessVisible(true);
+      }
     } catch (error) {
       setFormMessage({ error: LOGIN_VERIFIED_MESSAGE });
     }
@@ -248,12 +251,14 @@ const Login = () => {
               </SocialButton>
             </SocialLoginWrapper>
           </FormWrapper>
-          <CommonDialog
-            open={isLoginSuccessVisible}
-            children={'로그인에 성공했습니다!'}
-            onClose={completeLogin}
-            onClick={completeLogin}
-          />
+          {isLoggedIn && (
+            <CommonDialog
+              open={isLoginSuccessVisible}
+              children={`환영합니다. ${user.name}님!`}
+              onClose={completeLogin}
+              onClick={completeLogin}
+            />
+          )}
         </FormBox>
       </RootIn>
     </CommonRoot>
