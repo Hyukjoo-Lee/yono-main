@@ -130,7 +130,7 @@ export function MainHeader() {
         <TopListBox>
           {list.map((item, index) =>
             item.isText ? (
-              <StyledText key={index}>{item.label}</StyledText>
+              <StyledText key={index}>{item.label} &nbsp; | </StyledText>
             ) : (
               <StyledLink
                 to={item.path}
