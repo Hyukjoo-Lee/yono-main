@@ -1,6 +1,8 @@
 import { Link } from 'react-router-dom';
 import styled from 'styled-components';
 import { ReactComponent as Logo } from '../assets/images/Logo.svg';
+import { useSelector, useDispatch } from 'react-redux';
+import { logoutUser } from '../redux/actions/userAction';
 
 const Nav = styled.nav`
   position: fixed;
@@ -42,6 +44,7 @@ const StyledLink = styled(Link)`
     background-color: transparent;
   }
 `;
+
 const LineStyle = styled.p`
   margin: 0px 10px;
   font-size: ${(props) => props.theme.fontSize.xs};
@@ -86,14 +89,32 @@ const MenuStyledLink = styled(Link)`
   }
 `;
 
+const StyledText = styled.div`
+  color: ${(props) => props.theme.color.gray};
+  font-size: ${(props) => props.theme.fontSize.xs};
+  font-weight: 500;
+  margin: 0px 10px;
+`;
+
 export function MainHeader() {
-  const list = [
-    { label: '로그인', path: '/login' },
-    { label: '회원가입', path: '/signup' },
-    { label: '마이페이지', path: '/mypage' },
-    // { label: '아이디찾기', path: '/find-id' },
-    // { label: '비밀번호찾기', path: '/find-pwd' },
-  ];
+  const { isLoggedIn, user } = useSelector((state) => state.user);
+  const dispatch = useDispatch();
+
+  const handleLogout = () => {
+    dispatch(logoutUser());
+  };
+
+  const list = isLoggedIn
+    ? [
+        { label: `${user?.name || '사용자'}님`, isText: true },
+        { label: '로그아웃', path: '/', onClick: handleLogout },
+        { label: '마이페이지', path: '/mypage' },
+      ]
+    : [
+        { label: '로그인', path: '/login' },
+        { label: '회원가입', path: '/signup' },
+        { label: '마이페이지', path: '/mypage' },
+      ];
 
   const menuList = [
     { label: 'YONO', path: '/intro' },
@@ -107,14 +128,21 @@ export function MainHeader() {
     <Nav>
       <RootIn>
         <TopListBox>
-          {list.map((item, index) => (
-            <StyledLink to={item.path} key={index}>
-              {item.label}
-              {index !== list.length - 1 && <LineStyle>|</LineStyle>}
-            </StyledLink>
-          ))}
+          {list.map((item, index) =>
+            item.isText ? (
+              <StyledText key={index}>{item.label}</StyledText>
+            ) : (
+              <StyledLink
+                to={item.path}
+                key={index}
+                onClick={item.onClick || null}
+              >
+                {item.label}
+                {index !== list.length - 1 && <LineStyle>|</LineStyle>}
+              </StyledLink>
+            ),
+          )}
         </TopListBox>
-
         <MenuList>
           <LogoLink to="/">
             <Logo />
