@@ -61,10 +61,15 @@ const DayBox = styled.div`
         ? props.theme.color.white
         : props.theme.color.black};
   background: ${(props) =>
-    props.$selected ? props.theme.color.blue : 'transpernt'};
+    props.$selected ? props.theme.color.blue : 'transparent'};
 `;
 
-const CalendarBody = ({ currentMonth, selectedDate, onDateClick }) => {
+const CalendarBody = ({
+  currentMonth,
+  selectedDate,
+  onDateClick,
+  statistics,
+}) => {
   const monthStart = startOfMonth(currentMonth);
   const monthEnd = endOfMonth(monthStart);
   const startDate = startOfWeek(monthStart);
@@ -75,18 +80,32 @@ const CalendarBody = ({ currentMonth, selectedDate, onDateClick }) => {
   let day = startDate;
   let formattedDate = '';
 
+  // 백분율 범위를 계산
+  const getIcon = (totalAmount, targetAmount) => {
+    const percentage = (totalAmount / targetAmount) * 100;
+    if (percentage <= 26) return <ExcellentCoin />;
+    if (percentage <= 51) return <VeryGoodCoin />;
+    if (percentage <= 76) return <GoodCoin />;
+    return <BadCoin />;
+  };
+
   while (day <= endDate) {
     for (let i = 0; i < 7; i++) {
-      formattedDate = format(day, 'd');
+      formattedDate = format(day, 'yyyy-MM-dd');
       const cloneDay = day;
 
-      const history = format(day, 'MM-dd') === '12-10';
-      const history2 =
-        format(day, 'MM-dd') === '12-06' || format(day, 'MM-dd') === '12-08';
+      // 현재 날짜에 대한 통계 필터링
+      const dailyStats = statistics.filter(
+        (stat) => stat.dailyDate === formattedDate, // 날짜 형식 확인
+      );
 
-      const history3 = format(day, 'MM-dd') === '12-18';
-      const history4 =
-        format(day, 'MM-dd') === '12-24' || format(day, 'MM-dd') === '12-04';
+      // 총액과 목표액을 계산
+      const totalAmount = dailyStats.reduce(
+        (sum, stat) => sum + stat.amount,
+        0,
+      );
+      const targetAmount =
+        dailyStats.length > 0 ? dailyStats[0].dailyTarget : 0;
 
       days.push(
         <DaysBox
@@ -106,19 +125,9 @@ const CalendarBody = ({ currentMonth, selectedDate, onDateClick }) => {
                   : '',
             }}
           >
-            {formattedDate}
+            {format(day, 'd')}
           </DayBox>
-          {history ? (
-            <ExcellentCoin />
-          ) : history2 ? (
-            <VeryGoodCoin />
-          ) : history3 ? (
-            <GoodCoin />
-          ) : history4 ? (
-            <BadCoin />
-          ) : (
-            ''
-          )}
+          {targetAmount > 0 ? getIcon(totalAmount, targetAmount) : null}
         </DaysBox>,
       );
       day = addDays(day, 1);

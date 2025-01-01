@@ -196,7 +196,7 @@ const RankingTable = () => {
                   )}
 
                   <ProfileBox>
-                    {item.rankingImgUrl ? (
+                    {item.rankingImgUrl !== ' ' ? (
                       <img
                         src={`http://localhost:8065${item.rankingImgUrl}`}
                         alt={item.userName}

@@ -28,7 +28,7 @@ VALUES (user_seq.nextval, 8, '아이유', 'iu_ID', 5000, '2024-12', '/images/ima
 INSERT INTO ranking (ranking_id, ranking_position, user_name, user_id, total_badges, ranking_month, ranking_img_url, created_at, updated_at)
 VALUES (user_seq.nextval, 9, '김석진', 'sj_ID', 700, '2024-12', '/images/image4.jpg', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP);
 
-UPDATE ranking SET total_badges=67000 where user_id='mk_ID';
+UPDATE ranking SET ranking_img_url=' ' where user_id='kd_ID';
 
 
 COMMIT;

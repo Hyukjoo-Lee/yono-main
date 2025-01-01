@@ -12,9 +12,8 @@ const Root = styled.div`
   overflow: hidden;
 `;
 
-const Calendar = () => {
+const Calendar = ({ selectedDate, onDateClick, statistics }) => {
   const [currentMonth, setCurrentMonth] = useState(new Date());
-  const [selectedDate, setSelectedDate] = useState(new Date());
 
   const prevYear = () => {
     setCurrentMonth(subYears(currentMonth, 1));
@@ -32,9 +31,9 @@ const Calendar = () => {
     setCurrentMonth(addMonths(currentMonth, 1));
   };
 
-  const onDateClick = (day) => {
-    setSelectedDate(day);
-  };
+  // const onDateClick = (day) => {
+  //   onDateSelect(day); // 부모 컴포넌트로 선택된 날짜 전달
+  // };
 
   return (
     <Root>
@@ -50,6 +49,7 @@ const Calendar = () => {
         currentMonth={currentMonth}
         selectedDate={selectedDate}
         onDateClick={onDateClick}
+        statistics={statistics}
       />
     </Root>
   );
