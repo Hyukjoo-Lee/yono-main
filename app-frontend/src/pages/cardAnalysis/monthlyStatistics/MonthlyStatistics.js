@@ -1,7 +1,9 @@
 import React from 'react';
 import styled from 'styled-components';
-import Piechart from '../../../pages/cardAnalysis/monthlyStatistics/chart/Piechart';
+import { useState, useEffect } from 'react';
 import Barchart from '../../../pages/cardAnalysis/monthlyStatistics/chart/Barchart';
+import Piechart from '../../../pages/cardAnalysis/monthlyStatistics/chart/Piechart';
+import { getToken } from '../../../apis/cardApi';
 
 const barchart_data = [
   {
@@ -45,6 +47,23 @@ const Root = styled.div`
 `;
 
 const MonthlyStatistics = () => {
+  const [CardData, setCardData] = useState(null);
+
+  useEffect(() => {
+    const fetchUser = async () => {
+      try {
+        const user = await getToken();
+        // setCardData(user.data);
+        // console.log(user.data);
+      } catch (error) {
+        console.error('카드 정보를 불러오는 중 오류 발생:', error);
+        setCardData(null);
+      }
+    };
+
+    fetchUser();
+  }, []);
+
   return (
     <Root>
       <Barchart data={barchart_data} />

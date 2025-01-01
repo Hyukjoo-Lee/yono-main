@@ -28,8 +28,6 @@ import com.mmk.common.ApiResponse;
 import com.mmk.dto.UserDTO;
 import com.mmk.service.UserService;
 
-import jakarta.servlet.http.HttpServletRequest;
-
 /**
  * Controller: 사용자 요청의 값을 DTO 에 담아 Service 계층으로 전달함.
  */
