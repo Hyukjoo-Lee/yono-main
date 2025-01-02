@@ -200,6 +200,7 @@ const CardRegFormBox = ({ cardImg }) => {
     const cardNumber = cardNumToSave;
     const updatedFormData = { ...formData, cardNumber };
     // api 전송
+    console.log('data to send: ' + updatedFormData);
   };
 
   return (
