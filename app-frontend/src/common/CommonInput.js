@@ -63,6 +63,7 @@ const CommonInput = (props) => {
     onChange,
     $marginLeft,
     readOnly,
+    maxLength,
   } = props;
 
   return (
@@ -92,6 +93,7 @@ const CommonInput = (props) => {
         value={value}
         onChange={onChange}
         readOnly={readOnly}
+        maxLength={maxLength}
       />
     </div>
   );
