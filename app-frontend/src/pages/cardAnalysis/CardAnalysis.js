@@ -10,14 +10,14 @@ const CardAnalysis = () => {
   const [selectedTab, setSelectedTab] = useState(0);
   const items = [
     { text: '일별 통계' },
-    { text: '월별 통계' },
     { text: '목차별 통계' },
+    { text: '월별 통계' },
   ];
 
   const panels = [
     <DailyStatistics />,
-    <MonthlyStatistics />,
     <CategoryStatics />,
+    <MonthlyStatistics />,
   ];
   return (
     <CommonRoot>
@@ -42,13 +42,13 @@ const CardAnalysis = () => {
             </p>
           ) : selectedTab === 1 ? (
             <p>
-              유저의 최근 3개월간의 소비 내역을 분석해드립니다. <br />
-              막대와 원형 그래프를 통해 직관적으로 확인할 수 있습니다.
+              최근 1개월의 목차별 원형그래프로 소비를 알려드립니다. <br />
+              카테고리를 클릭하면 상세 내역을 확인할 수 있습니다.
             </p>
           ) : (
             <p>
-              최근 3개월의 목차별 원형그래프로 소비를 알려드립니다. <br />
-              카테고리를 클릭하면 상세 내역을 확인할 수 있습니다.
+              유저의 최근 3개월간의 소비 내역을 분석해드립니다. <br />
+              막대와 원형 그래프를 통해 직관적으로 확인할 수 있습니다.
             </p>
           )
         }

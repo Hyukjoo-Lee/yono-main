@@ -3,34 +3,7 @@ import styled from 'styled-components';
 import { useState, useEffect } from 'react';
 import Barchart from '../../../pages/cardAnalysis/monthlyStatistics/chart/Barchart';
 import Piechart from '../../../pages/cardAnalysis/monthlyStatistics/chart/Piechart';
-import { getToken } from '../../../apis/cardApi';
-
-const barchart_data = [
-  {
-    bottle: '9월',
-    식비: 1200,
-    교통비: 1000,
-    쇼핑: 1100,
-    문화: 3000,
-    전자제품: 1500,
-  },
-  {
-    bottle: '10월',
-    식비: 2200,
-    교통비: 2000,
-    쇼핑: 2100,
-    문화: 10000,
-    전자제품: 3500,
-  },
-  {
-    bottle: '11월',
-    식비: 3200,
-    교통비: 3000,
-    쇼핑: 3100,
-    문화: 5000,
-    전자제품: 10500,
-  },
-];
+import { getToken, getConId, getCardHistory } from '../../../apis/cardApi';
 
 const piechart_data = [
   { id: '식비', value: 3 },
@@ -46,27 +19,38 @@ const Root = styled.div`
   align-items: center;
 `;
 
+const LoadingText = styled.div`
+  font-size: 24px;
+  color: #999;
+`;
+
 const MonthlyStatistics = () => {
-  const [CardData, setCardData] = useState(null);
+  const [cardData, setCardData] = useState(null);
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     const fetchUser = async () => {
       try {
-        const user = await getToken();
-        // setCardData(user.data);
-        // console.log(user.data);
+        const response = await getCardHistory();
+        setCardData(response);
       } catch (error) {
         console.error('카드 정보를 불러오는 중 오류 발생:', error);
         setCardData(null);
+      } finally {
+        setLoading(false);
       }
     };
 
     fetchUser();
   }, []);
 
+  if (loading) {
+    return <LoadingText>로딩 중...</LoadingText>;
+  }
+
   return (
     <Root>
-      <Barchart data={barchart_data} />
+      {cardData ? <Barchart data={cardData} /> : <></>}
       <Piechart data={piechart_data} />
     </Root>
   );
