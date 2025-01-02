@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import Calendar from './calendar/Calendar';
 import styled from 'styled-components';
 import CommonCardListBox from '../../../common/CommonCardListBox';
@@ -8,6 +8,7 @@ import { ReactComponent as GoodCoin } from '../../../assets/images/GoodCoin.svg'
 import { ReactComponent as BadCoin } from '../../../assets/images/BadCoin.svg';
 import { fetchDailyStatistics } from '../../../apis/dailyStatisticsApi.js';
 import CircularProgress from '@mui/material/CircularProgress';
+import ResizeObserver from 'resize-observer-polyfill';
 
 const Root = styled.div`
   width: 100%;
@@ -43,8 +44,10 @@ const CalendarBottomBox = styled.div`
 `;
 
 const ListBox = styled.div`
-  height: 541px;
+  height: ${({ $dynamicHeight }) => `${$dynamicHeight}px`};
   overflow-y: auto;
+  transition: height 0.3s ease; /* 부드러운 전환 효과 */
+  padding-bottom: 20px;
   &::-webkit-scrollbar {
     width: 0;
   }
@@ -58,7 +61,7 @@ const ListBox = styled.div`
 
 const EmptyBox = styled.div`
   width: 100%;
-  height: 541px;
+  height: 100%;
   border-radius: 7px;
   box-sizing: border-box;
   border: 1px solid ${(props) => props.theme.color.mediumGray};
@@ -89,6 +92,8 @@ const DailyStatistics = () => {
   const [filteredStatistics, setFilteredStatistics] = useState([]);
   const [selectedDate, setSelectedDate] = useState(new Date());
   const [isLoading, setIsLoading] = useState(true);
+  const [dynamicHeight, setDynamicHeight] = useState(541); // 기본 높이 설정
+  const calendarRef = useRef(null);
 
   useEffect(() => {
     const fetchStatistics = async () => {
@@ -105,6 +110,28 @@ const DailyStatistics = () => {
     };
 
     fetchStatistics();
+  }, []);
+
+  const adjustHeight = () => {
+    if (calendarRef.current) {
+      const calendarHeight = calendarRef.current.offsetHeight;
+      setDynamicHeight(calendarHeight); // ListBox 높이를 Calendar 높이에 맞춤
+    }
+  };
+
+  useEffect(() => {
+    const observer = new ResizeObserver((entries) => {
+      entries.forEach((entry) => {
+        adjustHeight();
+      });
+    });
+
+    const currentRef = calendarRef.current;
+    if (currentRef) observer.observe(currentRef);
+
+    return () => {
+      if (currentRef) observer.unobserve(currentRef);
+    };
   }, []);
 
   // 선택한 형식날짜를 YYYY-MM-DD 형식으로
@@ -126,16 +153,21 @@ const DailyStatistics = () => {
 
   const handleDateClick = (date) => {
     setSelectedDate(date);
+    adjustHeight(); // 날짜 클릭 시 높이 재계산
   };
 
   return (
     <Root>
       <CalendarBox>
-        <Calendar
-          selectedDate={selectedDate}
-          onDateClick={handleDateClick}
-          statistics={statistics}
-        />
+        <div ref={calendarRef}>
+          <Calendar
+            selectedDate={selectedDate}
+            onDateClick={handleDateClick}
+            statistics={statistics}
+            adjustHeight={adjustHeight}
+          />
+        </div>
+
         <CalendarBottomBox>
           {Lists.map((item, index) => (
             <div key={index}>
@@ -146,7 +178,7 @@ const DailyStatistics = () => {
         </CalendarBottomBox>
       </CalendarBox>
 
-      <ListBox>
+      <ListBox $dynamicHeight={dynamicHeight}>
         {isLoading ? (
           <EmptyBox>
             <CircularProgress />

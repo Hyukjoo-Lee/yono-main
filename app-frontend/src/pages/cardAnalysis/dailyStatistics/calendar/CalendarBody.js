@@ -78,7 +78,6 @@ const CalendarBody = ({
   const rows = [];
   let days = [];
   let day = startDate;
-  let formattedDate = '';
 
   // 백분율 범위를 계산
   const getIcon = (totalAmount, targetAmount) => {
@@ -91,12 +90,11 @@ const CalendarBody = ({
 
   while (day <= endDate) {
     for (let i = 0; i < 7; i++) {
-      formattedDate = format(day, 'yyyy-MM-dd');
-      const cloneDay = day;
+      const cloneDay = day; // day를 고정된 값으로 복사
 
       // 현재 날짜에 대한 통계 필터링
       const dailyStats = statistics.filter(
-        (stat) => stat.dailyDate === formattedDate, // 날짜 형식 확인
+        (stat) => stat.dailyDate === format(cloneDay, 'yyyy-MM-dd'),
       );
 
       // 총액과 목표액을 계산
@@ -109,23 +107,23 @@ const CalendarBody = ({
 
       days.push(
         <DaysBox
-          key={day}
-          $selected={isSameDay(day, selectedDate)}
+          key={cloneDay}
+          $selected={isSameDay(cloneDay, selectedDate)}
           onClick={() => onDateClick(cloneDay)}
         >
           <DayBox
-            $today={isSameDay(day, new Date())}
-            $selected={isSameDay(day, selectedDate)}
-            $lastMonth={format(currentMonth, 'M') !== format(day, 'M')}
+            $today={isSameDay(cloneDay, new Date())}
+            $selected={isSameDay(cloneDay, selectedDate)}
+            $lastMonth={format(currentMonth, 'M') !== format(cloneDay, 'M')}
             style={{
-              color: isSameDay(day, selectedDate)
+              color: isSameDay(cloneDay, selectedDate)
                 ? '#FFFFFF'
-                : format(currentMonth, 'M') !== format(day, 'M')
+                : format(currentMonth, 'M') !== format(cloneDay, 'M')
                   ? '#d0d0d0'
                   : '',
             }}
           >
-            {format(day, 'd')}
+            {format(cloneDay, 'd')}
           </DayBox>
           {targetAmount > 0 ? getIcon(totalAmount, targetAmount) : null}
         </DaysBox>,
