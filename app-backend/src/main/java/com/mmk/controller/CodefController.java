@@ -14,7 +14,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.mmk.dto.CardDTO;
+import com.mmk.dto.TransDTO;
 
 import io.codef.api.EasyCodef;
 import io.codef.api.EasyCodefServiceType;
@@ -160,10 +160,11 @@ public class CodefController {
             objectMapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
 
             String dataArrayJson = objectMapper.readTree(result).get("data").toString();
-            List<CardDTO> cardDTOList = objectMapper.readValue(dataArrayJson, new TypeReference<List<CardDTO>>() {
-            });
+            List<TransDTO> transactionDTOList = objectMapper.readValue(dataArrayJson,
+                    new TypeReference<List<TransDTO>>() {
+                    });
 
-            Map<String, Map<String, Integer>> groupedData = cardDTOList.stream()
+            Map<String, Map<String, Integer>> groupedData = transactionDTOList.stream()
                     .collect(Collectors.groupingBy(
                             card -> card.getUsedDate().substring(0, 6),
                             Collectors.groupingBy(card -> {
