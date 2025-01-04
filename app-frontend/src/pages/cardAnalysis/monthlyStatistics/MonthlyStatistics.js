@@ -3,8 +3,8 @@ import styled from 'styled-components';
 import { useState, useEffect } from 'react';
 import Barchart from '../../../pages/cardAnalysis/monthlyStatistics/chart/Barchart';
 import Piechart from '../../../pages/cardAnalysis/monthlyStatistics/chart/Piechart';
-import { getToken, getConId, getCardHistory } from '../../../apis/cardApi';
-
+import { getConId } from '../../../apis/cardApi';
+// import { getToken, getConId, getCardHistory } from '../../../apis/cardApi'
 const piechart_data = [
   { id: '식비', value: 3 },
   { id: '교통비', value: 1 },
@@ -31,8 +31,9 @@ const MonthlyStatistics = () => {
   useEffect(() => {
     const fetchUser = async () => {
       try {
-        const response = await getCardHistory();
-        setCardData(response);
+        const response = await getConId();
+        // setCardData(response);
+        console.log(response);
       } catch (error) {
         console.error('카드 정보를 불러오는 중 오류 발생:', error);
         setCardData(null);
