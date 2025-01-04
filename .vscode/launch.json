@@ -2,6 +2,13 @@
   "configurations": [
     {
       "type": "java",
+      "name": "CodefController",
+      "request": "launch",
+      "mainClass": "com.mmk.controller.CodefController",
+      "projectName": "app-backend"
+    },
+    {
+      "type": "java",
       "name": "Spring Boot-BackendApplication<app-backend>",
       "request": "launch",
       "cwd": "${workspaceFolder}",

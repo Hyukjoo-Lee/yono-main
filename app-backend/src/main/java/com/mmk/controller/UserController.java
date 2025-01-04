@@ -28,8 +28,6 @@ import com.mmk.common.ApiResponse;
 import com.mmk.dto.UserDTO;
 import com.mmk.service.UserService;
 
-import jakarta.servlet.http.HttpServletRequest;
-
 /**
  * Controller: 사용자 요청의 값을 DTO 에 담아 Service 계층으로 전달함.
  */
@@ -153,70 +151,73 @@ public class UserController {
     // 유저 정보 업데이트
     @PutMapping("/{userNum}")
     public ResponseEntity<ApiResponse<UserDTO>> updateUser(
-        @RequestParam("userInfo") String userInfoJson,
-        @RequestParam(value="profileImage", required=false) MultipartFile profileImage,
-        @RequestParam(value="profileText", required=false) String profileText) {
+            @RequestParam("userInfo") String userInfoJson,
+            @RequestParam(value = "profileImage", required = false) MultipartFile profileImage,
+            @RequestParam(value = "profileText", required = false) String profileText) {
 
-            System.out.println(profileImage);
-            System.out.println(profileText);
-            System.out.println(userInfoJson);
-            
-            // String uploadFolder = request.getSession().getServletContext().getRealPath("/static/images");
-            String uploadFolder = System.getProperty("user.dir") + "/app-backend/src/main/resources/static/images";
+        String uploadFolder = System.getProperty("user.dir") + "/app-backend/src/main/resources/static/images";
 
-            System.out.println("userInfoJson: " + userInfoJson);
-            try {
-                UserDTO uv = new ObjectMapper().readValue(userInfoJson, UserDTO.class);
+        try {
+            UserDTO uv = new ObjectMapper().readValue(userInfoJson, UserDTO.class);
 
-                if (profileImage != null && !profileImage.isEmpty()) {
-                    String fileName = profileImage.getOriginalFilename();
+            if (uv.getProfile() != null && !uv.getProfile().isEmpty()) {
+                String existingProfilePath = System.getProperty("user.dir") + "/app-backend/src/main/resources/static"
+                        + uv.getProfile();
+                File existingFile = new File(existingProfilePath);
 
-                    if (fileName == null || fileName.isEmpty()) {
-                        fileName = "default_filename.jpg";
-                    }
+                if (existingFile.exists()) {
+                    existingFile.delete();
+                }
+            }
 
-                    Calendar cal = Calendar.getInstance();
-                    int year = cal.get(Calendar.YEAR);
-                    int month = cal.get(Calendar.MONTH) + 1;
-                    int date = cal.get(Calendar.DATE);
-    
-                    String homedir = uploadFolder + "/" + year + "-" + month + "-" + date;
-    
-                    File path = new File(homedir);
-                    if (!path.exists()) {
-                        path.mkdirs();
-                    }
-    
-                    Random r = new Random();
-                    int random = r.nextInt(100000000);
-                    int index = fileName.lastIndexOf(".");
-                    String fileExtension = fileName.substring(index + 1);
-                    String newFileName = "profile_" + year + month + date + random + "." + fileExtension;
-                    String fileDBName = "/images/" + year + "-" + month + "-" + date + "/" + newFileName;
-    
-                    File saveFile = new File(homedir + "/" + newFileName);
-                    System.out.println("파일 저장 경로: " + saveFile.getAbsolutePath());
+            if (profileImage != null && !profileImage.isEmpty()) {
+                String fileName = profileImage.getOriginalFilename();
 
-                    try {
-                        profileImage.transferTo(saveFile);
-                    } catch (Exception e) {
-                        e.printStackTrace();
-                    }
-    
-                    uv.setProfile(fileDBName);
-    
+                if (fileName == null || fileName.isEmpty()) {
+                    fileName = "default_filename.jpg";
                 }
 
-                userService.updateUser(uv);
-                // userRepository.save(uv);
+                Calendar cal = Calendar.getInstance();
+                int year = cal.get(Calendar.YEAR);
+                int month = cal.get(Calendar.MONTH) + 1;
+                int date = cal.get(Calendar.DATE);
 
-                ApiResponse<UserDTO> response = new ApiResponse<>(201, "회원 정보 수정 성공", uv);
-                return ResponseEntity.ok(response);
-            } catch (JsonProcessingException e) {
-                e.printStackTrace();
-                ApiResponse<UserDTO> response = new ApiResponse<>(400, "회원 정보 수정 오류", null);
-                return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(response);
+                String homedir = uploadFolder + "/" + year + "-" + month + "-" + date;
+
+                File path = new File(homedir);
+                if (!path.exists()) {
+                    path.mkdirs();
+                }
+                Random r = new Random();
+                int random = r.nextInt(100000000);
+                int index = fileName.lastIndexOf(".");
+                String fileExtension = fileName.substring(index + 1);
+                String newFileName = "profile_" + year + month + date + random + "." + fileExtension;
+                String fileDBName = "/images/" + year + "-" + month + "-" + date + "/" + newFileName;
+
+                File saveFile = new File(homedir + "/" + newFileName);
+                System.out.println("파일 저장 경로: " + saveFile.getAbsolutePath());
+
+                try {
+                    profileImage.transferTo(saveFile);
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+
+                uv.setProfile(fileDBName);
+
             }
+
+            userService.updateUser(uv);
+            // userRepository.save(uv);
+
+            ApiResponse<UserDTO> response = new ApiResponse<>(201, "회원 정보 수정 성공", uv);
+            return ResponseEntity.ok(response);
+        } catch (JsonProcessingException e) {
+            e.printStackTrace();
+            ApiResponse<UserDTO> response = new ApiResponse<>(400, "회원 정보 수정 오류", null);
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(response);
+        }
     }
 
 };

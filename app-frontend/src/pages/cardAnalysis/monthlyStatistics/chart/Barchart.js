@@ -10,20 +10,20 @@ const StyledChart = styled.div`
 
 const Barchart = ({ data }) => {
   const handle = {
-    barClick: (data) => {
-      console.log(data);
-    },
-    legendClick: (data) => {
-      console.log(data);
-    },
+    barClick: (data) => {},
+    legendClick: (data) => {},
   };
+
+  const keys = data[0]
+    ? Object.keys(data[0]).filter((key) => key !== '날짜')
+    : [];
 
   return (
     <StyledChart>
       <ResponsiveBar
         data={data}
-        keys={['식비', '교통비', '쇼핑', '문화', '전자제품']}
-        indexBy="bottle"
+        keys={keys}
+        indexBy="날짜"
         margin={{ top: 40, right: 120, bottom: 80, left: 80 }}
         padding={0.3}
         groupMode="grouped"
@@ -111,6 +111,7 @@ const Barchart = ({ data }) => {
               },
             ],
             onClick: handle.legendClick,
+            wrapText: true,
           },
         ]}
       />
