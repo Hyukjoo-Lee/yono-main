@@ -35,6 +35,8 @@ dependencies {
     developmentOnly 'org.springframework.boot:spring-boot-devtools'
 	implementation 'org.springframework.boot:spring-boot-starter-security'
 	implementation 'io.github.cdimascio:dotenv-java:2.2.0'
+	// codef
+	implementation 'io.codef.api:easycodef-java:1.0.6'
 }
 
 
@@ -45,4 +47,12 @@ tasks.named('test') {
 
 tasks.named('test') {
 	useJUnitPlatform()
+}
+
+sourceSets {
+    main {
+        resources {
+            srcDirs = ['src/main/resources']
+        }
+    }
 }

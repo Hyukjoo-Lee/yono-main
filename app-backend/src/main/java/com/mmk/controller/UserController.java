@@ -28,8 +28,6 @@ import com.mmk.common.ApiResponse;
 import com.mmk.dto.UserDTO;
 import com.mmk.service.UserService;
 
-import jakarta.servlet.http.HttpServletRequest;
-
 /**
  * Controller: 사용자 요청의 값을 DTO 에 담아 Service 계층으로 전달함.
  */
@@ -157,17 +155,20 @@ public class UserController {
             @RequestParam(value = "profileImage", required = false) MultipartFile profileImage,
             @RequestParam(value = "profileText", required = false) String profileText) {
 
-        System.out.println(profileImage);
-        System.out.println(profileText);
-        System.out.println(userInfoJson);
-
-        // String uploadFolder =
-        // request.getSession().getServletContext().getRealPath("/static/images");
         String uploadFolder = System.getProperty("user.dir") + "/app-backend/src/main/resources/static/images";
 
-        System.out.println("userInfoJson: " + userInfoJson);
         try {
             UserDTO uv = new ObjectMapper().readValue(userInfoJson, UserDTO.class);
+
+            if (uv.getProfile() != null && !uv.getProfile().isEmpty()) {
+                String existingProfilePath = System.getProperty("user.dir") + "/app-backend/src/main/resources/static"
+                        + uv.getProfile();
+                File existingFile = new File(existingProfilePath);
+
+                if (existingFile.exists()) {
+                    existingFile.delete();
+                }
+            }
 
             if (profileImage != null && !profileImage.isEmpty()) {
                 String fileName = profileImage.getOriginalFilename();
