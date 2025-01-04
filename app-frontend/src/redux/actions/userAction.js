@@ -5,13 +5,15 @@ import { userActions } from '../reducers/userReducer';
 // 로그인
 export const loginUser = createAsyncThunk(
   'user/login',
-  async (formData, { dispatch }) => {
+  async (formData, { dispatch, rejectWithValue }) => {
     try {
       const response = await userApi.login(formData);
+
       dispatch(userActions.loginSuccessful(response));
       return response;
     } catch (error) {
-      console.error('로그인 실패:', error);
+      console.error('로그인 실패: ', error);
+      return rejectWithValue(error.response?.data || '로그인 오류');
     }
   },
 );

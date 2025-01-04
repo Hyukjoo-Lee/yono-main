@@ -178,7 +178,10 @@ const Login = () => {
       const result = await dispatch(loginUser(formData));
       if (loginUser.fulfilled.match(result)) {
         setIsLoginSuccessVisible(true);
+      } else {
+        setFormMessage({ error: LOGIN_VERIFIED_MESSAGE });
       }
+      console.log(result);
     } catch (error) {
       setFormMessage({ error: LOGIN_VERIFIED_MESSAGE });
     }
