@@ -5,6 +5,7 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -13,6 +14,10 @@ import org.springframework.web.bind.annotation.RequestMapping;
 
 import com.mmk.service.PostsService;
 import com.mmk.dto.PostsDTO;
+import org.springframework.web.bind.annotation.PutMapping;
+
+
+
 
 
 
@@ -41,9 +46,23 @@ public ResponseEntity<List<PostsDTO>> getPosts() {
 
 //게시글 상세 조회
 @GetMapping("/list/{id}")
- public ResponseEntity<PostsDTO> getPostsById(@PathVariable String id) {
-     PostsDTO posts =  postsService.findById(id);
-        return ResponseEntity.ok(posts);
-    }
+public ResponseEntity<PostsDTO> getPostsById(@PathVariable String id) {
+    PostsDTO posts = postsService.findById(id);
+    return ResponseEntity.ok(posts);
+}
     
+  // 게시글 수정
+   @PutMapping("/update") 
+   public ResponseEntity<PostsDTO> updatePost(@RequestBody PostsDTO postsData) {
+       PostsDTO updatedPost = postsService.updatePost(postsData.getNo(), postsData); // postsService에 수정 로직 추가
+       return ResponseEntity.ok(updatedPost);
+   }
+ 
+  // 게시글 삭제
+@DeleteMapping("/delete/{id}")
+public ResponseEntity<String> deletePost(@PathVariable String id) {
+    postsService.deletePostById(id); 
+    return ResponseEntity.ok("게시글이 삭제되었습니다.");
+}
+
 }

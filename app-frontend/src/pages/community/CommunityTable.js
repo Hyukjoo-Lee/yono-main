@@ -83,6 +83,7 @@ export function CommunityTable() {
   const [rows, setRows] = useState([]);
   // const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [searchInput, setSearchInput] = useState('');
+  const [filteredRows, setFilteredRows] = useState([]);
   const rowsPerPage = 10;
   const navigate = useNavigate(); // navigate 훅을 사용
 
@@ -121,15 +122,23 @@ export function CommunityTable() {
     navigate('/communityFormBox');
   };
 
-  //검색기능
-  const fileteredRows = rows.filter((row) => {
-    return (
-      (row.title &&
-        row.title.toLowerCase().includes(searchInput.toLowerCase())) ||
-      (row.author &&
-        row.author.toLowerCase().includes(searchInput.toLowerCase()))
-    );
-  });
+  // 검색 버튼 클릭 시 실행되는 함수
+  const handleSearch = () => {
+    if (!searchInput.trim()) {
+      setFilteredRows(rows); // 검색어가 없으면 전체 리스트 표시
+    } else {
+      const filtered = rows.filter((row) => {
+        return (
+          (row.title &&
+            row.title.toLowerCase().includes(searchInput.toLowerCase())) ||
+          (row.author &&
+            row.author.toLowerCase().includes(searchInput.toLowerCase()))
+        );
+      });
+      setFilteredRows(filtered);
+    }
+    setPage(0); // 검색 후 페이지를 처음으로 설정
+  };
 
   // 데이터 가져오기
   useEffect(() => {
@@ -137,6 +146,7 @@ export function CommunityTable() {
       .get('/posts/list')
       .then((response) => {
         setRows(response.data);
+        setFilteredRows(response.data); // 초기에는 전체 데이터 표시
       })
       .catch((error) => {
         console.error('API 요청 실패:', error);
@@ -155,7 +165,7 @@ export function CommunityTable() {
         <CommonInput
           width="228px"
           height="39px"
-          placeholder="검색어를 입력하세요"
+          placeholder="제목, 작성자"
           value={searchInput}
           onChange={(e) => setSearchInput(e.target.value)}
         />
@@ -166,7 +176,7 @@ export function CommunityTable() {
           color="white"
           text="검색"
           borderRadius="5px"
-          onClick={() => console.log('검색실행:', searchInput)}
+          onClick={handleSearch}
         />
       </Box>
 
@@ -196,7 +206,7 @@ export function CommunityTable() {
               </TableRow>
             </TableHead>
             <TableBody>
-              {fileteredRows
+              {filteredRows
                 .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
                 .map((row, index) => {
                   return (

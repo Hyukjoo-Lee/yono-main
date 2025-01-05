@@ -23,7 +23,7 @@ public class PostsDTO {
     @JsonFormat(pattern = "yyyy-MM-dd")  // 날짜 포맷 지정
     private LocalDate regdate;
     
-    private int viewcnt;
+    private int viewcnt=0;
     private Timestamp createdAt;
     private Timestamp updatedAt;
     private String imgurl;

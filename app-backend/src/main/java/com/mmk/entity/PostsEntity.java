@@ -42,7 +42,7 @@ public class PostsEntity {
     @CreationTimestamp
     private LocalDate  regdate;
 
-    private int viewcnt;
+    private int viewcnt=0;
 
     private String imgurl;
 
@@ -51,6 +51,7 @@ public class PostsEntity {
 
     @CreationTimestamp
     private Timestamp updatedAt;
+
 
 
     

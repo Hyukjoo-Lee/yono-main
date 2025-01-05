@@ -38,13 +38,8 @@ const Row = styled.div`
     white-space: nowrap;
     display: flex;
   }
-  & > div {
-    display: flex;
-    flex-direction: column; /* input과 select, 에러메시지를 세로로 배치 */
-    width: 500px; /* input, select 너비 설정 */
-  }
 
-  & > textarea {
+  & textarea {
     background-color: #f8f9fe;
     border-radius: 5px;
     border: 1px solid #d7d7d7;
@@ -60,7 +55,26 @@ const Row = styled.div`
     outline: none;
   }
 `;
+const FileUploadContainer = styled.div`
+  display: flex;
+  align-items: center;
+  gap: 10px;
+`;
 
+const FileUploadButton = styled.div`
+  background-color: #3563e9;
+  color: white;
+  padding: 10px 20px;
+  border-radius: 5px;
+  font-size: 16px;
+  cursor: pointer;
+  text-align: center;
+  width: 70px;
+  height: 28px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+`;
 const Box1 = styled.div`
   display: flex;
   justify-content: center;
@@ -225,54 +239,72 @@ export function CommunityFormBox() {
       <FormBox>
         <Row>
           <span>제목</span>
-          <CommonInput
-            width="500px"
-            height="40px"
-            placeholder="제목을 입력해주세요"
-            value={postFormData.title}
-            onChange={(e) => handleInputChange(e, 'title')}
-          />
-          {alertMessage.title && (
-            <ErrorMessage>{alertMessage.title}</ErrorMessage>
-          )}
+          <div>
+            <CommonInput
+              width="500px"
+              height="40px"
+              placeholder="제목을 입력해주세요"
+              value={postFormData.title}
+              onChange={(e) => handleInputChange(e, 'title')}
+            />
+            {alertMessage.title && (
+              <ErrorMessage>{alertMessage.title}</ErrorMessage>
+            )}
+          </div>
         </Row>
         <Row>
           <span>카테고리</span>
-          <CommonSelect
-            options={OptionList}
-            width="500px"
-            height="40px"
-            find="카테고리를 선택해 주세요"
-            selectedValue={categoryOption}
-            setSelectedValue={(value) => handleSelectChange(value)}
-          />
-          {alertMessage.category && (
-            <ErrorMessage>{alertMessage.category}</ErrorMessage>
-          )}
+          <div>
+            <CommonSelect
+              options={OptionList}
+              width="500px"
+              height="40px"
+              find="카테고리를 선택해 주세요"
+              selectedValue={categoryOption}
+              setSelectedValue={(value) => handleSelectChange(value)}
+            />
+            {alertMessage.category && (
+              <ErrorMessage>{alertMessage.category}</ErrorMessage>
+            )}
+          </div>
         </Row>
         <Row>
           <span>내용</span>
-          <textarea
-            value={postFormData.content}
-            onChange={(e) => handleInputChange(e, 'content')}
-          />
-          {alertMessage.content && (
-            <ErrorMessage>{alertMessage.content}</ErrorMessage>
-          )}
+          <div>
+            <textarea
+              value={postFormData.content}
+              onChange={(e) => handleInputChange(e, 'content')}
+            />
+            {alertMessage.content && (
+              <ErrorMessage>{alertMessage.content}</ErrorMessage>
+            )}
+          </div>
         </Row>
+
         <Row>
           <span>사진</span>
-          <CommonInput
-            width="390px"
-            height="40px"
-            placeholder="사진 첨부"
-            accept=".jpg, .jpeg, .png, .gif"
-            type="file"
-            onChange={handleFileChange}
-          />
-          {alertMessage.file && (
-            <ErrorMessage>{alertMessage.file}</ErrorMessage>
-          )}
+          <div>
+            <FileUploadContainer>
+              <CommonInput
+                type="file"
+                width="390px"
+                height="40px"
+                placeholder="사진 첨부"
+                accept=".jpg, .jpeg, .png, .gif"
+                onChange={handleFileChange}
+              />
+              <FileUploadButton
+                onClick={() =>
+                  document.querySelector('input[type="file"]').click()
+                }
+              >
+                사진 첨부
+              </FileUploadButton>
+            </FileUploadContainer>
+            {alertMessage.file && (
+              <ErrorMessage>{alertMessage.file}</ErrorMessage>
+            )}
+          </div>
         </Row>
       </FormBox>
       <CommonHr

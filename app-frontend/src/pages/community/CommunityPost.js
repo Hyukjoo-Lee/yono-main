@@ -7,6 +7,7 @@ import CommonHr from '../../common/CommonHr';
 import HeartImg from '../../assets/images/HeartImg.png';
 import EmptyHeartImg from '../../assets/images/EmptyHeartImg.png';
 import { useState } from 'react';
+import axios from 'axios'; // axios 추가
 
 const comments = [
   {
@@ -152,6 +153,18 @@ export function CommunityPost() {
     });
   };
 
+  const handleDeletePost = async () => {
+    try {
+      const userId = rowData.id;
+
+      await axios.delete(`/posts/delete/${userId}`);
+
+      navigate('/community');
+    } catch (error) {
+      console.error('게시물 삭제에 실패했습니다.', error);
+    }
+  };
+
   return (
     <Root>
       <h2>{rowData.title}</h2> {/* 전달된 데이터에서 제목을 표시 */}
@@ -217,7 +230,12 @@ export function CommunityPost() {
           onClick={handleNavigateToEditForm}
           {...commonButtonProps}
         />
-        <CommonButton text="삭제" font-size="20px" {...commonButtonProps} />
+        <CommonButton
+          text="삭제"
+          font-size="20px"
+          onClick={handleDeletePost}
+          {...commonButtonProps}
+        />
       </BottomBox>
     </Root>
   );

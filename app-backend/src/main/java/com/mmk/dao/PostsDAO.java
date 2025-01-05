@@ -6,11 +6,16 @@ import java.util.List;
 import com.mmk.entity.PostsEntity;
 
 public interface PostsDAO {
+
     void save(PostsEntity postsData);
 
     List<PostsEntity> getAllPosts();
 
-    Object findById(int postId);
+    PostsEntity findById(int userId);
+
+    void deleteById(int userId);
+
+
 
     
 

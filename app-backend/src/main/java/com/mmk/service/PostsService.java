@@ -12,6 +12,9 @@ public interface PostsService {
 
     PostsDTO findById(String id);
 
-  
-    
+    PostsDTO updatePost(int no, PostsDTO postsData);
+
+    void deletePostById(String id);
+
+
 }
