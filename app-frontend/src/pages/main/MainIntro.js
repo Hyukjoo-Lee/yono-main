@@ -70,7 +70,7 @@ const MainIntro = () => {
   return (
     <StyledMainIntro>
       <StyledTextCon>
-        <StyledTitle>YONO Launching</StyledTitle>
+        <StyledTitle>YONO New Launching</StyledTitle>
         <StyledSubTitle>
           <span>YONO 2025, 새로운 시작!</span>
           <br />

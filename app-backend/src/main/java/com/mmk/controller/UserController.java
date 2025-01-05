@@ -1,15 +1,29 @@
 package com.mmk.controller;
 
+import java.io.File;
+import java.util.Calendar;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.NoSuchElementException;
+import java.util.Random;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.multipart.MultipartFile;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.mmk.common.ApiResponse;
 import com.mmk.dto.UserDTO;
 import com.mmk.service.UserService;
@@ -124,16 +138,6 @@ public class UserController {
         return ResponseEntity.ok(response);
     }
 
-    // 유저 정보 업데이트
-    @PostMapping("/{id}")
-    public ResponseEntity<ApiResponse<UserDTO>> updateUser(
-            @PathVariable("id") int id,
-            @RequestBody UserDTO userDTO) {
-        UserDTO updatedUser = userService.updateUser(id, userDTO);
-        ApiResponse<UserDTO> response = new ApiResponse<>(200, "유저 업데이트 성공", updatedUser);
-        return ResponseEntity.ok(response);
-    }
-
     // DELETE API
     // 유저 정보 삭제
     @DeleteMapping("/{id}")
@@ -142,4 +146,78 @@ public class UserController {
         ApiResponse<Object> response = new ApiResponse<>(200, "유저 삭제 성공", null);
         return ResponseEntity.ok(response);
     }
-}
+
+    // PUT API
+    // 유저 정보 업데이트
+    @PutMapping("/{userNum}")
+    public ResponseEntity<ApiResponse<UserDTO>> updateUser(
+            @RequestParam("userInfo") String userInfoJson,
+            @RequestParam(value = "profileImage", required = false) MultipartFile profileImage,
+            @RequestParam(value = "profileText", required = false) String profileText) {
+
+        String uploadFolder = System.getProperty("user.dir") + "/app-backend/src/main/resources/static/images";
+
+        try {
+            UserDTO uv = new ObjectMapper().readValue(userInfoJson, UserDTO.class);
+
+            if (uv.getProfile() != null && !uv.getProfile().isEmpty()) {
+                String existingProfilePath = System.getProperty("user.dir") + "/app-backend/src/main/resources/static"
+                        + uv.getProfile();
+                File existingFile = new File(existingProfilePath);
+
+                if (existingFile.exists()) {
+                    existingFile.delete();
+                }
+            }
+
+            if (profileImage != null && !profileImage.isEmpty()) {
+                String fileName = profileImage.getOriginalFilename();
+
+                if (fileName == null || fileName.isEmpty()) {
+                    fileName = "default_filename.jpg";
+                }
+
+                Calendar cal = Calendar.getInstance();
+                int year = cal.get(Calendar.YEAR);
+                int month = cal.get(Calendar.MONTH) + 1;
+                int date = cal.get(Calendar.DATE);
+
+                String homedir = uploadFolder + "/" + year + "-" + month + "-" + date;
+
+                File path = new File(homedir);
+                if (!path.exists()) {
+                    path.mkdirs();
+                }
+                Random r = new Random();
+                int random = r.nextInt(100000000);
+                int index = fileName.lastIndexOf(".");
+                String fileExtension = fileName.substring(index + 1);
+                String newFileName = "profile_" + year + month + date + random + "." + fileExtension;
+                String fileDBName = "/images/" + year + "-" + month + "-" + date + "/" + newFileName;
+
+                File saveFile = new File(homedir + "/" + newFileName);
+                System.out.println("파일 저장 경로: " + saveFile.getAbsolutePath());
+
+                try {
+                    profileImage.transferTo(saveFile);
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+
+                uv.setProfile(fileDBName);
+
+            }
+
+            userService.updateUser(uv);
+            // userRepository.save(uv);
+
+            ApiResponse<UserDTO> response = new ApiResponse<>(201, "회원 정보 수정 성공", uv);
+            return ResponseEntity.ok(response);
+        } catch (JsonProcessingException e) {
+            e.printStackTrace();
+            ApiResponse<UserDTO> response = new ApiResponse<>(400, "회원 정보 수정 오류", null);
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(response);
+        }
+    }
+
+};

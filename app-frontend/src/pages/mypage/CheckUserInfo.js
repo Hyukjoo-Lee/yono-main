@@ -1,8 +1,10 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
+import styled from 'styled-components';
+import { useNavigate } from 'react-router-dom';
 import CustomButton from '../../common/CommonButton';
 import CommonInput from '../../common/CommonInput';
-import styled from 'styled-components';
-import { ReactComponent as Profile } from '../../assets/images/Profile.svg';
+import { modifyUser } from '../../apis/userApi';
+import Profile from './Profile';
 
 const StyledHr = styled.hr`
   width: 100%;
@@ -60,70 +62,82 @@ const ErrorText = styled.p`
   width: 100%;
 `;
 
-const ProfileContainer = styled.div`
-  position: relative;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  width: 150px;
-  height: 150px;
-  border-radius: 50%;
-  background-color: #f5f5f5;
-  margin: 0 auto 40px;
-`;
-
-const ProfileImage = styled.div`
-  display: flex;
-  justify-content: center;
-  overflow: hidden;
-  & svg {
-    width: 70%;
-    height: 70%;
-  }
-`;
-
-const ProfileButton = styled.button`
-  position: absolute;
-  bottom: 23px;
-  right: 23px;
-  width: 30px;
-  height: 30px;
-  border: none;
-  border-radius: 50%;
-  background-color: #4064e6;
-  color: white;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  cursor: pointer;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
-  transform: translate(50%, 50%);
-  z-index: 10;
-  &:hover {
-    background-color: #0056b3;
-  }
-`;
-
 const CheckUserInfo = ({
-  userName,
+  userNum,
   userId,
-  originPassword,
+  password,
   email,
-  nickname,
-  Target_Expenditure_Amout,
+  name,
+  address,
+  detailAddress,
+  postcode,
+  spendingTarget,
+  profile,
+  createdAt,
 }) => {
+  const [profileImage, setProfileImage] = useState(profile);
+  const [previewImage, setPreviewImage] = useState(profile);
   const [isEditing, setIsEditing] = useState(true);
   const [passwordError, setPasswordError] = useState('');
   const [userInfo, setUserInfo] = useState({
-    userName: userName || ``,
-    nickname: nickname || ``,
+    userNum: userNum,
     userId: userId || '',
-    email: email || '',
-    Target_Expenditure_Amout: Target_Expenditure_Amout || '',
-    password: '',
+    originPassword: '',
     newPassword: '',
     confirmPassword: '',
+    email: email || '',
+    name: name || '',
+    address: address || '',
+    detailAddress: detailAddress || '',
+    postcode: postcode || '',
+    spendingTarget: spendingTarget || 0,
+    profile: profile || '',
+    createdAt: createdAt || '',
   });
+
+  useEffect(() => {
+    setUserInfo({
+      userNum: userNum,
+      userId: userId || '',
+      originPassword: '',
+      newPassword: '',
+      confirmPassword: '',
+      email: email || '',
+      name: name || '',
+      address: address || '',
+      detailAddress: detailAddress || '',
+      postcode: postcode || '',
+      spendingTarget: spendingTarget || 0,
+      profile: profile || '',
+      createdAt: createdAt || '',
+    });
+
+    setPreviewImage(profile);
+  }, [
+    userNum,
+    userId,
+    email,
+    name,
+    address,
+    detailAddress,
+    postcode,
+    spendingTarget,
+    profile,
+    createdAt,
+  ]);
+
+  const handleProfileChange = (e) => {
+    const file = e.target.files[0];
+    console.log(file);
+    if (file) {
+      setProfileImage(file);
+      const reader = new FileReader();
+      reader.onloadend = () => {
+        setPreviewImage(reader.result);
+      };
+      reader.readAsDataURL(file);
+    }
+  };
 
   const toggleEdit = () => {
     setIsEditing(!isEditing);
@@ -131,20 +145,32 @@ const CheckUserInfo = ({
   };
 
   const cancelEdit = () => {
-    userInfo.userName = userName;
-    userInfo.nickname = nickname;
-    userInfo.userId = userId;
-    userInfo.email = email;
-    userInfo.Target_Expenditure_Amout = Target_Expenditure_Amout;
-    userInfo.password = '';
-    userInfo.newPassword = '';
-    userInfo.confirmPassword = '';
+    setProfileImage(profile);
+    setPreviewImage(profile);
+
+    setUserInfo({
+      userNum: userNum,
+      userId: userId || '',
+      originPassword: '',
+      newPassword: '',
+      confirmPassword: '',
+      email: email || '',
+      name: name || '',
+      address: address || '',
+      detailAddress: detailAddress || '',
+      postcode: postcode || '',
+      spendingTarget: spendingTarget || '',
+      profile: profile || '',
+      createdAt: createdAt || '',
+    });
+
     setIsEditing(!isEditing);
   };
 
   const isFormValid = () => {
     for (const key in userInfo) {
-      if (userInfo[key].trim() === '') {
+      if ((userInfo[key] + '').trim() === '') {
+        console.log(key);
         return 1;
       }
     }
@@ -154,20 +180,44 @@ const CheckUserInfo = ({
     }
   };
 
+  const navigate = useNavigate();
+
   const save = () => {
     if (isFormValid() === 1) {
       setPasswordError('모든 정보를 입력해주세요!');
       return;
-    } else if (originPassword !== userInfo.password) {
+    } else if (password !== userInfo.originPassword) {
       setPasswordError('기존 비밀번호가 일치하지 않습니다!');
       return;
     } else if (isFormValid() === 2) {
       setPasswordError('비밀번호 확인이 일치하지 않습니다!');
       return;
     }
-    // 수정사항 저장 로직 추가 필요
-    setIsEditing(!isEditing);
+
+    const updatedUserInfo = {
+      ...userInfo,
+      password: userInfo.newPassword,
+      originPassword: undefined,
+      confirmPassword: undefined,
+      newPassword: undefined,
+    };
+
+    const formData = new FormData();
+    formData.append('userInfo', JSON.stringify(updatedUserInfo));
+    if (profileImage instanceof File) {
+      formData.append('profileImage', profileImage);
+    } else {
+      formData.append('profileText', profileImage);
+    }
+
+    formData.forEach((value, key) => console.log(key, value));
+
+    modifyUser(formData).then((response) => {
+      navigate(0);
+    });
+    // window.location.reload();
   };
+
   const deleteId = () => {};
 
   const disabledIntputProps = {
@@ -202,127 +252,103 @@ const CheckUserInfo = ({
     height: '38px',
   };
 
+  const nonEditField = [
+    { title: '이름', value: name },
+    { title: '아이디', value: userId },
+    { title: '이메일', value: email },
+    { title: '주소', value: address },
+    { title: '일일 목표 지출금액', value: spendingTarget },
+  ];
+
+  const editField = [
+    {
+      name: 'userId',
+      text: '아이디',
+      placeholder: '아이디를 입력하세요',
+      disabled: true,
+    },
+    {
+      name: 'originPassword',
+      text: '기존 비밀번호 입력',
+      placeholder: '기존 비밀번호 입력하세요',
+      disabled: false,
+    },
+    {
+      name: 'newPassword',
+      text: '새로운 비밀번호 입력',
+      placeholder: '새로운 비밀번호를 입력하세요',
+      disabled: false,
+    },
+    {
+      name: 'confirmPassword',
+      text: '비밀번호 확인',
+      placeholder: '비밀번호 확인',
+      disabled: false,
+    },
+    {
+      name: 'name',
+      text: '이름',
+      placeholder: '이름을 입력하세요',
+      disabled: true,
+    },
+    {
+      name: 'email',
+      text: '이메일',
+      placeholder: '이메일을 입력하세요',
+      disabled: false,
+    },
+    {
+      name: 'address',
+      text: '주소',
+      placeholder: '주소를 입력하세요',
+      disabled: false,
+    },
+    {
+      name: 'spendingTarget',
+      text: '일일 목표 지출금액',
+      placeholder: '일일 목표 지출금액을 입력하세요',
+      disabled: false,
+    },
+  ];
+
   return (
     <Root>
       {isEditing ? (
         <Section>
-          <ProfileContainer>
-            <ProfileImage>
-              <Profile />
-            </ProfileImage>
-          </ProfileContainer>
-          <InnerSection>
-            <TitleStyle>이름</TitleStyle>
-            <TextStyle>{userName}</TextStyle>
-            <StyledHr />
-          </InnerSection>
-          <InnerSection>
-            <TitleStyle>닉네임</TitleStyle>
-            <TextStyle>{nickname}</TextStyle>
-            <StyledHr />
-          </InnerSection>
-          <InnerSection>
-            <TitleStyle>아이디</TitleStyle>
-            <TextStyle>{userId}</TextStyle>
-            <StyledHr />
-          </InnerSection>
-          <InnerSection>
-            <TitleStyle>이메일</TitleStyle>
-            <TextStyle>{email}</TextStyle>
-            <StyledHr />
-          </InnerSection>
-          <InnerSection>
-            <TitleStyle>일일 목표 지출금액</TitleStyle>
-            <TextStyle>{Target_Expenditure_Amout}</TextStyle>
-          </InnerSection>
+          <Profile
+            profileImage={profileImage}
+            onImageChange={handleProfileChange}
+            isEditing={isEditing}
+          />
+
+          {nonEditField.map((field, index) => (
+            <InnerSection key={index}>
+              <TitleStyle>{field.title}</TitleStyle>
+              <TextStyle>{field.value}</TextStyle>
+              <StyledHr />
+            </InnerSection>
+          ))}
         </Section>
       ) : (
         <>
-          <ProfileContainer>
-            <ProfileImage>
-              <Profile />
-            </ProfileImage>
-            <ProfileButton onClick={() => console.log('프로필 버튼 클릭!')}>
-              +
-            </ProfileButton>
-          </ProfileContainer>
+          <Profile
+            profileImage={previewImage}
+            onProfileChange={handleProfileChange}
+            isEditing={isEditing}
+          />
 
-          <InnerSection>
-            <CommonInput
-              value={userInfo.userId}
-              placeholder="아이디를 입력하세요"
-              text="아이디"
-              {...disabledIntputProps}
-            />
-            <StyledHr />
-          </InnerSection>
-
-          <InnerSection>
-            <CommonInput
-              text="기존 비밀번호 입력"
-              placeholder="기존 비밀번호 입력하세요"
-              value={userInfo.password}
-              onChange={(e) => handleChange('password', e.target.value)}
-              {...abledInputProps}
-            />
-            <StyledHr />
-          </InnerSection>
-
-          <InnerSection>
-            <CommonInput
-              text="새로운 비밀번호 입력"
-              placeholder="새로운 비밀번호를 입력하세요"
-              value={userInfo.newPassword}
-              onChange={(e) => handleChange('newPassword', e.target.value)}
-              {...abledInputProps}
-            />
-            <StyledHr />
-          </InnerSection>
-
-          <InnerSection>
-            <CommonInput
-              text="비밀번호 확인"
-              placeholder="비밀번호 확인"
-              value={userInfo.confirmPassword}
-              onChange={(e) => handleChange('confirmPassword', e.target.value)}
-              {...abledInputProps}
-            />
-            <StyledHr />
-          </InnerSection>
-
-          <InnerSection>
-            <CommonInput
-              value={userInfo.userName}
-              text="이름"
-              placeholder="이름을 입력하세요"
-              {...disabledIntputProps}
-            />
-            <StyledHr />
-          </InnerSection>
-
-          <InnerSection>
-            <CommonInput
-              value={userInfo.email}
-              text="이메일"
-              placeholder="이메일을 입력하세요"
-              onChange={(e) => handleChange('email', e.target.value)}
-              {...abledInputProps}
-            />
-            <StyledHr />
-          </InnerSection>
-
-          <InnerSection>
-            <CommonInput
-              value={userInfo.Target_Expenditure_Amout}
-              text="일일 목표 지출금액"
-              placeholder="일일 목표 지출금액을 입력하세요"
-              onChange={(e) =>
-                handleChange('Target_Expenditure_Amout', e.target.value)
-              }
-              {...abledInputProps}
-            />
-            <StyledHr />
-          </InnerSection>
+          {editField.map((field, index) => (
+            <InnerSection key={index}>
+              <CommonInput
+                value={userInfo[field.name]}
+                text={field.text}
+                placeholder={field.placeholder}
+                onChange={(e) => handleChange(field.name, e.target.value)}
+                {...(field.disabled ? disabledIntputProps : abledInputProps)}
+              />
+              <StyledHr />
+            </InnerSection>
+          ))}
 
           {passwordError && <ErrorText>{passwordError}</ErrorText>}
         </>

@@ -19,6 +19,10 @@ spring:
     database: oracle
     # database-platform: org.hibernate.dialect.Oracle12Dialect
     database-platform: org.hibernate.dialect.OracleDialect
+  servlet:
+    multipart:
+      max-file-size: 100MB
+      max-request-size: 100MB
 
 logging:
   level:

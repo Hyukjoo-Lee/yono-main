@@ -67,26 +67,6 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public UserDTO updateUser(int id, UserDTO userDTO) {
-        UserEntity userEntity = userDAO.getUserById(id);
-        if (userEntity == null) {
-            throw new NoSuchElementException("ID " + id + "에 해당하는 사용자가 없습니다.");
-        }
-
-        userEntity.setName(userDTO.getName());
-        userEntity.setEmail(userDTO.getEmail());
-        userEntity.setAddress(userDTO.getAddress());
-        userEntity.setDetailAddress(userDTO.getDetailAddress());
-        userEntity.setPostcode(userDTO.getPostcode());
-        userEntity.setSpendingTarget(userDTO.getSpendingTarget());
-        userEntity.setProfile(userDTO.getProfile());
-
-        userDAO.updateUser(userEntity);
-
-        return toDTO(userEntity);
-    }
-
-    @Override
     public void deleteUser(int id) {
         UserEntity userEntity = userDAO.getUserById(id);
         if (userEntity == null) {
@@ -113,6 +93,12 @@ public class UserServiceImpl implements UserService {
         }
 
         return false;
+    }
+
+    @Override
+    public void updateUser(UserDTO userDTO) {
+        UserEntity ue = toEntity(userDTO);
+        userDAO.updateUser(ue);
     }
 
     // DTO → Entity 변환
@@ -150,4 +136,5 @@ public class UserServiceImpl implements UserService {
         dto.setUpdatedAt(entity.getUpdatedAt());
         return dto;
     }
+
 }

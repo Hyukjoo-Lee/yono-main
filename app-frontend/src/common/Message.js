@@ -10,7 +10,7 @@ export const EMPTY_CARDNUM_MESSAGE = '카드번호를 입력하세요.';
 export const EMPTY_CVC_MESSAGE = 'CVC를 입력하세요.';
 export const EMPTY_VALIDITY_MESSAGE = '유효기간을 입력하세요.';
 export const EMPTY_ENGNAME_MESSAGE = '영문이름을 입력하세요.';
-export const EMPTY_CARDSELECT_MESSAGE = '영문이름을 입력하세요.';
+export const EMPTY_CARDSELECT_MESSAGE = '카드를 선택해주세요.';
 
 export const EMPTY_EMAILCODE_MESSAGE = '인증 코드를 입력해주세요.';
 // REGEX 관련
@@ -23,7 +23,7 @@ export const NAME_REGEX_MESSAGE =
   '이름은 한글로 2자 이상, 10자 이하로 입력해주세요.';
 
 export const CARD_REGEX_MESSAGE =
-  '카드번호는 16자리 숫자만 입력하세요. 하이픈(-)은 제외해주세요.';
+  '카드번호는 하이픈(-)을 제외하고 16자리 숫자만 입력하세요.';
 export const CVC_REGEX_MESSAGE =
   'CVC는 카드 뒷면 서명란 끝의 3자리 숫자를 입력하세요.';
 export const VALIDITY_REGEX_MESSAGE = '유효기간은 MMYY 형식으로 입력하세요.';
