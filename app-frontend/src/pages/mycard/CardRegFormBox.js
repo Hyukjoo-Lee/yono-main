@@ -29,9 +29,9 @@ const FormBox = styled.form`
 
 const FORM_FIELDS = {
   cardNumber: {
-    placeholder: '카드번호를 입력하세요 (-제외)',
+    placeholder: '카드번호를 입력하세요',
     text: '카드번호',
-    regex: /^\d{16}$/,
+    maxLength: 19,
     errorMessage: {
       empty: EMPTY_CARDNUM_MESSAGE,
       invalid: CARD_REGEX_MESSAGE,
@@ -42,6 +42,8 @@ const FORM_FIELDS = {
     placeholder: '카드 뒷면 서명란 끝 3자리',
     text: 'CVC',
     regex: /^\d{3}$/,
+    maxLength: 3,
+    type: 'password',
     errorMessage: {
       empty: EMPTY_CVC_MESSAGE,
       invalid: CVC_REGEX_MESSAGE,
@@ -51,6 +53,7 @@ const FORM_FIELDS = {
     placeholder: '날짜를 입력하세요 (/제외)',
     text: '유효기간',
     regex: /^(0[1-9]|1[0-2])\d{2}$/,
+    maxLength: 4,
     errorMessage: {
       empty: EMPTY_VALIDITY_MESSAGE,
       invalid: VALIDITY_REGEX_MESSAGE,
@@ -115,17 +118,53 @@ const CardRegFormBox = ({ cardImg }) => {
     selectedCardType: '',
   });
 
+  const [cardNumToSave, setCardNumToSave] = useState('');
+
   const cardImages = useCardImages(cardImg, formData.selectedCardType);
 
-  const handleInputChange = (field) => (e) => {
+  const handleCardNumChange = (e) => {
+    const { value } = e.target;
+    const numericValue = value.replace(/\D/g, '');
+
+    if (numericValue.length > 16) return; // 최대 16자리 제한
+
+    // 하이픈 추가 로직
+    let formattedValue = numericValue;
+    if (numericValue.length > 4) {
+      formattedValue = numericValue.slice(0, 4) + '-' + numericValue.slice(4);
+    }
+    if (numericValue.length > 8) {
+      formattedValue =
+        formattedValue.slice(0, 9) + '-' + formattedValue.slice(9);
+    }
+    if (numericValue.length > 12) {
+      formattedValue =
+        formattedValue.slice(0, 14) + '-' + formattedValue.slice(14);
+    }
+
     setFormData((prev) => ({
       ...prev,
-      [field]: e.target.value,
+      cardNumber: formattedValue, // 화면 표시용 값
     }));
-    setFormMessage((prev) => ({
-      ...prev,
-      [field]: '',
-    }));
+    setCardNumToSave(numericValue); // 저장용 값
+  };
+
+  const handleInputChange = (field) => (e) => {
+    if (field === 'cardNumber') {
+      handleCardNumChange(e); // 카드 번호 전용 처리
+    } else {
+      const { value } = e.target;
+
+      setFormData((prev) => ({
+        ...prev,
+        [field]: value,
+      }));
+
+      setFormMessage((prev) => ({
+        ...prev,
+        [field]: '',
+      }));
+    }
   };
 
   const validateForm = () => {
@@ -134,7 +173,11 @@ const CardRegFormBox = ({ cardImg }) => {
     Object.keys(FORM_FIELDS).forEach((field) => {
       const { regex, errorMessage } = FORM_FIELDS[field];
 
-      if (!formData[field]) {
+      if (field === 'cardNumber') {
+        if (!cardNumToSave) {
+          errors[field] = EMPTY_CARDNUM_MESSAGE;
+        }
+      } else if (!formData[field]) {
         errors[field] = errorMessage.empty;
       } else if (regex && !regex.test(formData[field])) {
         errors[field] = errorMessage.invalid;
@@ -151,8 +194,13 @@ const CardRegFormBox = ({ cardImg }) => {
 
   const handleSubmit = (event) => {
     event.preventDefault();
+
     if (!validateForm()) return;
-    // TODO: 백엔드 구축 후 카드 등록 로직 추가
+
+    const cardNumber = cardNumToSave;
+    const updatedFormData = { ...formData, cardNumber };
+    // api 전송
+    console.log('data to send: ' + updatedFormData);
   };
 
   return (
@@ -166,6 +214,7 @@ const CardRegFormBox = ({ cardImg }) => {
               value={formData.cardNumber}
               onChange={handleInputChange('cardNumber')}
               width="100%"
+              maxLength={FORM_FIELDS.cardNumber.maxLength}
             />
             {formMessage.cardNumber && (
               <ValidationMessage
@@ -180,11 +229,13 @@ const CardRegFormBox = ({ cardImg }) => {
           {['cvc', 'cardValidity', 'englishName'].map((field) => (
             <Grid2 key={field} size={6}>
               <CommonInput
+                type={FORM_FIELDS[field].type}
                 placeholder={FORM_FIELDS[field].placeholder}
                 text={FORM_FIELDS[field].text}
                 value={formData[field]}
                 onChange={handleInputChange(field)}
                 width="100%"
+                maxLength={FORM_FIELDS[field].maxLength}
               />
               {formMessage[field] && (
                 <ValidationMessage

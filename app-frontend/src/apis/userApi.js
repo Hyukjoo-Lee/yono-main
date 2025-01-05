@@ -12,7 +12,6 @@ export const checkUserIdExists = async (userId) => {
 // 회원가입
 export const signUpUser = async (formData) => {
   const response = await axios.post('/user/signup', formData);
-  console.log(response.data);
   return response.data;
 };
 
@@ -21,6 +20,7 @@ export const login = async (formData) => {
   const response = await axios.post('/user/login', formData);
   return response.data;
 };
+
 // 회원번호로 회원정보 조회
 export const findUserById = async (id) => {
   const response = await axios.get(`/user/${id}`);
