@@ -323,18 +323,21 @@ const CheckUserInfo = ({
       text: '기존 비밀번호 입력',
       placeholder: '기존 비밀번호 입력하세요',
       disabled: false,
+      type: 'password',
     },
     {
       name: 'newPassword',
       text: '새로운 비밀번호 입력',
       placeholder: '새로운 비밀번호를 입력하세요',
       disabled: false,
+      type: 'password',
     },
     {
       name: 'confirmPassword',
       text: '비밀번호 확인',
       placeholder: '비밀번호 확인',
       disabled: false,
+      type: 'password',
     },
     {
       name: 'name',
@@ -388,6 +391,7 @@ const CheckUserInfo = ({
                 value={userInfo[field.name]}
                 text={field.text}
                 placeholder={field.placeholder}
+                type={field.type}
                 onChange={(e) => handleChange(field.name, e.target.value)}
                 {...(field.disabled ? disabledInputProps : abledInputProps)}
               />
