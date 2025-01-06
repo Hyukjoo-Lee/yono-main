@@ -1,15 +1,17 @@
 import React, { useEffect, useState } from 'react';
-import styled from 'styled-components';
 import { useNavigate } from 'react-router-dom';
-import CustomButton from '../../common/CommonButton';
-import CommonInput from '../../common/CommonInput';
+import styled from 'styled-components';
 import { modifyUser } from '../../apis/userApi';
-import Profile from './Profile';
+import CommonButton from '../../common/CommonButton';
+import CommonInput from '../../common/CommonInput';
+import SearchAddressDialog from '../auth/modal/SearchAddressDialog';
 import {
-  PASSWORD_REGEX_MESSAGE,
   EMAIL_REGEX_MESSAGE,
   PASSWORD_MISMATCH_MESSAGE,
+  PASSWORD_REGEX_MESSAGE,
 } from '../../common/Message';
+import Profile from './Profile';
+import theme from '../../theme/theme';
 
 const StyledHr = styled.hr`
   width: 100%;
@@ -67,6 +69,17 @@ const ErrorText = styled.p`
   width: 100%;
 `;
 
+const ButtonWrapper = styled.div`
+  position: relative;
+  margin-left: 15px;
+`;
+
+const InputUserIdBox = styled.div`
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-end;
+`;
+
 const CheckUserInfo = ({
   userNum,
   userId,
@@ -84,6 +97,7 @@ const CheckUserInfo = ({
   const [previewImage, setPreviewImage] = useState(profile);
   const [isEditing, setIsEditing] = useState(true);
   const [passwordError, setPasswordError] = useState('');
+  const [isAddressModalOpen, setIsAddressModalOpen] = useState(false);
   const [userInfo, setUserInfo] = useState({
     userNum: userNum,
     userId: userId || '',
@@ -142,6 +156,11 @@ const CheckUserInfo = ({
       };
       reader.readAsDataURL(file);
     }
+  };
+
+  const handleAddressSelect = (address) => {
+    setUserInfo((prev) => ({ ...prev, address }));
+    setIsAddressModalOpen(false);
   };
 
   const toggleEdit = () => {
@@ -247,7 +266,7 @@ const CheckUserInfo = ({
 
   const deleteId = () => {};
 
-  const disabledIntputProps = {
+  const disabledInputProps = {
     disabled: true,
     background: '#f5f5f5',
     width: '350px',
@@ -274,6 +293,10 @@ const CheckUserInfo = ({
     }
   };
 
+  const handleInputChange = (e, field) => {
+    setUserInfo((prev) => ({ ...prev, [field]: e.target.value }));
+  };
+
   const commonButtonProps = {
     width: '100px',
     height: '38px',
@@ -284,6 +307,7 @@ const CheckUserInfo = ({
     { title: '아이디', value: userId },
     { title: '이메일', value: email },
     { title: '주소', value: address },
+    { title: '상세주소', value: detailAddress },
     { title: '일일 목표 지출금액', value: spendingTarget },
   ];
 
@@ -322,12 +346,6 @@ const CheckUserInfo = ({
       name: 'email',
       text: '이메일',
       placeholder: '이메일을 입력하세요',
-      disabled: false,
-    },
-    {
-      name: 'address',
-      text: '주소',
-      placeholder: '주소를 입력하세요',
       disabled: false,
     },
     {
@@ -371,24 +389,66 @@ const CheckUserInfo = ({
                 text={field.text}
                 placeholder={field.placeholder}
                 onChange={(e) => handleChange(field.name, e.target.value)}
-                {...(field.disabled ? disabledIntputProps : abledInputProps)}
+                {...(field.disabled ? disabledInputProps : abledInputProps)}
               />
               <StyledHr />
             </InnerSection>
           ))}
 
+          <InnerSection>
+            <InputUserIdBox>
+              <CommonInput
+                placeholder="주소를 입력하세요"
+                text="주소"
+                value={userInfo.address}
+                {...abledInputProps}
+                width="100%"
+                onChange={(e) => handleInputChange(e, 'address')}
+              />
+              <ButtonWrapper>
+                <CommonButton
+                  width="100px"
+                  height="40px"
+                  text="주소검색"
+                  fontSize={theme.fontSize.base}
+                  onClick={() => setIsAddressModalOpen(true)}
+                />
+              </ButtonWrapper>
+            </InputUserIdBox>
+
+            <StyledHr />
+          </InnerSection>
+
+          <InnerSection>
+            <CommonInput
+              placeholder="상세 주소를 입력하세요"
+              text="상세 주소"
+              value={userInfo.detailAddress}
+              onChange={(e) => handleChange('detailAddress', e.target.value)}
+              {...abledInputProps}
+            />
+            <StyledHr />
+          </InnerSection>
+
           {passwordError && <ErrorText>{passwordError}</ErrorText>}
+
+          <SearchAddressDialog
+            open={isAddressModalOpen}
+            setModalVisible={setIsAddressModalOpen}
+            onCompletePost={handleAddressSelect}
+            setFormData={setUserInfo}
+          />
         </>
       )}
 
       <Button>
-        <CustomButton
+        <CommonButton
           text={isEditing ? '수정' : '저장'}
           onClick={isEditing ? toggleEdit : save}
           {...commonButtonProps}
         />
 
-        <CustomButton
+        <CommonButton
           text={isEditing ? '회원 탈퇴' : '취소'}
           onClick={isEditing ? deleteId : cancelEdit}
           {...commonButtonProps}
