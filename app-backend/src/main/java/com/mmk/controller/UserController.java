@@ -160,13 +160,15 @@ public class UserController {
         try {
             UserDTO uv = new ObjectMapper().readValue(userInfoJson, UserDTO.class);
 
-            if (uv.getProfile() != null && !uv.getProfile().isEmpty()) {
-                String existingProfilePath = System.getProperty("user.dir") + "/app-backend/src/main/resources/static"
-                        + uv.getProfile();
-                File existingFile = new File(existingProfilePath);
-
-                if (existingFile.exists()) {
-                    existingFile.delete();
+            if (profileImage != null && !profileImage.isEmpty()) {
+                if (uv.getProfile() != null && !uv.getProfile().isEmpty()) {
+                    String existingProfilePath = System.getProperty("user.dir") + "/app-backend/src/main/resources/static"
+                            + uv.getProfile();
+                    File existingFile = new File(existingProfilePath);
+    
+                    if (existingFile.exists()) {
+                        existingFile.delete();
+                    }
                 }
             }
 
@@ -209,7 +211,6 @@ public class UserController {
             }
 
             userService.updateUser(uv);
-            // userRepository.save(uv);
 
             ApiResponse<UserDTO> response = new ApiResponse<>(201, "회원 정보 수정 성공", uv);
             return ResponseEntity.ok(response);

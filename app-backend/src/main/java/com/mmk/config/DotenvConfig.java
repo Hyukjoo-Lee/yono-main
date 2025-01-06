@@ -9,7 +9,7 @@ public class DotenvConfig {
         Dotenv dotenv = Dotenv.configure()
                 // .directory(System.getProperty("user.dir") +
                 // "/app-backend/src/main/resources")
-                .directory(System.getProperty("user.dir") + "/src/main/resources")
+                .directory(System.getProperty("user.dir") + "/app-backend/src/main/resources")
                 .load();
 
         dotenv.entries().forEach(entry -> {

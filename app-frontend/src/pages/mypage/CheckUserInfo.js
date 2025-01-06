@@ -5,6 +5,11 @@ import CustomButton from '../../common/CommonButton';
 import CommonInput from '../../common/CommonInput';
 import { modifyUser } from '../../apis/userApi';
 import Profile from './Profile';
+import {
+  PASSWORD_REGEX_MESSAGE,
+  EMAIL_REGEX_MESSAGE,
+  PASSWORD_MISMATCH_MESSAGE,
+} from '../../common/Message';
 
 const StyledHr = styled.hr`
   width: 100%;
@@ -182,17 +187,39 @@ const CheckUserInfo = ({
 
   const navigate = useNavigate();
 
+  const inputRegexs = {
+    email: /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/,
+    password: /^(?=.*[a-z])(?=.*\d)(?=.*[*@#$%^&+=!]).{8,}$/,
+  };
+
   const save = () => {
+    let isInvalid = true;
+
     if (isFormValid() === 1) {
       setPasswordError('모든 정보를 입력해주세요!');
-      return;
+      isInvalid = false;
     } else if (password !== userInfo.originPassword) {
-      setPasswordError('기존 비밀번호가 일치하지 않습니다!');
-      return;
+      setPasswordError(PASSWORD_MISMATCH_MESSAGE);
+      isInvalid = false;
     } else if (isFormValid() === 2) {
       setPasswordError('비밀번호 확인이 일치하지 않습니다!');
-      return;
+      isInvalid = false;
     }
+
+    Object.keys(userInfo).forEach((field) => {
+      if (field === 'email' && !inputRegexs.email.test(userInfo.email)) {
+        setPasswordError(EMAIL_REGEX_MESSAGE);
+        isInvalid = false;
+      } else if (
+        field === 'newPassword' &&
+        !inputRegexs.password.test(userInfo.newPassword)
+      ) {
+        setPasswordError(PASSWORD_REGEX_MESSAGE);
+        isInvalid = false;
+      }
+    });
+
+    if (!isInvalid) return;
 
     const updatedUserInfo = {
       ...userInfo,
