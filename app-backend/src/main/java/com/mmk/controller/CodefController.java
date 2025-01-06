@@ -198,4 +198,52 @@ public class CodefController {
         return null;
     }
 
+    @GetMapping("getUserCards")
+    public void getUserCards() {
+        codef = new EasyCodef();
+        codef.setClientInfoForDemo(clientId, clientSecret);
+        codef.setPublicKey(publickey);
+
+        HashMap<String, Object> parameterMap = new HashMap<String, Object>();
+        
+        parameterMap.put("connectedId", connectedId);
+        parameterMap.put("organization", "0302"); // 기관 코드
+        parameterMap.put("birthDate", "19970424");
+        parameterMap.put("inquiryType", "1"); // 카드 이미지 포함 여부
+
+        String productUrl = "/v1/kr/card/p/account/card-list"; // 보유 카드 URL
+
+        String result = "";
+        try {
+            result = codef.requestProduct(productUrl, EasyCodefServiceType.DEMO, parameterMap);
+            System.out.println(result);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    @GetMapping("getUserPerformance")
+    public void getUserPerformance() {
+        codef = new EasyCodef();
+        codef.setClientInfoForDemo(clientId, clientSecret);
+        codef.setPublicKey(publickey);
+
+        HashMap<String, Object> parameterMap = new HashMap<String, Object>();
+        
+        parameterMap.put("connectedId", connectedId);
+        parameterMap.put("organization", "0302"); // 기관 코드
+
+        String productUrl = "/v1/kr/card/p/account/result-check-list"; // 보유 카드 URL
+
+        String result = "";
+        try {
+            result = codef.requestProduct(productUrl, EasyCodefServiceType.DEMO, parameterMap);
+            System.out.println(result);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+
+    
 }
