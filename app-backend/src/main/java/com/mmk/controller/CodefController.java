@@ -34,7 +34,7 @@ public class CodefController {
     @Value("${CODEF_PUBLIC_KEY}")
     private String publickey;
 
-    @Value("${CODEF_CONNECTEDID}")
+    @Value("${CODEF_CONNECTEDID:defaultValue}")
     private String connectedId;
 
     private EasyCodef codef;
