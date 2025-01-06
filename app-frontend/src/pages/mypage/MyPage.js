@@ -11,7 +11,7 @@ export function MyPage() {
   useEffect(() => {
     const fetchUser = async () => {
       try {
-        const userNum = 71; // 현재 로그인한 유저의 userNum
+        const userNum = 1; // 현재 로그인한 유저의 userNum
         const user = await findUserById(userNum);
         setUsers(user.data);
         console.log(user.data);

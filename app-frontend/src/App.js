@@ -6,10 +6,6 @@ import Footer from './common/Footer';
 import { MainHeader } from './common/MainHeader';
 
 import { ThemeProvider } from 'styled-components';
-import { FindID } from './pages/auth/FindID';
-import { FindPassword } from './pages/auth/FindPassword';
-import { Login } from './pages/auth/Login';
-import { SignUp } from './pages/auth/SignUp';
 import CardAnalysis from './pages/cardAnalysis/CardAnalysis';
 import { CardChallege } from './pages/cardChallege/CardChallege';
 import { Community } from './pages/community/Community';
@@ -23,6 +19,10 @@ import { CommunityPost } from './pages/community/CommunityPost';
 import { NoticePost } from './pages/community/NoticePost';
 import { EditFormBox } from './pages/community/EditFormBox';
 import ResetPassword from './pages/auth/ResetPassword';
+import Login from './pages/auth/Login';
+import SignUp from './pages/auth/SignUp';
+import FindID from './pages/auth/FindID';
+import FindPassword from './pages/auth/FindPassword';
 
 const Root = styled.div`
   & *,

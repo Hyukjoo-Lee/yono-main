@@ -18,11 +18,14 @@ values (user_seq.nextval, 'hjtestid', '이혁주', '/images/image2.jpg', 'hj@goo
 insert into user_info (user_num, user_id, name, profile, email, password, address, detail_Address, postcode, spending_target, created_at, updated_at) 
 values (user_seq.nextval, 'mktestid', '허민경', '/images/image3.jpg', 'mk@google.com', '1234', '서울시 용산구', '1415호', '11111', 500000, sysdate, sysdate);
 
-insert into user_info (user_num, user_id, name, profile, email,  password, address, detail_Address, postcode, spending_target, created_at, updated_at) 
-values (user_seq.nextval, 'hktestid', '이현경', '/images/image4.jpg', 'hk@google.com','1234', '서울시 용산구', '1415호', '11111', 500000, sysdate, sysdate);
+insert into user_info (user_num, user_id, name, profile, email, password, address, detail_Address, postcode, spending_target, created_at, updated_at) 
+values (user_seq.nextval, 'jhtestid', '김지훈', '/images/image3.jpg', 'jh@google.com', '1234', '서울시 용산구', '1415호', '11111', 500000, sysdate, sysdate);
 
+insert into user_info (user_num, user_id, name, profile, email, password, address, detail_Address, postcode, spending_target, created_at, updated_at) 
+values (user_seq.nextval, 'jetestid', '박지은', '/images/image3.jpg', 'je@google.com', '1234', '서울시 용산구', '1415호', '11111', 500000, sysdate, sysdate);
 commit;
-select * from user_info where email = 'hk@google.com';
+
+select * from user_info where email = 'mk@google.com';
 
 drop table user_info;
 

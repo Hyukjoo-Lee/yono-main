@@ -1,5 +1,10 @@
 package com.mmk.entity;
 
+import java.sql.Timestamp;
+
+import org.hibernate.annotations.CreationTimestamp;
+import org.hibernate.annotations.UpdateTimestamp;
+
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -15,41 +20,39 @@ import lombok.ToString;
 @Getter
 @ToString
 @Entity
-@SequenceGenerator(
-        name = "card_seq_generator",
-        sequenceName = "card_seq",
-        initialValue = 1,
-        allocationSize = 1
-)
-@Table(name = "card_history")
+@SequenceGenerator(name = "card_seq_generator", sequenceName = "card_seq", initialValue = 1, allocationSize = 1)
+@Table(name = "card")
 public class CardEntity {
-    
+
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "card_seq_generator")
+    @Column(name = "card_id")
+    private int cardId;
+
     @Column(name = "card_num")
-    private int cardNum;
+    private String cardNum;
+
+    @Column(name = "card_name_en")
+    private String cardNameEn;
+
+    @Column(name = "card_provider")
+    private String cardProvider;
+
+    @Column(name = "card_img_url")
+    private String cardImgUrl;
+
+    @Column(name = "is_primary")
+    private int isPrimary;
+
+    @Column(name = "expiry_date")
+    private String expiryDate;
 
     @Column(name = "user_num")
     private int userNum;
 
-    @Column(name = "used_date")
-    private String usedDate;
+    @CreationTimestamp
+    private Timestamp createdAt;
 
-    @Column(name = "used_time")
-    private String usedTime;
-
-    @Column(name = "card_name")
-    private String cardName;
-
-    @Column(name = "store_name")
-    private String storeName;
-
-    @Column(name = "used_amount")
-    private String usedAmount;
-
-    @Column(name = "paymentType")
-    private String paymentType; // 결제 방법 1: 일시불, 2: 할부, 3: 그 외
-
-    @Column(name = "storeType")
-    private String storeType; // 가맹점 업종
+    @UpdateTimestamp
+    private Timestamp updatedAt;
 }

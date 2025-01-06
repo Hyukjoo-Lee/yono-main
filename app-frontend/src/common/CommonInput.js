@@ -9,7 +9,6 @@ const InputStyle = styled.input`
   border: 1px solid ${(props) => props.$borderColor || '#D7D7D7'};
   border-radius: ${(props) =>
     props.borderRadius ? props.borderRadius : '5px'};
-  cursor: pointer;
   padding: 0 10px;
   box-sizing: border-box;
   font-size: ${(props) => props.fontSize || '16px'};
@@ -63,6 +62,8 @@ const CommonInput = (props) => {
     value,
     onChange,
     $marginLeft,
+    readOnly,
+    maxLength,
   } = props;
 
   return (
@@ -91,6 +92,8 @@ const CommonInput = (props) => {
         disabled={disabled}
         value={value}
         onChange={onChange}
+        readOnly={readOnly}
+        maxLength={maxLength}
       />
     </div>
   );

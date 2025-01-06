@@ -8,9 +8,12 @@ import theme from '../../theme/theme';
 import {
   EMPTY_PASSWORD_MESSAGE,
   EMPTY_USERID_MESSAGE,
+  LOGIN_VERIFIED_MESSAGE,
 } from '../../common/Message';
 import { useNavigate } from 'react-router-dom';
 import CommonDialog from '../../common/CommonDialog';
+import { useDispatch, useSelector } from 'react-redux';
+import { loginUser } from '../../redux/actions/userAction';
 
 const RootIn = styled.div`
   width: ${(props) => props.theme.display.lg};
@@ -112,20 +115,23 @@ const SocialButton = styled.div`
   cursor: pointer;
 `;
 
-export function Login() {
+const Login = () => {
   const [formData, setFormData] = useState({
     userId: '',
     password: '',
   });
 
-  const [alertMessage, setAlertMessage] = useState({
+  const [formMessage, setFormMessage] = useState({
     userId: '',
     password: '',
+    error: '',
   });
 
   const [isLoginSuccessVisible, setIsLoginSuccessVisible] = useState(false);
 
+  const dispatch = useDispatch();
   const navigate = useNavigate();
+  const { user, isLoggedIn } = useSelector((state) => state.user);
 
   const handleFindLink = (link) => {
     if (link === 'id') {
@@ -142,7 +148,7 @@ export function Login() {
 
   const handleInputChange = (e, field) => {
     setFormData((prev) => ({ ...prev, [field]: e.target.value }));
-    setAlertMessage((prev) => ({ ...prev, [field]: '' }));
+    setFormMessage((prev) => ({ ...prev, [field]: '' }));
   };
 
   const validateForm = () => {
@@ -162,18 +168,22 @@ export function Login() {
   const handleLogin = async (e) => {
     e.preventDefault();
     const errors = validateForm();
-    setAlertMessage(errors);
+    setFormMessage(errors);
 
     if (Object.keys(errors).length > 0) {
-      console.log('there is an error');
       return;
     }
 
     try {
-      // 로그인 api 요청
-      setIsLoginSuccessVisible(true);
+      const result = await dispatch(loginUser(formData));
+      if (loginUser.fulfilled.match(result)) {
+        setIsLoginSuccessVisible(true);
+      } else {
+        setFormMessage({ error: LOGIN_VERIFIED_MESSAGE });
+      }
+      console.log(result);
     } catch (error) {
-      console.log(error);
+      setFormMessage({ error: LOGIN_VERIFIED_MESSAGE });
     }
   };
 
@@ -191,8 +201,8 @@ export function Login() {
                 width="100%"
                 onChange={(e) => handleInputChange(e, 'userId')}
               />
-              {alertMessage.userId && (
-                <ErrorMessage>{alertMessage.userId}</ErrorMessage>
+              {formMessage.userId && (
+                <ErrorMessage>{formMessage.userId}</ErrorMessage>
               )}
             </InputWrapper>
             <InputWrapper>
@@ -204,8 +214,11 @@ export function Login() {
                 type="password"
                 onChange={(e) => handleInputChange(e, 'password')}
               />
-              {alertMessage.password && (
-                <ErrorMessage>{alertMessage.password}</ErrorMessage>
+              {formMessage.password && (
+                <ErrorMessage>{formMessage.password}</ErrorMessage>
+              )}
+              {formMessage.error && (
+                <ErrorMessage>{formMessage.error}</ErrorMessage>
               )}
             </InputWrapper>
             <OptionsWrapper>
@@ -241,14 +254,18 @@ export function Login() {
               </SocialButton>
             </SocialLoginWrapper>
           </FormWrapper>
-          <CommonDialog
-            open={isLoginSuccessVisible}
-            children={'로그인에 성공했습니다!'}
-            onClose={completeLogin}
-            onClick={completeLogin}
-          />
+          {isLoggedIn && (
+            <CommonDialog
+              open={isLoginSuccessVisible}
+              children={`환영합니다. ${user.name}님!`}
+              onClose={completeLogin}
+              onClick={completeLogin}
+            />
+          )}
         </FormBox>
       </RootIn>
     </CommonRoot>
   );
-}
+};
+
+export default Login;

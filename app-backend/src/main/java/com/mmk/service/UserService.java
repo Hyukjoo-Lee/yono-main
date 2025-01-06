@@ -21,5 +21,7 @@ public interface UserService {
 
     boolean existsByEmail(String email);
 
+    boolean validateLogin(String userId, String password);
+
     void updateUser(UserDTO userDTO);
 }

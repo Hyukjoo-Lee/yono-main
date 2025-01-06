@@ -140,7 +140,7 @@ const FORM_FIELDS = {
   },
 };
 
-export function SignUp() {
+const SignUp = () => {
   const [isSignUpSuccessVisible, setIsSignUpSuccessVisible] = useState(false);
   const [isSignUpFailVisible, setIsSignUpFailVisible] = useState(false);
   const [isAddressModalOpen, setIsAddressModalOpen] = useState(false);
@@ -175,10 +175,12 @@ export function SignUp() {
   };
 
   const navigate = useNavigate();
+
   const handleInputChange = (e, field) => {
     setFormData((prev) => ({ ...prev, [field]: e.target.value }));
     setFormMessage((prev) => ({ ...prev, [field]: '' }));
   };
+
   const validateForm = () => {
     const errors = {};
 
@@ -364,6 +366,7 @@ export function SignUp() {
               placeholder={FORM_FIELDS['address'].placeholder}
               text="주소"
               value={formData.address}
+              readOnly={true}
               onChange={(e) => handleInputChange(e, 'address')}
               {...InputProps}
             />
@@ -413,4 +416,6 @@ export function SignUp() {
       </FullContainer>
     </CommonRoot>
   );
-}
+};
+
+export default SignUp;
