@@ -6,6 +6,7 @@ import CommonButton from '../../common/CommonButton';
 import CommonInput from '../../common/CommonInput';
 import SearchAddressDialog from '../auth/modal/SearchAddressDialog';
 import {
+  PASSWORDCONFIRM_FAIL_MESSAGE,
   VALIDITY_REGEX_SPENDINGTARGET,
   EMAIL_REGEX_MESSAGE,
   PASSWORD_MISMATCH_MESSAGE,
@@ -223,7 +224,7 @@ const CheckUserInfo = ({
       setPasswordError(PASSWORD_MISMATCH_MESSAGE);
       isInvalid = false;
     } else if (isFormValid() === 2) {
-      setPasswordError('비밀번호 확인이 일치하지 않습니다!');
+      setPasswordError(PASSWORDCONFIRM_FAIL_MESSAGE);
       isInvalid = false;
     }
 

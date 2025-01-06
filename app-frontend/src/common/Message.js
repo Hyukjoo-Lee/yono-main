@@ -35,6 +35,8 @@ export const VALIDITY_REGEX_SPENDINGTARGET =
 export const PASSWORD_MISMATCH_MESSAGE = '비밀번호가 일치하지 않습니다.';
 export const LOGIN_VERIFIED_MESSAGE =
   '아이디 또는 비밀번호가 일치하지 않습니다.';
+export const PASSWORDCONFIRM_FAIL_MESSAGE =
+  '비밀번호 확인이 일치하지 않습니다.';
 
 // 중복 확인 관련
 export const USERID_DUPLICATE_MESSAGE = '이미 등록된 아이디입니다.';
