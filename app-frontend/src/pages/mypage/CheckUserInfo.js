@@ -6,6 +6,7 @@ import CommonButton from '../../common/CommonButton';
 import CommonInput from '../../common/CommonInput';
 import SearchAddressDialog from '../auth/modal/SearchAddressDialog';
 import {
+  VALIDITY_REGEX_SPENDINGTARGET,
   EMAIL_REGEX_MESSAGE,
   PASSWORD_MISMATCH_MESSAGE,
   PASSWORD_REGEX_MESSAGE,
@@ -209,6 +210,7 @@ const CheckUserInfo = ({
   const inputRegexs = {
     email: /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/,
     password: /^(?=.*[a-z])(?=.*\d)(?=.*[*@#$%^&+=!]).{8,}$/,
+    spendingTarget: /^[0-9]*$/,
   };
 
   const save = () => {
@@ -234,6 +236,12 @@ const CheckUserInfo = ({
         !inputRegexs.password.test(userInfo.newPassword)
       ) {
         setPasswordError(PASSWORD_REGEX_MESSAGE);
+        isInvalid = false;
+      } else if (
+        field === 'spendingTarget' &&
+        !inputRegexs.spendingTarget.test(userInfo.spendingTarget)
+      ) {
+        setPasswordError(VALIDITY_REGEX_SPENDINGTARGET);
         isInvalid = false;
       }
     });
