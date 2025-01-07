@@ -2,7 +2,7 @@ import CommonPageInfo from '../../common/CommonPageInfo';
 import CommonRoot from '../../common/CommonRoot';
 import CheckUserInfo from './CheckUserInfo';
 
-import { useState, useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import { findUserById } from '../../apis/userApi';
 
 export function MyPage() {
