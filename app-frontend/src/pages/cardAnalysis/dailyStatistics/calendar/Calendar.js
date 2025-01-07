@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import CalendarHeader from './CalendarHeader';
 import CalendarDays from './CalendarDays';
-import CalendarBody from './ClaendarBody';
+import CalendarBody from './CalendarBody';
 import { addMonths, subMonths, addYears, subYears } from 'date-fns';
 import styled from 'styled-components';
 
@@ -12,28 +12,27 @@ const Root = styled.div`
   overflow: hidden;
 `;
 
-const Calendar = () => {
+const Calendar = ({ selectedDate, onDateClick, statistics, adjustHeight }) => {
   const [currentMonth, setCurrentMonth] = useState(new Date());
-  const [selectedDate, setSelectedDate] = useState(new Date());
 
   const prevYear = () => {
     setCurrentMonth(subYears(currentMonth, 1));
+    adjustHeight();
   };
 
   const nextYear = () => {
     setCurrentMonth(addYears(currentMonth, 1));
+    adjustHeight();
   };
 
   const prevMonth = () => {
     setCurrentMonth(subMonths(currentMonth, 1));
+    adjustHeight();
   };
 
   const nextMonth = () => {
     setCurrentMonth(addMonths(currentMonth, 1));
-  };
-
-  const onDateClick = (day) => {
-    setSelectedDate(day);
+    adjustHeight();
   };
 
   return (
@@ -50,6 +49,7 @@ const Calendar = () => {
         currentMonth={currentMonth}
         selectedDate={selectedDate}
         onDateClick={onDateClick}
+        statistics={statistics}
       />
     </Root>
   );
