@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import styled from 'styled-components';
 import CommonPageInfo from '../../common/CommonPageInfo';
 import CommonRoot from '../../common/CommonRoot';
@@ -126,12 +126,24 @@ const Login = () => {
     password: '',
     error: '',
   });
-
   const [isLoginSuccessVisible, setIsLoginSuccessVisible] = useState(false);
+  const [rememberUserId, setRememberUserId] = useState(false);
 
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const { user, isLoggedIn } = useSelector((state) => state.user);
+
+  useEffect(() => {
+    const savedUserId = localStorage.getItem('savedUserId');
+    if (savedUserId) {
+      setFormData((prev) => ({ ...prev, userId: savedUserId }));
+      setRememberUserId(true);
+    }
+  }, []);
+
+  const handleRememberUserId = (e) => {
+    setRememberUserId(e.target.checked);
+  };
 
   const handleFindLink = (link) => {
     if (link === 'id') {
@@ -177,6 +189,11 @@ const Login = () => {
     try {
       const result = await dispatch(loginUser(formData));
       if (loginUser.fulfilled.match(result)) {
+        if (rememberUserId) {
+          localStorage.setItem('savedUserId', formData.userId);
+        } else {
+          localStorage.removeItem('savedUserId');
+        }
         setIsLoginSuccessVisible(true);
       } else {
         setFormMessage({ error: LOGIN_VERIFIED_MESSAGE });
@@ -197,6 +214,7 @@ const Login = () => {
               <CommonInput
                 background={theme.color.white}
                 placeholder="아이디를 입력하세요."
+                value={formData.userId}
                 text="아이디"
                 width="100%"
                 onChange={(e) => handleInputChange(e, 'userId')}
@@ -223,8 +241,12 @@ const Login = () => {
             </InputWrapper>
             <OptionsWrapper>
               <CheckBoxWrapper>
-                <StyledCheckbox htmlFor="save" type="checkbox" />
-                <Label id="save">아이디 저장</Label>
+                <StyledCheckbox
+                  type="checkbox"
+                  checked={rememberUserId}
+                  onChange={handleRememberUserId}
+                />
+                <Label>아이디 저장</Label>
               </CheckBoxWrapper>
               <div>
                 <LinkText href="#" onClick={() => handleFindLink('id')}>
