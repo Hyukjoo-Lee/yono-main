@@ -14,8 +14,6 @@ public class DotenvConfig {
         try {
             File resourceDirectory = ResourceUtils.getFile("classpath:");
             Dotenv dotenv = Dotenv.configure()
-                    // .directory(System.getProperty("user.dir") +
-                    // "/app-backend/src/main/resources")
                     .directory(resourceDirectory.getPath())
                     .load();
 
