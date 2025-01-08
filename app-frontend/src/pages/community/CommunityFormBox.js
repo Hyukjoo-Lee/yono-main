@@ -1,11 +1,12 @@
-import styled from 'styled-components';
-import CommonInput from '../../common/CommonInput';
-import CommonSelect from '../../common/CommonSelect';
-import CommonButton from '../../common/CommonButton';
-import CommonPageInfo from '../../common/CommonPageInfo';
-import { useNavigate } from 'react-router-dom';
-import CommonHr from '../../common/CommonHr';
+import axios from 'axios';
 import { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
+import styled from 'styled-components';
+import CommonButton from '../../common/CommonButton';
+import CommonHr from '../../common/CommonHr';
+import CommonInput from '../../common/CommonInput';
+import CommonPageInfo from '../../common/CommonPageInfo';
+import CommonSelect from '../../common/CommonSelect';
 
 const Root = styled.div`
   width: ${(props) => props.theme.display.lg};
@@ -71,10 +72,39 @@ const OptionList = [
 
 export function CommunityFormBox() {
   const navigate = useNavigate();
-  const handleButtonClick = () => {
-    navigate('/community');
+
+  const [title, setTitle] = useState('');
+  const [categoryOption, setCategoryOption] = useState('');
+  const [content, setContent] = useState('');
+  const [image, setImage] = useState('');
+
+  const handleTitleChange = (e) => setTitle(e.target.value);
+  const handleContentChange = (e) => setContent(e.target.value);
+  const handleImageChange = (e) => setImage(e.target.value);
+
+  const handleButtonClick = async () => {
+    try {
+      const requestData = {
+        commTitle: title,
+        commCategory: categoryOption,
+        commCont: content,
+        commImgUrl: image,
+      };
+
+      const response = await axios.post(
+        '/community/communityFormBox',
+        requestData,
+      );
+
+      if (response.status === 200) {
+        alert('게시글이 등록되었습니다.');
+        navigate('/community');
+      }
+    } catch (error) {
+      //오류처리
+      alert('게시글 등록에 실패했습니다. 다시 시도해주세요.');
+    }
   };
-  const [categoryOption, setcategoryOption] = useState('');
 
   return (
     <Root>
@@ -92,6 +122,8 @@ export function CommunityFormBox() {
             width="500px"
             height="40px"
             placeholder="제목을 입력해주세요"
+            value={title}
+            onChange={handleTitleChange}
           />
         </Row>
         <Row>
@@ -103,13 +135,13 @@ export function CommunityFormBox() {
             find="카테고리를 선택해 주세요"
             display="none"
             selectedValue={categoryOption}
-            setSelectedValue={(value) => setcategoryOption(value)}
+            setSelectedValue={(value) => setCategoryOption(value)}
           />
         </Row>
 
         <Row>
           <span>내용</span>
-          <textarea></textarea>
+          <textarea value={content} onChange={handleContentChange}></textarea>
         </Row>
         <Row>
           <span>사진</span>
@@ -119,6 +151,8 @@ export function CommunityFormBox() {
             width="100px"
             height="40px"
             font-size="10px"
+            value={image}
+            onChange={handleImageChange}
           />
         </Row>
       </FormBox>
