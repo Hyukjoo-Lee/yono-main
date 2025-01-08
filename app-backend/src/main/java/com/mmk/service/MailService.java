@@ -5,6 +5,8 @@ import jakarta.mail.internet.MimeMessage;
 
 public interface MailService {
     String createNumber();
-    MimeMessage createMail(String mail, String number) throws MessagingException;
-    String sendSimpleMessage(String sendEmail) throws MessagingException;
+    MimeMessage createCodeMail(String email, String number) throws MessagingException;
+    String sendCodeMessage(String email) throws MessagingException;
+    MimeMessage createTempPwdMail(String email, String tempPwd) throws MessagingException;
+    void sendTempPwd(String email, String tempPwd) throws MessagingException;
 }

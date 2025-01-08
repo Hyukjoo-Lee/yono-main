@@ -38,14 +38,14 @@ public class MailServiceImple implements MailService {
         return key.toString();
     }
 
-    // 메일 생성
+    // 아아디 인증코드 메일 생성
     @Override
-    public MimeMessage createMail(String mail, String number) throws MessagingException {
+    public MimeMessage createCodeMail(String mail, String number) throws MessagingException {
         MimeMessage message = javaMailSender.createMimeMessage();
 
         message.setFrom(senderEmail);
         message.setRecipients(MimeMessage.RecipientType.TO, mail);
-        message.setSubject("이메일 인증");
+        message.setSubject("YONO 이메일 인증");
         String body = "";
         body += "<h3>YONO 아이디 찾기 인증번호입니다.</h3>";
         body += "<h1>" + number + "</h1>";
@@ -55,12 +55,12 @@ public class MailServiceImple implements MailService {
         return message;
     }
 
-    // 메일 발송
+    // 아이디 인증코드 메일 발송
     @Override
-    public String sendSimpleMessage(String sendEmail) throws MessagingException {
+    public String sendCodeMessage(String sendEmail) throws MessagingException {
         String number = createNumber();
 
-        MimeMessage message = createMail(sendEmail, number);
+        MimeMessage message = createCodeMail(sendEmail, number);
         try {
             javaMailSender.send(message);
         } catch (MailException e) {
@@ -70,4 +70,33 @@ public class MailServiceImple implements MailService {
 
         return number;
     }
+
+    // 임시비밀번호 메일 생성
+    @Override
+    public MimeMessage createTempPwdMail(String email, String tempPwd) throws MessagingException {
+        MimeMessage message = javaMailSender.createMimeMessage();
+
+        message.setFrom(senderEmail);
+        message.setRecipients(MimeMessage.RecipientType.TO, email);
+        message.setSubject("YONO 임시 비밀번호");
+        String body = "";
+        body += "<h3>YONO 임시 비밀번호입니다.</h3>";
+        body += "<h1>" + tempPwd + "</h1>";
+        message.setText(body, "UTF-8", "html");
+
+        return message;
+    }
+
+    @Override
+    public void sendTempPwd(String email, String tempPwd) throws MessagingException {
+        MimeMessage message = createTempPwdMail(email, tempPwd);
+        try {
+            javaMailSender.send(message);
+        } catch (MailException e) {
+            e.printStackTrace();
+            throw new IllegalArgumentException("메일 발송 중 오류가 발생했습니다.");
+        }
+    }
+
+    
 }

@@ -28,7 +28,7 @@ export const CVC_REGEX_MESSAGE =
   'CVC는 카드 뒷면 서명란 끝의 3자리 숫자를 입력하세요.';
 export const VALIDITY_REGEX_MESSAGE = '유효기간은 MMYY 형식으로 입력하세요.';
 export const ENGNAME_REGEX_MESSAGE = '영문 이름을 정확히 입력해주세요.';
-export const VALIDITY_REGEX_SPENDINGTARGET =
+export const SPENDINGTARGET_REGEX_MESSAGE =
   '일일 목표 지출금액은 숫자로만 입력하세요.';
 
 // 일치 여부 관련

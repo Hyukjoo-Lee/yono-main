@@ -7,7 +7,7 @@ import CommonInput from '../../common/CommonInput';
 import SearchAddressDialog from '../auth/modal/SearchAddressDialog';
 import {
   PASSWORDCONFIRM_FAIL_MESSAGE,
-  VALIDITY_REGEX_SPENDINGTARGET,
+  SPENDINGTARGET_REGEX_MESSAGE,
   EMAIL_REGEX_MESSAGE,
   PASSWORD_MISMATCH_MESSAGE,
   PASSWORD_REGEX_MESSAGE,
@@ -242,7 +242,7 @@ const CheckUserInfo = ({
         field === 'spendingTarget' &&
         !inputRegexs.spendingTarget.test(userInfo.spendingTarget)
       ) {
-        setPasswordError(VALIDITY_REGEX_SPENDINGTARGET);
+        setPasswordError(SPENDINGTARGET_REGEX_MESSAGE);
         isInvalid = false;
       }
     });
