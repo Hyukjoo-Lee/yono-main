@@ -27,7 +27,7 @@ const StyledBox = styled.div`
 const StyledBoxTitle = styled.p`
   margin: 0;
   padding-bottom: 5px;
-  font-size: 24px;
+  font-size: ${(props) => props.theme.fontSize.lg};
   text-align: center;
   font-weight: bold;
 `;

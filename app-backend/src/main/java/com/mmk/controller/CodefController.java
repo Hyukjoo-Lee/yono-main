@@ -124,9 +124,6 @@ public class CodefController {
         // 0 - 최신순, 1 - 과거순
         parameterMap.put("orderBy", "1");
 
-        // 생년월일 설정
-        parameterMap.put("birthDate", "생년월일 6자 입력"); // 생년월일
-
         // 카드번호 설정
         parameterMap.put("cardNo", "카드번호 입력"); // 카드번호 입력
 
@@ -197,5 +194,52 @@ public class CodefController {
 
         return null;
     }
+
+    @GetMapping("getUserCards")
+    public void getUserCards() {
+        codef = new EasyCodef();
+        codef.setClientInfoForDemo(clientId, clientSecret);
+        codef.setPublicKey(publickey);
+
+        HashMap<String, Object> parameterMap = new HashMap<String, Object>();
+        
+        parameterMap.put("connectedId", connectedId);
+        parameterMap.put("organization", "0302"); // 기관 코드
+        parameterMap.put("inquiryType", "1"); // 카드 이미지 포함 여부
+
+        String productUrl = "/v1/kr/card/p/account/card-list"; // 보유 카드 URL
+
+        String result = "";
+        try {
+            result = codef.requestProduct(productUrl, EasyCodefServiceType.DEMO, parameterMap);
+            System.out.println(result);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    @GetMapping("getUserPerformance")
+    public void getUserPerformance() {
+        codef = new EasyCodef();
+        codef.setClientInfoForDemo(clientId, clientSecret);
+        codef.setPublicKey(publickey);
+
+        HashMap<String, Object> parameterMap = new HashMap<String, Object>();
+        
+        parameterMap.put("connectedId", connectedId);
+        parameterMap.put("organization", "0302"); // 기관 코드
+
+        String productUrl = "/v1/kr/card/p/account/result-check-list"; // 보유 카드 URL
+
+        String result = "";
+        try {
+            result = codef.requestProduct(productUrl, EasyCodefServiceType.DEMO, parameterMap);
+            System.out.println(result);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+
 
 }

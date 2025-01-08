@@ -1,6 +1,7 @@
 package com.mmk.controller;
 
 import java.io.File;
+import java.io.FileNotFoundException;
 import java.util.Calendar;
 import java.util.HashMap;
 import java.util.List;
@@ -11,6 +12,7 @@ import java.util.Random;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.util.ResourceUtils;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -155,18 +157,20 @@ public class UserController {
             @RequestParam(value = "profileImage", required = false) MultipartFile profileImage,
             @RequestParam(value = "profileText", required = false) String profileText) {
 
-        String uploadFolder = System.getProperty("user.dir") + "/app-backend/src/main/resources/static/images";
-
         try {
             UserDTO uv = new ObjectMapper().readValue(userInfoJson, UserDTO.class);
+            File resourceDirectory = ResourceUtils.getFile("classpath:");
+            String uploadFolder = resourceDirectory.getPath() + "/static/images";
 
-            if (uv.getProfile() != null && !uv.getProfile().isEmpty()) {
-                String existingProfilePath = System.getProperty("user.dir") + "/app-backend/src/main/resources/static"
-                        + uv.getProfile();
-                File existingFile = new File(existingProfilePath);
-
-                if (existingFile.exists()) {
-                    existingFile.delete();
+            if (profileImage != null && !profileImage.isEmpty()) {
+                if (uv.getProfile() != null && !uv.getProfile().isEmpty()) {
+                    String existingProfilePath = resourceDirectory.getPath() + "/static"
+                            + uv.getProfile();
+                    File existingFile = new File(existingProfilePath);
+    
+                    if (existingFile.exists()) {
+                        existingFile.delete();
+                    }
                 }
             }
 
@@ -209,11 +213,10 @@ public class UserController {
             }
 
             userService.updateUser(uv);
-            // userRepository.save(uv);
 
             ApiResponse<UserDTO> response = new ApiResponse<>(201, "회원 정보 수정 성공", uv);
             return ResponseEntity.ok(response);
-        } catch (JsonProcessingException e) {
+        } catch (JsonProcessingException | FileNotFoundException e) {
             e.printStackTrace();
             ApiResponse<UserDTO> response = new ApiResponse<>(400, "회원 정보 수정 오류", null);
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(response);

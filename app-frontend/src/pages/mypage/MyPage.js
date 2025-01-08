@@ -2,7 +2,7 @@ import CommonPageInfo from '../../common/CommonPageInfo';
 import CommonRoot from '../../common/CommonRoot';
 import CheckUserInfo from './CheckUserInfo';
 
-import { useState, useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import { findUserById } from '../../apis/userApi';
 
 export function MyPage() {
@@ -11,7 +11,7 @@ export function MyPage() {
   useEffect(() => {
     const fetchUser = async () => {
       try {
-        const userNum = 1; // 현재 로그인한 유저의 userNum
+        const userNum = 71; // 현재 로그인한 유저의 userNum
         const user = await findUserById(userNum);
         setUsers(user.data);
         console.log(user.data);
