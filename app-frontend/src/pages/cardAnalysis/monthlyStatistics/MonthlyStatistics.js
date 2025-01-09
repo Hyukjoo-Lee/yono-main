@@ -3,7 +3,7 @@ import styled from 'styled-components';
 import { useState, useEffect } from 'react';
 import Barchart from '../../../pages/cardAnalysis/monthlyStatistics/chart/Barchart';
 import Piechart from '../../../pages/cardAnalysis/monthlyStatistics/chart/Piechart';
-import { getCardHistory } from '../../../apis/cardApi';
+// import { getCardHistory } from '../../../apis/cardApi';
 // import { getToken, getConId, getCardHistory } from '../../../apis/cardApi'
 const piechart_data = [
   { id: '식비', value: 3 },
