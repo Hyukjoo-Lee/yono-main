@@ -14,7 +14,7 @@ export const getCardHistory = async () => {
 };
 
 export const getUserCards = async () => {
-  const response = await axios.get('/codef/getUserCards');
+  const response = await axios.get('/codef/getUserCardList');
   return response.data;
 };
 

@@ -23,6 +23,8 @@ import Login from './pages/auth/Login';
 import SignUp from './pages/auth/SignUp';
 import FindID from './pages/auth/FindID';
 import FindPassword from './pages/auth/FindPassword';
+import CardListTest from './test/CardListTest';
+import { KakaoLoginHandler } from './pages/auth/components/KakaoLoginHandler';
 
 const Root = styled.div`
   & *,
@@ -57,6 +59,11 @@ function App() {
         <Layout>
           <Routes>
             <Route path="/" element={<MainPage />} />
+            <Route
+              path="/login/oauth/callback/kakao"
+              element={<KakaoLoginHandler />}
+            />
+            <Route path="/test" element={<CardListTest />} />
             <Route path="/login" element={<Login />} />
             <Route path="/signup" element={<SignUp />} />
             <Route path="/mypage" element={<MyPage />} />

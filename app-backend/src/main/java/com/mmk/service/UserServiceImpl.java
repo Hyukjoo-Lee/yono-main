@@ -85,6 +85,11 @@ public class UserServiceImpl implements UserService {
         return userDAO.existsByEmail(email);
     }
 
+    @Override
+    public boolean existByName(String name) {
+        return userDAO.existsByName(name);
+    }
+
     public boolean validateLogin(String userId, String password) {
         UserEntity userEntity = userDAO.getUserByUserId(userId);
 
@@ -99,6 +104,20 @@ public class UserServiceImpl implements UserService {
     public void updateUser(UserDTO userDTO) {
         UserEntity ue = toEntity(userDTO);
         userDAO.updateUser(ue);
+    }
+
+    @Override
+    public UserDTO getFindId(String name, String email) {
+        UserEntity ue = userDAO.getFindId(name, email);
+        UserDTO result = toDTO(ue);
+        return result;
+    }
+
+    @Override
+    public UserDTO getFindPwd(String name, String email, String id) {
+        UserEntity ue = userDAO.getFindPwd(name, email, id);
+        UserDTO result = toDTO(ue);
+        return result;
     }
 
     // DTO → Entity 변환

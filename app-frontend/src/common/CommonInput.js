@@ -64,6 +64,7 @@ const CommonInput = (props) => {
     $marginLeft,
     readOnly,
     maxLength,
+    autoComplete,
   } = props;
 
   return (
@@ -94,6 +95,7 @@ const CommonInput = (props) => {
         onChange={onChange}
         readOnly={readOnly}
         maxLength={maxLength}
+        autoComplete={autoComplete}
       />
     </div>
   );

@@ -34,7 +34,7 @@ public class CodefController {
     @Value("${CODEF_PUBLIC_KEY}")
     private String publickey;
 
-    @Value("${CODEF_CONNECTEDID:defaultValue}")
+    @Value("${CODEF_CONNECTEDID}")
     private String connectedId;
 
     private EasyCodef codef;
@@ -66,17 +66,18 @@ public class CodefController {
 
         // 기관코드는 각 상품 페이지 (https://developer.codef.io/products/card/overview)에서 확인 가능
         // 카드사마다 기관코드가 다름, 아래 예시는 현대카드
-        accountMap.put("organization", "0302");
-
+        accountMap.put("organization", "0304");
+        System.out.println("map: " + accountMap);
         // login 방법이 공인인증서, 아이디 & 비번 2가지 방법이 있는데 아이디 & 비번을 선택
         // 공인인증서 loginType = 0, 아이디 & 비번 loginType = 1
         accountMap.put("loginType", "1");
 
-        accountMap.put("id", "카드사 아이디 입력"); // 카드사 아이디 입력
+        accountMap.put("id", "BIGIE2"); // 카드사 아이디 입력
 
+        System.out.println("accountMap: " + accountMap);
         try {
             // RSA암호화가 필요한 필드는 encryptRSA(String plainText, String publicKey) 메서드를 이용해 암호화
-            accountMap.put("password", EasyCodefUtil.encryptRSA("카드사비밀번호 입력", codef.getPublicKey())); // 카드사 비밀번호 입력
+            accountMap.put("password", EasyCodefUtil.encryptRSA("*Qwe89117465", codef.getPublicKey())); // 카드사 비밀번호 입력
         } catch (Exception e) {
             e.printStackTrace();
             return;
@@ -112,20 +113,20 @@ public class CodefController {
 
         // 기관코드는 각 상품 페이지 (https://developer.codef.io/products/card/overview)에서 확인 가능
         // 카드사마다 기관코드가 다름, 아래 예시는 현대카드
-        parameterMap.put("organization", "0302");
+        parameterMap.put("organization", "0304");
 
         // 조회 시작 날짜 설정
-        parameterMap.put("startDate", "20241001");
+        parameterMap.put("startDate", "20240101");
 
         // 조회 마지막 날짜 설정
-        parameterMap.put("endDate", "20241130");
+        parameterMap.put("endDate", "20241201");
 
         // 정렬 방법 설정
         // 0 - 최신순, 1 - 과거순
         parameterMap.put("orderBy", "1");
 
         // 카드번호 설정
-        parameterMap.put("cardNo", "카드번호 입력"); // 카드번호 입력
+        parameterMap.put("cardNo", ""); // 카드번호 입력
 
         // 가맹점 정보 포함 여부
         // 0 - 미포함, 1 - 포함, 2 - 부가세 포함, 3 - 전체 (가맹점 + 부가세)
@@ -134,10 +135,10 @@ public class CodefController {
         // 조회구분
         // 0 - 카드별 조회
         // 1 - 전체 조회
-        parameterMap.put("inquiryType", "0");
+        parameterMap.put("inquiryType", "1");
 
         try {
-            parameterMap.put("카드 비밀번호", EasyCodefUtil.encryptRSA("카드 비밀번호 입력", codef.getPublicKey())); // 카드 비밀번호 입력
+            parameterMap.put("카드 비밀번호", EasyCodefUtil.encryptRSA("", codef.getPublicKey())); // 카드 비밀번호 입력
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -195,26 +196,62 @@ public class CodefController {
         return null;
     }
 
-    @GetMapping("getUserCards")
-    public void getUserCards() {
+    // @GetMapping("getUserCards")
+    // public void getUserCards() {
+    // codef = new EasyCodef();
+    // codef.setClientInfoForDemo(clientId, clientSecret);
+    // codef.setPublicKey(publickey);
+
+    // HashMap<String, Object> parameterMap = new HashMap<String, Object>();
+
+    // parameterMap.put("connectedId", connectedId);
+    // parameterMap.put("organization", "0304"); // 기관 코드
+    // parameterMap.put("inquiryType", "0"); // 카드 이미지 포함 여부
+
+    // // System.out.println("map: " + parameterMap);
+    // String productUrl = "/v1/kr/card/p/account/card-list"; // 보유 카드 URL
+
+    // String result = "";
+    // try {
+    // result = codef.requestProduct(productUrl, EasyCodefServiceType.DEMO,
+    // parameterMap);
+    // System.out.println(result);
+    // } catch (Exception e) {
+    // e.printStackTrace();
+    // }
+
+    // }
+    @GetMapping("/getUserCardList")
+    public List<Map<String, Object>> getUserCardList() {
         codef = new EasyCodef();
         codef.setClientInfoForDemo(clientId, clientSecret);
         codef.setPublicKey(publickey);
 
-        HashMap<String, Object> parameterMap = new HashMap<String, Object>();
-        
+        HashMap<String, Object> parameterMap = new HashMap<>();
         parameterMap.put("connectedId", connectedId);
-        parameterMap.put("organization", "0302"); // 기관 코드
-        parameterMap.put("inquiryType", "1"); // 카드 이미지 포함 여부
+        parameterMap.put("organization", "0304"); // 기관 코드
+        parameterMap.put("inquiryType", "0"); // 카드 이미지 포함 여부
 
         String productUrl = "/v1/kr/card/p/account/card-list"; // 보유 카드 URL
 
-        String result = "";
         try {
-            result = codef.requestProduct(productUrl, EasyCodefServiceType.DEMO, parameterMap);
-            System.out.println(result);
+            String jsonResult = codef.requestProduct(productUrl, EasyCodefServiceType.DEMO, parameterMap);
+            ObjectMapper objectMapper = new ObjectMapper();
+
+            String dataArrayJson = objectMapper.readTree(jsonResult).get("data").toString();
+
+            List<Map<String, Object>> result = objectMapper.readValue(dataArrayJson,
+                    new TypeReference<List<Map<String, Object>>>() {
+                    });
+
+            if (result == null || result.isEmpty()) {
+                throw new RuntimeException("카드 정보가 존재하지 않습니다.");
+            }
+
+            return result;
         } catch (Exception e) {
             e.printStackTrace();
+            throw new RuntimeException("카드 리스트 정보 요청에 실패하였습니다.");
         }
     }
 
@@ -225,9 +262,9 @@ public class CodefController {
         codef.setPublicKey(publickey);
 
         HashMap<String, Object> parameterMap = new HashMap<String, Object>();
-        
+
         parameterMap.put("connectedId", connectedId);
-        parameterMap.put("organization", "0302"); // 기관 코드
+        parameterMap.put("organization", "0304"); // 기관 코드
 
         String productUrl = "/v1/kr/card/p/account/result-check-list"; // 보유 카드 URL
 
@@ -239,7 +276,5 @@ public class CodefController {
             e.printStackTrace();
         }
     }
-
-
 
 }
