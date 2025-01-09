@@ -12,7 +12,7 @@ import lombok.ToString;
 @ToString
 public class CommunityDTO {
   
-  private int commuintyNo;
+  private int communityNo;
   private String commCategory;
   private String userId;
   private String adminId;

@@ -1,6 +1,5 @@
 package com.mmk.entity;
 
-// import java.security.Timestamp;
 import java.sql.Timestamp;
 
 import org.hibernate.annotations.CreationTimestamp;
@@ -22,8 +21,8 @@ import lombok.ToString;
 @ToString
 @Entity
 @SequenceGenerator(
-  name = "gecommunity_no_seq",
-  sequenceName = "gecommunity_no_seq",
+  name = "community_seq",
+  sequenceName = "community_seq",
   initialValue= 1,
   allocationSize=1
 )
@@ -31,31 +30,36 @@ import lombok.ToString;
 public class CommunityEntity {
 
   @Id
-  @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "gecommunity_no_seq")
+  @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "community_seq")
   @Column(name = "community_no")
   private int communityNo;
+
   @Column(name = "comm_category")
   private String commCategory;
+
   @Column(name = "user_id", nullable=false)
   private String userId;
-  @Column(name = "admin_id", nullable=false)
-  private String adminId;
-  @Column(name = "comm_title",nullable=false)
+
+  @Column(name = "comm_title", nullable=false)
   private String commTitle;
-  @Column(name = "comm_cont",nullable=false)
+
+  @Column(name = "comm_cont", nullable=false)
   private String commCont;
-  @Column(name="comm_img_url",nullable=false)
+
+  @Column(name="comm_img_url")
   private String commImgUrl;
-  @Column(name="view_count",nullable=false)
-  private int viewCount;
-  @Column(name="reply_count",nullable=false)
-  private int replyCount;
+
+  @Column(name="view_count", nullable=false, columnDefinition = "int default 0")
+  private int viewCount = 0;
+
+  @Column(name="reply_count", nullable=false, columnDefinition = "int default 0")
+  private int replyCount = 0;
 
   @CreationTimestamp
-  @Column(name="created_at",nullable=false)
+  @Column(name="created_at")
   private Timestamp createdAt;
 
   @UpdateTimestamp
-  @Column(name="updated_at",nullable=false)
+  @Column(name="updated_at")
   private Timestamp updatedAt;
 }

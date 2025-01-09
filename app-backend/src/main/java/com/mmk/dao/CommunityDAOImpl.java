@@ -1,5 +1,7 @@
 package com.mmk.dao;
 
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
@@ -14,5 +16,10 @@ public class CommunityDAOImpl implements CommunityDAO {
     @Override
     public void save(CommunityEntity communityData) {
       this.communityRepo.save(communityData);
+    }
+
+    @Override
+    public List<CommunityEntity> getCommunityList(){
+      return this.communityRepo.findAll();
     }
 }
