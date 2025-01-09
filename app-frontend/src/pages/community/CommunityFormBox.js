@@ -1,5 +1,6 @@
 import axios from 'axios';
-import { useState } from 'react';
+import React, { useRef, useState } from 'react';
+import { useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
 import CommonButton from '../../common/CommonButton';
@@ -64,6 +65,10 @@ const Box1 = styled.div`
   margin: 30px;
   gap: 30px;
 `;
+
+const HiddenInput = styled.input`
+  display: none;
+`;
 const OptionList = [
   { value: 'option_1', label: '정보공유' },
   { value: 'option_2', label: '질문' },
@@ -73,23 +78,40 @@ const OptionList = [
 export function CommunityFormBox() {
   const navigate = useNavigate();
 
+  // const [userId, setUserId] = useState('');
   const [title, setTitle] = useState('');
   const [categoryOption, setCategoryOption] = useState('');
   const [content, setContent] = useState('');
   const [image, setImage] = useState('');
+  const user = useSelector((state) => state.user.user);
+  // console.log(JSON.stringify(user));
 
-  const handleTitleChange = (e) => setTitle(e.target.value);
+  const fileInputRef = useRef(null);
+
+  const requestData = {
+    userId: user.userId,
+    commTitle: title,
+    commCategory: categoryOption,
+    commCont: content,
+    commImgUrl: image,
+  };
+
+  const handleTitleChange = (e) => {
+    setTitle(e.target.value);
+  };
   const handleContentChange = (e) => setContent(e.target.value);
-  const handleImageChange = (e) => setImage(e.target.value);
+  const handleImageChange = (e) => {
+    const file = e.target.files[0];
+    if (file) {
+      setImage(file.name);
+      // setImage(file); 파일 이름만 저장하려면 file.name를 써야함
+    }
+    // setImage(e.target.value);
+  };
 
   const handleButtonClick = async () => {
     try {
-      const requestData = {
-        commTitle: title,
-        commCategory: categoryOption,
-        commCont: content,
-        commImgUrl: image,
-      };
+      console.log('request: ' + JSON.stringify(requestData));
 
       const response = await axios.post(
         '/community/communityFormBox',
@@ -101,7 +123,6 @@ export function CommunityFormBox() {
         navigate('/community');
       }
     } catch (error) {
-      //오류처리
       alert('게시글 등록에 실패했습니다. 다시 시도해주세요.');
     }
   };
@@ -145,14 +166,25 @@ export function CommunityFormBox() {
         </Row>
         <Row>
           <span>사진</span>
-          <CommonInput width="390px" height="40px" placeholder="사진 첨부" />
+          <CommonInput
+            width="390px"
+            height="40px"
+            placeholder="사진 첨부"
+            readOnly={true}
+            value={image}
+          />
+          <HiddenInput
+            type="file"
+            ref={fileInputRef}
+            onChange={handleImageChange}
+          />
           <CommonButton
             text="사진 찾기"
             width="100px"
             height="40px"
             font-size="10px"
-            value={image}
-            onChange={handleImageChange}
+            // value={image}
+            onClick={() => fileInputRef.current.click()}
           />
         </Row>
       </FormBox>
