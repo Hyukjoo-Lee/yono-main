@@ -37,6 +37,8 @@ dependencies {
 	implementation 'io.github.cdimascio:dotenv-java:2.2.0'
 	// codef
 	implementation 'io.codef.api:easycodef-java:1.0.6'
+	// Google SMTP 서버를 이용한 이메일 인증
+	implementation 'org.springframework.boot:spring-boot-starter-mail'
 }
 
 

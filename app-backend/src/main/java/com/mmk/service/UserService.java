@@ -21,7 +21,13 @@ public interface UserService {
 
     boolean existsByEmail(String email);
 
+    boolean existByName(String name);
+
     boolean validateLogin(String userId, String password);
 
     void updateUser(UserDTO userDTO);
+
+    UserDTO getFindId(String name, String email);
+
+    UserDTO getFindPwd(String name, String email, String id);
 }

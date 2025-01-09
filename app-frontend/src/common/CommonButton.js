@@ -21,9 +21,9 @@ const ButtonStyle = styled(Button)`
       transition:
         background-color 0.6s ease,
         color 0.6s ease;
-      background: ${(props) => props.hoverBk || props.theme.color.blue};
+      background: ${(props) => props.$hoverBk || props.theme.color.blue};
       & p {
-        color: ${(props) => props.hoverColor || props.theme.color.white};
+        color: ${(props) => props.$hoverColor || props.theme.color.white};
       }
     }
   }
@@ -50,8 +50,8 @@ const CustomButton = (props) => {
     fontSize,
     disabled,
     onClick,
-    hoverBk,
-    hoverColor,
+    $hoverBk,
+    $hoverColor,
     startIcon,
     endIcon,
     type,
@@ -64,8 +64,8 @@ const CustomButton = (props) => {
       background={background}
       $borderColor={$borderColor}
       $borderRadius={$borderRadius}
-      hoverBk={hoverBk}
-      hoverColor={hoverColor}
+      $hoverBk={$hoverBk}
+      $hoverColor={$hoverColor}
       onClick={disabled ? undefined : onClick}
       disabled={disabled}
       disableRipple

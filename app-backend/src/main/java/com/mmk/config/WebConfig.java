@@ -20,7 +20,6 @@ public class WebConfig implements WebMvcConfigurer {
             registry.addResourceHandler("/images/**")
                     .addResourceLocations("file:" + resourceDirectory.getPath() + "/static/images/");
 
-            System.out.println("Dir path : " + resourceDirectory.getPath());
         } catch (FileNotFoundException e) {
             throw new RuntimeException("프로필 사진 파일 경로 에러", e);
         }
