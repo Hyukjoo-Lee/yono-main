@@ -6,14 +6,13 @@ import CommonButton from '../../common/CommonButton';
 import CommonInput from '../../common/CommonInput';
 import SearchAddressDialog from '../auth/modal/SearchAddressDialog';
 import {
-  PASSWORDCONFIRM_FAIL_MESSAGE,
   SPENDINGTARGET_REGEX_MESSAGE,
   EMAIL_REGEX_MESSAGE,
   PASSWORD_MISMATCH_MESSAGE,
-  PASSWORD_REGEX_MESSAGE,
 } from '../../common/Message';
 import Profile from './Profile';
 import theme from '../../theme/theme';
+import PasswordDialog from './PasswordDialog';
 
 const StyledHr = styled.hr`
   width: 100%;
@@ -36,6 +35,7 @@ const Section = styled.div`
 `;
 
 const InnerSection = styled.div`
+  width: 100%;
   margin-bottom: 15px;
 `;
 
@@ -98,14 +98,13 @@ const CheckUserInfo = ({
   const [profileImage, setProfileImage] = useState(profile);
   const [previewImage, setPreviewImage] = useState(profile);
   const [isEditing, setIsEditing] = useState(true);
+  const [isShowDialog, setIsShowDialog] = useState(false);
   const [passwordError, setPasswordError] = useState('');
   const [isAddressModalOpen, setIsAddressModalOpen] = useState(false);
   const [userInfo, setUserInfo] = useState({
     userNum: userNum,
     userId: userId || '',
     originPassword: '',
-    newPassword: '',
-    confirmPassword: '',
     email: email || '',
     name: name || '',
     address: address || '',
@@ -121,8 +120,6 @@ const CheckUserInfo = ({
       userNum: userNum,
       userId: userId || '',
       originPassword: '',
-      newPassword: '',
-      confirmPassword: '',
       email: email || '',
       name: name || '',
       address: address || '',
@@ -134,6 +131,10 @@ const CheckUserInfo = ({
     });
 
     setPreviewImage(profile);
+
+    if (isShowDialog) {
+      document.getElementById('root').removeAttribute('inert');
+    }
   }, [
     userNum,
     userId,
@@ -145,6 +146,7 @@ const CheckUserInfo = ({
     spendingTarget,
     profile,
     createdAt,
+    isShowDialog,
   ]);
 
   const handleProfileChange = (e) => {
@@ -178,8 +180,6 @@ const CheckUserInfo = ({
       userNum: userNum,
       userId: userId || '',
       originPassword: '',
-      newPassword: '',
-      confirmPassword: '',
       email: email || '',
       name: name || '',
       address: address || '',
@@ -197,13 +197,10 @@ const CheckUserInfo = ({
     for (const key in userInfo) {
       if ((userInfo[key] + '').trim() === '') {
         console.log(key);
-        return 1;
+        return false;
       }
     }
-
-    if (userInfo.newPassword !== userInfo.confirmPassword) {
-      return 2;
-    }
+    return true;
   };
 
   const navigate = useNavigate();
@@ -217,26 +214,17 @@ const CheckUserInfo = ({
   const save = () => {
     let isInvalid = true;
 
-    if (isFormValid() === 1) {
+    if (!isFormValid()) {
       setPasswordError('모든 정보를 입력해주세요!');
       isInvalid = false;
     } else if (password !== userInfo.originPassword) {
       setPasswordError(PASSWORD_MISMATCH_MESSAGE);
-      isInvalid = false;
-    } else if (isFormValid() === 2) {
-      setPasswordError(PASSWORDCONFIRM_FAIL_MESSAGE);
       isInvalid = false;
     }
 
     Object.keys(userInfo).forEach((field) => {
       if (field === 'email' && !inputRegexs.email.test(userInfo.email)) {
         setPasswordError(EMAIL_REGEX_MESSAGE);
-        isInvalid = false;
-      } else if (
-        field === 'newPassword' &&
-        !inputRegexs.password.test(userInfo.newPassword)
-      ) {
-        setPasswordError(PASSWORD_REGEX_MESSAGE);
         isInvalid = false;
       } else if (
         field === 'spendingTarget' &&
@@ -253,8 +241,6 @@ const CheckUserInfo = ({
       ...userInfo,
       password: userInfo.newPassword,
       originPassword: undefined,
-      confirmPassword: undefined,
-      newPassword: undefined,
     };
 
     const formData = new FormData();
@@ -264,8 +250,6 @@ const CheckUserInfo = ({
     } else {
       formData.append('profileText', profileImage);
     }
-
-    formData.forEach((value, key) => console.log(key, value));
 
     modifyUser(formData).then((response) => {
       navigate(0);
@@ -297,9 +281,6 @@ const CheckUserInfo = ({
       ...prev,
       [key]: value,
     }));
-    if (key === 'newPassword' || key === 'confirmPassword') {
-      setPasswordError('');
-    }
   };
 
   const handleInputChange = (e, field) => {
@@ -312,42 +293,15 @@ const CheckUserInfo = ({
   };
 
   const nonEditField = [
-    { title: '이름', value: name },
     { title: '아이디', value: userId },
+    { title: '이름', value: name },
     { title: '이메일', value: email },
+    { title: '일일 목표 지출금액', value: spendingTarget },
     { title: '주소', value: address },
     { title: '상세주소', value: detailAddress },
-    { title: '일일 목표 지출금액', value: spendingTarget },
   ];
 
   const editField = [
-    {
-      name: 'userId',
-      text: '아이디',
-      placeholder: '아이디를 입력하세요',
-      disabled: true,
-    },
-    {
-      name: 'originPassword',
-      text: '기존 비밀번호 입력',
-      placeholder: '기존 비밀번호 입력하세요',
-      disabled: false,
-      type: 'password',
-    },
-    {
-      name: 'newPassword',
-      text: '새로운 비밀번호 입력',
-      placeholder: '새로운 비밀번호를 입력하세요',
-      disabled: false,
-      type: 'password',
-    },
-    {
-      name: 'confirmPassword',
-      text: '비밀번호 확인',
-      placeholder: '비밀번호 확인',
-      disabled: false,
-      type: 'password',
-    },
     {
       name: 'name',
       text: '이름',
@@ -393,6 +347,51 @@ const CheckUserInfo = ({
             onProfileChange={handleProfileChange}
             isEditing={isEditing}
           />
+
+          <InnerSection>
+            <CommonInput
+              value={userInfo.userId}
+              text="아이디"
+              placeholder="아이디를 입력하세요"
+              type="text"
+              onChange={(e) => handleChange('userId', e.target.value)}
+              {...disabledInputProps}
+            />
+            <StyledHr />
+          </InnerSection>
+
+          <form
+            onSubmit={(e) => {
+              e.preventDefault();
+              setIsShowDialog(true);
+            }}
+          >
+            <InputUserIdBox>
+              <CommonInput
+                placeholder="기존 비밀번호를 입력하세요"
+                text="기존 비밀번호"
+                type="password"
+                value={userInfo.originPassword}
+                {...abledInputProps}
+                width="100%"
+                onChange={(e) => handleInputChange(e, 'originPassword')}
+                autoComplete="off"
+              />
+              <ButtonWrapper>
+                <CommonButton
+                  width="100px"
+                  height="40px"
+                  text="변경"
+                  fontSize={theme.fontSize.base}
+                  type="submit"
+                />
+              </ButtonWrapper>
+            </InputUserIdBox>
+          </form>
+
+          <InnerSection>
+            <StyledHr />
+          </InnerSection>
 
           {editField.map((field, index) => (
             <InnerSection key={index}>
@@ -467,6 +466,17 @@ const CheckUserInfo = ({
           {...commonButtonProps}
         />
       </Button>
+
+      <PasswordDialog
+        isShowDialog={isShowDialog}
+        onClose={() => {
+          document.body.focus();
+          document.getElementById('root').setAttribute('inert', true);
+          setIsShowDialog(false);
+        }}
+        password={password}
+        userInfo={userInfo}
+      />
     </Root>
   );
 };

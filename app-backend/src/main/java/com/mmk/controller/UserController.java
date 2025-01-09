@@ -184,6 +184,36 @@ public class UserController {
     }
 
     // PUT API
+    // 임시비밀번호 발급 및 변경
+    @PutMapping("/updateTempPwd")
+    public String getUpdateTempPwd(@RequestParam("email") String email) {
+        String tempPwd=UUID.randomUUID().toString().replace("-", "");
+		tempPwd = tempPwd.substring(0,10);
+
+        UserDTO userDTO = userService.getUserByEmail(email);
+        userDTO.setPassword(tempPwd);
+        userService.updateUser(userDTO);
+
+        return tempPwd;
+    }
+
+    // 비밀번호 변경
+    @PutMapping("/updatePwd")
+    public ResponseEntity<ApiResponse<Object>> updatePwd(@RequestParam("password") String password, @RequestParam("userId") String userId) {
+        try {
+            UserDTO userDTO = userService.getUserByUserId(userId);
+            userDTO.setPassword(password);
+            userService.updateUser(userDTO);
+    
+            ApiResponse<Object> response = new ApiResponse<>(200, "비밀번호 변경 성공", null);
+            return ResponseEntity.ok(response);
+        } catch (Exception e) {
+            e.printStackTrace();
+            ApiResponse<Object> response = new ApiResponse<>(400, "비밀번호 변경 오류", null);
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(response);
+        }
+    };
+    
     // 유저 정보 업데이트
     @PutMapping("/{userNum}")
     public ResponseEntity<ApiResponse<UserDTO>> updateUser(
@@ -256,19 +286,4 @@ public class UserController {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(response);
         }
     }
-
-    // 임시비밀번호 발급 및 변경
-    @PutMapping("/updateTempPwd")
-    public String getUpdateTempPwd(@RequestParam("email") String email) {
-        System.out.println("백엔드에서 받은 email : " + email);
-        String tempPwd=UUID.randomUUID().toString().replace("-", "");
-		tempPwd = tempPwd.substring(0,10);
-
-        UserDTO userDTO = userService.getUserByEmail(email);
-        userDTO.setPassword(tempPwd);
-        userService.updateUser(userDTO);
-
-        return tempPwd;
-    }
-
 };

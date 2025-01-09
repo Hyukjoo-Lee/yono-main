@@ -31,7 +31,6 @@ export const findUserById = async (id) => {
 export const modifyUser = async (formData) => {
   try {
     const parsedUserInfo = JSON.parse(formData.get('userInfo'));
-    console.log(parsedUserInfo.userNum);
     await axios.put(`/user/${parsedUserInfo.userNum}`, formData, {
       headers: {
         'Content-Type': 'multipart/form-data',
@@ -74,6 +73,15 @@ export const findPwd = async (name, email, id) => {
 export const updateTempPwd = async (email) => {
   const response = await axios.put('/user/updateTempPwd', null, {
     params: { email },
+  });
+
+  return response.data;
+};
+
+// 비밀번호 변경
+export const updatePwd = async (password, userId) => {
+  const response = await axios.put('/user/updatePwd', null, {
+    params: { password, userId },
   });
 
   return response.data;
