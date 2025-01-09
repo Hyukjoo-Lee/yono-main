@@ -1,5 +1,6 @@
 import { createAsyncThunk } from '@reduxjs/toolkit';
 import * as userApi from '../../apis/userApi';
+import * as authApi from '../../apis/authApi';
 import { userActions } from '../reducers/userReducer';
 
 // 로그인
@@ -14,6 +15,19 @@ export const loginUser = createAsyncThunk(
     } catch (error) {
       console.error('로그인 실패: ', error);
       return rejectWithValue(error.response?.data || '로그인 오류');
+    }
+  },
+);
+
+export const kakaoLoginUser = createAsyncThunk(
+  'user/kakaoLogin',
+  async (accessToken, userInfo, { dispatch, rejectWithValue }) => {
+    try {
+      const response = await dispatch(userActions.loginSuccessful(response));
+      return response;
+    } catch (error) {
+      console.error('카카오 로그인 실패: ', error);
+      return rejectWithValue(error.response?.data || '카카오 로그인 오류');
     }
   },
 );
