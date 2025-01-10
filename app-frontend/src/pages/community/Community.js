@@ -2,7 +2,8 @@ import React, { useState } from 'react';
 import styled from 'styled-components';
 import CommonTabs from '../../common/CommonTabs';
 import CommunityTable from './CommunityTable';
-import NoticeTable from './NoticeTable';
+// import NoticeTable from './NoticeTable';
+import NoticeTable2 from './NoticeTable2';
 
 const Root = styled.div`
   width: ${(props) => props.theme.display.lg};
@@ -22,7 +23,7 @@ export function Community() {
   const [selectedTab, setSelectedTab] = useState(0);
   const items = [{ text: '커뮤니티' }, { text: '공지사항' }];
 
-  const panels = [<CommunityTable />, <NoticeTable />];
+  const panels = [<CommunityTable />, <NoticeTable2 />]; //NoticeTable -> NoticeTable2
 
   return (
     <>

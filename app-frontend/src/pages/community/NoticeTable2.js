@@ -13,6 +13,7 @@ import {
 } from '@mui/material';
 import axios from 'axios';
 import { Link, useNavigate } from 'react-router-dom';
+// import { Link } from 'react-router-dom';
 import styled from 'styled-components';
 import CommonButton from '../../common/CommonButton';
 import CommonInput from '../../common/CommonInput';
@@ -25,10 +26,9 @@ const Root = styled.div`
 `;
 
 const columns = [
-  { id: 'community_no', label: '번호' },
-  { id: 'commCategory', label: '카테고리', minWidth: 50 },
-  { id: 'commTitle', label: '제목', minWidth: 150 },
-  { id: 'userId', label: '작성자', minWidth: 100 },
+  { id: 'noticeNo', label: '번호', minWidth: 50 },
+  { id: 'noticeTitle', label: '제목', minWidth: 150 },
+  { id: 'adminIn', label: '작성자', minWidth: 100 },
   { id: 'createdAt', label: '등록일', minWidth: 100 },
   { id: 'viewCount', label: '조회', minWidth: 50 },
 ];
@@ -77,7 +77,7 @@ const Box = styled.div`
     margin-left: 10px;
   }
 `;
-export function CommunityTable() {
+export function NoticeTable2() {
   const [rows, setRows] = useState([]);
   const [page, setPage] = useState(0);
   const rowsPerPage = 10;
@@ -87,13 +87,13 @@ export function CommunityTable() {
     setPage(newPage - 1);
   };
   const handleButtonClick = () => {
-    navigate('/communityFormBox');
+    navigate('/noticeFormBox');
   };
 
   useEffect(() => {
     const getCommunityData = async () => {
       try {
-        const response = await axios.get('/community');
+        const response = await axios.get('/notice');
         setRows(response.data);
       } catch (error) {
         console.error('Error fetching data : ', error);
@@ -101,15 +101,6 @@ export function CommunityTable() {
     };
     getCommunityData();
   }, []);
-
-  const formatCategory = (category) => {
-    const categories = {
-      option_1: '정보공유',
-      option_2: '질문',
-      option_3: '기타문의',
-    };
-    return categories[category] || category;
-  };
 
   const formatDate = (timestamp) => {
     if (!timestamp) return '';
@@ -174,9 +165,6 @@ export function CommunityTable() {
                       <TableRow hover role="checkbox" tabIndex={-1} key={index}>
                         {columns.map((column) => {
                           let value = row[column.id];
-                          if (column.id === 'commCategory') {
-                            value = formatCategory(value);
-                          }
                           if (column.id === 'createdAt') {
                             value = formatDate(value);
                           }
@@ -187,7 +175,7 @@ export function CommunityTable() {
                               sx={{ borderBottom: '0.5px solid #757575' }}
                             >
                               <Link
-                                to="/CommunityPost"
+                                // to="/NoticePost"
                                 state={{ rowData: row }}
                                 style={{
                                   textDecoration: 'none',
@@ -225,4 +213,4 @@ export function CommunityTable() {
     </>
   );
 }
-export default CommunityTable;
+export default NoticeTable2;

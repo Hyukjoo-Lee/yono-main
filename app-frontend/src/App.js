@@ -6,23 +6,25 @@ import Footer from './common/Footer';
 import { MainHeader } from './common/MainHeader';
 
 import { ThemeProvider } from 'styled-components';
+import FindID from './pages/auth/FindID';
+import FindPassword from './pages/auth/FindPassword';
+import Login from './pages/auth/Login';
+import ResetPassword from './pages/auth/ResetPassword';
+import SignUp from './pages/auth/SignUp';
 import CardAnalysis from './pages/cardAnalysis/CardAnalysis';
 import { CardChallege } from './pages/cardChallege/CardChallege';
 import { Community } from './pages/community/Community';
 import { CommunityFormBox } from './pages/community/CommunityFormBox';
+import { CommunityPost } from './pages/community/CommunityPost';
+import { EditFormBox } from './pages/community/EditFormBox';
+import { NoticeFormBox } from './pages/community/NoticeFormBox'; //수정
+import { NoticePost } from './pages/community/NoticePost';
+// import { NoticeTable2 } from './pages/community/NoticeTable2';
 import { Intro } from './pages/intro/Intro';
 import { MainPage } from './pages/main/MainPage';
 import { MyCard } from './pages/mycard/MyCard';
 import { MyPage } from './pages/mypage/MyPage';
 import theme from './theme/theme';
-import { CommunityPost } from './pages/community/CommunityPost';
-import { NoticePost } from './pages/community/NoticePost';
-import { EditFormBox } from './pages/community/EditFormBox';
-import ResetPassword from './pages/auth/ResetPassword';
-import Login from './pages/auth/Login';
-import SignUp from './pages/auth/SignUp';
-import FindID from './pages/auth/FindID';
-import FindPassword from './pages/auth/FindPassword';
 
 const Root = styled.div`
   & *,
@@ -68,6 +70,8 @@ function App() {
             <Route path="/card-analysis" element={<CardAnalysis />} />
             <Route path="/community" element={<Community />} />
             <Route path="/communityFormBox" element={<CommunityFormBox />} />
+            {/* <Route pate="/notice" element={<NoticeTable2 />} /> */}
+            <Route path="/noticeFormBox" element={<NoticeFormBox />} />
             <Route path="/mycard" element={<MyCard />} />
             <Route path="/communityPost" element={<CommunityPost />} />
             <Route path="/noticePost" element={<NoticePost />} />
