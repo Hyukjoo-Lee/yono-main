@@ -12,15 +12,12 @@ public interface PostsDAO {
     List<PostsEntity> getAllPosts();
 
     PostsEntity findById(int userId);
-
-    void deleteById(int userId);
-
-
-
     
+    void updatePost(PostsEntity pe);
+
+    void deleteById(String postId);
 
 
 
 
-    
 } 

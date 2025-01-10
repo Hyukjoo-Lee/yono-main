@@ -9,25 +9,22 @@ import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
 
-@Setter
 @Getter
+@Setter
 @ToString
-public class PostsDTO {
+public class ReplyDTO {
 
-    private int no;
-    private String title;
-    private String category;
+    private int rno; //댓글  번호 
+    private int pno; //게시판 번호 
     private String userId;
-    private String content;
+    private String r_content;
+    private Timestamp createdAt;
+    private Timestamp updatedAt;
+    private int like_count;
+
 
     @JsonFormat(pattern = "yyyy-MM-dd")  // 날짜 포맷 지정
     private LocalDate regdate;
-    
-    private int viewcnt=0;
-    private Timestamp createdAt;
-    private Timestamp updatedAt;
-    private String imgurl;
-
     
     
 }

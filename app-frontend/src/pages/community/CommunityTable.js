@@ -1,6 +1,3 @@
-import React, { useEffect, useState } from 'react';
-import axios from 'axios';
-import { useNavigate } from 'react-router-dom'; // useNavigate를 임포트
 import {
   Pagination,
   PaginationItem,
@@ -12,10 +9,14 @@ import {
   TableHead,
   TableRow,
 } from '@mui/material';
+import axios from 'axios';
+import React, { useEffect, useState } from 'react';
+import { useNavigate } from 'react-router-dom'; // useNavigate를 임포트
 import styled from 'styled-components';
 import CommonButton from '../../common/CommonButton';
+import CommonDialog from '../../common/CommonDialog';
 import CommonInput from '../../common/CommonInput';
-// import CommonDialog from '../../common/CommonDialog';
+import { useSelector } from 'react-redux';
 
 const Root = styled.div`
   width: ${(props) => props.theme.display.lg};
@@ -27,7 +28,7 @@ const Root = styled.div`
 const columns = [
   { id: 'category', label: '카테고리 ', minWidth: 50 },
   { id: 'title', label: '제목 ', minWidth: 150 },
-  { id: 'author', label: '작성자 ', minWidth: 100 },
+  { id: 'userId', label: '작성자 ', minWidth: 100 },
   { id: 'regdate', label: '등록일', minWidth: 100 },
   { id: 'viewcnt', label: '조회', minWidth: 50 },
 ];
@@ -81,45 +82,35 @@ const Box = styled.div`
 export function CommunityTable() {
   const [page, setPage] = useState(0);
   const [rows, setRows] = useState([]);
-  // const [isLoggedIn, setIsLoggedIn] = useState(false);
+
+  const isLoggedIn = useSelector((state) => state.user.isLoggedIn);
+  const [isDialogOpen, setIsDialogOpen] = useState(false);
   const [searchInput, setSearchInput] = useState('');
   const [filteredRows, setFilteredRows] = useState([]);
   const rowsPerPage = 10;
   const navigate = useNavigate(); // navigate 훅을 사용
-
-  // useEffect(() => {
-  //   const storedUserId = localStorage.getItem('userId');
-  //   if (storedUserId) {
-  //     setIsLoggedIn(true);
-  //   }
-  // }, []);
-
   const handleChangePage = (event, newPage) => {
     setPage(newPage - 1);
   };
 
-  // const handleButtonClick = () => {
-  //   const storedUserId = localStorage.getItem('userId');
-  //   if (storedUserId) {
-  //     // 로그인되어 있으면 글쓰기 폼으로 이동
-  //     navigate('/communityFormBox');
-  //   } else {
-  //     // 로그인되지 않은 경우, 로그인 상태를 변경하여 다이얼로그를 띄움
-  //     setIsLoggedIn(true);
-  //   }
-  // };
-
-  // const handleDialogLogin = () => {
-  //   setIsLoggedIn(false);
-  //   navigate('/login');
-  // };
-
-  // const handleDialogClose = () => {
-  //   setIsLoggedIn(false);
-  // };
+  // redux 상태를 확인
+  // console.log('로그인 된 유저: ' + JSON.stringify(user.userId));
 
   const handleButtonClick = () => {
-    navigate('/communityFormBox');
+    if (isLoggedIn) {
+      navigate('/communityFormBox');
+    } else {
+      setIsDialogOpen(true);
+    }
+  };
+
+  const handleDialogLogin = () => {
+    setIsDialogOpen(false);
+    navigate('/login');
+  };
+
+  const handleDialogClose = () => {
+    setIsDialogOpen(false);
   };
 
   // 검색 버튼 클릭 시 실행되는 함수
@@ -244,13 +235,14 @@ export function CommunityTable() {
         />
       </Paper>
 
-      {/* <CommonDialog
-        open={isLoggedIn}
+      <CommonDialog
+        open={isDialogOpen}
         onClose={handleDialogClose}
         children={'로그인 해주세요'}
         onClick={handleDialogLogin}
-      /> */}
+      />
     </Root>
   );
 }
+
 export default CommunityTable;

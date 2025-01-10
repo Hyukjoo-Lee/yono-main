@@ -7,6 +7,7 @@ import CommonHr from '../../common/CommonHr';
 import { useNavigate } from 'react-router-dom';
 import { useState } from 'react';
 import axios from 'axios';
+import { useSelector } from 'react-redux';
 
 const Root = styled.div`
   width: ${(props) => props.theme.display.lg};
@@ -48,33 +49,28 @@ const Row = styled.div`
     width: 500px;
     height: 390px;
     box-sizing: border-box;
+    padding-left: 9px;
   }
 
   & textarea:focus {
     border: 1px solid #1976d2;
     outline: none;
   }
+  & textarea::placeholder {
+    font-size: 16px;
+    color: #b0b0b0;
+  }
 `;
+
 const FileUploadContainer = styled.div`
   display: flex;
   align-items: center;
   gap: 10px;
+  & > button {
+    margin-top: 5px;
+  }
 `;
 
-const FileUploadButton = styled.div`
-  background-color: #3563e9;
-  color: white;
-  padding: 10px 20px;
-  border-radius: 5px;
-  font-size: 16px;
-  cursor: pointer;
-  text-align: center;
-  width: 70px;
-  height: 28px;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-`;
 const Box1 = styled.div`
   display: flex;
   justify-content: center;
@@ -96,11 +92,14 @@ const OptionList = [
 
 export function CommunityFormBox() {
   const [categoryOption, setCategoryOption] = useState('');
+  const [postImg, setPostImg] = useState(null); //이미지 파일 자체의 상태
+  const user = useSelector((state) => state.user.user);
   const [postFormData, setPostFormData] = useState({
+    userId: user.userId,
     title: '',
     category: '',
     content: '',
-    file: null,
+    file: '',
   });
 
   const [alertMessage, setAlertMessage] = useState({
@@ -178,13 +177,11 @@ export function CommunityFormBox() {
         }));
         return;
       }
+
+      setPostImg(file); // 파일을 설정합니다.
       setPostFormData((prev) => ({
         ...prev,
-        file,
-      }));
-      setAlertMessage((prev) => ({
-        ...prev,
-        file: '',
+        file: file.name, // 파일명을 표시하도록 설정
       }));
     }
   };
@@ -199,29 +196,23 @@ export function CommunityFormBox() {
       return;
     }
 
-    const postsData = {
-      title: postFormData.title,
-      category: postFormData.category,
-      content: postFormData.content,
+    const updatedPostFormData = {
+      ...postFormData,
+      file: undefined,
     };
 
+    const formData = new FormData();
+    formData.append('postFormData', JSON.stringify(updatedPostFormData));
+
+    if (postImg) {
+      formData.append('file', postImg);
+    }
+
     try {
-      if (postFormData.file) {
-        const fileReader = new FileReader();
-        fileReader.readAsDataURL(postFormData.file);
-        fileReader.onload = async () => {
-          postsData.file = fileReader.result;
+      const response = await axios.post('/posts/write', formData);
 
-          const response = await axios.post('/posts/write', postsData);
-
-          console.log('게시글 등록 성공:', response.data);
-          navigate('/community');
-        };
-      } else {
-        const response = await axios.post('/posts/write', postsData);
-        console.log('게시글 등록 성공:', response.data);
-        navigate('/community');
-      }
+      console.log('게시글 등록 성공:', response.data);
+      navigate('/community');
     } catch (error) {
       console.error('게시글 등록 실패:', error);
     }
@@ -274,6 +265,7 @@ export function CommunityFormBox() {
             <textarea
               value={postFormData.content}
               onChange={(e) => handleInputChange(e, 'content')}
+              placeholder="내용을 입력해주세요"
             />
             {alertMessage.content && (
               <ErrorMessage>{alertMessage.content}</ErrorMessage>
@@ -286,20 +278,26 @@ export function CommunityFormBox() {
           <div>
             <FileUploadContainer>
               <CommonInput
-                type="file"
                 width="390px"
                 height="40px"
                 placeholder="사진 첨부"
                 accept=".jpg, .jpeg, .png, .gif"
-                onChange={handleFileChange}
+                value={postFormData.file}
+                onChange={(e) => handleInputChange(e, 'fifle')}
               />
-              <FileUploadButton
+              <input
+                type="file"
+                accept="image/*"
+                onChange={handleFileChange}
+                style={{ display: 'none' }}
+              />
+              <CommonButton
                 onClick={() =>
                   document.querySelector('input[type="file"]').click()
                 }
-              >
-                사진 첨부
-              </FileUploadButton>
+                text="사진 첨부"
+                height="40px"
+              />
             </FileUploadContainer>
             {alertMessage.file && (
               <ErrorMessage>{alertMessage.file}</ErrorMessage>

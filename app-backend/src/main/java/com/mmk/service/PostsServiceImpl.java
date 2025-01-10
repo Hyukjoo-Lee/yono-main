@@ -2,13 +2,15 @@ package com.mmk.service;
 
 import java.util.List;
 import java.util.stream.Collectors;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
 import com.mmk.dao.PostsDAO;
 import com.mmk.dto.PostsDTO;
 import com.mmk.entity.PostsEntity;
+
+import jakarta.transaction.Transactional;
 
 @Service
 public class PostsServiceImpl implements PostsService {
@@ -21,7 +23,7 @@ public class PostsServiceImpl implements PostsService {
         PostsEntity postsEntity = new PostsEntity();
         postsEntity.setTitle(postsData.getTitle());
         postsEntity.setCategory(postsData.getCategory());
-        postsEntity.setUserid(postsData.getUserid());
+        postsEntity.setUserId(postsData.getUserId());
         postsEntity.setContent(postsData.getContent());
     
         // DAO에 저장
@@ -40,7 +42,7 @@ public class PostsServiceImpl implements PostsService {
                     dto.setNo(postsEntity.getNo());
                     dto.setTitle(postsEntity.getTitle());
                     dto.setCategory(postsEntity.getCategory());
-                    dto.setUserid(postsEntity.getUserid());
+                    dto.setUserId(postsEntity.getUserId());
                     dto.setContent(postsEntity.getContent());
                     dto.setRegdate(postsEntity.getRegdate());
                     dto.setViewcnt(postsEntity.getViewcnt());
@@ -69,7 +71,7 @@ public PostsDTO findById(String id) {
     postsDTO.setNo(postEntity.getNo());
     postsDTO.setTitle(postEntity.getTitle());
     postsDTO.setCategory(postEntity.getCategory());
-    postsDTO.setUserid(postEntity.getUserid());
+    postsDTO.setUserId(postEntity.getUserId());
     postsDTO.setContent(postEntity.getContent());
     postsDTO.setRegdate(postEntity.getRegdate());
     postsDTO.setViewcnt(postEntity.getViewcnt());
@@ -80,53 +82,36 @@ public PostsDTO findById(String id) {
 }
 
 @Override
-public PostsDTO updatePost(int no, PostsDTO postsData) {
-    // 게시글 조회
-    PostsEntity postEntity = postsDao.findById(no);
+public void updatePost(PostsDTO postsDTO) {
+    PostsEntity pe =new PostsEntity();
+    pe.setNo(postsDTO.getNo());
+    pe.setTitle(postsDTO.getTitle());
+    pe.setCategory(postsDTO.getCategory());
+    pe.setUserId(postsDTO.getUserId());
+    pe.setContent(postsDTO.getContent());
+    pe.setRegdate(postsDTO.getRegdate());
+    pe.setViewcnt(postsDTO.getViewcnt());
+    pe.setCreatedAt(postsDTO.getCreatedAt());
+    pe.setUpdatedAt(postsDTO.getUpdatedAt());
 
-    // null 체크 후 예외 처리
-    if (postEntity == null) {
-        throw new RuntimeException("게시글을 찾을 수 없습니다.");
+    postsDao.updatePost(pe);
     }
 
-    // 게시글 수정
-    postEntity.setTitle(postsData.getTitle());
-    postEntity.setCategory(postsData.getCategory());
-    postEntity.setContent(postsData.getContent());
 
-    // 수정된 게시글을 DB에 저장
-    postsDao.save(postEntity);  // save는 수정된 데이터를 저장하는 용도로 사용됩니다.
-
-    // 수정된 게시글을 DTO로 변환하여 반환
-    PostsDTO updatedPostDTO = new PostsDTO();
-    updatedPostDTO.setNo(postEntity.getNo());
-    updatedPostDTO.setTitle(postEntity.getTitle());
-    updatedPostDTO.setCategory(postEntity.getCategory());
-    updatedPostDTO.setUserid(postEntity.getUserid());
-    updatedPostDTO.setContent(postEntity.getContent());
-    updatedPostDTO.setRegdate(postEntity.getRegdate());
-    updatedPostDTO.setViewcnt(postEntity.getViewcnt());
-    updatedPostDTO.setCreatedAt(postEntity.getCreatedAt());
-    updatedPostDTO.setUpdatedAt(postEntity.getUpdatedAt());
-
-    return updatedPostDTO;
+@Transactional
+@Override
+public void deletePostById(String postId) {
+    try {
+    postsDao.deleteById(postId);
+} catch (Exception e) {
+    throw new RuntimeException("게시글 삭제 중 오류 발생: " + e.getMessage());
+}
 }
 
 @Override
-public void deletePostById(String id) {
-    // id를 Integer로 변환
-    int userId = Integer.parseInt(id);
-
-    // 게시글 존재 여부 확인
-    PostsEntity postEntity = postsDao.findById(userId);
-
-    // null 체크 후 예외 처리
-    if (postEntity == null) {
-        throw new RuntimeException("게시글을 찾을 수 없습니다.");
-    }
-
-    // 게시글 삭제
-    postsDao.deleteById(userId); // DAO에서 deleteById 메서드를 호출
+public String saveFile(MultipartFile file) {
+    // TODO Auto-generated method stub
+    throw new UnsupportedOperationException("Unimplemented method 'saveFile'");
 }
 
 }

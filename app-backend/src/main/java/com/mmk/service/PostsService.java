@@ -2,19 +2,26 @@ package com.mmk.service;
 
 import java.util.List;
 
+import org.springframework.web.multipart.MultipartFile;
+
 import com.mmk.dto.PostsDTO;
 
 public interface PostsService {
 
     void save(PostsDTO postsData);
 
-    List<PostsDTO> getAllPosts();
+    List<PostsDTO> getAllPosts(); 
 
     PostsDTO findById(String id);
 
-    PostsDTO updatePost(int no, PostsDTO postsData);
+    void deletePostById(String postId);
 
-    void deletePostById(String id);
+    String saveFile(MultipartFile file);
+
+    void updatePost(PostsDTO postsDTO);
+
+
+
 
 
 }
