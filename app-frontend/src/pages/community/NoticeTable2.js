@@ -28,7 +28,7 @@ const Root = styled.div`
 const columns = [
   { id: 'noticeNo', label: '번호', minWidth: 50 },
   { id: 'noticeTitle', label: '제목', minWidth: 150 },
-  { id: 'adminIn', label: '작성자', minWidth: 100 },
+  { id: 'adminId', label: '작성자', minWidth: 100 },
   { id: 'createdAt', label: '등록일', minWidth: 100 },
   { id: 'viewCount', label: '조회', minWidth: 50 },
 ];
@@ -175,7 +175,7 @@ export function NoticeTable2() {
                               sx={{ borderBottom: '0.5px solid #757575' }}
                             >
                               <Link
-                                // to="/NoticePost"
+                                // to="/no"
                                 state={{ rowData: row }}
                                 style={{
                                   textDecoration: 'none',

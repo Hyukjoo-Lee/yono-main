@@ -7,7 +7,6 @@ import CommonButton from '../../common/CommonButton';
 import CommonHr from '../../common/CommonHr';
 import CommonInput from '../../common/CommonInput';
 import CommonPageInfo from '../../common/CommonPageInfo';
-// import CommonSelect from '../../common/CommonSelect';
 
 const Root = styled.div`
   width: ${(props) => props.theme.display.lg};
@@ -69,18 +68,12 @@ const Box1 = styled.div`
 const HiddenInput = styled.input`
   display: none;
 `;
-// const OptionList = [
-//   { value: 'option_1', label: '정보공유' },
-//   { value: 'option_2', label: '질문' },
-//   { value: 'option_3', label: '기타문의' },
-// ];
 
 export function NoticeFormBox() {
   const navigate = useNavigate();
 
   // const [userId, setUserId] = useState('');
   const [title, setTitle] = useState('');
-  // const [categoryOption, setCategoryOption] = useState('');
   const [content, setContent] = useState('');
   const [image, setImage] = useState('');
   // const [errors, setErrors] = useState({});
@@ -92,7 +85,6 @@ export function NoticeFormBox() {
   const requestData = {
     userId: user.userId,
     commTitle: title,
-    // commCategory: categoryOption,
     commCont: content,
     commImgUrl: image,
   };
@@ -116,10 +108,6 @@ export function NoticeFormBox() {
     if (!title?.trim() || title.length > 50) {
       errors.title = '제목을 1자 이상 50자 이내로 입력해주세요.';
     }
-
-    // if (!categoryOption) {
-    //   errors.categoryOption = '옵션을 선택해주세요.';
-    // }
 
     if (!content?.trim() || content.length > 2000) {
       errors.content = '내용을 1자 이상 2000자 이내로 입력해주세요.';
@@ -169,18 +157,6 @@ export function NoticeFormBox() {
             onChange={handleTitleChange}
           />
         </Row>
-        {/* <Row>
-          <span> 카테고리</span>
-          <CommonSelect
-            options={OptionList}
-            width="500px"
-            height="40px"
-            find="카테고리를 선택해 주세요"
-            display="none"
-            selectedValue={categoryOption}
-            setSelectedValue={(value) => setCategoryOption(value)}
-          />
-        </Row> */}
 
         <Row>
           <span>내용</span>
