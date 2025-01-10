@@ -86,8 +86,13 @@ public class UserController {
         boolean existsName = userService.existByName(name);
 
         if (existsEmail && existsName) {
-            UserDTO userDTO = userService.getFindId(name, email);
-
+            UserDTO userDTO;
+            try {
+                userDTO = userService.getFindId(name, email);
+            } catch (Exception e) {
+                e.printStackTrace();
+                return ResponseEntity.noContent().build();
+            }
             ApiResponse<UserDTO> response = new ApiResponse<>(200, "유저 검색 성공", userDTO);
             return ResponseEntity.ok(response);
         } else {
