@@ -72,7 +72,7 @@ const HiddenInput = styled.input`
 const OptionList = [
   { value: 'option_1', label: '정보공유' },
   { value: 'option_2', label: '질문' },
-  { value: 'option_3', label: '기타 문의' },
+  { value: 'option_3', label: '기타문의' },
 ];
 
 export function CommunityFormBox() {
@@ -83,6 +83,7 @@ export function CommunityFormBox() {
   const [categoryOption, setCategoryOption] = useState('');
   const [content, setContent] = useState('');
   const [image, setImage] = useState('');
+  // const [errors, setErrors] = useState({});
   const user = useSelector((state) => state.user.user);
   // console.log(JSON.stringify(user));
 
@@ -100,16 +101,40 @@ export function CommunityFormBox() {
     setTitle(e.target.value);
   };
   const handleContentChange = (e) => setContent(e.target.value);
+
   const handleImageChange = (e) => {
     const file = e.target.files[0];
     if (file) {
       setImage(file.name);
       // setImage(file); 파일 이름만 저장하려면 file.name를 써야함
     }
-    // setImage(e.target.value);
+  };
+
+  const validateForm = () => {
+    const errors = {};
+
+    if (!title?.trim() || title.length > 50) {
+      errors.title = '제목을 1자 이상 50자 이내로 입력해주세요.';
+    }
+
+    if (!categoryOption) {
+      errors.categoryOption = '옵션을 선택해주세요.';
+    }
+
+    if (!content?.trim() || content.length > 2000) {
+      errors.content = '내용을 1자 이상 2000자 이내로 입력해주세요.';
+    }
+    return errors;
   };
 
   const handleButtonClick = async () => {
+    const validationErrors = validateForm();
+
+    if (Object.keys(validationErrors).length > 0) {
+      alert(Object.values(validationErrors)[0]);
+      return;
+    }
+
     try {
       console.log('request: ' + JSON.stringify(requestData));
 
@@ -162,7 +187,7 @@ export function CommunityFormBox() {
 
         <Row>
           <span>내용</span>
-          <textarea value={content} onChange={handleContentChange}></textarea>
+          <textarea value={content} onChange={handleContentChange} />
         </Row>
         <Row>
           <span>사진</span>
@@ -183,7 +208,6 @@ export function CommunityFormBox() {
             width="100px"
             height="40px"
             font-size="10px"
-            // value={image}
             onClick={() => fileInputRef.current.click()}
           />
         </Row>

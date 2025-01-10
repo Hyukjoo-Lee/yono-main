@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 
 import {
   Pagination,
@@ -11,6 +11,7 @@ import {
   TableHead,
   TableRow,
 } from '@mui/material';
+import axios from 'axios';
 import { Link, useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
 import CommonButton from '../../common/CommonButton';
@@ -24,96 +25,11 @@ const Root = styled.div`
 `;
 
 const columns = [
-  { id: 'category', label: '카테고리 ', minWidth: 50 },
-  { id: 'title', label: '제목 ', minWidth: 150 },
-  { id: 'author', label: '작성자 ', minWidth: 100 },
-  { id: 'day', label: '등록일', minWidth: 100 },
-  { id: 'check', label: '조회', minWidth: 50 },
-];
-
-function createData(category, title, author, day, check) {
-  return { category, title, author, day, check };
-}
-
-const rows = [
-  //임시로 데이터
-  createData(
-    '공유',
-    '자유게시판 서비스 중단 소식을 알려드립니다',
-    '정해인',
-    '2024-10-28',
-    '5',
-  ),
-  createData(
-    '기타문의',
-    '자유게시판 서비스 중단 소식을 알려드립니다',
-    '익명',
-    '2024-10-28',
-    '0',
-  ),
-  createData(
-    '정보공유',
-    '자유게시판 서비스 중단 소식을 알려드립니다',
-    '익명',
-    '2024-10-28',
-    '0',
-  ),
-  createData(
-    '기타문의',
-    '자유게시판 서비스 중단 소식을 알려드립니다',
-    '익명',
-    '2024-10-28',
-    '0',
-  ),
-  createData(
-    '정보공유',
-    '자유게시판 서비스 중단 소식을 알려드립니다',
-    '익명',
-    '2024-10-28',
-    '0',
-  ),
-  createData(
-    '기타문의',
-    '자유게시판 서비스 중단 소식을 알려드립니다',
-    '익명',
-    '2024-10-28',
-    '0',
-  ),
-  createData(
-    '정보공유',
-    '자유게시판 서비스 중단 소식을 알려드립니다',
-    '익명',
-    '2024-10-28',
-    '0',
-  ),
-  createData(
-    '기타문의',
-    '자유게시판 서비스 중단 소식을 알려드립니다',
-    '익명',
-    '2024-10-28',
-    '0',
-  ),
-  createData(
-    '정보공유',
-    '자유게시판 서비스 중단 소식을 알려드립니다',
-    '익명',
-    '2024-10-28',
-    '0',
-  ),
-  createData(
-    '기타문의',
-    '자유게시판 서비스 중단 소식을 알려드립니다',
-    '익명',
-    '2024-10-28',
-    '0',
-  ),
-  createData(
-    '정보공유',
-    '자유게시판 서비스 중단 소식을 알려드립니다',
-    '익명',
-    '2024-10-28',
-    '0',
-  ),
+  { id: 'commCategory', label: '카테고리', minWidth: 50 },
+  { id: 'commTitle', label: '제목', minWidth: 150 },
+  { id: 'userId', label: '작성자', minWidth: 100 },
+  { id: 'createdAt', label: '등록일', minWidth: 100 },
+  { id: 'viewCount', label: '조회', minWidth: 50 },
 ];
 
 const TableContainerStyle = styled(TableContainer)`
@@ -161,6 +77,7 @@ const Box = styled.div`
   }
 `;
 export function CommunityTable() {
+  const [rows, setRows] = useState([]);
   const [page, setPage] = useState(0);
   const rowsPerPage = 10;
   const navigate = useNavigate();
@@ -171,6 +88,39 @@ export function CommunityTable() {
   const handleButtonClick = () => {
     navigate('/communityFormBox');
   };
+
+  useEffect(() => {
+    const getCommunityData = async () => {
+      try {
+        const response = await axios.get('/community');
+        setRows(response.data);
+      } catch (error) {
+        console.error('Error fetching data : ', error);
+      }
+    };
+    getCommunityData();
+  }, []);
+
+  const formatCategory = (category) => {
+    const categories = {
+      option_1: '정보공유',
+      option_2: '질문',
+      option_3: '기타문의',
+    };
+    return categories[category] || category;
+  };
+
+  const formatDate = (timestamp) => {
+    if (!timestamp) return '';
+    const date = new Date(timestamp);
+
+    const year = date.getFullYear();
+    const month = (date.getMonth() + 1).toString().padStart(2, '0');
+    const day = date.getDate().toString().padStart(2, '0');
+
+    return `${year}-${month}-${day}`;
+  };
+
   return (
     <>
       <Root>
@@ -216,13 +166,19 @@ export function CommunityTable() {
                 </TableRow>
               </TableHead>
               <TableBody>
-                {rows
-                  .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
-                  .map((row, index) => {
-                    return (
+                {rows.length > 0 ? (
+                  rows
+                    .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
+                    .map((row, index) => (
                       <TableRow hover role="checkbox" tabIndex={-1} key={index}>
                         {columns.map((column) => {
-                          const value = row[column.id];
+                          let value = row[column.id];
+                          if (column.id === 'commCategory') {
+                            value = formatCategory(value);
+                          }
+                          if (column.id === 'createdAt') {
+                            value = formatDate(value);
+                          }
                           return (
                             <TableCell
                               key={column.id}
@@ -245,8 +201,14 @@ export function CommunityTable() {
                           );
                         })}
                       </TableRow>
-                    );
-                  })}
+                    ))
+                ) : (
+                  <TableRow>
+                    <TableCell colSpan={columns.length} align="center">
+                      데이터가 없습니다.
+                    </TableCell>
+                  </TableRow>
+                )}
               </TableBody>
             </Table>
           </TableContainerStyle>
