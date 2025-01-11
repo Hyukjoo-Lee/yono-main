@@ -163,7 +163,7 @@ const FindID = () => {
 
     const response = await findId(formData.name, formData.email);
 
-    if (response === null || response.data === null) {
+    if (response == null || response.data == null) {
       setEmailValidVisible(true);
       setEmailValidMessageIndex(3);
       return;
