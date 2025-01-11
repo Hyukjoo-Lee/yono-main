@@ -133,11 +133,11 @@ public class CodefController {
         parameterMap.put("startDate", "20241001");
         parameterMap.put("endDate", "20241130");
         parameterMap.put("orderBy", "1");
-        parameterMap.put("cardNo", "4890160181422418");
+        parameterMap.put("cardNo", "카드번호 입력");
         parameterMap.put("memberStoreInfoType", "1");
         parameterMap.put("inquiryType", "0");
         try {
-            parameterMap.put("카드 비밀번호", EasyCodefUtil.encryptRSA("9010", codef.getPublicKey()));
+            parameterMap.put("카드 비밀번호", EasyCodefUtil.encryptRSA("카드비밀번호 입력", codef.getPublicKey()));
         } catch (Exception e) {
             e.printStackTrace();
         }
