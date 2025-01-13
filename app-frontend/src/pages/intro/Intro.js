@@ -21,6 +21,14 @@ const StyledInfoImg = styled.div`
   height: 750px;
   border-radius: 7px;
   background-color: #eff3fd;
+  display: flex;
+  justify-content: center;
+  align-items: center; /* 수직 중앙 정렬 */
+  & p {
+    font-size: 32px;
+    // font-weight: bold;
+    text-align: center; /* 텍스트 가운데 정렬 */
+  }
 `;
 
 const StyledInfo = styled.div`
@@ -35,7 +43,7 @@ export function Intro() {
       img: Info_icon,
       title: 'YONO 소개',
       subtitle:
-        'YONO(You Need Only On)은 내가 사용하는 카드를 불러와 나의 소비패턴을 분석하고 절약이 필요한 부분을 알려줍니다.YONO의 주요 기능을 보시려면 해당하는 이모티콘을 클릭해보세요.',
+        'YONO(You Need Only One)은 내가 사용하는 카드를 불러와 나의 소비패턴을 분석하고 절약이 필요한 부분을 알려줍니다.YONO의 주요 기능을 보시려면 해당하는 이모티콘을 클릭해보세요.',
       content: Sample,
     },
     {
@@ -75,7 +83,7 @@ export function Intro() {
                 style={{ width: '100%', height: 'auto' }}
               />
             ) : (
-              <p>왼쪽 아이콘 클릭!</p>
+              <p>왼쪽 아이콘을 클릭해보세요!</p>
             )}
           </StyledInfoImg>
           <StyledInfo className="info">

@@ -1,5 +1,6 @@
 import styled from 'styled-components';
 import CommonButton from '../../common/CommonButton';
+import CommonDialog from '../../common/CommonDialog';
 import { useLocation, useNavigate } from 'react-router-dom';
 import { ReactComponent as Profile } from '../../assets/images/Profile.svg';
 import CommonHr from '../../common/CommonHr';
@@ -18,12 +19,6 @@ const Root = styled.div`
   height: 100%;
 `;
 
-const list_data = [
-  {
-    Option1: '삭제',
-    Option2: '수정',
-  },
-];
 const Listbox = styled.div`
   border: 1px solid lightGray;
   width: 100%;
@@ -66,7 +61,7 @@ const Replybox = styled.div`
   & p {
     display: flex;
     align-items: center;
-    margin: 0;
+    margin: 0 0 0 10px;
   }
 `;
 
@@ -185,69 +180,167 @@ export function CommunityPost() {
   const location = useLocation();
   const [showOptions, setShowOptions] = useState(false);
   const { rowData } = location.state;
-  const [commentsData, setCommentsData] = useState([]);
-  const [newComment, setNewComment] = useState('');
+  const [comment, setComment] = useState('');
+  const [commentsData, setCommentsData] = useState([]); // 댓글 데이터를 배열로 관리
+  const [inputCount, setInputCount] = useState(0);
+  const [isDialogOpen, setIsDialogOpen] = useState(false);
+  const user = useSelector((state) => state.user.user);
+  const isLoggedIn = useSelector((state) => state.user.isLoggedIn); // 로그인 상태 확인
+  const MAX_LENGTH = 100;
   const navigate = useNavigate();
 
-  const toggleOptions = () => {
-    setShowOptions((prev) => !prev);
+  const toggleOptions = (rno) => {
+    setShowOptions((prev) => ({
+      ...prev,
+      [rno]: !prev[rno], // 선택된 댓글의 옵션만 토글
+    }));
   };
 
-  const handleSubmit = async (e) => {
-    if (newComment.trim() === '') {
+  const handleSubmit = async () => {
+    if (!isLoggedIn || !user) {
+      // user가 null일 경우 체크
+      setIsDialogOpen(true);
       return;
     }
     try {
-      const response = await axios.post(`/reply/write`, {
-        pno: rowData.userId,
+      const replyData = {
+        r_content: comment,
         userId: user.userId,
-        r_content: newComment,
+        pno: rowData.no,
+        like_count: 0,
+      };
+
+      const response = await axios.post('/reply/add', replyData);
+
+      if (response.status === 200) {
+        setCommentsData((prev) => [
+          ...prev,
+          {
+            ...replyData, // 클라이언트에서 보낸 데이터
+            rno: response.data.rno, // 서버에서 반환된 댓글 고유 번호 (예: rno)
+            regdate: response.data.regdate || new Date().toISOString(), // 서버 응답 데이터에 따라 조정
+            likedByUser: [],
+          },
+        ]);
+        setComment(''); // 입력창 초기화
+        setInputCount(0); // 입력 길이 초기화
+      }
+    } catch (error) {
+      console.error('댓글 작성 실패', error);
+    }
+  };
+
+  useEffect(() => {
+    axios
+      .get(`/reply/list/${rowData.no}`)
+      .then((response) => {
+        if (response.status === 200) {
+          // 서버 응답 데이터를 상태에 설정
+          setCommentsData(
+            response.data.map((comment) => ({
+              ...comment,
+              likedByUser: comment.likedByUser || [], // 좋아요한 유저 목록 초기화
+            })),
+          );
+        }
+      })
+      .catch((error) => {
+        console.error('댓글 데이터 요청 실패:', error);
       });
-      setCommentsData((prev) => [...prev, response.data]);
-      setNewComment('');
-    } catch (error) {
-      console.log('댓글 등록 실패', error);
-    }
-  };
+  }, [rowData.no]);
 
-  const fetchComments = async () => {
+  //댓글 삭제
+  const handleDeletecommentClick = async (rno) => {
+    if (!user) {
+      setIsDialogOpen(true);
+      return;
+    }
     try {
-      const response = await axios.get(`/comments/${rowData.userId}`);
-      setCommentsData(response.data); // 댓글 목록 갱신
+      const comment = commentsData.find((comment) => comment.rno === rno);
+      if (comment && comment.userId === user.userId) {
+        await axios.delete(`/comments/delete/${rno}`);
+        setCommentsData((prev) =>
+          prev.filter((comment) => comment.rno !== rno),
+        );
+      } else {
+        alert('댓글 작성자만 삭제할 수 있습니다.');
+      }
     } catch (error) {
-      console.error('댓글 목록을 가져오는데 실패했습니다.', error);
+      console.error('댓글 삭제에 실패했습니다.', error);
     }
   };
 
-  const handleOptionClick = (option) => {
-    console.log(`${option} 클릭됨`);
-    setShowOptions(false);
+  //댓글 수정
+  const handleEditecommentClick = async (rno, newContent) => {
+    if (!user || !user.userId) {
+      setIsDialogOpen(true);
+      return;
+    }
+    try {
+      await axios.put(`/comments/edit/${rno}`, { content: newContent });
+      setCommentsData((prev) =>
+        prev.map((comment) =>
+          comment.rno === rno ? { ...comment, content: newContent } : comment,
+        ),
+      );
+    } catch (error) {
+      console.error('댓글 수정 실패', error);
+    }
   };
+
   const handleNavigateToCommunity = () => {
     navigate('/community');
   };
   const handleNavigateToEditForm = () => {
     navigate('/editFormBox', { state: { rowData } });
   };
-  const [like, setLike] = useState(false);
-  const [count, setCount] = useState(0);
-  const [inputCount, setInputCount] = useState(0);
-  const user = useSelector((state) => state.user.user);
-  const MAX_LENGTH = 100;
 
-  const toggleLike = () => {
-    setLike((prev) => {
-      const newLiked = !prev;
-      setCount((prevCount) => {
-        if (newLiked && prevCount === 0) {
-          return prevCount + 1;
-        } else if (!newLiked && prevCount > 0) {
-          return prevCount - 1;
-        }
-        return prevCount;
-      });
-      return newLiked;
-    });
+  const toggleLike = async (rno) => {
+    if (!user || !user.userId) {
+      setIsDialogOpen(true);
+      return;
+    }
+
+    try {
+      const commentToUpdate = commentsData.find(
+        (comment) => comment.rno === rno,
+      );
+
+      if (!commentToUpdate) return;
+
+      // 이미 좋아요를 눌렀다면 취소
+      if (commentToUpdate.likedByUser.includes(user.userId)) {
+        const updatedComments = commentsData.map((comment) =>
+          comment.rno === rno
+            ? {
+                ...comment,
+                like_count: comment.like_count - 1,
+                likedByUser: comment.likedByUser.filter(
+                  (userId) => userId !== user.userId,
+                ),
+              }
+            : comment,
+        );
+        setCommentsData(updatedComments);
+      } else {
+        // 좋아요를 누르지 않았다면
+        const updatedComments = commentsData.map((comment) =>
+          comment.rno === rno
+            ? {
+                ...comment,
+                like_count: comment.like_count + 1,
+                likedByUser: [...comment.likedByUser, user.userId],
+              }
+            : comment,
+        );
+        setCommentsData(updatedComments);
+      }
+
+      // 서버에도 좋아요 상태 업데이트 요청
+      await axios.post('/reply/like', { rno, userId: user.userId });
+    } catch (error) {
+      console.error('좋아요 토글 실패', error);
+    }
   };
 
   const onInputHandler = (e) => {
@@ -272,6 +365,14 @@ export function CommunityPost() {
       console.error('게시물 삭제에 실패했습니다.', error);
     }
   };
+  const handleDialogLogin = () => {
+    setIsDialogOpen(false);
+    navigate('/login');
+  };
+
+  const handleDialogClose = () => {
+    setIsDialogOpen(false);
+  };
 
   return (
     <Root>
@@ -286,14 +387,31 @@ export function CommunityPost() {
         {rowData.userId} | {rowData.regdate} | 조회수: {rowData.viewcnt}
       </div>{' '}
       <div style={{ width: '100%' }}>{rowData.content}</div>
+      {rowData?.imgurl && (
+        <div style={{ width: '100%' }}>
+          <img
+            src={`${process.env.REACT_APP_API_URL}${rowData.imgurl}`}
+            alt="Post"
+          />
+        </div>
+      )}
       <Listbox>
         <textarea
           maxLength={MAX_LENGTH}
-          onChange={onInputHandler}
+          onChange={(e) => {
+            setComment(e.target.value);
+            onInputHandler(e);
+          }}
           width="900px"
           height="120px"
-          placeholder="댓글을 입력해주세요."
+          placeholder={
+            isLoggedIn
+              ? '댓글을 작성해 보세요'
+              : '로그인 시 댓글 작성이 가능합니다'
+          }
+          value={comment}
         />
+
         <Replybox>
           <p>
             <span>{inputCount.toLocaleString()}</span>
@@ -303,61 +421,55 @@ export function CommunityPost() {
             color="white"
             text="등록"
             {...commonButtonProps}
+            isDisabled={comment.trim().length === 0 || !isLoggedIn}
             onClick={handleSubmit}
           />
         </Replybox>
       </Listbox>
       <CommentBox>
-        {commentsData.map((comment, index) => {
-          return (
-            <div key={index}>
-              <TopRow>
-                <ImageBox>
-                  <Profile />
-                </ImageBox>
-                <h3>
-                  {comment.userId} <TimeText>{comment.createdAt}</TimeText>
-                </h3>
-                <ListIconBox onClick={toggleOptions}>
-                  <ListIconImage src={ListIcon} alt="옵션 아이콘" />
-                  {showOptions && (
-                    <OptionsBox>
-                      <ul>
-                        {list_data.map((data, i) => (
-                          <li
-                            key={i}
-                            onClick={() => handleOptionClick(data.Option1)}
-                          >
-                            {data.Option1}
-                          </li>
-                        ))}
-
-                        {list_data.map((data, i) => (
-                          <li
-                            key={i}
-                            onClick={() => handleOptionClick(data.Option2)}
-                          >
-                            {data.Option2}
-                          </li>
-                        ))}
-                      </ul>
-                    </OptionsBox>
-                  )}
-                </ListIconBox>
-              </TopRow>
-              <BottomRow>
-                <TextBox>
-                  <p>{comment.comment}</p>
-                </TextBox>
-
-                <LikeBox>
-                  <HeartButton like={like} onClick={toggleLike} />
-                  <p>{count}</p>
-                </LikeBox>
-              </BottomRow>
-            </div>
-          );
-        })}
+        {commentsData.map((comment) => (
+          <div key={comment.rno}>
+            <TopRow>
+              <ImageBox>
+                <Profile />
+              </ImageBox>
+              <h3>
+                {comment.userId} <TimeText>{comment.regdate}</TimeText>
+              </h3>
+              <ListIconBox onClick={() => toggleOptions(comment.rno)}>
+                <ListIconImage src={ListIcon} alt="옵션 아이콘" />
+                {showOptions[comment.rno] && ( // 해당 댓글만 옵션을 표시
+                  <OptionsBox>
+                    <ul>
+                      <li onClick={() => handleDeletecommentClick(comment.rno)}>
+                        삭제
+                      </li>
+                      <li
+                        onClick={() =>
+                          handleEditecommentClick(comment.rno, '수정')
+                        }
+                      >
+                        수정
+                      </li>
+                    </ul>
+                  </OptionsBox>
+                )}
+              </ListIconBox>
+            </TopRow>
+            <BottomRow>
+              <TextBox>
+                <p>{comment.r_content}</p>
+              </TextBox>
+              <LikeBox>
+                <HeartButton
+                  like={comment.likedByUser.includes(user.userId)}
+                  onClick={() => toggleLike(comment.rno)}
+                />
+                <p>{comment.like_count}</p>
+              </LikeBox>
+            </BottomRow>
+          </div>
+        ))}
       </CommentBox>
       <BottomBox>
         <CommonButton
@@ -379,6 +491,12 @@ export function CommunityPost() {
           {...commonButtonProps}
         />
       </BottomBox>
+      <CommonDialog
+        open={isDialogOpen}
+        onClose={handleDialogClose}
+        children={'로그인 해주세요'}
+        onClick={handleDialogLogin}
+      />
     </Root>
   );
 }

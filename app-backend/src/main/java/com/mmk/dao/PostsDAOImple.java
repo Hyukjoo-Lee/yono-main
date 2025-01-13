@@ -55,6 +55,11 @@ public void updatePost(PostsEntity pe) {
     postsRepo.save(pe);
 }
 
+@Override
+public void updateCnt(PostsEntity postEntity) {
+    postsRepo.save(postEntity);
+}
+
 
 
     

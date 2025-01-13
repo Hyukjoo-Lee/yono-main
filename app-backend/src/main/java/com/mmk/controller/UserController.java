@@ -1,16 +1,19 @@
 package com.mmk.controller;
 
 import java.io.File;
+import java.io.FileNotFoundException;
 import java.util.Calendar;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.NoSuchElementException;
 import java.util.Random;
+import java.util.UUID;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.util.ResourceUtils;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -39,19 +42,6 @@ public class UserController {
     private UserService userService;
 
     // GET API
-    // id(기본키) 기반으로 유저 정보를 검색
-    @GetMapping("/{id}")
-    public ResponseEntity<ApiResponse<UserDTO>> getUserDetails(@PathVariable("id") int id) {
-        UserDTO userDTO = userService.getUserById(id);
-        if (userDTO != null) {
-            ApiResponse<UserDTO> response = new ApiResponse<>(200, "유저 검색 성공", userDTO);
-            return ResponseEntity.ok(response);
-        } else {
-            ApiResponse<UserDTO> response = new ApiResponse<>(404, "유저 정보 찾을 수 없음", null);
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(response);
-        }
-    }
-
     // 유저 아이디 기반으로 유저 정보를 검색
     @GetMapping("/by-user-id")
     public ResponseEntity<ApiResponse<UserDTO>> getUserByUserId(@RequestParam("userId") String userId) {
@@ -87,6 +77,52 @@ public class UserController {
         }
 
         return ResponseEntity.ok(new ApiResponse<>(200, "전체 유저 검색 성공", userDTOs));
+    }
+
+    // 이름, 이메일로 유저 검색
+    @GetMapping("/findId")
+    public ResponseEntity<ApiResponse<UserDTO>> getFindId(@RequestParam("email") String email, @RequestParam("name") String name) {
+        boolean existsEmail = userService.existsByEmail(email);
+        boolean existsName = userService.existByName(name);
+
+        if (existsEmail && existsName) {
+            UserDTO userDTO = userService.getFindId(name, email);
+
+            ApiResponse<UserDTO> response = new ApiResponse<>(200, "유저 검색 성공", userDTO);
+            return ResponseEntity.ok(response);
+        } else {
+            return ResponseEntity.noContent().build();
+        }
+    }
+
+    // 이름, 메일, 아이디로 유저 검색
+    @GetMapping("/findPwd")
+    public ResponseEntity<ApiResponse<UserDTO>> getFindPwd(@RequestParam("name") String name, @RequestParam("email") String email, @RequestParam("id") String id) {
+        boolean existsName = userService.existByName(name);
+        boolean existsEmail = userService.existsByEmail(email);
+        boolean existsId = userService.existsByUserId(id);
+
+        if (existsName && existsEmail && existsId) {
+            UserDTO userDTO = userService.getFindPwd(name, email, id);
+
+            ApiResponse<UserDTO> response = new ApiResponse<>(200, "유저 검색 성공", userDTO);
+            return ResponseEntity.ok(response);
+        } else {
+            return ResponseEntity.noContent().build();
+        }
+    }
+
+    // id(기본키) 기반으로 유저 정보를 검색
+    @GetMapping("/{id}")
+    public ResponseEntity<ApiResponse<UserDTO>> getUserDetails(@PathVariable("id") int id) {
+        UserDTO userDTO = userService.getUserById(id);
+        if (userDTO != null) {
+            ApiResponse<UserDTO> response = new ApiResponse<>(200, "유저 검색 성공", userDTO);
+            return ResponseEntity.ok(response);
+        } else {
+            ApiResponse<UserDTO> response = new ApiResponse<>(404, "유저 정보 찾을 수 없음", null);
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(response);
+        }
     }
 
     // POST API
@@ -148,6 +184,36 @@ public class UserController {
     }
 
     // PUT API
+    // 임시비밀번호 발급 및 변경
+    @PutMapping("/updateTempPwd")
+    public String getUpdateTempPwd(@RequestParam("email") String email) {
+        String tempPwd=UUID.randomUUID().toString().replace("-", "");
+		tempPwd = tempPwd.substring(0,10);
+
+        UserDTO userDTO = userService.getUserByEmail(email);
+        userDTO.setPassword(tempPwd);
+        userService.updateUser(userDTO);
+
+        return tempPwd;
+    }
+
+    // 비밀번호 변경
+    @PutMapping("/updatePwd")
+    public ResponseEntity<ApiResponse<Object>> updatePwd(@RequestParam("password") String password, @RequestParam("userId") String userId) {
+        try {
+            UserDTO userDTO = userService.getUserByUserId(userId);
+            userDTO.setPassword(password);
+            userService.updateUser(userDTO);
+    
+            ApiResponse<Object> response = new ApiResponse<>(200, "비밀번호 변경 성공", null);
+            return ResponseEntity.ok(response);
+        } catch (Exception e) {
+            e.printStackTrace();
+            ApiResponse<Object> response = new ApiResponse<>(400, "비밀번호 변경 오류", null);
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(response);
+        }
+    };
+    
     // 유저 정보 업데이트
     @PutMapping("/{userNum}")
     public ResponseEntity<ApiResponse<UserDTO>> updateUser(
@@ -155,18 +221,20 @@ public class UserController {
             @RequestParam(value = "profileImage", required = false) MultipartFile profileImage,
             @RequestParam(value = "profileText", required = false) String profileText) {
 
-        String uploadFolder = System.getProperty("user.dir") + "/app-backend/src/main/resources/static/images";
-
         try {
             UserDTO uv = new ObjectMapper().readValue(userInfoJson, UserDTO.class);
+            File resourceDirectory = ResourceUtils.getFile("classpath:");
+            String uploadFolder = resourceDirectory.getPath() + "/static/images";
 
-            if (uv.getProfile() != null && !uv.getProfile().isEmpty()) {
-                String existingProfilePath = System.getProperty("user.dir") + "/app-backend/src/main/resources/static"
-                        + uv.getProfile();
-                File existingFile = new File(existingProfilePath);
-
-                if (existingFile.exists()) {
-                    existingFile.delete();
+            if (profileImage != null && !profileImage.isEmpty()) {
+                if (uv.getProfile() != null && !uv.getProfile().isEmpty()) {
+                    String existingProfilePath = resourceDirectory.getPath() + "/static"
+                            + uv.getProfile();
+                    File existingFile = new File(existingProfilePath);
+    
+                    if (existingFile.exists()) {
+                        existingFile.delete();
+                    }
                 }
             }
 
@@ -209,15 +277,13 @@ public class UserController {
             }
 
             userService.updateUser(uv);
-            // userRepository.save(uv);
 
             ApiResponse<UserDTO> response = new ApiResponse<>(201, "회원 정보 수정 성공", uv);
             return ResponseEntity.ok(response);
-        } catch (JsonProcessingException e) {
+        } catch (JsonProcessingException | FileNotFoundException e) {
             e.printStackTrace();
             ApiResponse<UserDTO> response = new ApiResponse<>(400, "회원 정보 수정 오류", null);
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(response);
         }
     }
-
 };

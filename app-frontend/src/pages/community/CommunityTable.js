@@ -82,7 +82,6 @@ const Box = styled.div`
 export function CommunityTable() {
   const [page, setPage] = useState(0);
   const [rows, setRows] = useState([]);
-
   const isLoggedIn = useSelector((state) => state.user.isLoggedIn);
   const [isDialogOpen, setIsDialogOpen] = useState(false);
   const [searchInput, setSearchInput] = useState('');
@@ -122,8 +121,8 @@ export function CommunityTable() {
         return (
           (row.title &&
             row.title.toLowerCase().includes(searchInput.toLowerCase())) ||
-          (row.author &&
-            row.author.toLowerCase().includes(searchInput.toLowerCase()))
+          (row.userId &&
+            row.userId.toLowerCase().includes(searchInput.toLowerCase()))
         );
       });
       setFilteredRows(filtered);
@@ -147,7 +146,14 @@ export function CommunityTable() {
   // 행 클릭 시 상세 페이지로 이동하는 함수
   const handleRowClick = (row) => {
     // navigate로 상세 페이지로 이동하면서 상태를 전달
-    navigate('/CommunityPost', { state: { rowData: row } });
+    axios
+      .get(`/posts/list/${row.no}`)
+      .then((response) => {
+        navigate('/CommunityPost', { state: { rowData: row } });
+      })
+      .catch((error) => {
+        console.log('조회수 증가 실패', error);
+      });
   };
 
   return (

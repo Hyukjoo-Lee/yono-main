@@ -17,6 +17,8 @@ public interface PostsDAO {
 
     void deleteById(String postId);
 
+    void updateCnt(PostsEntity postEntity);
+
 
 
 

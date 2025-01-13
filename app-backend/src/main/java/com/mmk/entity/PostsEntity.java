@@ -36,7 +36,7 @@ public class PostsEntity {
 
     private String title;
     private String category;
-    private String userid;
+    private String userId;
     private String content;
     
     @CreationTimestamp

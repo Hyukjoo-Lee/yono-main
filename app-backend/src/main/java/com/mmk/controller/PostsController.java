@@ -92,9 +92,9 @@ public class PostsController {
     }
 
     //게시글 상세 조회
-    @GetMapping("/list/{id}")
-    public ResponseEntity<PostsDTO> getPostsById(@PathVariable String id) {
-    PostsDTO posts = postsService.findById(id);
+    @GetMapping("/list/{id}")                                                   
+    public ResponseEntity<PostsDTO> getPostsByIdAndIncreaseViewCount(@PathVariable int id) {
+    PostsDTO posts = postsService.findByIdAndViewCnt(id);
     return ResponseEntity.ok(posts);
     }
     

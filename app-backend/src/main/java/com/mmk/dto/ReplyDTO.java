@@ -14,7 +14,7 @@ import lombok.ToString;
 @ToString
 public class ReplyDTO {
 
-    private int rno; //댓글  번호 
+    private int rno; //댓글 고유 아이디디 => 번호 
     private int pno; //게시판 번호 
     private String userId;
     private String r_content;
@@ -24,7 +24,7 @@ public class ReplyDTO {
 
 
     @JsonFormat(pattern = "yyyy-MM-dd")  // 날짜 포맷 지정
-    private LocalDate regdate;
+    private LocalDate regdate;//댓글 작성일
     
     
 }

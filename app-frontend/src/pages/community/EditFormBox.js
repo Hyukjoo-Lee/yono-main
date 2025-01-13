@@ -87,7 +87,7 @@ const ErrorMessage = styled.div`
 const OptionList = [
   { value: '정보공유', label: '정보공유' },
   { value: '질문', label: '질문' },
-  { value: '기타 문의', label: '기타 문의' },
+  { value: '문의', label: '문의' },
 ];
 
 export function EditFormBox() {
@@ -101,7 +101,7 @@ export function EditFormBox() {
     title: '',
     category: '',
     content: '',
-    file: '',
+    imgurl: '',
   });
 
   const [alertMessage, setAlertMessage] = useState({
@@ -177,6 +177,7 @@ export function EditFormBox() {
         title: rowData.title || '',
         category: rowData.category || '',
         content: rowData.content || '',
+        imgurl: rowData.imgurl || '',
       });
     }
   }, [rowData]);
@@ -237,12 +238,10 @@ export function EditFormBox() {
             options={OptionList}
             width="500px"
             height="40px"
-            find="카테고리를 선택해 주세요"
+            placeholder="카테고리를 선택해 주세요"
             display="none"
             selectedValue={postFormData.category}
-            setSelectedValue={(value) =>
-              handleInputChange({ target: { value } }, 'category')
-            }
+            onChange={(e) => handleInputChange(e, 'category')}
           />
         </Row>
 
@@ -268,6 +267,8 @@ export function EditFormBox() {
                 height="40px"
                 placeholder="사진 첨부"
                 accept=".jpg, .jpeg, .png, .gif"
+                value={postFormData.imgurl}
+                readOnly
               />
               <input
                 type="file"

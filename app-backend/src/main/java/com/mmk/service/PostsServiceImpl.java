@@ -4,7 +4,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import org.springframework.web.multipart.MultipartFile;
+
 
 import com.mmk.dao.PostsDAO;
 import com.mmk.dto.PostsDTO;
@@ -25,6 +25,7 @@ public class PostsServiceImpl implements PostsService {
         postsEntity.setCategory(postsData.getCategory());
         postsEntity.setUserId(postsData.getUserId());
         postsEntity.setContent(postsData.getContent());
+        postsEntity.setImgurl(postsData.getImgurl()); // imgurl 추가
     
         // DAO에 저장
         postsDao.save(postsEntity);
@@ -46,6 +47,7 @@ public class PostsServiceImpl implements PostsService {
                     dto.setContent(postsEntity.getContent());
                     dto.setRegdate(postsEntity.getRegdate());
                     dto.setViewcnt(postsEntity.getViewcnt());
+                    dto.setImgurl(postsEntity.getImgurl());
                     dto.setCreatedAt(postsEntity.getCreatedAt());
                     dto.setUpdatedAt(postsEntity.getUpdatedAt());
                     return dto;
@@ -54,17 +56,20 @@ public class PostsServiceImpl implements PostsService {
     }
 
 @Override
-public PostsDTO findById(String id) {
+public PostsDTO findByIdAndViewCnt(int id) {
     // id를 Integer로 변환하여 DB에서 조회
-    int userId = Integer.parseInt(id);
+
     
     // Optional을 사용하지 않고, 직접 null 체크
-    PostsEntity postEntity = postsDao.findById(userId);
+    PostsEntity postEntity = postsDao.findById(id);
 
     // 값이 존재하지 않으면 예외 처리
     if (postEntity == null) {
         throw new RuntimeException("게시글을 찾을 수 없습니다.");
     }
+    postEntity.setViewcnt(postEntity.getViewcnt() + 1); // 조회수 1 증가
+
+    postsDao.updateCnt(postEntity);
 
     // Entity → DTO 변환
     PostsDTO postsDTO = new PostsDTO();
@@ -77,6 +82,7 @@ public PostsDTO findById(String id) {
     postsDTO.setViewcnt(postEntity.getViewcnt());
     postsDTO.setCreatedAt(postEntity.getCreatedAt());
     postsDTO.setUpdatedAt(postEntity.getUpdatedAt());
+    postsDTO.setImgurl(postEntity.getImgurl());
 
     return postsDTO;
 }
@@ -93,6 +99,7 @@ public void updatePost(PostsDTO postsDTO) {
     pe.setViewcnt(postsDTO.getViewcnt());
     pe.setCreatedAt(postsDTO.getCreatedAt());
     pe.setUpdatedAt(postsDTO.getUpdatedAt());
+    pe.setImgurl(postsDTO.getImgurl());
 
     postsDao.updatePost(pe);
     }
@@ -108,10 +115,6 @@ public void deletePostById(String postId) {
 }
 }
 
-@Override
-public String saveFile(MultipartFile file) {
-    // TODO Auto-generated method stub
-    throw new UnsupportedOperationException("Unimplemented method 'saveFile'");
-}
+
 
 }

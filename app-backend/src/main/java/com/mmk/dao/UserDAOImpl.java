@@ -27,6 +27,11 @@ public class UserDAOImpl implements UserDAO {
     }
 
     @Override
+    public boolean existsByName(String name) {
+        return userRepository.existsByName(name);
+    }
+
+    @Override
     public void createUser(UserEntity userEntity) {
         userRepository.save(userEntity);
     }
@@ -61,5 +66,15 @@ public class UserDAOImpl implements UserDAO {
     @Override
     public void deleteUser(int id) {
         userRepository.deleteById(id);
+    }
+
+    @Override
+    public UserEntity getFindId(String name, String email) {
+        return userRepository.findByNameAndEmail(name, email);
+    }
+
+    @Override
+    public UserEntity getFindPwd(String name, String email, String id) {
+        return userRepository.findByNameAndEmailAndUserId(name, email, id);
     }
 }
