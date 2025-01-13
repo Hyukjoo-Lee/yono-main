@@ -55,38 +55,20 @@ public class CodefController {
         }
     }
 
+    // Connected ID 발급
     @GetMapping("/getConId")
-    public void getConId() {
+    public void getConId(String organization, String companyId, String companyPwd) {
         codef = new EasyCodef();
         codef.setClientInfoForDemo(clientId, clientSecret);
         codef.setPublicKey(publickey);
 
+        // organization, companyId, companyPwd 로 UserCard Table 에 있는지 조회
+        // 없으면 ConnectedId 발급받아서 DB에 넣는 코드 실행
+
         List<HashMap<String, Object>> accountList = new ArrayList<HashMap<String, Object>>();
-        HashMap<String, Object> accountMap = new HashMap<String, Object>();
-        accountMap.put("countryCode", "KR");
-        accountMap.put("businessType", "CD");
-        accountMap.put("clientType", "P");
-
-        // 기관코드는 각 상품 페이지 (https://developer.codef.io/products/card/overview)에서 확인 가능
-        // 카드사마다 기관코드가 다름, 아래 예시는 현대카드
-        accountMap.put("organization", "0302");
-
-        // login 방법이 공인인증서, 아이디 & 비번 2가지 방법이 있는데 아이디 & 비번을 선택
-        // 공인인증서 loginType = 0, 아이디 & 비번 loginType = 1
-        accountMap.put("loginType", "1");
-
-        accountMap.put("id", "카드사 아이디 입력"); // 카드사 아이디 입력
-
-        try {
-            // RSA암호화가 필요한 필드는 encryptRSA(String plainText, String publicKey) 메서드를 이용해 암호화
-            accountMap.put("password", EasyCodefUtil.encryptRSA("카드사비밀번호 입력", codef.getPublicKey())); // 카드사 비밀번호 입력
-        } catch (Exception e) {
-            e.printStackTrace();
-            return;
-        }
+        HashMap<String, Object> accountMap = getConIdParameterMap(organization, companyId, companyPwd);
+        
         accountList.add(accountMap);
-
-        System.out.println("어카운트 리스트:" + accountList);
 
         HashMap<String, Object> parameterMap = new HashMap<String, Object>();
         parameterMap.put("accountList", accountList);
@@ -103,6 +85,26 @@ public class CodefController {
         System.out.println(result);
     }
 
+    private HashMap<String, Object> getConIdParameterMap(String organization, String companyId, String companyPwd) {
+        HashMap<String, Object> parameterMap = new HashMap<>();
+        parameterMap.put("countryCode", "KR");
+        parameterMap.put("businessType", "CD");
+        parameterMap.put("clientType", "P");
+        parameterMap.put("organization", organization);
+        parameterMap.put("loginType", "1");
+        parameterMap.put("id", companyId);
+
+        try {
+            // RSA암호화가 필요한 필드는 encryptRSA(String plainText, String publicKey) 메서드를 이용해 암호화
+            parameterMap.put("password", EasyCodefUtil.encryptRSA(companyPwd, codef.getPublicKey())); // 카드사 비밀번호 입력
+        } catch (Exception e) {
+            e.printStackTrace();
+            return null;
+        }
+        return parameterMap;
+    }
+
+    // 카드 사용 내역
     @GetMapping("getCardHistory")
     public CompletableFuture<List<MonthlySummary>> getCardHistory() {
         String productUrl = "/v1/kr/card/p/account/approval-list";

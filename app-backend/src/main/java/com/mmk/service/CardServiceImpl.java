@@ -45,6 +45,13 @@ public class CardServiceImpl implements CardService {
         return cardDTOs;
     }
 
+    @Override
+    public CardDTO setPrimaryCard() {
+        CardDTO cardDTO = new CardDTO();
+        
+        return cardDTO;
+    }
+
     private CardEntity toEntity(CardDTO dto) {
         CardEntity entity = new CardEntity();
         entity.setCardId(dto.getCardId());

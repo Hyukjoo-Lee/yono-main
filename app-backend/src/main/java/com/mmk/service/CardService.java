@@ -8,4 +8,5 @@ public interface CardService {
     CardDTO createCard(CardDTO cardDTO);
 
     List<CardDTO> getAllCards();
+    CardDTO setPrimaryCard();
 }
