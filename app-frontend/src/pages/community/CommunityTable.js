@@ -12,7 +12,7 @@ import {
   TableRow,
 } from '@mui/material';
 import axios from 'axios';
-import { Link, useNavigate } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
 import CommonButton from '../../common/CommonButton';
 import CommonInput from '../../common/CommonInput';
@@ -104,6 +104,7 @@ export function CommunityTable() {
     };
     getCommunityData();
   }, []);
+
   if (loading) {
     return <></>;
   }
@@ -126,6 +127,10 @@ export function CommunityTable() {
     const day = date.getDate().toString().padStart(2, '0');
 
     return `${year}-${month}-${day}`;
+  };
+
+  const handlePostClick = (id) => {
+    navigate(`/community/${id}`);
   };
 
   return (
@@ -177,7 +182,13 @@ export function CommunityTable() {
                   rows
                     .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
                     .map((row, index) => (
-                      <TableRow hover role="checkbox" tabIndex={-1} key={index}>
+                      <TableRow
+                        hover
+                        role="checkbox"
+                        tabIndex={-1}
+                        key={index}
+                        onClick={() => handlePostClick(row.userId)}
+                      >
                         {columns.map((column) => {
                           let value = row[column.id];
                           if (column.id === 'commCategory') {
@@ -192,18 +203,18 @@ export function CommunityTable() {
                               align="center"
                               sx={{ borderBottom: '0.5px solid #757575' }}
                             >
-                              <Link
+                              {/* <Link
                                 to="/CommunityPost"
                                 state={{ rowData: row }}
                                 style={{
                                   textDecoration: 'none',
                                   color: 'black',
                                 }}
-                              >
-                                {column.format && typeof value === 'number'
-                                  ? column.format(value)
-                                  : value}
-                              </Link>
+                              > */}
+                              {column.format && typeof value === 'number'
+                                ? column.format(value)
+                                : value}
+                              {/* </Link> */}
                             </TableCell>
                           );
                         })}

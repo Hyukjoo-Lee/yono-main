@@ -1,9 +1,11 @@
+import axios from 'axios';
+import React, { useEffect, useState } from 'react';
+import { useNavigate, useParams } from 'react-router-dom';
 import styled from 'styled-components';
-import CommonButton from '../../common/CommonButton';
-import CommonInput from '../../common/CommonInput';
-import { useNavigate } from 'react-router-dom';
 import { ReactComponent as Profile } from '../../assets/images/Profile.svg';
+import CommonButton from '../../common/CommonButton';
 import CommonHr from '../../common/CommonHr';
+import CommonInput from '../../common/CommonInput';
 
 const comments = [
   {
@@ -99,16 +101,43 @@ const commonButtonProps = {
   height: '50px',
 };
 export function CommunityPost() {
+  const [communityData, setCommunityData] = useState(null);
   const navigate = useNavigate();
+  const { id } = useParams();
+
+  console.log('ID : ', id);
+
+  useEffect(() => {
+    // 게시글 데이터를 불러오는 함수
+    const fetchPostData = async () => {
+      try {
+        const response = await axios.get(`/community/${id}`);
+        // console.log('Fetched Data : ', response.data);
+        setCommunityData(response.data); // 게시글 데이터
+        console.log(response.data);
+      } catch (error) {
+        console.error('Error fetching post data:', error);
+      }
+    };
+
+    fetchPostData();
+  }, [id]); // id가 변경될 때마다 데이터 새로 불러오기
+
   const handleNavigateToCommunity = () => {
     navigate('/community');
   };
+
   const handleNavigateToEditForm = () => {
-    navigate('/editFormBox');
+    navigate(`/editFormBox/${id}`);
   };
+
+  if (!communityData) {
+    return <div>Loading...</div>; // 게시글 데이터가 아직 로드되지 않은 경우
+  }
+
   return (
     <Root>
-      <label>제목</label>
+      <label>{communityData.userId}</label>
       <CommonHr
         width="918px"
         borderWidth="2px"
@@ -116,9 +145,14 @@ export function CommunityPost() {
         margin="10px auto 20px"
       />
       <Detailbox>
-        <label>2024.11.22 | 작성자 OOO |조회수 n</label>
+        <label>
+          {communityData.createdAt} | 작성자 {communityData.userId} | 조회수{' '}
+          {communityData.viewCount}
+        </label>
       </Detailbox>
-      <Box></Box>
+      <Box>
+        <p>{communityData.commCont}</p>
+      </Box>
 
       <Listbox>
         <CommonInput

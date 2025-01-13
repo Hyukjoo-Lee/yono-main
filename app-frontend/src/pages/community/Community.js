@@ -1,4 +1,5 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
 import CommonTabs from '../../common/CommonTabs';
 import CommunityTable from './CommunityTable';
@@ -21,9 +22,18 @@ const TabStyle = styled.div`
 
 export function Community() {
   const [selectedTab, setSelectedTab] = useState(0);
-  const items = [{ text: '커뮤니티' }, { text: '공지사항' }];
+  const navigate = useNavigate();
 
+  const items = [{ text: '커뮤니티' }, { text: '공지사항' }];
   const panels = [<CommunityTable />, <NoticeTable2 />]; //NoticeTable -> NoticeTable2
+
+  useEffect(() => {
+    if (selectedTab === 0) {
+      navigate('/community');
+    } else if (selectedTab === 1) {
+      navigate('/notice');
+    }
+  }, [selectedTab, navigate]);
 
   return (
     <>

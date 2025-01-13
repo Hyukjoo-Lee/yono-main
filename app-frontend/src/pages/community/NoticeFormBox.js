@@ -83,10 +83,10 @@ export function NoticeFormBox() {
   const fileInputRef = useRef(null);
 
   const requestData = {
-    userId: user.userId,
-    commTitle: title,
-    commCont: content,
-    commImgUrl: image,
+    adminId: user.userId,
+    noticeTitle: title,
+    noticeCont: content,
+    noticeImgUrl: image,
   };
 
   const handleTitleChange = (e) => {
@@ -124,22 +124,29 @@ export function NoticeFormBox() {
     }
 
     try {
-      console.log('request: ' + JSON.stringify(requestData));
+      // console.log('request: ' + JSON.stringify(requestData));
 
       const response = await axios.post('/notice/noticeFormBox', requestData);
 
       if (response.status === 200) {
         alert('게시글이 등록되었습니다.');
-        navigate('/community'); //notice로 변경해야댐
+        navigate('/notice'); //notice로 변경해야댐
       }
     } catch (error) {
-      alert('게시글 등록에 실패했습니다. 다시 시도해주세요.');
+      if (error.response) {
+        console.error('Server error : ', error.response.data);
+        alert(`오류 : ${error.response.data.message}`);
+        // alert('게시글 등록에 실패했습니다. 다시 시도해주세요.');
+      } else {
+        console.error('Error : ', error);
+        alert('게시글 등록에 실패했습니다. 다시 시도해 주세요.');
+      }
     }
   };
 
   return (
     <Root>
-      <CommonPageInfo title={'고객게시판'} text={<p></p>} />
+      <CommonPageInfo title={'공지사항'} text={<p></p>} />
       <CommonHr
         width="918px"
         borderWidth="2px"
