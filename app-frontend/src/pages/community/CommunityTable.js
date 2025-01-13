@@ -25,7 +25,7 @@ const Root = styled.div`
 `;
 
 const columns = [
-  { id: 'community_no', label: '번호' },
+  { id: 'communityNo', label: '번호' },
   { id: 'commCategory', label: '카테고리', minWidth: 50 },
   { id: 'commTitle', label: '제목', minWidth: 150 },
   { id: 'userId', label: '작성자', minWidth: 100 },
@@ -80,6 +80,7 @@ const Box = styled.div`
 export function CommunityTable() {
   const [rows, setRows] = useState([]);
   const [page, setPage] = useState(0);
+  const [loading, setLoading] = useState(true);
   const rowsPerPage = 10;
   const navigate = useNavigate();
 
@@ -95,12 +96,17 @@ export function CommunityTable() {
       try {
         const response = await axios.get('/community');
         setRows(response.data);
+        setLoading(false);
       } catch (error) {
         console.error('Error fetching data : ', error);
+        setLoading(false);
       }
     };
     getCommunityData();
   }, []);
+  if (loading) {
+    return <></>;
+  }
 
   const formatCategory = (category) => {
     const categories = {
