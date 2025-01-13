@@ -120,10 +120,10 @@ public class CodefController {
                 throw new RuntimeException(e);
             }
         }).thenApply(result -> getCardHistoryprocessResult(result))
-        .exceptionally(e -> {
-            e.printStackTrace();
-            return Collections.emptyList();
-        });
+                .exceptionally(e -> {
+                    e.printStackTrace();
+                    return Collections.emptyList();
+                });
     }
 
     private HashMap<String, Object> getCardHistoryParameterMap() {
@@ -151,14 +151,16 @@ public class CodefController {
 
             String dataArrayJson = objectMapper.readTree(result).get("data").toString();
             List<TransDTO> transactionDTOList = objectMapper.readValue(dataArrayJson,
-                    new TypeReference<List<TransDTO>>() {});
+                    new TypeReference<List<TransDTO>>() {
+                    });
 
             Map<String, Map<String, Integer>> groupedData = transactionDTOList.parallelStream()
                     .collect(Collectors.groupingBy(
                             card -> card.getUsedDate().substring(0, 6),
-                            Collectors.groupingBy(card -> (card.getStoreType() != null && !card.getStoreType().isEmpty())
-                                    ? card.getStoreType()
-                                    : "기타",
+                            Collectors.groupingBy(
+                                    card -> (card.getStoreType() != null && !card.getStoreType().isEmpty())
+                                            ? card.getStoreType()
+                                            : "기타",
                                     Collectors.summingInt(card -> Integer.parseInt(card.getUsedAmount())))));
 
             return groupedData.entrySet().stream()
@@ -182,7 +184,7 @@ public class CodefController {
         codef.setPublicKey(publickey);
 
         HashMap<String, Object> parameterMap = new HashMap<String, Object>();
-        
+
         parameterMap.put("connectedId", connectedId);
         parameterMap.put("organization", "0302"); // 기관 코드
         parameterMap.put("inquiryType", "1"); // 카드 이미지 포함 여부
@@ -198,28 +200,34 @@ public class CodefController {
         }
     }
 
-    @GetMapping("getUserPerformance")
-    public void getUserPerformance() {
+    @GetMapping("/getUserCardList")
+    public List<Map<String, Object>> getUserCardList() {
         codef = new EasyCodef();
         codef.setClientInfoForDemo(clientId, clientSecret);
         codef.setPublicKey(publickey);
 
-        HashMap<String, Object> parameterMap = new HashMap<String, Object>();
-        
+        HashMap<String, Object> parameterMap = new HashMap<>();
         parameterMap.put("connectedId", connectedId);
-        parameterMap.put("organization", "0302"); // 기관 코드
+        parameterMap.put("organization", "0304"); // 기관 코드
+        parameterMap.put("inquiryType", "0"); // 카드 이미지 포함 여부
 
-        String productUrl = "/v1/kr/card/p/account/result-check-list"; // 보유 카드 URL
+        String productUrl = "/v1/kr/card/p/account/card-list"; // 보유 카드 URL
 
-        String result = "";
         try {
-            result = codef.requestProduct(productUrl, EasyCodefServiceType.DEMO, parameterMap);
-            System.out.println(result);
+            String jsonResult = codef.requestProduct(productUrl, EasyCodefServiceType.DEMO, parameterMap);
+            ObjectMapper objectMapper = new ObjectMapper();
+            String dataArrayJson = objectMapper.readTree(jsonResult).get("data").toString();
+            List<Map<String, Object>> result = objectMapper.readValue(dataArrayJson,
+                    new TypeReference<List<Map<String, Object>>>() {
+                    });
+            if (result == null || result.isEmpty()) {
+                throw new RuntimeException("카드 정보가 존재하지 않습니다.");
+            }
+            return result;
         } catch (Exception e) {
             e.printStackTrace();
+            throw new RuntimeException("카드 리스트 정보 요청에 실패하였습니다.");
         }
     }
-
-
 
 }
