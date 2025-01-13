@@ -7,5 +7,5 @@ import com.mmk.entity.UserCardEntity;
 public interface UserCardRepository extends JpaRepository<UserCardEntity, Integer> {
     boolean existsByUserCardNum(String userCardNum);
 
-    UserCardEntity findByUserEntityUserId(int userId);
+    // UserCardEntity findUserCardEntityByUserId(int userId);
 }
