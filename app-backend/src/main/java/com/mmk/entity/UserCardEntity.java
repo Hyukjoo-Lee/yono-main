@@ -36,6 +36,14 @@ public class UserCardEntity {
     @Column(name = "user_name", nullable = false)
     private String userName;
 
+    // 사용자 카드사 아이디
+    @Column(name = "user_card_company_id")
+    private String companyId;
+
+    // 사용자 카드사 비밀번호
+    @Column(name = "user_card_company_pwd")
+    private String companyPwd;
+
     @CreationTimestamp
     private Timestamp createdAt;
 

@@ -21,4 +21,7 @@ VALUES (CARD_SEQ.nextval, '신한 처음카드', '신한', '0306', '/images/card
 drop table card;
 commit;
 
+drop table user_card;
+
 select * from user_card;
+select * from card;
