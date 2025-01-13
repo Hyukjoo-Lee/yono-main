@@ -1,6 +1,5 @@
 package com.mmk.dto;
 
-// import java.security.Timestamp;
 import java.sql.Timestamp;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
@@ -12,16 +11,14 @@ import lombok.ToString;
 @Getter
 @Setter
 @ToString
-public class CommunityDTO {
+public class NoticeDTO {
   
-  private int communityNo;
-  private String commCategory;
-  private String userId;
-  private String commTitle;
-  private String commCont;
-  private String commImgUrl;
+  private int noticeNo;
+  private String adminId;
+  private String noticeTitle;
+  private String noticeCont;
+  private String noticeImgUrl;
   private int viewCount;
-  private int replyCount;
 
   @JsonFormat(pattern="yyyy-mm-dd")
   private Timestamp createdAt;

@@ -9,4 +9,6 @@ public interface CommunityDAO {
   void save(CommunityEntity communityData);
   
   List<CommunityEntity> getCommunityList();
+
+  CommunityEntity findById(int userId);
 }

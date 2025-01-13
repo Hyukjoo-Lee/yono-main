@@ -10,8 +10,12 @@ alter sequence community_seq
 nocache;
 
 alter table community add imgurl VARCHAR2(500);
+alter table community add regdate TIMESTAMP default CURRENT_TIMESTAMP;
+ALTER TABLE community DROP COLUMN regdate; --regdate 삭제
+ALTER TABLE community MODIFY createdAt TIMESTAMP DEFAULT CURRENT_TIMESTAMP; --날짜 확인
 
-select * from community;
+
+select * from community order by community_no asc;
 
 drop table community;
 
@@ -20,6 +24,11 @@ commit;
 --데이터 직접 넣기
 INSERT INTO community (community_no, comm_category, comm_cont, comm_img_url, comm_title, created_at, user_id, view_count, reply_count)
 VALUES (community_seq.nextval, '질문', '글 내용입니당', 'default_image.jpg', '글제목입니다.', CURRENT_TIMESTAMP, 'user', 0, 0);
+INSERT INTO community (community_no, comm_category, comm_cont, comm_img_url, comm_title, created_at, user_id, view_count, reply_count)
+VALUES (community_seq.nextval, '질문', '글 내용입니당2', 'default_image.jpg', '글제목입니다2.', CURRENT_TIMESTAMP, 'user2', 0, 0);
 
 --테이블 존재 여부 확인
 SELECT * FROM user_tables WHERE table_name = 'COMMUNITY';
+
+--최신 데이터 가져오기
+select * from community order by created_at desc;

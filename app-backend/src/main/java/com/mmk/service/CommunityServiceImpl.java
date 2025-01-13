@@ -35,13 +35,16 @@ public class CommunityServiceImpl implements CommunityService {
   }
 
   private CommunityDTO convertToDTO(CommunityEntity entity) {
+
     CommunityDTO dto = new CommunityDTO();
+
     dto.setCommunityNo(entity.getCommunityNo());
     dto.setCommCategory(entity.getCommCategory());
     dto.setUserId(entity.getUserId());
     dto.setCommTitle(entity.getCommTitle());
     dto.setCommCont(entity.getCommCont());
     dto.setViewCount(entity.getViewCount());
+    
     return dto;
   }
 
@@ -55,4 +58,24 @@ public class CommunityServiceImpl implements CommunityService {
       .collect(Collectors.toList());
   }
 
+  @Override
+  public CommunityDTO findById(String id) {
+    int userId = Integer.parseInt(id);
+
+    CommunityEntity communityEntity = communityDAO.findById(userId);
+
+    if(communityEntity == null){
+      throw new RuntimeException("해당 게시글을 찾을 수 없습니다!");
+    }
+
+    CommunityDTO communityDTO = new CommunityDTO();
+    communityDTO.setCommunityNo(communityEntity.getCommunityNo());
+    communityDTO.setCommCategory(communityEntity.getCommCategory());
+    communityDTO.setUserId(communityEntity.getUserId());
+    communityDTO.setCommTitle(communityEntity.getCommTitle());
+    communityDTO.setCommCont(communityEntity.getCommCont());
+    communityDTO.setViewCount(communityEntity.getViewCount());
+
+    return communityDTO;
+  }
 }

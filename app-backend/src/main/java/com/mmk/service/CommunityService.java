@@ -9,4 +9,6 @@ public interface CommunityService {
   void save(CommunityDTO communityData);
 
   List<CommunityDTO> getCommunityList();
+
+  CommunityDTO findById(String id);
 }

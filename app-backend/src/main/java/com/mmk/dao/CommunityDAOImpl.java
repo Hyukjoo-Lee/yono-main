@@ -22,4 +22,15 @@ public class CommunityDAOImpl implements CommunityDAO {
     public List<CommunityEntity> getCommunityList(){
       return this.communityRepo.findAll();
     }
+
+    @Override
+    public CommunityEntity findById(int userId) {
+      CommunityEntity community = communityRepo.findById(userId).orElse(null);
+
+      if(community == null){
+        throw new RuntimeException("해당 게시글을 찾을 수 없습니다!");
+      }
+      return community;
+    }
+
 }

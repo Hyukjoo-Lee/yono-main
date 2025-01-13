@@ -62,4 +62,8 @@ public class CommunityEntity {
   @UpdateTimestamp
   @Column(name="updated_at")
   private Timestamp updatedAt;
+
+  // @CreationTimestamp
+  // @Column(name="regdate₩",nullable=false)
+  // private Timestamp regdate;
 }
