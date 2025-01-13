@@ -1,20 +1,22 @@
 import React, { useState } from 'react';
-import styled from 'styled-components';
-import CommonButton from '../../common/CommonButton';
-import CommonInput from '../../common/CommonInput';
-import CommonRoot from '../../common/CommonRoot';
-import CommonPageInfo from '../../common/CommonPageInfo';
 import { useNavigate } from 'react-router-dom';
+import styled from 'styled-components';
+import { findPwd, updateTempPwd } from '../../apis/userApi';
+import { sendTempPwd } from '../../apis/mailApi';
+import CommonButton from '../../common/CommonButton';
 import CommonHr from '../../common/CommonHr';
-import theme from '../../theme/theme';
-import ValidationMessage from '../../common/ValidationMessage';
+import CommonInput from '../../common/CommonInput';
+import CommonPageInfo from '../../common/CommonPageInfo';
+import CommonRoot from '../../common/CommonRoot';
 import {
   EMAIL_REGEX_MESSAGE,
   EMPTY_EMAIL_MESSAGE,
-  EMPTY_EMAILCODE_MESSAGE,
   EMPTY_NAME_MESSAGE,
   EMPTY_USERID_MESSAGE,
 } from '../../common/Message';
+import ValidationMessage from '../../common/ValidationMessage';
+import theme from '../../theme/theme';
+import CommonDialog from '../../common/CommonDialog';
 
 const RootIn = styled.div`
   display: flex;
@@ -37,7 +39,6 @@ const MiddleContainer = styled.div`
   display: flex;
   flex-direction: column;
   justify-content: center;
-  align-items: center;
 `;
 
 const ButtonContainer = styled.div`
@@ -45,23 +46,6 @@ const ButtonContainer = styled.div`
   display: flex;
   justify-content: space-between;
   width: 45%;
-`;
-
-const CodeContainer = styled.div`
-  width: 300px;
-  display: flex;
-`;
-
-const CodeInput = styled.div`
-  width: 200px;
-`;
-
-const CodeButton = styled.div`
-  display: flex;
-  align-items: flex-end;
-  justify-content: flex-end;
-  width: 100px;
-  padding: 15px 5px;
 `;
 
 const styleProps = {
@@ -74,6 +58,18 @@ const styleProps = {
   $focusBorderColor: 'transparent',
 };
 
+const EmailValidMessageStyle = styled.p`
+  color: red;
+  margin: 5px;
+  font-size: 15px;
+  white-space: pre-line;
+`;
+
+const emailValidMessages = [
+  '등록되지 않은 아이디이거나\n이름 혹은 이메일이 잘못 입력되었습니다.',
+  '잠시만 기다려주세요.',
+];
+
 const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
 const FindPassword = () => {
@@ -83,24 +79,23 @@ const FindPassword = () => {
     name: '',
     userId: '',
     email: '',
-    emailCode: '',
   });
 
   const [formMessage, setFormMessage] = useState({
     name: '',
     userId: '',
     email: '',
-    emailCode: '',
   });
 
-  const [isEmailCodeVisible, setIsEmailCodeVisible] = useState(false);
+  const [isShowMessage, setIsShowMessage] = useState(false);
+  const [isShowDialog, setIsShowDialog] = useState(false);
+  const [emailValidMessageIndex, setEmailValidMessageIndex] = useState();
 
   const validateField = (field, value) => {
     if (!value) {
       if (field === 'name') return EMPTY_NAME_MESSAGE;
       if (field === 'userId') return EMPTY_USERID_MESSAGE;
       if (field === 'email') return EMPTY_EMAIL_MESSAGE;
-      if (field === 'emailCode') return EMPTY_EMAILCODE_MESSAGE;
     }
     if (field === 'email' && !emailRegex.test(value)) {
       return EMAIL_REGEX_MESSAGE;
@@ -123,27 +118,31 @@ const FindPassword = () => {
     setFormMessage((prev) => ({ ...prev, [field]: '' }));
   };
 
-  const handleSendCode = () => {
-    if (!formData.email || formMessage.email) return;
-    setIsEmailCodeVisible(true);
-  };
+  const handleSendTempPwd = async () => {
+    const response = await findPwd(
+      formData.name,
+      formData.email,
+      formData.userId,
+    );
 
-  const handleConfirmCode = () => {
-    if (formData.emailCode === '1234') {
-      alert('인증 성공!');
-      navigate('/reset-password');
+    if (!response || !response.data) {
+      setIsShowMessage(true);
+      setEmailValidMessageIndex(0);
     } else {
-      setFormMessage((prev) => ({
-        ...prev,
-        emailCode: '인증 코드가 일치하지 않습니다.',
-      }));
+      setIsShowMessage(true);
+      setEmailValidMessageIndex(1);
+
+      const tempPwd = await updateTempPwd(formData.email);
+      await sendTempPwd(formData.email, tempPwd);
+
+      setIsShowDialog(true);
     }
   };
 
   const handleSubmit = (e) => {
     e.preventDefault();
     if (!validateForm()) return;
-    handleSendCode();
+    handleSendTempPwd();
   };
 
   return (
@@ -189,34 +188,13 @@ const FindPassword = () => {
               <ValidationMessage text={formMessage.email} />
             )}
             <CommonHr />
-
-            {isEmailCodeVisible && (
-              <CodeContainer>
-                <CodeInput>
-                  <CommonInput
-                    text="인증코드"
-                    placeholder="인증코드를 입력하세요"
-                    width="100%"
-                    value={formData.emailCode}
-                    onChange={(e) => handleInputChange(e, 'emailCode')}
-                    {...styleProps}
-                  />
-                  {formMessage.emailCode && (
-                    <ValidationMessage text={formMessage.emailCode} />
-                  )}
-                </CodeInput>
-                <CodeButton>
-                  <CommonButton
-                    text="확인"
-                    width="50%"
-                    height="30px"
-                    fontSize={theme.fontSize.sm}
-                    onClick={handleConfirmCode}
-                  />
-                </CodeButton>
-              </CodeContainer>
-            )}
           </MiddleContainer>
+
+          {isShowMessage && (
+            <EmailValidMessageStyle>
+              {emailValidMessages[emailValidMessageIndex]}
+            </EmailValidMessageStyle>
+          )}
 
           <ButtonContainer>
             <CommonButton
@@ -235,6 +213,25 @@ const FindPassword = () => {
             />
           </ButtonContainer>
         </FullContainer>
+        {isShowDialog && (
+          <CommonDialog
+            open={isShowDialog}
+            onClose={() => setIsShowDialog(false)}
+            onClick={() => navigate('/login')}
+            submitText="로그인하기"
+            cancelBtn={true}
+            cancelText="확인"
+            children={
+              <p style={{ textAlign: 'center' }}>
+                임시 비밀번호가{' '}
+                <span style={{ color: theme.color.blue, fontWeight: 'bold' }}>
+                  {formData.email}
+                </span>
+                로 발송되었습니다.
+              </p>
+            }
+          />
+        )}
       </RootIn>
     </CommonRoot>
   );

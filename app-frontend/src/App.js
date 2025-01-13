@@ -6,6 +6,7 @@ import Footer from './common/Footer';
 import { MainHeader } from './common/MainHeader';
 
 import { ThemeProvider } from 'styled-components';
+import { KakaoLoginHandler } from './pages/auth/components/KakaoLoginHandler';
 import FindID from './pages/auth/FindID';
 import FindPassword from './pages/auth/FindPassword';
 import Login from './pages/auth/Login';
@@ -19,12 +20,13 @@ import { CommunityPost } from './pages/community/CommunityPost';
 import { EditFormBox } from './pages/community/EditFormBox';
 import { NoticeFormBox } from './pages/community/NoticeFormBox'; //수정
 import { NoticePost } from './pages/community/NoticePost';
-// import { NoticeTable2 } from './pages/community/NoticeTable2';
 import { Intro } from './pages/intro/Intro';
 import { MainPage } from './pages/main/MainPage';
 import { MyCard } from './pages/mycard/MyCard';
 import { MyPage } from './pages/mypage/MyPage';
+import CardListTest from './test/CardListTest';
 import theme from './theme/theme';
+// import { NoticeTable2 } from './pages/community/NoticeTable2';
 
 const Root = styled.div`
   & *,
@@ -59,6 +61,11 @@ function App() {
         <Layout>
           <Routes>
             <Route path="/" element={<MainPage />} />
+            <Route
+              path="/login/oauth/callback/kakao"
+              element={<KakaoLoginHandler />}
+            />
+            <Route path="/test" element={<CardListTest />} />
             <Route path="/login" element={<Login />} />
             <Route path="/signup" element={<SignUp />} />
             <Route path="/mypage" element={<MyPage />} />

@@ -17,7 +17,7 @@ const MessageText = styled.p`
 const ValidationMessage = ({
   text,
   type = 'error',
-  $margin = '0px',
+  $margin = '0px 0px 0px 10px',
   fontSize,
   textColor,
 }) => {

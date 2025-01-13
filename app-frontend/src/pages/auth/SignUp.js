@@ -28,7 +28,7 @@ import {
 } from '../../common/Message';
 import ValidationMessage from '../../common/ValidationMessage';
 import CommonDialog from '../../common/CommonDialog';
-import { useNavigate } from 'react-router-dom';
+import { useLocation, useNavigate } from 'react-router-dom';
 import theme from '../../theme/theme';
 
 const FullContainer = styled.div`
@@ -145,13 +145,14 @@ const SignUp = () => {
   const [isSignUpFailVisible, setIsSignUpFailVisible] = useState(false);
   const [isAddressModalOpen, setIsAddressModalOpen] = useState(false);
   const [isUserIdValidated, setIsUserIdValidated] = useState(false);
-
+  const location = useLocation();
+  const userInfo = location.state?.userInfo;
   const [formData, setFormData] = useState({
-    userId: '',
+    userId: userInfo?.id || '',
     password: '',
     confirmPassword: '',
     name: '',
-    email: '',
+    email: userInfo?.kakao_account.email || '',
     address: '',
     detailAddress: '',
     postcode: '',
@@ -338,6 +339,8 @@ const SignUp = () => {
             <CommonInput
               placeholder="아이디를 입력하세요."
               text="아이디"
+              value={formData.userId}
+              readOnly={true}
               onChange={(e) => handleInputChange(e, 'userId')}
               {...InputProps}
             />
