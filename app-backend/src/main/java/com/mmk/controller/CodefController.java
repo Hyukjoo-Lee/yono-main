@@ -177,48 +177,58 @@ public class CodefController {
         }
     }
 
-    @GetMapping("getUserCards")
-    public void getUserCards() {
+    @GetMapping("/getUserCardList")
+    public List<Map<String, Object>> getUserCardList() {
         codef = new EasyCodef();
         codef.setClientInfoForDemo(clientId, clientSecret);
         codef.setPublicKey(publickey);
-
-        HashMap<String, Object> parameterMap = new HashMap<String, Object>();
-
+        HashMap<String, Object> parameterMap = new HashMap<>();
         parameterMap.put("connectedId", connectedId);
-        parameterMap.put("organization", "0302"); // 기관 코드
-        parameterMap.put("inquiryType", "1"); // 카드 이미지 포함 여부
-
+        parameterMap.put("organization", "0304"); // 기관 코드
+        parameterMap.put("inquiryType", "0"); // 카드 이미지 포함 여부
         String productUrl = "/v1/kr/card/p/account/card-list"; // 보유 카드 URL
-
-        String result = "";
         try {
-            result = codef.requestProduct(productUrl, EasyCodefServiceType.DEMO, parameterMap);
+            String jsonResult = codef.requestProduct(productUrl, EasyCodefServiceType.DEMO, parameterMap);
+            ObjectMapper objectMapper = new ObjectMapper();
+            String dataArrayJson = objectMapper.readTree(jsonResult).get("data").toString();
+            List<Map<String, Object>> result = objectMapper.readValue(dataArrayJson,
+                    new TypeReference<List<Map<String, Object>>>() {
+                    });
             System.out.println(result);
+            if (result == null || result.isEmpty()) {
+                throw new RuntimeException("카드 정보가 존재하지 않습니다.");
+            }
+            return result;
         } catch (Exception e) {
             e.printStackTrace();
+            throw new RuntimeException("카드 리스트 정보 요청에 실패하였습니다.");
         }
     }
 
     @GetMapping("getUserPerformance")
-    public void getUserPerformance() {
+    public List<Map<String, Object>> getUserPerformance() {
         codef = new EasyCodef();
         codef.setClientInfoForDemo(clientId, clientSecret);
         codef.setPublicKey(publickey);
-
         HashMap<String, Object> parameterMap = new HashMap<String, Object>();
-
         parameterMap.put("connectedId", connectedId);
-        parameterMap.put("organization", "0302"); // 기관 코드
-
-        String productUrl = "/v1/kr/card/p/account/result-check-list"; // 보유 카드 URL
-
-        String result = "";
+        parameterMap.put("organization", "0304");
+        String productUrl = "/v1/kr/card/p/account/result-check-list";
         try {
-            result = codef.requestProduct(productUrl, EasyCodefServiceType.DEMO, parameterMap);
+            String jsonResult = codef.requestProduct(productUrl, EasyCodefServiceType.DEMO, parameterMap);
+            ObjectMapper objectMapper = new ObjectMapper();
+            String dataArrayJson = objectMapper.readTree(jsonResult).get("data").toString();
+            List<Map<String, Object>> result = objectMapper.readValue(dataArrayJson,
+                    new TypeReference<List<Map<String, Object>>>() {
+                    });
             System.out.println(result);
+            if (result == null || result.isEmpty()) {
+                throw new RuntimeException("카드 정보가 존재하지 않습니다.");
+            }
+            return result;
         } catch (Exception e) {
             e.printStackTrace();
+            throw new RuntimeException("카드 리스트 정보 요청에 실패하였습니다.");
         }
     }
 
