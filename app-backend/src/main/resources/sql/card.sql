@@ -1,5 +1,3 @@
-select * from card;
-
 -- KB국민 My WE:SH 카드 
 INSERT INTO card (CARD_ID, CARD_TITLE, CARD_PROVIDER, ORGANIZATION_CODE, CARD_IMG_URL, CARD_DESC, CREATED_AT, UPDATED_AT)
 VALUES (CARD_SEQ.nextval, 'KB국민 My WE:SH 카드', '국민', '0301', '/images/cards/kb/kb-my1.png', 'KB국민카드 - My WE:SH 카드', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP);
@@ -22,3 +20,5 @@ VALUES (CARD_SEQ.nextval, '신한 처음카드', '신한', '0306', '/images/card
 
 drop table card;
 commit;
+
+select * from user_card;

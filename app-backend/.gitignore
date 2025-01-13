@@ -26,6 +26,7 @@ bin/
 out/
 !**/src/main/**/out/
 !**/src/test/**/out/
+src/main/java/com/mmk/controller/CodefController.java
 
 ### NetBeans ###
 /nbproject/private/

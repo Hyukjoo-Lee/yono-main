@@ -1,7 +1,6 @@
 package com.mmk.entity;
 
 import java.sql.Timestamp;
-import java.util.ArrayList;
 
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
@@ -52,8 +51,8 @@ public class CardEntity {
     private String cardDesc;
 
     @CreationTimestamp
-    private Timestamp createdAt; // 생성 시각 (자동 생성)
+    private Timestamp createdAt;
 
     @UpdateTimestamp
-    private Timestamp updatedAt; // 업데이트 시각 (자동 갱신)
+    private Timestamp updatedAt;
 }
