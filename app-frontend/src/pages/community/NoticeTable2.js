@@ -113,6 +113,10 @@ export function NoticeTable2() {
     return `${year}-${month}-${day}`;
   };
 
+  const handlePostClick = (id) => {
+    navigate(`/notice/${id}`);
+  };
+
   return (
     <>
       <Root>
@@ -162,7 +166,13 @@ export function NoticeTable2() {
                   rows
                     .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
                     .map((row, index) => (
-                      <TableRow hover role="checkbox" tabIndex={-1} key={index}>
+                      <TableRow
+                        hover
+                        role="checkbox"
+                        tabIndex={-1}
+                        key={index}
+                        onClick={() => handlePostClick(row.noticeNo)}
+                      >
                         {columns.map((column) => {
                           let value = row[column.id];
                           if (column.id === 'createdAt') {
