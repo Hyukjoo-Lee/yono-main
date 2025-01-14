@@ -75,11 +75,11 @@ public class CodefController {
         // 공인인증서 loginType = 0, 아이디 & 비번 loginType = 1
         accountMap.put("loginType", "1");
 
-        accountMap.put("id", "BIGIE2"); // 카드사 아이디 입력
+        accountMap.put("id", "카드사 아이디"); // 카드사 아이디 입력
 
         try {
             // RSA암호화가 필요한 필드는 encryptRSA(String plainText, String publicKey) 메서드를 이용해 암호화
-            accountMap.put("password", EasyCodefUtil.encryptRSA("!Qwe89117465", codef.getPublicKey())); // 카드사 비밀번호 입력
+            accountMap.put("password", EasyCodefUtil.encryptRSA("카드사 비밀번호", codef.getPublicKey())); // 카드사 비밀번호 입력
         } catch (Exception e) {
             e.printStackTrace();
             return;
@@ -187,18 +187,34 @@ public class CodefController {
         parameterMap.put("organization", "0304"); // 기관 코드
         parameterMap.put("inquiryType", "0"); // 카드 이미지 포함 여부
         String productUrl = "/v1/kr/card/p/account/card-list"; // 보유 카드 URL
+
         try {
             String jsonResult = codef.requestProduct(productUrl, EasyCodefServiceType.DEMO, parameterMap);
             ObjectMapper objectMapper = new ObjectMapper();
             String dataArrayJson = objectMapper.readTree(jsonResult).get("data").toString();
+
             List<Map<String, Object>> result = objectMapper.readValue(dataArrayJson,
                     new TypeReference<List<Map<String, Object>>>() {
                     });
-            System.out.println(result);
+
             if (result == null || result.isEmpty()) {
                 throw new RuntimeException("카드 정보가 존재하지 않습니다.");
             }
-            return result;
+
+            List<Map<String, Object>> filteredResult = new ArrayList<>();
+            result.forEach(card -> {
+                Map<String, Object> filteredCard = new HashMap<>();
+                filteredCard.put("cardName", card.get("resCardName"));
+                filteredCard.put("cardNo", card.get("resCardNo"));
+                filteredCard.put("userName", card.get("resUserNm"));
+                filteredCard.put("validPeriod", card.get("resValidPeriod"));
+                filteredCard.put("imageLink", card.get("resImageLink"));
+
+                filteredResult.add(filteredCard);
+            });
+
+            return filteredResult;
+
         } catch (Exception e) {
             e.printStackTrace();
             throw new RuntimeException("카드 리스트 정보 요청에 실패하였습니다.");
@@ -241,18 +257,23 @@ public class CodefController {
                         new TypeReference<List<Map<String, Object>>>() {
                         });
 
+                List<Map<String, Object>> benefitInfoList = new ArrayList<>();
                 if (benefitList != null) {
                     benefitList.forEach(benefit -> {
-                        Map<String, Object> filteredData = new HashMap<>();
-                        filteredData.put("cardName", cardName);
-                        filteredData.put("cardNo", cardNo);
-                        filteredData.put("cardCompany", cardCompany);
-                        filteredData.put("benefitName", benefit.get("resCardBenefitName"));
-                        filteredData.put("businessTypes", benefit.get("resBusinessTypes"));
-
-                        filteredResult.add(filteredData);
+                        Map<String, Object> benefitInfo = new HashMap<>();
+                        benefitInfo.put("benefitName", benefit.get("resCardBenefitName"));
+                        benefitInfo.put("businessTypes", benefit.get("resBusinessTypes"));
+                        benefitInfoList.add(benefitInfo);
                     });
                 }
+
+                Map<String, Object> cardInfo = new HashMap<>();
+                cardInfo.put("cardName", cardName);
+                cardInfo.put("cardNo", cardNo);
+                cardInfo.put("cardCompany", cardCompany);
+                cardInfo.put("benefits", benefitInfoList);
+
+                filteredResult.add(cardInfo);
             });
 
             return filteredResult;
