@@ -1,6 +1,6 @@
 package com.mmk.dto;
 
-import com.fasterxml.jackson.annotation.JsonProperty;
+import java.sql.Timestamp;
 
 import lombok.Getter;
 import lombok.Setter;
@@ -10,5 +10,14 @@ import lombok.ToString;
 @Setter
 @ToString
 public class CardDTO {
+    private int cardId;
 
+    private String cardTitle;
+    private String cardProvider;
+    private String organizationCode;
+    private String cardImgUrl;
+    private String cardDesc;
+
+    private Timestamp createdAt;
+    private Timestamp updatedAt;
 }

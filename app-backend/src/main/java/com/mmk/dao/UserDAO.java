@@ -20,7 +20,13 @@ public interface UserDAO {
 
     boolean existsByEmail(String email);
 
+    boolean existsByName(String name);
+
     void updateUser(UserEntity uEntity);
 
     void deleteUser(int id);
+
+    UserEntity getFindId(String name, String email);
+
+    UserEntity getFindPwd(String name, String email, String id);
 }

@@ -89,8 +89,8 @@ const CommonDialog = (props) => {
             background="#ffffff"
             $borderColor="#4064E6"
             color="#4064E6"
-            hoverBk="#ffffff"
-            hoverColor="#4064E6"
+            $hoverBk="#ffffff"
+            $hoverColor="#4064E6"
             onClick={onClose}
             autoFocus
           />

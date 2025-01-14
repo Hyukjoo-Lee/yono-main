@@ -7,14 +7,16 @@ import CommonInput from '../../common/CommonInput';
 import CommonPageInfo from '../../common/CommonPageInfo';
 import CommonRoot from '../../common/CommonRoot';
 import theme from '../../theme/theme';
+import { findId } from '../../apis/userApi';
+import { sendMail } from '../../apis/mailApi';
 import {
   EMAIL_REGEX_MESSAGE,
   EMPTY_EMAIL_MESSAGE,
-  // EMPTY_EMAILCODE_MESSAGE,
   EMPTY_NAME_MESSAGE,
   NAME_REGEX_MESSAGE,
 } from '../../common/Message';
 import ValidationMessage from '../../common/ValidationMessage';
+import CommonDialog from '../../common/CommonDialog';
 
 const RootIn = styled.div`
   display: flex;
@@ -78,12 +80,14 @@ const EmailValidMessageStyle = styled.p`
   color: red;
   margin: 5px;
   font-size: 15px;
+  white-space: pre-line;
 `;
 
 const emailValidMessages = [
   '인증 완료!',
-  '인증코드가 일치하지 않습니다!',
-  '이메일 인증을 확인하세요!',
+  '인증코드가 일치하지 않습니다.',
+  '이메일 인증을 확인하세요.',
+  '등록되지 않은 아이디이거나\n이름 혹은 이메일이 잘못 입력되었습니다.',
 ];
 
 const FindID = () => {
@@ -101,12 +105,14 @@ const FindID = () => {
     emailCode: '',
   });
 
-  const [isEmailSentDialog, setIsEmailSentDialog] = useState(false);
   const [isEmailCodeVisible, setIsEmailCodeVisble] = useState(false);
   const [emailValidVisible, setEmailValidVisible] = useState(false);
   const [emailValidMessageIndex, setEmailValidMessageIndex] = useState();
+  const [isShowDialog, setIsShowDialog] = useState(false);
 
-  let isEmailValid = false; // 백엔드에서 받아온 이메일인증 확인 결과값, 기본값 false;
+  const [id, setId] = useState('');
+  const [code, setCode] = useState('');
+  const [isEmailValid, setIsEmailValid] = useState(false);
 
   const inputRegexs = {
     email: /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/,
@@ -152,12 +158,23 @@ const FindID = () => {
     return isValid;
   };
 
-  const handleSendCode = () => {
+  const handleSendCode = async () => {
     if (!validateField()) return;
-    setIsEmailSentDialog(!isEmailSentDialog);
+
+    const response = await findId(formData.name, formData.email);
+
+    if (response == null || response.data == null) {
+      setEmailValidVisible(true);
+      setEmailValidMessageIndex(3);
+      return;
+    }
+
+    setEmailValidVisible(false);
+    setId(response.data.userId);
     setIsEmailCodeVisble(!isEmailCodeVisible);
 
-    // setIsDialogIDVisible(true);
+    const sendedCode = await sendMail(formData.email);
+    setCode(sendedCode);
   };
 
   const handleConfirmCode = () => {
@@ -165,9 +182,11 @@ const FindID = () => {
       setEmailValidVisible(true);
       setEmailValidMessageIndex(2);
     } else if (emailValidVisible && !isEmailValid) {
-      setEmailValidMessageIndex(2);
+      setEmailValidVisible(true);
+      setEmailValidMessageIndex(1);
     } else if (emailValidVisible && isEmailValid) {
-      setIsEmailSentDialog(true);
+      setEmailValidVisible(false);
+      setIsShowDialog(true);
     }
   };
 
@@ -177,7 +196,13 @@ const FindID = () => {
 
   const handleCheckCode = () => {
     setEmailValidVisible(true);
-    setEmailValidMessageIndex(isEmailValid ? 0 : 1);
+    if (code === formData.emailCode) {
+      setIsEmailValid(true);
+      setEmailValidMessageIndex(0);
+    } else {
+      setIsEmailValid(false);
+      setEmailValidMessageIndex(1);
+    }
   };
 
   return (
@@ -222,33 +247,33 @@ const FindID = () => {
             <CommonHr />
 
             {isEmailCodeVisible && (
-              <>
-                <CodeContainer>
-                  <CodeInput>
-                    <CommonInput
-                      text="인증코드"
-                      placeholder="인증코드를 입력하세요"
-                      width="100%"
-                      {...styleProps}
-                    />
-                    <CommonHr />
-                  </CodeInput>
-                  <CodeButton>
-                    <CustomButton
-                      text="확인"
-                      width="50%"
-                      height="30px"
-                      fontSize={theme.fontSize.sm}
-                      onClick={handleCheckCode}
-                    />
-                  </CodeButton>
-                </CodeContainer>
-                {emailValidVisible && (
-                  <EmailValidMessageStyle>
-                    {emailValidMessages[emailValidMessageIndex]}
-                  </EmailValidMessageStyle>
-                )}
-              </>
+              <CodeContainer>
+                <CodeInput>
+                  <CommonInput
+                    text="인증코드"
+                    placeholder="인증코드를 입력하세요"
+                    width="100%"
+                    onChange={(e) => handleInputChange(e, 'emailCode')}
+                    {...styleProps}
+                  />
+                  <CommonHr />
+                </CodeInput>
+                <CodeButton>
+                  <CustomButton
+                    text="확인"
+                    width="50%"
+                    height="30px"
+                    fontSize={theme.fontSize.sm}
+                    onClick={handleCheckCode}
+                  />
+                </CodeButton>
+              </CodeContainer>
+            )}
+
+            {emailValidVisible && (
+              <EmailValidMessageStyle>
+                {emailValidMessages[emailValidMessageIndex]}
+              </EmailValidMessageStyle>
             )}
           </MiddleContainer>
           {/* <HiddenBox></HiddenBox> */}
@@ -271,6 +296,27 @@ const FindID = () => {
           </ButtonContainer>
         </FullContainer>
       </RootIn>
+
+      {isShowDialog && (
+        <CommonDialog
+          open={isShowDialog}
+          children={
+            <p style={{ textAlign: 'center' }}>
+              회원님의 아이디는{' '}
+              <span style={{ color: theme.color.blue, fontWeight: 'bold' }}>
+                {id}
+              </span>{' '}
+              입니다.
+            </p>
+          }
+          onClose={() => {
+            setIsShowDialog(false);
+          }}
+          onClick={() => {
+            setIsShowDialog(false);
+          }}
+        />
+      )}
     </CommonRoot>
   );
 };

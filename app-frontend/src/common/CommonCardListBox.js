@@ -100,14 +100,22 @@ const AdditionalInfo = styled.div`
 `;
 
 const CommonCardListBox = ({
-  cardTitle,
-  cardImg,
   cardInfo,
   data,
   showDetailed,
   onCardSelect,
   buttonText = '카드 선택',
+  cardItem,
 }) => {
+  const fields = cardItem
+    ? [
+        { title: '날짜', value: cardItem.dailyDate || 'N/A' },
+        { title: '사용처', value: cardItem.store || 'N/A' },
+        { title: '카테고리', value: cardItem.category || 'N/A' },
+        { title: '사용금액', value: cardItem.amount || 'N/A' },
+      ]
+    : [];
+
   return (
     <>
       {showDetailed ? (
@@ -152,20 +160,25 @@ const CommonCardListBox = ({
               </BoxStyle>
             ))}
         </>
-      ) : (
+      ) : cardItem ? (
         <BoxStyle>
-          <SmallCardImage src={cardImg} alt="카드이미지" />
+          <SmallCardImage
+            src={`http://localhost:8065${cardItem.cardImage || ''}`}
+            alt="카드이미지"
+          />
           <BoxInStyle>
-            <DailyCardName>{cardTitle}</DailyCardName>
-            {cardInfo.map((item, index) => (
+            <DailyCardName>
+              {cardItem.cardName || '카드 이름 없음'}
+            </DailyCardName>
+            {fields.map((item, index) => (
               <InfoRow key={index}>
-                <TitleStyle>{item.label}</TitleStyle>
+                <TitleStyle>{item.title}</TitleStyle>
                 <TextStyle>{item.value}</TextStyle>
               </InfoRow>
             ))}
           </BoxInStyle>
         </BoxStyle>
-      )}
+      ) : null}
     </>
   );
 };
