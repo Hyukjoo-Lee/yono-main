@@ -2,9 +2,6 @@ package com.mmk.dto;
 
 import java.sql.Timestamp;
 
-import com.mmk.entity.CardEntity;
-import com.mmk.entity.UserEntity;
-
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
@@ -19,12 +16,14 @@ public class UserCardDTO {
     private String expiryDate;
     private String userName;
 
+    private String companyId;
+    private String companyPwd;
+    private String connectedId;
+    private int primaryCard;
+
     private int cardId;
     private int userNum;
 
     private Timestamp createdAt;
     private Timestamp updatedAt;
-
-    private UserEntity userEntity;
-    private CardEntity cardEntity;
 }

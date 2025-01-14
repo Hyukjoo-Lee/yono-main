@@ -189,18 +189,34 @@ public class CodefController {
         parameterMap.put("organization", "0304"); // 기관 코드
         parameterMap.put("inquiryType", "0"); // 카드 이미지 포함 여부
         String productUrl = "/v1/kr/card/p/account/card-list"; // 보유 카드 URL
+
         try {
             String jsonResult = codef.requestProduct(productUrl, EasyCodefServiceType.DEMO, parameterMap);
             ObjectMapper objectMapper = new ObjectMapper();
             String dataArrayJson = objectMapper.readTree(jsonResult).get("data").toString();
+
             List<Map<String, Object>> result = objectMapper.readValue(dataArrayJson,
                     new TypeReference<List<Map<String, Object>>>() {
                     });
-            System.out.println(result);
+
             if (result == null || result.isEmpty()) {
                 throw new RuntimeException("카드 정보가 존재하지 않습니다.");
             }
-            return result;
+
+            List<Map<String, Object>> filteredResult = new ArrayList<>();
+            result.forEach(card -> {
+                Map<String, Object> filteredCard = new HashMap<>();
+                filteredCard.put("cardName", card.get("resCardName"));
+                filteredCard.put("cardNo", card.get("resCardNo"));
+                filteredCard.put("userName", card.get("resUserNm"));
+                filteredCard.put("validPeriod", card.get("resValidPeriod"));
+                filteredCard.put("imageLink", card.get("resImageLink"));
+
+                filteredResult.add(filteredCard);
+            });
+
+            return filteredResult;
+
         } catch (Exception e) {
             e.printStackTrace();
             throw new RuntimeException("카드 리스트 정보 요청에 실패하였습니다.");
@@ -212,22 +228,58 @@ public class CodefController {
         codef = new EasyCodef();
         codef.setClientInfoForDemo(clientId, clientSecret);
         codef.setPublicKey(publickey);
-        HashMap<String, Object> parameterMap = new HashMap<String, Object>();
+        HashMap<String, Object> parameterMap = new HashMap<>();
         parameterMap.put("connectedId", connectedId);
         parameterMap.put("organization", "0304");
         String productUrl = "/v1/kr/card/p/account/result-check-list";
+
         try {
             String jsonResult = codef.requestProduct(productUrl, EasyCodefServiceType.DEMO, parameterMap);
             ObjectMapper objectMapper = new ObjectMapper();
             String dataArrayJson = objectMapper.readTree(jsonResult).get("data").toString();
+
             List<Map<String, Object>> result = objectMapper.readValue(dataArrayJson,
                     new TypeReference<List<Map<String, Object>>>() {
                     });
-            System.out.println(result);
+
             if (result == null || result.isEmpty()) {
                 throw new RuntimeException("카드 정보가 존재하지 않습니다.");
             }
-            return result;
+
+            // 카드 이름, 카드 번호, 카드 회사, 혜택 이름, 혜택 카테고리 필터링
+            List<Map<String, Object>> filteredResult = new ArrayList<>();
+
+            result.forEach(card -> {
+                String cardName = (String) card.get("resCardName");
+                String cardNo = (String) card.get("resCardNo");
+                String cardCompany = (String) card.get("resCardCompany");
+
+                List<Map<String, Object>> benefitList = objectMapper.convertValue(
+                        card.get("resCardBenefitList"),
+                        new TypeReference<List<Map<String, Object>>>() {
+                        });
+
+                List<Map<String, Object>> benefitInfoList = new ArrayList<>();
+                if (benefitList != null) {
+                    benefitList.forEach(benefit -> {
+                        Map<String, Object> benefitInfo = new HashMap<>();
+                        benefitInfo.put("benefitName", benefit.get("resCardBenefitName"));
+                        benefitInfo.put("businessTypes", benefit.get("resBusinessTypes"));
+                        benefitInfoList.add(benefitInfo);
+                    });
+                }
+
+                Map<String, Object> cardInfo = new HashMap<>();
+                cardInfo.put("cardName", cardName);
+                cardInfo.put("cardNo", cardNo);
+                cardInfo.put("cardCompany", cardCompany);
+                cardInfo.put("benefits", benefitInfoList);
+
+                filteredResult.add(cardInfo);
+            });
+
+            return filteredResult;
+
         } catch (Exception e) {
             e.printStackTrace();
             throw new RuntimeException("카드 리스트 정보 요청에 실패하였습니다.");

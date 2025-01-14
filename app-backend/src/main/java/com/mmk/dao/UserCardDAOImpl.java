@@ -35,4 +35,9 @@ public class UserCardDAOImpl implements UserCardDAO {
         return null;
         // 구현중
     }
+
+    @Override
+    public void removePrimaryCardAll(int userNum) {
+        userCardRepository.removePrimaryCardAll(userNum);
+    }
 }

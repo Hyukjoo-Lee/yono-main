@@ -33,14 +33,6 @@ public class CardController {
         return ResponseEntity.ok(new ApiResponse<>(200, "전체 마스터 카드 검색 성공", cardDTOs));
     }
 
-    // 대표카드 설정
-    @GetMapping("/setPrimaryCard")
-    public ResponseEntity<ApiResponse<CardDTO>> setPrimaryCard() {
-        CardDTO cardDTO = cardService.setPrimaryCard();
-
-        return null;
-    }
-
     // 마스터 카드 생성
     @PostMapping("/create")
     public ResponseEntity<ApiResponse<CardDTO>> createCard(@RequestBody CardDTO cardDTO) {

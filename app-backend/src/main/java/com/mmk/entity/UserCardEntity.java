@@ -65,6 +65,6 @@ public class UserCardEntity {
     private CardEntity cardEntity;
 
     @ManyToOne
-    @JoinColumn(name = "user_id", nullable = false)
+    @JoinColumn(name = "user_num", nullable = false)
     private UserEntity userEntity;
 }
