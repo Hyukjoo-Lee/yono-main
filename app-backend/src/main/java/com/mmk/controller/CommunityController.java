@@ -35,6 +35,7 @@ public class CommunityController {
     return ResponseEntity.ok(communityList);
   }
 
+  //글 상세조회
   @GetMapping("/{id}")
   public ResponseEntity<CommunityDTO> getCommunityById(@PathVariable String id){
     CommunityDTO community = communityService.findById(id);

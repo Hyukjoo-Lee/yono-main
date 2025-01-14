@@ -18,6 +18,7 @@ public class NoticeServieImpl implements NoticeService {
   @Autowired
   private NoticeDAO noticeDAO;
 
+  //글 등록하기
   @Override
   @Transactional
   public void save(NoticeDTO noticeData) {
@@ -45,6 +46,7 @@ public class NoticeServieImpl implements NoticeService {
     return dto;
   }
 
+  //글 리스트 불러오기
   @Override
   public List<NoticeDTO> getNoticeList() {
     List<NoticeEntity> noticeEntities = noticeDAO.getNoticeList();
@@ -53,5 +55,28 @@ public class NoticeServieImpl implements NoticeService {
     .map(this::convertToDTO)
     .collect(Collectors.toList());
   }
-  
+
+  //글 상세조회
+	@Override
+	public NoticeDTO findById(String id) {
+		int adminId = Integer.parseInt(id);
+
+    NoticeEntity noticeEntity = noticeDAO.findById(adminId);
+
+  if(noticeEntity == null){
+    throw new RuntimeException("해당 공지사항을 찾을 수 없습니다!");
+  }
+
+  NoticeDTO noticeDTO = new NoticeDTO();
+
+  noticeDTO.setNoticeNo(noticeEntity.getNoticeNo());
+  noticeDTO.setAdminId(noticeEntity.getAdminId());
+  noticeDTO.setNoticeTitle(noticeEntity.getNoticeTitle());
+  noticeDTO.setNoticeCont(noticeEntity.getNoticeCont());
+  noticeDTO.setNoticeImgUrl(noticeEntity.getNoticeImgUrl());
+  noticeDTO.setCreatedAt(noticeEntity.getCreatedAt());
+  noticeDTO.setViewCount(noticeEntity.getViewCount());
+
+  return noticeDTO;
+  }
 }

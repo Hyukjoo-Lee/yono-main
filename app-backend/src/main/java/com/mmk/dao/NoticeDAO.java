@@ -9,4 +9,6 @@ public interface NoticeDAO {
   void save(NoticeEntity noticeData);
 
   List<NoticeEntity> getNoticeList();
+
+  NoticeEntity findById(int adminId);
 }

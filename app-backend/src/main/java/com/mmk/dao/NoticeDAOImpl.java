@@ -22,5 +22,15 @@ public class NoticeDAOImpl implements NoticeDAO {
   public List<NoticeEntity> getNoticeList() {
     return this.noticeRepo.findAll();
   }
+
+	@Override
+	public NoticeEntity findById(int adminId) {
+		NoticeEntity notice = noticeRepo.findById(adminId).orElse(null);
+
+    if(notice == null){
+      throw new RuntimeException("해당 공지사항을 찾을 수 없습니다!");
+    }
+    return notice;
+	}
   
 }
