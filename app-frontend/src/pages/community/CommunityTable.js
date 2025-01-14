@@ -187,7 +187,7 @@ export function CommunityTable() {
                         role="checkbox"
                         tabIndex={-1}
                         key={index}
-                        onClick={() => handlePostClick(row.userId)}
+                        onClick={() => handlePostClick(row.communityNo)}
                       >
                         {columns.map((column) => {
                           let value = row[column.id];

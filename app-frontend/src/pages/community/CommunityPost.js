@@ -29,7 +29,7 @@ const Root = styled.div`
 
 const Box = styled.div`
   display: flex;
-  justify-content: flex-end;
+  // justify-content: flex-end;
   align-items: flex-start;
   height: 300px;
   border: 1px solid gray;
@@ -137,7 +137,7 @@ export function CommunityPost() {
 
   return (
     <Root>
-      <label>{communityData.userId}</label>
+      <label>{communityData.commTitle}</label>
       <CommonHr
         width="918px"
         borderWidth="2px"
@@ -146,8 +146,8 @@ export function CommunityPost() {
       />
       <Detailbox>
         <label>
-          {communityData.createdAt} | 작성자 {communityData.userId} | 조회수{' '}
-          {communityData.viewCount}
+          등록일 {communityData.createdAt} | 작성자 {communityData.userId} |
+          조회수 {communityData.viewCount}
         </label>
       </Detailbox>
       <Box>
