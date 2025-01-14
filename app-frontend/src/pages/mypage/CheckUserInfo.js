@@ -239,7 +239,7 @@ const CheckUserInfo = ({
 
     const updatedUserInfo = {
       ...userInfo,
-      password: userInfo.newPassword,
+      password: userInfo.originPassword,
       originPassword: undefined,
     };
 

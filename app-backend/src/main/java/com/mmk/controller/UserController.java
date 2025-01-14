@@ -228,15 +228,14 @@ public class UserController {
 
         try {
             UserDTO uv = new ObjectMapper().readValue(userInfoJson, UserDTO.class);
-            File resourceDirectory = ResourceUtils.getFile("classpath:");
-            String uploadFolder = resourceDirectory.getPath() + "/static/images";
+            String uploadFolder = System.getProperty("user.dir") + "/uploads/images";
+            System.out.println("uploadFolder :" + uploadFolder);
 
             if (profileImage != null && !profileImage.isEmpty()) {
                 if (uv.getProfile() != null && !uv.getProfile().isEmpty()) {
-                    String existingProfilePath = resourceDirectory.getPath() + "/static"
-                            + uv.getProfile();
-                    File existingFile = new File(existingProfilePath);
-    
+                    File existingFile = new File(System.getProperty("user.dir") + uv.getProfile());
+                    
+                    System.out.println("existingFile: " + existingFile);
                     if (existingFile.exists()) {
                         existingFile.delete();
                     }
@@ -266,7 +265,8 @@ public class UserController {
                 int index = fileName.lastIndexOf(".");
                 String fileExtension = fileName.substring(index + 1);
                 String newFileName = "profile_" + year + month + date + random + "." + fileExtension;
-                String fileDBName = "/images/" + year + "-" + month + "-" + date + "/" + newFileName;
+                // String fileDBName = "/images/" + year + "-" + month + "-" + date + "/" + newFileName;
+                String fileDBName = "/uploads/images/" + year + "-" + month + "-" + date + "/" + newFileName;
 
                 File saveFile = new File(homedir + "/" + newFileName);
                 System.out.println("파일 저장 경로: " + saveFile.getAbsolutePath());
@@ -285,7 +285,7 @@ public class UserController {
 
             ApiResponse<UserDTO> response = new ApiResponse<>(201, "회원 정보 수정 성공", uv);
             return ResponseEntity.ok(response);
-        } catch (JsonProcessingException | FileNotFoundException e) {
+        } catch (JsonProcessingException e) {
             e.printStackTrace();
             ApiResponse<UserDTO> response = new ApiResponse<>(400, "회원 정보 수정 오류", null);
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(response);
