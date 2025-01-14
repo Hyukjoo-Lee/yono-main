@@ -18,9 +18,14 @@ const comments = [
     time: '30분전',
     comment: '안녕하세요. 반갑습니다~!',
   },
+  {
+    name: '핀테크',
+    time: '2시간전',
+    comment: '안뇽하세욧ㅇㅇ용',
+  },
 ];
 const Root = styled.div`
-  width: ${(props) => props.theme.display.sm};
+  width: ${(props) => props.theme.display.lg};
   margin: 0 auto;
   box-sizing: border-box;
   padding-top: ${(props) => props.theme.headerHeight};
@@ -32,13 +37,13 @@ const Box = styled.div`
   // justify-content: flex-end;
   align-items: flex-start;
   height: 300px;
-  border: 1px solid gray;
+  // border: 1px solid gray;
   margin-top: 10px;
 `;
 const Detailbox = styled.div`
   display: flex;
-  justify-content: flex-end;
-  align-items: flex-end;
+  // justify-content: flex-end;
+  // align-items: flex-end;
 `;
 const Listbox = styled.div`
   margin: 20px 0px 20px 0px;
@@ -56,10 +61,10 @@ const CommentBox = styled.div`
   gap: 10px;
 
   & > div {
-    padding-left: 20px;
+    // padding-left: 20px;
     height: 100px;
-    border: 1px solid #d7d7d7;
-    border-radius: 20px;
+    // border: 1px solid #d7d7d7;
+    // border-radius: 20px;
     flex-direction: column;
     gap: 5px;
   }
@@ -75,6 +80,8 @@ const ImageBox = styled.div`
   & > svg {
     width: 50px;
     height: 50px;
+    border: 1px solid rgba(128, 128, 128, 0.3);
+    border-radius: 50px;
   }
 `;
 
@@ -82,12 +89,12 @@ const TimeText = styled.span`
   color: ${(props) => props.theme.color.lightGray};
   font-size: 12px;
   margin-left: 8px;
-  margin-bottom: 5px;
+  margin: auto 55px;
 `;
 const TextBox = styled.div`
   & > p {
     color: ${(props) => props.theme.color.black};
-    margin-left: 25px;
+    margin-left: 55px;
   }
 `;
 const BottomBox = styled.div`
@@ -100,6 +107,7 @@ const commonButtonProps = {
   width: '80px',
   height: '50px',
 };
+
 export function CommunityPost() {
   const [communityData, setCommunityData] = useState(null);
   const navigate = useNavigate();
@@ -137,36 +145,39 @@ export function CommunityPost() {
 
   return (
     <Root>
-      <label>{communityData.commTitle}</label>
+      <p style={{ fontWeight: 'bold', fontSize: '18px' }}>
+        커뮤니티{' '}
+        <span style={{ color: '#4064e6' }}>{communityData.communityNo}</span>
+      </p>
       <CommonHr
-        width="918px"
-        borderWidth="2px"
-        borderColor="black"
+        width="1200px"
+        borderWidth="1.5px"
+        borderColor="rgba(128, 128, 128, 0.7)"
         margin="10px auto 20px"
       />
+      <p
+        style={{ fontWeight: 'bold', fontSize: '20px', margin: '0px 0px 10px' }}
+      >
+        {communityData.commTitle}
+      </p>
       <Detailbox>
-        <label>
-          등록일 {communityData.createdAt} | 작성자 {communityData.userId} |
-          조회수 {communityData.viewCount}
+        <label style={{ fontSize: '15px' }}>
+          {/* 등록일 {communityData.createdAt} | 작성자 {communityData.userId} |
+          조회수 {communityData.viewCount} */}
+          등록일 2025-01-14 | 작성자 {communityData.userId} | 조회수 0
         </label>
       </Detailbox>
+
+      <CommonHr
+        width="1200px"
+        borderWidth="1.5px"
+        borderColor="rgba(128, 128, 128, 0.3)"
+        margin="20px auto 20px"
+      />
+
       <Box>
         <p>{communityData.commCont}</p>
       </Box>
-
-      <Listbox>
-        <CommonInput
-          width="810px"
-          height="50px"
-          placeholder="댓글을 입력해주세요."
-        />
-        <CommonButton
-          background-color="#3563E9"
-          color="white"
-          text="등록"
-          {...commonButtonProps}
-        />
-      </Listbox>
 
       <CommentBox>
         {comments.map((comment, index) => {
@@ -176,17 +187,39 @@ export function CommunityPost() {
                 <ImageBox>
                   <Profile />
                 </ImageBox>
-                <h3>
+                <h3 style={{ fontSize: '16px' }}>
                   {comment.name} <TimeText>{comment.time}</TimeText>
                 </h3>
               </TopRow>
               <TextBox>
                 <p>{comment.comment}</p>
               </TextBox>
+              {index !== comments.length - 1 && (
+                <CommonHr
+                  width="1200px"
+                  borderWidth="1.5px"
+                  borderColor="rgba(128, 128, 128, 0.3)"
+                  // margin="auto"
+                />
+              )}
             </div>
           );
         })}
       </CommentBox>
+
+      <Listbox>
+        <CommonInput
+          width="1107px"
+          height="50px"
+          placeholder={`(작성자: ${communityData.userId}) 댓글을 입력해주세요.`}
+        />
+        <CommonButton
+          background-color="#3563E9"
+          color="white"
+          text="등록"
+          {...commonButtonProps}
+        />
+      </Listbox>
 
       <BottomBox>
         <CommonButton
@@ -201,6 +234,7 @@ export function CommunityPost() {
           onClick={handleNavigateToEditForm}
           {...commonButtonProps}
         />
+
         <CommonButton text="삭제" font-size="20px" {...commonButtonProps} />
       </BottomBox>
     </Root>
