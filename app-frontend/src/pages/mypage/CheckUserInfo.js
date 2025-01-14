@@ -132,7 +132,7 @@ const CheckUserInfo = ({
 
     setPreviewImage(profile);
 
-    if (isShowDialog) {
+    if (!isShowDialog) {
       document.getElementById('root').removeAttribute('inert');
     }
   }, [
@@ -239,7 +239,7 @@ const CheckUserInfo = ({
 
     const updatedUserInfo = {
       ...userInfo,
-      password: userInfo.newPassword,
+      password: userInfo.originPassword,
       originPassword: undefined,
     };
 

@@ -32,6 +32,12 @@ const Titlediv = styled.div`
     font-size: ${(props) => props.theme.fontSize.xl};
     font-weight: bold;
   }
+  & hr {
+    border: 0;
+    border-top: 1px solid rgba(0, 0, 0, 0.3);
+    margin: 0 20px 40px 20px;
+    width: 70%;
+  }
 `;
 
 const TitleGroup = styled.div`
@@ -50,38 +56,25 @@ const MonthComparisionTable = () => {
     <TextWrap>
       <TitleGroup>
         <Titlediv>
-          <p>
-            전달에 사용하신 금액
-            <br />
-            <hr />
-          </p>
+          <p>전달에 사용하신 금액</p>
+          <hr />
           <span>{previousMonthAmount.toLocaleString()}원</span>
         </Titlediv>
-        <br />
         <Titlediv>
-          <p>
-            이번달에 사용하신 금액
-            <br />
-            <hr />
-          </p>
+          <p>이번달에 사용하신 금액</p>
+          <hr />
           <span>{currentMonthAmount.toLocaleString()}원</span>
         </Titlediv>
       </TitleGroup>
       <TitleGroup>
         <Titlediv>
-          <p>
-            저번달 뱃지 갯수
-            <br />
-            <hr />
-          </p>
+          <p>저번달 뱃지 갯수</p>
+          <hr />
           <span>{previousbadgeCount.toLocaleString()}개</span>
         </Titlediv>
         <Titlediv>
-          <p>
-            이번달 예상 뱃지 갯수
-            <br />
-            <hr />
-          </p>
+          <p>이번달 예상 뱃지 갯수</p>
+          <hr />
           <span>{currentbadgeCount.toLocaleString()}개</span>
         </Titlediv>
       </TitleGroup>
