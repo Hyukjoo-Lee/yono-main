@@ -13,7 +13,6 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.mmk.common.ApiResponse;
 import com.mmk.dto.UserCardDTO;
@@ -48,18 +47,18 @@ public class UserCardController {
     // 대표카드 설정
     @GetMapping("/setPrimaryCard")
     public ResponseEntity<ApiResponse<UserCardDTO>> setPrimaryCard(
-        @RequestBody Map<String, Object> cardInfo) {
+            @RequestBody Map<String, Object> cardInfo) {
 
-            try {
-                UserCardDTO uc = new ObjectMapper().convertValue(cardInfo.get("cardInfo"), UserCardDTO.class);
-                UserCardDTO userCardDTO = userCardService.setPrimaryCard(uc);
-                ApiResponse<UserCardDTO> response = new ApiResponse<>(201, "대표 카드 설정 성공", userCardDTO);
-                return ResponseEntity.ok(response);
-            } catch (Exception e) {
-                e.printStackTrace();
-                ApiResponse<UserCardDTO> response = new ApiResponse<>(400, "대표 카드 등록 오류", null);
-                return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(response);
-            }
+        try {
+            UserCardDTO uc = new ObjectMapper().convertValue(cardInfo.get("cardInfo"), UserCardDTO.class);
+            UserCardDTO userCardDTO = userCardService.setPrimaryCard(uc);
+            ApiResponse<UserCardDTO> response = new ApiResponse<>(201, "대표 카드 설정 성공", userCardDTO);
+            return ResponseEntity.ok(response);
+        } catch (Exception e) {
+            e.printStackTrace();
+            ApiResponse<UserCardDTO> response = new ApiResponse<>(400, "대표 카드 등록 오류", null);
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(response);
+        }
     }
 
 }

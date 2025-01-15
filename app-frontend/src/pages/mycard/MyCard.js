@@ -29,13 +29,15 @@ export function MyCard() {
       try {
         const cardList = await getUserCards();
         const cardBenefits = await getUserPerformance();
-        // setCardList(cardList);
-        // setCardBenefits(cardBenefits);
+        setCardList(cardList);
+        setCardBenefits(cardBenefits);
         // 카드 및 혜택 정보를 DB에 저장
+        // console.log(JSON.stringify(cardList));
+        // console.log(JSON.stringify(cardBenefits));
         const response = await saveUserCardData(cardList, cardBenefits);
         console.log('DB 저장 완료: ' + response);
       } catch (error) {
-        console.error('유저 정보를 불러오는 중 오류 발생:', error);
+        console.error('카드 정보를 불러오는 중 오류 발생:', error);
         setCardList(null);
       }
     };
@@ -44,9 +46,6 @@ export function MyCard() {
   }, []);
 
   const panels = [<CardRegTab />, <CardRecTab />];
-
-  console.log(JSON.stringify(cardBenefits));
-  console.log(JSON.stringify(cardList));
 
   return (
     <CommonRoot>

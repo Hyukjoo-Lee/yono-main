@@ -48,8 +48,9 @@ public class CardController {
             @RequestBody Map<String, List<Map<String, Object>>> requestBody) {
         List<Map<String, Object>> cardList = requestBody.get("cardList");
         List<Map<String, Object>> performanceList = requestBody.get("performanceList");
-        // System.out.println("cardList: " + cardList);
-        // System.out.println("performanceList: " + performanceList);
+        System.out.println("cardList: " + cardList);
+        System.out.println("performanceList: " + performanceList);
+
         cardService.saveCardAndBenefitData(cardList, performanceList);
 
         return ResponseEntity.status(HttpStatus.CREATED)
