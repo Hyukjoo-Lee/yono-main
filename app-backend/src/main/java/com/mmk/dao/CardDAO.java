@@ -13,4 +13,6 @@ public interface CardDAO {
     boolean existsByCardTitle(String cardId);
 
     CardEntity findByCardId(int cardId);
+
+    CardEntity findByCardTitle(String cardTitle);
 }

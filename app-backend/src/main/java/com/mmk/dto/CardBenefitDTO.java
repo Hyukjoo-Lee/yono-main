@@ -9,14 +9,14 @@ import lombok.ToString;
 @Getter
 @Setter
 @ToString
-public class CardDTO {
-    private int cardId;
+public class CardBenefitDTO {
+    private int benefitId;
 
-    private String cardTitle;
-    private String cardProvider;
-    private String organizationCode;
-    private String cardImgUrl;
+    private String benefitTitle;
+    private String businessTypes;
 
     private Timestamp createdAt;
     private Timestamp updatedAt;
+
+    private int cardId;
 }
