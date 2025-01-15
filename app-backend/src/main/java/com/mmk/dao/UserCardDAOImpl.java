@@ -18,13 +18,6 @@ public class UserCardDAOImpl implements UserCardDAO {
         userCardRepository.save(userCardEntity);
     }
 
-    // @Override
-    // public UserCardEntity findByUserCardEntityUserId(int userId) {
-    // UserCardEntity userCardEntity =
-    // userCardRepository.findByUserEntityUserId(userId);
-    // return userCardEntity;
-    // }
-
     @Override
     public boolean existsByUserCardNum(String userCardNum) {
         return existsByUserCardNum(userCardNum);
