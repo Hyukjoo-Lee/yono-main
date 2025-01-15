@@ -3,6 +3,7 @@ package com.mmk.service;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.NoSuchElementException;
+import java.util.concurrent.CompletableFuture;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -11,6 +12,7 @@ import org.springframework.transaction.annotation.Transactional;
 import com.mmk.dao.CardDAO;
 import com.mmk.dao.UserCardDAO;
 import com.mmk.dao.UserDAO;
+import com.mmk.dto.MonthlySummary;
 import com.mmk.dto.UserCardDTO;
 import com.mmk.entity.CardEntity;
 import com.mmk.entity.UserCardEntity;
@@ -80,6 +82,15 @@ public class UserCardServiceImpl implements UserCardService {
         return uc;
     }
 
+    // 카드 내역 조회
+    @Override
+    public CompletableFuture<List<MonthlySummary>> getCardHistory(int userNum) {
+        UserEntity userEntity = userDAO.getUserById(userNum);
+        UserCardEntity userCardEntity = userCardDAO.findByUserNumAndPrimaryCard(userEntity, 1);
+        CompletableFuture<List<MonthlySummary>> result = codefService.getCardHistory(userCardEntity);
+        return result;
+    }
+
     private UserCardEntity toEntity(UserCardDTO dto) {
         UserCardEntity entity = new UserCardEntity();
         entity.setUserCardId(dto.getUserCardId());
@@ -87,6 +98,7 @@ public class UserCardServiceImpl implements UserCardService {
         entity.setExpiryDate(dto.getExpiryDate());
         entity.setUserName(dto.getUserName());
 
+        entity.setCardPwd(dto.getCardPwd());
         entity.setCompanyId(dto.getCompanyId());
         entity.setCompanyPwd(dto.getCompanyPwd());
         entity.setConnectedId(dto.getConnectedId());
@@ -110,6 +122,7 @@ public class UserCardServiceImpl implements UserCardService {
         dto.setExpiryDate(entity.getExpiryDate());
         dto.setUserName(entity.getUserName());
 
+        dto.setCardPwd(entity.getCardPwd());
         dto.setCompanyId(entity.getCompanyId());
         dto.setCompanyPwd(entity.getCompanyPwd());
         dto.setConnectedId(entity.getConnectedId());
