@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
 import com.mmk.entity.UserCardEntity;
+import com.mmk.entity.UserEntity;
 
 @Repository
 public class UserCardDAOImpl implements UserCardDAO {
@@ -32,5 +33,10 @@ public class UserCardDAOImpl implements UserCardDAO {
     @Override
     public void removePrimaryCardAll(int userNum) {
         userCardRepository.removePrimaryCardAll(userNum);
+    }
+
+    @Override
+    public UserCardEntity findByUserNumAndPrimaryCard(UserEntity userEntity, int primaryCard) {
+        return userCardRepository.findByUserEntityAndPrimaryCard(userEntity, primaryCard);
     }
 }
