@@ -15,7 +15,7 @@ import com.mmk.dto.CommunityDTO;
 import com.mmk.service.CommunityService;
 
 @Controller
-@RequestMapping("/community123")
+@RequestMapping("/community")
 public class CommunityController {
   
   @Autowired
@@ -30,12 +30,12 @@ public class CommunityController {
 
   //글목록 불러오기
   @GetMapping("")
-  public ResponseEntity<List<CommunityDTO>> getCommunity(){
-    List<CommunityDTO> communityList = communityService.getCommunityList();
-    return ResponseEntity.ok(communityList);
+    public ResponseEntity<List<CommunityDTO>> getCommunity(){
+      List<CommunityDTO> communityList = communityService.getCommunityList();
+      return ResponseEntity.ok(communityList);
   }
-
-  //글 상세조회
+  
+  //글 조회
   @GetMapping("/{id}")
   public ResponseEntity<CommunityDTO> getCommunityById(@PathVariable String id){
     CommunityDTO community = communityService.findById(id);
