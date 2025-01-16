@@ -5,58 +5,61 @@ import CommonHr from '../../common/CommonHr';
 const comments = [
   {
     name: '한교동',
-    time: '1시간전',
     comment: '안녕하세요. 반갑습니다~!',
   },
   {
     name: '포차코',
-    time: '30분전',
     comment: '안녕하세요. 반갑습니다~!',
   },
   {
     name: '핀테크',
-    time: '2시간전',
     comment: '안뇽하세욧ㅇㅇ용',
   },
 ];
 
 const CommentBox = styled.div`
+  width: 1200px;
+  // height: 100px;
   display: flex;
   flex-direction: column;
   gap: 10px;
+  // border: 1px solid black;
 
-  & > div {
-    flex-direction: column;
-    gap: 5px;
+  & > div > div {
+    display: flex;
+    flex-direction: row;
+    gap: 10px;
+    align-items: flex-start;
   }
 `;
 const TopRow = styled.div`
   margin-top: 5px;
-  display: flex;
-  align-items: center;
-  gap: 5px;
-  height: 50px;
+  // display: flex;
+  // align-items: center;
+  // gap: 5px;
+  // weight: 50px;
+  // height: 50px;
 `;
 const ImageBox = styled.div`
+  width: 60px;
+  height: 60px;
+  flex-shrink: 0;
   & > svg {
-    width: 50px;
-    height: 50px;
-    border: 1px solid rgba(128, 128, 128, 0.3);
-    border-radius: 50px;
+    width: 100%;
+    height: 100%;
+    max-width: 50px;
+    max-height: 50px;
+    border: 1px solid #d0d0d0;
+    border-radius: 50%;
     // margin:10px;
   }
 `;
 
-const TimeText = styled.span`
-  color: ${(props) => props.theme.color.lightGray};
-  font-size: 12px;
-  margin-left: 8px;
-  margin: auto 55px;
-`;
 const TextBox = styled.div`
+  flex: 1;
   & > p {
     color: ${(props) => props.theme.color.black};
-    margin: 0px auto 20px 55px;
+    // margin: 0px auto 20px 55px;
   }
 `;
 
@@ -66,26 +69,31 @@ const CommunityComment = () => {
       {comments.map((comment, index) => {
         return (
           <div key={index}>
-            <TopRow>
+            <div>
               <ImageBox>
                 <Profile />
               </ImageBox>
-              <h3 style={{ fontSize: '16px' }}>
-                {comment.name} <TimeText>{comment.time}</TimeText>
-              </h3>
-            </TopRow>
-            <TextBox>
-              <p>{comment.comment}</p>
-              <p>2025.01.14</p>
-
-              {index !== comments.length - 1 && (
-                <CommonHr
-                  width="1200px"
-                  borderWidth="1px"
-                  borderColor="rgba(128, 128, 128, 0.3)"
-                />
-              )}
-            </TextBox>
+              <span>
+                <TopRow>
+                  <TextBox>
+                    <h3 style={{ fontSize: '16px', margin: '0px' }}>
+                      {comment.name}
+                    </h3>
+                    <p>{comment.comment}</p>
+                    <p style={{ fontSize: '12px', color: '#757575' }}>
+                      2025.01.14. 09:47
+                    </p>
+                  </TextBox>
+                </TopRow>
+              </span>
+            </div>
+            {index !== comments.length - 1 && (
+              <CommonHr
+                width="1200px"
+                borderWidth="1px"
+                borderColor="rgba(128, 128, 128, 0.3)"
+              />
+            )}
           </div>
         );
       })}
