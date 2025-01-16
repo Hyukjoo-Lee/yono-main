@@ -27,6 +27,8 @@ public class PostsDTO {
     private Timestamp createdAt;
     private Timestamp updatedAt;
     private String imgurl;
+    private String file;
+
 
     
     

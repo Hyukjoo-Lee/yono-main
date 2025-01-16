@@ -5,10 +5,14 @@ import java.time.LocalDate;
 
 import org.hibernate.annotations.CreationTimestamp;
 
+
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+
+import jakarta.persistence.ManyToOne;
 import jakarta.persistence.SequenceGenerator;
 import jakarta.persistence.Table;
 import lombok.Getter;
@@ -36,7 +40,8 @@ public class PostsEntity {
 
     private String title;
     private String category;
-    private String userId;
+
+
     private String content;
     
     @CreationTimestamp
@@ -51,10 +56,8 @@ public class PostsEntity {
 
     @CreationTimestamp
     private Timestamp updatedAt;
-
-
-
     
-
-    
+    @ManyToOne
+    @JoinColumn(name = "user_id")
+    private UserEntity userEntity;
 }

@@ -43,7 +43,11 @@ public class PostsController {
                 + "/mickle-muckle/app-backend/src/main/resources/static/fileuploadfolder";
 
         try {
+
+            System.out.println("아아아");
             PostsDTO pd = new ObjectMapper().readValue(postFormData, PostsDTO.class);
+            // System.out.println("받은 데이터: " + pd);
+            System.out.println("UserId: " + pd.getUserId());
 
             if (postFile != null && !postFile.isEmpty()) {
                 String fileName = postFile.getOriginalFilename();
@@ -94,25 +98,32 @@ public class PostsController {
     //게시글 상세 조회
     @GetMapping("/list/{id}")                                                   
     public ResponseEntity<PostsDTO> getPostsByIdAndIncreaseViewCount(@PathVariable int id) {
-    PostsDTO posts = postsService.findByIdAndViewCnt(id);
-    return ResponseEntity.ok(posts);
+        PostsDTO posts = postsService.findByIdAndViewCnt(id);
+        return ResponseEntity.ok(posts);
     }
-    
-    // 게시글 수정
-    @PutMapping("/update/{userId}") 
-        public ResponseEntity<ApiResponse<PostsDTO>> updatePost(
-        @PathVariable("userId")  String userId,
-        @RequestPart("postFormData") String postFormData,
-        @RequestPart(value = "file", required = false) MultipartFile file) {
 
-        String uploadFolder = System.getProperty("user.dir") + "/mickle-muckle/app-backend/src/main/resources/static/fileuploadfolder";
-        try {
-            // JSON 문자열을 PostsDTO 객체로 변환
-            PostsDTO ed = new ObjectMapper().readValue(postFormData, PostsDTO.class);
-            ed.setUserId(userId);
-        // 파일이 업로드된 경우, 기존 파일을 덮어쓰는 방식으로 처리
+    @PutMapping("/update/{no}")
+    public ResponseEntity<ApiResponse<PostsDTO>> updatePost(
+    @PathVariable("no") int no,
+    @RequestPart("postFormData") String postFormData,
+    @RequestPart(value = "file", required = false) MultipartFile file
+    ) {
+    // 파일 저장 폴더 경로 설정
+    String uploadFolder = System.getProperty("user.dir") + "/mickle-muckle/app-backend/src/main/resources/static/fileuploadfolder";
+
+    try {
+        // JSON 문자열을 PostsDTO 객체로 변환
+        PostsDTO ed = new ObjectMapper().readValue(postFormData, PostsDTO.class);
+
+        // 게시글 ID 설정
+        ed.setNo(no);
+
+        // 파일이 업로드된 경우 처리
         if (file != null && !file.isEmpty()) {
-            String fileName = file.getOriginalFilename();
+            String originalFileName = file.getOriginalFilename();
+            if (originalFileName == null) {
+                throw new RuntimeException("파일 이름을 읽을 수 없습니다.");
+            }
 
             // 날짜 및 랜덤 값으로 새 파일 이름 생성
             Calendar cal = Calendar.getInstance();
@@ -120,47 +131,57 @@ public class PostsController {
             int month = cal.get(Calendar.MONTH) + 1;
             int date = cal.get(Calendar.DATE);
 
-            Random r = new Random();
-            int random = r.nextInt(100000000);
-            int index = fileName.lastIndexOf(".");
-            String fileExtension = fileName.substring(index + 1);
-            String newFileName = "post_" + year + month + date + random + "." + fileExtension;
+            Random random = new Random();
+            int randomNum = random.nextInt(100000000);
 
-            // 새 파일 경로
-            String fileDBName = "/fileuploadfolder/" + newFileName;
+            int index = originalFileName.lastIndexOf(".");
+            String fileExtension = originalFileName.substring(index + 1);
+            String newFileName = "post_" + year + month + date + randomNum + "." + fileExtension;
 
-            // 파일이 저장될 실제 경로
-            File saveFile = new File(uploadFolder + "/" + newFileName);
+            // 파일 경로 설정
+            String fileDBName = "/fileuploadfolder/" + newFileName; // DB에 저장할 경로
+            File saveFile = new File(uploadFolder + "/" + newFileName); // 실제 파일 경로
 
             // 기존 파일 삭제 (필요한 경우)
             if (ed.getImgurl() != null && !ed.getImgurl().isEmpty()) {
-                File oldFile = new File(uploadFolder + ed.getImgurl().replace("/fileuploadfolder/", ""));
-                if (oldFile.exists()) {
-                    oldFile.delete(); // 기존 파일 삭제
+                String oldFilePath = uploadFolder + "/" + ed.getImgurl().replace("/fileuploadfolder/", "");
+                File oldFile = new File(oldFilePath);
+                if (oldFile.exists() && oldFile.isFile()) {
+                    boolean deleted = oldFile.delete();
+                    if (!deleted) {
+                        System.err.println("기존 파일 삭제 실패: " + oldFilePath);
+                    }
                 }
             }
 
             // 새 파일 저장
-            try {
-                file.transferTo(saveFile);
-                ed.setImgurl(fileDBName); // 새로 저장한 파일의 경로를 설정
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
+            file.transferTo(saveFile);
+
+            // 파일 경로 업데이트
             ed.setImgurl(fileDBName);
         }
+
+        // 게시글 수정
         postsService.updatePost(ed);
 
-        
+        // 성공 응답
+        ApiResponse<PostsDTO> response = new ApiResponse<>(200, "게시글 수정 성공", ed);
+        return ResponseEntity.ok(response);
 
-        ApiResponse<PostsDTO> response = new ApiResponse<>(201, "게시글 저장 성공", ed);
-            return ResponseEntity.ok(response);
-        } catch (JsonProcessingException e) {
-            e.printStackTrace();
-            ApiResponse<PostsDTO> response = new ApiResponse<>(400, "게시글 저장 오류", null);
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(response);
-        }
+    } catch (JsonProcessingException e) {
+        // JSON 파싱 오류
+        e.printStackTrace();
+        ApiResponse<PostsDTO> response = new ApiResponse<>(400, "JSON 파싱 오류: " + e.getMessage(), null);
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(response);
+
+    } catch (Exception e) {
+        // 기타 서버 오류
+        e.printStackTrace();
+        ApiResponse<PostsDTO> response = new ApiResponse<>(500, "서버 오류: " + e.getMessage(), null);
+        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(response);
     }
+}
+
 
     // 게시글 삭제
     @DeleteMapping("/delete/{postId}")

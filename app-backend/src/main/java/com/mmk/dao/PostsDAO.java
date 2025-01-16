@@ -7,19 +7,16 @@ import com.mmk.entity.PostsEntity;
 
 public interface PostsDAO {
 
-    void save(PostsEntity postsData);
+    void save(PostsEntity postsEntity);
 
     List<PostsEntity> getAllPosts();
 
-    PostsEntity findById(int userId);
-    
-    void updatePost(PostsEntity pe);
+    PostsEntity findById(int postId);
 
     void deleteById(String postId);
 
     void updateCnt(PostsEntity postEntity);
 
-
-
-
-} 
+    void updatePost(PostsEntity pe);
+}
+ 

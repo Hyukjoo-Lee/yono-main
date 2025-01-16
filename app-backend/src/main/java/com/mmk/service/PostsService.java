@@ -10,16 +10,15 @@ public interface PostsService {
 
     void save(PostsDTO postsData);
 
-    List<PostsDTO> getAllPosts(); 
+    List<PostsDTO> getAllPosts();
 
     void deletePostById(String postId);
 
-    void updatePost(PostsDTO postsDTO);
-
     PostsDTO findByIdAndViewCnt(int id);
 
+    void updatePost(PostsDTO postsDTO);
 
-
+   
 
 
 }

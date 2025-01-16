@@ -15,9 +15,9 @@ public class PostsDAOImple implements PostsDAO {
     private PostsRepository postsRepo;
 
     @Override
-    public void save(PostsEntity postsData) {
-        this.postsRepo.save(postsData);
-    }
+    public void save(PostsEntity postsEntity) {
+        this.postsRepo.save(postsEntity);
+}
 
     @Override
     public List<PostsEntity> getAllPosts() {
@@ -49,20 +49,14 @@ public void deleteById(String postId) {
     }
 }
 
-
-@Override
-public void updatePost(PostsEntity pe) {
-    postsRepo.save(pe);
-}
-
 @Override
 public void updateCnt(PostsEntity postEntity) {
     postsRepo.save(postEntity);
 }
-
-
-
-    
+@Override
+public void updatePost(PostsEntity pe) {
+    postsRepo.save(pe);
+}
 
 
 }
