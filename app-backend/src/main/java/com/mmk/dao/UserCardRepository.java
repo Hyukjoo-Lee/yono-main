@@ -7,6 +7,7 @@ import org.springframework.data.repository.query.Param;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.mmk.entity.UserCardEntity;
+import com.mmk.entity.UserEntity;
 
 public interface UserCardRepository extends JpaRepository<UserCardEntity, Integer> {
     boolean existsByUserCardNum(String userCardNum);
@@ -15,4 +16,6 @@ public interface UserCardRepository extends JpaRepository<UserCardEntity, Intege
     @Transactional
     @Query("UPDATE UserCardEntity u SET u.primaryCard = 0 WHERE u.userEntity.userNum = :userNum")
     void removePrimaryCardAll(@Param("userNum") int userNum);
+
+    UserCardEntity findByUserEntityAndPrimaryCard(UserEntity userEntity, int primaryCard);
 }

@@ -2,6 +2,7 @@ package com.mmk.controller;
 
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.CompletableFuture;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -11,10 +12,12 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.mmk.common.ApiResponse;
+import com.mmk.dto.MonthlySummary;
 import com.mmk.dto.UserCardDTO;
 import com.mmk.service.UserCardService;
 
@@ -59,6 +62,12 @@ public class UserCardController {
             ApiResponse<UserCardDTO> response = new ApiResponse<>(400, "대표 카드 등록 오류", null);
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(response);
         }
+    }
+
+    // 카드내역 조회
+    @GetMapping("/getCardHistory")
+    public CompletableFuture<List<MonthlySummary>> getCardHistory(@RequestParam("userNum") int userNum) {
+        return userCardService.getCardHistory(userNum);
     }
 
 }

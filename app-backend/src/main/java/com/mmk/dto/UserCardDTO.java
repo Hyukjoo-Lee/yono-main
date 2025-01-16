@@ -16,6 +16,7 @@ public class UserCardDTO {
     private String expiryDate;
     private String userName;
 
+    private String cardPwd;
     private String companyId;
     private String companyPwd;
     private String connectedId;
