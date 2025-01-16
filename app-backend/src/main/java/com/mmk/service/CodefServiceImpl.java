@@ -8,6 +8,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.CompletableFuture;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Value;
@@ -17,6 +19,7 @@ import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.mmk.dto.CardSummaryDTO;
 import com.mmk.dto.MonthlySummary;
 import com.mmk.dto.TransDTO;
 import com.mmk.entity.UserCardEntity;
@@ -68,17 +71,18 @@ public class CodefServiceImpl implements CodefService {
     }
 
     private HashMap<String, Object> getConIdParameterMap(String organization, String companyId, String companyPwd) {
-        HashMap<String, Object> parameterMap = new HashMap<>();
-        parameterMap.put("countryCode", "KR");
-        parameterMap.put("businessType", "CD");
-        parameterMap.put("clientType", "P");
-        parameterMap.put("organization", organization);
-        parameterMap.put("loginType", "1");
-        parameterMap.put("id", companyId);
-
+        HashMap<String, Object> parameterMap = new HashMap<>(
+            Map.of(
+                "countryCode", "KR",
+                "businessType", "CD",
+                "clientType", "P",
+                "organization", organization,
+                "loginType", "1",
+                "id", companyId
+            )
+        );
         try {
-            // RSA암호화가 필요한 필드는 encryptRSA(String plainText, String publicKey) 메서드를 이용해 암호화
-            parameterMap.put("password", EasyCodefUtil.encryptRSA(companyPwd, codef.getPublicKey())); // 카드사 비밀번호 입력
+            parameterMap.put("password", EasyCodefUtil.encryptRSA(companyPwd, codef.getPublicKey()));
         } catch (Exception e) {
             e.printStackTrace();
             return null;
@@ -86,7 +90,10 @@ public class CodefServiceImpl implements CodefService {
         return parameterMap;
     }
 
-    // 카드 사용 내역
+
+    //카드 월별 사용 내역
+    private static final ExecutorService executor = Executors.newFixedThreadPool(10);
+
     public CompletableFuture<List<MonthlySummary>> getCardHistory(UserCardEntity userCardEntity) {
         String productUrl = "/v1/kr/card/p/account/approval-list";
 
@@ -107,11 +114,12 @@ public class CodefServiceImpl implements CodefService {
             } catch (Exception e) {
                 throw new RuntimeException(e);
             }
-        }).thenApply(result -> getCardHistoryprocessResult(result))
-                .exceptionally(e -> {
-                    e.printStackTrace();
-                    return Collections.emptyList();
-                });
+        }, executor)
+        .thenApply(result -> getCardHistoryprocessResult(result))
+        .exceptionally(e -> {
+            e.printStackTrace();
+            return Collections.emptyList();
+        });
     }
 
     private HashMap<String, Object> getCardHistoryParameterMap(String connectedId, String organization, String cardNo, String cardPwd) {
@@ -122,15 +130,18 @@ public class CodefServiceImpl implements CodefService {
         String startDate = twoMonthsAgoFirstDay.format(formatter);
         String endDate = today.format(formatter);
 
-        HashMap<String, Object> parameterMap = new HashMap<>();
-        parameterMap.put("connectedId", connectedId);
-        parameterMap.put("organization", organization);
-        parameterMap.put("startDate", startDate);
-        parameterMap.put("endDate", endDate);
-        parameterMap.put("orderBy", "1");
-        parameterMap.put("cardNo", cardNo);
-        parameterMap.put("memberStoreInfoType", "1");
-        parameterMap.put("inquiryType", "0");
+        HashMap<String, Object> parameterMap = new HashMap<>(
+            Map.of(
+                "connectedId", connectedId,
+                "organization", organization,
+                "startDate", startDate,
+                "endDate", endDate,
+                "orderBy", "1",
+                "cardNo", cardNo,
+                "memberStoreInfoType", "1",
+                "inquiryType", "0"
+            )
+        );
         try {
             parameterMap.put("카드 비밀번호", EasyCodefUtil.encryptRSA(cardPwd, codef.getPublicKey()));
         } catch (Exception e) {
@@ -145,25 +156,29 @@ public class CodefServiceImpl implements CodefService {
             objectMapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
     
             String dataArrayJson = objectMapper.readTree(result).get("data").toString();
-            List<TransDTO> transactionDTOList = objectMapper.readValue(dataArrayJson,
-                    new TypeReference<List<TransDTO>>() {});
+            List<TransDTO> transactionDTOList = objectMapper.readValue(dataArrayJson, new TypeReference<List<TransDTO>>() {});
     
             Map<String, Map<String, Integer>> groupedData = transactionDTOList.stream()
-                    .collect(Collectors.groupingBy(
-                            card -> card.getUsedDate().substring(0, 6),
-                            Collectors.groupingBy(
-                                    card -> (card.getStoreType() != null && !card.getStoreType().isEmpty())
-                                            ? card.getStoreType()
-                                            : "기타",
-                                    Collectors.summingInt(card -> Integer.parseInt(card.getUsedAmount()))
-                            )));
+                .map(card -> new CardSummaryDTO(
+                    card.getUsedDate().substring(0, 6),
+                    (card.getStoreType() != null && !card.getStoreType().isEmpty()) ? card.getStoreType() : "기타",
+                    Integer.parseInt(card.getUsedAmount())
+                ))
+                .collect(Collectors.groupingBy(
+                    CardSummaryDTO::getMonth,
+                    Collectors.groupingBy(
+                        CardSummaryDTO::getStoreType,
+                        Collectors.summingInt(CardSummaryDTO::getUsedAmount)
+                    )
+                ));
+
     
             return groupedData.entrySet().stream()
-                    .map(entry -> new MonthlySummary(
-                            entry.getKey().substring(4) + "월",
-                            entry.getValue()
-                    ))
-                    .collect(Collectors.toList());
+                .map(entry -> new MonthlySummary(
+                    entry.getKey().substring(4) + "월",
+                    entry.getValue()
+                ))
+                .collect(Collectors.toList());
         } catch (Exception e) {
             System.err.println("Error processing card history: " + e.getMessage());
             return Collections.emptyList();
