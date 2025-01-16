@@ -103,6 +103,7 @@ public class CodefServiceImpl implements CodefService {
 
         return CompletableFuture.supplyAsync(() -> {
             try {
+                System.out.println(codef.requestProduct(productUrl, EasyCodefServiceType.DEMO, parameterMap));
                 return codef.requestProduct(productUrl, EasyCodefServiceType.DEMO, parameterMap);
             } catch (Exception e) {
                 throw new RuntimeException(e);
