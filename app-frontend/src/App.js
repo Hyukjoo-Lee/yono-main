@@ -18,7 +18,7 @@ import { Community } from './pages/community/Community';
 import { CommunityFormBox } from './pages/community/CommunityFormBox';
 import { CommunityPost } from './pages/community/CommunityPost';
 import { EditFormBox } from './pages/community/EditFormBox';
-import { NoticeFormBox } from './pages/community/NoticeFormBox'; //수정
+import { NoticeFormBox } from './pages/community/NoticeFormBox';
 import { NoticePost } from './pages/community/NoticePost';
 import { Intro } from './pages/intro/Intro';
 import { MainPage } from './pages/main/MainPage';
@@ -75,10 +75,10 @@ function App() {
             <Route path="/intro" element={<Intro />} />
             <Route path="/card-challege" element={<CardChallege />} />
             <Route path="/card-analysis" element={<CardAnalysis />} />
-            <Route path="/community" element={<Community />} />
+            <Route path="/communityList" element={<Community />} />
             <Route path="/communityFormBox" element={<CommunityFormBox />} />
             <Route path="/community/:id" element={<CommunityPost />} />
-            <Route path="/notice" element={<Community />} />
+            <Route path="/noticeList" element={<Community />} />
             <Route path="/noticeFormBox" element={<NoticeFormBox />} />
             <Route path="/mycard" element={<MyCard />} />
             <Route path="/notice/:id" element={<NoticePost />} />

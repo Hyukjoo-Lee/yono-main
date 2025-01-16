@@ -29,9 +29,9 @@ export function Community() {
 
   useEffect(() => {
     if (selectedTab === 0) {
-      navigate('/community');
+      navigate('/communityList');
     } else if (selectedTab === 1) {
-      navigate('/notice');
+      navigate('/noticeList');
     }
   }, [selectedTab, navigate]);
 

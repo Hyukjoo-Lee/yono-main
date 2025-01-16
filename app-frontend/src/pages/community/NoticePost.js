@@ -50,7 +50,7 @@ export function NoticePost() {
   useEffect(() => {
     const fetchPostData = async () => {
       try {
-        const response = await axios.get(`/notice123/${id}`);
+        const response = await axios.get(`/notice/${id}`);
         setnoticeData(response.data);
         console.log(response.data);
       } catch (error) {
@@ -61,7 +61,7 @@ export function NoticePost() {
   }, [id]);
 
   const handleButtonClick = () => {
-    navigate('/notice');
+    navigate('/noticeList');
   };
 
   if (!noticeData) {

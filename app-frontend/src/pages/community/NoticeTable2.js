@@ -93,7 +93,7 @@ export function NoticeTable2() {
   useEffect(() => {
     const getCommunityData = async () => {
       try {
-        const response = await axios.get('/notice123');
+        const response = await axios.get('/notice');
         setRows(response.data);
       } catch (error) {
         console.error('Error fetching data : ', error);

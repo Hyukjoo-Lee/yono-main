@@ -1,12 +1,12 @@
 import axios from 'axios';
-import React, { useRef, useState } from 'react';
+import React, { useState } from 'react';
 import { useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
 import CommonButton from '../../common/CommonButton';
 import CommonHr from '../../common/CommonHr';
 import CommonInput from '../../common/CommonInput';
-import CommonPageInfo from '../../common/CommonPageInfo';
+import ReactQuillEdit from './ReactQuillEdit';
 
 const Root = styled.div`
   width: ${(props) => props.theme.display.lg};
@@ -14,6 +14,15 @@ const Root = styled.div`
   box-sizing: border-box;
   padding-top: ${(props) => props.theme.headerHeight};
 `;
+
+const Wrapper = styled.div`
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  width: 100%;
+  margin: 0px;
+`;
+
 const FormBox = styled.div`
   display: flex;
   flex-direction: column;
@@ -58,16 +67,23 @@ const Row = styled.div`
   }
 `;
 
-const Box1 = styled.div`
-  display: flex;
-  justify-content: center;
-  margin: 30px;
-  gap: 30px;
+const FormTitle = styled.p`
+  font-size: ${(props) => props.theme.fontSize.xl};
+  color: ${(props) => props.theme.color.black};
+  font-weight: bold;
+  // margin: 20px 0px 0;
 `;
 
-const HiddenInput = styled.input`
-  display: none;
-`;
+// const Box1 = styled.div`
+//   display: flex;
+//   justify-content: center;
+//   margin: 30px;
+//   gap: 30px;
+// `;
+
+// const HiddenInput = styled.input`
+//   display: none;
+// `;
 
 export function NoticeFormBox() {
   const navigate = useNavigate();
@@ -75,18 +91,18 @@ export function NoticeFormBox() {
   // const [userId, setUserId] = useState('');
   const [title, setTitle] = useState('');
   const [content, setContent] = useState('');
-  const [image, setImage] = useState('');
+  // const [image, setImage] = useState('');
   // const [errors, setErrors] = useState({});
   const user = useSelector((state) => state.user.user);
   // console.log(JSON.stringify(user));
 
-  const fileInputRef = useRef(null);
+  // const fileInputRef = useRef(null);
 
   const requestData = {
     adminId: user.userId,
     noticeTitle: title,
     noticeCont: content,
-    noticeImgUrl: image,
+    // noticeImgUrl: image,
   };
 
   const handleTitleChange = (e) => {
@@ -94,13 +110,13 @@ export function NoticeFormBox() {
   };
   const handleContentChange = (e) => setContent(e.target.value);
 
-  const handleImageChange = (e) => {
-    const file = e.target.files[0];
-    if (file) {
-      setImage(file.name);
-      // setImage(file); 파일 이름만 저장하려면 file.name를 써야함
-    }
-  };
+  // const handleImageChange = (e) => {
+  //   const file = e.target.files[0];
+  //   if (file) {
+  //     setImage(file.name);
+  //     // setImage(file); 파일 이름만 저장하려면 file.name를 써야함
+  //   }
+  // };
 
   const validateForm = () => {
     const errors = {};
@@ -146,18 +162,27 @@ export function NoticeFormBox() {
 
   return (
     <Root>
-      <CommonPageInfo title={'공지사항'} text={<p></p>} />
+      <Wrapper>
+        <FormTitle>공지사항 글쓰기</FormTitle>
+        <CommonButton
+          text="등록하기"
+          width="200px"
+          height="50px"
+          font-size="20px"
+          onClick={handleButtonClick}
+        />
+      </Wrapper>
       <CommonHr
-        width="918px"
+        width="1200px"
         borderWidth="2px"
         borderColor="black"
         margin="10px auto 20px"
       />
       <FormBox>
-        <Row>
+        <Row style={{ display: 'flex', justifyContent: 'space-between' }}>
           <span>제목</span>
           <CommonInput
-            width="500px"
+            width="1000px"
             height="40px"
             placeholder="제목을 입력해주세요"
             value={title}
@@ -166,10 +191,11 @@ export function NoticeFormBox() {
         </Row>
 
         <Row>
-          <span>내용</span>
-          <textarea value={content} onChange={handleContentChange} />
+          {/* <span>내용</span>
+          <textarea value={content} onChange={handleContentChange} /> */}
+          <ReactQuillEdit value={content} onChange={handleContentChange} />
         </Row>
-        <Row>
+        {/* <Row>
           <span>사진</span>
           <CommonInput
             width="390px"
@@ -190,23 +216,14 @@ export function NoticeFormBox() {
             font-size="10px"
             onClick={() => fileInputRef.current.click()}
           />
-        </Row>
+        </Row> */}
       </FormBox>
-      <CommonHr
+      {/* <CommonHr
         width="918px"
         borderWidth="2px"
         borderColor="black"
         margin="10px auto 20px"
-      />
-      <Box1>
-        <CommonButton
-          text="등록하기"
-          width="200px"
-          height="50px"
-          font-size="20px"
-          onClick={handleButtonClick}
-        />
-      </Box1>
+      /> */}
     </Root>
   );
 }

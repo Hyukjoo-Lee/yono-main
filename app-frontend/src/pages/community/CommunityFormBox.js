@@ -1,5 +1,5 @@
 import axios from 'axios';
-import React, { useRef, useState } from 'react';
+import React, { useState } from 'react';
 import { useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
@@ -7,6 +7,7 @@ import CommonButton from '../../common/CommonButton';
 import CommonHr from '../../common/CommonHr';
 import CommonInput from '../../common/CommonInput';
 import CommonSelect from '../../common/CommonSelect';
+import ReactQuillEdit from './ReactQuillEdit';
 
 const Root = styled.div`
   width: ${(props) => props.theme.display.lg};
@@ -25,10 +26,10 @@ const Wrapper = styled.div`
 const FormBox = styled.div`
   display: flex;
   flex-direction: column;
-  align-items: center;
+  // align-items: center;
   justify-content: center;
   width: 100%;
-  max-width: 1000px;
+  max-width: 1200px;
   margin: 0 auto;
 `;
 
@@ -37,12 +38,13 @@ const Row = styled.div`
   display: flex;
   align-items: center;
   gap: 10px;
-  justify-content: center;
+  justify-content: space-between;
   & > span {
     width: 60px;
-    margin-right: 100px;
-    white-space: nowrap;
-    display: flex;
+    // margin-right: 30px;
+    // margin-left: 50px;
+    // white-space: nowrap;
+    // display: flex;
   }
 
   & > textarea {
@@ -66,12 +68,12 @@ const Row = styled.div`
   }
 `;
 
-const Box1 = styled.div`
-  display: flex;
-  justify-content: center;
-  margin: 30px;
-  gap: 30px;
-`;
+// const Box1 = styled.div`
+//   display: flex;
+//   justify-content: center;
+//   margin: 30px;
+//   // gap: 30px;
+// `;
 
 const FormTitle = styled.p`
   font-size: ${(props) => props.theme.fontSize.xl};
@@ -80,9 +82,9 @@ const FormTitle = styled.p`
   // margin: 20px 0px 0;
 `;
 
-const HiddenInput = styled.input`
-  display: none;
-`;
+// const HiddenInput = styled.input`
+//   display: none;
+// `;
 const OptionList = [
   { value: 'option_1', label: '정보공유' },
   { value: 'option_2', label: '질문' },
@@ -92,37 +94,37 @@ const OptionList = [
 export function CommunityFormBox() {
   const navigate = useNavigate();
 
-  // const [userId, setUserId] = useState('');
   const [title, setTitle] = useState('');
   const [categoryOption, setCategoryOption] = useState('');
   const [content, setContent] = useState('');
-  const [image, setImage] = useState('');
-  // const [errors, setErrors] = useState({});
+  // const [image, setImage] = useState('');
   const user = useSelector((state) => state.user.user);
-  // console.log(JSON.stringify(user));
-
-  const fileInputRef = useRef(null);
+  // const fileInputRef = useRef(null);
 
   const requestData = {
     userId: user.userId,
     commTitle: title,
     commCategory: categoryOption,
     commCont: content,
-    commImgUrl: image,
+    // commImgUrl: image,
   };
 
   const handleTitleChange = (e) => {
     setTitle(e.target.value);
   };
-  const handleContentChange = (e) => setContent(e.target.value);
+  // const handleContentChange = (e) => setContent(e.target.value);
 
-  const handleImageChange = (e) => {
-    const file = e.target.files[0];
-    if (file) {
-      setImage(file.name);
-      // setImage(file); 파일 이름만 저장하려면 file.name를 써야함
-    }
+  const handleContentChange = (value) => {
+    setContent(value);
   };
+
+  // const handleImageChange = (e) => {
+  //   const file = e.target.files[0];
+  //   if (file) {
+  //     setImage(file.name);
+  //     // setImage(file); 파일 이름만 저장하려면 file.name를 써야함
+  //   }
+  // };
 
   const validateForm = () => {
     const errors = {};
@@ -159,7 +161,7 @@ export function CommunityFormBox() {
 
       if (response.status === 200) {
         alert('게시글이 등록되었습니다.');
-        navigate('/community');
+        navigate('/communityList');
       }
     } catch (error) {
       alert('게시글 등록에 실패했습니다. 다시 시도해주세요.');
@@ -170,33 +172,30 @@ export function CommunityFormBox() {
     <Root>
       <Wrapper>
         <FormTitle>커뮤니티 글쓰기</FormTitle>
-        <Box1>
-          <CommonButton
-            text="등록하기"
-            width="100px"
-            height="40px"
-            font-size="20px"
-            onClick={handleButtonClick}
-          />
-        </Box1>
+        <CommonButton
+          text="등록하기"
+          width="100px"
+          height="40px"
+          font-size="20px"
+          onClick={handleButtonClick}
+        />
       </Wrapper>
       <CommonHr width="1200px" borderWidth="2px" margin="10px auto 20px" />
       <FormBox>
         <Row>
           <span>제목</span>
           <CommonInput
-            width="500px"
+            width="700px"
             height="40px"
             placeholder="제목을 입력해주세요"
             value={title}
             onChange={handleTitleChange}
           />
-        </Row>
-        <Row>
+
           <span> 카테고리</span>
           <CommonSelect
             options={OptionList}
-            width="500px"
+            width="300px"
             height="40px"
             find="카테고리를 선택해 주세요"
             display="none"
@@ -206,10 +205,11 @@ export function CommunityFormBox() {
         </Row>
 
         <Row>
-          <span>내용</span>
-          <textarea value={content} onChange={handleContentChange} />
+          {/* <span>내용</span>
+          <textarea value={content} onChange={handleContentChange} /> */}
+          <ReactQuillEdit value={content} onChange={handleContentChange} />
         </Row>
-        <Row>
+        {/* <Row>
           <span>사진</span>
           <CommonInput
             width="390px"
@@ -230,14 +230,8 @@ export function CommunityFormBox() {
             font-size="10px"
             onClick={() => fileInputRef.current.click()}
           />
-        </Row>
+        </Row> */}
       </FormBox>
-      {/* <CommonHr
-        width="918px"
-        borderWidth="2px"
-        borderColor="black"
-        margin="10px auto 20px"
-      /> */}
     </Root>
   );
 }

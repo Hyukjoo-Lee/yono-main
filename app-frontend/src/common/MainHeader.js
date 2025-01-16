@@ -1,7 +1,7 @@
+import { useDispatch, useSelector } from 'react-redux';
 import { Link } from 'react-router-dom';
 import styled from 'styled-components';
 import { ReactComponent as Logo } from '../assets/images/Logo.svg';
-import { useSelector, useDispatch } from 'react-redux';
 import { logoutUser } from '../redux/actions/userAction';
 
 const Nav = styled.nav`
@@ -121,7 +121,7 @@ export function MainHeader() {
     { label: '소비챌린지', path: '/card-challege' },
     { label: '소비패턴분석', path: '/card-analysis' },
     { label: '마이카드', path: '/mycard' },
-    { label: '커뮤니티', path: '/community' },
+    { label: '커뮤니티', path: '/communityList' },
   ];
 
   return (

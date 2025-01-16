@@ -90,7 +90,7 @@ export function CommunityPost() {
   useEffect(() => {
     const fetchPostData = async () => {
       try {
-        const response = await axios.get(`/community123/${id}`);
+        const response = await axios.get(`/community/${id}`);
         setCommunityData(response.data);
       } catch (error) {
         console.error('Error fetching post data:', error);
@@ -101,7 +101,7 @@ export function CommunityPost() {
   }, [id]);
 
   const handleNavigateToCommunity = () => {
-    navigate('/community');
+    navigate('/communityList');
   };
 
   const handleNavigateToNext = () => {
@@ -112,6 +112,10 @@ export function CommunityPost() {
   const handleNavigateToEditForm = () => {
     navigate(`/editFormBox/${id}`);
   };
+
+  // const getPlainText = (htmlContent) => {
+  //   return htmlContent.replace(/<\/?[^>]+(>|$)/g, ''); // HTML 태그 제거
+  // };
 
   if (!communityData) {
     return <div>Loading...</div>;
@@ -153,11 +157,11 @@ export function CommunityPost() {
       />
 
       <Box>
-        <p>{communityData.commCont}</p>
+        <p dangerouslySetInnerHTML={{ __html: communityData.commCont }}></p>
       </Box>
-      <div style={{ marginBottom: '20px' }}>
-        <CommunityComment />
-      </div>
+
+      <CommunityComment />
+
       <Listbox>
         <CommonInput
           width="1107px"
