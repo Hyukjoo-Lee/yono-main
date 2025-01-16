@@ -6,16 +6,31 @@ import java.util.NoSuchElementException;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
+import com.mmk.dao.CardDAO;
 import com.mmk.dao.UserCardDAO;
+import com.mmk.dao.UserDAO;
 import com.mmk.dto.UserCardDTO;
+import com.mmk.entity.CardEntity;
 import com.mmk.entity.UserCardEntity;
+import com.mmk.entity.UserEntity;
 
+@Transactional
 @Service
 public class UserCardServiceImpl implements UserCardService {
 
     @Autowired
     private UserCardDAO userCardDAO;
+
+    @Autowired
+    private CardDAO cardDAO;
+
+    @Autowired
+    private UserDAO userDAO;
+
+    @Autowired
+    private CodefService codefService;
 
     // 사용자 카드 등록
     @Override
@@ -46,17 +61,45 @@ public class UserCardServiceImpl implements UserCardService {
         return userCardDTOs;
     }
 
+    // 대표 카드 등록
+    @Override
+    public UserCardDTO setPrimaryCard(UserCardDTO uc) {
+        userCardDAO.removePrimaryCardAll(uc.getUserNum());
+        
+        String companyId = uc.getCompanyId();
+        String companyPwd = uc.getCompanyPwd();
+        int cardId = uc.getCardId();
+        String organization = cardDAO.findByCardId(cardId).getOrganizationCode();
+
+        String connectedId = codefService.getConId(organization, companyId, companyPwd);
+        System.out.println("ConnectedId :" + connectedId);
+
+        uc.setConnectedId(connectedId);
+        uc.setPrimaryCard(1);
+        userCardDAO.registerCard(toEntity(uc));
+        return uc;
+    }
+
     private UserCardEntity toEntity(UserCardDTO dto) {
         UserCardEntity entity = new UserCardEntity();
         entity.setUserCardId(dto.getUserCardId());
         entity.setUserCardNum(dto.getUserCardNum());
         entity.setExpiryDate(dto.getExpiryDate());
         entity.setUserName(dto.getUserName());
+
+        entity.setCompanyId(dto.getCompanyId());
+        entity.setCompanyPwd(dto.getCompanyPwd());
+        entity.setConnectedId(dto.getConnectedId());
+        entity.setPrimaryCard(dto.getPrimaryCard());
+
         entity.setCreatedAt(dto.getCreatedAt());
         entity.setUpdatedAt(dto.getUpdatedAt());
 
-        entity.setCardEntity(dto.getCardEntity());
-        entity.setUserEntity(dto.getUserEntity());
+        CardEntity cardEntity = cardDAO.findByCardId(dto.getCardId());
+        UserEntity userEntity = userDAO.getUserById(dto.getUserNum());
+
+        entity.setCardEntity(cardEntity);
+        entity.setUserEntity(userEntity);
         return entity;
     }
 
@@ -66,11 +109,17 @@ public class UserCardServiceImpl implements UserCardService {
         dto.setUserCardNum(entity.getUserCardNum());
         dto.setExpiryDate(entity.getExpiryDate());
         dto.setUserName(entity.getUserName());
+
+        dto.setCompanyId(entity.getCompanyId());
+        dto.setCompanyPwd(entity.getCompanyPwd());
+        dto.setConnectedId(entity.getConnectedId());
+        dto.setPrimaryCard(entity.getPrimaryCard());
+
         dto.setCreatedAt(entity.getCreatedAt());
         dto.setUpdatedAt(entity.getUpdatedAt());
 
-        dto.setCardEntity(entity.getCardEntity());
-        dto.setUserEntity(entity.getUserEntity());
+        dto.setCardId(entity.getCardEntity().getCardId());
+        dto.setUserNum(entity.getUserEntity().getUserNum());
         return dto;
     }
 }

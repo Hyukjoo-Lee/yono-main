@@ -9,4 +9,5 @@ public interface UserCardService {
 
     List<UserCardDTO> getUserCardsByUserId(int userId);
 
+    UserCardDTO setPrimaryCard(UserCardDTO uc);
 }

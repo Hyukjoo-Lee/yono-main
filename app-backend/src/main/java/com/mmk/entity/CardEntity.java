@@ -1,15 +1,19 @@
 package com.mmk.entity;
 
 import java.sql.Timestamp;
+import java.util.ArrayList;
+import java.util.List;
 
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.OneToMany;
 import jakarta.persistence.SequenceGenerator;
 import jakarta.persistence.Table;
 import lombok.Getter;
@@ -31,7 +35,7 @@ public class CardEntity {
     private int cardId; // 카드 ID (기본 키)
 
     // 카드 이름
-    @Column(name = "card_title", nullable = false)
+    @Column(name = "card_title", nullable = false, unique = true)
     private String cardTitle;
 
     // 카드 회사
@@ -46,13 +50,17 @@ public class CardEntity {
     @Column(name = "card_img_url", nullable = true)
     private String cardImgUrl;
 
-    // 카드 설명
-    @Column(name = "card_desc", nullable = true)
-    private String cardDesc;
-
     @CreationTimestamp
     private Timestamp createdAt;
 
     @UpdateTimestamp
     private Timestamp updatedAt;
+
+    // UserCardEntity 와의 관계
+    @OneToMany(mappedBy = "cardEntity", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<UserCardEntity> userCards = new ArrayList<>();
+
+    // CardBenefitEntity 와의 관계
+    @OneToMany(mappedBy = "cardEntity", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<CardBenefitEntity> cardBenefits = new ArrayList<>();
 }

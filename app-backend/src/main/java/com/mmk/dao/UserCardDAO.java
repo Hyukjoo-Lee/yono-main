@@ -11,4 +11,6 @@ public interface UserCardDAO {
     boolean existsByUserCardNum(String userCardNum);
 
     List<UserCardEntity> findUserCardEntityByUserId(int userId);
+
+    void removePrimaryCardAll(int userNum);
 }
