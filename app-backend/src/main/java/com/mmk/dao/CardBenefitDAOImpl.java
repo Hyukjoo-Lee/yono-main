@@ -20,16 +20,6 @@ public class CardBenefitDAOImpl implements CardBenefitDAO {
     }
 
     @Override
-    public List<CardBenefitEntity> getCardBenefitByCardId(int cardId) {
-        return cardBenefitRepository.findByCard_CardId(cardId);
-    }
-
-    @Override
-    public List<CardBenefitEntity> getCardBenefitByCardTitle(String cardTitle) {
-        return cardBenefitRepository.findByCard_CardTitle(cardTitle);
-    }
-
-    @Override
     public CardBenefitEntity getCardBenefitByBenefitId(int benefitId) {
         CardBenefitEntity cardBenefitEntity = cardBenefitRepository.findByBenefitId(benefitId);
         return cardBenefitEntity;
@@ -38,12 +28,6 @@ public class CardBenefitDAOImpl implements CardBenefitDAO {
     @Override
     public boolean existsByBenefitTitle(String benefitTitle) {
         return cardBenefitRepository.existsByBenefitTitle(benefitTitle);
-    }
-
-    @Override
-    public boolean existsByCardAndBenefitTitle(CardEntity cardEntity, String benefitTitle) {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'existsByCardAndBenefitTitle'");
     }
 
 }

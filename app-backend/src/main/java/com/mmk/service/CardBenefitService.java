@@ -8,9 +8,9 @@ public interface CardBenefitService {
 
     CardBenefitDTO createCardBenefit(CardBenefitDTO cardBenefitDTO);
 
-    List<CardBenefitDTO> getCardBenefitsByCardId(int cardId);
+    List<CardBenefitDTO> getCardBenefitByCardId(int cardId);
 
-    List<CardBenefitDTO> getCardBenefitsByCardTitle(String cardTitle);
+    List<CardBenefitDTO> getCardBenefitByCardTitle(String cardTitle);
 
     CardBenefitDTO getCardBenefitByBenefitId(int benefitId);
 }

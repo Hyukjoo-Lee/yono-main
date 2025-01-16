@@ -12,8 +12,6 @@ import com.mmk.entity.UserEntity;
 public interface UserCardRepository extends JpaRepository<UserCardEntity, Integer> {
     boolean existsByUserCardNum(String userCardNum);
 
-    // UserCardEntity findUserCardEntityByUserId(int userId);
-
     @Modifying
     @Transactional
     @Query("UPDATE UserCardEntity u SET u.primaryCard = 0 WHERE u.userEntity.userNum = :userNum")

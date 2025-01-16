@@ -7,7 +7,6 @@ import org.hibernate.annotations.UpdateTimestamp;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
-import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
@@ -43,7 +42,7 @@ public class CardBenefitEntity {
     @UpdateTimestamp
     private Timestamp updatedAt;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "card_id", referencedColumnName = "card_id", nullable = false)
-    private int cardId;
+    @ManyToOne
+    @JoinColumn(name = "card_id", nullable = false)
+    private CardEntity cardEntity;
 }
