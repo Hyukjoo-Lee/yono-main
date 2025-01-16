@@ -15,7 +15,7 @@ import com.mmk.dto.NoticeDTO;
 import com.mmk.service.NoticeService;
 
 @Controller
-@RequestMapping("/notice")
+@RequestMapping("/notice123")
 public class NoticeController {
   
   @Autowired

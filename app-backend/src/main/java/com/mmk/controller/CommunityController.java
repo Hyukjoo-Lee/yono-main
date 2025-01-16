@@ -15,7 +15,7 @@ import com.mmk.dto.CommunityDTO;
 import com.mmk.service.CommunityService;
 
 @Controller
-@RequestMapping("/community")
+@RequestMapping("/community123")
 public class CommunityController {
   
   @Autowired

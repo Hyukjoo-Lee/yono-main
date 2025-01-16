@@ -25,7 +25,7 @@ module.exports = function (app) {
   );
 
   app.use(
-    '/community',
+    '/community123',
     createProxyMiddleware({
       target: process.env.REACT_APP_API_URL,
       changeOrigin: true,
@@ -33,7 +33,7 @@ module.exports = function (app) {
   );
 
   app.use(
-    '/notice',
+    '/notice123',
     createProxyMiddleware({
       target: process.env.REACT_APP_API_URL,
       changeOrigin: true,

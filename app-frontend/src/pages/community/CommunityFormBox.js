@@ -6,7 +6,6 @@ import styled from 'styled-components';
 import CommonButton from '../../common/CommonButton';
 import CommonHr from '../../common/CommonHr';
 import CommonInput from '../../common/CommonInput';
-import CommonPageInfo from '../../common/CommonPageInfo';
 import CommonSelect from '../../common/CommonSelect';
 
 const Root = styled.div`
@@ -14,6 +13,14 @@ const Root = styled.div`
   margin: 0 auto;
   box-sizing: border-box;
   padding-top: ${(props) => props.theme.headerHeight};
+`;
+
+const Wrapper = styled.div`
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  width: 100%;
+  margin: 0px;
 `;
 const FormBox = styled.div`
   display: flex;
@@ -64,6 +71,13 @@ const Box1 = styled.div`
   justify-content: center;
   margin: 30px;
   gap: 30px;
+`;
+
+const FormTitle = styled.p`
+  font-size: ${(props) => props.theme.fontSize.xl};
+  color: ${(props) => props.theme.color.black};
+  font-weight: bold;
+  // margin: 20px 0px 0;
 `;
 
 const HiddenInput = styled.input`
@@ -154,13 +168,19 @@ export function CommunityFormBox() {
 
   return (
     <Root>
-      <CommonPageInfo title={'고객게시판'} text={<p></p>} />
-      <CommonHr
-        width="918px"
-        borderWidth="2px"
-        borderColor="black"
-        margin="10px auto 20px"
-      />
+      <Wrapper>
+        <FormTitle>커뮤니티 글쓰기</FormTitle>
+        <Box1>
+          <CommonButton
+            text="등록하기"
+            width="100px"
+            height="40px"
+            font-size="20px"
+            onClick={handleButtonClick}
+          />
+        </Box1>
+      </Wrapper>
+      <CommonHr width="1200px" borderWidth="2px" margin="10px auto 20px" />
       <FormBox>
         <Row>
           <span>제목</span>
@@ -212,21 +232,12 @@ export function CommunityFormBox() {
           />
         </Row>
       </FormBox>
-      <CommonHr
+      {/* <CommonHr
         width="918px"
         borderWidth="2px"
         borderColor="black"
         margin="10px auto 20px"
-      />
-      <Box1>
-        <CommonButton
-          text="등록하기"
-          width="200px"
-          height="50px"
-          font-size="20px"
-          onClick={handleButtonClick}
-        />
-      </Box1>
+      /> */}
     </Root>
   );
 }

@@ -2,28 +2,29 @@ import axios from 'axios';
 import React, { useEffect, useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import styled from 'styled-components';
-import { ReactComponent as Profile } from '../../assets/images/Profile.svg';
+// import { ReactComponent as Profile } from '../../assets/images/Profile.svg';
 import CommonButton from '../../common/CommonButton';
 import CommonHr from '../../common/CommonHr';
 import CommonInput from '../../common/CommonInput';
+import CommunityComment from './CommunityComment';
 
-const comments = [
-  {
-    name: '한교동',
-    time: '1시간전',
-    comment: '안녕하세요. 반갑습니다~!',
-  },
-  {
-    name: '포차코',
-    time: '30분전',
-    comment: '안녕하세요. 반갑습니다~!',
-  },
-  {
-    name: '핀테크',
-    time: '2시간전',
-    comment: '안뇽하세욧ㅇㅇ용',
-  },
-];
+// const comments = [
+//   {
+//     name: '한교동',
+//     time: '1시간전',
+//     comment: '안녕하세요. 반갑습니다~!',
+//   },
+//   {
+//     name: '포차코',
+//     time: '30분전',
+//     comment: '안녕하세요. 반갑습니다~!',
+//   },
+//   {
+//     name: '핀테크',
+//     time: '2시간전',
+//     comment: '안뇽하세욧ㅇㅇ용',
+//   },
+// ];
 const Root = styled.div`
   width: ${(props) => props.theme.display.lg};
   margin: 0 auto;
@@ -55,48 +56,45 @@ const Listbox = styled.div`
     margin-left: 10px;
   }
 `;
-const CommentBox = styled.div`
-  display: flex;
-  flex-direction: column;
-  gap: 10px;
+// const CommentBox = styled.div`
+//   display: flex;
+//   flex-direction: column;
+//   gap: 10px;
 
-  & > div {
-    // padding-left: 20px;
-    height: 100px;
-    // border: 1px solid #d7d7d7;
-    // border-radius: 20px;
-    flex-direction: column;
-    gap: 5px;
-  }
-`;
-const TopRow = styled.div`
-  margin-top: 5px;
-  display: flex;
-  align-items: center;
-  gap: 5px;
-  height: 50px;
-`;
-const ImageBox = styled.div`
-  & > svg {
-    width: 50px;
-    height: 50px;
-    border: 1px solid rgba(128, 128, 128, 0.3);
-    border-radius: 50px;
-  }
-`;
+//   & > div {
+//     flex-direction: column;
+//     gap: 5px;
+//   }
+// `;
+// const TopRow = styled.div`
+//   margin-top: 5px;
+//   display: flex;
+//   align-items: center;
+//   gap: 5px;
+//   height: 50px;
+// `;
+// const ImageBox = styled.div`
+//   & > svg {
+//     width: 50px;
+//     height: 50px;
+//     border: 1px solid rgba(128, 128, 128, 0.3);
+//     border-radius: 50px;
+//     // margin:10px;
+//   }
+// `;
 
-const TimeText = styled.span`
-  color: ${(props) => props.theme.color.lightGray};
-  font-size: 12px;
-  margin-left: 8px;
-  margin: auto 55px;
-`;
-const TextBox = styled.div`
-  & > p {
-    color: ${(props) => props.theme.color.black};
-    margin-left: 55px;
-  }
-`;
+// const TimeText = styled.span`
+//   color: ${(props) => props.theme.color.lightGray};
+//   font-size: 12px;
+//   margin-left: 8px;
+//   margin: auto 55px;
+// `;
+// const TextBox = styled.div`
+//   & > p {
+//     color: ${(props) => props.theme.color.black};
+//     margin: 0px auto 20px 55px;
+//   }
+// `;
 const BottomBox = styled.div`
   display: flex;
   margin: 20px 0px 20px 0px;
@@ -113,16 +111,12 @@ export function CommunityPost() {
   const navigate = useNavigate();
   const { id } = useParams();
 
-  console.log('ID : ', id);
-
   useEffect(() => {
     // 게시글 데이터를 불러오는 함수
     const fetchPostData = async () => {
       try {
-        const response = await axios.get(`/community/${id}`);
-        // console.log('Fetched Data : ', response.data);
+        const response = await axios.get(`/community123/${id}`);
         setCommunityData(response.data); // 게시글 데이터
-        console.log(response.data);
       } catch (error) {
         console.error('Error fetching post data:', error);
       }
@@ -145,6 +139,18 @@ export function CommunityPost() {
 
   return (
     <Root>
+      <button
+        style={{
+          fontSize: '15px',
+          border: 'none',
+          background: 'none',
+          cursor: 'pointer',
+          fontWeight: 'bold',
+        }}
+        onClick={handleNavigateToCommunity}
+      >
+        &lt; 이전
+      </button>
       <p style={{ fontWeight: 'bold', fontSize: '18px' }}>
         커뮤니티{' '}
         <span style={{ color: '#4064e6' }}>{communityData.communityNo}</span>
@@ -161,7 +167,7 @@ export function CommunityPost() {
         {communityData.commTitle}
       </p>
       <Detailbox>
-        <label style={{ fontSize: '15px' }}>
+        <label style={{ fontSize: '12px' }}>
           {/* 등록일 {communityData.createdAt} | 작성자 {communityData.userId} |
           조회수 {communityData.viewCount} */}
           등록일 2025-01-14 | 작성자 {communityData.userId} | 조회수 0
@@ -179,7 +185,8 @@ export function CommunityPost() {
         <p>{communityData.commCont}</p>
       </Box>
 
-      <CommentBox>
+      <CommunityComment />
+      {/* <CommentBox>
         {comments.map((comment, index) => {
           return (
             <div key={index}>
@@ -193,19 +200,21 @@ export function CommunityPost() {
               </TopRow>
               <TextBox>
                 <p>{comment.comment}</p>
+                <p>2025.01.14</p>
+
+                {index !== comments.length - 1 && (
+                  <CommonHr
+                    width="1200px"
+                    borderWidth="1px"
+                    borderColor="rgba(128, 128, 128, 0.3)"
+                    // margin="auto"
+                  />
+                )}
               </TextBox>
-              {index !== comments.length - 1 && (
-                <CommonHr
-                  width="1200px"
-                  borderWidth="1.5px"
-                  borderColor="rgba(128, 128, 128, 0.3)"
-                  // margin="auto"
-                />
-              )}
             </div>
           );
         })}
-      </CommentBox>
+      </CommentBox> */}
 
       <Listbox>
         <CommonInput
@@ -222,12 +231,6 @@ export function CommunityPost() {
       </Listbox>
 
       <BottomBox>
-        <CommonButton
-          text="목록"
-          font-size="20px"
-          onClick={handleNavigateToCommunity}
-          {...commonButtonProps}
-        />
         <CommonButton
           text="수정"
           font-size="20px"
