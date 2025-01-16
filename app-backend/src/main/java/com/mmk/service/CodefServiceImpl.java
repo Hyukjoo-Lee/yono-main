@@ -103,7 +103,6 @@ public class CodefServiceImpl implements CodefService {
 
         return CompletableFuture.supplyAsync(() -> {
             try {
-                System.out.println(codef.requestProduct(productUrl, EasyCodefServiceType.DEMO, parameterMap));
                 return codef.requestProduct(productUrl, EasyCodefServiceType.DEMO, parameterMap);
             } catch (Exception e) {
                 throw new RuntimeException(e);
@@ -144,31 +143,29 @@ public class CodefServiceImpl implements CodefService {
         try {
             ObjectMapper objectMapper = new ObjectMapper();
             objectMapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
-
+    
             String dataArrayJson = objectMapper.readTree(result).get("data").toString();
             List<TransDTO> transactionDTOList = objectMapper.readValue(dataArrayJson,
-                    new TypeReference<List<TransDTO>>() {
-                    });
-
-            Map<String, Map<String, Integer>> groupedData = transactionDTOList.parallelStream()
+                    new TypeReference<List<TransDTO>>() {});
+    
+            Map<String, Map<String, Integer>> groupedData = transactionDTOList.stream()
                     .collect(Collectors.groupingBy(
                             card -> card.getUsedDate().substring(0, 6),
                             Collectors.groupingBy(
                                     card -> (card.getStoreType() != null && !card.getStoreType().isEmpty())
                                             ? card.getStoreType()
                                             : "기타",
-                                    Collectors.summingInt(card -> Integer.parseInt(card.getUsedAmount())))));
-
+                                    Collectors.summingInt(card -> Integer.parseInt(card.getUsedAmount()))
+                            )));
+    
             return groupedData.entrySet().stream()
-                    .map(entry -> {
-                        MonthlySummary summary = new MonthlySummary();
-                        summary.setMonth(entry.getKey().substring(4) + "월");
-                        summary.setCategoryTotals(entry.getValue());
-                        return summary;
-                    })
+                    .map(entry -> new MonthlySummary(
+                            entry.getKey().substring(4) + "월",
+                            entry.getValue()
+                    ))
                     .collect(Collectors.toList());
         } catch (Exception e) {
-            e.printStackTrace();
+            System.err.println("Error processing card history: " + e.getMessage());
             return Collections.emptyList();
         }
     }
