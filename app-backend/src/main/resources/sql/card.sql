@@ -27,6 +27,5 @@ commit;
 
 drop table user_card;
 
--- d1oQotAZQHL8yDe7YXUFeG
 select * from user_card;
 select * from card;
