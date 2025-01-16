@@ -25,6 +25,14 @@ module.exports = function (app) {
   );
 
   app.use(
+    '/card',
+    createProxyMiddleware({
+      target: process.env.REACT_APP_API_URL,
+      changeOrigin: true,
+    }),
+  );
+
+  app.use(
     '/community123',
     createProxyMiddleware({
       target: process.env.REACT_APP_API_URL,

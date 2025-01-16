@@ -340,7 +340,7 @@ const SignUp = () => {
               placeholder="아이디를 입력하세요."
               text="아이디"
               value={formData.userId}
-              readOnly={true}
+              // readOnly={true}
               onChange={(e) => handleInputChange(e, 'userId')}
               {...InputProps}
             />

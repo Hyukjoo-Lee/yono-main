@@ -22,3 +22,17 @@ export const getUserPerformance = async () => {
   const response = await axios.get('/codef/getUserPerformance');
   return response.data;
 };
+
+export const saveUserCardData = async (cardList, cardBenefits) => {
+  try {
+    const requestBody = {
+      cardList: cardList,
+      performanceList: cardBenefits,
+    };
+
+    const response = await axios.post('/card/saveUserCardData', requestBody);
+    console.log(response.data.message);
+  } catch (error) {
+    console.error('데이터 저장 중 오류 발생:', error);
+  }
+};

@@ -24,8 +24,18 @@ public class CardDAOImpl implements CardDAO {
     }
 
     @Override
+    public CardEntity findByCardTitle(String cardTitle) {
+        return cardRepository.findByCardTitle(cardTitle);
+    }
+
+    @Override
     public boolean existsByCardTitle(String cardTitle) {
         return cardRepository.existsByCardTitle(cardTitle);
+    }
+
+    @Override
+    public CardEntity findByCardId(int cardId) {
+        return cardRepository.findByCardId(cardId);
     }
 
 }

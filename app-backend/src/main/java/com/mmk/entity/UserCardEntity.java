@@ -36,6 +36,23 @@ public class UserCardEntity {
     @Column(name = "user_name", nullable = false)
     private String userName;
 
+    // 사용자 카드사 아이디
+    @Column(name = "user_card_company_id")
+    private String companyId;
+
+    // 사용자 카드사 비밀번호
+    @Column(name = "user_card_company_pwd")
+    private String companyPwd;
+
+    // 사용자 카드사 커넥티드 아이디
+    @Column(name = "user_card_connectedId")
+    private String connectedId;
+
+    // 대표카드 설정
+    // 대표카드가 아닌 경우 0, 대표카드인 경우 1
+    @Column(name = "primary_card", columnDefinition = "int default 0")
+    private int primaryCard = 0;
+
     @CreationTimestamp
     private Timestamp createdAt;
 
@@ -48,6 +65,6 @@ public class UserCardEntity {
     private CardEntity cardEntity;
 
     @ManyToOne
-    @JoinColumn(name = "user_id", nullable = false)
+    @JoinColumn(name = "user_num", nullable = false)
     private UserEntity userEntity;
 }

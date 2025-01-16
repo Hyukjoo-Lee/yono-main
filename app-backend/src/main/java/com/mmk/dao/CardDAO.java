@@ -11,4 +11,8 @@ public interface CardDAO {
 
     // 카드 이름은 고유해야함
     boolean existsByCardTitle(String cardId);
+
+    CardEntity findByCardId(int cardId);
+
+    CardEntity findByCardTitle(String cardTitle);
 }
