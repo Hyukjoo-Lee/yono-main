@@ -7,7 +7,7 @@ import com.mmk.dto.MonthlySummary;
 import com.mmk.dto.UserCardDTO;
 
 public interface UserCardService {
-    UserCardDTO registerCard(UserCardDTO userCardDTO);
+    UserCardDTO registerCard(UserCardDTO userCardDTO, String organization, String cardTitle);
 
     List<UserCardDTO> getUserCardsByUserId(int userId);
 

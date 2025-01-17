@@ -20,4 +20,14 @@ public class CardCompanyDAOImpl implements CardCompanyDAO {
     public void save(CardCompanyEntity cardCompanyEntity) {
         cardCompanyRepository.save(cardCompanyEntity);
     }
+
+    @Override
+    public CardCompanyEntity findByCardCompanyNum(int cardCompanyNum) {
+        return cardCompanyRepository.findByCardCompanyNum(cardCompanyNum);
+    }
+
+    @Override
+    public CardCompanyEntity findCardCompanyNumByUserNumAndOrganization(int userNum, String organization) {
+        return cardCompanyRepository.findCardCompanyEntityByUserNumAndOrganization(userNum, organization);
+    }
 }

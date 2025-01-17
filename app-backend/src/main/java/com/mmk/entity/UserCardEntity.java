@@ -37,20 +37,8 @@ public class UserCardEntity {
     private String userName;
 
     // 카드 비밀번호
-    @Column(name = "card_pwd")
+    @Column(name = "card_pwd", nullable = false)
     private String cardPwd;
-
-    // 사용자 카드사 아이디
-    @Column(name = "user_card_company_id")
-    private String companyId;
-
-    // 사용자 카드사 비밀번호
-    @Column(name = "user_card_company_pwd")
-    private String companyPwd;
-
-    // 사용자 카드사 커넥티드 아이디
-    @Column(name = "user_card_connectedId")
-    private String connectedId;
 
     // 대표카드 설정
     // 대표카드가 아닌 경우 0, 대표카드인 경우 1
@@ -63,7 +51,10 @@ public class UserCardEntity {
     @UpdateTimestamp
     private Timestamp updatedAt;
 
-    // CardEntity 에서 카드 타이틀, 이미지, 연결된 혜택들 가져와야함
+    @ManyToOne
+    @JoinColumn(name = "card_company_num", nullable = false)
+    private CardCompanyEntity cardCompanyEntity;
+
     @ManyToOne
     @JoinColumn(name = "card_id", nullable = false)
     private CardEntity cardEntity;

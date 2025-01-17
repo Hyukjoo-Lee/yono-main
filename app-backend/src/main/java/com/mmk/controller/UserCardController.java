@@ -41,10 +41,15 @@ public class UserCardController {
 
     // 사용자 카드 등록
     @PostMapping("/register")
-    public ResponseEntity<ApiResponse<UserCardDTO>> registerUserCard(@RequestBody UserCardDTO userCardDTO) {
-        UserCardDTO savedCard = userCardService.registerCard(userCardDTO);
-        ApiResponse<UserCardDTO> response = new ApiResponse<>(201, "카드등록 성공", savedCard);
-        return ResponseEntity.status(HttpStatus.CREATED).body(response);
+    public ResponseEntity<ApiResponse<UserCardDTO>> registerUserCard(@RequestBody UserCardDTO userCardDTO, @RequestParam String organization, @RequestParam String cardTitle) {
+        UserCardDTO savedCard = userCardService.registerCard(userCardDTO, organization, cardTitle);
+        if (savedCard == null) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND)
+                    .body(new ApiResponse<>(404, "등록되어 있지 않은 카드사입니다.", null));
+        } else {
+            ApiResponse<UserCardDTO> response = new ApiResponse<>(201, "카드등록 성공", savedCard);
+            return ResponseEntity.status(HttpStatus.CREATED).body(response);
+        }
     }
 
     // 대표카드 설정

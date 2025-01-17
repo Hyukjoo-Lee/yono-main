@@ -5,7 +5,6 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
-import com.mmk.entity.CardCompanyEntity;
 import com.mmk.entity.UserCardEntity;
 import com.mmk.entity.UserEntity;
 
@@ -22,7 +21,7 @@ public class UserCardDAOImpl implements UserCardDAO {
 
     @Override
     public boolean existsByUserCardNum(String userCardNum) {
-        return existsByUserCardNum(userCardNum);
+        return userCardRepository.existsByUserCardNum(userCardNum);
     }
 
     @Override
