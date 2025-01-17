@@ -10,6 +10,7 @@ import ListIcon from '../../assets/images/ListIcon.png';
 import { useEffect, useState } from 'react';
 import axios from 'axios';
 import { useSelector } from 'react-redux';
+import CommonInput from '../../common/CommonInput';
 
 const Root = styled.div`
   width: ${(props) => props.theme.display.sm};
@@ -69,7 +70,10 @@ const CommentBox = styled.div`
   display: flex;
   flex-direction: column;
   gap: 10px;
+  transition: height 0.3s ease;
+  max-height: ${(props) => (props.isEditing ? '500px' : '200px')};
   & > div {
+    height: auto;
     padding-left: 20px;
     height: 100px;
     border: 1px solid #d7d7d7;
@@ -104,12 +108,7 @@ const BottomRow = styled.div`
   align-items: center;
   justify-content: space-between;
 `;
-const TextBox = styled.div`
-  & > p {
-    color: ${(props) => props.theme.color.black};
-    margin-left: 25px;
-  }
-`;
+
 const LikeBox = styled.div`
   border: 1px solid lightGray;
   width: 50px;
@@ -166,6 +165,30 @@ const HeartButton = ({ like, onClick }) => {
   return <Heart src={like ? HeartImg : EmptyHeartImg} onClick={onClick} />;
 };
 
+const TextBox = styled.div`
+  & > p {
+    color: ${(props) => props.theme.color.black};
+    margin-left: 25px;
+  }
+
+  & > input {
+    width: 100%;
+    padding: 9px;
+    font-size: 16px;
+    box-sizing: border-box;
+    margin-top: 5px;
+
+    &:focus {
+      border: 1px solid #1976d2;
+      outline: none;
+    }
+
+    &::placeholder {
+      color: #b0b0b0;
+    }
+  }
+`;
+
 const BottomBox = styled.div`
   display: flex;
   margin: 20px 0px 20px 0px;
@@ -176,6 +199,7 @@ const commonButtonProps = {
   width: '80px',
   height: '50px',
 };
+
 export function CommunityPost() {
   const location = useLocation();
   const [showOptions, setShowOptions] = useState(false);
@@ -186,6 +210,8 @@ export function CommunityPost() {
   const [isDialogOpen, setIsDialogOpen] = useState(false);
   const user = useSelector((state) => state.user.user);
   const isLoggedIn = useSelector((state) => state.user.isLoggedIn); // 로그인 상태 확인
+  const [editingComment, setEditingComment] = useState(null);
+  const [editedContent, setEditedContent] = useState('');
   const MAX_LENGTH = 100;
   const navigate = useNavigate();
 
@@ -248,8 +274,6 @@ export function CommunityPost() {
         console.error('댓글 데이터 요청 실패:', error);
       });
   }, [rowData.no]);
-
-  //댓글 삭제
   const handleDeletecommentClick = async (rno) => {
     if (!user) {
       setIsDialogOpen(true);
@@ -258,7 +282,7 @@ export function CommunityPost() {
     try {
       const comment = commentsData.find((comment) => comment.rno === rno);
       if (comment && comment.userId === user.userId) {
-        await axios.delete(`/comments/delete/${rno}`);
+        await axios.delete(`/reply/delete/${rno}/${user.userId}`);
         setCommentsData((prev) =>
           prev.filter((comment) => comment.rno !== rno),
         );
@@ -269,20 +293,37 @@ export function CommunityPost() {
       console.error('댓글 삭제에 실패했습니다.', error);
     }
   };
+  const handleEditChange = (e) => {
+    setEditedContent(e.target.value);
+  };
 
-  //댓글 수정
-  const handleEditecommentClick = async (rno, newContent) => {
+  const handleSaveEdit = async (rno) => {
     if (!user || !user.userId) {
       setIsDialogOpen(true);
       return;
     }
     try {
-      await axios.put(`/comments/edit/${rno}`, { content: newContent });
-      setCommentsData((prev) =>
-        prev.map((comment) =>
-          comment.rno === rno ? { ...comment, content: newContent } : comment,
-        ),
-      );
+      // 서버에 댓글 수정 요청
+      const updatedComment = {
+        r_content: editedContent, // 수정된 댓글 내용
+        userId: user.userId, // 사용자 ID
+      };
+
+      const response = await axios.put(`/reply/edit/${rno}`, updatedComment);
+
+      // 댓글 수정이 성공하면, 클라이언트 상태 업데이트
+      if (response.status === 200) {
+        setCommentsData((prev) => {
+          const updatedComments = prev.map((comment) =>
+            comment.rno === rno
+              ? { ...comment, r_content: editedContent }
+              : comment,
+          );
+          console.log('수정된 댓글 데이터:', updatedComments); // 수정된 데이터 확인
+          return updatedComments;
+        });
+        setEditingComment(null);
+      }
     } catch (error) {
       console.error('댓글 수정 실패', error);
     }
@@ -296,7 +337,7 @@ export function CommunityPost() {
   };
 
   const toggleLike = async (rno) => {
-    if (!user || !user.userId) {
+    if (!isLoggedIn || !user) {
       setIsDialogOpen(true);
       return;
     }
@@ -438,16 +479,21 @@ export function CommunityPost() {
               </h3>
               <ListIconBox onClick={() => toggleOptions(comment.rno)}>
                 <ListIconImage src={ListIcon} alt="옵션 아이콘" />
-                {showOptions[comment.rno] && ( // 해당 댓글만 옵션을 표시
+                {showOptions[comment.rno] && (
                   <OptionsBox>
                     <ul>
-                      <li onClick={() => handleDeletecommentClick(comment.rno)}>
+                      <li
+                        key={`delete-${comment.rno}`}
+                        onClick={() => handleDeletecommentClick(comment.rno)}
+                      >
                         삭제
                       </li>
                       <li
-                        onClick={() =>
-                          handleEditecommentClick(comment.rno, '수정')
-                        }
+                        key={`edit-${comment.rno}`}
+                        onClick={() => {
+                          setEditingComment(comment.rno);
+                          setEditedContent(comment.r_content); // 기존 댓글 내용을 상태에 설정
+                        }}
                       >
                         수정
                       </li>
@@ -458,15 +504,34 @@ export function CommunityPost() {
             </TopRow>
             <BottomRow>
               <TextBox>
-                <p>{comment.r_content}</p>
+                {editingComment === comment.rno ? (
+                  <CommonInput
+                    type="text"
+                    value={editedContent}
+                    onChange={handleEditChange}
+                    placeholder="댓글을 수정하세요"
+                  />
+                ) : (
+                  <p>{comment.r_content}</p> // 수정이 완료되면 텍스트만 보이게 함
+                )}
               </TextBox>
-              <LikeBox>
-                <HeartButton
-                  like={comment.likedByUser.includes(user.userId)}
-                  onClick={() => toggleLike(comment.rno)}
+              {editingComment === comment.rno && (
+                <CommonButton
+                  text="저장"
+                  onClick={() => handleSaveEdit(comment.rno)}
                 />
-                <p>{comment.like_count}</p>
-              </LikeBox>
+              )}
+              {editingComment !== comment.rno && (
+                <>
+                  <LikeBox>
+                    <HeartButton
+                      like={user && comment.likedByUser.includes(user.userId)}
+                      onClick={user ? () => toggleLike(comment.rno) : null}
+                    />
+                    <p>{comment.like_count}</p>
+                  </LikeBox>
+                </>
+              )}
             </BottomRow>
           </div>
         ))}

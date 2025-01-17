@@ -68,4 +68,35 @@ public class ReplyServiceImpl implements ReplyService {
             })
             .collect(Collectors.toList());
     }
+
+    @Override
+    public void delete(int rno, String loggedInUserId) {
+
+        // 댓글 삭제
+        replyDao.deleteById(rno);
+    }
+    @Override
+    public boolean edit(int rno, ReplyDTO updatedComment) {
+        // 댓글을 데이터베이스에서 찾음
+        ReplyEntity existingComment = replyDao.findById(rno).orElse(null);
+
+        if (existingComment == null) {
+            return false;  // 댓글이 존재하지 않으면 false 반환
+        }
+
+        // 댓글 내용이 비어있거나 길이가 너무 길면 수정할 수 없으므로 유효성 체크
+        if (!validate(updatedComment)) {
+            return false;  // 유효하지 않은 댓글 내용
+        }
+
+        // 댓글을 수정
+        existingComment.setR_content(updatedComment.getR_content());  // 수정된 내용으로 변경
+        existingComment.setUpdatedAt(updatedComment.getUpdatedAt());  // 수정일자 업데이트
+
+        // 수정된 댓글을 저장
+        replyDao.updateReply(existingComment);
+
+        return true;  // 수정 성공
+    }
+
 }

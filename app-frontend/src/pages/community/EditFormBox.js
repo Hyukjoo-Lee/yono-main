@@ -95,13 +95,15 @@ export function EditFormBox() {
   const navigate = useNavigate();
   const { rowData } = location.state;
   const user = useSelector((state) => state.user.user);
-
+  console.log('userId:', user.userId);
   const [postFormData, setPostFormData] = useState({
     userId: user.userId,
+    no: '',
     title: '',
     category: '',
     content: '',
     imgurl: '',
+    regdate: '',
   });
 
   const [alertMessage, setAlertMessage] = useState({
@@ -168,16 +170,24 @@ export function EditFormBox() {
         }));
         return;
       }
+      setPostFormData((prev) => ({
+        ...prev,
+        imgurl: file.name,
+      }));
     }
   };
 
   useEffect(() => {
-    if (rowData) {
+    if (rowData && rowData.user) {
+      //userId가 존재하지 않을 경우 수정 폼 초기화
       setPostFormData({
+        userId: rowData.user.userId,
+        no: rowData.no,
         title: rowData.title || '',
         category: rowData.category || '',
         content: rowData.content || '',
         imgurl: rowData.imgurl || '',
+        regdate: rowData.regdate || '',
       });
     }
   }, [rowData]);
@@ -185,30 +195,65 @@ export function EditFormBox() {
   const handleSave = async (e) => {
     e.preventDefault();
 
+    // 유효성 검사
     const errors = validateForm();
-    setAlertMessage(errors); // 유효성 검사 후 오류 메시지 설정
+    setAlertMessage(errors);
 
     if (Object.keys(errors).length > 0) {
-      return; // 오류가 있으면 저장하지 않음
+      console.log('유효성 검사 실패:', errors); // 유효성 검사 결과 확인
+      return;
     }
 
-    const editFormData = {
-      ...postFormData,
-    };
-
-    const formData = new FormData();
-    formData.append('postFormData', JSON.stringify(editFormData));
     try {
-      const id = rowData.userId;
-      console.log(id);
+      const formData = new FormData();
+      formData.append('userId', postFormData.userId);
+      formData.append('no', postFormData.no);
+      formData.append('title', postFormData.title);
+      formData.append('category', postFormData.category);
+      formData.append('content', postFormData.content);
+      formData.append('regdate', postFormData.regdate);
 
-      if (user && id === rowData.userId) {
-        await axios.put(`/posts/update/${id}`, formData); // 수정 API 호출
-        navigate('/community');
+      if (postFormData.file) {
+        formData.append('file', postFormData.file);
       }
-      console.error('게시물 수정에 성공했습니다.');
+
+      console.log(postFormData);
+
+      // FormData를 JSON으로 변환
+      const postData = JSON.stringify({
+        userId: postFormData.userId,
+        no: postFormData.no,
+        title: postFormData.title,
+        category: postFormData.category,
+        content: postFormData.content,
+        imgurl: postFormData.imgurl,
+      });
+
+      formData.append('postFormData', postData);
+
+      console.log(postData);
+
+      const response = await axios.put(
+        `/posts/update/${postFormData.no}`,
+        formData,
+      );
+
+      if (response.status === 200) {
+        console.log('게시물 수정 성공:', response.data);
+
+        navigate('/community', { state: { updatePost: response.data } });
+      } else {
+        setAlertMessage((prev) => ({
+          ...prev,
+          file: '서버 오류가 발생했습니다. 다시 시도해주세요.',
+        }));
+      }
     } catch (error) {
       console.error('게시물 수정 실패:', error);
+      setAlertMessage((prev) => ({
+        ...prev,
+        file: '서버 오류로 인해 게시물을 수정할 수 없습니다.',
+      }));
     }
   };
 
@@ -241,6 +286,9 @@ export function EditFormBox() {
             placeholder="카테고리를 선택해 주세요"
             display="none"
             selectedValue={postFormData.category}
+            setSelectedValue={(value) =>
+              handleInputChange({ target: { value } }, 'category')
+            } // handleInputChange로 처리
             onChange={(e) => handleInputChange(e, 'category')}
           />
         </Row>

@@ -196,17 +196,20 @@ export function CommunityFormBox() {
       return;
     }
 
-    const updatedPostFormData = {
-      ...postFormData,
-      file: undefined,
-    };
-
     const formData = new FormData();
-    formData.append('postFormData', JSON.stringify(updatedPostFormData));
 
+    // 각 필드를 개별적으로 추가
+    formData.append('postFormData', JSON.stringify(postFormData));
+
+    // 파일이 선택된 경우에만 추가
     if (postImg) {
       formData.append('file', postImg);
     }
+
+    // 폼 데이터 로그 확인
+    formData.forEach((value, key) => {
+      console.log(`${key}: ${value}`);
+    });
 
     try {
       const response = await axios.post('/posts/write', formData);
@@ -214,7 +217,10 @@ export function CommunityFormBox() {
       console.log('게시글 등록 성공:', response.data);
       navigate('/community');
     } catch (error) {
-      console.error('게시글 등록 실패:', error);
+      console.error(
+        '게시글 등록 실패:',
+        error.response ? error.response.data : error,
+      );
     }
   };
 

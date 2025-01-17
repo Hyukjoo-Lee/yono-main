@@ -12,5 +12,12 @@ public interface ReplyService {
 
     List<ReplyDTO> findByPno(int pno);
 
+    void delete(int rno, String loggedInUserId);
+
+    boolean edit(int rno, ReplyDTO updatedComment);
+
+
+
+
     
 } 
