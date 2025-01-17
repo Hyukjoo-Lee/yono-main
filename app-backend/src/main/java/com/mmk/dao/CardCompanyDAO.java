@@ -9,5 +9,5 @@ public interface CardCompanyDAO {
 
     CardCompanyEntity findByCardCompanyNum(int cardCompanyNum);
 
-    CardCompanyEntity findCardCompanyNumByUserNumAndOrganization(int userNum, String organization);
+    CardCompanyEntity findByUserNumAndOrganization(int userNum, String organization);
 }

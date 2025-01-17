@@ -9,5 +9,5 @@ public interface CardCompanyRepository extends JpaRepository<CardCompanyEntity, 
 
     CardCompanyEntity findByCardCompanyNum(int cardCompanyNum);
 
-    CardCompanyEntity findCardCompanyEntityByUserNumAndOrganization(int userNum, String organization);
+    CardCompanyEntity findByUserNumAndOrganization(int userNum, String organization);
 }

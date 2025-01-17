@@ -27,7 +27,7 @@ public class CardCompanyDAOImpl implements CardCompanyDAO {
     }
 
     @Override
-    public CardCompanyEntity findCardCompanyNumByUserNumAndOrganization(int userNum, String organization) {
-        return cardCompanyRepository.findCardCompanyEntityByUserNumAndOrganization(userNum, organization);
+    public CardCompanyEntity findByUserNumAndOrganization(int userNum, String organization) {
+        return cardCompanyRepository.findByUserNumAndOrganization(userNum, organization);
     }
 }
