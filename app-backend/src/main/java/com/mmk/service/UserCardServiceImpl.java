@@ -49,7 +49,7 @@ public class UserCardServiceImpl implements UserCardService {
             if (userCardDAO.existsByUserCardNum(userCardNum)) {
                 throw new IllegalArgumentException("이미 등록된 카드입니다.");
             } else {
-                int cardCompanyNum = cardCompanyDAO.findCardCompanyNumByUserNumAndOrganization(userNum, organization).getCardCompanyNum();
+                int cardCompanyNum = cardCompanyDAO.findByUserNumAndOrganization(userNum, organization).getCardCompanyNum();
                 int cardId = cardDAO.findByCardTitle(cardTitle).getCardId();
                 userCardDTO.setCardCompanyNum(cardCompanyNum);
                 userCardDTO.setCardId(cardId);
@@ -82,22 +82,11 @@ public class UserCardServiceImpl implements UserCardService {
 
     // 대표 카드 등록
     @Override
-    public UserCardDTO setPrimaryCard(UserCardDTO uc) {
-        // userCardDAO.removePrimaryCardAll(uc.getUserNum());
-        
-        // String companyId = uc.getCompanyId();
-        // String companyPwd = uc.getCompanyPwd();
-        // int cardId = uc.getCardId();
-        // String organization = cardDAO.findByCardId(cardId).getOrganizationCode();
+    public UserCardDTO setPrimaryCard(int userCardId, int userNum) {
+        userCardDAO.removePrimaryCardAll(userNum);
+        userCardDAO.setPrimaryCard(userCardId);
 
-        // String connectedId = codefService.getConId(organization, companyId, companyPwd);
-        // System.out.println("ConnectedId :" + connectedId);
-
-        // uc.setConnectedId(connectedId);
-        // uc.setPrimaryCard(1);
-        // userCardDAO.registerCard(toEntity(uc));
-        // return uc;
-        return null;
+        return toDTO(userCardDAO.findByUserCardId(userCardId));
     }
 
     // 카드 내역 조회

@@ -15,7 +15,11 @@ public interface UserCardDAO {
 
     void removePrimaryCardAll(int userNum);
 
+    void setPrimaryCard(int userCardId);
+
     UserCardEntity findByUserNumAndPrimaryCard(UserEntity userEntity, int primaryCard);
+
+    UserCardEntity findByUserCardId(int userCardId);
 
     // void updateAllByUserNumAndOrganization(int userNum, String organization, String companyId, String companyPwd, String connectedId);
 }
