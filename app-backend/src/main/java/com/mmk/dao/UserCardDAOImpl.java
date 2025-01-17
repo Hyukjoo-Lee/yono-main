@@ -5,6 +5,7 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
+import com.mmk.entity.CardCompanyEntity;
 import com.mmk.entity.UserCardEntity;
 import com.mmk.entity.UserEntity;
 
@@ -39,4 +40,9 @@ public class UserCardDAOImpl implements UserCardDAO {
     public UserCardEntity findByUserNumAndPrimaryCard(UserEntity userEntity, int primaryCard) {
         return userCardRepository.findByUserEntityAndPrimaryCard(userEntity, primaryCard);
     }
+
+    // @Override
+    // public void updateAllByUserNumAndOrganization(int userNum, String organization, String companyId, String companyPwd, String connectedId) {
+    //     userCardRepository.updateAllByUserNumAndOrganization(userNum, organization, companyId, companyPwd, connectedId);
+    // }
 }

@@ -8,5 +8,6 @@ import com.mmk.entity.UserCardEntity;
 
 public interface CodefService {
     String getConId(String organization, String companyId, String companyPwd);
+    
     CompletableFuture<List<MonthlySummary>> getCardHistory(UserCardEntity userCardEntity);
 }

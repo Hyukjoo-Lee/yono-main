@@ -56,7 +56,6 @@ public class CodefServiceImpl implements CodefService {
         HashMap<String, Object> parameterMap = new HashMap<String, Object>();
         parameterMap.put("accountList", accountList);
 
-        // 계정 등록 요청(Connected ID 발급 요청) - 서비스타입(API:정식, DEMO:데모, SANDBOX:샌드박스)
         String result = "";
         try {
             result = codef.createAccount(EasyCodefServiceType.DEMO, parameterMap);

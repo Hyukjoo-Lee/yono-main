@@ -13,16 +13,24 @@ public class CardCompanyServiceImpl implements CardCompanyService {
     @Autowired
     private CardCompanyDAO cardCompanyDAO;
 
+    @Autowired
+    private CodefService codefService;
+
     // 카드사 등록
     @Override
     public CardCompanyDTO registerCardCompany(CardCompanyDTO cardCompanyDTO) {
         int userNum = cardCompanyDTO.getUserNum();
         String organization = cardCompanyDTO.getOrganization();
+        String companyId = cardCompanyDTO.getCompanyId();
+        String companyPwd = cardCompanyDTO.getCompanyPwd();
         boolean exists = cardCompanyDAO.existsCompany(userNum, organization);
         
         if (exists) {
             return null;
         } else {
+            String connectedId = codefService.getConId(organization, companyId, companyPwd);
+            cardCompanyDTO.setConnectedId(connectedId);
+            // usercardDAO.updateAllByUserNumAndOrganization(userNum, organization, companyId, companyPwd, connectedId);
             cardCompanyDAO.save(toEntity(cardCompanyDTO));
             return cardCompanyDTO;
         }
@@ -35,6 +43,7 @@ public class CardCompanyServiceImpl implements CardCompanyService {
         dto.setCompanyPwd(entity.getCompanyPwd());
         dto.setOrganization(entity.getOrganization());
         dto.setUserNum(entity.getUserNum());
+        dto.setConnectedId(entity.getConnedtedId());
         return dto;
     }
 
@@ -45,6 +54,7 @@ public class CardCompanyServiceImpl implements CardCompanyService {
         entity.setCompanyPwd(dto.getCompanyPwd());
         entity.setOrganization(dto.getOrganization());
         entity.setUserNum(dto.getUserNum());
+        entity.setConnedtedId(dto.getConnectedId());
         return entity;
     }
 }

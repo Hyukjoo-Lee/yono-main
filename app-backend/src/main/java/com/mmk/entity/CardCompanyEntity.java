@@ -35,4 +35,7 @@ public class CardCompanyEntity {
 
     @Column(name = "company_pwd", nullable = false)
     private String companyPwd;
+
+    @Column(name = "connected_Id")
+    private String connedtedId;
 }   

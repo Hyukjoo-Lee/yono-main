@@ -17,4 +17,6 @@ public class CardCompanyDTO {
     private String companyId;
 
     private String companyPwd;
+
+    private String connectedId = "";
 }
