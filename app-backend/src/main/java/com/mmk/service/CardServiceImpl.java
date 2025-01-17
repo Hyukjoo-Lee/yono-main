@@ -2,16 +2,13 @@ package com.mmk.service;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 import java.util.NoSuchElementException;
 import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.mmk.dao.CardBenefitDAO;
 import com.mmk.dao.CardDAO;
-import com.mmk.dao.UserCardDAO;
 import com.mmk.dto.CardBenefitDTO;
 import com.mmk.dto.CardDTO;
 import com.mmk.dto.UserCardDTO;
@@ -19,19 +16,11 @@ import com.mmk.entity.CardBenefitEntity;
 import com.mmk.entity.CardEntity;
 import com.mmk.entity.UserCardEntity;
 
-import jakarta.transaction.Transactional;
-
 @Service
 public class CardServiceImpl implements CardService {
 
     @Autowired
     private CardDAO cardDAO;
-
-    @Autowired
-    private UserCardDAO userCardDAO;
-
-    @Autowired
-    private CardBenefitDAO benefitDAO;
 
     @Override
     public CardDTO createCard(CardDTO cardDTO) {
@@ -59,43 +48,6 @@ public class CardServiceImpl implements CardService {
         }
 
         return cardDTOs;
-    }
-
-    @Override
-    @Transactional
-    public void saveCardAndBenefitData(List<Map<String, Object>> cardList, List<Map<String, Object>> performanceList) {
-
-        System.out.println("cardList: " + cardList);
-        System.out.println("performanceList: " + performanceList);
-
-        cardList.forEach(cardData -> {
-            String cardTitle = (String) cardData.get("cardName");
-            String cardNumber = (String) cardData.get("cardNo");
-            String userName = (String) cardData.get("userName");
-            String validPeriod = (String) cardData.get("validPeriod");
-            String imageLink = (String) cardData.get("imageLink");
-
-        });
-
-        performanceList.forEach(benefitData -> {
-
-            @SuppressWarnings("unchecked")
-            List<Map<String, String>> benefits = (List<Map<String, String>>) benefitData.get("benefits");
-
-            for (Map<String, String> benefit : benefits) {
-                String benefitName = benefit.get("benefitName");
-                String businessType = benefit.get("businessTypes");
-
-            }
-
-            String cardName = (String) benefitData.get("cardName");
-            String cardNo = (String) benefitData.get("cardNo");
-            String cardCompany = (String) benefitData.get("cardCompany");
-
-            System.out.println("cardName: " + cardName);
-            System.out.println("cardNo: " + cardNo);
-            System.out.println("cardCompany: " + cardCompany);
-        });
     }
 
     private CardEntity toEntity(CardDTO dto) {
@@ -153,4 +105,5 @@ public class CardServiceImpl implements CardService {
         dto.setCardId(entity.getCardEntity().getCardId());
         return dto;
     }
+
 }
