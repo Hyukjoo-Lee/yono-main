@@ -56,7 +56,6 @@ public class CodefServiceImpl implements CodefService {
         HashMap<String, Object> parameterMap = new HashMap<String, Object>();
         parameterMap.put("accountList", accountList);
 
-        // 계정 등록 요청(Connected ID 발급 요청) - 서비스타입(API:정식, DEMO:데모, SANDBOX:샌드박스)
         String result = "";
         try {
             result = codef.createAccount(EasyCodefServiceType.DEMO, parameterMap);
@@ -95,6 +94,7 @@ public class CodefServiceImpl implements CodefService {
     private static final ExecutorService executor = Executors.newFixedThreadPool(10);
 
     public CompletableFuture<List<MonthlySummary>> getCardHistory(UserCardEntity userCardEntity) {
+        long startTime = System.nanoTime();
         String productUrl = "/v1/kr/card/p/account/approval-list";
 
         codef = new EasyCodef();
@@ -110,7 +110,10 @@ public class CodefServiceImpl implements CodefService {
 
         return CompletableFuture.supplyAsync(() -> {
             try {
-                return codef.requestProduct(productUrl, EasyCodefServiceType.DEMO, parameterMap);
+                String result = codef.requestProduct(productUrl, EasyCodefServiceType.DEMO, parameterMap);
+                long endTime = System.nanoTime();
+                System.out.println("CODEF 데이터 호출 소요 시간: " + (endTime - startTime) + "ns");
+                return result;
             } catch (Exception e) {
                 throw new RuntimeException(e);
             }
@@ -171,8 +174,6 @@ public class CodefServiceImpl implements CodefService {
                         Collectors.summingInt(CardSummaryDTO::getUsedAmount)
                     )
                 ));
-
-    
             return groupedData.entrySet().stream()
                 .map(entry -> new MonthlySummary(
                     entry.getKey().substring(4) + "월",
