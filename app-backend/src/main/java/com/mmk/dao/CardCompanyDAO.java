@@ -6,4 +6,8 @@ public interface CardCompanyDAO {
     boolean existsCompany(int userNum, String organization);
     
     void save(CardCompanyEntity cardCompanyEntity);
+
+    CardCompanyEntity findByCardCompanyNum(int cardCompanyNum);
+
+    CardCompanyEntity findCardCompanyNumByUserNumAndOrganization(int userNum, String organization);
 }

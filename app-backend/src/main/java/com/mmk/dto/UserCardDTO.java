@@ -15,14 +15,10 @@ public class UserCardDTO {
     private String userCardNum;
     private String expiryDate;
     private String userName;
-
     private String cardPwd;
-    private String companyId;
-    private String companyPwd;
-    private String connectedId;
-    private int primaryCard;
+    private int primaryCard = 0;
 
-    // connectedId, 카드 아이디, 비밀번호 (api 호출을 위한 필드)
+    private int cardCompanyNum;
     private int cardId;
     private int userNum;
 

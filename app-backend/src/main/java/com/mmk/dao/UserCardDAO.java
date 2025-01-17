@@ -2,7 +2,6 @@ package com.mmk.dao;
 
 import java.util.List;
 
-import com.mmk.entity.CardCompanyEntity;
 import com.mmk.entity.UserCardEntity;
 import com.mmk.entity.UserEntity;
 

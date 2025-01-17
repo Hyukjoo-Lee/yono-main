@@ -95,35 +95,34 @@ public class CodefServiceImpl implements CodefService {
     private static final ExecutorService executor = Executors.newFixedThreadPool(10);
 
     public CompletableFuture<List<MonthlySummary>> getCardHistory(UserCardEntity userCardEntity) {
-        long startTime = System.nanoTime();
-        String productUrl = "/v1/kr/card/p/account/approval-list";
-
-        codef = new EasyCodef();
-        codef.setClientInfoForDemo(clientId, clientSecret);
-        codef.setPublicKey(publickey);
-
-        String connectedId = userCardEntity.getConnectedId();
-        String organization = userCardEntity.getCardEntity().getOrganizationCode();
-        String cardNo = userCardEntity.getUserCardNum();
-        String cardPwd = userCardEntity.getCardPwd();
-
-        HashMap<String, Object> parameterMap = getCardHistoryParameterMap(connectedId, organization, cardNo, cardPwd);
-
-        return CompletableFuture.supplyAsync(() -> {
-            try {
-                String result = codef.requestProduct(productUrl, EasyCodefServiceType.DEMO, parameterMap);
-                long endTime = System.nanoTime();
-                System.out.println("CODEF 데이터 호출 소요 시간: " + (endTime - startTime) + "ns");
-                return result;
-            } catch (Exception e) {
-                throw new RuntimeException(e);
-            }
-        }, executor)
-                .thenApply(result -> getCardHistoryprocessResult(result))
-                .exceptionally(e -> {
-                    e.printStackTrace();
-                    return Collections.emptyList();
-                });
+        // long startTime = System.nanoTime();
+        // String productUrl = "/v1/kr/card/p/account/approval-list";
+        // codef = new EasyCodef();
+        // codef.setClientInfoForDemo(clientId, clientSecret);
+        // codef.setPublicKey(publickey);
+        // String connectedId = userCardEntity.getConnectedId();
+        // String organization = userCardEntity.getCardEntity().getOrganizationCode();
+        // String cardNo = userCardEntity.getUserCardNum();
+        // String cardPwd = userCardEntity.getCardPwd();
+        // HashMap<String, Object> parameterMap =
+        // getCardHistoryParameterMap(connectedId, organization, cardNo, cardPwd);
+        // return CompletableFuture.supplyAsync(() -> {
+        // try {
+        // String result = codef.requestProduct(productUrl, EasyCodefServiceType.DEMO,
+        // parameterMap);
+        // long endTime = System.nanoTime();
+        // System.out.println("CODEF 데이터 호출 소요 시간: " + (endTime - startTime) + "ns");
+        // return result;
+        // } catch (Exception e) {
+        // throw new RuntimeException(e);
+        // }
+        // }, executor)
+        // .thenApply(result -> getCardHistoryprocessResult(result))
+        // .exceptionally(e -> {
+        // e.printStackTrace();
+        // return Collections.emptyList();
+        // });
+        return null;
     }
 
     private HashMap<String, Object> getCardHistoryParameterMap(String connectedId, String organization, String cardNo,
