@@ -49,11 +49,12 @@ public class UserCardServiceImpl implements UserCardService {
             if (userCardDAO.existsByUserCardNum(userCardNum)) {
                 throw new IllegalArgumentException("이미 등록된 카드입니다.");
             } else {
-                int cardCompanyNum = cardCompanyDAO.findCardCompanyNumByUserNumAndOrganization(userNum, organization).getCardCompanyNum();
+                int cardCompanyNum = cardCompanyDAO.findByUserNumAndOrganization(userNum, organization)
+                        .getCardCompanyNum();
                 int cardId = cardDAO.findByCardTitle(cardTitle).getCardId();
                 userCardDTO.setCardCompanyNum(cardCompanyNum);
                 userCardDTO.setCardId(cardId);
-                
+
                 UserCardEntity userCardEntity = toEntity(userCardDTO);
                 userCardDAO.registerCard(userCardEntity);
                 return toDTO(userCardEntity);
@@ -84,13 +85,14 @@ public class UserCardServiceImpl implements UserCardService {
     @Override
     public UserCardDTO setPrimaryCard(UserCardDTO uc) {
         // userCardDAO.removePrimaryCardAll(uc.getUserNum());
-        
+
         // String companyId = uc.getCompanyId();
         // String companyPwd = uc.getCompanyPwd();
         // int cardId = uc.getCardId();
         // String organization = cardDAO.findByCardId(cardId).getOrganizationCode();
 
-        // String connectedId = codefService.getConId(organization, companyId, companyPwd);
+        // String connectedId = codefService.getConId(organization, companyId,
+        // companyPwd);
         // System.out.println("ConnectedId :" + connectedId);
 
         // uc.setConnectedId(connectedId);
@@ -115,7 +117,7 @@ public class UserCardServiceImpl implements UserCardService {
         entity.setUserCardNum(dto.getUserCardNum());
         entity.setExpiryDate(dto.getExpiryDate());
         entity.setUserName(dto.getUserName());
-        entity.setCardPwd(dto.getCardPwd());        
+        entity.setCardPwd(dto.getCardPwd());
         entity.setPrimaryCard(dto.getPrimaryCard());
         entity.setCreatedAt(dto.getCreatedAt());
         entity.setUpdatedAt(dto.getUpdatedAt());
@@ -140,7 +142,7 @@ public class UserCardServiceImpl implements UserCardService {
         dto.setPrimaryCard(entity.getPrimaryCard());
         dto.setCreatedAt(entity.getCreatedAt());
         dto.setUpdatedAt(entity.getUpdatedAt());
-        
+
         dto.setCardCompanyNum(entity.getCardCompanyEntity().getCardCompanyNum());
         dto.setCardId(entity.getCardEntity().getCardId());
         dto.setUserNum(entity.getUserEntity().getUserNum());
