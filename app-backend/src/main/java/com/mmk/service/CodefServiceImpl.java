@@ -21,7 +21,7 @@ import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.mmk.dto.CardSummaryDTO;
 import com.mmk.dto.MonthlySummary;
-import com.mmk.dto.TransDTO;
+import com.mmk.dto.MonthlyTransDTO;
 import com.mmk.entity.UserCardEntity;
 
 import io.codef.api.EasyCodef;
@@ -94,36 +94,36 @@ public class CodefServiceImpl implements CodefService {
     private static final ExecutorService executor = Executors.newFixedThreadPool(10);
 
     public CompletableFuture<List<MonthlySummary>> getCardHistory(UserCardEntity userCardEntity) {
-        // long startTime = System.nanoTime();
-        // String productUrl = "/v1/kr/card/p/account/approval-list";
+        long startTime = System.nanoTime();
+        String productUrl = "/v1/kr/card/p/account/approval-list";
 
-        // codef = new EasyCodef();
-        // codef.setClientInfoForDemo(clientId, clientSecret);
-        // codef.setPublicKey(publickey);
+        codef = new EasyCodef();
+        codef.setClientInfoForDemo(clientId, clientSecret);
+        codef.setPublicKey(publickey);
 
-        // String connectedId = userCardEntity.getConnectedId();
-        // String organization = userCardEntity.getCardEntity().getOrganizationCode();
-        // String cardNo = userCardEntity.getUserCardNum();
-        // String cardPwd = userCardEntity.getCardPwd();
+        String connectedId = userCardEntity.getCardCompanyEntity().getConnedtedId();
+        String organization = userCardEntity.getCardEntity().getOrganizationCode();
+        String cardNo = userCardEntity.getUserCardNum();
+        String cardPwd = userCardEntity.getCardPwd();
 
-        // HashMap<String, Object> parameterMap = getCardHistoryParameterMap(connectedId, organization, cardNo, cardPwd);
+        HashMap<String, Object> parameterMap = getCardHistoryParameterMap(connectedId, organization, cardNo, cardPwd);
 
-        // return CompletableFuture.supplyAsync(() -> {
-        //     try {
-        //         String result = codef.requestProduct(productUrl, EasyCodefServiceType.DEMO, parameterMap);
-        //         long endTime = System.nanoTime();
-        //         System.out.println("CODEF 데이터 호출 소요 시간: " + (endTime - startTime) + "ns");
-        //         return result;
-        //     } catch (Exception e) {
-        //         throw new RuntimeException(e);
-        //     }
-        // }, executor)
-        // .thenApply(result -> getCardHistoryprocessResult(result))
-        // .exceptionally(e -> {
-        //     e.printStackTrace();
-        //     return Collections.emptyList();
-        // });
-        return null;
+        return CompletableFuture.supplyAsync(() -> {
+            try {
+                String result = codef.requestProduct(productUrl, EasyCodefServiceType.DEMO, parameterMap);
+                long endTime = System.nanoTime();
+                System.out.println("CODEF 데이터 호출 소요 시간: " + (endTime - startTime) + "ns");
+                System.out.println(result);
+                return result;
+            } catch (Exception e) {
+                throw new RuntimeException(e);
+            }
+        }, executor)
+        .thenApply(result -> getCardHistoryprocessResult(result))
+        .exceptionally(e -> {
+            e.printStackTrace();
+            return Collections.emptyList();
+        });
     }
 
     private HashMap<String, Object> getCardHistoryParameterMap(String connectedId, String organization, String cardNo, String cardPwd) {
@@ -133,7 +133,7 @@ public class CodefServiceImpl implements CodefService {
 
         String startDate = twoMonthsAgoFirstDay.format(formatter);
         String endDate = today.format(formatter);
-
+        
         HashMap<String, Object> parameterMap = new HashMap<>(
             Map.of(
                 "connectedId", connectedId,
@@ -160,7 +160,7 @@ public class CodefServiceImpl implements CodefService {
             objectMapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
     
             String dataArrayJson = objectMapper.readTree(result).get("data").toString();
-            List<TransDTO> transactionDTOList = objectMapper.readValue(dataArrayJson, new TypeReference<List<TransDTO>>() {});
+            List<MonthlyTransDTO> transactionDTOList = objectMapper.readValue(dataArrayJson, new TypeReference<List<MonthlyTransDTO>>() {});
     
             Map<String, Map<String, Integer>> groupedData = transactionDTOList.stream()
                 .map(card -> new CardSummaryDTO(

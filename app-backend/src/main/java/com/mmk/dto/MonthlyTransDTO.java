@@ -9,7 +9,7 @@ import lombok.ToString;
 @Getter
 @Setter
 @ToString
-public class TransDTO {
+public class MonthlyTransDTO {
     private int cardNum;
 
     private int userNum;
