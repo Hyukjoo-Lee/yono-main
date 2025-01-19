@@ -43,4 +43,10 @@ public class ReplyDAOImpl implements ReplyDAO {
         this.replyRepo.save(existingComment);
     }
 
+    @Override
+    public ReplyEntity findByRno(int rno) {
+        // 댓글의 rno로 조회하여 반환
+        return this.replyRepo.findByRno(rno).orElseThrow(() -> 
+        new IllegalArgumentException("댓글을 찾을 수 없습니다: " + rno));
+    }
 }

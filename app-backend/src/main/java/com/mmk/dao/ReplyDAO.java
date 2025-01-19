@@ -17,4 +17,6 @@ public interface ReplyDAO {
 
     void updateReply(ReplyEntity existingComment);
 
+    ReplyEntity findByRno(int rno);
+
 }

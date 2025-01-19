@@ -52,6 +52,7 @@ public void save(PostsDTO postsData) {
                 .collect(Collectors.toList());
     }
 
+    @Transactional
     @Override
     public PostsDTO findByIdAndViewCnt(int id) {
         // 게시글 조회

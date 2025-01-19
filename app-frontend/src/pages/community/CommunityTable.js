@@ -11,7 +11,7 @@ import {
 } from '@mui/material';
 import axios from 'axios';
 import React, { useEffect, useState } from 'react';
-import { useNavigate } from 'react-router-dom'; // useNavigate를 임포트
+import { useLocation, useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
 import CommonButton from '../../common/CommonButton';
 import CommonDialog from '../../common/CommonDialog';
@@ -87,6 +87,10 @@ export function CommunityTable() {
   const [searchInput, setSearchInput] = useState('');
   const [filteredRows, setFilteredRows] = useState([]);
   const rowsPerPage = 10;
+  const location = useLocation();
+  const updatePost = location.state?.updatePost;
+  console.log(updatePost); // 작성자(userId)와 작성일(regdate)가 포함되어 있는지 확인
+
   const navigate = useNavigate(); // navigate 훅을 사용
   const handleChangePage = (event, newPage) => {
     setPage(newPage - 1);

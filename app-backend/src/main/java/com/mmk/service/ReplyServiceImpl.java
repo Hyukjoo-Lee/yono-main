@@ -1,6 +1,7 @@
 package com.mmk.service;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -10,11 +11,14 @@ import com.mmk.dao.ReplyDAO;
 import com.mmk.dto.ReplyDTO;
 import com.mmk.entity.ReplyEntity;
 
+
 @Service
 public class ReplyServiceImpl implements ReplyService {
 
     @Autowired
-    private ReplyDAO replyDao;  // 댓글 저장소
+    private ReplyDAO replyDao; // 댓글 저장소
+    
+
 
     @Override
     public boolean validate(ReplyDTO replyDTO) {
@@ -81,22 +85,29 @@ public class ReplyServiceImpl implements ReplyService {
         ReplyEntity existingComment = replyDao.findById(rno).orElse(null);
 
         if (existingComment == null) {
-            return false;  // 댓글이 존재하지 않으면 false 반환
+            return false; // 댓글이 존재하지 않으면 false 반환
         }
 
         // 댓글 내용이 비어있거나 길이가 너무 길면 수정할 수 없으므로 유효성 체크
         if (!validate(updatedComment)) {
-            return false;  // 유효하지 않은 댓글 내용
+            return false; // 유효하지 않은 댓글 내용
         }
 
         // 댓글을 수정
-        existingComment.setR_content(updatedComment.getR_content());  // 수정된 내용으로 변경
-        existingComment.setUpdatedAt(updatedComment.getUpdatedAt());  // 수정일자 업데이트
+        existingComment.setR_content(updatedComment.getR_content()); // 수정된 내용으로 변경
+        existingComment.setUpdatedAt(updatedComment.getUpdatedAt()); // 수정일자 업데이트
 
         // 수정된 댓글을 저장
         replyDao.updateReply(existingComment);
 
-        return true;  // 수정 성공
+        return true; // 수정 성공
+    }
+
+    @Override
+    public ReplyEntity findByRno(int rno) {
+        // 댓글 번호로 댓글을 찾아서 반환
+        Optional<ReplyEntity> replyEntity = replyDao.findById(rno);
+        return replyEntity.orElse(null);  // 댓글이 존재하지 않으면 null 반환
     }
 
 }

@@ -1,8 +1,11 @@
 package com.mmk.controller;
+import java.util.Collections;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
+
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -15,7 +18,9 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.mmk.dto.ReplyDTO;
+import com.mmk.entity.ReplyEntity;
 import com.mmk.service.ReplyService;
+import com.mmk.service.ReplyLikeService;
 
 @RestController
 @RequestMapping("/reply")
@@ -23,6 +28,9 @@ public class ReplyController {
 
     @Autowired
     private ReplyService replyService;
+
+    @Autowired
+    private ReplyLikeService replyLikeService;
 
     
     @PostMapping("/add")
@@ -86,9 +94,40 @@ public class ReplyController {
         }
 
     }
+    
+    @PostMapping("/like/{rno}")
+    @PreAuthorize("isAuthenticated()")
+    public ResponseEntity<Map<String, Object>> toggleLike(
+    @PathVariable int rno,
+    @RequestBody Map<String, String> payload) {
 
+    String userId = payload.get("userId");
 
+    try {
+        // 좋아요 상태 토글
+        boolean isLiked = replyLikeService.toggleLike(rno, userId);
+
+        // 해당 댓글의 like_count를 업데이트 후 응답에 포함
+        ReplyEntity reply = replyService.findByRno(rno);
+        
+        Map<String, Object> response = new HashMap<>();
+        response.put("isLiked", isLiked);
+        response.put("likeCount", reply.getLike_count());  // like_count 업데이트 된 값을 포함
+
+        return ResponseEntity.ok(response);
+    } catch (Exception e) {
+        e.printStackTrace();
+        return ResponseEntity.status(500).body(Collections.singletonMap("error", "서버 오류가 발생했습니다."));
+    }
 }
+
+
+    
+}
+
+    
+
+
 
 
 

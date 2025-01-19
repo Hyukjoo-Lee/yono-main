@@ -3,6 +3,7 @@ package com.mmk.service;
 import java.util.List;
 
 import com.mmk.dto.ReplyDTO;
+import com.mmk.entity.ReplyEntity;
 
 public interface ReplyService {
 
@@ -15,6 +16,8 @@ public interface ReplyService {
     void delete(int rno, String loggedInUserId);
 
     boolean edit(int rno, ReplyDTO updatedComment);
+
+    ReplyEntity findByRno(int rno);
 
 
 

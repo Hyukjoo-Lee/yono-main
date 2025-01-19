@@ -96,6 +96,7 @@ export function EditFormBox() {
   const { rowData } = location.state;
   const user = useSelector((state) => state.user.user);
   console.log('userId:', user.userId);
+  console.log(rowData);
   const [postFormData, setPostFormData] = useState({
     userId: user.userId,
     no: '',
@@ -178,15 +179,15 @@ export function EditFormBox() {
   };
 
   useEffect(() => {
-    if (rowData && rowData.user) {
+    if (rowData) {
       //userId가 존재하지 않을 경우 수정 폼 초기화
       setPostFormData({
-        userId: rowData.user.userId,
+        userId: rowData.userId,
         no: rowData.no,
         title: rowData.title || '',
         category: rowData.category || '',
         content: rowData.content || '',
-        imgurl: rowData.imgurl || '',
+        file: rowData.file || '',
         regdate: rowData.regdate || '',
       });
     }

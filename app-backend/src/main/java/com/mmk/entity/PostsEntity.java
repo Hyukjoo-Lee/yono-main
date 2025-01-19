@@ -58,6 +58,6 @@ public class PostsEntity {
     private Timestamp updatedAt;
     
     @ManyToOne
-    @JoinColumn(name = "user_id")
+    @JoinColumn(name = "user_id", referencedColumnName ="user_id")
     private UserEntity userEntity;
 }

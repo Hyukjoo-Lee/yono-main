@@ -1,8 +1,10 @@
 package com.mmk.entity;
 
-import java.sql.Timestamp;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
+
 import org.hibernate.annotations.CreationTimestamp;
+
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -18,31 +20,21 @@ import lombok.ToString;
 @ToString
 @Entity
 @SequenceGenerator(
-    name ="reply_seq_generator",
-    sequenceName = "reply_seq",
+    name ="replylike_seq_generator",
+    sequenceName = "replylike_seq",
     initialValue = 1,
     allocationSize = 1
 )
-
-@Table(name="tbl_reply")
-public class ReplyEntity {
+@Table(name = "reply_likes")
+public class ReplyLikeEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE, // 사용할 전략을 시퀀스로 선택
-            generator = "reply_seq_generator") // 시퀀스 생성기에 설정해 놓은 시퀀스 제너레이터 이름
-    
-    private int rno; //댓글  번호 
-    private int pno; //게시판 번호 
-    private String userId; 
-    private String r_content;
-    private int like_count;
+            generator = "replylike_seq_generator")
 
-
+    private int id;              // 고유 ID (Primary Key)
+    private int rno;       // 좋아요가 눌린 댓글 ID (Foreign Key)
+    private String userId;    // 좋아요를 누른 사용자 ID (Foreign Key)
     @CreationTimestamp
-    private LocalDate regdate;
-
-    @CreationTimestamp
-    private Timestamp createdAt;
-    @CreationTimestamp
-    private Timestamp updatedAt;
+    private LocalDate regdate;// 좋아요 누른 시간
 }
