@@ -21,4 +21,6 @@ public class DailyStatisticsController {
     public List<DailyStatisticsDTO> getDailyStatistics() {
         return dailyStatisticsService.getDailyStatistics();
     }
+
+    
 }
