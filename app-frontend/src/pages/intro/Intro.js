@@ -1,25 +1,23 @@
 import { useCallback, useEffect, useState } from 'react';
 import styled from 'styled-components';
-import IntroGIF from '../../assets/images/main.gif';
+import InfoSample from '../../assets/images/infoSample.png';
+// import IntroGIF from '../../assets/images/main.gif';
 import CommonRoot from '../../common/CommonRoot';
 
-const Root = styled.div.withConfig({
-  shouldForwardProp: (prop) => prop !== 'currentPage',
-})`
+const Root = styled.div`
   width: 100%;
-  height: calc(100vh - ${({ theme }) => theme.headerHeight});
+  height: 100vh;
   overflow: hidden;
 `;
-
-// background-color: ${({ $currentPage }) =>
-//   $currentPage % 2 === 0 ? 'white' : '#EFF3FD'};
+// background-color: ${({ currentPage }) =>
+//   currentPage % 2 === 0 ? 'white' : '#EFF3FD'};
 
 const PagesWrapper = styled.div`
   display: flex;
   flex-direction: column;
   height: 100%;
   transition: transform 0.8s ease;
-  transform: ${({ currentPage }) => `translateY(-${currentPage * 100}vh)`};
+  transform: ${({ $currentPage }) => `translateY(-${$currentPage * 100}vh)`};
 `;
 
 const Page = styled.div`
@@ -60,41 +58,40 @@ const ContentWrap = styled.div`
 
 export function Intro() {
   const [currentPage, setCurrentPage] = useState(0);
-  const [pageHeight, setPageHeight] = useState(window.innerHeight);
+  const [isScrolling, setIsScrolling] = useState(false);
+  // const [pageHeight, setPageHeight] = useState(window.innerHeight);
 
   const handleScroll = useCallback(
     (e) => {
+      if (isScrolling) return;
+      setIsScrolling(true);
+
       if (e.deltaY > 0 && currentPage < 4) {
         setCurrentPage((prevPage) => prevPage + 1);
       } else if (e.deltaY < 0 && currentPage > 0) {
         setCurrentPage((prevPage) => prevPage - 1);
       }
+      setTimeout(() => setIsScrolling(false), 800);
     },
-    [currentPage],
+    [currentPage, isScrolling],
   );
 
   useEffect(() => {
-    window.scrollTo({
-      top: currentPage * pageHeight,
-      behavior: 'smooth',
-    });
-  }, [currentPage, pageHeight]);
-
-  useEffect(() => {
     const handleResize = () => {
-      setPageHeight(window.innerHeight);
+      window.scrollTo({
+        top: currentPage * window.innerHeight,
+        behavior: 'smooth',
+      });
     };
 
     window.addEventListener('resize', handleResize);
-
     return () => {
       window.removeEventListener('resize', handleResize);
     };
-  }, []);
+  }, [currentPage]);
 
   useEffect(() => {
     window.addEventListener('wheel', handleScroll, { passive: true });
-
     return () => {
       window.removeEventListener('wheel', handleScroll);
     };
@@ -102,14 +99,13 @@ export function Intro() {
 
   return (
     <Root>
-      {/* currentPage={currentPage} */}
       <CommonRoot>
-        <PagesWrapper>
+        <PagesWrapper $currentPage={currentPage}>
           {/* 첫 번째 페이지 */}
           <Page>
             <ContentWrap>
               <GIFWrap>
-                <img src={IntroGIF} alt="main GIF" />
+                <img src={InfoSample} alt="main GIF" />
               </GIFWrap>
               <TextWrap>
                 <p>
@@ -130,7 +126,7 @@ export function Intro() {
           <Page>
             <ContentWrap>
               <GIFWrap>
-                <img src={IntroGIF} alt="main GIF" />
+                <img src={InfoSample} alt="main GIF" />
               </GIFWrap>
               <TextWrap>
                 <p>
@@ -145,6 +141,28 @@ export function Intro() {
                   제공할 수 있도록 카드 챌린지 기능을 도입했습니다. 유저들이
                   서로의 절약 성과를 비교하고, 목표 달성을 통해 뱃지를
                   획득하거나 순위를 확인 할<br />수 있도록 설계되었습니다.
+                </p>
+              </TextWrap>
+            </ContentWrap>
+          </Page>
+          {/* 세 번째 페이지 */}
+          <Page>
+            <ContentWrap>
+              <GIFWrap>
+                <img src={InfoSample} alt="main GIF" />
+              </GIFWrap>
+              <TextWrap>
+                <p>
+                  소비 패턴을 분석해 지출 파악하고,
+                  <br />더 나은 소비 관리를 위한 통찰 제공
+                </p>
+                <p>
+                  소비 내역을 일별, 월별 그리고 카테고리별로 체계적으로 분석하여
+                  사용자들
+                  <br />이 자신의 소비패턴을 보다 명확하고 쉽게 이해 할 수
+                  있도록 설계했습니다.
+                  <br /> 이를 통해 사용자는 자신의 소비 습관을 구체적으로
+                  파악하고, 보다 효과적으로 절약을 실천 할 수 있습니다.
                 </p>
               </TextWrap>
             </ContentWrap>
