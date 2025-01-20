@@ -8,7 +8,7 @@ public interface UserDAO {
 
     void createUser(UserEntity uEntity);
 
-    UserEntity getUserById(int id);
+    UserEntity getUserByUserNum(int userNum);
 
     UserEntity getUserByUserId(String userId);
 

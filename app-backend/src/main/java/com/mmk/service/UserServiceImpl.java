@@ -32,7 +32,7 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public UserDTO getUserById(int id) {
-        UserEntity userEntity = userDAO.getUserById(id);
+        UserEntity userEntity = userDAO.getUserByUserNum(id);
         if (userEntity == null) {
             throw new NoSuchElementException("ID " + id + "에 해당하는 사용자가 없습니다.");
         }
@@ -68,7 +68,7 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public void deleteUser(int id) {
-        UserEntity userEntity = userDAO.getUserById(id);
+        UserEntity userEntity = userDAO.getUserByUserNum(id);
         if (userEntity == null) {
             throw new NoSuchElementException("ID " + id + "에 해당하는 사용자가 없습니다.");
         }

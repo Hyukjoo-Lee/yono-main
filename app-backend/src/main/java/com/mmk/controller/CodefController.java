@@ -17,7 +17,7 @@ import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.mmk.dto.MonthlySummary;
-import com.mmk.dto.TransDTO;
+import com.mmk.dto.MonthlyTransDTO;
 
 import io.codef.api.EasyCodef;
 import io.codef.api.EasyCodefServiceType;
@@ -73,17 +73,17 @@ public class CodefController {
 
         // 기관코드는 각 상품 페이지 (https://developer.codef.io/products/card/overview)에서 확인 가능
         // 카드사마다 기관코드가 다름, 아래 예시는 현대카드
-        accountMap.put("organization", "0302");
+        accountMap.put("organization", "0304");
 
         // login 방법이 공인인증서, 아이디 & 비번 2가지 방법이 있는데 아이디 & 비번을 선택
         // 공인인증서 loginType = 0, 아이디 & 비번 loginType = 1
         accountMap.put("loginType", "1");
 
-        accountMap.put("id", "카드사 아이디"); // 카드사 아이디 입력
+        accountMap.put("id", "BIGIE2"); // 카드사 아이디 입력
 
         try {
             // RSA암호화가 필요한 필드는 encryptRSA(String plainText, String publicKey) 메서드를 이용해 암호화
-            accountMap.put("password", EasyCodefUtil.encryptRSA("카드사 비밀번호", codef.getPublicKey())); // 카드사 비밀번호 입력
+            accountMap.put("password", EasyCodefUtil.encryptRSA("*As89117465", codef.getPublicKey())); // 카드사 비밀번호 입력
         } catch (Exception e) {
             e.printStackTrace();
             return;
@@ -172,8 +172,8 @@ public class CodefController {
             objectMapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
 
             String dataArrayJson = objectMapper.readTree(result).get("data").toString();
-            List<TransDTO> transactionDTOList = objectMapper.readValue(dataArrayJson,
-                    new TypeReference<List<TransDTO>>() {
+            List<MonthlyTransDTO> transactionDTOList = objectMapper.readValue(dataArrayJson,
+                    new TypeReference<List<MonthlyTransDTO>>() {
                     });
 
             Map<String, Map<String, Integer>> groupedData = transactionDTOList.parallelStream()

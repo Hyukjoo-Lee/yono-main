@@ -21,7 +21,7 @@ public class UserCardDAOImpl implements UserCardDAO {
 
     @Override
     public boolean existsByUserCardNum(String userCardNum) {
-        return existsByUserCardNum(userCardNum);
+        return userCardRepository.existsByUserCardNum(userCardNum);
     }
 
     @Override
@@ -36,7 +36,22 @@ public class UserCardDAOImpl implements UserCardDAO {
     }
 
     @Override
+    public void setPrimaryCard(int userCardId) {
+        userCardRepository.setPrimaryCard(userCardId);
+    }
+
+    @Override
     public UserCardEntity findByUserNumAndPrimaryCard(UserEntity userEntity, int primaryCard) {
         return userCardRepository.findByUserEntityAndPrimaryCard(userEntity, primaryCard);
     }
+
+    @Override
+    public UserCardEntity findByUserCardId(int userCardId) {
+        return userCardRepository.findByUserCardId(userCardId);
+    }
+
+    // @Override
+    // public void updateAllByUserNumAndOrganization(int userNum, String organization, String companyId, String companyPwd, String connectedId) {
+    //     userCardRepository.updateAllByUserNumAndOrganization(userNum, organization, companyId, companyPwd, connectedId);
+    // }
 }
