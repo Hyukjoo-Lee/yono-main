@@ -95,38 +95,36 @@ const DailyStatistics = () => {
   const [dynamicHeight, setDynamicHeight] = useState(541); // 기본 높이 설정
   const calendarRef = useRef(null);
 
+  const fetchStatistics = async () => {
+    setIsLoading(true);
+    try {
+      const data = await fetchDailyStatistics(); // API 호출
+      setStatistics(data);
+      setFilteredStatistics(data); // 처음음 통계 설정
+    } catch (error) {
+      console.error('Failed to fetch statistics:', error);
+    } finally {
+      setIsLoading(false); // 데이터 로드 완료 후 로딩 상태 false
+    }
+  };
+
+  // 선택한 날짜가 변경되면 데이터 가져오기
   useEffect(() => {
-    const fetchStatistics = async () => {
-      setIsLoading(true);
-      try {
-        const data = await fetchDailyStatistics(); // API 호출
-        setStatistics(data);
-        setFilteredStatistics(data); // 처음음 통계 설정
-      } catch (error) {
-        console.error('Failed to fetch statistics:', error);
-      } finally {
-        setIsLoading(false); // 데이터 로드 완료 후 로딩 상태 false
-      }
-    };
-
     fetchStatistics();
-  }, []);
+  }, [selectedDate]);
 
+  // 동적으로 ListBox 높이 조정
   const adjustHeight = () => {
     if (calendarRef.current) {
       const calendarHeight = calendarRef.current.offsetHeight;
-      setDynamicHeight(calendarHeight); // ListBox 높이를 Calendar 높이에 맞춤
+      setDynamicHeight(calendarHeight);
     }
   };
 
   useEffect(() => {
-    const observer = new ResizeObserver((entries) => {
-      entries.forEach((entry) => {
-        adjustHeight();
-      });
-    });
-
+    const observer = new ResizeObserver(() => adjustHeight());
     const currentRef = calendarRef.current;
+
     if (currentRef) observer.observe(currentRef);
 
     return () => {
