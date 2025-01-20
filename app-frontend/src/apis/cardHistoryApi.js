@@ -5,6 +5,7 @@ export const uploadRecentHistory = async (userNum) => {
     const response = await axios.get('/cardHistory/monthlyUpload', {
       params: { userNum },
     });
+    console.log('response: ' + response.data);
     return response.data;
   } catch (error) {
     if (error.response) {

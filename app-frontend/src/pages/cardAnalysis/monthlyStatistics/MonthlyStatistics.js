@@ -34,8 +34,8 @@ const MonthlyStatistics = () => {
     const fetchUser = async () => {
       try {
         const response = await uploadRecentHistory(userNum);
-        setCardData(response);
-        console.log(response);
+        setCardData(response.data);
+        console.log('response: ' + JSON.stringify(response.data));
       } catch (error) {
         console.error('카드 정보를 불러오는 중 오류 발생:', error);
         setCardData(null);
@@ -45,7 +45,7 @@ const MonthlyStatistics = () => {
     };
 
     if (userNum) {
-      console.log(userNum);
+      console.log('userNum: ' + userNum);
       fetchUser();
     }
   }, [userNum]);
