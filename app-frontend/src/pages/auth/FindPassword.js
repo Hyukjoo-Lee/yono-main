@@ -16,6 +16,7 @@ import {
 } from '../../common/Message';
 import ValidationMessage from '../../common/ValidationMessage';
 import theme from '../../theme/theme';
+import CommonDialog from '../../common/CommonDialog';
 
 const RootIn = styled.div`
   display: flex;
@@ -66,7 +67,7 @@ const EmailValidMessageStyle = styled.p`
 
 const emailValidMessages = [
   '등록되지 않은 아이디이거나\n이름 혹은 이메일이 잘못 입력되었습니다.',
-  '임시비밀번호가 이메일 주소로 발송되었습니다.',
+  '잠시만 기다려주세요.',
 ];
 
 const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
@@ -87,6 +88,7 @@ const FindPassword = () => {
   });
 
   const [isShowMessage, setIsShowMessage] = useState(false);
+  const [isShowDialog, setIsShowDialog] = useState(false);
   const [emailValidMessageIndex, setEmailValidMessageIndex] = useState();
 
   const validateField = (field, value) => {
@@ -123,19 +125,17 @@ const FindPassword = () => {
       formData.userId,
     );
 
-    console.log(response);
-    console.log(response.data);
-
     if (!response || !response.data) {
       setIsShowMessage(true);
       setEmailValidMessageIndex(0);
     } else {
-      setIsShowMessage(false);
+      setIsShowMessage(true);
+      setEmailValidMessageIndex(1);
+
       const tempPwd = await updateTempPwd(formData.email);
       await sendTempPwd(formData.email, tempPwd);
 
-      setIsShowMessage(true);
-      setEmailValidMessageIndex(1);
+      setIsShowDialog(true);
     }
   };
 
@@ -213,6 +213,25 @@ const FindPassword = () => {
             />
           </ButtonContainer>
         </FullContainer>
+        {isShowDialog && (
+          <CommonDialog
+            open={isShowDialog}
+            onClose={() => setIsShowDialog(false)}
+            onClick={() => navigate('/login')}
+            submitText="로그인하기"
+            cancelBtn={true}
+            cancelText="확인"
+            children={
+              <p style={{ textAlign: 'center' }}>
+                임시 비밀번호가{' '}
+                <span style={{ color: theme.color.blue, fontWeight: 'bold' }}>
+                  {formData.email}
+                </span>
+                로 발송되었습니다.
+              </p>
+            }
+          />
+        )}
       </RootIn>
     </CommonRoot>
   );

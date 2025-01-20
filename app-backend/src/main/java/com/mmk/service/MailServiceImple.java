@@ -79,9 +79,12 @@ public class MailServiceImple implements MailService {
         message.setFrom(senderEmail);
         message.setRecipients(MimeMessage.RecipientType.TO, email);
         message.setSubject("YONO 임시 비밀번호");
+
+        String loginPage = "http://localhost:3000/login";
         String body = "";
         body += "<h3>YONO 임시 비밀번호입니다.</h3>";
         body += "<h1>" + tempPwd + "</h1>";
+        body += "<a href=" + loginPage + ">로그인하기</a>";
         message.setText(body, "UTF-8", "html");
 
         return message;

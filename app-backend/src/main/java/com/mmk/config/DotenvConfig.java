@@ -26,6 +26,4 @@ public class DotenvConfig {
             throw new RuntimeException(".env 파일 경로 에러", e);
         }
     }
-
-    
 }

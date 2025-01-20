@@ -1,21 +1,26 @@
 package com.mmk.entity;
 
 import java.sql.Timestamp;
+import java.util.ArrayList;
+import java.util.List;
 
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.OneToMany;
 import jakarta.persistence.SequenceGenerator;
 import jakarta.persistence.Table;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
 
+// 카드 마스터 엔터티: 특정 카드 종류에 대한 공통 정보
 @Setter
 @Getter
 @ToString
@@ -27,32 +32,35 @@ public class CardEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "card_seq_generator")
     @Column(name = "card_id")
-    private int cardId;
+    private int cardId; // 카드 ID (기본 키)
 
-    @Column(name = "card_num")
-    private String cardNum;
+    // 카드 이름
+    @Column(name = "card_title", nullable = false, unique = true)
+    private String cardTitle;
 
-    @Column(name = "card_name_en")
-    private String cardNameEn;
-
-    @Column(name = "card_provider")
+    // 카드 회사
+    @Column(name = "card_provider", nullable = false)
     private String cardProvider;
 
-    @Column(name = "card_img_url")
+    // 기관 코드
+    @Column(name = "organization_code")
+    private String organizationCode;
+
+    // 카드 이미지 URL
+    @Column(name = "card_img_url", nullable = true)
     private String cardImgUrl;
-
-    @Column(name = "is_primary")
-    private int isPrimary;
-
-    @Column(name = "expiry_date")
-    private String expiryDate;
-
-    @Column(name = "user_num")
-    private int userNum;
 
     @CreationTimestamp
     private Timestamp createdAt;
 
     @UpdateTimestamp
     private Timestamp updatedAt;
+
+    // UserCardEntity 와의 관계
+    @OneToMany(mappedBy = "cardEntity", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<UserCardEntity> userCards = new ArrayList<>();
+
+    // CardBenefitEntity 와의 관계
+    @OneToMany(mappedBy = "cardEntity", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<CardBenefitEntity> cardBenefits = new ArrayList<>();
 }

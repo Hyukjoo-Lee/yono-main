@@ -5,7 +5,7 @@ import CardRecTab from './CardRecTab';
 import styled from 'styled-components';
 
 import CommonRoot from '../../common/CommonRoot';
-import { getUserCards } from '../../apis/cardApi';
+import { saveCodefCard } from '../../apis/cardApi';
 
 const RootIn = styled.div`
   width: ${(props) => props.theme.display.lg};
@@ -15,18 +15,17 @@ const RootIn = styled.div`
 
 export function MyCard() {
   const [selectedTab, setSelectedTab] = useState(0);
-  const [cardList, setCardList] = useState([]);
-
   const items = [{ text: '카드 등록' }, { text: '카드 추천' }];
 
+  // Codef 에서 실제 가지고 보유하고 있는 카드리스트 + 혜택 정보 저장
+  // organization, userNum
   useEffect(() => {
     const fetchCardListData = async () => {
       try {
-        const cardList = await getUserCards();
-        setCardList(cardList);
+        const response = await saveCodefCard();
+        console.log('DB 저장 완료: ' + response);
       } catch (error) {
-        console.error('유저 정보를 불러오는 중 오류 발생:', error);
-        setCardList(null);
+        console.error('카드 정보를 불러오는 중 오류 발생:', error);
       }
     };
 
@@ -35,7 +34,6 @@ export function MyCard() {
 
   const panels = [<CardRegTab />, <CardRecTab />];
 
-  console.log('cardList: ' + cardList);
   return (
     <CommonRoot>
       <RootIn>

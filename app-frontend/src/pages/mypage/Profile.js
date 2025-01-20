@@ -57,6 +57,7 @@ const ProfileButton = styled.button`
 `;
 
 const Profile = ({ profileImage, onProfileChange, isEditing }) => {
+  console.log(`${process.env.REACT_APP_API_URL}${profileImage}`);
   return (
     <ProfileContainer>
       <ProfileImage>
