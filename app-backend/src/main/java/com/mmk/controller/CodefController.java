@@ -17,7 +17,6 @@ import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.mmk.dto.MonthlySummary;
-import com.mmk.dto.MonthlyTransDTO;
 
 import io.codef.api.EasyCodef;
 import io.codef.api.EasyCodefServiceType;
@@ -124,29 +123,29 @@ public class CodefController {
         return parameterMap;
     }
 
-    // 카드 사용 내역
-    @GetMapping("getCardHistory")
-    public CompletableFuture<List<MonthlySummary>> getCardHistory() {
-        String productUrl = "/v1/kr/card/p/account/approval-list";
+    // // 카드 사용 내역
+    // @GetMapping("getCardHistory")
+    // public CompletableFuture<List<MonthlySummary>> getCardHistory() {
+    //     String productUrl = "/v1/kr/card/p/account/approval-list";
 
-        codef = new EasyCodef();
-        codef.setClientInfoForDemo(clientId, clientSecret);
-        codef.setPublicKey(publickey);
+    //     codef = new EasyCodef();
+    //     codef.setClientInfoForDemo(clientId, clientSecret);
+    //     codef.setPublicKey(publickey);
 
-        HashMap<String, Object> parameterMap = getCardHistoryParameterMap();
+    //     HashMap<String, Object> parameterMap = getCardHistoryParameterMap();
 
-        return CompletableFuture.supplyAsync(() -> {
-            try {
-                return codef.requestProduct(productUrl, EasyCodefServiceType.DEMO, parameterMap);
-            } catch (Exception e) {
-                throw new RuntimeException(e);
-            }
-        }).thenApply(result -> getCardHistoryprocessResult(result))
-                .exceptionally(e -> {
-                    e.printStackTrace();
-                    return Collections.emptyList();
-                });
-    }
+    //     return CompletableFuture.supplyAsync(() -> {
+    //         try {
+    //             return codef.requestProduct(productUrl, EasyCodefServiceType.DEMO, parameterMap);
+    //         } catch (Exception e) {
+    //             throw new RuntimeException(e);
+    //         }
+    //     }).thenApply(result -> getCardHistoryprocessResult(result))
+    //             .exceptionally(e -> {
+    //                 e.printStackTrace();
+    //                 return Collections.emptyList();
+    //             });
+    // }
 
     private HashMap<String, Object> getCardHistoryParameterMap() {
         HashMap<String, Object> parameterMap = new HashMap<>();
@@ -166,38 +165,38 @@ public class CodefController {
         return parameterMap;
     }
 
-    private List<MonthlySummary> getCardHistoryprocessResult(String result) {
-        try {
-            ObjectMapper objectMapper = new ObjectMapper();
-            objectMapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
+    // private List<MonthlySummary> getCardHistoryprocessResult(String result) {
+    //     try {
+    //         ObjectMapper objectMapper = new ObjectMapper();
+    //         objectMapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
 
-            String dataArrayJson = objectMapper.readTree(result).get("data").toString();
-            List<MonthlyTransDTO> transactionDTOList = objectMapper.readValue(dataArrayJson,
-                    new TypeReference<List<MonthlyTransDTO>>() {
-                    });
+    //         String dataArrayJson = objectMapper.readTree(result).get("data").toString();
+    //         List<MonthlyTransDTO> transactionDTOList = objectMapper.readValue(dataArrayJson,
+    //                 new TypeReference<List<MonthlyTransDTO>>() {
+    //                 });
 
-            Map<String, Map<String, Integer>> groupedData = transactionDTOList.parallelStream()
-                    .collect(Collectors.groupingBy(
-                            card -> card.getUsedDate().substring(0, 6),
-                            Collectors.groupingBy(
-                                    card -> (card.getStoreType() != null && !card.getStoreType().isEmpty())
-                                            ? card.getStoreType()
-                                            : "기타",
-                                    Collectors.summingInt(card -> Integer.parseInt(card.getUsedAmount())))));
+    //         Map<String, Map<String, Integer>> groupedData = transactionDTOList.parallelStream()
+    //                 .collect(Collectors.groupingBy(
+    //                         card -> card.getUsedDate().substring(0, 6),
+    //                         Collectors.groupingBy(
+    //                                 card -> (card.getStoreType() != null && !card.getStoreType().isEmpty())
+    //                                         ? card.getStoreType()
+    //                                         : "기타",
+    //                                 Collectors.summingInt(card -> Integer.parseInt(card.getUsedAmount())))));
 
-            return groupedData.entrySet().stream()
-                    .map(entry -> {
-                        MonthlySummary summary = new MonthlySummary();
-                        summary.setMonth(entry.getKey().substring(4) + "월");
-                        summary.setCategoryTotals(entry.getValue());
-                        return summary;
-                    })
-                    .collect(Collectors.toList());
-        } catch (Exception e) {
-            e.printStackTrace();
-            return Collections.emptyList();
-        }
-    }
+    //         return groupedData.entrySet().stream()
+    //                 .map(entry -> {
+    //                     MonthlySummary summary = new MonthlySummary();
+    //                     summary.setMonth(entry.getKey().substring(4) + "월");
+    //                     summary.setCategoryTotals(entry.getValue());
+    //                     return summary;
+    //                 })
+    //                 .collect(Collectors.toList());
+    //     } catch (Exception e) {
+    //         e.printStackTrace();
+    //         return Collections.emptyList();
+    //     }
+    // }
 
     @GetMapping("/getUserCardList")
     public List<Map<String, Object>> getUserCardList() {
@@ -205,9 +204,9 @@ public class CodefController {
         codef.setClientInfoForDemo(clientId, clientSecret);
         codef.setPublicKey(publickey);
         HashMap<String, Object> parameterMap = new HashMap<>();
-        parameterMap.put("connectedId", connectedId);
-        parameterMap.put("organization", "0304"); // 기관 코드
-        parameterMap.put("inquiryType", "0"); // 카드 이미지 포함 여부
+        parameterMap.put("connectedId", "f-mNqxOG409a7IcpOsh6L7");
+        parameterMap.put("organization", "0302"); // 기관 코드
+        parameterMap.put("inquiryType", "1"); // 카드 이미지 포함 여부
         String productUrl = "/v1/kr/card/p/account/card-list"; // 보유 카드 URL
 
         try {

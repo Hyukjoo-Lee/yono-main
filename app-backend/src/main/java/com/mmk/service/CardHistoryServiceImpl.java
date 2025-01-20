@@ -2,7 +2,11 @@ package com.mmk.service;
 
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
+import java.util.Map;
+import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -14,6 +18,7 @@ import com.mmk.dao.CardHistoryDAO;
 import com.mmk.dao.UserCardDAO;
 import com.mmk.dao.UserDAO;
 import com.mmk.dto.CardHistoryDTO;
+import com.mmk.dto.MonthlySummary;
 import com.mmk.entity.CardHistoryEntity;
 import com.mmk.entity.UserCardEntity;
 import com.mmk.entity.UserEntity;
@@ -32,6 +37,28 @@ public class CardHistoryServiceImpl implements CardHistoryService {
 
     @Autowired
     CodefService codefService;
+
+    // DB에 있는 최근 3개월 카드내역 불러오기 
+    public List<CardHistoryDTO> uploadCardHistory(int userNum) {
+
+        LocalDate today = LocalDate.now();
+        LocalDate twoMonthsAgoFirstDay = today.minusMonths(2).withDayOfMonth(1);
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyyMMdd");
+        String startDate = twoMonthsAgoFirstDay.format(formatter);
+
+        UserEntity userEntity = userDAO.getUserByUserNum(userNum);
+        UserCardEntity userCardEntity = userCardDAO.findByUserNumAndPrimaryCard(userEntity, 1);
+        int userCardId = userCardEntity.getUserCardId();
+
+        List<CardHistoryEntity> entity = cardHistoryDAO.findRecentHistory(userCardId, startDate);
+        List<CardHistoryDTO> result = new ArrayList<>();
+
+        for (CardHistoryEntity cardHistoryEntity : entity) {
+            result.add(toDTO(cardHistoryEntity));
+        }
+
+        return result;
+    }
 
     // 카드내역 DB에 갱신
     @Override
@@ -53,8 +80,6 @@ public class CardHistoryServiceImpl implements CardHistoryService {
             startDate = recentDate;
         }
 
-        System.out.println(startDate);
-
         String result = codefService.getCardHistory(userCardEntity, startDate, endDate);
 
         try {
@@ -70,6 +95,44 @@ public class CardHistoryServiceImpl implements CardHistoryService {
             }
         } catch (Exception e) {
             e.printStackTrace();
+        }
+    }
+
+    // 월별통계 - DB에 있는 최근 3개월 카드내역 불러오기
+    @Override
+    public List<MonthlySummary> uploadMonthlyHistory(int userNum) {
+
+        List<CardHistoryDTO> data = uploadCardHistory(userNum);
+        List<MonthlySummary> result = monthlyHistoryProcess(data);
+        return result;
+    }
+
+    // 월별통계 - DB 에서 불러온 내용 가공
+    private List<MonthlySummary> monthlyHistoryProcess(List<CardHistoryDTO> cardHistoryDTOList) {
+        try {
+            Map<String, Map<String, Integer>> groupedData = cardHistoryDTOList.parallelStream()
+                .collect(Collectors.groupingBy(
+                    card -> card.getResUsedDate().substring(0, 6),
+                    Collectors.groupingBy(
+                        card -> (card.getResMemberStoreType() != null && !card.getResMemberStoreType().isEmpty())
+                            ? card.getResMemberStoreType()
+                            : "기타",
+                        Collectors.summingInt(card -> Integer.parseInt(card.getResUsedAmount()))
+                    )
+                ));
+    
+            return groupedData.entrySet().stream()
+                .map(entry -> {
+                    MonthlySummary summary = new MonthlySummary();
+                    summary.setMonth(entry.getKey().substring(4) + "월");
+                    summary.setCategoryTotals(entry.getValue());
+                    return summary;
+                })
+                .collect(Collectors.toList());
+    
+        } catch (Exception e) {
+            e.printStackTrace();
+            return Collections.emptyList();
         }
     }
     

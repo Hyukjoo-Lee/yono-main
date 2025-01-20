@@ -21,7 +21,6 @@ import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.mmk.dto.CardSummaryDTO;
 import com.mmk.dto.MonthlySummary;
-import com.mmk.dto.MonthlyTransDTO;
 import com.mmk.entity.UserCardEntity;
 
 import io.codef.api.EasyCodef;
@@ -89,7 +88,6 @@ public class CodefServiceImpl implements CodefService {
         return parameterMap;
     }
 
-
     // 카드 월별 사용 내역
     // private static final ExecutorService executor = Executors.newFixedThreadPool(10);
 
@@ -126,6 +124,7 @@ public class CodefServiceImpl implements CodefService {
     //     });
     // }
 
+    // 지정한 기간 동안의 카드 사용 내역 불러오기
     public String getCardHistory(UserCardEntity userCardEntity, String startDate, String endDate) {
         long startTime = System.nanoTime();
         String productUrl = "/v1/kr/card/p/account/approval-list";
@@ -172,36 +171,36 @@ public class CodefServiceImpl implements CodefService {
         return parameterMap;
     }
 
-    private List<MonthlySummary> getCardHistoryprocessResult(String result) {
-        try {
-            ObjectMapper objectMapper = new ObjectMapper();
-            objectMapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
+    // private List<MonthlySummary> getCardHistoryprocessResult(String result) {
+    //     try {
+    //         ObjectMapper objectMapper = new ObjectMapper();
+    //         objectMapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
     
-            String dataArrayJson = objectMapper.readTree(result).get("data").toString();
-            List<MonthlyTransDTO> transactionDTOList = objectMapper.readValue(dataArrayJson, new TypeReference<List<MonthlyTransDTO>>() {});
+    //         String dataArrayJson = objectMapper.readTree(result).get("data").toString();
+    //         List<MonthlyTransDTO> transactionDTOList = objectMapper.readValue(dataArrayJson, new TypeReference<List<MonthlyTransDTO>>() {});
     
-            Map<String, Map<String, Integer>> groupedData = transactionDTOList.stream()
-                .map(card -> new CardSummaryDTO(
-                    card.getUsedDate().substring(0, 6),
-                    (card.getStoreType() != null && !card.getStoreType().isEmpty()) ? card.getStoreType() : "기타",
-                    Integer.parseInt(card.getUsedAmount())
-                ))
-                .collect(Collectors.groupingBy(
-                    CardSummaryDTO::getMonth,
-                    Collectors.groupingBy(
-                        CardSummaryDTO::getStoreType,
-                        Collectors.summingInt(CardSummaryDTO::getUsedAmount)
-                    )
-                ));
-            return groupedData.entrySet().stream()
-                .map(entry -> new MonthlySummary(
-                    entry.getKey().substring(4) + "월",
-                    entry.getValue()
-                ))
-                .collect(Collectors.toList());
-        } catch (Exception e) {
-            System.err.println("Error processing card history: " + e.getMessage());
-            return Collections.emptyList();
-        }
-    }
+    //         Map<String, Map<String, Integer>> groupedData = transactionDTOList.stream()
+    //             .map(card -> new CardSummaryDTO(
+    //                 card.getUsedDate().substring(0, 6),
+    //                 (card.getStoreType() != null && !card.getStoreType().isEmpty()) ? card.getStoreType() : "기타",
+    //                 Integer.parseInt(card.getUsedAmount())
+    //             ))
+    //             .collect(Collectors.groupingBy(
+    //                 CardSummaryDTO::getMonth,
+    //                 Collectors.groupingBy(
+    //                     CardSummaryDTO::getStoreType,
+    //                     Collectors.summingInt(CardSummaryDTO::getUsedAmount)
+    //                 )
+    //             ));
+    //         return groupedData.entrySet().stream()
+    //             .map(entry -> new MonthlySummary(
+    //                 entry.getKey().substring(4) + "월",
+    //                 entry.getValue()
+    //             ))
+    //             .collect(Collectors.toList());
+    //     } catch (Exception e) {
+    //         System.err.println("Error processing card history: " + e.getMessage());
+    //         return Collections.emptyList();
+    //     }
+    // }
 }
