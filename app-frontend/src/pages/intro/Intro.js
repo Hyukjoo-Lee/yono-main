@@ -3,13 +3,16 @@ import styled from 'styled-components';
 import IntroGIF from '../../assets/images/main.gif';
 import CommonRoot from '../../common/CommonRoot';
 
-const Root = styled.div`
+const Root = styled.div.withConfig({
+  shouldForwardProp: (prop) => prop !== 'currentPage',
+})`
   width: 100%;
-  height: 100vh;
+  height: calc(100vh - ${({ theme }) => theme.headerHeight});
   overflow: hidden;
-  background-color: ${({ currentPage }) =>
-    currentPage % 2 === 0 ? 'white' : '#EFF3FD'};
 `;
+
+// background-color: ${({ $currentPage }) =>
+//   $currentPage % 2 === 0 ? 'white' : '#EFF3FD'};
 
 const PagesWrapper = styled.div`
   display: flex;
@@ -98,9 +101,10 @@ export function Intro() {
   }, [handleScroll]);
 
   return (
-    <Root currentPage={currentPage}>
+    <Root>
+      {/* currentPage={currentPage} */}
       <CommonRoot>
-        <PagesWrapper currentPage={currentPage}>
+        <PagesWrapper>
           {/* 첫 번째 페이지 */}
           <Page>
             <ContentWrap>
