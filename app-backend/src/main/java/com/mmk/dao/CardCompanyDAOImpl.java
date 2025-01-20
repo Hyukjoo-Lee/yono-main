@@ -7,7 +7,7 @@ import com.mmk.entity.CardCompanyEntity;
 
 @Repository
 public class CardCompanyDAOImpl implements CardCompanyDAO {
-    
+
     @Autowired
     private CardCompanyRepository cardCompanyRepository;
 

@@ -1,14 +1,13 @@
 package com.mmk.service;
 
-import java.util.List;
-import java.util.NoSuchElementException;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.mmk.dao.CardBenefitDAO;
+import com.mmk.dao.CardDAO;
 import com.mmk.dto.CardBenefitDTO;
 import com.mmk.entity.CardBenefitEntity;
+import com.mmk.entity.CardEntity;
 
 @Service
 public class CardBenefitServiceImpl implements CardBenefitService {
@@ -16,49 +15,32 @@ public class CardBenefitServiceImpl implements CardBenefitService {
     @Autowired
     private CardBenefitDAO cardBenefitDAO;
 
+    @Autowired
+    private CardDAO cardDAO;
+
     @Override
     public CardBenefitDTO createCardBenefit(CardBenefitDTO cardBenefitDTO) {
-        CardBenefitEntity cardBenefitEntity = toEntity(cardBenefitDTO);
+        CardEntity cardEntity = cardDAO.findByCardTitle(cardBenefitDTO.getCardTitle());
+
+        if (cardEntity == null) {
+            throw new RuntimeException("카드 정보를 찾을 수 없습니다: " + cardBenefitDTO.getCardTitle());
+        }
+
+        CardBenefitEntity cardBenefitEntity = toEntity(cardBenefitDTO, cardEntity);
+        System.out.println("cardBenefitEntity: " + cardBenefitEntity);
         cardBenefitDAO.createCardBenefit(cardBenefitEntity);
+
         return toDTO(cardBenefitEntity);
     }
 
-    // @Override
-    // public List<CardBenefitDTO> getCardBenefitsByCardId(int cardId) {
-    // List<CardBenefitEntity> benefitEntities =
-    // cardBenefitDAO.getCardBenefitByCardId(cardId);
-    // if (benefitEntities.isEmpty()) {
-    // throw new NoSuchElementException("해당 카드 ID에 대한 혜택이 존재하지 않습니다.");
-    // }
-    // return
-    // benefitEntities.stream().map(this::toDTO).collect(Collectors.toList());
-    // }
-
-    // @Override
-    // public List<CardBenefitDTO> getCardBenefitsByCardTitle(String cardTitle) {
-    // List<CardBenefitEntity> benefitEntities =
-    // cardBenefitDAO.getCardBenefitByCardTitle(cardTitle);
-    // if (benefitEntities.isEmpty()) {
-    // throw new NoSuchElementException("해당 카드 이름에 대한 혜택이 존재하지 않습니다.");
-    // }
-    // return
-    // benefitEntities.stream().map(this::toDTO).collect(Collectors.toList());
-    // }
-
-    @Override
-    public CardBenefitDTO getCardBenefitByBenefitId(int benefitId) {
-        CardBenefitEntity benefitEntity = cardBenefitDAO.getCardBenefitByBenefitId(benefitId);
-        if (benefitEntity == null) {
-            throw new NoSuchElementException("해당 혜택 ID에 대한 혜택이 존재하지 않습니다.");
-        }
-        return toDTO(benefitEntity);
-    }
-
-    private CardBenefitEntity toEntity(CardBenefitDTO dto) {
+    private CardBenefitEntity toEntity(CardBenefitDTO dto, CardEntity cardEntity) {
         CardBenefitEntity entity = new CardBenefitEntity();
         entity.setBenefitId(dto.getBenefitId());
         entity.setBenefitTitle(dto.getBenefitTitle());
         entity.setBusinessTypes(dto.getBusinessTypes());
+        entity.setCreatedAt(dto.getCreatedAt());
+        entity.setUpdatedAt(dto.getUpdatedAt());
+        entity.setCardEntity(cardEntity);
         return entity;
     }
 
@@ -67,19 +49,9 @@ public class CardBenefitServiceImpl implements CardBenefitService {
         dto.setBenefitId(entity.getBenefitId());
         dto.setBenefitTitle(entity.getBenefitTitle());
         dto.setBusinessTypes(entity.getBusinessTypes());
+        dto.setCreatedAt(entity.getCreatedAt());
+        dto.setUpdatedAt(entity.getUpdatedAt());
+        dto.setCardTitle(entity.getCardEntity().getCardTitle());
         return dto;
     }
-
-    @Override
-    public List<CardBenefitDTO> getCardBenefitByCardId(int cardId) {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'getCardBenefitByCardId'");
-    }
-
-    @Override
-    public List<CardBenefitDTO> getCardBenefitByCardTitle(String cardTitle) {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'getCardBenefitByCardTitle'");
-    }
-
 }
