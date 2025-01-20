@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
 import com.mmk.entity.UserCardEntity;
+import com.mmk.entity.UserEntity;
 
 @Repository
 public class UserCardDAOImpl implements UserCardDAO {
@@ -18,16 +19,9 @@ public class UserCardDAOImpl implements UserCardDAO {
         userCardRepository.save(userCardEntity);
     }
 
-    // @Override
-    // public UserCardEntity findByUserCardEntityUserId(int userId) {
-    // UserCardEntity userCardEntity =
-    // userCardRepository.findByUserEntityUserId(userId);
-    // return userCardEntity;
-    // }
-
     @Override
     public boolean existsByUserCardNum(String userCardNum) {
-        return existsByUserCardNum(userCardNum);
+        return userCardRepository.existsByUserCardNum(userCardNum);
     }
 
     @Override
@@ -35,4 +29,29 @@ public class UserCardDAOImpl implements UserCardDAO {
         return null;
         // 구현중
     }
+
+    @Override
+    public void removePrimaryCardAll(int userNum) {
+        userCardRepository.removePrimaryCardAll(userNum);
+    }
+
+    @Override
+    public void setPrimaryCard(int userCardId) {
+        userCardRepository.setPrimaryCard(userCardId);
+    }
+
+    @Override
+    public UserCardEntity findByUserNumAndPrimaryCard(UserEntity userEntity, int primaryCard) {
+        return userCardRepository.findByUserEntityAndPrimaryCard(userEntity, primaryCard);
+    }
+
+    @Override
+    public UserCardEntity findByUserCardId(int userCardId) {
+        return userCardRepository.findByUserCardId(userCardId);
+    }
+
+    // @Override
+    // public void updateAllByUserNumAndOrganization(int userNum, String organization, String companyId, String companyPwd, String connectedId) {
+    //     userCardRepository.updateAllByUserNumAndOrganization(userNum, organization, companyId, companyPwd, connectedId);
+    // }
 }

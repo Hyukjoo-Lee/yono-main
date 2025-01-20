@@ -3,6 +3,7 @@ package com.mmk.dao;
 import java.util.List;
 
 import com.mmk.entity.UserCardEntity;
+import com.mmk.entity.UserEntity;
 
 public interface UserCardDAO {
     void registerCard(UserCardEntity userCardEntity);
@@ -11,4 +12,14 @@ public interface UserCardDAO {
     boolean existsByUserCardNum(String userCardNum);
 
     List<UserCardEntity> findUserCardEntityByUserId(int userId);
+
+    void removePrimaryCardAll(int userNum);
+
+    void setPrimaryCard(int userCardId);
+
+    UserCardEntity findByUserNumAndPrimaryCard(UserEntity userEntity, int primaryCard);
+
+    UserCardEntity findByUserCardId(int userCardId);
+
+    // void updateAllByUserNumAndOrganization(int userNum, String organization, String companyId, String companyPwd, String connectedId);
 }

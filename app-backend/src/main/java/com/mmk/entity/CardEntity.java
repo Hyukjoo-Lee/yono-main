@@ -31,7 +31,7 @@ public class CardEntity {
     private int cardId; // 카드 ID (기본 키)
 
     // 카드 이름
-    @Column(name = "card_title", nullable = false)
+    @Column(name = "card_title", nullable = false, unique = true)
     private String cardTitle;
 
     // 카드 회사
@@ -46,13 +46,11 @@ public class CardEntity {
     @Column(name = "card_img_url", nullable = true)
     private String cardImgUrl;
 
-    // 카드 설명
-    @Column(name = "card_desc", nullable = true)
-    private String cardDesc;
-
     @CreationTimestamp
+    @Column(name = "created_at")
     private Timestamp createdAt;
 
     @UpdateTimestamp
+    @Column(name = "updated_at")
     private Timestamp updatedAt;
 }

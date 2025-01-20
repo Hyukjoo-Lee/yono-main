@@ -45,6 +45,17 @@ public class CardServiceImpl implements CardService {
         return cardDTOs;
     }
 
+    @Override
+    public CardEntity getByTitle(String title) {
+        CardEntity cardEntity = cardDAO.findByCardTitle(title);
+
+        if (cardEntity == null) {
+            throw new IllegalArgumentException("존재 하지 않는 카드이름입니다.");
+        }
+
+        return cardEntity;
+    }
+
     private CardEntity toEntity(CardDTO dto) {
         CardEntity entity = new CardEntity();
         entity.setCardId(dto.getCardId());
@@ -52,7 +63,6 @@ public class CardServiceImpl implements CardService {
         entity.setCardProvider(dto.getCardProvider());
         entity.setOrganizationCode(dto.getOrganizationCode());
         entity.setCardImgUrl(dto.getCardImgUrl());
-        entity.setCardDesc(dto.getCardDesc());
         entity.setCreatedAt(dto.getCreatedAt());
         entity.setUpdatedAt(dto.getUpdatedAt());
         return entity;
@@ -65,7 +75,6 @@ public class CardServiceImpl implements CardService {
         dto.setCardProvider(entity.getCardProvider());
         dto.setOrganizationCode(entity.getOrganizationCode());
         dto.setCardImgUrl(entity.getCardImgUrl());
-        dto.setCardDesc(entity.getCardDesc());
         dto.setCreatedAt(entity.getCreatedAt());
         dto.setUpdatedAt(entity.getUpdatedAt());
         return dto;
