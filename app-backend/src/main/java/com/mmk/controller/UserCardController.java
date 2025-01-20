@@ -15,7 +15,6 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.mmk.common.ApiResponse;
-import com.mmk.dto.CardHistoryDTO;
 import com.mmk.dto.MonthlySummary;
 import com.mmk.dto.UserCardDTO;
 import com.mmk.service.UserCardService;
@@ -69,13 +68,6 @@ public class UserCardController {
     @GetMapping("/getCardHistory")
     public CompletableFuture<List<MonthlySummary>> getCardHistory(@RequestParam("userNum") int userNum) {
         return userCardService.getCardHistory(userNum);
-    }
-
-    // 카드내역 DB에 갱신
-    @GetMapping("/updateCardHistory")
-    public void updateCardHistory(@RequestParam("cardHistory") List<CardHistoryDTO> cardHistory) {
-
-        
     }
 
 }

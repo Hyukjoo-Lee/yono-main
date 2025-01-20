@@ -90,10 +90,43 @@ public class CodefServiceImpl implements CodefService {
     }
 
 
-    //카드 월별 사용 내역
-    private static final ExecutorService executor = Executors.newFixedThreadPool(10);
+    // 카드 월별 사용 내역
+    // private static final ExecutorService executor = Executors.newFixedThreadPool(10);
 
-    public CompletableFuture<List<MonthlySummary>> getCardHistory(UserCardEntity userCardEntity) {
+    // public CompletableFuture<List<MonthlySummary>> getCardHistory(UserCardEntity userCardEntity) {
+    //     long startTime = System.nanoTime();
+    //     String productUrl = "/v1/kr/card/p/account/approval-list";
+
+    //     codef = new EasyCodef();
+    //     codef.setClientInfoForDemo(clientId, clientSecret);
+    //     codef.setPublicKey(publickey);
+
+    //     String connectedId = userCardEntity.getCardCompanyEntity().getConnedtedId();
+    //     String organization = userCardEntity.getCardEntity().getOrganizationCode();
+    //     String cardNo = userCardEntity.getUserCardNum();
+    //     String cardPwd = userCardEntity.getCardPwd();
+
+    //     HashMap<String, Object> parameterMap = getCardHistoryParameterMap(connectedId, organization, cardNo, cardPwd);
+
+    //     return CompletableFuture.supplyAsync(() -> {
+    //         try {
+    //             String result = codef.requestProduct(productUrl, EasyCodefServiceType.DEMO, parameterMap);
+    //             long endTime = System.nanoTime();
+    //             System.out.println("CODEF 데이터 호출 소요 시간: " + (endTime - startTime) + "ns");
+    //             System.out.println(result);
+    //             return result;
+    //         } catch (Exception e) {
+    //             throw new RuntimeException(e);
+    //         }
+    //     }, executor)
+    //     .thenApply(result -> getCardHistoryprocessResult(result))
+    //     .exceptionally(e -> {
+    //         e.printStackTrace();
+    //         return Collections.emptyList();
+    //     });
+    // }
+
+    public String getCardHistory(UserCardEntity userCardEntity) {
         long startTime = System.nanoTime();
         String productUrl = "/v1/kr/card/p/account/approval-list";
 
@@ -108,22 +141,15 @@ public class CodefServiceImpl implements CodefService {
 
         HashMap<String, Object> parameterMap = getCardHistoryParameterMap(connectedId, organization, cardNo, cardPwd);
 
-        return CompletableFuture.supplyAsync(() -> {
-            try {
-                String result = codef.requestProduct(productUrl, EasyCodefServiceType.DEMO, parameterMap);
-                long endTime = System.nanoTime();
-                System.out.println("CODEF 데이터 호출 소요 시간: " + (endTime - startTime) + "ns");
-                System.out.println(result);
-                return result;
-            } catch (Exception e) {
-                throw new RuntimeException(e);
-            }
-        }, executor)
-        .thenApply(result -> getCardHistoryprocessResult(result))
-        .exceptionally(e -> {
-            e.printStackTrace();
-            return Collections.emptyList();
-        });
+        try {
+            String result = codef.requestProduct(productUrl, EasyCodefServiceType.DEMO, parameterMap);
+            long endTime = System.nanoTime();
+            System.out.println("CODEF 데이터 호출 소요 시간: " + (endTime - startTime) + "ns");
+            System.out.println(result);
+            return result;
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
     }
 
     private HashMap<String, Object> getCardHistoryParameterMap(String connectedId, String organization, String cardNo, String cardPwd) {

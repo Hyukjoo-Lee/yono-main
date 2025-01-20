@@ -39,6 +39,9 @@ public class UserCardServiceImpl implements UserCardService {
     @Autowired
     private CodefService codefService;
 
+    @Autowired
+    private CardHistoryService cardHistoryService;
+
     // 사용자 카드 등록
     @Override
     public UserCardDTO registerCard(UserCardDTO userCardDTO, String organization, String cardTitle) {
@@ -92,10 +95,11 @@ public class UserCardServiceImpl implements UserCardService {
     // 카드 내역 조회
     @Override
     public CompletableFuture<List<MonthlySummary>> getCardHistory(int userNum) {
-        UserEntity userEntity = userDAO.getUserById(userNum);
-        UserCardEntity userCardEntity = userCardDAO.findByUserNumAndPrimaryCard(userEntity, 1);
-        CompletableFuture<List<MonthlySummary>> result = codefService.getCardHistory(userCardEntity);
-        return result;
+        // UserEntity userEntity = userDAO.getUserByUserNum(userNum);
+        // UserCardEntity userCardEntity = userCardDAO.findByUserNumAndPrimaryCard(userEntity, 1);
+        // CompletableFuture<List<MonthlySummary>> result = codefService.getCardHistory(userCardEntity);
+        // return result;
+        return null;
     }
 
     private UserCardEntity toEntity(UserCardDTO dto) {
@@ -111,7 +115,7 @@ public class UserCardServiceImpl implements UserCardService {
 
         CardCompanyEntity cardCompanyEntity = cardCompanyDAO.findByCardCompanyNum(dto.getCardCompanyNum());
         CardEntity cardEntity = cardDAO.findByCardId(dto.getCardId());
-        UserEntity userEntity = userDAO.getUserById(dto.getUserNum());
+        UserEntity userEntity = userDAO.getUserByUserNum(dto.getUserNum());
 
         entity.setCardCompanyEntity(cardCompanyEntity);
         entity.setCardEntity(cardEntity);

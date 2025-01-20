@@ -37,6 +37,6 @@ public class CardHistoryEntity {
     private String resMemberStoreType; // 가맹점 업종
 
     @ManyToOne
-    @JoinColumn(name = "user_card", nullable = false)
+    @JoinColumn(name = "user_card_Id", nullable = false)
     private UserCardEntity userCardEntity;
 }
