@@ -7,7 +7,7 @@ const StyledMainIntro = styled.div`
   justify-content: space-between;
   align-items: center;
   height: 400px;
-  background-color: #eff3fd;
+  background-color: ${(props) => props.theme.color.lightBlue};
   border-radius: 7px;
   box-shadow: 10px 10px 15px rgba(0, 0, 0, 0.2);
   padding: 0px 60px;
@@ -21,7 +21,7 @@ const StyledTitle = styled.p`
 `;
 
 const StyledSubTitle = styled.p`
-  font-size: 20px;
+  font-size: ${(props) => props.theme.fontSize.md};
   font-weight: 200;
   padding: 15px 0px;
   padding: 0;
@@ -49,7 +49,7 @@ const StyledTextCon = styled.div`
 const StyledButton = styled.div`
   width: 162px;
   height: 48px;
-  background-color: #2357a2;
+  background-color: ${(props) => props.theme.color.blue};
   border-radius: 50px;
   display: flex;
   align-items: center;
@@ -59,7 +59,7 @@ const StyledButton = styled.div`
 const StyledButtonA = styled.a`
   color: white;
   text-decoration: none;
-  font-size: 20px;
+  font-size: ${(props) => props.theme.fontSize.md};
   font-weight: 500;
   display: flex;
   align-items: center;
@@ -70,9 +70,9 @@ const MainIntro = () => {
   return (
     <StyledMainIntro>
       <StyledTextCon>
-        <StyledTitle>Mickle Muckle Launching</StyledTitle>
+        <StyledTitle>YONO New Launching</StyledTitle>
         <StyledSubTitle>
-          <span>미클머클 2024, 새로운 시작!</span>
+          <span>YONO 2025, 새로운 시작!</span>
           <br />
           지혜로운 소비로 더 나은 미래를 준비하세요.
           <br />

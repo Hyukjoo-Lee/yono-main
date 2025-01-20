@@ -2,12 +2,23 @@ package com.mmk.service;
 
 import java.util.List;
 
-import com.mmk.vo.PostsVO;
+
+
+import com.mmk.dto.PostsDTO;
 
 public interface PostsService {
 
-    void save(PostsVO postsData);
+    void save(PostsDTO postsData);
 
-    List<PostsVO> getAllPosts();
-    
+    List<PostsDTO> getAllPosts();
+
+    void deletePostById(String postId);
+
+    PostsDTO findByIdAndViewCnt(int id);
+
+    void updatePost(PostsDTO postsDTO);
+
+   
+
+
 }

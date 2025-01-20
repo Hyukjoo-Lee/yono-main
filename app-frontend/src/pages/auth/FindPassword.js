@@ -1,12 +1,22 @@
 import React, { useState } from 'react';
-import AlarmPw from './AlarmPw';
-import styled from 'styled-components';
-import CustomButton from '../../common/CommonButton';
-import CommonInput from '../../common/CommonInput';
-import CommonRoot from '../../common/CommonRoot';
-import CommonPageInfo from '../../common/CommonPageInfo';
 import { useNavigate } from 'react-router-dom';
+import styled from 'styled-components';
+import { findPwd, updateTempPwd } from '../../apis/userApi';
+import { sendTempPwd } from '../../apis/mailApi';
+import CommonButton from '../../common/CommonButton';
 import CommonHr from '../../common/CommonHr';
+import CommonInput from '../../common/CommonInput';
+import CommonPageInfo from '../../common/CommonPageInfo';
+import CommonRoot from '../../common/CommonRoot';
+import {
+  EMAIL_REGEX_MESSAGE,
+  EMPTY_EMAIL_MESSAGE,
+  EMPTY_NAME_MESSAGE,
+  EMPTY_USERID_MESSAGE,
+} from '../../common/Message';
+import ValidationMessage from '../../common/ValidationMessage';
+import theme from '../../theme/theme';
+import CommonDialog from '../../common/CommonDialog';
 
 const RootIn = styled.div`
   display: flex;
@@ -17,6 +27,7 @@ const RootIn = styled.div`
   margin: 0 auto;
   box-sizing: border-box;
 `;
+
 const FullContainer = styled.div`
   display: flex;
   flex-direction: column;
@@ -28,132 +39,202 @@ const MiddleContainer = styled.div`
   display: flex;
   flex-direction: column;
   justify-content: center;
-  align-items: center;
 `;
-
-// const HiddenBox = styled.div`
-//   display: flex;
-//   margin-left: 58%;
-//   margin-bottom: 2%;
-// `;
-// const ErrorMessage = styled.div`
-//   color: red;
-//   font-size: 13px;
-// `;
 
 const ButtonContainer = styled.div`
   margin-top: 10px;
   display: flex;
-  flex-direction: flex-end;
   justify-content: space-between;
   width: 45%;
 `;
+
 const styleProps = {
   height: '35px',
-  width: '300px',
   background: 'transparent',
   $marginLeft: '7px',
-};
-const ContainerProps = {
-  marginBottom: '3px',
+  color: '#464646',
+  focusBorderWidth: '10px',
+  $borderColor: 'transparent',
+  $focusBorderColor: 'transparent',
 };
 
-export const FindPassword = () => {
-  const find = '비밀번호 찾기';
+const EmailValidMessageStyle = styled.p`
+  color: red;
+  margin: 5px;
+  font-size: 15px;
+  white-space: pre-line;
+`;
+
+const emailValidMessages = [
+  '등록되지 않은 아이디이거나\n이름 혹은 이메일이 잘못 입력되었습니다.',
+  '잠시만 기다려주세요.',
+];
+
+const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+
+const FindPassword = () => {
   const navigate = useNavigate();
 
-  const [isDialogPWVisible, setIsDialogPWVisible] = useState(false);
-  // const [answer, setAnswer] = useState('');
-  // const [selectedQuestion, setSelectedQuestion] = useState('');
-  // const [errorMessage, setErrorMessage] = useState('');
+  const [formData, setFormData] = useState({
+    name: '',
+    userId: '',
+    email: '',
+  });
 
-  const handleConfirm = () => {
-    setIsDialogPWVisible(true);
+  const [formMessage, setFormMessage] = useState({
+    name: '',
+    userId: '',
+    email: '',
+  });
+
+  const [isShowMessage, setIsShowMessage] = useState(false);
+  const [isShowDialog, setIsShowDialog] = useState(false);
+  const [emailValidMessageIndex, setEmailValidMessageIndex] = useState();
+
+  const validateField = (field, value) => {
+    if (!value) {
+      if (field === 'name') return EMPTY_NAME_MESSAGE;
+      if (field === 'userId') return EMPTY_USERID_MESSAGE;
+      if (field === 'email') return EMPTY_EMAIL_MESSAGE;
+    }
+    if (field === 'email' && !emailRegex.test(value)) {
+      return EMAIL_REGEX_MESSAGE;
+    }
+    return '';
   };
-  // const UpdateAnswer = (e) => {
-  //   setAnswer(e.target.value);
-  // };
-  const handleClose = () => {
-    navigate('/Login');
+
+  const validateForm = () => {
+    const errors = {};
+    Object.keys(formData).forEach((field) => {
+      const error = validateField(field, formData[field]);
+      if (error) errors[field] = error;
+    });
+    setFormMessage(errors);
+    return Object.keys(errors).length === 0;
   };
+
+  const handleInputChange = (e, field) => {
+    setFormData((prev) => ({ ...prev, [field]: e.target.value }));
+    setFormMessage((prev) => ({ ...prev, [field]: '' }));
+  };
+
+  const handleSendTempPwd = async () => {
+    const response = await findPwd(
+      formData.name,
+      formData.email,
+      formData.userId,
+    );
+
+    if (!response || !response.data) {
+      setIsShowMessage(true);
+      setEmailValidMessageIndex(0);
+    } else {
+      setIsShowMessage(true);
+      setEmailValidMessageIndex(1);
+
+      const tempPwd = await updateTempPwd(formData.email);
+      await sendTempPwd(formData.email, tempPwd);
+
+      setIsShowDialog(true);
+    }
+  };
+
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    if (!validateForm()) return;
+    handleSendTempPwd();
+  };
+
   return (
     <CommonRoot>
       <RootIn>
         <FullContainer>
-          <CommonPageInfo title={find} text={<p></p>} />
+          <CommonPageInfo title="비밀번호 찾기" />
 
           <MiddleContainer>
             <CommonInput
               text="이름"
-              color="#464646"
               placeholder="이름을 입력하세요"
-              focusBorderWidth="10px"
-              $borderColor="transparent"
-              $focusBorderColor="transparent"
+              width="300px"
+              value={formData.name}
+              onChange={(e) => handleInputChange(e, 'name')}
               {...styleProps}
-              // onChange={onChange}
             />
-            <div style={ContainerProps} />
-
+            {formMessage.name && <ValidationMessage text={formMessage.name} />}
             <CommonHr />
-            <div style={ContainerProps} />
-
-            <CommonInput
-              text="이메일"
-              color="#464646"
-              placeholder="이메일을 입력하세요"
-              focusBorderWidth="10px"
-              $borderColor="transparent"
-              $focusBorderColor="transparent"
-              {...styleProps}
-              // onChange={onChange}
-            />
-            <CommonHr />
-            <div style={ContainerProps} />
 
             <CommonInput
               text="아이디"
-              color="#464646"
               placeholder="아이디를 입력하세요"
-              focusBorderWidth="10px"
-              $borderColor="transparent"
-              $focusBorderColor="transparent"
+              width="300px"
+              value={formData.userId}
+              onChange={(e) => handleInputChange(e, 'userId')}
               {...styleProps}
-              // onChange={onChange}
             />
+            {formMessage.userId && (
+              <ValidationMessage text={formMessage.userId} />
+            )}
+            <CommonHr />
+
+            <CommonInput
+              text="이메일"
+              placeholder="이메일을 입력하세요"
+              width="300px"
+              value={formData.email}
+              onChange={(e) => handleInputChange(e, 'email')}
+              {...styleProps}
+            />
+            {formMessage.email && (
+              <ValidationMessage text={formMessage.email} />
+            )}
             <CommonHr />
           </MiddleContainer>
-          {/* <HiddenBox></HiddenBox> */}
+
+          {isShowMessage && (
+            <EmailValidMessageStyle>
+              {emailValidMessages[emailValidMessageIndex]}
+            </EmailValidMessageStyle>
+          )}
 
           <ButtonContainer>
-            <CustomButton
+            <CommonButton
               text="확인"
               width="50px"
               height="30px"
-              background="#4064E6"
-              color="#ffffff"
-              fontSize="20"
-              onClick={handleConfirm}
+              fontSize={theme.fontSize.sm}
+              onClick={handleSubmit}
             />
-            <CustomButton
+            <CommonButton
               text="취소"
               width="50px"
               height="30px"
-              background="#ffffff"
-              $borderColor="#4064E6"
-              color="#4064E6"
-              hoverBk="#ffffff"
-              fontSize="20"
-              onClick={handleClose}
+              fontSize={theme.fontSize.sm}
+              onClick={() => navigate('/login')}
             />
           </ButtonContainer>
         </FullContainer>
-        <AlarmPw
-          open={isDialogPWVisible}
-          $setIsDialogPWVisible={setIsDialogPWVisible}
-        />
+        {isShowDialog && (
+          <CommonDialog
+            open={isShowDialog}
+            onClose={() => setIsShowDialog(false)}
+            onClick={() => navigate('/login')}
+            submitText="로그인하기"
+            cancelBtn={true}
+            cancelText="확인"
+            children={
+              <p style={{ textAlign: 'center' }}>
+                임시 비밀번호가{' '}
+                <span style={{ color: theme.color.blue, fontWeight: 'bold' }}>
+                  {formData.email}
+                </span>
+                로 발송되었습니다.
+              </p>
+            }
+          />
+        )}
       </RootIn>
     </CommonRoot>
   );
 };
+
 export default FindPassword;

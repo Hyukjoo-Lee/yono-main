@@ -5,27 +5,30 @@ import CommonInput from '../../common/CommonInput';
 import CommonButton from '../../common/CommonButton';
 import CommonHr from '../../common/CommonHr';
 import CommonPageInfo from '../../common/CommonPageInfo';
-import SuccessSignUp from './SuccessSignUp';
-import FailSignUp from './SuccessSignUp';
 
-import SearchAddressModal from './Component/SearchAddressModal';
+import SearchAddressDialog from './modal/SearchAddressDialog';
 
 import { checkUserIdExists, signUpUser } from '../../apis/userApi';
 import {
-  EMAIL_REGEX_ERROR,
-  EMPTY_ADDRESS_ERROR,
-  EMPTY_EMAIL_ERROR,
-  EMPTY_NAME_ERROR,
-  EMPTY_PASSWORD_ERROR,
-  EMPTY_USERID_ERROR,
-  PASSWORD_MISMATCH_ERROR,
-  PASSWORD_REGEX_ERROR,
-  SERVER_ERROR,
+  EMAIL_REGEX_MESSAGE,
+  EMPTY_ADDRESS_MESSAGE,
+  EMPTY_DETAIL_ADDRESS_MESSAGE,
+  EMPTY_EMAIL_MESSAGE,
+  EMPTY_NAME_MESSAGE,
+  EMPTY_PASSWORD_MESSAGE,
+  EMPTY_USERID_MESSAGE,
+  NAME_REGEX_MESSAGE,
+  PASSWORD_MISMATCH_MESSAGE,
+  PASSWORD_REGEX_MESSAGE,
+  SERVER_MESSAGE,
   USERID_AVAILABLE_MESSAGE,
-  USERID_DUPLICATE_ERROR,
-  USERID_REGEX_ERROR,
+  USERID_DUPLICATE_MESSAGE,
+  USERID_REGEX_MESSAGE,
   USERID_VERIFY_PROMPT,
-} from './Component/Message';
+} from '../../common/Message';
+import ValidationMessage from '../../common/ValidationMessage';
+import CommonDialog from '../../common/CommonDialog';
+import { useLocation, useNavigate } from 'react-router-dom';
 import theme from '../../theme/theme';
 
 const FullContainer = styled.div`
@@ -42,116 +45,176 @@ const MiddleContainer = styled.div`
   align-items: flex-start;
 `;
 
-const ErrorMessage = styled.div`
-  color: ${theme.color.red};
-  font-size: 13px;
-`;
-
-const ValidMessage = styled.div`
-  color: ${theme.color.blue};
-  font-size: 13px;
-  margin-left: 10px;
-`;
-
 const ContainerProps = {
   marginBottom: '13px',
 };
 
+const InputUserIdBox = styled.div`
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-end;
+  width: 490px;
+`;
+
+const ButtonWrapper = styled.div`
+  position: relative;
+  margin-left: 15px;
+`;
+
 const InputProps = {
-  width: '350px',
+  width: '380px',
   $borderColor: 'transparent',
   background: 'transparent',
   $focusBorderColor: 'transparent',
   $marginLeft: '10px',
 };
 
-const InputUserIdBox = styled.div`
-  display: flex;
-  flex-direction: row;
-  justify-content: space-between;
-  align-items: flex-end;
-  width: 350px;
-
-  & > *:not(:last-child) {
-    margin-right: 10px;
-  }
-`;
-
-const MessageBox = styled.div`
-  margin-left: 10px;
-`;
-
 const ButtonProps = {
-  width: '73px',
-  height: '37px',
+  width: '75px',
+  height: '40px',
 };
 
-export function SignUp() {
+const FORM_FIELDS = {
+  userId: {
+    placeholder: '아이디를 입력하세요.',
+    text: '아이디',
+    type: 'text',
+    errorMessage: {
+      empty: EMPTY_USERID_MESSAGE,
+      invalid: USERID_REGEX_MESSAGE,
+      duplicate: USERID_DUPLICATE_MESSAGE,
+      available: USERID_AVAILABLE_MESSAGE,
+      verifyPrompt: USERID_VERIFY_PROMPT,
+    },
+  },
+  password: {
+    placeholder: EMPTY_PASSWORD_MESSAGE,
+    text: '비밀번호',
+    type: 'password',
+    errorMessage: {
+      empty: EMPTY_PASSWORD_MESSAGE,
+      invalid: PASSWORD_REGEX_MESSAGE,
+    },
+  },
+  confirmPassword: {
+    placeholder: '비밀번호를 다시 입력하세요.',
+    text: '비밀번호 확인',
+    type: 'password',
+    errorMessage: {
+      mismatch: PASSWORD_MISMATCH_MESSAGE,
+    },
+  },
+  name: {
+    placeholder: EMPTY_NAME_MESSAGE,
+    text: '이름',
+    type: 'text',
+    errorMessage: {
+      empty: EMPTY_NAME_MESSAGE,
+      invalid: NAME_REGEX_MESSAGE,
+    },
+  },
+  email: {
+    placeholder: EMPTY_EMAIL_MESSAGE,
+    text: '이메일',
+    type: 'email',
+    errorMessage: {
+      empty: EMPTY_EMAIL_MESSAGE,
+      invalid: EMAIL_REGEX_MESSAGE,
+    },
+  },
+  address: {
+    placeholder: EMPTY_ADDRESS_MESSAGE,
+    text: '주소',
+    type: 'text',
+    errorMessage: {
+      empty: EMPTY_ADDRESS_MESSAGE,
+    },
+  },
+  detailAddress: {
+    placeholder: EMPTY_DETAIL_ADDRESS_MESSAGE,
+    text: '상세주소',
+    type: 'text',
+    errorMessage: {
+      empty: EMPTY_DETAIL_ADDRESS_MESSAGE,
+    },
+  },
+};
+
+const SignUp = () => {
   const [isSignUpSuccessVisible, setIsSignUpSuccessVisible] = useState(false);
   const [isSignUpFailVisible, setIsSignUpFailVisible] = useState(false);
   const [isAddressModalOpen, setIsAddressModalOpen] = useState(false);
   const [isUserIdValidated, setIsUserIdValidated] = useState(false);
+  const location = useLocation();
+  const userInfo = location.state?.userInfo;
+  const [formData, setFormData] = useState({
+    userId: userInfo?.id || '',
+    password: '',
+    confirmPassword: '',
+    name: '',
+    email: userInfo?.kakao_account.email || '',
+    address: '',
+    detailAddress: '',
+    postcode: '',
+  });
+
+  const [formMessage, setFormMessage] = useState({
+    userId: '',
+    password: '',
+    confirmPassword: '',
+    name: '',
+    email: '',
+    address: '',
+    detailAddress: '',
+  });
 
   const inputRegexs = {
     userId: /^[a-z][a-z0-9]{3,15}$/,
     email: /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/,
     password: /^(?=.*[a-z])(?=.*\d)(?=.*[*@#$%^&+=!]).{8,}$/,
+    name: /^[가-힣]{2,10}$/,
   };
 
-  const [formData, setFormData] = useState({
-    userId: '',
-    password: '',
-    confirmPassword: '',
-    name: '',
-    email: '',
-    address: '',
-  });
-
-  const [alertMessage, setAlertMessage] = useState({
-    userId: '',
-    password: '',
-    confirmPassword: '',
-    name: '',
-    email: '',
-    address: '',
-  });
+  const navigate = useNavigate();
 
   const handleInputChange = (e, field) => {
     setFormData((prev) => ({ ...prev, [field]: e.target.value }));
-    setAlertMessage((prev) => ({ ...prev, [field]: '' }));
+    setFormMessage((prev) => ({ ...prev, [field]: '' }));
   };
 
   const validateForm = () => {
     const errors = {};
 
-    if (!formData.userId) {
-      errors.userId = EMPTY_USERID_ERROR;
-    } else if (!inputRegexs.userId.test(formData.userId)) {
-      errors.userId = USERID_REGEX_ERROR;
+    Object.keys(FORM_FIELDS).forEach((field) => {
+      if (!formData[field]) {
+        errors[field] = FORM_FIELDS[field].errorMessage.empty;
+      } else if (field === 'name' && !inputRegexs.name.test(formData.name)) {
+        errors[field] = FORM_FIELDS.name.errorMessage.invalid;
+      } else if (field === 'email' && !inputRegexs.email.test(formData.email)) {
+        errors[field] = FORM_FIELDS.email.errorMessage.invalid;
+      } else if (
+        field === 'password' &&
+        !inputRegexs.password.test(formData.password)
+      ) {
+        errors[field] = FORM_FIELDS.password.errorMessage.invalid;
+      } else if (
+        field === 'userId' &&
+        !inputRegexs.userId.test(formData.userId)
+      ) {
+        errors[field] = FORM_FIELDS.userId.errorMessage.invalid;
+      }
+    });
+
+    if (formData.password !== formData.confirmPassword) {
+      errors.confirmPassword =
+        FORM_FIELDS.confirmPassword.errorMessage.mismatch;
     }
 
     if (!formData.address) {
-      errors.address = EMPTY_ADDRESS_ERROR;
+      errors.address = FORM_FIELDS.address.errorMessage.empty;
     }
-
-    if (!formData.email) {
-      errors.email = EMPTY_EMAIL_ERROR;
-    } else if (!inputRegexs.email.test(formData.email)) {
-      errors.email = EMAIL_REGEX_ERROR;
-    }
-
-    if (!formData.password) {
-      errors.password = EMPTY_PASSWORD_ERROR;
-    } else if (!inputRegexs.password.test(formData.password)) {
-      errors.password = PASSWORD_REGEX_ERROR;
-    }
-
-    if (formData.password !== formData.confirmPassword) {
-      errors.confirmPassword = PASSWORD_MISMATCH_ERROR;
-    }
-
-    if (!formData.name) {
-      errors.name = EMPTY_NAME_ERROR;
+    if (!formData.detailAddress) {
+      errors.detailAddress = FORM_FIELDS.detailAddress.errorMessage.empty;
     }
 
     return errors;
@@ -160,17 +223,17 @@ export function SignUp() {
   // 아이디 중복 체크 클릭시
   const validateUserId = async () => {
     if (!formData.userId) {
-      setAlertMessage({
-        ...alertMessage,
-        userId: EMPTY_USERID_ERROR,
-      });
+      setFormMessage((prev) => ({
+        ...prev,
+        userId: FORM_FIELDS.userId.errorMessage.empty,
+      }));
       setIsUserIdValidated(false);
       return;
     } else if (!inputRegexs.userId.test(formData.userId)) {
-      setAlertMessage({
-        ...alertMessage,
-        userId: USERID_REGEX_ERROR,
-      });
+      setFormMessage((prev) => ({
+        ...prev,
+        userId: FORM_FIELDS.userId.errorMessage.invalid,
+      }));
       setIsUserIdValidated(false);
       return;
     }
@@ -179,29 +242,30 @@ export function SignUp() {
     try {
       const result = await checkUserIdExists(formData.userId);
       if (result.userIdAvailable) {
-        setAlertMessage({
-          ...alertMessage,
-          userId: USERID_AVAILABLE_MESSAGE,
-        });
+        setFormMessage((prev) => ({
+          ...prev,
+          userId: FORM_FIELDS.userId.errorMessage.available,
+        }));
         setIsUserIdValidated(true);
       } else {
-        setAlertMessage({
-          ...alertMessage,
-          userId: USERID_DUPLICATE_ERROR,
-        });
+        setFormMessage((prev) => ({
+          ...prev,
+          userId: FORM_FIELDS.userId.errorMessage.duplicate,
+        }));
         setIsUserIdValidated(false);
       }
-    } catch (error) {
-      setAlertMessage({
-        ...alertMessage,
-        userId: SERVER_ERROR,
-      });
+    } catch {
+      setFormMessage((prev) => ({
+        ...prev,
+        userId: SERVER_MESSAGE,
+      }));
       setIsUserIdValidated(false);
     }
   };
 
   const handleAddressSelect = (address) => {
     setFormData((prev) => ({ ...prev, address }));
+    setFormMessage((prev) => ({ ...prev, address: '' }));
     setIsAddressModalOpen(false);
   };
 
@@ -213,17 +277,17 @@ export function SignUp() {
   const handleSubmit = async (e) => {
     e.preventDefault();
     const errors = validateForm();
-    setAlertMessage(errors);
+    setFormMessage(errors);
 
     if (Object.keys(errors).length > 0) {
       return;
     }
 
     if (!isUserIdValidated) {
-      setAlertMessage({
-        ...alertMessage,
-        userId: USERID_VERIFY_PROMPT,
-      });
+      setFormMessage((prev) => ({
+        ...prev,
+        userId: FORM_FIELDS.userId.errorMessage.verifyPrompt,
+      }));
       return;
     }
 
@@ -235,19 +299,31 @@ export function SignUp() {
     }
   };
 
-  const renderInputField = (field, placeholder, text, type) => (
+  const completeLogin = () => {
+    setIsSignUpSuccessVisible(false);
+    navigate('/');
+  };
+
+  const closeDialog = () => {
+    setIsSignUpFailVisible(false);
+  };
+
+  const renderInputField = (field) => (
     <>
       <CommonInput
-        placeholder={placeholder}
-        text={text}
-        type={type}
+        placeholder={FORM_FIELDS[field].placeholder}
+        text={FORM_FIELDS[field].text}
+        type={FORM_FIELDS[field].type}
+        value={formData[field]}
         onChange={(e) => handleInputChange(e, field)}
         {...InputProps}
       />
-      {alertMessage[field] && (
-        <MessageBox>
-          <ErrorMessage>{alertMessage[field]}</ErrorMessage>
-        </MessageBox>
+      {formMessage[field] && (
+        <ValidationMessage
+          text={formMessage[field]}
+          type={'error'}
+          $margin="0 10px"
+        />
       )}
       <CommonHr />
       <div style={ContainerProps} />
@@ -263,91 +339,86 @@ export function SignUp() {
             <CommonInput
               placeholder="아이디를 입력하세요."
               text="아이디"
+              value={formData.userId}
+              // readOnly={true}
               onChange={(e) => handleInputChange(e, 'userId')}
               {...InputProps}
             />
-            <div style={{ marginLeft: '5px' }}>
+            <ButtonWrapper>
               <CommonButton
                 {...ButtonProps}
                 text="중복확인"
                 width="100px"
                 onClick={validateUserId}
               />
-            </div>
+            </ButtonWrapper>
           </InputUserIdBox>
-          <MessageBox>
-            {!isUserIdValidated ? (
-              <ErrorMessage>{alertMessage.userId}</ErrorMessage>
-            ) : (
-              <ValidMessage>{alertMessage.userId}</ValidMessage>
-            )}
-          </MessageBox>
+
+          <ValidationMessage
+            text={formMessage.userId}
+            type={isUserIdValidated ? 'success' : 'error'}
+            $margin={'0 10px'}
+          />
           <CommonHr />
+          {renderInputField('password')}
+          {renderInputField('confirmPassword')}
+          {renderInputField('name')}
+          {renderInputField('email')}
           <InputUserIdBox>
             <CommonInput
-              placeholder="주소를 입력하세요."
+              placeholder={FORM_FIELDS['address'].placeholder}
               text="주소"
               value={formData.address}
+              readOnly={true}
               onChange={(e) => handleInputChange(e, 'address')}
               {...InputProps}
             />
-            <div style={{ marginLeft: '5px' }}>
+            <ButtonWrapper>
               <CommonButton
                 {...ButtonProps}
-                text="주소찾기"
+                text="주소검색"
                 width="100px"
+                fontSize={theme.fontSize.base}
                 onClick={() => setIsAddressModalOpen(true)}
               />
-            </div>
+            </ButtonWrapper>
           </InputUserIdBox>
-          <MessageBox>
-            {alertMessage.address ? (
-              <ErrorMessage>{alertMessage.address}</ErrorMessage>
-            ) : (
-              <ValidMessage>{alertMessage.address}</ValidMessage>
-            )}
-          </MessageBox>
+          {formMessage['address'] && (
+            <ValidationMessage
+              text={formMessage['address']}
+              type={'error'}
+              $margin="0 10px"
+            />
+          )}
           <CommonHr />
-
-          {renderInputField(
-            'password',
-            '비밀번호를 입력하세요',
-            '비밀번호',
-            'password',
-          )}
-          {renderInputField(
-            'confirmPassword',
-            '비밀번호를 입력하세요',
-            '비밀번호 확인',
-            'password',
-          )}
-          {renderInputField('name', '이름을 입력하세요', '이름')}
-          {renderInputField('email', '이메일을 입력하세요', '이메일')}
+          <div style={ContainerProps} />
+          {renderInputField('detailAddress')}
+          <div style={{ marginBottom: '15px' }}></div>
         </MiddleContainer>
-
-        <div style={{ marginTop: '5px' }}>
-          <CommonButton
-            {...ButtonProps}
-            text="회원가입"
-            width="100px"
-            onClick={handleSubmit}
-          />
-        </div>
-
-        <SuccessSignUp
+        <CommonButton {...ButtonProps} text="회원가입" onClick={handleSubmit} />
+        <CommonDialog
           open={isSignUpSuccessVisible}
-          setSuccessVisible={setIsSignUpSuccessVisible}
+          children={'회원가입에 성공했습니다!'}
+          onClose={completeLogin}
+          onClick={completeLogin}
         />
-        <FailSignUp
+        <CommonDialog
           open={isSignUpFailVisible}
-          setSuccessVisible={setIsSignUpFailVisible}
+          children={
+            '계정을 만드는 중 문제가 발생했습니다. 잠시 후 다시 시도해주세요.'
+          }
+          onClose={closeDialog}
+          onClick={closeDialog}
         />
-        <SearchAddressModal
+        <SearchAddressDialog
           open={isAddressModalOpen}
           setModalVisible={setIsAddressModalOpen}
           onCompletePost={handleAddressSelect}
+          setFormData={setFormData}
         />
       </FullContainer>
     </CommonRoot>
   );
-}
+};
+
+export default SignUp;

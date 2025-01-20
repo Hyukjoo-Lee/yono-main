@@ -1,7 +1,7 @@
 import React from 'react';
 import styled from 'styled-components';
-import Calendar from '../../cardAnalysis/dailyStatistics/calendar/Calendar';
-import Barchart from '../../cardAnalysis/monthlyStatistics/chart/Barchart';
+import Barchart from './Barchart';
+import MonthComparisionTable from './MonthComparisonTable';
 
 const Root = styled.div`
   width: 100%;
@@ -11,45 +11,31 @@ const Root = styled.div`
   align-items: center;
 `;
 
-const CalendarWrap = styled.div`
-  width: 720px;
-  margin-right: 30px;
+const BarchartWrap = styled.div`
+  width: 480px;
+  height: 530px;
 `;
 
 const barchart_data = [
   {
-    bottle: '9월',
-    식비: 1200,
-    교통비: 1000,
-    쇼핑: 1100,
-    문화: 3000,
-    전자제품: 1500,
+    bottle: '저번달',
+    목표금액: 3000,
+    사용금액: 2000,
   },
   {
-    bottle: '10월',
-    식비: 2200,
-    교통비: 2000,
-    쇼핑: 2100,
-    문화: 10000,
-    전자제품: 3500,
-  },
-  {
-    bottle: '11월',
-    식비: 3200,
-    교통비: 3000,
-    쇼핑: 3100,
-    문화: 5000,
-    전자제품: 10500,
+    bottle: '이번달',
+    목표금액: 2000,
+    사용금액: 1500,
   },
 ];
 
 const MonthComparision = () => {
   return (
     <Root>
-      <CalendarWrap>
-        <Calendar />
-      </CalendarWrap>
-      <Barchart data={barchart_data} />
+      <MonthComparisionTable />
+      <BarchartWrap>
+        <Barchart data={barchart_data} />
+      </BarchartWrap>
     </Root>
   );
 };

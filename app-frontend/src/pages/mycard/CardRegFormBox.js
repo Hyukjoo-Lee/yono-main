@@ -5,6 +5,20 @@ import { Box, Grid2 } from '@mui/material';
 import CardSlider from './CardSlider';
 import CommonButton from '../../common/CommonButton';
 import { useState, useEffect } from 'react';
+import ValidationMessage from '../../common/ValidationMessage';
+import theme from '../../theme/theme';
+import {
+  CARD_DUPLICATE_MESSAGE,
+  CARD_REGEX_MESSAGE,
+  CVC_REGEX_MESSAGE,
+  EMPTY_CARDNUM_MESSAGE,
+  EMPTY_CARDSELECT_MESSAGE,
+  EMPTY_CVC_MESSAGE,
+  EMPTY_ENGNAME_MESSAGE,
+  EMPTY_VALIDITY_MESSAGE,
+  ENGNAME_REGEX_MESSAGE,
+  VALIDITY_REGEX_MESSAGE,
+} from '../../common/Message';
 
 const FormBox = styled.form`
   width: 100%;
@@ -12,22 +26,53 @@ const FormBox = styled.form`
   overflow-y: auto;
   background-color: ${(props) => props.background || '#EFF3FD'};
 `;
+
 const FORM_FIELDS = {
   cardNumber: {
+    placeholder: '카드번호를 입력하세요',
     text: '카드번호',
-    placeholder: '카드번호를 입력하세요 (-제외)',
+    maxLength: 19,
+    errorMessage: {
+      empty: EMPTY_CARDNUM_MESSAGE,
+      invalid: CARD_REGEX_MESSAGE,
+      duplicate: CARD_DUPLICATE_MESSAGE,
+    },
   },
   cvc: {
+    placeholder: '카드 뒷면 서명란 끝 3자리',
     text: 'CVC',
-    placeholder: '뒷면 서명란 끝 3자리',
+    regex: /^\d{3}$/,
+    maxLength: 3,
+    type: 'password',
+    errorMessage: {
+      empty: EMPTY_CVC_MESSAGE,
+      invalid: CVC_REGEX_MESSAGE,
+    },
   },
   cardValidity: {
-    text: '유효기간',
     placeholder: '날짜를 입력하세요 (/제외)',
+    text: '유효기간',
+    regex: /^(0[1-9]|1[0-2])\d{2}$/,
+    maxLength: 4,
+    errorMessage: {
+      empty: EMPTY_VALIDITY_MESSAGE,
+      invalid: VALIDITY_REGEX_MESSAGE,
+    },
   },
   englishName: {
-    text: '영문이름',
     placeholder: '영문이름을 입력하세요',
+    text: '영문이름',
+    regex: /^[a-zA-Z\s]+$/,
+    errorMessage: {
+      empty: EMPTY_ENGNAME_MESSAGE,
+      invalid: ENGNAME_REGEX_MESSAGE,
+    },
+  },
+  selectedCardType: {
+    text: '카드 선택',
+    errorMessage: {
+      empty: EMPTY_CARDSELECT_MESSAGE,
+    },
   },
 };
 
@@ -65,35 +110,97 @@ const CardRegFormBox = ({ cardImg }) => {
     selectedCardType: '',
   });
 
+  const [formMessage, setFormMessage] = useState({
+    cardNumber: '',
+    cvc: '',
+    cardValidity: '',
+    englishName: '',
+    selectedCardType: '',
+  });
+
+  const [cardNumToSave, setCardNumToSave] = useState('');
+
   const cardImages = useCardImages(cardImg, formData.selectedCardType);
 
-  const handleInputChange = (field) => (e) => {
+  const handleCardNumChange = (e) => {
+    const { value } = e.target;
+    const numericValue = value.replace(/\D/g, '');
+
+    if (numericValue.length > 16) return; // 최대 16자리 제한
+
+    // 하이픈 추가 로직
+    let formattedValue = numericValue;
+    if (numericValue.length > 4) {
+      formattedValue = numericValue.slice(0, 4) + '-' + numericValue.slice(4);
+    }
+    if (numericValue.length > 8) {
+      formattedValue =
+        formattedValue.slice(0, 9) + '-' + formattedValue.slice(9);
+    }
+    if (numericValue.length > 12) {
+      formattedValue =
+        formattedValue.slice(0, 14) + '-' + formattedValue.slice(14);
+    }
+
     setFormData((prev) => ({
       ...prev,
-      [field]: e.target.value,
+      cardNumber: formattedValue, // 화면 표시용 값
     }));
+    setCardNumToSave(numericValue); // 저장용 값
+  };
+
+  const handleInputChange = (field) => (e) => {
+    if (field === 'cardNumber') {
+      handleCardNumChange(e); // 카드 번호 전용 처리
+    } else {
+      const { value } = e.target;
+
+      setFormData((prev) => ({
+        ...prev,
+        [field]: value,
+      }));
+
+      setFormMessage((prev) => ({
+        ...prev,
+        [field]: '',
+      }));
+    }
   };
 
   const validateForm = () => {
-    const { cardNumber, cvc, cardValidity, englishName, selectedCardType } =
-      formData;
-    if (
-      !cardNumber ||
-      !cvc ||
-      !cardValidity ||
-      !englishName ||
-      !selectedCardType
-    ) {
-      alert('필수 필드를 입력해주세요.');
-      return false;
+    const errors = {};
+
+    Object.keys(FORM_FIELDS).forEach((field) => {
+      const { regex, errorMessage } = FORM_FIELDS[field];
+
+      if (field === 'cardNumber') {
+        if (!cardNumToSave) {
+          errors[field] = EMPTY_CARDNUM_MESSAGE;
+        }
+      } else if (!formData[field]) {
+        errors[field] = errorMessage.empty;
+      } else if (regex && !regex.test(formData[field])) {
+        errors[field] = errorMessage.invalid;
+      }
+    });
+
+    if (!formData.selectedCardType) {
+      errors.selectedCardType = FORM_FIELDS.selectedCardType.errorMessage.empty;
     }
-    return true;
+
+    setFormMessage(errors);
+    return Object.keys(errors).length === 0;
   };
 
   const handleSubmit = (event) => {
     event.preventDefault();
+
     if (!validateForm()) return;
-    // TODO: 백엔드 구축 후 카드 등록 로직 추가
+
+    const cardNumber = cardNumToSave;
+    const updatedFormData = { ...formData, cardNumber };
+    // api 전송
+    console.log('data to send: ' + updatedFormData);
   };
 
   return (
@@ -102,49 +209,80 @@ const CardRegFormBox = ({ cardImg }) => {
         <Grid2 container rowSpacing={1} columnSpacing={4}>
           <Grid2 size={24}>
             <CommonInput
-              {...FORM_FIELDS.cardNumber}
-              width={'100%'}
-              margin="0px"
+              placeholder={FORM_FIELDS.cardNumber.placeholder}
+              text={FORM_FIELDS.cardNumber.text}
               value={formData.cardNumber}
               onChange={handleInputChange('cardNumber')}
+              width="100%"
+              maxLength={FORM_FIELDS.cardNumber.maxLength}
             />
+            {formMessage.cardNumber && (
+              <ValidationMessage
+                text={formMessage.cardNumber}
+                type="error"
+                fontSize={theme.fontSize.small}
+                $margin="0 5px"
+              />
+            )}
           </Grid2>
 
           {['cvc', 'cardValidity', 'englishName'].map((field) => (
             <Grid2 key={field} size={6}>
               <CommonInput
-                {...FORM_FIELDS[field]}
-                width={'100%'}
+                type={FORM_FIELDS[field].type}
+                placeholder={FORM_FIELDS[field].placeholder}
+                text={FORM_FIELDS[field].text}
                 value={formData[field]}
                 onChange={handleInputChange(field)}
+                width="100%"
+                maxLength={FORM_FIELDS[field].maxLength}
               />
+              {formMessage[field] && (
+                <ValidationMessage
+                  text={formMessage[field]}
+                  type="error"
+                  fontSize={theme.fontSize.small}
+                  $margin="0 5px"
+                />
+              )}
             </Grid2>
           ))}
 
           <Grid2 size={6}>
             <CommonSelect
-              text="카드선택"
-              margin="0px 0px 0px 0px"
-              labelColor={'#4a4a4a'}
-              width={'227.75px'}
+              text={FORM_FIELDS.selectedCardType.text}
               options={CARD_LIST}
               selectedValue={formData.selectedCardType}
               setSelectedValue={(value) =>
-                handleInputChange('selectedCardType')({ target: { value } })
+                handleInputChange('selectedCardType')({
+                  target: { value },
+                })
               }
+              margin="0"
+              labelColor="#4a4a4a"
+              width="227.75px"
             />
+            {formMessage.selectedCardType && (
+              <ValidationMessage
+                text={formMessage.selectedCardType}
+                type="error"
+                fontSize={theme.fontSize.small}
+                $margin="0 5px"
+              />
+            )}
           </Grid2>
 
           <Grid2 size={12}>
             <CardSlider cardImages={cardImages} />
           </Grid2>
+
           <Grid2 container justifyContent="center" size={12} pt={3}>
             <CommonButton
               fontSize="16px"
               width="120px"
               height="35px"
               text="카드 등록"
-              type="submit"
+              onClick={handleSubmit}
             />
           </Grid2>
         </Grid2>

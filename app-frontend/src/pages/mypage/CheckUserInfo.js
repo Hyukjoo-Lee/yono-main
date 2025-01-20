@@ -1,8 +1,18 @@
-import React, { useState } from 'react';
-import CustomButton from '../../common/CommonButton';
-import CommonInput from '../../common/CommonInput';
+import React, { useEffect, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
-import { ReactComponent as Profile } from '../../assets/images/Profile.svg';
+import { modifyUser } from '../../apis/userApi';
+import CommonButton from '../../common/CommonButton';
+import CommonInput from '../../common/CommonInput';
+import SearchAddressDialog from '../auth/modal/SearchAddressDialog';
+import {
+  SPENDINGTARGET_REGEX_MESSAGE,
+  EMAIL_REGEX_MESSAGE,
+  PASSWORD_MISMATCH_MESSAGE,
+} from '../../common/Message';
+import Profile from './Profile';
+import theme from '../../theme/theme';
+import PasswordDialog from './PasswordDialog';
 
 const StyledHr = styled.hr`
   width: 100%;
@@ -25,6 +35,7 @@ const Section = styled.div`
 `;
 
 const InnerSection = styled.div`
+  width: 100%;
   margin-bottom: 15px;
 `;
 
@@ -60,65 +71,101 @@ const ErrorText = styled.p`
   width: 100%;
 `;
 
-const ProfileContainer = styled.div`
+const ButtonWrapper = styled.div`
   position: relative;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  width: 150px;
-  height: 150px;
-  border-radius: 50%;
-  overflow: hidden;
-  background-color: #f5f5f5;
-  margin: 0 auto 20px;
-  & svg {
-    width: 70%;
-    height: 70%;
-  }
+  margin-left: 15px;
 `;
 
-const ProfileButton = styled.button`
-  position: absolute;
-  bottom: -5px;
-  right: -5px;
-  width: 30px;
-  height: 30px;
-  border: none;
-  border-radius: 50%;
-  background-color: #007bff;
-  color: white;
+const InputUserIdBox = styled.div`
   display: flex;
-  justify-content: center;
-  align-items: center;
-  cursor: pointer;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
-  transform: translate(50%, 50%);
-  z-index: 10;
-  &:hover {
-    background-color: #0056b3;
-  }
+  justify-content: space-between;
+  align-items: flex-end;
 `;
 
 const CheckUserInfo = ({
-  userName,
+  userNum,
   userId,
-  originPassword,
+  password,
   email,
-  nickname,
-  Target_Expenditure_Amout,
+  name,
+  address,
+  detailAddress,
+  postcode,
+  spendingTarget,
+  profile,
+  createdAt,
 }) => {
+  const [profileImage, setProfileImage] = useState(profile);
+  const [previewImage, setPreviewImage] = useState(profile);
   const [isEditing, setIsEditing] = useState(true);
+  const [isShowDialog, setIsShowDialog] = useState(false);
   const [passwordError, setPasswordError] = useState('');
+  const [isAddressModalOpen, setIsAddressModalOpen] = useState(false);
   const [userInfo, setUserInfo] = useState({
-    userName: userName || ``,
-    nickname: nickname || ``,
+    userNum: userNum,
     userId: userId || '',
+    originPassword: '',
     email: email || '',
-    Target_Expenditure_Amout: Target_Expenditure_Amout || '',
-    password: '',
-    newPassword: '',
-    confirmPassword: '',
+    name: name || '',
+    address: address || '',
+    detailAddress: detailAddress || '',
+    postcode: postcode || '',
+    spendingTarget: spendingTarget || 0,
+    profile: profile || '',
+    createdAt: createdAt || '',
   });
+
+  useEffect(() => {
+    setUserInfo({
+      userNum: userNum,
+      userId: userId || '',
+      originPassword: '',
+      email: email || '',
+      name: name || '',
+      address: address || '',
+      detailAddress: detailAddress || '',
+      postcode: postcode || '',
+      spendingTarget: spendingTarget || 0,
+      profile: profile || '',
+      createdAt: createdAt || '',
+    });
+
+    setPreviewImage(profile);
+
+    if (!isShowDialog) {
+      document.getElementById('root').removeAttribute('inert');
+    }
+  }, [
+    userNum,
+    userId,
+    email,
+    name,
+    address,
+    detailAddress,
+    postcode,
+    spendingTarget,
+    profile,
+    createdAt,
+    isShowDialog,
+  ]);
+
+  const handleProfileChange = (e) => {
+    const file = e.target.files[0];
+    console.log(file);
+    if (file) {
+      setProfileImage(file);
+      const reader = new FileReader();
+      reader.onloadend = () => {
+        setPreviewImage(reader.result);
+      };
+      reader.readAsDataURL(file);
+    }
+  };
+
+  const handleAddressSelect = (address) => {
+    setUserInfo((prev) => ({ ...prev, address }));
+    setIsAddressModalOpen(false);
+  };
 
   const toggleEdit = () => {
     setIsEditing(!isEditing);
@@ -126,46 +173,93 @@ const CheckUserInfo = ({
   };
 
   const cancelEdit = () => {
-    userInfo.userName = userName;
-    userInfo.nickname = nickname;
-    userInfo.userId = userId;
-    userInfo.email = email;
-    userInfo.Target_Expenditure_Amout = Target_Expenditure_Amout;
-    userInfo.password = '';
-    userInfo.newPassword = '';
-    userInfo.confirmPassword = '';
+    setProfileImage(profile);
+    setPreviewImage(profile);
+
+    setUserInfo({
+      userNum: userNum,
+      userId: userId || '',
+      originPassword: '',
+      email: email || '',
+      name: name || '',
+      address: address || '',
+      detailAddress: detailAddress || '',
+      postcode: postcode || '',
+      spendingTarget: spendingTarget || '',
+      profile: profile || '',
+      createdAt: createdAt || '',
+    });
+
     setIsEditing(!isEditing);
   };
 
   const isFormValid = () => {
     for (const key in userInfo) {
-      if (userInfo[key].trim() === '') {
-        return 1;
+      if ((userInfo[key] + '').trim() === '') {
+        console.log(key);
+        return false;
       }
     }
+    return true;
+  };
 
-    if (userInfo.newPassword !== userInfo.confirmPassword) {
-      return 2;
-    }
+  const navigate = useNavigate();
+
+  const inputRegexs = {
+    email: /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/,
+    password: /^(?=.*[a-z])(?=.*\d)(?=.*[*@#$%^&+=!]).{8,}$/,
+    spendingTarget: /^[0-9]*$/,
   };
 
   const save = () => {
-    if (isFormValid() === 1) {
+    let isInvalid = true;
+
+    if (!isFormValid()) {
       setPasswordError('모든 정보를 입력해주세요!');
-      return;
-    } else if (originPassword !== userInfo.password) {
-      setPasswordError('기존 비밀번호가 일치하지 않습니다!');
-      return;
-    } else if (isFormValid() === 2) {
-      setPasswordError('비밀번호 확인이 일치하지 않습니다!');
-      return;
+      isInvalid = false;
+    } else if (password !== userInfo.originPassword) {
+      setPasswordError(PASSWORD_MISMATCH_MESSAGE);
+      isInvalid = false;
     }
-    // 수정사항 저장 로직 추가 필요
-    setIsEditing(!isEditing);
+
+    Object.keys(userInfo).forEach((field) => {
+      if (field === 'email' && !inputRegexs.email.test(userInfo.email)) {
+        setPasswordError(EMAIL_REGEX_MESSAGE);
+        isInvalid = false;
+      } else if (
+        field === 'spendingTarget' &&
+        !inputRegexs.spendingTarget.test(userInfo.spendingTarget)
+      ) {
+        setPasswordError(SPENDINGTARGET_REGEX_MESSAGE);
+        isInvalid = false;
+      }
+    });
+
+    if (!isInvalid) return;
+
+    const updatedUserInfo = {
+      ...userInfo,
+      password: userInfo.originPassword,
+      originPassword: undefined,
+    };
+
+    const formData = new FormData();
+    formData.append('userInfo', JSON.stringify(updatedUserInfo));
+    if (profileImage instanceof File) {
+      formData.append('profileImage', profileImage);
+    } else {
+      formData.append('profileText', profileImage);
+    }
+
+    modifyUser(formData).then((response) => {
+      navigate(0);
+    });
+    // window.location.reload();
   };
+
   const deleteId = () => {};
 
-  const disabledIntputProps = {
+  const disabledInputProps = {
     disabled: true,
     background: '#f5f5f5',
     width: '350px',
@@ -187,9 +281,10 @@ const CheckUserInfo = ({
       ...prev,
       [key]: value,
     }));
-    if (key === 'newPassword' || key === 'confirmPassword') {
-      setPasswordError('');
-    }
+  };
+
+  const handleInputChange = (e, field) => {
+    setUserInfo((prev) => ({ ...prev, [field]: e.target.value }));
   };
 
   const commonButtonProps = {
@@ -197,138 +292,191 @@ const CheckUserInfo = ({
     height: '38px',
   };
 
+  const nonEditField = [
+    { title: '아이디', value: userId },
+    { title: '이름', value: name },
+    { title: '이메일', value: email },
+    { title: '일일 목표 지출금액', value: spendingTarget },
+    { title: '주소', value: address },
+    { title: '상세주소', value: detailAddress },
+  ];
+
+  const editField = [
+    {
+      name: 'name',
+      text: '이름',
+      placeholder: '이름을 입력하세요',
+      disabled: true,
+    },
+    {
+      name: 'email',
+      text: '이메일',
+      placeholder: '이메일을 입력하세요',
+      disabled: false,
+    },
+    {
+      name: 'spendingTarget',
+      text: '일일 목표 지출금액',
+      placeholder: '일일 목표 지출금액을 입력하세요',
+      disabled: false,
+    },
+  ];
+
   return (
     <Root>
       {isEditing ? (
         <Section>
-          <InnerSection>
-            <TitleStyle>이름</TitleStyle>
-            <TextStyle>{userName}</TextStyle>
-            <StyledHr />
-          </InnerSection>
-          <InnerSection>
-            <TitleStyle>닉네임</TitleStyle>
-            <TextStyle>{nickname}</TextStyle>
-            <StyledHr />
-          </InnerSection>
-          <InnerSection>
-            <TitleStyle>아이디</TitleStyle>
-            <TextStyle>{userId}</TextStyle>
-            <StyledHr />
-          </InnerSection>
-          <InnerSection>
-            <TitleStyle>이메일</TitleStyle>
-            <TextStyle>{email}</TextStyle>
-            <StyledHr />
-          </InnerSection>
-          <InnerSection>
-            <TitleStyle>이번 달 목표 지출금액</TitleStyle>
-            <TextStyle>{Target_Expenditure_Amout}</TextStyle>
-          </InnerSection>
+          <Profile
+            profileImage={profileImage}
+            onImageChange={handleProfileChange}
+            isEditing={isEditing}
+          />
+
+          {nonEditField.map((field, index) => (
+            <InnerSection key={index}>
+              <TitleStyle>{field.title}</TitleStyle>
+              <TextStyle>{field.value}</TextStyle>
+              <StyledHr />
+            </InnerSection>
+          ))}
         </Section>
       ) : (
         <>
-          <ProfileContainer>
-            <Profile />
-            <ProfileButton onClick={() => console.log('프로필 버튼 클릭!')}>
-              +
-            </ProfileButton>
-          </ProfileContainer>
+          <Profile
+            profileImage={previewImage}
+            onProfileChange={handleProfileChange}
+            isEditing={isEditing}
+          />
 
           <InnerSection>
             <CommonInput
               value={userInfo.userId}
-              placeholder="아이디를 입력하세요"
               text="아이디"
-              {...disabledIntputProps}
+              placeholder="아이디를 입력하세요"
+              type="text"
+              onChange={(e) => handleChange('userId', e.target.value)}
+              {...disabledInputProps}
             />
+            <StyledHr />
+          </InnerSection>
+
+          <form
+            onSubmit={(e) => {
+              e.preventDefault();
+              setIsShowDialog(true);
+            }}
+          >
+            <InputUserIdBox>
+              <CommonInput
+                placeholder="기존 비밀번호를 입력하세요"
+                text="기존 비밀번호"
+                type="password"
+                value={userInfo.originPassword}
+                {...abledInputProps}
+                width="100%"
+                onChange={(e) => handleInputChange(e, 'originPassword')}
+                autoComplete="off"
+              />
+              <ButtonWrapper>
+                <CommonButton
+                  width="100px"
+                  height="40px"
+                  text="변경"
+                  fontSize={theme.fontSize.base}
+                  type="submit"
+                />
+              </ButtonWrapper>
+            </InputUserIdBox>
+          </form>
+
+          <InnerSection>
+            <StyledHr />
+          </InnerSection>
+
+          {editField.map((field, index) => (
+            <InnerSection key={index}>
+              <CommonInput
+                value={userInfo[field.name]}
+                text={field.text}
+                placeholder={field.placeholder}
+                type={field.type}
+                onChange={(e) => handleChange(field.name, e.target.value)}
+                {...(field.disabled ? disabledInputProps : abledInputProps)}
+              />
+              <StyledHr />
+            </InnerSection>
+          ))}
+
+          <InnerSection>
+            <InputUserIdBox>
+              <CommonInput
+                placeholder="주소를 입력하세요"
+                text="주소"
+                value={userInfo.address}
+                {...abledInputProps}
+                width="100%"
+                onChange={(e) => handleInputChange(e, 'address')}
+              />
+              <ButtonWrapper>
+                <CommonButton
+                  width="100px"
+                  height="40px"
+                  text="주소검색"
+                  fontSize={theme.fontSize.base}
+                  onClick={() => setIsAddressModalOpen(true)}
+                />
+              </ButtonWrapper>
+            </InputUserIdBox>
+
             <StyledHr />
           </InnerSection>
 
           <InnerSection>
             <CommonInput
-              text="기존 비밀번호 입력"
-              placeholder="기존 비밀번호 입력하세요"
-              value={userInfo.password}
-              onChange={(e) => handleChange('password', e.target.value)}
-              {...abledInputProps}
-            />
-            <StyledHr />
-          </InnerSection>
-
-          <InnerSection>
-            <CommonInput
-              text="새로운 비밀번호 입력"
-              placeholder="새로운 비밀번호를 입력하세요"
-              value={userInfo.newPassword}
-              onChange={(e) => handleChange('newPassword', e.target.value)}
-              {...abledInputProps}
-            />
-            <StyledHr />
-          </InnerSection>
-
-          <InnerSection>
-            <CommonInput
-              text="비밀번호 확인"
-              placeholder="비밀번호 확인"
-              value={userInfo.confirmPassword}
-              onChange={(e) => handleChange('confirmPassword', e.target.value)}
-              {...abledInputProps}
-            />
-            <StyledHr />
-          </InnerSection>
-
-          <InnerSection>
-            <CommonInput
-              value={userInfo.userName}
-              text="이름"
-              placeholder="이름을 입력하세요"
-              {...disabledIntputProps}
-            />
-            <StyledHr />
-          </InnerSection>
-
-          <InnerSection>
-            <CommonInput
-              value={userInfo.email}
-              text="이메일"
-              placeholder="이메일을 입력하세요"
-              onChange={(e) => handleChange('email', e.target.value)}
-              {...abledInputProps}
-            />
-            <StyledHr />
-          </InnerSection>
-
-          <InnerSection>
-            <CommonInput
-              value={userInfo.Target_Expenditure_Amout}
-              text="이번 달 목표 지출금액"
-              placeholder="이번 달 목표 지출금액을 입력하세요"
-              onChange={(e) =>
-                handleChange('Target_Expenditure_Amout', e.target.value)
-              }
+              placeholder="상세 주소를 입력하세요"
+              text="상세 주소"
+              value={userInfo.detailAddress}
+              onChange={(e) => handleChange('detailAddress', e.target.value)}
               {...abledInputProps}
             />
             <StyledHr />
           </InnerSection>
 
           {passwordError && <ErrorText>{passwordError}</ErrorText>}
+
+          <SearchAddressDialog
+            open={isAddressModalOpen}
+            setModalVisible={setIsAddressModalOpen}
+            onCompletePost={handleAddressSelect}
+            setFormData={setUserInfo}
+          />
         </>
       )}
 
       <Button>
-        <CustomButton
+        <CommonButton
           text={isEditing ? '수정' : '저장'}
           onClick={isEditing ? toggleEdit : save}
           {...commonButtonProps}
         />
 
-        <CustomButton
+        <CommonButton
           text={isEditing ? '회원 탈퇴' : '취소'}
           onClick={isEditing ? deleteId : cancelEdit}
           {...commonButtonProps}
         />
       </Button>
+
+      <PasswordDialog
+        isShowDialog={isShowDialog}
+        onClose={() => {
+          document.body.focus();
+          document.getElementById('root').setAttribute('inert', true);
+          setIsShowDialog(false);
+        }}
+        password={password}
+        userInfo={userInfo}
+      />
     </Root>
   );
 };

@@ -9,7 +9,7 @@ const FooterStyle = styled.footer`
   align-items: center;
   box-sizing: border-box;
   padding: 30px 20px;
-  border-top: 1px solid ${(props) => props.theme.color.brightGray};
+  border-top: 1px solid ${(props) => props.theme.color.mediumGray};
 `;
 
 const TextStyle = styled.div`
@@ -21,7 +21,7 @@ const TextStyle = styled.div`
 const Footer = () => {
   return (
     <FooterStyle>
-      <TextStyle>© 2024 Mickle Muckle. All rights reserved.</TextStyle>
+      <TextStyle>© 2024 YONO. All rights reserved.</TextStyle>
     </FooterStyle>
   );
 };

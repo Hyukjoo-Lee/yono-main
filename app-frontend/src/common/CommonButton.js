@@ -10,7 +10,7 @@ const ButtonStyle = styled(Button)`
       props.background ? props.background : props.theme.color.blue};
     border: ${(props) =>
       props.$borderColor ? `1px solid ${props.$borderColor}` : '0px'};
-    border-radius: ${(props) => props.borderRadius || '6px'};
+    border-radius: ${(props) => props.$borderRadius || '6px'};
     cursor: pointer;
     display: flex;
     align-items: center;
@@ -21,9 +21,9 @@ const ButtonStyle = styled(Button)`
       transition:
         background-color 0.6s ease,
         color 0.6s ease;
-      background: ${(props) => props.hoverBk || props.theme.color.blue};
+      background: ${(props) => props.$hoverBk || props.theme.color.blue};
       & p {
-        color: ${(props) => props.hoverColor || props.theme.color.white};
+        color: ${(props) => props.$hoverColor || props.theme.color.white};
       }
     }
   }
@@ -46,12 +46,12 @@ const CustomButton = (props) => {
     background,
     color,
     $borderColor,
-    borderRadius,
+    $borderRadius,
     fontSize,
     disabled,
     onClick,
-    hoverBk,
-    hoverColor,
+    $hoverBk,
+    $hoverColor,
     startIcon,
     endIcon,
     type,
@@ -63,9 +63,9 @@ const CustomButton = (props) => {
       height={height}
       background={background}
       $borderColor={$borderColor}
-      borderRadius={borderRadius}
-      hoverBk={hoverBk}
-      hoverColor={hoverColor}
+      $borderRadius={$borderRadius}
+      $hoverBk={$hoverBk}
+      $hoverColor={$hoverColor}
       onClick={disabled ? undefined : onClick}
       disabled={disabled}
       disableRipple

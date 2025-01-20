@@ -1,20 +1,22 @@
-import React, { useState } from 'react';
-
-import styled from 'styled-components';
 import {
-  Paper,
-  Table,
   Pagination,
   PaginationItem,
+  Paper,
+  Table,
   TableBody,
   TableCell,
+  TableContainer,
+  TableHead,
   TableRow,
 } from '@mui/material';
+import axios from 'axios';
+import React, { useEffect, useState } from 'react';
+import { useLocation, useNavigate } from 'react-router-dom';
+import styled from 'styled-components';
 import CommonButton from '../../common/CommonButton';
-import { useNavigate } from 'react-router-dom';
-import { Link } from 'react-router-dom';
+import CommonDialog from '../../common/CommonDialog';
 import CommonInput from '../../common/CommonInput';
-import { TableContainer, TableHead } from '@mui/material';
+import { useSelector } from 'react-redux';
 
 const Root = styled.div`
   width: ${(props) => props.theme.display.lg};
@@ -26,94 +28,9 @@ const Root = styled.div`
 const columns = [
   { id: 'category', label: '카테고리 ', minWidth: 50 },
   { id: 'title', label: '제목 ', minWidth: 150 },
-  { id: 'author', label: '작성자 ', minWidth: 100 },
-  { id: 'day', label: '등록일', minWidth: 100 },
-  { id: 'check', label: '조회', minWidth: 50 },
-];
-
-function createData(category, title, author, day, check) {
-  return { category, title, author, day, check };
-}
-
-const rows = [
-  //임시로 데이터
-  createData(
-    '공유',
-    '자유게시판 서비스 중단 소식을 알려드립니다',
-    '정해인',
-    '2024-10-28',
-    '5',
-  ),
-  createData(
-    '기타문의',
-    '자유게시판 서비스 중단 소식을 알려드립니다',
-    '익명',
-    '2024-10-28',
-    '0',
-  ),
-  createData(
-    '정보공유',
-    '자유게시판 서비스 중단 소식을 알려드립니다',
-    '익명',
-    '2024-10-28',
-    '0',
-  ),
-  createData(
-    '기타문의',
-    '자유게시판 서비스 중단 소식을 알려드립니다',
-    '익명',
-    '2024-10-28',
-    '0',
-  ),
-  createData(
-    '정보공유',
-    '자유게시판 서비스 중단 소식을 알려드립니다',
-    '익명',
-    '2024-10-28',
-    '0',
-  ),
-  createData(
-    '기타문의',
-    '자유게시판 서비스 중단 소식을 알려드립니다',
-    '익명',
-    '2024-10-28',
-    '0',
-  ),
-  createData(
-    '정보공유',
-    '자유게시판 서비스 중단 소식을 알려드립니다',
-    '익명',
-    '2024-10-28',
-    '0',
-  ),
-  createData(
-    '기타문의',
-    '자유게시판 서비스 중단 소식을 알려드립니다',
-    '익명',
-    '2024-10-28',
-    '0',
-  ),
-  createData(
-    '정보공유',
-    '자유게시판 서비스 중단 소식을 알려드립니다',
-    '익명',
-    '2024-10-28',
-    '0',
-  ),
-  createData(
-    '기타문의',
-    '자유게시판 서비스 중단 소식을 알려드립니다',
-    '익명',
-    '2024-10-28',
-    '0',
-  ),
-  createData(
-    '정보공유',
-    '자유게시판 서비스 중단 소식을 알려드립니다',
-    '익명',
-    '2024-10-28',
-    '0',
-  ),
+  { id: 'userId', label: '작성자 ', minWidth: 100 },
+  { id: 'regdate', label: '등록일', minWidth: 100 },
+  { id: 'viewcnt', label: '조회', minWidth: 50 },
 ];
 
 const TableContainerStyle = styled(TableContainer)`
@@ -149,6 +66,7 @@ const PaginationStyle = styled(Pagination)`
     color: #3563e9;
   }
 `;
+
 const Box = styled.div`
   display: flex;
   justify-content: start;
@@ -160,106 +78,181 @@ const Box = styled.div`
     margin-left: 10px;
   }
 `;
+
 export function CommunityTable() {
   const [page, setPage] = useState(0);
+  const [rows, setRows] = useState([]);
+  const isLoggedIn = useSelector((state) => state.user.isLoggedIn);
+  const [isDialogOpen, setIsDialogOpen] = useState(false);
+  const [searchInput, setSearchInput] = useState('');
+  const [filteredRows, setFilteredRows] = useState([]);
   const rowsPerPage = 10;
-  const navigate = useNavigate();
+  const location = useLocation();
+  const updatePost = location.state?.updatePost;
+  console.log(updatePost); // 작성자(userId)와 작성일(regdate)가 포함되어 있는지 확인
 
+  const navigate = useNavigate(); // navigate 훅을 사용
   const handleChangePage = (event, newPage) => {
     setPage(newPage - 1);
   };
+
+  // redux 상태를 확인
+  // console.log('로그인 된 유저: ' + JSON.stringify(user.userId));
+
   const handleButtonClick = () => {
-    navigate('/communityFormBox');
+    if (isLoggedIn) {
+      navigate('/communityFormBox');
+    } else {
+      setIsDialogOpen(true);
+    }
   };
+
+  const handleDialogLogin = () => {
+    setIsDialogOpen(false);
+    navigate('/login');
+  };
+
+  const handleDialogClose = () => {
+    setIsDialogOpen(false);
+  };
+
+  // 검색 버튼 클릭 시 실행되는 함수
+  const handleSearch = () => {
+    if (!searchInput.trim()) {
+      setFilteredRows(rows); // 검색어가 없으면 전체 리스트 표시
+    } else {
+      const filtered = rows.filter((row) => {
+        return (
+          (row.title &&
+            row.title.toLowerCase().includes(searchInput.toLowerCase())) ||
+          (row.userId &&
+            row.userId.toLowerCase().includes(searchInput.toLowerCase()))
+        );
+      });
+      setFilteredRows(filtered);
+    }
+    setPage(0); // 검색 후 페이지를 처음으로 설정
+  };
+
+  // 데이터 가져오기
+  useEffect(() => {
+    axios
+      .get('/posts/list')
+      .then((response) => {
+        setRows(response.data);
+        setFilteredRows(response.data); // 초기에는 전체 데이터 표시
+      })
+      .catch((error) => {
+        console.error('API 요청 실패:', error);
+      });
+  }, []);
+
+  // 행 클릭 시 상세 페이지로 이동하는 함수
+  const handleRowClick = (row) => {
+    // navigate로 상세 페이지로 이동하면서 상태를 전달
+    axios
+      .get(`/posts/list/${row.no}`)
+      .then((response) => {
+        navigate('/CommunityPost', { state: { rowData: row } });
+      })
+      .catch((error) => {
+        console.log('조회수 증가 실패', error);
+      });
+  };
+
   return (
-    <>
-      <Root>
-        <Box>
-          <CommonInput
-            width="228px"
-            height="39px"
-            placeholder="검색어를 입력하세요"
-          />
-          <CommonButton
-            width="74px"
-            height="39px"
-            background-color="#3563E9"
-            color="white"
-            text="검색"
-            borderRadius="5px"
-          />
-        </Box>
+    <Root>
+      <Box>
+        <CommonInput
+          width="228px"
+          height="39px"
+          placeholder="제목, 작성자"
+          value={searchInput}
+          onChange={(e) => setSearchInput(e.target.value)}
+        />
+        <CommonButton
+          width="74px"
+          height="39px"
+          background="#3563E9"
+          color="white"
+          text="검색"
+          borderRadius="5px"
+          onClick={handleSearch}
+        />
+      </Box>
 
-        <Container>
-          <CommonButton
-            width="100px"
-            height="39px"
-            text="글등록"
-            onClick={handleButtonClick}
-          />
-        </Container>
-        <Paper sx={{ width: '100%', overflow: 'hidden', boxShadow: 'none' }}>
-          <TableContainerStyle>
-            <Table stickyHeader aria-label="sticky table">
-              <TableHead>
-                <TableRow>
-                  {columns.map((column) => (
-                    <TableCell
-                      key={column.id}
-                      align="center"
-                      style={{ minWidth: column.minWidth }}
-                      sx={{ borderBottom: '1px solid #000000' }}
+      <Container>
+        <CommonButton
+          width="100px"
+          height="39px"
+          text="글등록"
+          onClick={handleButtonClick}
+        />
+      </Container>
+      <Paper sx={{ width: '100%', overflow: 'hidden', boxShadow: 'none' }}>
+        <TableContainerStyle>
+          <Table stickyHeader aria-label="sticky table">
+            <TableHead>
+              <TableRow>
+                {columns.map((column) => (
+                  <TableCell
+                    key={column.id}
+                    align="center"
+                    style={{ minWidth: column.minWidth }}
+                    sx={{ borderBottom: '1px solid #000000' }}
+                  >
+                    {column.label}
+                  </TableCell>
+                ))}
+              </TableRow>
+            </TableHead>
+            <TableBody>
+              {filteredRows
+                .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
+                .map((row, index) => {
+                  return (
+                    <TableRow
+                      hover
+                      role="checkbox"
+                      tabIndex={-1}
+                      key={index}
+                      onClick={() => handleRowClick(row)} // 행 클릭 시 이벤트 발생
                     >
-                      {column.label}
-                    </TableCell>
-                  ))}
-                </TableRow>
-              </TableHead>
-              <TableBody>
-                {rows
-                  .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
-                  .map((row, index) => {
-                    return (
-                      <TableRow hover role="checkbox" tabIndex={-1} key={index}>
-                        {columns.map((column) => {
-                          const value = row[column.id];
-                          return (
-                            <TableCell
-                              key={column.id}
-                              align="center"
-                              sx={{ borderBottom: '0.5px solid #757575' }}
-                            >
-                              <Link
-                                to="/CommunityPost"
-                                state={{ rowData: row }}
-                                style={{
-                                  textDecoration: 'none',
-                                  color: 'black',
-                                }}
-                              >
-                                {column.format && typeof value === 'number'
-                                  ? column.format(value)
-                                  : value}
-                              </Link>
-                            </TableCell>
-                          );
-                        })}
-                      </TableRow>
-                    );
-                  })}
-              </TableBody>
-            </Table>
-          </TableContainerStyle>
+                      {columns.map((column) => {
+                        const value = row[column.id];
+                        return (
+                          <TableCell
+                            key={column.id}
+                            align="center"
+                            sx={{ borderBottom: '0.5px solid #757575' }}
+                          >
+                            {value}
+                          </TableCell>
+                        );
+                      })}
+                    </TableRow>
+                  );
+                })}
+            </TableBody>
+          </Table>
+        </TableContainerStyle>
 
-          <PaginationStyle
-            count={Math.ceil(rows.length / rowsPerPage)}
-            page={page + 1}
-            onChange={handleChangePage}
-            renderItem={(item) => <PaginationItem {...item} />}
-          />
-        </Paper>
-      </Root>
-    </>
+        <PaginationStyle
+          count={Math.ceil(rows.length / rowsPerPage)}
+          page={page + 1}
+          onChange={handleChangePage}
+          renderItem={(item) => <PaginationItem {...item} />}
+        />
+      </Paper>
+
+      <CommonDialog
+        open={isDialogOpen}
+        onClose={handleDialogClose}
+        children={'로그인 해주세요'}
+        onClick={handleDialogLogin}
+      />
+    </Root>
   );
 }
+
 export default CommunityTable;

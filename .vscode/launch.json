@@ -2,10 +2,27 @@
   "configurations": [
     {
       "type": "java",
+      "name": "CodefController",
+      "request": "launch",
+      "mainClass": "com.mmk.controller.CodefController",
+      "projectName": "app-backend"
+    },
+    {
+      "type": "java",
       "name": "Spring Boot-BackendApplication<app-backend>",
       "request": "launch",
       "cwd": "${workspaceFolder}",
       "mainClass": "com.mmk.BackendApplication",
+      "projectName": "app-backend",
+      "args": "",
+      "envFile": "${workspaceFolder}/.env"
+    },
+    {
+      "type": "java",
+      "name": "Spring Boot-Token<app-backend>",
+      "request": "launch",
+      "cwd": "${workspaceFolder}",
+      "mainClass": "com.mmk.codef.Token",
       "projectName": "app-backend",
       "args": "",
       "envFile": "${workspaceFolder}/.env"
