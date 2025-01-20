@@ -145,7 +145,6 @@ public class CodefServiceImpl implements CodefService {
             String result = codef.requestProduct(productUrl, EasyCodefServiceType.DEMO, parameterMap);
             long endTime = System.nanoTime();
             System.out.println("CODEF 데이터 호출 소요 시간: " + (endTime - startTime) + "ns");
-            System.out.println(result);
             return result;
         } catch (Exception e) {
             throw new RuntimeException(e);

@@ -15,4 +15,9 @@ public class CardHistoryDAOImpl implements CardHistoryDAO {
     public void save(CardHistoryEntity cardHistoryEntity) {
         cardHistoryRepository.save(cardHistoryEntity);
     }
+
+    @Override
+    public String findMaxResUsedDate(int userCardId) {
+        return cardHistoryRepository.findMaxResUsedDate(userCardId);
+    }
 }

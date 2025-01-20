@@ -38,6 +38,9 @@ public class CardHistoryServiceImpl implements CardHistoryService {
     public void updateCardHistory(int userNum) {
         UserEntity userEntity = userDAO.getUserByUserNum(userNum);
         UserCardEntity userCardEntity = userCardDAO.findByUserNumAndPrimaryCard(userEntity, 1);
+        int userCardId = userCardEntity.getUserCardId();
+
+        String recentDate = cardHistoryDAO.findMaxResUsedDate(userCardId);
 
         LocalDate today = LocalDate.now();
         LocalDate twoMonthsAgoFirstDay = today.minusMonths(2).withDayOfMonth(1);
@@ -46,8 +49,13 @@ public class CardHistoryServiceImpl implements CardHistoryService {
         String startDate = twoMonthsAgoFirstDay.format(formatter);
         String endDate = today.format(formatter);
 
+        if (recentDate != null && recentDate.compareTo(startDate) >= 0) {
+            startDate = recentDate;
+        }
+
+        System.out.println(startDate);
+
         String result = codefService.getCardHistory(userCardEntity, startDate, endDate);
-        System.out.println(result);
 
         try {
             ObjectMapper objectMapper = new ObjectMapper();
@@ -57,7 +65,7 @@ public class CardHistoryServiceImpl implements CardHistoryService {
             List<CardHistoryDTO> cardHistoryDTOList = objectMapper.readValue(dataArrayJson, new TypeReference<List<CardHistoryDTO>>() {});
 
             for (CardHistoryDTO cardHistoryDTO : cardHistoryDTOList) {
-                cardHistoryDTO.setUserCardId(userCardEntity.getUserCardId());
+                cardHistoryDTO.setUserCardId(userCardId);
                 cardHistoryDAO.save(toEntity(cardHistoryDTO));
             }
         } catch (Exception e) {
