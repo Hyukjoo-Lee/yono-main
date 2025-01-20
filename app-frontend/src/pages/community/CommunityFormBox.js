@@ -3,7 +3,6 @@ import CommonInput from '../../common/CommonInput';
 import CommonSelect from '../../common/CommonSelect';
 import CommonButton from '../../common/CommonButton';
 import CommonPageInfo from '../../common/CommonPageInfo';
-import { useNavigate } from 'react-router-dom';
 import CommonHr from '../../common/CommonHr';
 import { useNavigate } from 'react-router-dom';
 import { useState } from 'react';
@@ -25,6 +24,7 @@ const FormBox = styled.div`
   width: 100%;
   max-width: 1000px;
   margin: 0 auto;
+  gap: 20px;
 `;
 
 const Row = styled.div`
@@ -77,6 +77,13 @@ const Box1 = styled.div`
   margin: 30px;
   gap: 30px;
 `;
+
+const ErrorMessage = styled.div`
+  color: red;
+  font-size: 13px;
+  margin-top: 5px;
+`;
+
 const OptionList = [
   { value: '정보공유', label: '정보공유' },
   { value: '질문', label: '질문' },
@@ -308,7 +315,7 @@ export function CommunityFormBox() {
         width="918px"
         borderWidth="2px"
         borderColor="black"
-        margin="10px auto 20px"
+        margin="20px auto 20px"
       />
       <Box1>
         <CommonButton

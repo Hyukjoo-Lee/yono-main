@@ -155,8 +155,8 @@ const CommunityComment = ({
   };
   return (
     <CommentBox>
-      {commentsData.map((comment) => (
-        <div key={comment.rno}>
+      {commentsData.map((comment, index) => (
+        <div key={index}>
           <TopRow>
             <ImageBox>
               <Profile />

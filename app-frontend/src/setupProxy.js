@@ -18,6 +18,14 @@ module.exports = function (app) {
   );
 
   app.use(
+    '/reply',
+    createProxyMiddleware({
+      target: process.env.REACT_APP_API_URL,
+      changeOrigin: true,
+    }),
+  );
+
+  app.use(
     '/codef',
     createProxyMiddleware({
       target: process.env.REACT_APP_API_URL,

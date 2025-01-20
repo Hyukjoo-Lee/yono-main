@@ -212,7 +212,9 @@ export function EditFormBox() {
       formData.append('title', postFormData.title);
       formData.append('category', postFormData.category);
       formData.append('content', postFormData.content);
-      formData.append('regdate', postFormData.regdate);
+
+      const updatedDate = new Date().toISOString().split('T')[0]; // 수정된 날짜
+      formData.append('regdate', updatedDate);
 
       if (postFormData.file) {
         formData.append('file', postFormData.file);
@@ -228,6 +230,7 @@ export function EditFormBox() {
         category: postFormData.category,
         content: postFormData.content,
         imgurl: postFormData.imgurl,
+        regdate: updatedDate, // 수정된 날짜
       });
 
       formData.append('postFormData', postData);
