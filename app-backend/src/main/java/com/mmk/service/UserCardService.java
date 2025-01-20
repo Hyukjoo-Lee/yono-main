@@ -11,7 +11,7 @@ public interface UserCardService {
 
     List<UserCardDTO> getUserCardsByUserId(int userId);
 
-    UserCardDTO setPrimaryCard(UserCardDTO uc);
+    UserCardDTO setPrimaryCard(int userCardId, int userNum);
 
     CompletableFuture<List<MonthlySummary>> getCardHistory(int userNum);
 }

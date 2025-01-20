@@ -17,7 +17,7 @@ import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.mmk.dto.MonthlySummary;
-import com.mmk.dto.TransDTO;
+import com.mmk.dto.MonthlyTransDTO;
 
 import io.codef.api.EasyCodef;
 import io.codef.api.EasyCodefServiceType;
@@ -172,8 +172,8 @@ public class CodefController {
             objectMapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
 
             String dataArrayJson = objectMapper.readTree(result).get("data").toString();
-            List<TransDTO> transactionDTOList = objectMapper.readValue(dataArrayJson,
-                    new TypeReference<List<TransDTO>>() {
+            List<MonthlyTransDTO> transactionDTOList = objectMapper.readValue(dataArrayJson,
+                    new TypeReference<List<MonthlyTransDTO>>() {
                     });
 
             Map<String, Map<String, Integer>> groupedData = transactionDTOList.parallelStream()

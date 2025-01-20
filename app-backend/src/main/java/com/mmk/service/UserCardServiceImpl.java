@@ -83,32 +83,23 @@ public class UserCardServiceImpl implements UserCardService {
 
     // 대표 카드 등록
     @Override
-    public UserCardDTO setPrimaryCard(UserCardDTO uc) {
-        // userCardDAO.removePrimaryCardAll(uc.getUserNum());
+    public UserCardDTO setPrimaryCard(int userCardId, int userNum) {
+        userCardDAO.removePrimaryCardAll(userNum);
+        userCardDAO.setPrimaryCard(userCardId);
 
-        // String companyId = uc.getCompanyId();
-        // String companyPwd = uc.getCompanyPwd();
-        // int cardId = uc.getCardId();
-        // String organization = cardDAO.findByCardId(cardId).getOrganizationCode();
-
-        // String connectedId = codefService.getConId(organization, companyId,
-        // companyPwd);
-        // System.out.println("ConnectedId :" + connectedId);
-
-        // uc.setConnectedId(connectedId);
-        // uc.setPrimaryCard(1);
-        // userCardDAO.registerCard(toEntity(uc));
-        // return uc;
-        return null;
+        return toDTO(userCardDAO.findByUserCardId(userCardId));
     }
 
     // 카드 내역 조회
     @Override
     public CompletableFuture<List<MonthlySummary>> getCardHistory(int userNum) {
-        UserEntity userEntity = userDAO.getUserById(userNum);
-        UserCardEntity userCardEntity = userCardDAO.findByUserNumAndPrimaryCard(userEntity, 1);
-        CompletableFuture<List<MonthlySummary>> result = codefService.getCardHistory(userCardEntity);
-        return result;
+        // UserEntity userEntity = userDAO.getUserByUserNum(userNum);
+        // UserCardEntity userCardEntity =
+        // userCardDAO.findByUserNumAndPrimaryCard(userEntity, 1);
+        // CompletableFuture<List<MonthlySummary>> result =
+        // codefService.getCardHistory(userCardEntity);
+        // return result;
+        return null;
     }
 
     private UserCardEntity toEntity(UserCardDTO dto) {
@@ -124,7 +115,7 @@ public class UserCardServiceImpl implements UserCardService {
 
         CardCompanyEntity cardCompanyEntity = cardCompanyDAO.findByCardCompanyNum(dto.getCardCompanyNum());
         CardEntity cardEntity = cardDAO.findByCardId(dto.getCardId());
-        UserEntity userEntity = userDAO.getUserById(dto.getUserNum());
+        UserEntity userEntity = userDAO.getUserByUserNum(dto.getUserNum());
 
         entity.setCardCompanyEntity(cardCompanyEntity);
         entity.setCardEntity(cardEntity);

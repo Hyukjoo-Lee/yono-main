@@ -13,4 +13,6 @@ public interface CodefService {
     CompletableFuture<List<MonthlySummary>> getCardHistory(UserCardEntity userCardEntity);
 
     CardCompanyDTO saveCodefCard(CardCompanyDTO cardCompanyDTO);
+
+    String getCardHistory(UserCardEntity userCardEntity, String startDate, String endDate);
 }

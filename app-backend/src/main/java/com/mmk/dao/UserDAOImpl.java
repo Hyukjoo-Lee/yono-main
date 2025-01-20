@@ -37,8 +37,8 @@ public class UserDAOImpl implements UserDAO {
     }
 
     @Override
-    public UserEntity getUserById(int id) {
-        UserEntity userInfoEntity = userRepository.getReferenceById(id);
+    public UserEntity getUserByUserNum(int userNum) {
+        UserEntity userInfoEntity = userRepository.getReferenceById(userNum);
         return userInfoEntity;
     }
 
