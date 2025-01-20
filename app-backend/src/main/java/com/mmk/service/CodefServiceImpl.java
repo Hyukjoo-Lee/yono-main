@@ -126,7 +126,7 @@ public class CodefServiceImpl implements CodefService {
     //     });
     // }
 
-    public String getCardHistory(UserCardEntity userCardEntity) {
+    public String getCardHistory(UserCardEntity userCardEntity, String startDate, String endDate) {
         long startTime = System.nanoTime();
         String productUrl = "/v1/kr/card/p/account/approval-list";
 
@@ -139,7 +139,7 @@ public class CodefServiceImpl implements CodefService {
         String cardNo = userCardEntity.getUserCardNum();
         String cardPwd = userCardEntity.getCardPwd();
 
-        HashMap<String, Object> parameterMap = getCardHistoryParameterMap(connectedId, organization, cardNo, cardPwd);
+        HashMap<String, Object> parameterMap = getCardHistoryParameterMap(connectedId, organization, cardNo, cardPwd, startDate, endDate);
 
         try {
             String result = codef.requestProduct(productUrl, EasyCodefServiceType.DEMO, parameterMap);
@@ -152,14 +152,7 @@ public class CodefServiceImpl implements CodefService {
         }
     }
 
-    private HashMap<String, Object> getCardHistoryParameterMap(String connectedId, String organization, String cardNo, String cardPwd) {
-        LocalDate today = LocalDate.now();
-        LocalDate twoMonthsAgoFirstDay = today.minusMonths(2).withDayOfMonth(1);
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyyMMdd");
-
-        String startDate = twoMonthsAgoFirstDay.format(formatter);
-        String endDate = today.format(formatter);
-        
+    private HashMap<String, Object> getCardHistoryParameterMap(String connectedId, String organization, String cardNo, String cardPwd, String startDate, String endDate) {
         HashMap<String, Object> parameterMap = new HashMap<>(
             Map.of(
                 "connectedId", connectedId,

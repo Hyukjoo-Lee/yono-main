@@ -1,5 +1,7 @@
 package com.mmk.service;
 
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -36,7 +38,15 @@ public class CardHistoryServiceImpl implements CardHistoryService {
     public void updateCardHistory(int userNum) {
         UserEntity userEntity = userDAO.getUserByUserNum(userNum);
         UserCardEntity userCardEntity = userCardDAO.findByUserNumAndPrimaryCard(userEntity, 1);
-        String result = codefService.getCardHistory(userCardEntity);
+
+        LocalDate today = LocalDate.now();
+        LocalDate twoMonthsAgoFirstDay = today.minusMonths(2).withDayOfMonth(1);
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyyMMdd");
+
+        String startDate = twoMonthsAgoFirstDay.format(formatter);
+        String endDate = today.format(formatter);
+
+        String result = codefService.getCardHistory(userCardEntity, startDate, endDate);
         System.out.println(result);
 
         try {
