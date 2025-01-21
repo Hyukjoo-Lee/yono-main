@@ -92,8 +92,12 @@ public class CardHistoryServiceImpl implements CardHistoryService {
             List<CardHistoryDTO> cardHistoryDTOList = objectMapper.readValue(dataArrayJson, new TypeReference<List<CardHistoryDTO>>() {});
 
             for (CardHistoryDTO cardHistoryDTO : cardHistoryDTOList) {
-                cardHistoryDTO.setUserCardId(userCardId);
-                cardHistoryDAO.save(toEntity(cardHistoryDTO));
+                try {
+                    cardHistoryDTO.setUserCardId(userCardId);
+                    cardHistoryDAO.save(toEntity(cardHistoryDTO));
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
             }
         } catch (Exception e) {
             e.printStackTrace();
@@ -105,6 +109,7 @@ public class CardHistoryServiceImpl implements CardHistoryService {
     public List<MonthlySummaryDTO> uploadMonthlyHistory(int userNum) {
 
         List<CardHistoryDTO> data = uploadCardHistory(userNum);
+        System.out.println("data: " + data);
         List<MonthlySummaryDTO> result = monthlyHistoryProcess(data);
         return result;
     }
@@ -120,7 +125,7 @@ public class CardHistoryServiceImpl implements CardHistoryService {
                         card -> (card.getResMemberStoreType() != null && !card.getResMemberStoreType().isEmpty())
                             ? card.getResMemberStoreType()
                             : "기타",
-                        Collectors.summingInt(card -> Integer.parseInt(card.getResUsedAmount()))
+                            Collectors.summingInt(card -> Integer.parseInt(card.getResUsedAmount()))
                     )
                 ));
     
