@@ -15,7 +15,7 @@ export function MainPage() {
   const user = useSelector((state) => state.user.user);
 
   // redux 상태를 확인
-  console.log('로그인 된 유저: ' + user);
+  console.log('로그인 된 유저: ' + JSON.stringify(user));
 
   return (
     <CommonRoot>

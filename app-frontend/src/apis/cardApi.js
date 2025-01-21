@@ -14,7 +14,7 @@ export const getCardHistory = async () => {
 };
 
 export const getUserCards = async () => {
-  const response = await axios.get('/codef/getUserCardList');
+  const response = await axios.get('/card/getUserCardList');
   return response.data;
 };
 
@@ -23,14 +23,14 @@ export const getUserPerformance = async () => {
   return response.data;
 };
 
-export const saveUserCardData = async (cardList, cardBenefits) => {
+export const saveCodefCard = async (userNum, organization) => {
   try {
     const requestBody = {
-      cardList: cardList,
-      performanceList: cardBenefits,
+      userNum: userNum,
+      organization: organization,
     };
 
-    const response = await axios.post('/card/saveUserCardData', requestBody);
+    const response = await axios.post('/card/saveCodefCard', requestBody);
     console.log(response.data.message);
   } catch (error) {
     console.error('데이터 저장 중 오류 발생:', error);

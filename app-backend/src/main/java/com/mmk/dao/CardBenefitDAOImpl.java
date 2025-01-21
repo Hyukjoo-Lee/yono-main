@@ -1,12 +1,9 @@
 package com.mmk.dao;
 
-import java.util.List;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
 import com.mmk.entity.CardBenefitEntity;
-import com.mmk.entity.CardEntity;
 
 @Repository
 public class CardBenefitDAOImpl implements CardBenefitDAO {
