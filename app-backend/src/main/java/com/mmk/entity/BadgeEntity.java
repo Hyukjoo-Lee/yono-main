@@ -15,7 +15,7 @@ import lombok.ToString;
 @SequenceGenerator(name = "badge_seq_generator", sequenceName = "badge_seq", initialValue = 1, allocationSize = 1)
 @Table(name = "badge")
 public class BadgeEntity {
-    
+
     @Column(name = "badge_date")
     private String badgeDate; // 202501 -> 날짜
 
