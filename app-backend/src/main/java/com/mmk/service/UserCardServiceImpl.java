@@ -59,10 +59,9 @@ public class UserCardServiceImpl implements UserCardService {
         }
     }
 
-    // 사용자 보유 카드 조회
     @Override
-    public List<UserCardDTO> getUserCardsByUserId(int userId) {
-        List<UserCardEntity> userCardEntities = userCardDAO.findUserCardEntityByUserId(userId);
+    public List<UserCardDTO> getAllCardsByUserNum(int userNum) {
+        List<UserCardEntity> userCardEntities = userCardDAO.getAllCardsByUserNum(userNum);
         if (userCardEntities.isEmpty()) {
             throw new NoSuchElementException("해당 사용자가 소유한 카드가 없습니다.");
         }
