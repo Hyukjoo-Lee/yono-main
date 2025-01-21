@@ -8,11 +8,29 @@ const StyledChart = styled.div`
   margin: 0 auto;
 `;
 
+const processData = (data) => {
+  const categoryTotals = {};
+
+  data.forEach(({ categoryTotals: totals }) => {
+    Object.entries(totals).forEach(([category, value]) => {
+      if (!categoryTotals[category]) {
+        categoryTotals[category] = 0;
+      }
+      categoryTotals[category] += value;
+    });
+  });
+
+  return Object.entries(categoryTotals).map(([id, value]) => ({
+    id,
+    value,
+  }));
+};
+
 const Piechart = ({ data }) => {
   return (
     <StyledChart>
       <ResponsivePie
-        data={data}
+        data={processData(data)}
         margin={{ top: 40, right: 120, bottom: 80, left: 80 }}
         innerRadius={0.5}
         padAngle={1}

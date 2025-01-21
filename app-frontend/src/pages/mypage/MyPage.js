@@ -9,7 +9,7 @@ import { findUserById } from '../../apis/userApi';
 import CommonDialog from '../../common/CommonDialog';
 
 export function MyPage() {
-  const userNum = useSelector((state) => state.user.user?.userNum); // 현재 로그인한 유저의 userNum
+  const userNum = useSelector((state) => state.user.user?.userNum);
   const [users, setUsers] = useState(null);
   const [loading, setLoading] = useState(true);
   const [isShowDialog, setIsShowDialog] = useState(false);
