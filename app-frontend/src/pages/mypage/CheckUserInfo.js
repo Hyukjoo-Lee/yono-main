@@ -151,7 +151,6 @@ const CheckUserInfo = ({
 
   const handleProfileChange = (e) => {
     const file = e.target.files[0];
-    console.log(file);
     if (file) {
       setProfileImage(file);
       const reader = new FileReader();
@@ -196,7 +195,6 @@ const CheckUserInfo = ({
   const isFormValid = () => {
     for (const key in userInfo) {
       if ((userInfo[key] + '').trim() === '') {
-        console.log(key);
         return false;
       }
     }

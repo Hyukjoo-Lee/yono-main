@@ -14,16 +14,22 @@ const Barchart = ({ data }) => {
     legendClick: (data) => {},
   };
 
-  const keys = data[0]
-    ? Object.keys(data[0]).filter((key) => key !== '날짜')
-    : [];
+  const transformedData = data.map((item) => {
+    const categoryTotals = item.categoryTotals;
+    return {
+      month: item.month,
+      ...categoryTotals,
+    };
+  });
+
+  const keys = data[0] ? Object.keys(data[0].categoryTotals) : [];
 
   return (
     <StyledChart>
       <ResponsiveBar
-        data={data}
+        data={transformedData}
         keys={keys}
-        indexBy="날짜"
+        indexBy="month"
         margin={{ top: 40, right: 120, bottom: 80, left: 80 }}
         padding={0.3}
         groupMode="grouped"

@@ -90,18 +90,6 @@ public class UserCardServiceImpl implements UserCardService {
         return toDTO(userCardDAO.findByUserCardId(userCardId));
     }
 
-    // 카드 내역 조회
-    @Override
-    public CompletableFuture<List<MonthlySummary>> getCardHistory(int userNum) {
-        // UserEntity userEntity = userDAO.getUserByUserNum(userNum);
-        // UserCardEntity userCardEntity =
-        // userCardDAO.findByUserNumAndPrimaryCard(userEntity, 1);
-        // CompletableFuture<List<MonthlySummary>> result =
-        // codefService.getCardHistory(userCardEntity);
-        // return result;
-        return null;
-    }
-
     private UserCardEntity toEntity(UserCardDTO dto) {
         UserCardEntity entity = new UserCardEntity();
         entity.setUserCardId(dto.getUserCardId());

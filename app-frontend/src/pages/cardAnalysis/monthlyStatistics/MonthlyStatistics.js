@@ -3,7 +3,8 @@ import styled from 'styled-components';
 import { useState, useEffect } from 'react';
 import Barchart from '../../../pages/cardAnalysis/monthlyStatistics/chart/Barchart';
 import Piechart from '../../../pages/cardAnalysis/monthlyStatistics/chart/Piechart';
-// import { getCardHistory } from '../../../apis/cardApi';
+import { uploadRecentHistory } from '../../../apis/cardHistoryApi';
+import { useSelector } from 'react-redux';
 // import { getToken, getConId, getCardHistory } from '../../../apis/cardApi'
 const piechart_data = [
   { id: '식비', value: 3 },
@@ -27,13 +28,14 @@ const LoadingText = styled.div`
 const MonthlyStatistics = () => {
   const [cardData, setCardData] = useState(null);
   const [loading, setLoading] = useState(true);
+  const userNum = useSelector((state) => state.user.user?.userNum);
 
   useEffect(() => {
     const fetchUser = async () => {
       try {
-        // const response = await getCardHistory();
-        // setCardData(response);
-        // console.log(response);
+        const response = await uploadRecentHistory(userNum);
+        setCardData(response.data);
+        console.log('response: ' + JSON.stringify(response.data));
       } catch (error) {
         console.error('카드 정보를 불러오는 중 오류 발생:', error);
         setCardData(null);
@@ -42,8 +44,11 @@ const MonthlyStatistics = () => {
       }
     };
 
-    fetchUser();
-  }, []);
+    if (userNum) {
+      console.log('userNum: ' + userNum);
+      fetchUser();
+    }
+  }, [userNum]);
 
   if (loading) {
     return <LoadingText>로딩 중...</LoadingText>;
