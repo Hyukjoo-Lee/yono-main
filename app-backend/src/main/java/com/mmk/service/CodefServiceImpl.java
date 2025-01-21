@@ -26,7 +26,7 @@ import com.mmk.dto.CardCompanyDTO;
 import com.mmk.dto.CardDTO;
 import com.mmk.dto.CardSummaryDTO;
 import com.mmk.dto.MonthlySummary;
-import com.mmk.dto.MonthlyTransDTO;
+import com.mmk.entity.CardCompanyEntity;
 import com.mmk.entity.UserCardEntity;
 
 import io.codef.api.EasyCodef;
@@ -191,35 +191,277 @@ public class CodefServiceImpl implements CodefService {
         return parameterMap;
     }
 
-    private List<MonthlySummary> getCardHistoryprocessResult(String result) {
+    // private List<MonthlySummary> getCardHistoryprocessResult(String result) {
+    // try {
+    // ObjectMapper objectMapper = new ObjectMapper();
+    // objectMapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES,
+    // false);
+
+    // String dataArrayJson = objectMapper.readTree(result).get("data").toString();
+
+    // List<MonthlyTransDTO> transactionDTOList =
+    // objectMapper.readValue(dataArrayJson,
+    // new TypeReference<List<MonthlyTransDTO>>() {
+    // });
+
+    // Map<String, Map<String, Integer>> groupedData = transactionDTOList.stream()
+    // .map(card -> new CardSummaryDTO(
+    // card.getUsedDate().substring(0, 6),
+    // (card.getStoreType() != null && !card.getStoreType().isEmpty()) ?
+    // card.getStoreType()
+    // : "기타",
+    // Integer.parseInt(card.getUsedAmount())))
+    // .collect(Collectors.groupingBy(
+    // CardSummaryDTO::getMonth,
+    // Collectors.groupingBy(
+    // CardSummaryDTO::getStoreType,
+    // Collectors.summingInt(CardSummaryDTO::getUsedAmount))));
+    // return groupedData.entrySet().stream()
+    // .map(entry -> new MonthlySummary(
+    // entry.getKey().substring(4) + "월",
+    // entry.getValue()))
+    // .collect(Collectors.toList());
+    // } catch (Exception e) {
+    // System.err.println("Error processing card history: " + e.getMessage());
+    // return Collections.emptyList();
+    // }
+    // }
+
+    // 사용자 보유 카드 리스트를 가져오는 메서드
+    @Override
+    public List<Map<String, Object>> getUserCardList(String connectedId, String organization) {
+        codef = new EasyCodef();
+        codef.setClientInfoForDemo(clientId, clientSecret);
+        codef.setPublicKey(publickey);
+
+        HashMap<String, Object> parameterMap = new HashMap<>();
+        parameterMap.put("connectedId", connectedId);
+        parameterMap.put("organization", organization); // 기관 코드
+        parameterMap.put("inquiryType", "0"); // 카드 이미지 포함 여부
+        String productUrl = "/v1/kr/card/p/account/card-list";
+
         try {
+            String jsonResult = codef.requestProduct(productUrl, EasyCodefServiceType.DEMO, parameterMap);
             ObjectMapper objectMapper = new ObjectMapper();
-            objectMapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
+            JsonNode dataNode = objectMapper.readTree(jsonResult).get("data");
 
-            String dataArrayJson = objectMapper.readTree(result).get("data").toString();
-            List<MonthlyTransDTO> transactionDTOList = objectMapper.readValue(dataArrayJson,
-                    new TypeReference<List<MonthlyTransDTO>>() {
+            // 반환값이 배열인지 객체인지 확인 - 카드가 하나 일 때는 배열로 반환되고 두개 이상일 때는 객체로 반환됨
+            List<Map<String, Object>> result;
+
+            if (dataNode.isArray()) {
+                result = objectMapper.convertValue(dataNode, new TypeReference<List<Map<String, Object>>>() {
+                });
+            } else {
+                Map<String, Object> singleCard = objectMapper.convertValue(dataNode,
+                        new TypeReference<Map<String, Object>>() {
+                        });
+                result = new ArrayList<>();
+                result.add(singleCard);
+            }
+
+            if (result.isEmpty()) {
+                throw new RuntimeException("카드 정보가 존재하지 않습니다.");
+            }
+
+            List<Map<String, Object>> filteredResult = new ArrayList<>();
+            result.forEach(card -> {
+                Map<String, Object> filteredCard = new HashMap<>();
+                filteredCard.put("cardName", card.get("resCardName"));
+                filteredCard.put("cardNo", card.get("resCardNo"));
+                filteredCard.put("userName", card.get("resUserNm"));
+                filteredCard.put("validPeriod", card.get("resValidPeriod"));
+                filteredCard.put("imageLink", card.get("resImageLink"));
+                filteredCard.put("organizationCode", parameterMap.get("organization"));
+                filteredResult.add(filteredCard);
+            });
+
+            return filteredResult;
+
+        } catch (
+
+        Exception e) {
+            e.printStackTrace();
+            throw new RuntimeException("카드 리스트 정보 요청에 실패하였습니다.");
+        }
+    }
+
+    // 카드 혜택 정보를 가져오는 메서드
+    @Override
+    public List<Map<String, Object>> getUserPerformance(String connectedId, String organization) {
+        codef = new EasyCodef();
+        codef.setClientInfoForDemo(clientId, clientSecret);
+        codef.setPublicKey(publickey);
+
+        HashMap<String, Object> parameterMap = new HashMap<>();
+        parameterMap.put("connectedId", connectedId);
+        parameterMap.put("organization", organization);
+        String productUrl = "/v1/kr/card/p/account/result-check-list";
+
+        try {
+            String jsonResult = codef.requestProduct(productUrl, EasyCodefServiceType.DEMO, parameterMap);
+            System.out.println("jsonResult: " + jsonResult);
+            ObjectMapper objectMapper = new ObjectMapper();
+            JsonNode dataNode = objectMapper.readTree(jsonResult).get("data");
+
+            List<Map<String, Object>> result;
+
+            System.out.println("result: " + dataNode);
+
+            if (dataNode.isArray()) {
+                result = objectMapper.convertValue(dataNode, new TypeReference<List<Map<String, Object>>>() {
+                });
+            } else if (dataNode.isObject()) {
+                Map<String, Object> singleCard = objectMapper.convertValue(dataNode,
+                        new TypeReference<Map<String, Object>>() {
+                        });
+                result = new ArrayList<>();
+                result.add(singleCard);
+            } else {
+                throw new RuntimeException("존재 하지 않는 타입: ");
+            }
+
+            if (result.isEmpty()) {
+                throw new RuntimeException("카드 정보가 존재하지 않습니다.");
+            }
+
+            List<Map<String, Object>> filteredResult = new ArrayList<>();
+            result.forEach(card -> {
+                String cardName = (String) card.get("resCardName");
+                String cardNo = (String) card.get("resCardNo");
+                String cardCompany = (String) card.get("resCardCompany");
+
+                List<Map<String, Object>> benefitList = objectMapper.convertValue(
+                        card.get("resCardBenefitList"),
+                        new TypeReference<List<Map<String, Object>>>() {
+                        });
+
+                List<Map<String, Object>> benefitInfoList = new ArrayList<>();
+                if (benefitList != null) {
+                    benefitList.forEach(benefit -> {
+                        Map<String, Object> benefitInfo = new HashMap<>();
+                        benefitInfo.put("benefitName", benefit.get("resCardBenefitName"));
+                        benefitInfo.put("businessTypes", benefit.get("resBusinessTypes"));
+                        benefitInfoList.add(benefitInfo);
                     });
+                }
 
-            Map<String, Map<String, Integer>> groupedData = transactionDTOList.stream()
-                    .map(card -> new CardSummaryDTO(
-                            card.getUsedDate().substring(0, 6),
-                            (card.getStoreType() != null && !card.getStoreType().isEmpty()) ? card.getStoreType()
-                                    : "기타",
-                            Integer.parseInt(card.getUsedAmount())))
-                    .collect(Collectors.groupingBy(
-                            CardSummaryDTO::getMonth,
-                            Collectors.groupingBy(
-                                    CardSummaryDTO::getStoreType,
-                                    Collectors.summingInt(CardSummaryDTO::getUsedAmount))));
-            return groupedData.entrySet().stream()
-                    .map(entry -> new MonthlySummary(
-                            entry.getKey().substring(4) + "월",
-                            entry.getValue()))
-                    .collect(Collectors.toList());
-        } catch (Exception e) {
-            System.err.println("Error processing card history: " + e.getMessage());
-            return Collections.emptyList();
+                Map<String, Object> cardInfo = new HashMap<>();
+                cardInfo.put("cardName", cardName);
+                cardInfo.put("cardNo", cardNo);
+                cardInfo.put("cardCompany", cardCompany);
+                cardInfo.put("benefits", benefitInfoList);
+                filteredResult.add(cardInfo);
+            });
+
+            return filteredResult;
+
+        } catch (
+
+        Exception e) {
+            e.printStackTrace();
+            throw new RuntimeException("카드 혜택 정보 요청에 실패하였습니다.");
+        }
+    }
+
+    // 카드 정보, 혜택 호출 결과 저장 - 이미 회사가 등록 되어 있어야 함
+    @Override
+    public CardCompanyDTO saveCodefCard(CardCompanyDTO cardCompanyDTO) {
+
+        int userNum = cardCompanyDTO.getUserNum();
+        String organization = cardCompanyDTO.getOrganization();
+
+        CardCompanyEntity cardCompanyEntity = cardCompanyDAO.findByUserNumAndOrganization(userNum, organization);
+
+        if (cardCompanyEntity == null) {
+            throw new RuntimeException("카드 회사 정보가 존재하지 않습니다.");
+        } else {
+            int companyNum = cardCompanyEntity.getCardCompanyNum();
+            String companyId = cardCompanyEntity.getCompanyId();
+            String companyPwd = cardCompanyEntity.getCompanyPwd();
+            String connectedId = cardCompanyEntity.getConnedtedId();
+
+            cardCompanyDTO.setCardCompanyNum(companyNum);
+            cardCompanyDTO.setCompanyId(companyId);
+            cardCompanyDTO.setCompanyPwd(companyPwd);
+            cardCompanyDTO.setConnectedId(connectedId);
+        }
+        // Codef API로 카드 정보 요청
+        List<Map<String, Object>> cardList = getUserCardList(cardCompanyDTO.getConnectedId(), organization);
+
+        if (cardList.isEmpty()) {
+            throw new RuntimeException("Codef API로부터 카드 정보를 가져오지 못했습니다.");
+        }
+
+        // 마스터 카드, 유저 카드 저장
+        cardList.forEach(card -> {
+            CardDTO cardDTO = new CardDTO();
+            cardDTO.setCardTitle((String) card.get("cardName"));
+            cardDTO.setCardProvider(getCardProvider(organization));
+            cardDTO.setOrganizationCode((String) card.get("organizationCode"));
+            cardDTO.setCardImgUrl((String) card.get("imageLink"));
+
+            cardService.createCard(cardDTO);
+        });
+
+        // Codef API로 카드 혜택 요청
+        List<Map<String, Object>> benefitList = getUserPerformance(cardCompanyDTO.getConnectedId(), organization);
+
+        if (benefitList.isEmpty()) {
+            throw new RuntimeException("Codef API로부터 카드 혜택 정보를 가져오지 못했습니다.");
+        }
+        System.out.println("benefitList: " + benefitList);
+        // CardBenefitEntity 생성 및 저장
+        benefitList.forEach(benefit -> {
+            CardBenefitDTO cardBenefitDTO = new CardBenefitDTO();
+
+            String cardTitle = (String) benefit.get("cardName");
+
+            cardBenefitDTO.setCardTitle(cardTitle);
+
+            @SuppressWarnings("unchecked")
+            List<Map<String, Object>> benefits = (List<Map<String, Object>>) benefit.get("benefits");
+            benefits.forEach(b -> {
+
+                String benefitTitle = (String) b.get("benefitName");
+                String businessTypes = (String) b.get("businessTypes");
+
+                cardBenefitDTO.setBenefitTitle(benefitTitle);
+                cardBenefitDTO.setBusinessTypes(businessTypes);
+
+                cardBenefitService.createCardBenefit(cardBenefitDTO);
+            });
+        });
+
+        return cardCompanyDTO;
+    }
+
+    // 기관코드에 따른 CARD_PROVIDER 설정
+    private String getCardProvider(String organization) {
+        switch (organization) {
+            case "0301":
+                return "kb";
+            case "0302":
+                return "hyundai";
+            case "0303":
+                return "samsung";
+            case "0304":
+                return "nh";
+            case "0306":
+                return "shinhan";
+            case "0313":
+                return "hana";
+            case "NH":
+                return "NH농협카드";
+            case "SS":
+                return "삼성카드";
+            case "HD":
+                return "현대카드";
+            case "WF":
+                return "우리카드";
+            case "CT":
+                return "씨티카드";
+            default:
+                throw new IllegalArgumentException("유효하지 않은 기관코드: " + organization);
         }
     }
 }
