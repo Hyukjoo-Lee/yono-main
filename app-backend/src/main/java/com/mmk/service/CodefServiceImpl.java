@@ -310,54 +310,52 @@ public class CodefServiceImpl implements CodefService {
             cardCompanyDTO.setCompanyPwd(companyPwd);
             cardCompanyDTO.setConnectedId(connectedId);
         }
-        // Codef API로 카드 정보 요청
-        List<Map<String, Object>> cardList = getUserCardList(cardCompanyDTO.getConnectedId(), organization);
+        // // Codef API로 카드 정보 요청
+        // List<Map<String, Object>> cardList =
+        // getUserCardList(cardCompanyDTO.getConnectedId(), organization);
 
-        if (cardList.isEmpty()) {
-            throw new RuntimeException("Codef API로부터 카드 정보를 가져오지 못했습니다.");
-        }
-        System.out.println("cardList: " + cardList);
-        // 마스터 카드, 유저 카드 저장
-        cardList.forEach(card -> {
-            CardDTO cardDTO = new CardDTO();
-            cardDTO.setCardTitle((String) card.get("cardName"));
-            cardDTO.setCardProvider(getCardProvider(organization));
-            cardDTO.setOrganizationCode((String) card.get("organizationCode"));
-            cardDTO.setCardImgUrl((String) card.get("imageLink"));
-
-            cardService.createCard(cardDTO);
-        });
-
-        // // Codef API로 카드 혜택 요청
-        // List<Map<String, Object>> benefitList =
-        // getUserPerformance(cardCompanyDTO.getConnectedId(), organization);
-
-        // if (benefitList.isEmpty()) {
-        // throw new RuntimeException("Codef API로부터 카드 혜택 정보를 가져오지 못했습니다.");
+        // if (cardList.isEmpty()) {
+        // throw new RuntimeException("Codef API로부터 카드 정보를 가져오지 못했습니다.");
         // }
-        // System.out.println("benefitList: " + benefitList);
-        // // CardBenefitEntity 생성 및 저장
-        // benefitList.forEach(benefit -> {
-        // CardBenefitDTO cardBenefitDTO = new CardBenefitDTO();
+        // System.out.println("cardList: " + cardList);
+        // // 마스터 카드, 유저 카드 저장
+        // cardList.forEach(card -> {
+        // CardDTO cardDTO = new CardDTO();
+        // cardDTO.setCardTitle((String) card.get("cardName"));
+        // cardDTO.setCardProvider(getCardProvider(organization));
+        // cardDTO.setOrganizationCode((String) card.get("organizationCode"));
+        // cardDTO.setCardImgUrl((String) card.get("imageLink"));
 
-        // String cardTitle = (String) benefit.get("cardName");
-
-        // cardBenefitDTO.setCardTitle(cardTitle);
-
-        // @SuppressWarnings("unchecked")
-        // List<Map<String, Object>> benefits = (List<Map<String, Object>>)
-        // benefit.get("benefits");
-        // benefits.forEach(b -> {
-
-        // String benefitTitle = (String) b.get("benefitName");
-        // String businessTypes = (String) b.get("businessTypes");
-
-        // cardBenefitDTO.setBenefitTitle(benefitTitle);
-        // cardBenefitDTO.setBusinessTypes(businessTypes);
-
-        // cardBenefitService.createCardBenefit(cardBenefitDTO);
+        // cardService.createCard(cardDTO);
         // });
-        // });
+
+        // Codef API로 카드 혜택 요청
+        List<Map<String, Object>> benefitList = getUserPerformance(cardCompanyDTO.getConnectedId(), organization);
+
+        if (benefitList.isEmpty()) {
+            throw new RuntimeException("Codef API로부터 카드 혜택 정보를 가져오지 못했습니다.");
+        }
+
+        benefitList.forEach(benefit -> {
+            CardBenefitDTO cardBenefitDTO = new CardBenefitDTO();
+
+            String cardTitle = (String) benefit.get("cardName");
+
+            cardBenefitDTO.setCardTitle(cardTitle);
+
+            @SuppressWarnings("unchecked")
+            List<Map<String, Object>> benefits = (List<Map<String, Object>>) benefit.get("benefits");
+            benefits.forEach(b -> {
+
+                String benefitTitle = (String) b.get("benefitName");
+                String businessTypes = (String) b.get("businessTypes");
+
+                cardBenefitDTO.setBenefitTitle(benefitTitle);
+                cardBenefitDTO.setBusinessTypes(businessTypes);
+
+                cardBenefitService.createCardBenefit(cardBenefitDTO);
+            });
+        });
 
         return cardCompanyDTO;
     }

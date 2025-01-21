@@ -9,6 +9,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.mmk.dao.CardBenefitDAO;
+import com.mmk.dao.CardDAO;
 import com.mmk.dao.CardRepository;
 import com.mmk.dto.CardBenefitDTO;
 import com.mmk.entity.CardBenefitEntity;
@@ -23,6 +24,9 @@ public class CardBenefitServiceImpl implements CardBenefitService {
 
     @Autowired
     private CardRepository cardRepository;
+
+    @Autowired
+    private CardDAO cardDAO;
 
     // 카드 제목으로 혜택 조회
     @Override
@@ -62,6 +66,21 @@ public class CardBenefitServiceImpl implements CardBenefitService {
         }
 
         return savedBenefits;
+    }
+
+    @Override
+    public CardBenefitDTO createCardBenefit(CardBenefitDTO cardBenefitDTO) {
+        CardEntity cardEntity = cardDAO.findByCardTitle(cardBenefitDTO.getCardTitle());
+
+        if (cardEntity == null) {
+            throw new RuntimeException("카드 정보를 찾을 수 없습니다: " + cardBenefitDTO.getCardTitle());
+        }
+
+        CardBenefitEntity cardBenefitEntity = toEntity(cardBenefitDTO, cardEntity);
+        System.out.println("cardBenefitEntity: " + cardBenefitEntity);
+        cardBenefitDAO.registerCardBenefit(cardBenefitEntity);
+
+        return toDTO(cardBenefitEntity);
     }
 
     private CardBenefitEntity toEntity(CardBenefitDTO dto, CardEntity cardEntity) {

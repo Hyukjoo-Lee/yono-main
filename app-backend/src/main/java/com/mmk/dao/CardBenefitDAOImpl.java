@@ -39,5 +39,4 @@ public class CardBenefitDAOImpl implements CardBenefitDAO {
     public CardBenefitEntity registerCardBenefit(CardBenefitEntity cardBenefitEntity) {
         return cardBenefitRepository.save(cardBenefitEntity);
     }
-
 }
