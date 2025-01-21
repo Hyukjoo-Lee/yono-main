@@ -1,32 +1,21 @@
 package com.mmk.service;
 
-import java.time.LocalDate;
-import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.concurrent.CompletableFuture;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
-import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 import com.fasterxml.jackson.core.type.TypeReference;
-import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.mmk.dao.CardCompanyDAO;
 import com.mmk.dto.CardBenefitDTO;
 import com.mmk.dto.CardCompanyDTO;
 import com.mmk.dto.CardDTO;
-import com.mmk.dto.CardSummaryDTO;
-import com.mmk.dto.MonthlySummary;
-import com.mmk.dto.MonthlyTransDTO;
 import com.mmk.entity.CardCompanyEntity;
 import com.mmk.entity.UserCardEntity;
 
@@ -105,46 +94,7 @@ public class CodefServiceImpl implements CodefService {
         return parameterMap;
     }
 
-    // 카드 월별 사용 내역
-    // private static final ExecutorService executor =
-    // Executors.newFixedThreadPool(10);
-
-    // public CompletableFuture<List<MonthlySummary>> getCardHistory(UserCardEntity
-    // userCardEntity) {
-    // long startTime = System.nanoTime();
-    // String productUrl = "/v1/kr/card/p/account/approval-list";
-
-    // codef = new EasyCodef();
-    // codef.setClientInfoForDemo(clientId, clientSecret);
-    // codef.setPublicKey(publickey);
-
-    // String connectedId = userCardEntity.getCardCompanyEntity().getConnedtedId();
-    // String organization = userCardEntity.getCardEntity().getOrganizationCode();
-    // String cardNo = userCardEntity.getUserCardNum();
-    // String cardPwd = userCardEntity.getCardPwd();
-
-    // HashMap<String, Object> parameterMap =
-    // getCardHistoryParameterMap(connectedId, organization, cardNo, cardPwd);
-
-    // return CompletableFuture.supplyAsync(() -> {
-    // try {
-    // String result = codef.requestProduct(productUrl, EasyCodefServiceType.DEMO,
-    // parameterMap);
-    // long endTime = System.nanoTime();
-    // System.out.println("CODEF 데이터 호출 소요 시간: " + (endTime - startTime) + "ns");
-    // System.out.println(result);
-    // return result;
-    // } catch (Exception e) {
-    // throw new RuntimeException(e);
-    // }
-    // }, executor)
-    // .thenApply(result -> getCardHistoryprocessResult(result))
-    // .exceptionally(e -> {
-    // e.printStackTrace();
-    // return Collections.emptyList();
-    // });
-    // }
-
+    // 지정한 기간 동안의 카드 사용 내역 불러오기
     public String getCardHistory(UserCardEntity userCardEntity, String startDate, String endDate) {
         long startTime = System.nanoTime();
         String productUrl = "/v1/kr/card/p/account/approval-list";
@@ -165,7 +115,6 @@ public class CodefServiceImpl implements CodefService {
             String result = codef.requestProduct(productUrl, EasyCodefServiceType.DEMO, parameterMap);
             long endTime = System.nanoTime();
             System.out.println("CODEF 데이터 호출 소요 시간: " + (endTime - startTime) + "ns");
-            System.out.println(result);
             return result;
         } catch (Exception e) {
             throw new RuntimeException(e);
@@ -192,38 +141,6 @@ public class CodefServiceImpl implements CodefService {
         return parameterMap;
     }
 
-    private List<MonthlySummary> getCardHistoryprocessResult(String result) {
-        try {
-            ObjectMapper objectMapper = new ObjectMapper();
-            objectMapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
-
-            String dataArrayJson = objectMapper.readTree(result).get("data").toString();
-            List<MonthlyTransDTO> transactionDTOList = objectMapper.readValue(dataArrayJson,
-                    new TypeReference<List<MonthlyTransDTO>>() {
-                    });
-
-            Map<String, Map<String, Integer>> groupedData = transactionDTOList.stream()
-                    .map(card -> new CardSummaryDTO(
-                            card.getUsedDate().substring(0, 6),
-                            (card.getStoreType() != null && !card.getStoreType().isEmpty()) ? card.getStoreType()
-                                    : "기타",
-                            Integer.parseInt(card.getUsedAmount())))
-                    .collect(Collectors.groupingBy(
-                            CardSummaryDTO::getMonth,
-                            Collectors.groupingBy(
-                                    CardSummaryDTO::getStoreType,
-                                    Collectors.summingInt(CardSummaryDTO::getUsedAmount))));
-            return groupedData.entrySet().stream()
-                    .map(entry -> new MonthlySummary(
-                            entry.getKey().substring(4) + "월",
-                            entry.getValue()))
-                    .collect(Collectors.toList());
-        } catch (Exception e) {
-            System.err.println("Error processing card history: " + e.getMessage());
-            return Collections.emptyList();
-        }
-    }
-
     // 사용자 보유 카드 리스트를 가져오는 메서드
     @Override
     public List<Map<String, Object>> getUserCardList(String connectedId, String organization) {
@@ -240,13 +157,23 @@ public class CodefServiceImpl implements CodefService {
         try {
             String jsonResult = codef.requestProduct(productUrl, EasyCodefServiceType.DEMO, parameterMap);
             ObjectMapper objectMapper = new ObjectMapper();
-            String dataArrayJson = objectMapper.readTree(jsonResult).get("data").toString();
+            JsonNode dataNode = objectMapper.readTree(jsonResult).get("data");
 
-            List<Map<String, Object>> result = objectMapper.readValue(dataArrayJson,
-                    new TypeReference<List<Map<String, Object>>>() {
-                    });
+            // 반환값이 배열인지 객체인지 확인 - 카드가 하나 일 때는 배열로 반환되고 두개 이상일 때는 객체로 반환됨
+            List<Map<String, Object>> result;
 
-            if (result == null || result.isEmpty()) {
+            if (dataNode.isArray()) {
+                result = objectMapper.convertValue(dataNode, new TypeReference<List<Map<String, Object>>>() {
+                });
+            } else {
+                Map<String, Object> singleCard = objectMapper.convertValue(dataNode,
+                        new TypeReference<Map<String, Object>>() {
+                        });
+                result = new ArrayList<>();
+                result.add(singleCard);
+            }
+
+            if (result.isEmpty()) {
                 throw new RuntimeException("카드 정보가 존재하지 않습니다.");
             }
 
@@ -284,14 +211,28 @@ public class CodefServiceImpl implements CodefService {
 
         try {
             String jsonResult = codef.requestProduct(productUrl, EasyCodefServiceType.DEMO, parameterMap);
+            System.out.println("jsonResult: " + jsonResult);
             ObjectMapper objectMapper = new ObjectMapper();
-            String dataArrayJson = objectMapper.readTree(jsonResult).get("data").toString();
+            JsonNode dataNode = objectMapper.readTree(jsonResult).get("data");
 
-            List<Map<String, Object>> result = objectMapper.readValue(dataArrayJson,
-                    new TypeReference<List<Map<String, Object>>>() {
-                    });
+            List<Map<String, Object>> result;
 
-            if (result == null || result.isEmpty()) {
+            System.out.println("result: " + dataNode);
+
+            if (dataNode.isArray()) {
+                result = objectMapper.convertValue(dataNode, new TypeReference<List<Map<String, Object>>>() {
+                });
+            } else if (dataNode.isObject()) {
+                Map<String, Object> singleCard = objectMapper.convertValue(dataNode,
+                        new TypeReference<Map<String, Object>>() {
+                        });
+                result = new ArrayList<>();
+                result.add(singleCard);
+            } else {
+                throw new RuntimeException("존재 하지 않는 타입: ");
+            }
+
+            if (result.isEmpty()) {
                 throw new RuntimeException("카드 정보가 존재하지 않습니다.");
             }
 
@@ -326,9 +267,11 @@ public class CodefServiceImpl implements CodefService {
 
             return filteredResult;
 
-        } catch (Exception e) {
+        } catch (
+
+        Exception e) {
             e.printStackTrace();
-            throw new RuntimeException("카드 리스트 정보 요청에 실패하였습니다.");
+            throw new RuntimeException("카드 혜택 정보 요청에 실패하였습니다.");
         }
     }
 
@@ -378,10 +321,11 @@ public class CodefServiceImpl implements CodefService {
         if (benefitList.isEmpty()) {
             throw new RuntimeException("Codef API로부터 카드 혜택 정보를 가져오지 못했습니다.");
         }
-
+        System.out.println("benefitList: " + benefitList);
         // CardBenefitEntity 생성 및 저장
         benefitList.forEach(benefit -> {
             CardBenefitDTO cardBenefitDTO = new CardBenefitDTO();
+
             String cardTitle = (String) benefit.get("cardName");
 
             cardBenefitDTO.setCardTitle(cardTitle);
@@ -416,6 +360,8 @@ public class CodefServiceImpl implements CodefService {
                 return "nh";
             case "0306":
                 return "shinhan";
+            case "0313":
+                return "hana";
             case "NH":
                 return "NH농협카드";
             case "SS":

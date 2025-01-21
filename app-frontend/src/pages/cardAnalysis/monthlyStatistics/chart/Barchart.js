@@ -14,16 +14,22 @@ const Barchart = ({ data }) => {
     legendClick: (data) => {},
   };
 
-  const keys = data[0]
-    ? Object.keys(data[0]).filter((key) => key !== '날짜')
-    : [];
+  const transformedData = data.map((item) => {
+    const categoryTotals = item.categoryTotals;
+    return {
+      month: item.month,
+      ...categoryTotals,
+    };
+  });
+
+  const keys = data[0] ? Object.keys(data[0].categoryTotals) : [];
 
   return (
     <StyledChart>
       <ResponsiveBar
-        data={data}
+        data={transformedData}
         keys={keys}
-        indexBy="날짜"
+        indexBy="month"
         margin={{ top: 40, right: 120, bottom: 80, left: 80 }}
         padding={0.3}
         groupMode="grouped"
@@ -88,32 +94,32 @@ const Barchart = ({ data }) => {
         // 토탈 값 표시
         // enableTotals = {true}
         onClick={handle.barClick}
-        legends={[
-          {
-            dataFrom: 'keys',
-            anchor: 'bottom',
-            direction: 'row',
-            justify: false,
-            translateX: 0,
-            translateY: 80,
-            itemsSpacing: 10,
-            itemWidth: 100,
-            itemHeight: 18,
-            itemDirection: 'left-to-right',
-            itemOpacity: 0.85,
-            symbolSize: 15,
-            effects: [
-              {
-                on: 'hover',
-                style: {
-                  itemOpacity: 1,
-                },
-              },
-            ],
-            onClick: handle.legendClick,
-            wrapText: true,
-          },
-        ]}
+        // legends={[
+        //   {
+        //     dataFrom: 'keys',
+        //     anchor: 'bottom',
+        //     direction: 'row',
+        //     justify: false,
+        //     translateX: 0,
+        //     translateY: 80,
+        //     itemsSpacing: 10,
+        //     itemWidth: 100,
+        //     itemHeight: 18,
+        //     itemDirection: 'left-to-right',
+        //     itemOpacity: 0.85,
+        //     symbolSize: 15,
+        //     effects: [
+        //       {
+        //         on: 'hover',
+        //         style: {
+        //           itemOpacity: 1,
+        //         },
+        //       },
+        //     ],
+        //     onClick: handle.legendClick,
+        //     wrapText: true,
+        //   },
+        // ]}
       />
     </StyledChart>
   );

@@ -1,9 +1,6 @@
 package com.mmk.dao;
 
 import com.mmk.entity.CardBenefitEntity;
-import com.mmk.entity.CardEntity;
-
-import java.util.List;
 
 public interface CardBenefitDAO {
     void createCardBenefit(CardBenefitEntity cardBenefitEntity);

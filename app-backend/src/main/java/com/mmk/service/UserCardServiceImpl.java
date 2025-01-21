@@ -3,7 +3,6 @@ package com.mmk.service;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.NoSuchElementException;
-import java.util.concurrent.CompletableFuture;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -13,7 +12,6 @@ import com.mmk.dao.CardCompanyDAO;
 import com.mmk.dao.CardDAO;
 import com.mmk.dao.UserCardDAO;
 import com.mmk.dao.UserDAO;
-import com.mmk.dto.MonthlySummary;
 import com.mmk.dto.UserCardDTO;
 import com.mmk.entity.CardCompanyEntity;
 import com.mmk.entity.CardEntity;
@@ -35,9 +33,6 @@ public class UserCardServiceImpl implements UserCardService {
 
     @Autowired
     private CardCompanyDAO cardCompanyDAO;
-
-    @Autowired
-    private CodefService codefService;
 
     // 사용자 카드 등록
     @Override
@@ -88,18 +83,6 @@ public class UserCardServiceImpl implements UserCardService {
         userCardDAO.setPrimaryCard(userCardId);
 
         return toDTO(userCardDAO.findByUserCardId(userCardId));
-    }
-
-    // 카드 내역 조회
-    @Override
-    public CompletableFuture<List<MonthlySummary>> getCardHistory(int userNum) {
-        // UserEntity userEntity = userDAO.getUserByUserNum(userNum);
-        // UserCardEntity userCardEntity =
-        // userCardDAO.findByUserNumAndPrimaryCard(userEntity, 1);
-        // CompletableFuture<List<MonthlySummary>> result =
-        // codefService.getCardHistory(userCardEntity);
-        // return result;
-        return null;
     }
 
     private UserCardEntity toEntity(UserCardDTO dto) {
