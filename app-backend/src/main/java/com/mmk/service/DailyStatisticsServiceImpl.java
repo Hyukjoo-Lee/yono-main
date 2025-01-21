@@ -20,19 +20,19 @@ public class DailyStatisticsServiceImpl implements DailyStatisticsService {
         return dailyStatisticsDao.getDailyStatistics().stream()
                 .map(entity -> {
                     DailyStatisticsDTO dto = new DailyStatisticsDTO();
-                    dto.setDailyId(entity.getDailyId());
-                    dto.setUserId(entity.getUserId());
-                    dto.setDailyDate(entity.getDailyDate());
-                    dto.setDailyTarget(entity.getDailyTarget());
-                    dto.setCardImage(entity.getCardImage());
-                    dto.setCardName(entity.getCardName());
-                    dto.setStore(entity.getStore());
-                    dto.setCategory(entity.getCategory());
-                    dto.setAmount(entity.getAmount());
-                    dto.setCreatedAt(entity.getCreatedAt());
+                    dto.setResApprovalNo(entity.getResApprovalNo());
+                    dto.setResUsedDate(entity.getResUsedDate());
+                    dto.setResMemberStoreName(entity.getResMemberStoreName());
+                    dto.setResUsedAmount(entity.getResUsedAmount());
+                    dto.setResMemberStoreType(entity.getResMemberStoreType());
+
+                    dto.setSpendingTarget(entity.getUserCardEntity().getUserEntity().getSpendingTarget());
+                    dto.setUserCardId(entity.getUserCardEntity().getUserCardId());
+                    dto.setCardTitle(entity.getUserCardEntity().getCardEntity().getCardTitle());
+                    dto.setCardImgUrl(entity.getUserCardEntity().getCardEntity().getCardImgUrl());
+                    dto.setUserNum(entity.getUserCardEntity().getUserEntity().getUserNum());
                     return dto;
                 })
                 .collect(Collectors.toList());
     }
 }
-

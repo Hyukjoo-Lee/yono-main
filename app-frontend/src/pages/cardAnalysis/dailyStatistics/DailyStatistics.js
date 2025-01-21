@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect, useRef, useCallback } from 'react';
 import Calendar from './calendar/Calendar';
 import styled from 'styled-components';
 import CommonCardListBox from '../../../common/CommonCardListBox';
@@ -7,8 +7,12 @@ import { ReactComponent as VeryGoodCoin } from '../../../assets/images/VeryGoodC
 import { ReactComponent as GoodCoin } from '../../../assets/images/GoodCoin.svg';
 import { ReactComponent as BadCoin } from '../../../assets/images/BadCoin.svg';
 import { fetchDailyStatistics } from '../../../apis/dailyStatisticsApi.js';
+import { findUserById } from '../../../apis/userApi';
 import CircularProgress from '@mui/material/CircularProgress';
 import ResizeObserver from 'resize-observer-polyfill';
+import CommonDialog from '../../../common/CommonDialog';
+import { useSelector } from 'react-redux';
+import { useNavigate } from 'react-router-dom';
 
 const Root = styled.div`
   width: 100%;
@@ -87,48 +91,69 @@ const DailyStatistics = () => {
     { icon: <VeryGoodCoin />, text: '51~75% 소비절약' },
     { icon: <ExcellentCoin />, text: '76~100% 소비절약' },
   ];
-
+  const isLoggedIn = useSelector((state) => state.user.user?.userNum); // 현재 로그인한 유저의 userNum
   const [statistics, setStatistics] = useState([]);
-  const [filteredStatistics, setFilteredStatistics] = useState([]);
   const [selectedDate, setSelectedDate] = useState(new Date());
   const [isLoading, setIsLoading] = useState(true);
+  const [users, setUsers] = useState(null);
+  const [isShowDialog, setIsShowDialog] = useState(false);
   const [dynamicHeight, setDynamicHeight] = useState(541); // 기본 높이 설정
   const calendarRef = useRef(null);
+  const navigate = useNavigate();
 
   useEffect(() => {
-    const fetchStatistics = async () => {
-      setIsLoading(true);
+    const fetchUser = async () => {
       try {
-        const data = await fetchDailyStatistics(); // API 호출
-        setStatistics(data);
-        setFilteredStatistics(data); // 처음음 통계 설정
+        if (!isLoggedIn) {
+          setIsShowDialog(true);
+        } else {
+          const user = await findUserById(isLoggedIn);
+          setUsers(user.data);
+        }
       } catch (error) {
-        console.error('Failed to fetch statistics:', error);
+        setIsShowDialog(true);
       } finally {
-        setIsLoading(false); // 데이터 로드 완료 후 로딩 상태 false
+        setIsLoading(false);
       }
     };
 
-    fetchStatistics();
-  }, []);
+    fetchUser();
+  }, [isLoggedIn]);
 
+  const fetchStatistics = useCallback(async () => {
+    setIsLoading(true);
+    try {
+      const data = await fetchDailyStatistics(); // API 호출
+      // 로그인한 사용자의 userNum과 일치하는 데이터만 필터링
+      const filteredData = data.filter((item) => item.userNum === isLoggedIn);
+      setStatistics(filteredData);
+    } catch (error) {
+      console.error('Failed to fetch statistics:', error);
+      console.error('유저 정보 실패: ', users);
+    } finally {
+      setIsLoading(false); // 데이터 로드 완료 후 로딩 상태 false
+    }
+  }, [isLoggedIn, users]);
+
+  useEffect(() => {
+    if (isLoggedIn) {
+      fetchStatistics();
+    }
+  }, [isLoggedIn, fetchStatistics]);
+
+  // 동적으로 ListBox 높이 조정
   const adjustHeight = () => {
     if (calendarRef.current) {
       const calendarHeight = calendarRef.current.offsetHeight;
-      setDynamicHeight(calendarHeight); // ListBox 높이를 Calendar 높이에 맞춤
+      setDynamicHeight(calendarHeight);
     }
   };
 
   useEffect(() => {
-    const observer = new ResizeObserver((entries) => {
-      entries.forEach((entry) => {
-        adjustHeight();
-      });
-    });
-
+    const observer = new ResizeObserver(() => adjustHeight());
     const currentRef = calendarRef.current;
-    if (currentRef) observer.observe(currentRef);
 
+    if (currentRef) observer.observe(currentRef);
     return () => {
       if (currentRef) observer.unobserve(currentRef);
     };
@@ -136,20 +161,27 @@ const DailyStatistics = () => {
 
   // 선택한 형식날짜를 YYYY-MM-DD 형식으로
   const formatDate = (date) => {
-    const year = date.getFullYear();
-    const month = String(date.getMonth() + 1).padStart(2, '0');
-    const day = String(date.getDate()).padStart(2, '0');
-    return `${year}-${month}-${day}`;
+    if (typeof date === 'string' && date.length === 8) {
+      // '20240105' 형식을 '2024-01-05'로 변환
+      const year = date.slice(0, 4);
+      const month = date.slice(4, 6);
+      const day = date.slice(6, 8);
+      return `${year}-${month}-${day}`;
+    } else if (date instanceof Date) {
+      // Date 객체를 '2024-01-05' 형식으로 변환
+      const year = date.getFullYear();
+      const month = String(date.getMonth() + 1).padStart(2, '0');
+      const day = String(date.getDate()).padStart(2, '0');
+      return `${year}-${month}-${day}`;
+    }
+    return date; // 원래 값 반환 (예외 처리)
   };
 
-  // 선택한 날짜를 기준으로 통계 필터링
-  useEffect(() => {
+  const filteredStatistics = statistics.filter((item) => {
     const formattedDate = formatDate(selectedDate);
-    const filtered = statistics.filter(
-      (item) => formatDate(new Date(item.dailyDate)) === formattedDate,
-    );
-    setFilteredStatistics(filtered);
-  }, [selectedDate, statistics]);
+    const resUsedDateFormatted = formatDate(item.resUsedDate);
+    return resUsedDateFormatted === formattedDate;
+  });
 
   const handleDateClick = (date) => {
     setSelectedDate(date);
@@ -184,11 +216,14 @@ const DailyStatistics = () => {
             <CircularProgress />
             <p>데이터 불러오는 중...</p>
           </EmptyBox>
-        ) : filteredStatistics && filteredStatistics.length > 0 ? (
+        ) : filteredStatistics.length > 0 ? (
           filteredStatistics.map((item) => (
             <CommonCardListBox
-              key={item.dailyId}
-              cardItem={item}
+              key={item.resApprovalNo}
+              cardItem={{
+                ...item,
+                resUsedDate: formatDate(item.resUsedDate), // 변환된 날짜 전달
+              }}
               showDetailed={false}
             />
           ))
@@ -198,6 +233,19 @@ const DailyStatistics = () => {
           </EmptyBox>
         )}
       </ListBox>
+
+      {isShowDialog && (
+        <CommonDialog
+          open={isShowDialog}
+          onClick={() => navigate('/login')}
+          onClose={() => navigate('/login')}
+          submitText="로그인"
+        >
+          <p style={{ textAlign: 'center' }}>
+            로그인 정보가 없습니다. 로그인을 진행해주세요!
+          </p>
+        </CommonDialog>
+      )}
     </Root>
   );
 };
