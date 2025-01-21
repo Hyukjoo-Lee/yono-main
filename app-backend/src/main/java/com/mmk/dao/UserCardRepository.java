@@ -24,7 +24,4 @@ public interface UserCardRepository extends JpaRepository<UserCardEntity, Intege
     void setPrimaryCard(@Param("userCardId") int userCardId);
 
     UserCardEntity findByUserCardId(int userCardId);
-
-    // @Query("UPDATE UserCardEntity u SET u.companyId = :companyId, u.companyPwd = :companyPwd, u.connectedId = :connectedId WHERE u.userNum = :userNum AND u.organization = :organization")
-    // void updateAllByUserNumAndOrganization(@Param("userNum") int userNum, @Param("organization") String organization, @Param("companyId") String companyId, @Param("companyPwd") String companyPwd, @Param("connectedId") String connectedId);
 }
