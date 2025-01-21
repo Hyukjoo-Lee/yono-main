@@ -279,6 +279,10 @@ public class UserController {
 
             }
 
+            if (profileText != null) {
+                uv.setProfile(profileText);
+            }
+
             userService.updateUser(uv);
 
             ApiResponse<UserDTO> response = new ApiResponse<>(201, "회원 정보 수정 성공", uv);

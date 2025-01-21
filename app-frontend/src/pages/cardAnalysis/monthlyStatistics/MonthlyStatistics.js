@@ -71,12 +71,12 @@ const MonthlyStatistics = () => {
         {cardData ? (
           <Barchart data={cardData} />
         ) : (
-          <p>데이터가 존재하지 않습니다.</p>
+          <p>집계된 데이터가 없습니다.</p>
         )}
         {cardData ? (
           <Piechart data={cardData} />
         ) : (
-          <p>데이터가 존재하지 않습니다.</p>
+          <p>집계된 데이터가 없습니다.</p>
         )}
       </ChartsContainer>
       {message && (

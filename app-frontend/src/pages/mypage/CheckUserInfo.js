@@ -37,6 +37,12 @@ const Section = styled.div`
 const InnerSection = styled.div`
   width: 100%;
   margin-bottom: 15px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  & button {
+    width: 150px;
+  }
 `;
 
 const Button = styled.div`
@@ -161,6 +167,13 @@ const CheckUserInfo = ({
     }
   };
 
+  const handleProfileDelete = () => {
+    setProfileImage('temp_profile');
+    setPreviewImage(null);
+    console.log('profileImage: ' + profileImage);
+    console.log('previewImage: ' + previewImage);
+  };
+
   const handleAddressSelect = (address) => {
     setUserInfo((prev) => ({ ...prev, address }));
     setIsAddressModalOpen(false);
@@ -252,7 +265,6 @@ const CheckUserInfo = ({
     modifyUser(formData).then((response) => {
       navigate(0);
     });
-    // window.location.reload();
   };
 
   const deleteId = () => {};
@@ -342,11 +354,22 @@ const CheckUserInfo = ({
         <>
           <Profile
             profileImage={previewImage}
-            onProfileChange={handleProfileChange}
+            onImageChange={handleProfileChange}
             isEditing={isEditing}
           />
 
           <InnerSection>
+            <CommonButton
+              width="100px"
+              height="40px"
+              text="기본 이미지로 변경"
+              fontSize="13px"
+              color="black"
+              $hoverBk="transparent"
+              $hoverColor="black"
+              background="transparent"
+              onClick={handleProfileDelete}
+            />
             <CommonInput
               value={userInfo.userId}
               text="아이디"
