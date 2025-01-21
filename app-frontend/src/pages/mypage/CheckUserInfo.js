@@ -37,6 +37,11 @@ const Section = styled.div`
 const InnerSection = styled.div`
   width: 100%;
   margin-bottom: 15px;
+`;
+
+const DeleteButtonContainer = styled.div`
+  width: 100%;
+  margin-bottom: 15px;
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -357,19 +362,20 @@ const CheckUserInfo = ({
             onImageChange={handleProfileChange}
             isEditing={isEditing}
           />
-
-          <InnerSection>
+          <DeleteButtonContainer>
             <CommonButton
               width="100px"
               height="40px"
               text="기본 이미지로 변경"
               fontSize="13px"
               color="black"
+              background="transparent"
               $hoverBk="transparent"
               $hoverColor="black"
-              background="transparent"
               onClick={handleProfileDelete}
             />
+          </DeleteButtonContainer>
+          <InnerSection>
             <CommonInput
               value={userInfo.userId}
               text="아이디"
