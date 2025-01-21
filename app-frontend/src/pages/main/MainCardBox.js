@@ -33,7 +33,11 @@ const MainCardBox = ({ isLoggedIn }) => {
     <StyledWrap>
       <StyledCardP>나의 등록 카드</StyledCardP>
       <StyledCardContainer>
-        <CustomSlides cardData={cardData} showDetailed={true} />
+        {cardData.length === 0 ? (
+          <p>등록된 카드가 없습니다!</p>
+        ) : (
+          <CustomSlides cardData={cardData} showDetailed={true} />
+        )}
       </StyledCardContainer>
     </StyledWrap>
   );
