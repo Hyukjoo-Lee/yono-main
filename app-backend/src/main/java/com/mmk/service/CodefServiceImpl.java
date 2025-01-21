@@ -198,6 +198,7 @@ public class CodefServiceImpl implements CodefService {
             objectMapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
 
             String dataArrayJson = objectMapper.readTree(result).get("data").toString();
+
             List<MonthlyTransDTO> transactionDTOList = objectMapper.readValue(dataArrayJson,
                     new TypeReference<List<MonthlyTransDTO>>() {
                     });
@@ -240,13 +241,23 @@ public class CodefServiceImpl implements CodefService {
         try {
             String jsonResult = codef.requestProduct(productUrl, EasyCodefServiceType.DEMO, parameterMap);
             ObjectMapper objectMapper = new ObjectMapper();
-            String dataArrayJson = objectMapper.readTree(jsonResult).get("data").toString();
+            JsonNode dataNode = objectMapper.readTree(jsonResult).get("data");
 
-            List<Map<String, Object>> result = objectMapper.readValue(dataArrayJson,
-                    new TypeReference<List<Map<String, Object>>>() {
-                    });
+            // 반환값이 배열인지 객체인지 확인 - 카드가 하나 일 때는 배열로 반환되고 두개 이상일 때는 객체로 반환됨
+            List<Map<String, Object>> result;
 
-            if (result == null || result.isEmpty()) {
+            if (dataNode.isArray()) {
+                result = objectMapper.convertValue(dataNode, new TypeReference<List<Map<String, Object>>>() {
+                });
+            } else {
+                Map<String, Object> singleCard = objectMapper.convertValue(dataNode,
+                        new TypeReference<Map<String, Object>>() {
+                        });
+                result = new ArrayList<>();
+                result.add(singleCard);
+            }
+
+            if (result.isEmpty()) {
                 throw new RuntimeException("카드 정보가 존재하지 않습니다.");
             }
 
@@ -284,14 +295,28 @@ public class CodefServiceImpl implements CodefService {
 
         try {
             String jsonResult = codef.requestProduct(productUrl, EasyCodefServiceType.DEMO, parameterMap);
+            System.out.println("jsonResult: " + jsonResult);
             ObjectMapper objectMapper = new ObjectMapper();
-            String dataArrayJson = objectMapper.readTree(jsonResult).get("data").toString();
+            JsonNode dataNode = objectMapper.readTree(jsonResult).get("data");
 
-            List<Map<String, Object>> result = objectMapper.readValue(dataArrayJson,
-                    new TypeReference<List<Map<String, Object>>>() {
-                    });
+            List<Map<String, Object>> result;
 
-            if (result == null || result.isEmpty()) {
+            System.out.println("result: " + dataNode);
+
+            if (dataNode.isArray()) {
+                result = objectMapper.convertValue(dataNode, new TypeReference<List<Map<String, Object>>>() {
+                });
+            } else if (dataNode.isObject()) {
+                Map<String, Object> singleCard = objectMapper.convertValue(dataNode,
+                        new TypeReference<Map<String, Object>>() {
+                        });
+                result = new ArrayList<>();
+                result.add(singleCard);
+            } else {
+                throw new RuntimeException("존재 하지 않는 타입: ");
+            }
+
+            if (result.isEmpty()) {
                 throw new RuntimeException("카드 정보가 존재하지 않습니다.");
             }
 
@@ -328,7 +353,7 @@ public class CodefServiceImpl implements CodefService {
 
         } catch (Exception e) {
             e.printStackTrace();
-            throw new RuntimeException("카드 리스트 정보 요청에 실패하였습니다.");
+            throw new RuntimeException("카드 혜택 정보 요청에 실패하였습니다.");
         }
     }
 
@@ -378,10 +403,11 @@ public class CodefServiceImpl implements CodefService {
         if (benefitList.isEmpty()) {
             throw new RuntimeException("Codef API로부터 카드 혜택 정보를 가져오지 못했습니다.");
         }
-
+        System.out.println("benefitList: " + benefitList);
         // CardBenefitEntity 생성 및 저장
         benefitList.forEach(benefit -> {
             CardBenefitDTO cardBenefitDTO = new CardBenefitDTO();
+
             String cardTitle = (String) benefit.get("cardName");
 
             cardBenefitDTO.setCardTitle(cardTitle);
@@ -416,6 +442,8 @@ public class CodefServiceImpl implements CodefService {
                 return "nh";
             case "0306":
                 return "shinhan";
+            case "0313":
+                return "hana";
             case "NH":
                 return "NH농협카드";
             case "SS":

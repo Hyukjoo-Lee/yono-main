@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.DeserializationFeature;
+import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.mmk.dto.MonthlySummary;
 import com.mmk.dto.MonthlyTransDTO;
@@ -73,17 +74,17 @@ public class CodefController {
 
         // 기관코드는 각 상품 페이지 (https://developer.codef.io/products/card/overview)에서 확인 가능
         // 카드사마다 기관코드가 다름, 아래 예시는 현대카드
-        accountMap.put("organization", "0304");
+        accountMap.put("organization", "0302");
 
         // login 방법이 공인인증서, 아이디 & 비번 2가지 방법이 있는데 아이디 & 비번을 선택
         // 공인인증서 loginType = 0, 아이디 & 비번 loginType = 1
         accountMap.put("loginType", "1");
 
-        accountMap.put("id", "BIGIE2"); // 카드사 아이디 입력
+        accountMap.put("id", "카드사 아이디"); // 카드사 아이디 입력
 
         try {
             // RSA암호화가 필요한 필드는 encryptRSA(String plainText, String publicKey) 메서드를 이용해 암호화
-            accountMap.put("password", EasyCodefUtil.encryptRSA("*As89117465", codef.getPublicKey())); // 카드사 비밀번호 입력
+            accountMap.put("password", EasyCodefUtil.encryptRSA("카드사 비밀번호", codef.getPublicKey())); // 카드사 비밀번호 입력
         } catch (Exception e) {
             e.printStackTrace();
             return;
@@ -206,7 +207,7 @@ public class CodefController {
         codef.setPublicKey(publickey);
         HashMap<String, Object> parameterMap = new HashMap<>();
         parameterMap.put("connectedId", connectedId);
-        parameterMap.put("organization", "0304"); // 기관 코드
+        parameterMap.put("organization", "0313"); // 기관 코드
         parameterMap.put("inquiryType", "0"); // 카드 이미지 포함 여부
         String productUrl = "/v1/kr/card/p/account/card-list"; // 보유 카드 URL
 
@@ -250,25 +251,35 @@ public class CodefController {
         codef.setPublicKey(publickey);
         HashMap<String, Object> parameterMap = new HashMap<>();
         parameterMap.put("connectedId", connectedId);
-        parameterMap.put("organization", "0304");
+        parameterMap.put("organization", "0313");
         String productUrl = "/v1/kr/card/p/account/result-check-list";
 
         try {
             String jsonResult = codef.requestProduct(productUrl, EasyCodefServiceType.DEMO, parameterMap);
             ObjectMapper objectMapper = new ObjectMapper();
-            String dataArrayJson = objectMapper.readTree(jsonResult).get("data").toString();
+            JsonNode dataNode = objectMapper.readTree(jsonResult).get("data");
 
-            List<Map<String, Object>> result = objectMapper.readValue(dataArrayJson,
-                    new TypeReference<List<Map<String, Object>>>() {
-                    });
+            // JSON이 배열인지 객체인지 확인
+            List<Map<String, Object>> result;
+            if (dataNode.isArray()) {
+                result = objectMapper.convertValue(dataNode, new TypeReference<List<Map<String, Object>>>() {
+                });
+            } else if (dataNode.isObject()) {
+                Map<String, Object> singleCard = objectMapper.convertValue(dataNode,
+                        new TypeReference<Map<String, Object>>() {
+                        });
+                result = new ArrayList<>();
+                result.add(singleCard); // 단일 객체를 리스트로 변환
+            } else {
+                throw new RuntimeException("알 수 없는 JSON 데이터 형식입니다: " + dataNode);
+            }
 
-            if (result == null || result.isEmpty()) {
+            if (result.isEmpty()) {
                 throw new RuntimeException("카드 정보가 존재하지 않습니다.");
             }
 
             // 카드 이름, 카드 번호, 카드 회사, 혜택 이름, 혜택 카테고리 필터링
             List<Map<String, Object>> filteredResult = new ArrayList<>();
-
             result.forEach(card -> {
                 String cardName = (String) card.get("resCardName");
                 String cardNo = (String) card.get("resCardNo");
