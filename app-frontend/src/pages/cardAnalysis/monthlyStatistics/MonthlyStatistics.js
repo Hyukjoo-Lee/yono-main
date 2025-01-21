@@ -3,19 +3,11 @@ import styled from 'styled-components';
 import { useState, useEffect } from 'react';
 import Barchart from '../../../pages/cardAnalysis/monthlyStatistics/chart/Barchart';
 import Piechart from '../../../pages/cardAnalysis/monthlyStatistics/chart/Piechart';
-import {
-  updateHistory,
-  uploadRecentHistory,
-} from '../../../apis/cardHistoryApi';
+// import {
+//   updateHistory,
+//   uploadRecentHistory,
+// } from '../../../apis/cardHistoryApi';
 import { useSelector } from 'react-redux';
-
-const piechart_data = [
-  { id: '식비', value: 3 },
-  { id: '교통비', value: 1 },
-  { id: '쇼핑', value: 2 },
-  { id: '문화', value: 8 },
-  { id: '전자제품', value: 3 },
-];
 
 const Root = styled.div`
   display: flex;
@@ -35,7 +27,7 @@ const LoadingText = styled.div`
 `;
 
 const MessageText = styled.p`
-  margin-top: 20px; /* 그래프와 문구 사이 간격 */
+  margin-top: 20px;
   font-size: 16px;
   color: #666;
   text-align: center;
@@ -50,13 +42,13 @@ const MonthlyStatistics = () => {
   useEffect(() => {
     const fetchUser = async () => {
       try {
-        const response = await uploadRecentHistory(userNum);
-        setCardData(response.data);
+        // const response = await uploadRecentHistory(userNum);
+        // setCardData(response.data);
         setLoading(false);
 
-        await updateHistory(userNum);
-        const updatedData = await uploadRecentHistory(userNum);
-        setCardData(updatedData.data);
+        // await updateHistory(userNum);
+        // const updatedData = await uploadRecentHistory(userNum);
+        // setCardData(updatedData.data);
         setMessage(false);
       } catch (error) {
         console.error('카드 정보를 불러오는 중 오류 발생:', error);

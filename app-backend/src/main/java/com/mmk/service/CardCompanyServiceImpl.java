@@ -30,7 +30,6 @@ public class CardCompanyServiceImpl implements CardCompanyService {
         } else {
             String connectedId = codefService.getConId(organization, companyId, companyPwd);
             cardCompanyDTO.setConnectedId(connectedId);
-            // usercardDAO.updateAllByUserNumAndOrganization(userNum, organization, companyId, companyPwd, connectedId);
             cardCompanyDAO.save(toEntity(cardCompanyDTO));
             return cardCompanyDTO;
         }
