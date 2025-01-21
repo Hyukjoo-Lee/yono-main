@@ -1,8 +1,9 @@
 import { useCallback, useEffect, useState } from 'react';
 import styled from 'styled-components';
 import InfoSample from '../../assets/images/infoSample.png';
-// import IntroGIF from '../../assets/images/main.gif';
-import CommonRoot from '../../common/CommonRoot';
+import InfoSample2 from '../../assets/images/mainsample.gif';
+// import CommonRoot from '../../common/CommonRoot';
+import IntroGIF from './IntroGIF';
 
 const Root = styled.div`
   width: 100%;
@@ -12,12 +13,15 @@ const Root = styled.div`
 // background-color: ${({ currentPage }) =>
 //   currentPage % 2 === 0 ? 'white' : '#EFF3FD'};
 
+const CommonRoot = styled.div``;
+
 const PagesWrapper = styled.div`
   display: flex;
   flex-direction: column;
   height: 100%;
   transition: transform 0.8s ease;
   transform: ${({ $currentPage }) => `translateY(-${$currentPage * 100}vh)`};
+  border: 1px solid black;
 `;
 
 const Page = styled.div`
@@ -99,13 +103,14 @@ export function Intro() {
 
   return (
     <Root>
+      {/* $currentPage={currentPage} */}
       <CommonRoot>
         <PagesWrapper $currentPage={currentPage}>
           {/* 첫 번째 페이지 */}
           <Page>
             <ContentWrap>
               <GIFWrap>
-                <img src={InfoSample} alt="main GIF" />
+                <IntroGIF src={InfoSample2} alt="Intro GIF" duration={4000} />
               </GIFWrap>
               <TextWrap>
                 <p>
