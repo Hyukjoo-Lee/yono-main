@@ -1,7 +1,6 @@
 import { useCallback, useEffect, useState } from 'react';
 import styled from 'styled-components';
-import InfoSample from '../../assets/images/infoSample.png';
-import InfoSample2 from '../../assets/images/mainsample.gif';
+import IntroSample from '../../assets/images/mainsample.gif';
 import IntroGIF from './IntroGIF';
 
 const Root = styled.div`
@@ -111,7 +110,7 @@ export function Intro() {
           <Page>
             <ContentWrap>
               <GIFWrap>
-                <IntroGIF src={InfoSample2} alt="Intro GIF" duration={4000} />
+                <IntroGIF src={IntroSample} alt="Intro GIF" duration={4000} />
               </GIFWrap>
               <TextWrap>
                 <p>
@@ -147,7 +146,7 @@ export function Intro() {
                 </p>
               </TextWrap>
               <GIFWrap>
-                <img src={InfoSample} alt="main GIF" />
+                <img src={IntroSample} alt="main GIF" />
               </GIFWrap>
             </ContentWrap>
           </Page>
@@ -155,7 +154,7 @@ export function Intro() {
           <Page>
             <ContentWrap>
               <GIFWrap>
-                <img src={InfoSample} alt="main GIF" />
+                <img src={IntroSample} alt="main GIF" />
               </GIFWrap>
               <TextWrap>
                 <p>
@@ -203,7 +202,7 @@ export function Intro() {
                 </p>
               </TextWrap>
               <GIFWrap>
-                <img src={InfoSample} alt="main GIF" />
+                <img src={IntroSample} alt="main GIF" />
               </GIFWrap>
             </ContentWrap>
           </Page>
@@ -211,7 +210,7 @@ export function Intro() {
           <Page>
             <ContentWrap>
               <GIFWrap>
-                <img src={InfoSample} alt="main GIF" />
+                <img src={IntroSample} alt="main GIF" />
               </GIFWrap>
               <TextWrap>
                 <p>
