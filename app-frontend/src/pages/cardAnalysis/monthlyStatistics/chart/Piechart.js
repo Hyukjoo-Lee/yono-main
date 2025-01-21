@@ -49,30 +49,30 @@ const Piechart = ({ data }) => {
             },
           },
         }}
-        legends={[
-          {
-            anchor: 'bottom',
-            direction: 'row',
-            justify: false,
-            translateX: 0,
-            translateY: 80,
-            itemsSpacing: 10,
-            itemWidth: 100,
-            itemHeight: 18,
-            itemDirection: 'left-to-right',
-            itemOpacity: 1,
-            symbolSize: 15,
-            symbolShape: 'circle',
-            effects: [
-              {
-                on: 'hover',
-                style: {
-                  itemWidth: 'olive',
-                },
-              },
-            ],
-          },
-        ]}
+        // legends={[
+        //   {
+        //     anchor: 'bottom',
+        //     direction: 'row',
+        //     justify: false,
+        //     translateX: 0,
+        //     translateY: 80,
+        //     itemsSpacing: 10,
+        //     itemWidth: 100,
+        //     itemHeight: 18,
+        //     itemDirection: 'left-to-right',
+        //     itemOpacity: 1,
+        //     symbolSize: 15,
+        //     symbolShape: 'circle',
+        //     effects: [
+        //       {
+        //         on: 'hover',
+        //         style: {
+        //           itemWidth: 'olive',
+        //         },
+        //       },
+        //     ],
+        //   },
+        // ]}
       />
     </StyledChart>
   );

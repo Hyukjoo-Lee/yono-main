@@ -94,32 +94,32 @@ const Barchart = ({ data }) => {
         // 토탈 값 표시
         // enableTotals = {true}
         onClick={handle.barClick}
-        legends={[
-          {
-            dataFrom: 'keys',
-            anchor: 'bottom',
-            direction: 'row',
-            justify: false,
-            translateX: 0,
-            translateY: 80,
-            itemsSpacing: 10,
-            itemWidth: 100,
-            itemHeight: 18,
-            itemDirection: 'left-to-right',
-            itemOpacity: 0.85,
-            symbolSize: 15,
-            effects: [
-              {
-                on: 'hover',
-                style: {
-                  itemOpacity: 1,
-                },
-              },
-            ],
-            onClick: handle.legendClick,
-            wrapText: true,
-          },
-        ]}
+        // legends={[
+        //   {
+        //     dataFrom: 'keys',
+        //     anchor: 'bottom',
+        //     direction: 'row',
+        //     justify: false,
+        //     translateX: 0,
+        //     translateY: 80,
+        //     itemsSpacing: 10,
+        //     itemWidth: 100,
+        //     itemHeight: 18,
+        //     itemDirection: 'left-to-right',
+        //     itemOpacity: 0.85,
+        //     symbolSize: 15,
+        //     effects: [
+        //       {
+        //         on: 'hover',
+        //         style: {
+        //           itemOpacity: 1,
+        //         },
+        //       },
+        //     ],
+        //     onClick: handle.legendClick,
+        //     wrapText: true,
+        //   },
+        // ]}
       />
     </StyledChart>
   );
