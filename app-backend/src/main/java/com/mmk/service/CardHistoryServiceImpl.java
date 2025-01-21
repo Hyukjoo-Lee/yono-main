@@ -82,6 +82,7 @@ public class CardHistoryServiceImpl implements CardHistoryService {
         }
 
         String result = codefService.getCardHistory(userCardEntity, startDate, endDate);
+        System.out.println("result: " + result);
 
         try {
             ObjectMapper objectMapper = new ObjectMapper();
