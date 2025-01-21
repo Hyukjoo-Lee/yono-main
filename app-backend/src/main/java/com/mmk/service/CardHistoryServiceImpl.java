@@ -47,7 +47,7 @@ public class CardHistoryServiceImpl implements CardHistoryService {
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyyMMdd");
         String startDate = twoMonthsAgoFirstDay.format(formatter);
 
-        UserEntity userEntity = userDAO.getUserByUserNum(userNum);
+        UserEntity userEntity = userDAO.findByUserNum(userNum);
         UserCardEntity userCardEntity = userCardDAO.findByUserNumAndPrimaryCard(userEntity, 1);
         int userCardId = userCardEntity.getUserCardId();
 
@@ -64,7 +64,7 @@ public class CardHistoryServiceImpl implements CardHistoryService {
     // 카드내역 DB에 갱신
     @Override
     public void updateCardHistory(int userNum) {
-        UserEntity userEntity = userDAO.getUserByUserNum(userNum);
+        UserEntity userEntity = userDAO.findByUserNum(userNum);
         UserCardEntity userCardEntity = userCardDAO.findByUserNumAndPrimaryCard(userEntity, 1);
         int userCardId = userCardEntity.getUserCardId();
 

@@ -116,9 +116,9 @@ public class UserController {
     }
 
     // id(기본키) 기반으로 유저 정보를 검색
-    @GetMapping("/{id}")
-    public ResponseEntity<ApiResponse<UserDTO>> getUserDetails(@PathVariable("id") int id) {
-        UserDTO userDTO = userService.getUserById(id);
+    @GetMapping("/{userNum}")
+    public ResponseEntity<ApiResponse<UserDTO>> getUserDetails(@PathVariable("userNum") int userNum) {
+        UserDTO userDTO = userService.findByUserNum(userNum);
         if (userDTO != null) {
             ApiResponse<UserDTO> response = new ApiResponse<>(200, "유저 검색 성공", userDTO);
             return ResponseEntity.ok(response);
@@ -179,11 +179,10 @@ public class UserController {
 
     // DELETE API
     // 유저 정보 삭제
-    @DeleteMapping("/{id}")
-    public ResponseEntity<ApiResponse<Object>> deleteUser(@PathVariable("id") int id) {
-        userService.deleteUser(id);
-        ApiResponse<Object> response = new ApiResponse<>(200, "유저 삭제 성공", null);
-        return ResponseEntity.ok(response);
+    @DeleteMapping("/deleteUser")
+    public ResponseEntity<ApiResponse<Object>> deleteUser(@RequestParam("userNum") int userNum) {
+        userService.deleteUser(userNum);
+        return null;
     }
 
     // PUT API

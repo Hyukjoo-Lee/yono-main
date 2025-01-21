@@ -1,18 +1,20 @@
 import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
-import { modifyUser } from '../../apis/userApi';
+import { deleteUser, modifyUser } from '../../apis/userApi';
 import CommonButton from '../../common/CommonButton';
 import CommonInput from '../../common/CommonInput';
-import SearchAddressDialog from '../auth/modal/SearchAddressDialog';
 import {
-  SPENDINGTARGET_REGEX_MESSAGE,
   EMAIL_REGEX_MESSAGE,
   PASSWORD_MISMATCH_MESSAGE,
+  SPENDINGTARGET_REGEX_MESSAGE,
 } from '../../common/Message';
-import Profile from './Profile';
+import { logoutUser } from '../../redux/actions/userAction';
+import { useDispatch } from 'react-redux';
 import theme from '../../theme/theme';
+import SearchAddressDialog from '../auth/modal/SearchAddressDialog';
 import PasswordDialog from './PasswordDialog';
+import Profile from './Profile';
 
 const StyledHr = styled.hr`
   width: 100%;
@@ -267,12 +269,18 @@ const CheckUserInfo = ({
       formData.append('profileText', profileImage);
     }
 
-    modifyUser(formData).then((response) => {
+    modifyUser(formData).then(() => {
       navigate(0);
     });
   };
 
-  const deleteId = () => {};
+  const dispatch = useDispatch();
+
+  const deleteId = async () => {
+    await deleteUser(userInfo.userNum);
+    // 정말 탈퇴하시겠습니까? 다이얼로그 띄우기
+    dispatch(logoutUser());
+  };
 
   const disabledInputProps = {
     disabled: true,
