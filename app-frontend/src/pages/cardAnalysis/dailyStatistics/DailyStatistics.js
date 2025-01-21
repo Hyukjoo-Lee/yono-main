@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect, useRef, useCallback } from 'react';
 import Calendar from './calendar/Calendar';
 import styled from 'styled-components';
 import CommonCardListBox from '../../../common/CommonCardListBox';
@@ -120,7 +120,7 @@ const DailyStatistics = () => {
     fetchUser();
   }, [isLoggedIn]);
 
-  const fetchStatistics = async () => {
+  const fetchStatistics = useCallback(async () => {
     setIsLoading(true);
     try {
       const data = await fetchDailyStatistics(); // API 호출
@@ -129,16 +129,17 @@ const DailyStatistics = () => {
       setStatistics(filteredData);
     } catch (error) {
       console.error('Failed to fetch statistics:', error);
+      console.error('유저 정보 실패: ', users);
     } finally {
       setIsLoading(false); // 데이터 로드 완료 후 로딩 상태 false
     }
-  };
+  }, [isLoggedIn, users]);
 
   useEffect(() => {
     if (isLoggedIn) {
       fetchStatistics();
     }
-  }, [isLoggedIn]);
+  }, [isLoggedIn, fetchStatistics]);
 
   // 동적으로 ListBox 높이 조정
   const adjustHeight = () => {
@@ -153,7 +154,6 @@ const DailyStatistics = () => {
     const currentRef = calendarRef.current;
 
     if (currentRef) observer.observe(currentRef);
-
     return () => {
       if (currentRef) observer.unobserve(currentRef);
     };
