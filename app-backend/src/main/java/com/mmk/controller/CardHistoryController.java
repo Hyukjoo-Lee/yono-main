@@ -11,7 +11,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.mmk.common.ApiResponse;
-import com.mmk.dto.MonthlySummary;
+import com.mmk.dto.MonthlySummaryDTO;
 import com.mmk.service.CardHistoryService;
 
 @RestController
@@ -29,8 +29,8 @@ public class CardHistoryController {
 
     // 월별통계 - DB에 있는 최근 3개월 카드내역 불러오기
     @GetMapping("/monthlyUpload")
-    public ResponseEntity<ApiResponse<List<MonthlySummary>>> uploadMonthlyHistory(@RequestParam("userNum") int userNum) {
-        List<MonthlySummary> result = cardHistoryService.uploadMonthlyHistory(userNum);
+    public ResponseEntity<ApiResponse<List<MonthlySummaryDTO>>> uploadMonthlyHistory(@RequestParam("userNum") int userNum) {
+        List<MonthlySummaryDTO> result = cardHistoryService.uploadMonthlyHistory(userNum);
         if (result.isEmpty()) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND)
                     .body(new ApiResponse<>(404, "최근 카드내역이 존재하지 않습니다", null));

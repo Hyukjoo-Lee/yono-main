@@ -18,7 +18,7 @@ import com.mmk.dao.CardHistoryDAO;
 import com.mmk.dao.UserCardDAO;
 import com.mmk.dao.UserDAO;
 import com.mmk.dto.CardHistoryDTO;
-import com.mmk.dto.MonthlySummary;
+import com.mmk.dto.MonthlySummaryDTO;
 import com.mmk.entity.CardHistoryEntity;
 import com.mmk.entity.UserCardEntity;
 import com.mmk.entity.UserEntity;
@@ -100,15 +100,15 @@ public class CardHistoryServiceImpl implements CardHistoryService {
 
     // 월별통계 - DB에 있는 최근 3개월 카드내역 불러오기
     @Override
-    public List<MonthlySummary> uploadMonthlyHistory(int userNum) {
+    public List<MonthlySummaryDTO> uploadMonthlyHistory(int userNum) {
 
         List<CardHistoryDTO> data = uploadCardHistory(userNum);
-        List<MonthlySummary> result = monthlyHistoryProcess(data);
+        List<MonthlySummaryDTO> result = monthlyHistoryProcess(data);
         return result;
     }
 
     // 월별통계 - DB 에서 불러온 내용 가공
-    private List<MonthlySummary> monthlyHistoryProcess(List<CardHistoryDTO> cardHistoryDTOList) {
+    private List<MonthlySummaryDTO> monthlyHistoryProcess(List<CardHistoryDTO> cardHistoryDTOList) {
         try {
             Map<String, Map<String, Integer>> groupedData = cardHistoryDTOList.parallelStream()
                 .collect(Collectors.groupingBy(
@@ -123,7 +123,7 @@ public class CardHistoryServiceImpl implements CardHistoryService {
     
             return groupedData.entrySet().stream()
                 .map(entry -> {
-                    MonthlySummary summary = new MonthlySummary();
+                    MonthlySummaryDTO summary = new MonthlySummaryDTO();
                     summary.setMonth(entry.getKey().substring(4) + "월");
                     summary.setCategoryTotals(entry.getValue());
                     return summary;
