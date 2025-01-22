@@ -10,13 +10,12 @@ import theme from '../../theme/theme';
 import {
   CARD_DUPLICATE_MESSAGE,
   CARD_REGEX_MESSAGE,
-  CVC_REGEX_MESSAGE,
+  CARDPWD_REGEX_MESSAGE,
+  EMPTY_CARD_SELECT_MESSAGE,
   EMPTY_CARDNUM_MESSAGE,
-  EMPTY_CARDSELECT_MESSAGE,
-  EMPTY_CVC_MESSAGE,
-  EMPTY_ENGNAME_MESSAGE,
+  EMPTY_CARDPWD_MESSAGE,
+  EMPTY_COMPANY_SELECT_MESSAGE,
   EMPTY_VALIDITY_MESSAGE,
-  ENGNAME_REGEX_MESSAGE,
   VALIDITY_REGEX_MESSAGE,
 } from '../../common/Message';
 
@@ -38,15 +37,15 @@ const FORM_FIELDS = {
       duplicate: CARD_DUPLICATE_MESSAGE,
     },
   },
-  cvc: {
-    placeholder: '카드 뒷면 서명란 끝 3자리',
-    text: 'CVC',
-    regex: /^\d{3}$/,
-    maxLength: 3,
+  cardPwd: {
+    placeholder: '카드 비밀번호를 입력하세요',
+    text: '카드 비밀번호',
+    regex: /^\d{4}$/,
+    maxLength: 4,
     type: 'password',
     errorMessage: {
-      empty: EMPTY_CVC_MESSAGE,
-      invalid: CVC_REGEX_MESSAGE,
+      empty: EMPTY_CARDPWD_MESSAGE,
+      invalid: CARDPWD_REGEX_MESSAGE,
     },
   },
   cardValidity: {
@@ -59,24 +58,21 @@ const FORM_FIELDS = {
       invalid: VALIDITY_REGEX_MESSAGE,
     },
   },
-  englishName: {
-    placeholder: '영문이름을 입력하세요',
-    text: '영문이름',
-    regex: /^[a-zA-Z\s]+$/,
+  selectedCardTitle: {
+    text: '카드 종류',
     errorMessage: {
-      empty: EMPTY_ENGNAME_MESSAGE,
-      invalid: ENGNAME_REGEX_MESSAGE,
+      empty: EMPTY_CARD_SELECT_MESSAGE,
     },
   },
   selectedCardType: {
-    text: '카드 선택',
+    text: '카드 회사',
     errorMessage: {
-      empty: EMPTY_CARDSELECT_MESSAGE,
+      empty: EMPTY_COMPANY_SELECT_MESSAGE,
     },
   },
 };
 
-const CARD_LIST = [
+const CARD_COMPANY_LIST = [
   { value: '0301', label: '국민카드' },
   { value: '0302', label: '현대카드' },
   { value: '0303', label: '삼성카드' },
@@ -84,43 +80,84 @@ const CARD_LIST = [
   { value: '0306', label: '신한카드' },
 ];
 
-const useCardImages = (cardImg, selectedCardType) => {
-  const [cardImages, setCardImages] = useState(null);
+// const useCardImages = (cardImg, selectedCardType) => {
+//   const [cardImages, setCardImages] = useState(null);
 
-  useEffect(() => {
-    if (cardImg && selectedCardType) {
-      const selectedCardData = cardImg[selectedCardType];
-      if (selectedCardData) {
-        const cardTypeKey = Object.keys(selectedCardData)[0];
-        const images = Object.values(selectedCardData[cardTypeKey]);
-        setCardImages(images);
-      }
-    }
-  }, [cardImg, selectedCardType]);
+//   useEffect(() => {
+//     if (cardImg && selectedCardType) {
+//       const selectedCardData = cardImg[selectedCardType];
+//       if (selectedCardData) {
+//         const cardTypeKey = Object.keys(selectedCardData)[0];
+//         const images = Object.values(selectedCardData[cardTypeKey]);
+//         setCardImages(images);
+//       }
+//     }
+//   }, [cardImg, selectedCardType]);
 
-  return cardImages;
-};
+//   return cardImages;
+// };
 
 const CardRegFormBox = ({ cardImg }) => {
   const [formData, setFormData] = useState({
     cardNumber: '',
-    cvc: '',
+    cardPwd: '',
     cardValidity: '',
-    englishName: '',
-    selectedCardType: '',
+    selectedCardTitle: '', // 카드이름
+    selectedCardType: '', // 기관코드
   });
 
   const [formMessage, setFormMessage] = useState({
     cardNumber: '',
-    cvc: '',
+    cardPwd: '',
     cardValidity: '',
-    englishName: '',
+    selectedCardTitle: '',
     selectedCardType: '',
   });
 
-  const [cardNumToSave, setCardNumToSave] = useState('');
+  const fetchCardData = async (cardCompany) => {
+    try {
+      const response = await fetch(
+        `http://localhost:8065/card/company?organization=${cardCompany}`,
+      );
+      const data = await response.json();
 
-  const cardImages = useCardImages(cardImg, formData.selectedCardType);
+      if (data.status === 200) {
+        setCardList(data.data.map((card) => card.cardTitle)); // 카드 이름 목록 저장
+        setCardImages(data.data.map((card) => card.imageUrl)); // 카드 이미지 목록 저장
+      } else {
+        console.error('카드 데이터를 가져오는 데 실패했습니다:', data.message);
+      }
+    } catch (error) {
+      console.error('API 요청 중 오류 발생:', error);
+    }
+  };
+
+  const [cardList, setCardList] = useState([]); // 카드 목록
+  const [cardImages, setCardImages] = useState([]); // 카드 이미지
+
+  // 카드 회사 선택 시 카드 목록 가져오기
+  const handleCardCompanyChange = async (value) => {
+    setFormData((prev) => ({
+      ...prev,
+      selectedCardType: value,
+      selectedCardTitle: '', // 카드 종류 초기화
+    }));
+    try {
+      const response = await fetch(`http://localhost:8065/card/${value}`); // API 요청
+      const data = await response.json();
+
+      if (data.status === 200) {
+        setCardList(data.data); // 카드 목록 저장
+      } else {
+        setCardList([]);
+        console.error('카드 데이터를 가져오는 데 실패했습니다:', data.message);
+      }
+    } catch (error) {
+      console.error('API 요청 중 오류 발생:', error);
+    }
+  };
+
+  const [cardNumToSave, setCardNumToSave] = useState('');
 
   const handleCardNumChange = (e) => {
     const { value } = e.target;
@@ -129,6 +166,7 @@ const CardRegFormBox = ({ cardImg }) => {
     if (numericValue.length > 16) return; // 최대 16자리 제한
 
     // 하이픈 추가 로직
+    // TODO: 제거하고 빈칸 4개로 만들기 (마지막 8자리 마스킹 처리 예정)
     let formattedValue = numericValue;
     if (numericValue.length > 4) {
       formattedValue = numericValue.slice(0, 4) + '-' + numericValue.slice(4);
@@ -200,7 +238,7 @@ const CardRegFormBox = ({ cardImg }) => {
     const cardNumber = cardNumToSave;
     const updatedFormData = { ...formData, cardNumber };
     // api 전송
-    console.log('data to send: ' + updatedFormData);
+    console.log('data to send: ' + JSON.stringify(updatedFormData));
   };
 
   return (
@@ -226,7 +264,7 @@ const CardRegFormBox = ({ cardImg }) => {
             )}
           </Grid2>
 
-          {['cvc', 'cardValidity', 'englishName'].map((field) => (
+          {['cardPwd', 'cardValidity'].map((field) => (
             <Grid2 key={field} size={6}>
               <CommonInput
                 type={FORM_FIELDS[field].type}
@@ -251,10 +289,37 @@ const CardRegFormBox = ({ cardImg }) => {
           <Grid2 size={6}>
             <CommonSelect
               text={FORM_FIELDS.selectedCardType.text}
-              options={CARD_LIST}
+              options={CARD_COMPANY_LIST}
               selectedValue={formData.selectedCardType}
               setSelectedValue={(value) =>
                 handleInputChange('selectedCardType')({
+                  target: { value },
+                })
+              }
+              margin="0"
+              labelColor="#4a4a4a"
+              width="227.75px"
+            />
+            {formMessage.selectedCardType && (
+              <ValidationMessage
+                text={formMessage.selectedCardType}
+                type="error"
+                fontSize={theme.fontSize.small}
+                $margin="0 5px"
+              />
+            )}
+          </Grid2>
+
+          <Grid2 size={6}>
+            <CommonSelect
+              text={FORM_FIELDS.selectedCardTitle.text}
+              options={cardList.map((cardTitle) => ({
+                value: cardTitle,
+                label: cardTitle,
+              }))}
+              selectedValue={formData.selectedCardTitle}
+              setSelectedValue={(value) =>
+                handleInputChange('selectedCardTitle')({
                   target: { value },
                 })
               }

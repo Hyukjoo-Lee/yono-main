@@ -11,4 +11,6 @@ public interface CardService {
     List<CardDTO> getAllCards();
 
     CardEntity getByTitle(String string);
+
+    List<CardDTO> getAllCardsByOrganizationCode(String organizationCode);
 }

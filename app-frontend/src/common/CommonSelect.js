@@ -49,7 +49,7 @@ const TextStyle = styled.p`
 `;
 
 const CommonSelect = ({
-  text = '카드를 선택하세요',
+  text = '카드 회사를 선택하세요',
   height,
   options = [],
   width,
@@ -66,7 +66,7 @@ const CommonSelect = ({
   fieldFocusedBorderColor,
   display,
   onSelect,
-  find = '카드를 선택하세요',
+  find = '카드 회사를 선택하세요',
   selectedValue = '',
   setSelectedValue,
   $marginLeft,

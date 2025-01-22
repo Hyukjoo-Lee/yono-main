@@ -77,7 +77,7 @@ public class CardBenefitServiceImpl implements CardBenefitService {
         }
 
         CardBenefitEntity cardBenefitEntity = toEntity(cardBenefitDTO, cardEntity);
-        System.out.println("cardBenefitEntity: " + cardBenefitEntity);
+
         cardBenefitDAO.registerCardBenefit(cardBenefitEntity);
 
         return toDTO(cardBenefitEntity);
@@ -87,7 +87,8 @@ public class CardBenefitServiceImpl implements CardBenefitService {
         CardBenefitEntity entity = new CardBenefitEntity();
         entity.setBenefitId(dto.getBenefitId());
         entity.setBenefitTitle(dto.getBenefitTitle());
-        entity.setBusinessTypes(dto.getBusinessTypes());
+        entity.setBenefitValue(dto.getBenefitValue());
+        entity.setBenefitType(dto.getBenefitType());
         entity.setCreatedAt(dto.getCreatedAt());
         entity.setUpdatedAt(dto.getUpdatedAt());
 
@@ -99,7 +100,8 @@ public class CardBenefitServiceImpl implements CardBenefitService {
         CardBenefitDTO dto = new CardBenefitDTO();
         dto.setBenefitId(entity.getBenefitId());
         dto.setBenefitTitle(entity.getBenefitTitle());
-        dto.setBusinessTypes(entity.getBusinessTypes());
+        dto.setBenefitValue(entity.getBenefitValue());
+        dto.setBenefitType(entity.getBenefitType());
         dto.setCreatedAt(entity.getCreatedAt());
         dto.setUpdatedAt(entity.getUpdatedAt());
         dto.setCardTitle(entity.getCardEntity().getCardTitle());

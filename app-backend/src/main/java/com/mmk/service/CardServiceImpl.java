@@ -56,6 +56,25 @@ public class CardServiceImpl implements CardService {
         return cardEntity;
     }
 
+    @Override
+    public List<CardDTO> getAllCardsByOrganizationCode(String organizationCode) {
+
+        List<CardEntity> cardEntities = cardDAO.getAllCardsByOrganizationCode(organizationCode);
+
+        if (cardEntities.isEmpty()) {
+            throw new NoSuchElementException("해당 기관에 해당하는 카드가 없습니다.");
+        }
+
+        List<CardDTO> cardDTOs = new ArrayList<>();
+
+        for (CardEntity cardEntity : cardEntities) {
+            CardDTO cardDTO = toDTO(cardEntity);
+            cardDTOs.add(cardDTO);
+        }
+
+        return cardDTOs;
+    }
+
     private CardEntity toEntity(CardDTO dto) {
         CardEntity entity = new CardEntity();
         entity.setCardId(dto.getCardId());
@@ -79,5 +98,4 @@ public class CardServiceImpl implements CardService {
         dto.setUpdatedAt(entity.getUpdatedAt());
         return dto;
     }
-
 }
