@@ -3,6 +3,7 @@ package com.mmk.entity;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
+import jakarta.persistence.Index;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
@@ -14,7 +15,12 @@ import lombok.ToString;
 @Getter
 @ToString
 @Entity
-@Table(name = "card_History")
+@Table(
+    name = "card_History",
+    indexes = {
+        @Index(name = "idx_user_card_and_date", columnList = "user_card_Id, resUsedDate")
+    }
+)
 public class CardHistoryEntity {
     
     @Id

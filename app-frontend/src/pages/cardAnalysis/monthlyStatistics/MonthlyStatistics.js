@@ -4,7 +4,7 @@ import { useState, useEffect } from 'react';
 import Barchart from '../../../pages/cardAnalysis/monthlyStatistics/chart/Barchart';
 import Piechart from '../../../pages/cardAnalysis/monthlyStatistics/chart/Piechart';
 import {
-  // updateHistory,
+  updateHistory,
   uploadRecentHistory,
 } from '../../../apis/cardHistoryApi';
 import { useSelector } from 'react-redux';
@@ -46,9 +46,9 @@ const MonthlyStatistics = () => {
         setCardData(response.data);
         setLoading(false);
 
-        // await updateHistory(userNum);
-        // const updatedData = await uploadRecentHistory(userNum);
-        // setCardData(updatedData.data);
+        await updateHistory(userNum);
+        const updatedData = await uploadRecentHistory(userNum);
+        setCardData(updatedData.data);
         setMessage(false);
       } catch (error) {
         console.error('카드 정보를 불러오는 중 오류 발생:', error);
