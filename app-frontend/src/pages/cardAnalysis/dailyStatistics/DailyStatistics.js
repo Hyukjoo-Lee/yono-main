@@ -120,6 +120,7 @@ const DailyStatistics = () => {
     fetchUser();
   }, [isLoggedIn]);
 
+  
   const fetchStatistics = useCallback(async () => {
     setIsLoading(true);
     try {
