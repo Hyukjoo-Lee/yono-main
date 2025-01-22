@@ -20,15 +20,15 @@ public class RankingServiceImpl implements RankingService {
         return rankingDao.getAllRankings().stream()
                 .map(entity -> {
                     RankingDTO dto = new RankingDTO();
-                    dto.setRankingId(entity.getRankingId());
+                    dto.setRankingNum(entity.getRankingNum());
+                    dto.setBadgeNum(entity.getBadgeEntity().getBadgeNum());
+                    dto.setBadgeDate(entity.getBadgeEntity().getBadgeDate());
+                    dto.setBadge(entity.getBadgeEntity().getBadge());
+                    dto.setUserNum(entity.getBadgeEntity().getUserEntity().getUserNum());
+                    dto.setName(entity.getBadgeEntity().getUserEntity().getName());
+                    dto.setUserId(entity.getBadgeEntity().getUserEntity().getUserId());
+                    dto.setProfile(entity.getBadgeEntity().getUserEntity().getProfile());
                     dto.setRankingPosition(entity.getRankingPosition());
-                    dto.setUserName(entity.getUserName());
-                    dto.setUserId(entity.getUserId());
-                    dto.setTotalBadges(entity.getTotalBadges());
-                    dto.setRankingMonth(entity.getRankingMonth());
-                    dto.setRankingImgUrl(entity.getRankingImgUrl());
-                    dto.setCreatedAt(entity.getCreatedAt());
-                    dto.setUpdatedAt(entity.getUpdatedAt());
                     return dto;
                 })
                 .collect(Collectors.toList());

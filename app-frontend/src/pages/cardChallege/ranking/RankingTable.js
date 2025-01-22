@@ -5,7 +5,9 @@ import { ReactComponent as Medal2 } from '../../../assets/images/Medal2.svg';
 import { ReactComponent as Medal3 } from '../../../assets/images/Medal3.svg';
 import { ReactComponent as Profile } from '../../../assets/images/Profile.svg';
 import { fetchUserRanking } from '../../../apis/rankingApi';
+import { findUserById } from '../../../apis/userApi';
 import CircularProgress from '@mui/material/CircularProgress';
+import { useSelector } from 'react-redux';
 
 const Root = styled.div`
   width: 100%;
@@ -120,15 +122,38 @@ const ProfileBox = styled.div`
 `;
 
 const RankingTable = () => {
+  const isLoggedIn = useSelector((state) => state.user.user?.userNum); // 현재 로그인한 유저의 userNum
   const [list, setList] = useState([]);
   const [isLoading, setIsLoading] = useState(true); // 로딩 상태 추가
+  const [users, setUsers] = useState(null);
+  const [userList, setUserList] = useState([]);
+
+  useEffect(() => {
+    const fetchUser = async () => {
+      try {
+        if (!isLoggedIn) {
+          console.log('로그인 정보가 없습니다.');
+        } else {
+          const user = await findUserById(isLoggedIn);
+          setUsers(user.data);
+        }
+      } catch (error) {
+        console.log('유저 정보가 없습니다.');
+      }
+    };
+
+    fetchUser();
+  }, [isLoggedIn]);
 
   useEffect(() => {
     const getRanking = async () => {
       setIsLoading(true); // 데이터 로드 시작 시 로딩 상태 true
       try {
         const data = await fetchUserRanking(); // API 호출
-        const sortedList = data.sort((a, b) => b.totalBadges - a.totalBadges); // badge 기준 내림차순 정렬
+        const sortedList = data.sort((a, b) => b.badge - a.badge); // badge 기준 내림차순 정렬
+        // 로그인한 사용자의 userNum과 일치하는 데이터만 필터링
+        const filteredData = data.filter((item) => item.userNum === isLoggedIn);
+        setUserList(filteredData); // 로그인한 사용자 데이터 저장
         setList(sortedList); // 정렬된 데이터 상태로 저장
       } catch (error) {
         console.error('Error fetching rankings:', error);
@@ -138,7 +163,7 @@ const RankingTable = () => {
     };
 
     getRanking();
-  }, []);
+  }, [isLoggedIn, users]);
 
   return (
     <Root>
@@ -158,22 +183,22 @@ const RankingTable = () => {
         <BoxStyle>
           <BoxIn>
             <TextBox>
-              <TextStyle>{list[3]?.rankingPosition}</TextStyle>
+              <TextStyle>{userList[0]?.badgeNum}</TextStyle>
               <ProfileBox>
-                {list[3]?.rankingImgUrl ? (
+                {userList[0]?.profile !== 'temp_profile' ? (
                   <img
-                    src={`http://localhost:8065${list[3]?.rankingImgUrl}`}
-                    alt={list[3]?.userName}
+                    src={`http://localhost:8065${userList[0]?.profile}`}
+                    alt={userList[0]?.name}
                   />
                 ) : (
                   <Profile />
                 )}
               </ProfileBox>
               <TextStyle>
-                {list[3]?.userName}({list[3]?.userId})
+                {userList[0]?.name}({userList[0]?.userId})
               </TextStyle>
             </TextBox>
-            <NumberText>{list[3]?.totalBadges.toLocaleString()}</NumberText>
+            <NumberText>{userList[0]?.badge}</NumberText>
           </BoxIn>
           <BoxInStyle>
             {list.map((item, index) => (
@@ -196,20 +221,20 @@ const RankingTable = () => {
                   )}
 
                   <ProfileBox>
-                    {item.rankingImgUrl !== ' ' ? (
+                    {item.profile !== 'temp_profile' ? (
                       <img
-                        src={`http://localhost:8065${item.rankingImgUrl}`}
-                        alt={item.userName}
+                        src={`http://localhost:8065${item.profile}`}
+                        alt={item.name}
                       />
                     ) : (
                       <Profile />
                     )}
                   </ProfileBox>
                   <TextStyle>
-                    {item.userName}({item.userId})
+                    {item.name}({item.userId})
                   </TextStyle>
                 </TextBox>
-                <NumberText>{item.totalBadges.toLocaleString()}</NumberText>
+                <NumberText>{item.badge.toLocaleString()}</NumberText>
               </BoxIn>
             ))}
           </BoxInStyle>
