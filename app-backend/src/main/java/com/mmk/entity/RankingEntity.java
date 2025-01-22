@@ -7,6 +7,7 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
+import jakarta.persistence.OneToOne;
 import jakarta.persistence.SequenceGenerator;
 import jakarta.persistence.Table;
 import lombok.Getter;
@@ -34,6 +35,10 @@ public class RankingEntity {
     @ManyToOne
     @JoinColumn(name = "badge_num", nullable = false)
     private BadgeEntity badgeEntity;
+
+    @ManyToOne
+    @JoinColumn(name = "user_num", nullable = false)
+    private UserEntity userEntity;
 
     @Column(name = "ranking_position", nullable = false)
     private int rankingPosition; // 등수

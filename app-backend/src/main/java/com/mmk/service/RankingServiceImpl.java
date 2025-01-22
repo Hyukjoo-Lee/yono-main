@@ -24,7 +24,7 @@ public class RankingServiceImpl implements RankingService {
                     dto.setBadgeNum(entity.getBadgeEntity().getBadgeNum());
                     dto.setBadgeDate(entity.getBadgeEntity().getBadgeDate());
                     dto.setBadge(entity.getBadgeEntity().getBadge());
-                    dto.setUserNum(entity.getBadgeEntity().getUserEntity().getUserNum());
+                    dto.setUserNum(entity.getUserEntity().getUserNum());
                     dto.setName(entity.getBadgeEntity().getUserEntity().getName());
                     dto.setUserId(entity.getBadgeEntity().getUserEntity().getUserId());
                     dto.setProfile(entity.getBadgeEntity().getUserEntity().getProfile());
@@ -33,4 +33,10 @@ public class RankingServiceImpl implements RankingService {
                 })
                 .collect(Collectors.toList());
     }
+
+    @Override
+    public void updateRankings() {
+        rankingDao.updateRankings();
+    }
+
 }

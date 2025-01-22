@@ -4,10 +4,7 @@ import { ReactComponent as Medal1 } from '../../../assets/images/Medal1.svg';
 import { ReactComponent as Medal2 } from '../../../assets/images/Medal2.svg';
 import { ReactComponent as Medal3 } from '../../../assets/images/Medal3.svg';
 import { ReactComponent as Profile } from '../../../assets/images/Profile.svg';
-import { fetchUserRanking } from '../../../apis/rankingApi';
-import { findUserById } from '../../../apis/userApi';
 import CircularProgress from '@mui/material/CircularProgress';
-import { useSelector } from 'react-redux';
 
 const Root = styled.div`
   width: 100%;
@@ -121,49 +118,28 @@ const ProfileBox = styled.div`
   }
 `;
 
-const RankingTable = () => {
-  const isLoggedIn = useSelector((state) => state.user.user?.userNum); // 현재 로그인한 유저의 userNum
-  const [list, setList] = useState([]);
+const RankingTable = ({ isLoggedIn, rankingList, setRankingList }) => {
   const [isLoading, setIsLoading] = useState(true); // 로딩 상태 추가
-  const [users, setUsers] = useState(null);
   const [userList, setUserList] = useState([]);
 
   useEffect(() => {
-    const fetchUser = async () => {
+    const initializeRankings = async () => {
       try {
-        if (!isLoggedIn) {
-          console.log('로그인 정보가 없습니다.');
-        } else {
-          const user = await findUserById(isLoggedIn);
-          setUsers(user.data);
-        }
+        //const sortedList = rankingList.sort((a, b) => b.badge - a.badge);
+        const filteredData = rankingList.filter(
+          (item) => item.userNum === isLoggedIn,
+        );
+        setUserList(filteredData);
+        //setRankingList(sortedList);
       } catch (error) {
-        console.log('유저 정보가 없습니다.');
-      }
-    };
-
-    fetchUser();
-  }, [isLoggedIn]);
-
-  useEffect(() => {
-    const getRanking = async () => {
-      setIsLoading(true); // 데이터 로드 시작 시 로딩 상태 true
-      try {
-        const data = await fetchUserRanking(); // API 호출
-        const sortedList = data.sort((a, b) => b.badge - a.badge); // badge 기준 내림차순 정렬
-        // 로그인한 사용자의 userNum과 일치하는 데이터만 필터링
-        const filteredData = data.filter((item) => item.userNum === isLoggedIn);
-        setUserList(filteredData); // 로그인한 사용자 데이터 저장
-        setList(sortedList); // 정렬된 데이터 상태로 저장
-      } catch (error) {
-        console.error('Error fetching rankings:', error);
+        console.error('Error initializing rankings:', error);
       } finally {
-        setIsLoading(false); // 데이터 로드 완료 후 로딩 상태 false
+        setIsLoading(false);
       }
     };
 
-    getRanking();
-  }, [isLoggedIn, users]);
+    initializeRankings();
+  }, [isLoggedIn, rankingList]);
 
   return (
     <Root>
@@ -172,7 +148,7 @@ const RankingTable = () => {
           <CircularProgress />
           <p>데이터 불러오는 중...</p>
         </LoadingBox>
-      ) : list.length === 0 ? (
+      ) : rankingList.length === 0 ? (
         <EmptyBox>
           <p>
             아직 집계된 데이터가 없습니다. (정해진 날짜가 지나지 않아 데이터가
@@ -183,7 +159,7 @@ const RankingTable = () => {
         <BoxStyle>
           <BoxIn>
             <TextBox>
-              <TextStyle>{userList[0]?.badgeNum}</TextStyle>
+              <TextStyle>{userList[0]?.rankingPosition}</TextStyle>
               <ProfileBox>
                 {userList[0]?.profile !== 'temp_profile' ? (
                   <img
@@ -198,26 +174,26 @@ const RankingTable = () => {
                 {userList[0]?.name}({userList[0]?.userId})
               </TextStyle>
             </TextBox>
-            <NumberText>{userList[0]?.badge}</NumberText>
+            <NumberText>{userList[0]?.badge.toLocaleString()}</NumberText>
           </BoxIn>
           <BoxInStyle>
-            {list.map((item, index) => (
+            {rankingList.map((item, index) => (
               <BoxIn key={index}>
                 <TextBox>
-                  {index === 0 ? (
+                  {item.rankingPosition === 1 ? (
                     <MedalBox>
                       <Medal1 />
                     </MedalBox>
-                  ) : index === 1 ? (
+                  ) : item.rankingPosition === 2 ? (
                     <MedalBox>
                       <Medal2 />
                     </MedalBox>
-                  ) : index === 2 ? (
+                  ) : item.rankingPosition === 3 ? (
                     <MedalBox>
                       <Medal3 />
                     </MedalBox>
                   ) : (
-                    <TextStyle>{index + 1}</TextStyle>
+                    <TextStyle>{item.rankingPosition}</TextStyle>
                   )}
 
                   <ProfileBox>

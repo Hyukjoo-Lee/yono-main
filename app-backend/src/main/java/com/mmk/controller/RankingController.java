@@ -24,4 +24,10 @@ public class RankingController {
     public List<RankingDTO> getRanking() {
         return rankingService.getAllRankings();
     }
+
+    @PostMapping("/ranking/update")
+    public ResponseEntity<String> updateRankings() {
+        rankingService.updateRankings();
+        return new ResponseEntity<>("Rankings updated successfully.", HttpStatus.OK);
+    }
 }
