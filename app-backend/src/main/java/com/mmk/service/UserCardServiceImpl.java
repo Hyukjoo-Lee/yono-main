@@ -97,7 +97,7 @@ public class UserCardServiceImpl implements UserCardService {
 
         CardCompanyEntity cardCompanyEntity = cardCompanyDAO.findByCardCompanyNum(dto.getCardCompanyNum());
         CardEntity cardEntity = cardDAO.findByCardId(dto.getCardId());
-        UserEntity userEntity = userDAO.getUserByUserNum(dto.getUserNum());
+        UserEntity userEntity = userDAO.findByUserNum(dto.getUserNum());
 
         entity.setCardCompanyEntity(cardCompanyEntity);
         entity.setCardEntity(cardEntity);

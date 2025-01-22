@@ -18,6 +18,10 @@ VALUES (CARD_SEQ.nextval, '농협 별다줄카드', '농협', '0304', '/images/c
 INSERT INTO card (CARD_ID, CARD_TITLE, CARD_PROVIDER, ORGANIZATION_CODE, CARD_IMG_URL, CREATED_AT, UPDATED_AT)
 VALUES (CARD_SEQ.nextval, '신한 처음카드', '신한', '0306', '/images/cards/shinhan/shinhan-first/shinhan-first1.png', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP);
 
+-- 하나 알뜰카드
+INSERT INTO card (CARD_ID, CARD_TITLE, CARD_PROVIDER, ORGANIZATION_CODE, CARD_IMG_URL, CREATED_AT, UPDATED_AT)
+VALUES (CARD_SEQ.nextval, '하나 알뜰카드', '하나', '0313', '/images/cards/shinhan/shinhan-first1.png', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP);
+
 drop table card;
 commit;
 
