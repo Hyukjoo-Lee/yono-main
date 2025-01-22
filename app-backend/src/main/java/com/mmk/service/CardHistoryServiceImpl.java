@@ -4,6 +4,7 @@ import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.Comparator;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
@@ -52,6 +53,7 @@ public class CardHistoryServiceImpl implements CardHistoryService {
         int userCardId = userCardEntity.getUserCardId();
 
         List<CardHistoryEntity> entity = cardHistoryDAO.findRecentHistory(userCardId, startDate);
+        entity.sort(Comparator.comparing(CardHistoryEntity::getResUsedDate));
         List<CardHistoryDTO> result = new ArrayList<>();
 
         for (CardHistoryEntity cardHistoryEntity : entity) {
@@ -82,7 +84,6 @@ public class CardHistoryServiceImpl implements CardHistoryService {
         }
 
         String result = codefService.getCardHistory(userCardEntity, startDate, endDate);
-        System.out.println("result: " + result);
 
         try {
             ObjectMapper objectMapper = new ObjectMapper();
@@ -110,9 +111,7 @@ public class CardHistoryServiceImpl implements CardHistoryService {
     // 월별통계 - DB에 있는 최근 3개월 카드내역 불러오기
     @Override
     public List<MonthlySummaryDTO> uploadMonthlyHistory(int userNum) {
-
         List<CardHistoryDTO> data = uploadCardHistory(userNum);
-        System.out.println("data: " + data);
         List<MonthlySummaryDTO> result = monthlyHistoryProcess(data);
         return result;
     }
