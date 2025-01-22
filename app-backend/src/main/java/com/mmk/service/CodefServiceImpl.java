@@ -13,7 +13,7 @@ import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.mmk.dao.CardCompanyDAO;
-import com.mmk.dto.CardBenefitDTO;
+// import com.mmk.dto.CardBenefitDTO;
 import com.mmk.dto.CardCompanyDTO;
 import com.mmk.dto.CardDTO;
 import com.mmk.entity.CardCompanyEntity;
@@ -45,8 +45,8 @@ public class CodefServiceImpl implements CodefService {
     @Autowired
     private CardService cardService;
 
-    @Autowired
-    private CardBenefitService cardBenefitService;
+    // @Autowired
+    // private CardBenefitService cardBenefitService;
 
     // Connected Id 발급
     @Override
@@ -156,16 +156,20 @@ public class CodefServiceImpl implements CodefService {
 
         try {
             String jsonResult = codef.requestProduct(productUrl, EasyCodefServiceType.DEMO, parameterMap);
+            System.out.println("jsonResult: " + jsonResult);
             ObjectMapper objectMapper = new ObjectMapper();
             JsonNode dataNode = objectMapper.readTree(jsonResult).get("data");
-
+            System.out.println("dataNode: " + dataNode);
             // 반환값이 배열인지 객체인지 확인 - 카드가 하나 일 때는 배열로 반환되고 두개 이상일 때는 객체로 반환됨
             List<Map<String, Object>> result;
 
             if (dataNode.isArray()) {
+                System.out.println("this is array: ");
                 result = objectMapper.convertValue(dataNode, new TypeReference<List<Map<String, Object>>>() {
                 });
+                System.out.println("this is array2: " + result);
             } else {
+
                 Map<String, Object> singleCard = objectMapper.convertValue(dataNode,
                         new TypeReference<Map<String, Object>>() {
                         });
@@ -275,7 +279,11 @@ public class CodefServiceImpl implements CodefService {
         }
     }
 
-    // 카드 정보, 혜택 호출 결과 저장 - 이미 회사가 등록 되어 있어야 함
+    /**
+     * 카드 정보, 혜택 호출 결과 저장 - 이미 회사가 등록 되어 있어야 함
+     * 현재 CODEF 조회 시 혜택이 제대로 불러 와지지 않아 문의를 넣은 상태
+     * 현재는 보유 카드만 저장 가능
+     */
     @Override
     public CardCompanyDTO saveCodefCard(CardCompanyDTO cardCompanyDTO) {
 
@@ -292,6 +300,11 @@ public class CodefServiceImpl implements CodefService {
             String companyPwd = cardCompanyEntity.getCompanyPwd();
             String connectedId = cardCompanyEntity.getConnedtedId();
 
+            System.out.println(companyNum + " :companyNum");
+            System.out.println(companyId + " :companyId");
+            System.out.println(companyPwd + " :companyPwd");
+            System.out.println(connectedId + " :connectedId");
+
             cardCompanyDTO.setCardCompanyNum(companyNum);
             cardCompanyDTO.setCompanyId(companyId);
             cardCompanyDTO.setCompanyPwd(companyPwd);
@@ -303,7 +316,7 @@ public class CodefServiceImpl implements CodefService {
         if (cardList.isEmpty()) {
             throw new RuntimeException("Codef API로부터 카드 정보를 가져오지 못했습니다.");
         }
-
+        System.out.println("cardList: " + cardList);
         // 마스터 카드, 유저 카드 저장
         cardList.forEach(card -> {
             CardDTO cardDTO = new CardDTO();
@@ -321,29 +334,17 @@ public class CodefServiceImpl implements CodefService {
         if (benefitList.isEmpty()) {
             throw new RuntimeException("Codef API로부터 카드 혜택 정보를 가져오지 못했습니다.");
         }
-        System.out.println("benefitList: " + benefitList);
-        // CardBenefitEntity 생성 및 저장
-        benefitList.forEach(benefit -> {
-            CardBenefitDTO cardBenefitDTO = new CardBenefitDTO();
+        System.out.println("cardList: " + cardList);
+        // 마스터 카드, 유저 카드 저장
+        cardList.forEach(card -> {
+            CardDTO cardDTO = new CardDTO();
+            cardDTO.setCardTitle((String) card.get("cardName"));
+            cardDTO.setCardProvider(getCardProvider(organization));
+            cardDTO.setOrganizationCode((String) card.get("organizationCode"));
+            cardDTO.setCardImgUrl((String) card.get("imageLink"));
 
-            String cardTitle = (String) benefit.get("cardName");
-
-            cardBenefitDTO.setCardTitle(cardTitle);
-
-            @SuppressWarnings("unchecked")
-            List<Map<String, Object>> benefits = (List<Map<String, Object>>) benefit.get("benefits");
-            benefits.forEach(b -> {
-
-                String benefitTitle = (String) b.get("benefitName");
-                String businessTypes = (String) b.get("businessTypes");
-
-                cardBenefitDTO.setBenefitTitle(benefitTitle);
-                cardBenefitDTO.setBusinessTypes(businessTypes);
-
-                cardBenefitService.createCardBenefit(cardBenefitDTO);
-            });
+            cardService.createCard(cardDTO);
         });
-
         return cardCompanyDTO;
     }
 

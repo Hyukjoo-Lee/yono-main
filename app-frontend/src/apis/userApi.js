@@ -86,3 +86,12 @@ export const updatePwd = async (password, userId) => {
 
   return response.data;
 };
+
+// 회원 탈퇴
+export const deleteUser = async (userNum) => {
+  const response = await axios.delete('/user/deleteUser', {
+    params: { userNum },
+  });
+
+  return response.data;
+};

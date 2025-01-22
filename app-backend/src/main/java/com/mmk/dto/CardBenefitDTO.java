@@ -13,7 +13,8 @@ public class CardBenefitDTO {
     private int benefitId;
 
     private String benefitTitle;
-    private String businessTypes;
+    private String benefitValue;
+    private String benefitType;
 
     private Timestamp createdAt;
     private Timestamp updatedAt;

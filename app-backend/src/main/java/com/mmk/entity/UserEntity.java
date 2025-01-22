@@ -57,6 +57,12 @@ public class UserEntity {
     @Column(name = "profile", columnDefinition = "varchar2(255) default 'temp_profile'")
     private String profile = "temp_profile";
 
+    @Column(name = "state", columnDefinition = "int default 1")
+    private int state; // 회원일때 1, 탈퇴회원 0
+
+    @Column(name = "user_role", columnDefinition = "int default 1")
+    private int userRole; // 관리자 0, 회원 1
+
     @CreationTimestamp
     @Column(name = "created_at")
     private Timestamp createdAt;

@@ -33,8 +33,11 @@ public class CardBenefitEntity {
     @Column(name = "benefit_title", nullable = false)
     private String benefitTitle;
 
-    @Column(name = "benefit_types", nullable = false)
-    private String businessTypes;
+    @Column(name = "benefit_value", nullable = false)
+    private String benefitValue;
+
+    @Column(name = "benefit_type", nullable = false)
+    private String benefitType;
 
     @CreationTimestamp
     @Column(name = "created_at")

@@ -1,5 +1,7 @@
 package com.mmk.dao;
 
+import java.util.List;
+
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
@@ -11,6 +13,9 @@ import com.mmk.entity.UserEntity;
 
 public interface UserCardRepository extends JpaRepository<UserCardEntity, Integer> {
     boolean existsByUserCardNum(String userCardNum);
+
+    // 모든 카드 조회
+    List<UserCardEntity> findByUserEntityUserNum(int userNum);
 
     @Modifying
     @Transactional

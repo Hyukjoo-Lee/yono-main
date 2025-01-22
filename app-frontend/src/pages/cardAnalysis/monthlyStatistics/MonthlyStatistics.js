@@ -3,10 +3,10 @@ import styled from 'styled-components';
 import { useState, useEffect } from 'react';
 import Barchart from '../../../pages/cardAnalysis/monthlyStatistics/chart/Barchart';
 import Piechart from '../../../pages/cardAnalysis/monthlyStatistics/chart/Piechart';
-// import {
-//   updateHistory,
-//   uploadRecentHistory,
-// } from '../../../apis/cardHistoryApi';
+import {
+  // updateHistory,
+  uploadRecentHistory,
+} from '../../../apis/cardHistoryApi';
 import { useSelector } from 'react-redux';
 
 const Root = styled.div`
@@ -71,12 +71,12 @@ const MonthlyStatistics = () => {
         {cardData ? (
           <Barchart data={cardData} />
         ) : (
-          <p>데이터가 존재하지 않습니다.</p>
+          <p>집계된 데이터가 없습니다.</p>
         )}
         {cardData ? (
           <Piechart data={cardData} />
         ) : (
-          <p>데이터가 존재하지 않습니다.</p>
+          <p>집계된 데이터가 없습니다.</p>
         )}
       </ChartsContainer>
       {message && (

@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -35,6 +36,20 @@ public class CardController {
                     .body(new ApiResponse<>(404, "등록된 마스터 카드가 없습니다.", null));
         }
         return ResponseEntity.ok(new ApiResponse<>(200, "전체 마스터 카드 검색 성공", cardDTOs));
+    }
+
+    // 기관 코드로 카드 조회
+    @GetMapping("/{organization}")
+    public ResponseEntity<ApiResponse<List<CardDTO>>> getCardsByOrganization(
+            @PathVariable String organization) {
+
+        List<CardDTO> cardDTOs = cardService.getAllCardsByOrganizationCode(organization);
+
+        if (cardDTOs.isEmpty()) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND)
+                    .body(new ApiResponse<>(404, "해당 기관 코드에 등록된 카드가 없습니다.", null));
+        }
+        return ResponseEntity.ok(new ApiResponse<>(200, "기관 코드별 카드 검색 성공", cardDTOs));
     }
 
     // 마스터 카드 생성

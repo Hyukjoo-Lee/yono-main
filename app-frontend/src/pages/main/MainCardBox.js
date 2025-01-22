@@ -21,6 +21,18 @@ const StyledCardP = styled.p`
   font-weight: bold;
 `;
 
+const EmptyBox = styled.div`
+  width: 100%;
+  height: 100px;
+  border: 1px solid ${(props) => props.theme.color.mediumGray};
+  border-radius: 7px;
+  boxshadow: 0px 4px 5px rgba(0, 0, 0, 0.1);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-top: 30px;
+`;
+
 const MainCardBox = ({ isLoggedIn }) => {
   // 등록된 카드 데이터
   const cardData = registeredCardData;
@@ -33,7 +45,13 @@ const MainCardBox = ({ isLoggedIn }) => {
     <StyledWrap>
       <StyledCardP>나의 등록 카드</StyledCardP>
       <StyledCardContainer>
-        <CustomSlides cardData={cardData} showDetailed={true} />
+        {cardData.length === 0 ? (
+          <EmptyBox>
+            <p>등록된 카드가 없습니다! (카드 등록 후 보여집니다.)</p>
+          </EmptyBox>
+        ) : (
+          <CustomSlides cardData={cardData} showDetailed={true} />
+        )}
       </StyledCardContainer>
     </StyledWrap>
   );

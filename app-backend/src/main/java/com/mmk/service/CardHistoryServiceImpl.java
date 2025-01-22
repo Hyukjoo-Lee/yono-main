@@ -4,6 +4,8 @@ import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.Comparator;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
@@ -46,11 +48,12 @@ public class CardHistoryServiceImpl implements CardHistoryService {
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyyMMdd");
         String startDate = twoMonthsAgoFirstDay.format(formatter);
 
-        UserEntity userEntity = userDAO.getUserByUserNum(userNum);
+        UserEntity userEntity = userDAO.findByUserNum(userNum);
         UserCardEntity userCardEntity = userCardDAO.findByUserNumAndPrimaryCard(userEntity, 1);
         int userCardId = userCardEntity.getUserCardId();
 
         List<CardHistoryEntity> entity = cardHistoryDAO.findRecentHistory(userCardId, startDate);
+        entity.sort(Comparator.comparing(CardHistoryEntity::getResUsedDate));
         List<CardHistoryDTO> result = new ArrayList<>();
 
         for (CardHistoryEntity cardHistoryEntity : entity) {
@@ -63,7 +66,7 @@ public class CardHistoryServiceImpl implements CardHistoryService {
     // 카드내역 DB에 갱신
     @Override
     public void updateCardHistory(int userNum) {
-        UserEntity userEntity = userDAO.getUserByUserNum(userNum);
+        UserEntity userEntity = userDAO.findByUserNum(userNum);
         UserCardEntity userCardEntity = userCardDAO.findByUserNumAndPrimaryCard(userEntity, 1);
         int userCardId = userCardEntity.getUserCardId();
 
@@ -90,8 +93,15 @@ public class CardHistoryServiceImpl implements CardHistoryService {
             List<CardHistoryDTO> cardHistoryDTOList = objectMapper.readValue(dataArrayJson, new TypeReference<List<CardHistoryDTO>>() {});
 
             for (CardHistoryDTO cardHistoryDTO : cardHistoryDTOList) {
-                cardHistoryDTO.setUserCardId(userCardId);
-                cardHistoryDAO.save(toEntity(cardHistoryDTO));
+                try {
+                    if (cardHistoryDTO.getResMemberStoreType() == "") {
+                        cardHistoryDTO.setResMemberStoreType("기타");
+                    }
+                    cardHistoryDTO.setUserCardId(userCardId);
+                    cardHistoryDAO.save(toEntity(cardHistoryDTO));
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
             }
         } catch (Exception e) {
             e.printStackTrace();
@@ -101,7 +111,6 @@ public class CardHistoryServiceImpl implements CardHistoryService {
     // 월별통계 - DB에 있는 최근 3개월 카드내역 불러오기
     @Override
     public List<MonthlySummaryDTO> uploadMonthlyHistory(int userNum) {
-
         List<CardHistoryDTO> data = uploadCardHistory(userNum);
         List<MonthlySummaryDTO> result = monthlyHistoryProcess(data);
         return result;
@@ -113,10 +122,9 @@ public class CardHistoryServiceImpl implements CardHistoryService {
             Map<String, Map<String, Integer>> groupedData = cardHistoryDTOList.parallelStream()
                 .collect(Collectors.groupingBy(
                     card -> card.getResUsedDate().substring(0, 6),
+                    LinkedHashMap::new,
                     Collectors.groupingBy(
-                        card -> (card.getResMemberStoreType() != null && !card.getResMemberStoreType().isEmpty())
-                            ? card.getResMemberStoreType()
-                            : "기타",
+                        CardHistoryDTO::getResMemberStoreType,
                         Collectors.summingInt(card -> Integer.parseInt(card.getResUsedAmount()))
                     )
                 ));

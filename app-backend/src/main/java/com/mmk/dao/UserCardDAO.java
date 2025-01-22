@@ -11,7 +11,8 @@ public interface UserCardDAO {
     // 카드 넘버는 고유해야함
     boolean existsByUserCardNum(String userCardNum);
 
-    List<UserCardEntity> findUserCardEntityByUserId(int userId);
+    // userNum 로 모든 카드 조회
+    List<UserCardEntity> getAllCardsByUserNum(int userNum);
 
     void removePrimaryCardAll(int userNum);
 
@@ -21,5 +22,6 @@ public interface UserCardDAO {
 
     UserCardEntity findByUserCardId(int userCardId);
 
-    // void updateAllByUserNumAndOrganization(int userNum, String organization, String companyId, String companyPwd, String connectedId);
+    // void updateAllByUserNumAndOrganization(int userNum, String organization,
+    // String companyId, String companyPwd, String connectedId);
 }

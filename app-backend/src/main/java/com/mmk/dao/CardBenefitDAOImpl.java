@@ -1,9 +1,12 @@
 package com.mmk.dao;
 
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
 import com.mmk.entity.CardBenefitEntity;
+import com.mmk.entity.CardEntity;
 
 @Repository
 public class CardBenefitDAOImpl implements CardBenefitDAO {
@@ -12,8 +15,8 @@ public class CardBenefitDAOImpl implements CardBenefitDAO {
     private CardBenefitRepository cardBenefitRepository;
 
     @Override
-    public void createCardBenefit(CardBenefitEntity cardBenefitEntity) {
-        cardBenefitRepository.save(cardBenefitEntity);
+    public boolean existsByBenefitTitle(String benefitTitle) {
+        return cardBenefitRepository.existsByBenefitTitle(benefitTitle);
     }
 
     @Override
@@ -23,8 +26,17 @@ public class CardBenefitDAOImpl implements CardBenefitDAO {
     }
 
     @Override
-    public boolean existsByBenefitTitle(String benefitTitle) {
-        return cardBenefitRepository.existsByBenefitTitle(benefitTitle);
+    public List<CardBenefitEntity> getAllCardBenefitsByCardTitle(String cardTitle) {
+        return cardBenefitRepository.findByCardEntityCardTitle(cardTitle);
     }
 
+    @Override
+    public boolean existsByBenefitTitleAndCard(String benefitTitle, CardEntity cardEntity) {
+        return cardBenefitRepository.existsByBenefitTitleAndCardEntity(benefitTitle, cardEntity);
+    }
+
+    @Override
+    public CardBenefitEntity registerCardBenefit(CardBenefitEntity cardBenefitEntity) {
+        return cardBenefitRepository.save(cardBenefitEntity);
+    }
 }
