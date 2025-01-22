@@ -15,6 +15,7 @@ import theme from '../../theme/theme';
 import SearchAddressDialog from '../auth/modal/SearchAddressDialog';
 import PasswordDialog from './PasswordDialog';
 import Profile from './Profile';
+import CommonDialog from '../../common/CommonDialog';
 
 const StyledHr = styled.hr`
   width: 100%;
@@ -47,9 +48,6 @@ const DeleteButtonContainer = styled.div`
   display: flex;
   flex-direction: column;
   align-items: center;
-  & button {
-    width: 150px;
-  }
 `;
 
 const Button = styled.div`
@@ -114,6 +112,7 @@ const CheckUserInfo = ({
   const [isShowDialog, setIsShowDialog] = useState(false);
   const [passwordError, setPasswordError] = useState('');
   const [isAddressModalOpen, setIsAddressModalOpen] = useState(false);
+  const [isDeleteDialog, setIsDeleteDialog] = useState(false);
   const [userInfo, setUserInfo] = useState({
     userNum: userNum,
     userId: userId || '',
@@ -276,10 +275,14 @@ const CheckUserInfo = ({
 
   const dispatch = useDispatch();
 
+  const checkDeleteId = () => {
+    setIsDeleteDialog(true);
+  };
+
   const deleteId = async () => {
-    await deleteUser(userInfo.userNum);
-    // 정말 탈퇴하시겠습니까? 다이얼로그 띄우기
+    navigate('/');
     dispatch(logoutUser());
+    await deleteUser(userInfo.userNum);
   };
 
   const disabledInputProps = {
@@ -372,14 +375,16 @@ const CheckUserInfo = ({
           />
           <DeleteButtonContainer>
             <CommonButton
-              width="100px"
-              height="40px"
-              text="기본 이미지로 변경"
-              fontSize="13px"
-              color="black"
+              width="50px"
+              height="30px"
+              text="프로필 삭제"
+              fontSize="10px"
+              color={theme.color.blue}
               background="transparent"
+              $borderRadius="4px"
+              $borderColor={theme.color.blue}
               $hoverBk="transparent"
-              $hoverColor="black"
+              $hoverColor={theme.color.blue}
               onClick={handleProfileDelete}
             />
           </DeleteButtonContainer>
@@ -497,7 +502,7 @@ const CheckUserInfo = ({
 
         <CommonButton
           text={isEditing ? '회원 탈퇴' : '취소'}
-          onClick={isEditing ? deleteId : cancelEdit}
+          onClick={isEditing ? checkDeleteId : cancelEdit}
           {...commonButtonProps}
         />
       </Button>
@@ -511,6 +516,15 @@ const CheckUserInfo = ({
         }}
         password={password}
         userInfo={userInfo}
+      />
+
+      <CommonDialog
+        open={isDeleteDialog}
+        text="탈퇴"
+        onClose={() => setIsDeleteDialog(false)}
+        onClick={deleteId}
+        cancelBtn={true}
+        children={<p>정말로 탈퇴하시겠습니까?</p>}
       />
     </Root>
   );

@@ -34,9 +34,6 @@ public class CodefServiceImpl implements CodefService {
     @Value("${CODEF_PUBLIC_KEY}")
     private String publickey;
 
-    @Value("${CODEF_CONNECTEDID:defaultValue}")
-    private String connectedId;
-
     private EasyCodef codef;
 
     @Autowired
@@ -310,24 +307,25 @@ public class CodefServiceImpl implements CodefService {
             cardCompanyDTO.setCompanyPwd(companyPwd);
             cardCompanyDTO.setConnectedId(connectedId);
         }
-        // // Codef API로 카드 정보 요청
-        // List<Map<String, Object>> cardList =
-        // getUserCardList(cardCompanyDTO.getConnectedId(), organization);
+        
+        // Codef API로 카드 정보 요청
+        List<Map<String, Object>> cardList =
+        getUserCardList(cardCompanyDTO.getConnectedId(), organization);
 
-        // if (cardList.isEmpty()) {
-        // throw new RuntimeException("Codef API로부터 카드 정보를 가져오지 못했습니다.");
-        // }
-        // System.out.println("cardList: " + cardList);
-        // // 마스터 카드, 유저 카드 저장
-        // cardList.forEach(card -> {
-        // CardDTO cardDTO = new CardDTO();
-        // cardDTO.setCardTitle((String) card.get("cardName"));
-        // cardDTO.setCardProvider(getCardProvider(organization));
-        // cardDTO.setOrganizationCode((String) card.get("organizationCode"));
-        // cardDTO.setCardImgUrl((String) card.get("imageLink"));
+        if (cardList.isEmpty()) {
+        throw new RuntimeException("Codef API로부터 카드 정보를 가져오지 못했습니다.");
+        }
+        System.out.println("cardList: " + cardList);
+        // 마스터 카드, 유저 카드 저장
+        cardList.forEach(card -> {
+        CardDTO cardDTO = new CardDTO();
+        cardDTO.setCardTitle((String) card.get("cardName"));
+        cardDTO.setCardProvider(getCardProvider(organization));
+        cardDTO.setOrganizationCode((String) card.get("organizationCode"));
+        cardDTO.setCardImgUrl((String) card.get("imageLink"));
 
-        // cardService.createCard(cardDTO);
-        // });
+        cardService.createCard(cardDTO);
+        });
 
         // Codef API로 카드 혜택 요청
         List<Map<String, Object>> benefitList = getUserPerformance(cardCompanyDTO.getConnectedId(), organization);
