@@ -3,7 +3,7 @@ import styled from 'styled-components';
 import { ResponsivePie } from '@nivo/pie';
 
 const StyledChart = styled.div`
-  width: 582px;
+  width: 55%;
   height: 600px;
   margin: 0 auto;
 `;
@@ -23,6 +23,7 @@ const processData = (data) => {
   return Object.entries(categoryTotals).map(([id, value]) => ({
     id,
     value,
+    // value: new Intl.NumberFormat('en-US').format(value),
   }));
 };
 
@@ -31,7 +32,8 @@ const Piechart = ({ data }) => {
     <StyledChart>
       <ResponsivePie
         data={processData(data)}
-        margin={{ top: 40, right: 120, bottom: 80, left: 80 }}
+        margin={{ top: 40, right: 150, bottom: 80, left: 150 }}
+        valueFormat=" >-,"
         innerRadius={0.5}
         padAngle={1}
         cornerRadius={3}

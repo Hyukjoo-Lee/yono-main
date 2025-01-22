@@ -3,10 +3,10 @@ import styled from 'styled-components';
 import { useState, useEffect } from 'react';
 import Barchart from '../../../pages/cardAnalysis/monthlyStatistics/chart/Barchart';
 import Piechart from '../../../pages/cardAnalysis/monthlyStatistics/chart/Piechart';
-// import {
-//   updateHistory,
-//   uploadRecentHistory,
-// } from '../../../apis/cardHistoryApi';
+import {
+  // updateHistory,
+  uploadRecentHistory,
+} from '../../../apis/cardHistoryApi';
 import { useSelector } from 'react-redux';
 
 const Root = styled.div`
@@ -42,8 +42,8 @@ const MonthlyStatistics = () => {
   useEffect(() => {
     const fetchUser = async () => {
       try {
-        // const response = await uploadRecentHistory(userNum);
-        // setCardData(response.data);
+        const response = await uploadRecentHistory(userNum);
+        setCardData(response.data);
         setLoading(false);
 
         // await updateHistory(userNum);
