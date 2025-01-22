@@ -2,6 +2,8 @@ select * from card_History where USER_CARD_ID = 23 order by res_used_date;
 drop table card_History;
 TRUNCATE table card_History;
 
+select * from CARD_HISTORY;
+
 commit;
 
 delete from CARD_HISTORY where USER_CARD_ID = 23;

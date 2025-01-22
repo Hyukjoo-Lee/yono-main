@@ -93,6 +93,9 @@ public class CardHistoryServiceImpl implements CardHistoryService {
 
             for (CardHistoryDTO cardHistoryDTO : cardHistoryDTOList) {
                 try {
+                    if (cardHistoryDTO.getResMemberStoreType() == "") {
+                        cardHistoryDTO.setResMemberStoreType("기타");
+                    }
                     cardHistoryDTO.setUserCardId(userCardId);
                     cardHistoryDAO.save(toEntity(cardHistoryDTO));
                 } catch (Exception e) {
@@ -122,10 +125,8 @@ public class CardHistoryServiceImpl implements CardHistoryService {
                     card -> card.getResUsedDate().substring(0, 6),
                     LinkedHashMap::new,
                     Collectors.groupingBy(
-                        card -> (card.getResMemberStoreType() != null && !card.getResMemberStoreType().isEmpty())
-                            ? card.getResMemberStoreType()
-                            : "기타",
-                            Collectors.summingInt(card -> Integer.parseInt(card.getResUsedAmount()))
+                        CardHistoryDTO::getResMemberStoreType,
+                        Collectors.summingInt(card -> Integer.parseInt(card.getResUsedAmount()))
                     )
                 ));
     

@@ -33,7 +33,7 @@ public class CardHistoryEntity {
     @Column(name = "resUsedAmount", nullable = false)
     private String resUsedAmount; // 이용금액
 
-    @Column(name = "resMemberStoreType", nullable = true)
+    @Column(name = "resMemberStoreType", nullable = false)
     private String resMemberStoreType; // 가맹점 업종
 
     @ManyToOne
