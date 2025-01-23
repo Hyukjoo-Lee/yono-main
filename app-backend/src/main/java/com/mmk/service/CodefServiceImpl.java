@@ -63,10 +63,18 @@ public class CodefServiceImpl implements CodefService {
         String result = "";
         try {
             result = codef.createAccount(EasyCodefServiceType.DEMO, parameterMap);
+            System.out.println(result);
             ObjectMapper objectMapper = new ObjectMapper();
             JsonNode jsonNode = objectMapper.readTree(result);
-            String connectedId = jsonNode.path("data").path("connectedId").asText();
-            return connectedId;
+            String code = jsonNode.path("result").path("code").asText();
+            System.out.println("code: " + code);
+            if (code.equals("CF-00000")) {
+                String connectedId = jsonNode.path("data").path("connectedId").asText();
+                return connectedId;
+            } else {
+                String errorMessage = jsonNode.path("data").path("errorList").get(0).path("message").asText();
+                return "error" + errorMessage;
+            }
         } catch (Exception e) {
             e.printStackTrace();
             return null;
