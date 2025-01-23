@@ -3,28 +3,35 @@ import styled from 'styled-components';
 import { ResponsiveBar } from '@nivo/bar';
 
 const StyledChart = styled.div`
-  width: 582px;
+  width: 45%;
   height: 600px;
   margin: 0 auto;
 `;
 
 const Barchart = ({ data }) => {
-  const handle = {
-    barClick: (data) => {},
-    legendClick: (data) => {},
-  };
+  // const handle = {
+  //   barClick: (data) => {},
+  //   legendClick: (data) => {},
+  // };
 
-  const keys = data[0]
-    ? Object.keys(data[0]).filter((key) => key !== '날짜')
-    : [];
+  const transformedData = data.map((item) => {
+    const categoryTotals = item.categoryTotals;
+    return {
+      month: item.month,
+      ...categoryTotals,
+    };
+  });
+
+  const keys = data[0] ? Object.keys(data[0].categoryTotals) : [];
 
   return (
     <StyledChart>
       <ResponsiveBar
-        data={data}
+        data={transformedData}
         keys={keys}
-        indexBy="날짜"
-        margin={{ top: 40, right: 120, bottom: 80, left: 80 }}
+        indexBy="month"
+        margin={{ top: 40, right: 40, bottom: 80, left: 80 }}
+        valueFormat=" >-,"
         padding={0.3}
         groupMode="grouped"
         // colors={{ scheme: 'blues' }}
@@ -82,38 +89,40 @@ const Barchart = ({ data }) => {
           legend: '',
           legendPosition: 'middle',
           legendOffset: -60,
+          ticks: true,
+          format: (value) => new Intl.NumberFormat().format(value),
         }}
         labelSkipWidth={36}
         labelSkipHeight={12}
         // 토탈 값 표시
         // enableTotals = {true}
-        onClick={handle.barClick}
-        legends={[
-          {
-            dataFrom: 'keys',
-            anchor: 'bottom',
-            direction: 'row',
-            justify: false,
-            translateX: 0,
-            translateY: 80,
-            itemsSpacing: 10,
-            itemWidth: 100,
-            itemHeight: 18,
-            itemDirection: 'left-to-right',
-            itemOpacity: 0.85,
-            symbolSize: 15,
-            effects: [
-              {
-                on: 'hover',
-                style: {
-                  itemOpacity: 1,
-                },
-              },
-            ],
-            onClick: handle.legendClick,
-            wrapText: true,
-          },
-        ]}
+        // onClick={handle.barClick}
+        // legends={[
+        //   {
+        //     dataFrom: 'keys',
+        //     anchor: 'bottom',
+        //     direction: 'row',
+        //     justify: false,
+        //     translateX: 0,
+        //     translateY: 80,
+        //     itemsSpacing: 10,
+        //     itemWidth: 100,
+        //     itemHeight: 18,
+        //     itemDirection: 'left-to-right',
+        //     itemOpacity: 0.85,
+        //     symbolSize: 15,
+        //     effects: [
+        //       {
+        //         on: 'hover',
+        //         style: {
+        //           itemOpacity: 1,
+        //         },
+        //       },
+        //     ],
+        //     onClick: handle.legendClick,
+        //     wrapText: true,
+        //   },
+        // ]}
       />
     </StyledChart>
   );

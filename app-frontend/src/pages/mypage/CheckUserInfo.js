@@ -1,18 +1,20 @@
 import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
-import { modifyUser } from '../../apis/userApi';
+import { deleteUser, modifyUser } from '../../apis/userApi';
 import CommonButton from '../../common/CommonButton';
 import CommonInput from '../../common/CommonInput';
-import SearchAddressDialog from '../auth/modal/SearchAddressDialog';
 import {
-  SPENDINGTARGET_REGEX_MESSAGE,
   EMAIL_REGEX_MESSAGE,
   PASSWORD_MISMATCH_MESSAGE,
+  SPENDINGTARGET_REGEX_MESSAGE,
 } from '../../common/Message';
-import Profile from './Profile';
+import { logoutUser } from '../../redux/actions/userAction';
+import { useDispatch } from 'react-redux';
 import theme from '../../theme/theme';
+import SearchAddressDialog from '../auth/modal/SearchAddressDialog';
 import PasswordDialog from './PasswordDialog';
+import Profile from './Profile';
 
 const StyledHr = styled.hr`
   width: 100%;
@@ -37,6 +39,17 @@ const Section = styled.div`
 const InnerSection = styled.div`
   width: 100%;
   margin-bottom: 15px;
+`;
+
+const DeleteButtonContainer = styled.div`
+  width: 100%;
+  margin-bottom: 15px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  & button {
+    width: 150px;
+  }
 `;
 
 const Button = styled.div`
@@ -151,7 +164,6 @@ const CheckUserInfo = ({
 
   const handleProfileChange = (e) => {
     const file = e.target.files[0];
-    console.log(file);
     if (file) {
       setProfileImage(file);
       const reader = new FileReader();
@@ -160,6 +172,13 @@ const CheckUserInfo = ({
       };
       reader.readAsDataURL(file);
     }
+  };
+
+  const handleProfileDelete = () => {
+    setProfileImage('temp_profile');
+    setPreviewImage(null);
+    console.log('profileImage: ' + profileImage);
+    console.log('previewImage: ' + previewImage);
   };
 
   const handleAddressSelect = (address) => {
@@ -196,7 +215,6 @@ const CheckUserInfo = ({
   const isFormValid = () => {
     for (const key in userInfo) {
       if ((userInfo[key] + '').trim() === '') {
-        console.log(key);
         return false;
       }
     }
@@ -251,13 +269,18 @@ const CheckUserInfo = ({
       formData.append('profileText', profileImage);
     }
 
-    modifyUser(formData).then((response) => {
+    modifyUser(formData).then(() => {
       navigate(0);
     });
-    // window.location.reload();
   };
 
-  const deleteId = () => {};
+  const dispatch = useDispatch();
+
+  const deleteId = async () => {
+    await deleteUser(userInfo.userNum);
+    // 정말 탈퇴하시겠습니까? 다이얼로그 띄우기
+    dispatch(logoutUser());
+  };
 
   const disabledInputProps = {
     disabled: true,
@@ -344,10 +367,22 @@ const CheckUserInfo = ({
         <>
           <Profile
             profileImage={previewImage}
-            onProfileChange={handleProfileChange}
+            onImageChange={handleProfileChange}
             isEditing={isEditing}
           />
-
+          <DeleteButtonContainer>
+            <CommonButton
+              width="100px"
+              height="40px"
+              text="기본 이미지로 변경"
+              fontSize="13px"
+              color="black"
+              background="transparent"
+              $hoverBk="transparent"
+              $hoverColor="black"
+              onClick={handleProfileDelete}
+            />
+          </DeleteButtonContainer>
           <InnerSection>
             <CommonInput
               value={userInfo.userId}

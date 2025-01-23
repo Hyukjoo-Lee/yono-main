@@ -9,13 +9,16 @@ import lombok.ToString;
 @Getter
 @Setter
 @ToString
-public class MonthlyTransDTO {
+public class TransDailyDTO {
     private int cardNum;
 
     private int userNum;
 
     @JsonProperty("resUsedDate")
     private String usedDate;
+
+    @JsonProperty("resMemberStoreName")
+    private String storeName;
 
     @JsonProperty("resUsedAmount")
     private String usedAmount;

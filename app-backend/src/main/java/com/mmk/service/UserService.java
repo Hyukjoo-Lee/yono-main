@@ -7,7 +7,7 @@ import com.mmk.dto.UserDTO;
 public interface UserService {
     UserDTO createUser(UserDTO userDTO);
 
-    UserDTO getUserById(int id);
+    UserDTO findByUserNum(int userNum);
 
     UserDTO getUserByUserId(String userId);
 

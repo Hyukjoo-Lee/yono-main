@@ -1,7 +1,6 @@
 package com.mmk.dto;
 
 import java.sql.Timestamp;
-import java.util.List;
 
 import lombok.Getter;
 import lombok.Setter;
@@ -20,7 +19,4 @@ public class CardDTO {
 
     private Timestamp createdAt;
     private Timestamp updatedAt;
-
-    private List<UserCardDTO> userCards;
-    private List<CardBenefitDTO> cardBenefits;
 }

@@ -31,8 +31,8 @@ const CardAnalysis = () => {
           selectedTab === 0
             ? '일별통계(캘린더)'
             : selectedTab === 1
-              ? '월별통계(막대/원형그래프)'
-              : '목차별통계(원형그래프)'
+              ? '목차별통계(원형그래프)'
+              : '월별통계(막대/원형그래프)'
         }
         text={
           selectedTab === 0 ? (

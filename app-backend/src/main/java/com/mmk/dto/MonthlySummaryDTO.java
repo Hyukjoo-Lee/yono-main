@@ -13,7 +13,7 @@ import lombok.ToString;
 @AllArgsConstructor
 @NoArgsConstructor
 @ToString
-public class MonthlySummary {
+public class MonthlySummaryDTO {
     private String month;
     private Map<String, Integer> categoryTotals;
 

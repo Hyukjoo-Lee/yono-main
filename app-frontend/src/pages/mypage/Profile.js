@@ -1,6 +1,7 @@
+import CameraAltRoundedIcon from '@mui/icons-material/CameraAltRounded';
 import React from 'react';
-import { ReactComponent as DefaultProfile } from '../../assets/images/Profile.svg';
 import styled from 'styled-components';
+import { ReactComponent as DefaultProfile } from '../../assets/images/Profile.svg';
 
 const ProfileContainer = styled.div`
   position: relative;
@@ -11,7 +12,7 @@ const ProfileContainer = styled.div`
   height: 150px;
   border-radius: 50%;
   background-color: #f5f5f5;
-  margin: 0 auto 40px;
+  margin: 0 auto 5px;
 `;
 
 const ProfileImage = styled.div`
@@ -38,12 +39,13 @@ const ProfileButton = styled.button`
   position: absolute;
   bottom: 23px;
   right: 23px;
-  width: 30px;
-  height: 30px;
+  width: 35px;
+  height: 35px;
   border: none;
   border-radius: 50%;
-  background-color: #4064e6;
-  color: white;
+  // background-color: #4064e6;
+  background-color: transparent;
+  color: #4064e6;
   display: flex;
   justify-content: center;
   align-items: center;
@@ -52,46 +54,45 @@ const ProfileButton = styled.button`
   transform: translate(50%, 50%);
   z-index: 10;
   &:hover {
-    background-color: #0056b3;
+    background-color: rgb(228, 233, 238);
   }
 `;
 
-const Profile = ({ profileImage, onProfileChange, isEditing }) => {
-  console.log(`${process.env.REACT_APP_API_URL}${profileImage}`);
-  return (
-    <ProfileContainer>
-      <ProfileImage>
-        {profileImage && profileImage !== 'temp_profile' ? (
-          typeof profileImage === 'string' &&
-          profileImage.startsWith('data:image') ? (
-            <img src={profileImage} alt="Profile" />
-          ) : (
-            <img
-              src={`${process.env.REACT_APP_API_URL}${profileImage}`}
-              alt="Profile"
-            />
-          )
+const Profile = ({ profileImage, onImageChange, isEditing }) => (
+  <ProfileContainer>
+    <ProfileImage>
+      {profileImage && profileImage !== 'temp_profile' ? (
+        typeof profileImage === 'string' &&
+        profileImage.startsWith('data:image') ? (
+          <img src={profileImage} alt="Profile" />
         ) : (
-          <DefaultProfile />
-        )}
-      </ProfileImage>
-      {!isEditing && (
+          <img
+            src={`${process.env.REACT_APP_API_URL}${profileImage}`}
+            alt="Profile"
+          />
+        )
+      ) : (
+        <DefaultProfile />
+      )}
+    </ProfileImage>
+    {!isEditing && (
+      <>
         <ProfileButton
           htmlFor="profile-upload"
           onClick={() => document.getElementById('fileInput').click()}
         >
-          +
+          <CameraAltRoundedIcon />
           <input
             type="file"
             id="fileInput"
             style={{ display: 'none' }}
             accept="image/*"
-            onChange={onProfileChange}
+            onChange={onImageChange}
           />
         </ProfileButton>
-      )}
-    </ProfileContainer>
-  );
-};
+      </>
+    )}
+  </ProfileContainer>
+);
 
 export default Profile;

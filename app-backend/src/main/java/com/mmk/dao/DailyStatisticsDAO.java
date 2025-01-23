@@ -2,9 +2,9 @@ package com.mmk.dao;
 
 import java.util.List;
 
-import com.mmk.entity.DailyStatisticsEntity;
+import com.mmk.entity.CardHistoryEntity;
 
 public interface DailyStatisticsDAO {
 
-    List<DailyStatisticsEntity> getDailyStatistics();
+    List<CardHistoryEntity> getDailyStatistics();
 }

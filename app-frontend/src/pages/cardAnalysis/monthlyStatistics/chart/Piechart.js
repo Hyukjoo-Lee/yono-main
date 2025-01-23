@@ -3,17 +3,37 @@ import styled from 'styled-components';
 import { ResponsivePie } from '@nivo/pie';
 
 const StyledChart = styled.div`
-  width: 582px;
+  width: 55%;
   height: 600px;
   margin: 0 auto;
 `;
+
+const processData = (data) => {
+  const categoryTotals = {};
+
+  data.forEach(({ categoryTotals: totals }) => {
+    Object.entries(totals).forEach(([category, value]) => {
+      if (!categoryTotals[category]) {
+        categoryTotals[category] = 0;
+      }
+      categoryTotals[category] += value;
+    });
+  });
+
+  return Object.entries(categoryTotals).map(([id, value]) => ({
+    id,
+    value,
+    // value: new Intl.NumberFormat('en-US').format(value),
+  }));
+};
 
 const Piechart = ({ data }) => {
   return (
     <StyledChart>
       <ResponsivePie
-        data={data}
-        margin={{ top: 40, right: 120, bottom: 80, left: 80 }}
+        data={processData(data)}
+        margin={{ top: 40, right: 150, bottom: 80, left: 150 }}
+        valueFormat=" >-,"
         innerRadius={0.5}
         padAngle={1}
         cornerRadius={3}
@@ -49,30 +69,30 @@ const Piechart = ({ data }) => {
             },
           },
         }}
-        legends={[
-          {
-            anchor: 'bottom',
-            direction: 'row',
-            justify: false,
-            translateX: 0,
-            translateY: 80,
-            itemsSpacing: 10,
-            itemWidth: 100,
-            itemHeight: 18,
-            itemDirection: 'left-to-right',
-            itemOpacity: 1,
-            symbolSize: 15,
-            symbolShape: 'circle',
-            effects: [
-              {
-                on: 'hover',
-                style: {
-                  itemWidth: 'olive',
-                },
-              },
-            ],
-          },
-        ]}
+        // legends={[
+        //   {
+        //     anchor: 'bottom',
+        //     direction: 'row',
+        //     justify: false,
+        //     translateX: 0,
+        //     translateY: 80,
+        //     itemsSpacing: 10,
+        //     itemWidth: 100,
+        //     itemHeight: 18,
+        //     itemDirection: 'left-to-right',
+        //     itemOpacity: 1,
+        //     symbolSize: 15,
+        //     symbolShape: 'circle',
+        //     effects: [
+        //       {
+        //         on: 'hover',
+        //         style: {
+        //           itemWidth: 'olive',
+        //         },
+        //       },
+        //     ],
+        //   },
+        // ]}
       />
     </StyledChart>
   );

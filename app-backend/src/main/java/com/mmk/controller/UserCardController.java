@@ -1,7 +1,6 @@
 package com.mmk.controller;
 
 import java.util.List;
-import java.util.concurrent.CompletableFuture;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -15,7 +14,6 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.mmk.common.ApiResponse;
-import com.mmk.dto.MonthlySummary;
 import com.mmk.dto.UserCardDTO;
 import com.mmk.service.UserCardService;
 
@@ -28,8 +26,8 @@ public class UserCardController {
 
     // 특정 사용자의 보유 카드 조회
     @GetMapping("/user/{userNum}")
-    public ResponseEntity<ApiResponse<List<UserCardDTO>>> getUserCards(@PathVariable int userNum) {
-        List<UserCardDTO> userCards = userCardService.getUserCardsByUserId(userNum);
+    public ResponseEntity<ApiResponse<List<UserCardDTO>>> getAllCardsByUserNum(@PathVariable int userNum) {
+        List<UserCardDTO> userCards = userCardService.getAllCardsByUserNum(userNum);
         if (userCards.isEmpty()) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND)
                     .body(new ApiResponse<>(404, "해당 사용자가 보유한 카드가 없습니다.", null));
@@ -39,7 +37,8 @@ public class UserCardController {
 
     // 사용자 카드 등록
     @PostMapping("/register")
-    public ResponseEntity<ApiResponse<UserCardDTO>> registerUserCard(@RequestBody UserCardDTO userCardDTO, @RequestParam String organization, @RequestParam String cardTitle) {
+    public ResponseEntity<ApiResponse<UserCardDTO>> registerUserCard(@RequestBody UserCardDTO userCardDTO,
+            @RequestParam String organization, @RequestParam String cardTitle) {
         UserCardDTO savedCard = userCardService.registerCard(userCardDTO, organization, cardTitle);
         if (savedCard == null) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND)
@@ -52,7 +51,8 @@ public class UserCardController {
 
     // 대표카드 설정
     @GetMapping("/setPrimaryCard")
-    public ResponseEntity<ApiResponse<UserCardDTO>> setPrimaryCard(@RequestParam("userCardId") int userCardId, @RequestParam("userNum") int userNum) {
+    public ResponseEntity<ApiResponse<UserCardDTO>> setPrimaryCard(@RequestParam("userCardId") int userCardId,
+            @RequestParam("userNum") int userNum) {
         try {
             UserCardDTO userCardDTO = userCardService.setPrimaryCard(userCardId, userNum);
             ApiResponse<UserCardDTO> response = new ApiResponse<>(201, "대표카드 등록성공", userCardDTO);
@@ -63,11 +63,4 @@ public class UserCardController {
                     .body(new ApiResponse<>(404, "대표카드 등록실패.", null));
         }
     }
-
-    // 카드내역 조회
-    @GetMapping("/getCardHistory")
-    public CompletableFuture<List<MonthlySummary>> getCardHistory(@RequestParam("userNum") int userNum) {
-        return userCardService.getCardHistory(userNum);
-    }
-
 }

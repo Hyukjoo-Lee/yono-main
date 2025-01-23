@@ -8,7 +8,7 @@ public interface UserDAO {
 
     void createUser(UserEntity uEntity);
 
-    UserEntity getUserByUserNum(int userNum);
+    UserEntity findByUserNum(int userNum);
 
     UserEntity getUserByUserId(String userId);
 
@@ -24,7 +24,7 @@ public interface UserDAO {
 
     void updateUser(UserEntity uEntity);
 
-    void deleteUser(int id);
+    void deleteUser(int userNum);
 
     UserEntity getFindId(String name, String email);
 

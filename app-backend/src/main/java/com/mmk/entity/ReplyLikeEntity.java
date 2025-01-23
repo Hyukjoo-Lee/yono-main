@@ -1,7 +1,6 @@
 package com.mmk.entity;
 
 import java.time.LocalDate;
-import java.time.LocalDateTime;
 
 import org.hibernate.annotations.CreationTimestamp;
 
@@ -19,12 +18,7 @@ import lombok.ToString;
 @Getter
 @ToString
 @Entity
-@SequenceGenerator(
-    name ="replylike_seq_generator",
-    sequenceName = "replylike_seq",
-    initialValue = 1,
-    allocationSize = 1
-)
+@SequenceGenerator(name = "replylike_seq_generator", sequenceName = "replylike_seq", initialValue = 1, allocationSize = 1)
 @Table(name = "reply_likes")
 public class ReplyLikeEntity {
 
@@ -32,9 +26,9 @@ public class ReplyLikeEntity {
     @GeneratedValue(strategy = GenerationType.SEQUENCE, // 사용할 전략을 시퀀스로 선택
             generator = "replylike_seq_generator")
 
-    private int id;              // 고유 ID (Primary Key)
-    private int rno;       // 좋아요가 눌린 댓글 ID (Foreign Key)
-    private String userId;    // 좋아요를 누른 사용자 ID (Foreign Key)
+    private int id; // 고유 ID (Primary Key)
+    private int rno; // 좋아요가 눌린 댓글 ID (Foreign Key)
+    private String userId; // 좋아요를 누른 사용자 ID (Foreign Key)
     @CreationTimestamp
     private LocalDate regdate;// 좋아요 누른 시간
 }

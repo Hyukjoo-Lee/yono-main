@@ -48,4 +48,12 @@ module.exports = function (app) {
       changeOrigin: true,
     }),
   );
+
+  app.use(
+    '/cardHistory',
+    createProxyMiddleware({
+      target: process.env.REACT_APP_API_URL,
+      changeOrigin: true,
+    }),
+  );
 };
