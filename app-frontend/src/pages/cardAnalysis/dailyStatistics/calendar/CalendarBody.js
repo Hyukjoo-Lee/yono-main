@@ -94,16 +94,17 @@ const CalendarBody = ({
 
       // 현재 날짜에 대한 통계 필터링
       const dailyStats = statistics.filter(
-        (stat) => stat.dailyDate === format(cloneDay, 'yyyy-MM-dd'),
+        (stat) => stat.resUsedDate === format(cloneDay, 'yyyyMMdd'),
       );
 
       // 총액과 목표액을 계산
       const totalAmount = dailyStats.reduce(
-        (sum, stat) => sum + stat.amount,
+        (sum, stat) => sum + stat.resUsedAmount,
         0,
       );
+
       const targetAmount =
-        dailyStats.length > 0 ? dailyStats[0].dailyTarget : 0;
+        dailyStats.length > 0 ? dailyStats[0].spendingTarget : 0;
 
       days.push(
         <DaysBox

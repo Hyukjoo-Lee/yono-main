@@ -109,10 +109,10 @@ const CommonCardListBox = ({
 }) => {
   const fields = cardItem
     ? [
-        { title: '날짜', value: cardItem.dailyDate || 'N/A' },
-        { title: '사용처', value: cardItem.store || 'N/A' },
-        { title: '카테고리', value: cardItem.category || 'N/A' },
-        { title: '사용금액', value: cardItem.amount || 'N/A' },
+        { title: '날짜', value: cardItem.resUsedDate || 'N/A' },
+        { title: '사용처', value: cardItem.resMemberStoreName || 'N/A' },
+        { title: '카테고리', value: cardItem.resMemberStoreType || 'N/A' },
+        { title: '사용금액', value: cardItem.resUsedAmount || 'N/A' },
       ]
     : [];
 
@@ -163,12 +163,12 @@ const CommonCardListBox = ({
       ) : cardItem ? (
         <BoxStyle>
           <SmallCardImage
-            src={`http://localhost:8065${cardItem.cardImage || ''}`}
+            src={`http://localhost:8065${cardItem.cardImgUrl || ''}`}
             alt="카드이미지"
           />
           <BoxInStyle>
             <DailyCardName>
-              {cardItem.cardName || '카드 이름 없음'}
+              {cardItem.cardTitle || '카드 이름 없음'}
             </DailyCardName>
             {fields.map((item, index) => (
               <InfoRow key={index}>

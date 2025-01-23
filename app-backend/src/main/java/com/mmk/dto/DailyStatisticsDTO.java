@@ -1,7 +1,5 @@
 package com.mmk.dto;
 
-import java.sql.Timestamp;
-
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
@@ -10,18 +8,16 @@ import lombok.ToString;
 @Setter
 @ToString
 public class DailyStatisticsDTO {
-    private int dailyId;
+    private String resApprovalNo; // 승인번호
 
-    private String userId;
+    private String resUsedDate; // 사용 날짜
+    private String resMemberStoreName; // 가맹점명
+    private String resUsedAmount; // 이용금액
+    private String resMemberStoreType; // 가맹점 업종
 
-    private String dailyDate;
-    private int dailyTarget;
-
-    private String cardImage;
-    private String cardName;
-    private String store;
-    private String category;
-    private int amount;
-
-    private Timestamp createdAt;
+    private int spendingTarget; // 일일 목표금액(UserEntity)
+    private int userCardId;
+    private String cardTitle; // 카드 이름 (CardEntity)
+    private String cardImgUrl; // 카드 이미지 (CardEntity)
+    private int userNum; // 유저 넘버버 (UserEntity)
 }
