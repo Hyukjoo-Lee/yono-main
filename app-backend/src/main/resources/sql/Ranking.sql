@@ -9,19 +9,20 @@ drop table badge;
 DROP SEQUENCE badge_seq;
 
 INSERT INTO badge (badge_num, badge_date, badge, user_num)
-VALUES (badge_seq.nextval, '202501', 30000 , 6);
+VALUES (badge_seq.nextval, '202501', 30000 , 15);
 INSERT INTO badge (badge_num, badge_date, badge, user_num)
-VALUES (badge_seq.nextval, '202501', 50000 , 7);
+VALUES (badge_seq.nextval, '202501', 50000 , 18);
+
 INSERT INTO badge (badge_num, badge_date, badge, user_num)
-VALUES (badge_seq.nextval, '202501', 20000 , 8);
+VALUES (badge_seq.nextval, '202501', 20000 , 20);
 INSERT INTO badge (badge_num, badge_date, badge, user_num)
-VALUES (badge_seq.nextval, '202501', 10000 , 9);
+VALUES (badge_seq.nextval, '202501', 10000 , 21);
 INSERT INTO badge (badge_num, badge_date, badge, user_num)
-VALUES (badge_seq.nextval, '202501', 25000 , 10);
+VALUES (badge_seq.nextval, '202501', 25000 , 22);
 INSERT INTO badge (badge_num, badge_date, badge, user_num)
-VALUES (badge_seq.nextval, '202501', 25000 , 13);
+VALUES (badge_seq.nextval, '202501', 25000 , 23);
 INSERT INTO badge (badge_num, badge_date, badge, user_num)
-VALUES (badge_seq.nextval, '202501', 50000 , 14);
+VALUES (badge_seq.nextval, '202501', 50000 , 24);
 
 
 COMMIT;

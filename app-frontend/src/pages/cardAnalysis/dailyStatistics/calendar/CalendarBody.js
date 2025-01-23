@@ -37,7 +37,7 @@ const DaysBox = styled.div`
   }
   &:first-child {
     & > div {
-      color: red;
+      color: ${(props) => props.theme.color.red};
     }
   }
   & svg {
@@ -62,6 +62,11 @@ const DayBox = styled.div`
         : props.theme.color.black};
   background: ${(props) =>
     props.$selected ? props.theme.color.blue : 'transparent'};
+`;
+
+const MoneyText = styled.p`
+  font-size: ${(props) => props.theme.fontSize.xs};
+  margin: 4px 0 0;
 `;
 
 const CalendarBody = ({
@@ -128,6 +133,9 @@ const CalendarBody = ({
             {format(cloneDay, 'd')}
           </DayBox>
           {targetAmount > 0 ? getIcon(totalAmount, targetAmount) : null}
+          <MoneyText>
+            {totalAmount === 0 ? null : totalAmount.toLocaleString()}
+          </MoneyText>
         </DaysBox>,
       );
       day = addDays(day, 1);

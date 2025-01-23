@@ -19,7 +19,7 @@ insert into user_info (user_num, user_id, name, email, password, address, detail
 values (user_seq.nextval, 'mktestid', '허민경', 'mk@google.com', '1234', '서울시 용산구', '1415호', '11111', 500000, sysdate, sysdate);
 
 insert into user_info (user_num, user_id, name, email, password, address, detail_Address, postcode, spending_target, created_at, updated_at) 
-values (user_seq.nextval, 'jhtestid', '김지훈', 'lizars4024@gmail.com', '1234', '서울시 용산구', '1415호', '11111', 500000, sysdate, sysdate);
+values (user_seq.nextval, 'jhtestid', '김지훈', 'lizars4024@gmail.com', '1234', '서울시 용산구', '1415호', '11111', 50000, sysdate, sysdate);
 
 insert into user_info (user_num, user_id, name, email, password, address, detail_Address, postcode, spending_target, created_at, updated_at) 
 values (user_seq.nextval, 'jetestid', '박지은', 'je@google.com', '1234', '서울시 용산구', '1415호', '11111', 500000, sysdate, sysdate);
@@ -39,4 +39,4 @@ drop table user_info;
 
 delete from user_info where name = '김지훈';
 
-update user_info set profile = '/images/image3.png' where user_num = 43;
+update user_info set user_role = 1 where user_num = 15;
