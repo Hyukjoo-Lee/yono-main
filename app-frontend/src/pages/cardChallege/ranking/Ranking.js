@@ -26,7 +26,7 @@ const Ranking = () => {
           setUsers(user.data);
         }
       } catch (error) {
-        console.log('유저 정보가 없습니다.', error);
+        console.log('에러메시지: ', error);
       }
     };
 
@@ -54,6 +54,7 @@ const Ranking = () => {
         setRankingList={setRankingList}
       />
       <RankingTable
+        users={users}
         isLoggedIn={isLoggedIn}
         rankingList={rankingList}
         setRankingList={setRankingList}
