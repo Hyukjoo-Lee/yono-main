@@ -42,8 +42,8 @@ const MonthlyStatistics = () => {
   useEffect(() => {
     const fetchUser = async () => {
       try {
-        // const response = await uploadRecentHistory(userNum);
-        // setCardData(response.data);
+        const response = await uploadRecentHistory(userNum);
+        setCardData(response.data);
         setLoading(false);
 
         // await updateHistory(userNum);
