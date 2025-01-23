@@ -34,9 +34,6 @@ public class CodefServiceImpl implements CodefService {
     @Value("${CODEF_PUBLIC_KEY}")
     private String publickey;
 
-    @Value("${CODEF_CONNECTEDID:defaultValue}")
-    private String connectedId;
-
     private EasyCodef codef;
 
     @Autowired
@@ -68,8 +65,14 @@ public class CodefServiceImpl implements CodefService {
             result = codef.createAccount(EasyCodefServiceType.DEMO, parameterMap);
             ObjectMapper objectMapper = new ObjectMapper();
             JsonNode jsonNode = objectMapper.readTree(result);
-            String connectedId = jsonNode.path("data").path("connectedId").asText();
-            return connectedId;
+            String code = jsonNode.path("result").path("code").asText();
+            if (code.equals("CF-00000")) {
+                String connectedId = jsonNode.path("data").path("connectedId").asText();
+                return connectedId;
+            } else {
+                String errorMessage = jsonNode.path("data").path("errorList").get(0).path("message").asText();
+                return "error" + errorMessage;
+            }
         } catch (Exception e) {
             e.printStackTrace();
             return null;

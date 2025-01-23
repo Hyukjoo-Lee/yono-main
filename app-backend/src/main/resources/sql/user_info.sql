@@ -33,3 +33,4 @@ drop table user_info;
 delete from user_info where name = '김지훈';
 
 update user_info set profile = '/images/image1.jpg' where user_num = 41;
+update user_info set state = 1 where user_num = 96;
