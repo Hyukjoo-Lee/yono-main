@@ -4,7 +4,7 @@ VALUES (CARD_SEQ.nextval, 'KB국민 My WE:SH 카드', '국민', '0301', '/images
 
 -- 현대카드 M카드 
 INSERT INTO card (CARD_ID, CARD_TITLE, CARD_PROVIDER, ORGANIZATION_CODE, CARD_IMG_URL, CREATED_AT, UPDATED_AT)
-VALUES (CARD_SEQ.nextval, '현대 M카드', '현대', '0302', '/images/cards/hyundai/hyundai-m1.png', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP);
+VALUES (CARD_SEQ.nextval, '현대 M카드', '현대', '0302', '/images/cards/hyundai/hyundai-m1.png',  CURRENT_TIMESTAMP, CURRENT_TIMESTAMP);
 
 -- 삼성카드 iD SIMPLE
 INSERT INTO card (CARD_ID, CARD_TITLE, CARD_PROVIDER, ORGANIZATION_CODE, CARD_IMG_URL, CREATED_AT, UPDATED_AT)

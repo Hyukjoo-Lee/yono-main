@@ -19,4 +19,6 @@ public interface ReplyDAO {
 
     ReplyEntity findByRno(int rno);
 
+    void deleteByPno(int pno);
+
 }

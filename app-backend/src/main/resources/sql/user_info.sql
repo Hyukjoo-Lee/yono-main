@@ -33,3 +33,14 @@ drop table user_info;
 delete from user_info where name = '김지훈';
 
 update user_info set profile = '/images/image1.jpg' where user_num = 41;
+
+
+drop table card; 
+drop table card_company;
+drop table user_card; 
+drop table user_info; 
+drop table card_benefit; 
+drop table card_history; 
+drop table tbl_posts; 
+drop table tbl_reply; 
+drop table reply_likes; 
