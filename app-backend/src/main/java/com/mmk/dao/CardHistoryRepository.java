@@ -10,9 +10,12 @@ import com.mmk.entity.CardHistoryEntity;
 
 public interface CardHistoryRepository extends JpaRepository<CardHistoryEntity, String> {
     
-    @Query("SELECT MAX(c.resUsedDate) FROM CardHistoryEntity c where c.userCardEntity.userCardId = :userCardId")
+    @Query("SELECT c.resUsedDate FROM CardHistoryEntity c " +
+       "WHERE c.userCardEntity.userCardId = :userCardId " +
+       "ORDER BY c.resUsedDate DESC")
     String findMaxResUsedDate(@Param("userCardId") int userCardId);
 
-    @Query("SELECT c FROM CardHistoryEntity c WHERE c.userCardEntity.userCardId = :userCardId AND c.resUsedDate >= :recentDate")
+    @Query("SELECT c FROM CardHistoryEntity c " + 
+        "WHERE c.userCardEntity.userCardId = :userCardId AND c.resUsedDate >= :recentDate")
     List<CardHistoryEntity> findRecentHistory(@Param("userCardId") int userCardId, @Param("recentDate") String recentDate);
 }

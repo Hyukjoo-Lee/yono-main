@@ -225,12 +225,12 @@ public class UserController {
 
         try {
             UserDTO uv = new ObjectMapper().readValue(userInfoJson, UserDTO.class);
-            String uploadFolder = System.getProperty("user.dir") + "/uploads/images";
-            System.out.println("uploadFolder :" + uploadFolder);
+            String propertyPath = System.getProperty("user.dir").replace("\\app-backend", "");
+            String uploadFolder = propertyPath + "\\uploads\\images";
 
             if (profileImage != null && !profileImage.isEmpty()) {
                 if (uv.getProfile() != null && !uv.getProfile().isEmpty()) {
-                    File existingFile = new File(System.getProperty("user.dir") + uv.getProfile());
+                    File existingFile = new File(System.getProperty("user.dir").replace("\\app-backend", "") + uv.getProfile());
                     
                     System.out.println("existingFile: " + existingFile);
                     if (existingFile.exists()) {
@@ -251,7 +251,7 @@ public class UserController {
                 int month = cal.get(Calendar.MONTH) + 1;
                 int date = cal.get(Calendar.DATE);
 
-                String homedir = uploadFolder + "/" + year + "-" + month + "-" + date;
+                String homedir = uploadFolder + "\\" + year + "-" + month + "-" + date;
 
                 File path = new File(homedir);
                 if (!path.exists()) {
@@ -263,9 +263,9 @@ public class UserController {
                 String fileExtension = fileName.substring(index + 1);
                 String newFileName = "profile_" + year + month + date + random + "." + fileExtension;
                 // String fileDBName = "/images/" + year + "-" + month + "-" + date + "/" + newFileName;
-                String fileDBName = "/uploads/images/" + year + "-" + month + "-" + date + "/" + newFileName;
+                String fileDBName = "\\uploads\\images\\" + year + "-" + month + "-" + date + "\\" + newFileName;
 
-                File saveFile = new File(homedir + "/" + newFileName);
+                File saveFile = new File(homedir + "\\" + newFileName);
                 System.out.println("파일 저장 경로: " + saveFile.getAbsolutePath());
 
                 try {
