@@ -9,11 +9,11 @@ import lombok.ToString;
 @ToString
 public class BadgeDTO {
   
-  private int badgeNum;
-  private String badgeDate;
-  private int badge;
+  // private int badgeNum;
+  // private String badgeDate;
+  // private int badge;
   
-  private CardHistoryDTO cardHistory;
+  // private CardHistoryDTO cardHistory;
 
-  private int userCardId; //카드아이디
+  // private int userCardId; //카드아이디
 }
