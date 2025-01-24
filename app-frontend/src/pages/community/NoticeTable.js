@@ -28,8 +28,8 @@ const Root = styled.div`
 
 const columns = [
   { id: 'noticeNo', label: '번호', minWidth: 50 },
-  { id: 'noticeTitle', label: '제목', minWidth: 150 },
-  { id: 'adminId', label: '작성자', minWidth: 100 },
+  { id: 'title', label: '제목', minWidth: 150 },
+  { id: 'userId', label: '작성자', minWidth: 100 },
   { id: 'createdAt', label: '등록일', minWidth: 100 },
   { id: 'viewCount', label: '조회', minWidth: 50 },
 ];
@@ -81,32 +81,44 @@ const Box = styled.div`
 export function NoticeTable() {
   const [rows, setRows] = useState([]);
   const [page, setPage] = useState(0);
+  const [keyword, setKeyword] = useState('');
   const rowsPerPage = 10;
   const navigate = useNavigate();
 
   const handleChangePage = (event, newPage) => {
     setPage(newPage - 1);
   };
+
   const handleButtonClick = () => {
     navigate('/noticeFormBox');
   };
 
+  const handleSearchChange = (e) => {
+    setKeyword(e.target.value);
+  };
+
+  const handleSerchSubmit = () => {
+    getNoticeData(keyword);
+  };
+
   useEffect(() => {
-    const getCommunityData = async () => {
-      try {
-        const response = await axios.get('/notice');
-        setRows(response.data);
-      } catch (error) {
-        console.error('Error fetching data : ', error);
-      }
-    };
-    getCommunityData();
-  }, []);
+    getNoticeData(keyword);
+  }, [keyword]);
+
+  const getNoticeData = async (searchKeyword) => {
+    try {
+      const response = await axios.get('/notice/list', {
+        params: { keyword: searchKeyword },
+      });
+      setRows(response.data);
+    } catch (error) {
+      console.error('Error fetching data : ', error);
+    }
+  };
 
   const formatDate = (timestamp) => {
     if (!timestamp) return '';
     const date = new Date(timestamp);
-
     const year = date.getFullYear();
     const month = (date.getMonth() + 1).toString().padStart(2, '0');
     const day = date.getDate().toString().padStart(2, '0');
@@ -126,6 +138,8 @@ export function NoticeTable() {
             width="228px"
             height="39px"
             placeholder="검색어를 입력하세요"
+            value={keyword}
+            onChange={handleSearchChange}
           />
           <CommonButton
             width="74px"
@@ -134,6 +148,7 @@ export function NoticeTable() {
             color="white"
             text="검색"
             borderRadius="5px"
+            onClick={handleSerchSubmit}
           />
         </Box>
 
@@ -145,6 +160,7 @@ export function NoticeTable() {
             onClick={handleButtonClick}
           />
         </Container>
+
         <Paper sx={{ width: '100%', overflow: 'hidden', boxShadow: 'none' }}>
           <TableContainerStyle>
             <Table stickyHeader aria-label="sticky table">

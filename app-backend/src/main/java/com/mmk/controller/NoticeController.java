@@ -3,10 +3,12 @@ package com.mmk.controller;
 import java.io.File;
 import java.io.IOException;
 import java.util.Calendar;
+import java.util.List;
 import java.util.Random;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -79,5 +81,11 @@ public class NoticeController {
         }
 
         return fileDBName;
+    }
+
+    //글 목록 불러오기
+    @GetMapping("/list")
+    public List<NoticeDTO> searchNotice(@RequestParam("keyword") String keyword){
+        return noticeService.searchNotice(keyword);
     }
 }

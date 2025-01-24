@@ -1,5 +1,7 @@
 package com.mmk.dao;
 
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
@@ -14,6 +16,11 @@ public class NoticeDAOImpl implements NoticeDAO{
   @Override
   public void saveNotice(NoticeEntity notice) {
     noticeRepo.save(notice);
+  }
+
+  @Override
+  public List<NoticeEntity> searchNotice(String keyword) {
+    return noticeRepo.searchNotice(keyword);
   }
   
 }
