@@ -32,4 +32,4 @@ drop table user_info;
 
 delete from user_info where name = '김지훈';
 
-update user_info set profile = '/images/image1.jpg' where user_num = 41;
+update user_info set user_role=0 where user_num = 1;

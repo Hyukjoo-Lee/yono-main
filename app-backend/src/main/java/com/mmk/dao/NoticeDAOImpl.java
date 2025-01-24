@@ -9,11 +9,11 @@ import com.mmk.entity.NoticeEntity;
 public class NoticeDAOImpl implements NoticeDAO{
 
   @Autowired
-  private NoticeRepository noticeRepo;
+  NoticeRepository noticeRepo;
 
   @Override
-  public void save(NoticeEntity noticeData) {
-    noticeRepo.save(noticeData);
+  public void saveNotice(NoticeEntity notice) {
+    noticeRepo.save(notice);
   }
   
 }

@@ -4,6 +4,6 @@ import com.mmk.entity.NoticeEntity;
 
 public interface NoticeDAO {
 
-  void save(NoticeEntity noticeData);
+  void saveNotice(NoticeEntity notice);
   
 }

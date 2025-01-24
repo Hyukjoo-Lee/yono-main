@@ -49,6 +49,15 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
+    public UserEntity findByUserId(String userId) {
+        UserEntity userEntity = userDAO.getUserByUserId(userId);
+        if (userEntity == null) {
+            throw new NoSuchElementException("아이디 " + userId + "에 해당하는 사용자가 없습니다.");
+        }
+        return userEntity;
+    }
+
+    @Override
     public UserDTO getUserByEmail(String email) {
         UserEntity userEntity = userDAO.getUserByEmail(email);
         if (userEntity == null) {

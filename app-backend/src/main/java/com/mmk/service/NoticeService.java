@@ -4,5 +4,6 @@ import com.mmk.dto.NoticeDTO;
 
 public interface NoticeService{
 
-  void save(NoticeDTO noticeDTO);
+  void saveNotice(NoticeDTO notice);
+
 }

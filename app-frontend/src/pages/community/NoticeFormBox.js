@@ -6,7 +6,6 @@ import styled from 'styled-components';
 import CommonButton from '../../common/CommonButton';
 import CommonHr from '../../common/CommonHr';
 import CommonInput from '../../common/CommonInput';
-import ReactQuillEdit from './ReactQuillEdit';
 
 const Root = styled.div`
   width: ${(props) => props.theme.display.lg};
@@ -74,49 +73,32 @@ const FormTitle = styled.p`
   // margin: 20px 0px 0;
 `;
 
-// const Box1 = styled.div`
-//   display: flex;
-//   justify-content: center;
-//   margin: 30px;
-//   gap: 30px;
-// `;
-
-// const HiddenInput = styled.input`
-//   display: none;
-// `;
+const HiddenInput = styled.input`
+  display: none;
+`;
 
 export function NoticeFormBox() {
   const navigate = useNavigate();
 
-  // const [userId, setUserId] = useState('');
   const [title, setTitle] = useState('');
   const [content, setContent] = useState('');
-  // const [image, setImage] = useState('');
-  // const [errors, setErrors] = useState({});
+  const [image, setImage] = useState('');
   const user = useSelector((state) => state.user.user);
-  // console.log(JSON.stringify(user));
 
   // const fileInputRef = useRef(null);
-
-  const requestData = {
-    adminId: user.userId,
-    noticeTitle: title,
-    noticeCont: content,
-    // noticeImgUrl: image,
-  };
 
   const handleTitleChange = (e) => {
     setTitle(e.target.value);
   };
+
   const handleContentChange = (e) => setContent(e.target.value);
 
-  // const handleImageChange = (e) => {
-  //   const file = e.target.files[0];
-  //   if (file) {
-  //     setImage(file.name);
-  //     // setImage(file); 파일 이름만 저장하려면 file.name를 써야함
-  //   }
-  // };
+  const handleImageChange = (e) => {
+    const file = e.target.files[0];
+    if (file) {
+      setImage(file);
+    }
+  };
 
   const validateForm = () => {
     const errors = {};
@@ -139,22 +121,30 @@ export function NoticeFormBox() {
       return;
     }
 
-    try {
-      // console.log('request: ' + JSON.stringify(requestData));
+    const formData = new FormData();
+    formData.append('userId', user.userId);
+    formData.append('title', title);
+    formData.append('content', content);
 
-      const response = await axios.post('/notice/noticeFormBox', requestData);
+    if (image) formData.append('file', image);
+
+    try {
+      const response = await axios.post('/notice/write', formData, {
+        headers: {
+          'Content-Type': 'multipart/form-data',
+        },
+      });
 
       if (response.status === 200) {
         alert('게시글이 등록되었습니다.');
-        navigate('/notice'); //notice로 변경해야댐
+        navigate('/notice'); // notice 페이지로 이동
       }
     } catch (error) {
       if (error.response) {
-        console.error('Server error : ', error.response.data);
-        alert(`오류 : ${error.response.data.message}`);
-        // alert('게시글 등록에 실패했습니다. 다시 시도해주세요.');
+        console.error('Server error: ', error.response.data);
+        alert(`오류: ${error.response.data.message}`);
       } else {
-        console.error('Error : ', error);
+        console.error('Error: ', error);
         alert('게시글 등록에 실패했습니다. 다시 시도해 주세요.');
       }
     }
@@ -191,39 +181,28 @@ export function NoticeFormBox() {
         </Row>
 
         <Row>
-          {/* <span>내용</span>
-          <textarea value={content} onChange={handleContentChange} /> */}
-          <ReactQuillEdit value={content} onChange={handleContentChange} />
+          <span>내용</span>
+          <textarea value={content} onChange={handleContentChange} />
         </Row>
-        {/* <Row>
+        <Row>
           <span>사진</span>
           <CommonInput
             width="390px"
             height="40px"
             placeholder="사진 첨부"
             readOnly={true}
-            value={image}
+            value={image ? image.name : ''}
           />
-          <HiddenInput
-            type="file"
-            ref={fileInputRef}
-            onChange={handleImageChange}
-          />
+          <HiddenInput type="file" onChange={handleImageChange} />
           <CommonButton
             text="사진 찾기"
             width="100px"
             height="40px"
             font-size="10px"
-            onClick={() => fileInputRef.current.click()}
+            onClick={() => document.querySelector('input[type="file"]').click()}
           />
-        </Row> */}
+        </Row>
       </FormBox>
-      {/* <CommonHr
-        width="918px"
-        borderWidth="2px"
-        borderColor="black"
-        margin="10px auto 20px"
-      /> */}
     </Root>
   );
 }
