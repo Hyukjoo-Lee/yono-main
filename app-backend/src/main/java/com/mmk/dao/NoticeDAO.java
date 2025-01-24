@@ -1,5 +1,9 @@
 package com.mmk.dao;
 
-public class NoticeDAO {
+import com.mmk.entity.NoticeEntity;
+
+public interface NoticeDAO {
+
+  void save(NoticeEntity noticeData);
   
 }
