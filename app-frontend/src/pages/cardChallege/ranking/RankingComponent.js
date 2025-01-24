@@ -4,7 +4,6 @@ import { ReactComponent as Medal1 } from '../../../assets/images/Medal1.svg';
 import { ReactComponent as Medal2 } from '../../../assets/images/Medal2.svg';
 import { ReactComponent as Medal3 } from '../../../assets/images/Medal3.svg';
 import { ReactComponent as Profile } from '../../../assets/images/Profile.svg';
-import { fetchUserRanking } from '../../../apis/rankingApi';
 
 const Root = styled.div`
   width: 100%;
@@ -73,18 +72,15 @@ const Box = styled.div`
   }
 `;
 
-const RankingComponent = () => {
+const RankingComponent = ({ rankingList }) => {
   const [list, setList] = useState([]);
 
   useEffect(() => {
     const getRanking = async () => {
       try {
-        const data = await fetchUserRanking();
-        // badge 기준 내림차순 정렬하고 상위 3개 추출
-        const sortedList = data
-          .sort((a, b) => b.totalBadges - a.totalBadges) // badge 기준 내림차순 정렬
+        const sortedList = rankingList
+          .sort((a, b) => b.badge - a.badge) // badge 기준 내림차순 정렬
           .slice(0, 3); // 상위 3개만 추출
-
         setList(sortedList);
       } catch (error) {
         console.error('Error fetching rankings: ', error);
@@ -92,7 +88,7 @@ const RankingComponent = () => {
     };
 
     getRanking();
-  }, []);
+  }, [rankingList]);
 
   return (
     <Root>
@@ -102,21 +98,27 @@ const RankingComponent = () => {
         list.map((item, index) => (
           <BoxStyle key={index}>
             <CircleBox $rank={index}>
-              {item.rankingImgUrl ? (
+              {item.profile !== 'temp_profile' ? (
                 <img
-                  src={`http://localhost:8065${item.rankingImgUrl}`}
-                  alt={item.userName}
+                  src={`http://localhost:8065${item.profile}`}
+                  alt={item.name}
                 />
               ) : (
                 <Profile />
               )}
             </CircleBox>
             <NameStyle>
-              {item.userName}({item.userId})
+              {item.name}({item.userId})
             </NameStyle>
             <Box>
-              {index === 0 ? <Medal1 /> : index === 1 ? <Medal2 /> : <Medal3 />}
-              <p>{item.totalBadges.toLocaleString()}</p>
+              {item.rankingPosition === 1 ? (
+                <Medal1 />
+              ) : item.rankingPosition === 2 ? (
+                <Medal2 />
+              ) : (
+                <Medal3 />
+              )}
+              <p>{item.badge.toLocaleString()}</p>
             </Box>
           </BoxStyle>
         ))

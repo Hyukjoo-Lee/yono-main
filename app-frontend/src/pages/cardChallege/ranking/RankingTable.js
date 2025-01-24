@@ -4,7 +4,6 @@ import { ReactComponent as Medal1 } from '../../../assets/images/Medal1.svg';
 import { ReactComponent as Medal2 } from '../../../assets/images/Medal2.svg';
 import { ReactComponent as Medal3 } from '../../../assets/images/Medal3.svg';
 import { ReactComponent as Profile } from '../../../assets/images/Profile.svg';
-import { fetchUserRanking } from '../../../apis/rankingApi';
 import CircularProgress from '@mui/material/CircularProgress';
 
 const Root = styled.div`
@@ -119,26 +118,28 @@ const ProfileBox = styled.div`
   }
 `;
 
-const RankingTable = () => {
-  const [list, setList] = useState([]);
+const RankingTable = ({ isLoggedIn, rankingList, setRankingList }) => {
   const [isLoading, setIsLoading] = useState(true); // 로딩 상태 추가
+  const [userList, setUserList] = useState([]);
 
   useEffect(() => {
-    const getRanking = async () => {
-      setIsLoading(true); // 데이터 로드 시작 시 로딩 상태 true
+    const initializeRankings = async () => {
       try {
-        const data = await fetchUserRanking(); // API 호출
-        const sortedList = data.sort((a, b) => b.totalBadges - a.totalBadges); // badge 기준 내림차순 정렬
-        setList(sortedList); // 정렬된 데이터 상태로 저장
+        //const sortedList = rankingList.sort((a, b) => b.badge - a.badge);
+        const filteredData = rankingList.filter(
+          (item) => item.userNum === isLoggedIn,
+        );
+        setUserList(filteredData);
+        //setRankingList(sortedList);
       } catch (error) {
-        console.error('Error fetching rankings:', error);
+        console.error('Error initializing rankings:', error);
       } finally {
-        setIsLoading(false); // 데이터 로드 완료 후 로딩 상태 false
+        setIsLoading(false);
       }
     };
 
-    getRanking();
-  }, []);
+    initializeRankings();
+  }, [isLoggedIn, rankingList]);
 
   return (
     <Root>
@@ -147,7 +148,7 @@ const RankingTable = () => {
           <CircularProgress />
           <p>데이터 불러오는 중...</p>
         </LoadingBox>
-      ) : list.length === 0 ? (
+      ) : rankingList.length === 0 ? (
         <EmptyBox>
           <p>
             아직 집계된 데이터가 없습니다. (정해진 날짜가 지나지 않아 데이터가
@@ -158,58 +159,58 @@ const RankingTable = () => {
         <BoxStyle>
           <BoxIn>
             <TextBox>
-              <TextStyle>{list[3]?.rankingPosition}</TextStyle>
+              <TextStyle>{userList[0]?.rankingPosition}</TextStyle>
               <ProfileBox>
-                {list[3]?.rankingImgUrl ? (
+                {userList[0]?.profile !== 'temp_profile' ? (
                   <img
-                    src={`http://localhost:8065${list[3]?.rankingImgUrl}`}
-                    alt={list[3]?.userName}
+                    src={`http://localhost:8065${userList[0]?.profile}`}
+                    alt={userList[0]?.name}
                   />
                 ) : (
                   <Profile />
                 )}
               </ProfileBox>
               <TextStyle>
-                {list[3]?.userName}({list[3]?.userId})
+                {userList[0]?.name}({userList[0]?.userId})
               </TextStyle>
             </TextBox>
-            <NumberText>{list[3]?.totalBadges.toLocaleString()}</NumberText>
+            <NumberText>{userList[0]?.badge.toLocaleString()}</NumberText>
           </BoxIn>
           <BoxInStyle>
-            {list.map((item, index) => (
+            {rankingList.map((item, index) => (
               <BoxIn key={index}>
                 <TextBox>
-                  {index === 0 ? (
+                  {item.rankingPosition === 1 ? (
                     <MedalBox>
                       <Medal1 />
                     </MedalBox>
-                  ) : index === 1 ? (
+                  ) : item.rankingPosition === 2 ? (
                     <MedalBox>
                       <Medal2 />
                     </MedalBox>
-                  ) : index === 2 ? (
+                  ) : item.rankingPosition === 3 ? (
                     <MedalBox>
                       <Medal3 />
                     </MedalBox>
                   ) : (
-                    <TextStyle>{index + 1}</TextStyle>
+                    <TextStyle>{item.rankingPosition}</TextStyle>
                   )}
 
                   <ProfileBox>
-                    {item.rankingImgUrl !== ' ' ? (
+                    {item.profile !== 'temp_profile' ? (
                       <img
-                        src={`http://localhost:8065${item.rankingImgUrl}`}
-                        alt={item.userName}
+                        src={`http://localhost:8065${item.profile}`}
+                        alt={item.name}
                       />
                     ) : (
                       <Profile />
                     )}
                   </ProfileBox>
                   <TextStyle>
-                    {item.userName}({item.userId})
+                    {item.name}({item.userId})
                   </TextStyle>
                 </TextBox>
-                <NumberText>{item.totalBadges.toLocaleString()}</NumberText>
+                <NumberText>{item.badge.toLocaleString()}</NumberText>
               </BoxIn>
             ))}
           </BoxInStyle>
