@@ -225,12 +225,12 @@ public class UserController {
 
         try {
             UserDTO uv = new ObjectMapper().readValue(userInfoJson, UserDTO.class);
-            String propertyPath = System.getProperty("user.dir").replace("\\app-backend", "");
-            String uploadFolder = propertyPath + "\\uploads\\images";
+            String propertyPath = System.getProperty("user.dir").replace("\\app-backend", "").replace("/app-backend", "");
+            String uploadFolder = propertyPath + "/uploads/images";
 
             if (profileImage != null && !profileImage.isEmpty()) {
                 if (uv.getProfile() != null && !uv.getProfile().isEmpty()) {
-                    File existingFile = new File(System.getProperty("user.dir").replace("\\app-backend", "") + uv.getProfile());
+                    File existingFile = new File(propertyPath + uv.getProfile());
                     
                     System.out.println("existingFile: " + existingFile);
                     if (existingFile.exists()) {
