@@ -79,7 +79,8 @@ public class UserController {
 
     // 이름, 이메일로 유저 검색
     @GetMapping("/findId")
-    public ResponseEntity<ApiResponse<UserDTO>> getFindId(@RequestParam("email") String email, @RequestParam("name") String name) {
+    public ResponseEntity<ApiResponse<UserDTO>> getFindId(@RequestParam("email") String email,
+            @RequestParam("name") String name) {
         boolean existsEmail = userService.existsByEmail(email);
         boolean existsName = userService.existByName(name);
 
@@ -100,7 +101,8 @@ public class UserController {
 
     // 이름, 메일, 아이디로 유저 검색
     @GetMapping("/findPwd")
-    public ResponseEntity<ApiResponse<UserDTO>> getFindPwd(@RequestParam("name") String name, @RequestParam("email") String email, @RequestParam("id") String id) {
+    public ResponseEntity<ApiResponse<UserDTO>> getFindPwd(@RequestParam("name") String name,
+            @RequestParam("email") String email, @RequestParam("id") String id) {
         boolean existsName = userService.existByName(name);
         boolean existsEmail = userService.existsByEmail(email);
         boolean existsId = userService.existsByUserId(id);
@@ -189,8 +191,8 @@ public class UserController {
     // 임시비밀번호 발급 및 변경
     @PutMapping("/updateTempPwd")
     public String getUpdateTempPwd(@RequestParam("email") String email) {
-        String tempPwd=UUID.randomUUID().toString().replace("-", "");
-		tempPwd = tempPwd.substring(0,10);
+        String tempPwd = UUID.randomUUID().toString().replace("-", "");
+        tempPwd = tempPwd.substring(0, 10);
 
         UserDTO userDTO = userService.getUserByEmail(email);
         userDTO.setPassword(tempPwd);
@@ -201,12 +203,13 @@ public class UserController {
 
     // 비밀번호 변경
     @PutMapping("/updatePwd")
-    public ResponseEntity<ApiResponse<Object>> updatePwd(@RequestParam("password") String password, @RequestParam("userId") String userId) {
+    public ResponseEntity<ApiResponse<Object>> updatePwd(@RequestParam("password") String password,
+            @RequestParam("userId") String userId) {
         try {
             UserDTO userDTO = userService.getUserByUserId(userId);
             userDTO.setPassword(password);
             userService.updateUser(userDTO);
-    
+
             ApiResponse<Object> response = new ApiResponse<>(200, "비밀번호 변경 성공", null);
             return ResponseEntity.ok(response);
         } catch (Exception e) {
@@ -215,7 +218,7 @@ public class UserController {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(response);
         }
     };
-    
+
     // 유저 정보 업데이트
     @PutMapping("/{userNum}")
     public ResponseEntity<ApiResponse<UserDTO>> updateUser(
@@ -225,13 +228,16 @@ public class UserController {
 
         try {
             UserDTO uv = new ObjectMapper().readValue(userInfoJson, UserDTO.class);
-            String propertyPath = System.getProperty("user.dir").replace("\\app-backend", "");
-            String uploadFolder = propertyPath + "\\uploads\\images";
+            String propertyPath = System.getProperty("user.dir").replace("\\app-backend", "").replace("/app-backend",
+                    "");
+            String uploadFolder = propertyPath + "/uploads/images";
 
             if (profileImage != null && !profileImage.isEmpty()) {
                 if (uv.getProfile() != null && !uv.getProfile().isEmpty()) {
-                    File existingFile = new File(System.getProperty("user.dir").replace("\\app-backend", "") + uv.getProfile());
-                    
+                    File existingFile = new File(
+                            System.getProperty("user.dir").replace("\\app-backend", "").replace("/app-backend", "")
+                                    + uv.getProfile());
+
                     System.out.println("existingFile: " + existingFile);
                     if (existingFile.exists()) {
                         existingFile.delete();
@@ -251,7 +257,7 @@ public class UserController {
                 int month = cal.get(Calendar.MONTH) + 1;
                 int date = cal.get(Calendar.DATE);
 
-                String homedir = uploadFolder + "\\" + year + "-" + month + "-" + date;
+                String homedir = uploadFolder + "/" + year + "-" + month + "-" + date;
 
                 File path = new File(homedir);
                 if (!path.exists()) {
@@ -262,10 +268,11 @@ public class UserController {
                 int index = fileName.lastIndexOf(".");
                 String fileExtension = fileName.substring(index + 1);
                 String newFileName = "profile_" + year + month + date + random + "." + fileExtension;
-                // String fileDBName = "/images/" + year + "-" + month + "-" + date + "/" + newFileName;
-                String fileDBName = "\\uploads\\images\\" + year + "-" + month + "-" + date + "\\" + newFileName;
+                // String fileDBName = "/images/" + year + "-" + month + "-" + date + "/" +
+                // newFileName;
+                String fileDBName = "/uploads/images/" + year + "-" + month + "-" + date + "/" + newFileName;
 
-                File saveFile = new File(homedir + "\\" + newFileName);
+                File saveFile = new File(homedir + "/" + newFileName);
                 System.out.println("파일 저장 경로: " + saveFile.getAbsolutePath());
 
                 try {
