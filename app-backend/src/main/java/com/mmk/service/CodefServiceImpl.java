@@ -65,6 +65,7 @@ public class CodefServiceImpl implements CodefService {
             result = codef.createAccount(EasyCodefServiceType.DEMO, parameterMap);
             ObjectMapper objectMapper = new ObjectMapper();
             JsonNode jsonNode = objectMapper.readTree(result);
+            System.out.println("result: " + result);
             String code = jsonNode.path("result").path("code").asText();
             if (code.equals("CF-00000")) {
                 String connectedId = jsonNode.path("data").path("connectedId").asText();
@@ -118,6 +119,7 @@ public class CodefServiceImpl implements CodefService {
             String result = codef.requestProduct(productUrl, EasyCodefServiceType.DEMO, parameterMap);
             long endTime = System.nanoTime();
             System.out.println("CODEF 데이터 호출 소요 시간: " + (endTime - startTime) + "ns");
+            System.out.println("result: " + result);
             return result;
         } catch (Exception e) {
             throw new RuntimeException(e);

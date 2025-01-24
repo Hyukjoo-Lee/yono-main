@@ -29,6 +29,7 @@ public class CardCompanyServiceImpl implements CardCompanyService {
             return null;
         } else {
             String connectedId = codefService.getConId(organization, companyId, companyPwd);
+            System.out.println("connectedId: " + connectedId);
             cardCompanyDTO.setConnectedId(connectedId);
             if (connectedId.isEmpty()) {
                 return cardCompanyDTO;

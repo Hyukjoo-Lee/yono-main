@@ -1,5 +1,7 @@
 package com.mmk.service;
 
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.NoSuchElementException;
@@ -8,6 +10,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.mmk.dao.CardCompanyDAO;
 import com.mmk.dao.CardDAO;
 import com.mmk.dao.UserCardDAO;
@@ -34,6 +38,9 @@ public class UserCardServiceImpl implements UserCardService {
     @Autowired
     private CardCompanyDAO cardCompanyDAO;
 
+    @Autowired
+    private CodefService codefService;
+
     // 사용자 카드 등록
     @Override
     public UserCardDTO registerCard(UserCardDTO userCardDTO, String organization, String cardTitle) {
@@ -49,10 +56,29 @@ public class UserCardServiceImpl implements UserCardService {
                 int cardId = cardDAO.findByCardTitle(cardTitle).getCardId();
                 userCardDTO.setCardCompanyNum(cardCompanyNum);
                 userCardDTO.setCardId(cardId);
-
+                
                 UserCardEntity userCardEntity = toEntity(userCardDTO);
-                userCardDAO.registerCard(userCardEntity);
-                return toDTO(userCardEntity);
+
+                LocalDate today = LocalDate.now();
+                DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyyMMdd");
+                String endDate = today.format(formatter);
+
+                String result = codefService.getCardHistory(userCardEntity, endDate, endDate);
+                ObjectMapper objectMapper = new ObjectMapper();
+                try {
+                    JsonNode jsonNode = objectMapper.readTree(result);
+                    String code = jsonNode.path("result").path("code").asText();
+                    System.out.println("code: " + code);
+                    if (code.equals("CF-00000")) {
+                        userCardDAO.registerCard(userCardEntity);
+                        return toDTO(userCardEntity);
+                    } else {
+                        throw new IllegalArgumentException("잘못된 카드 정보입니다.");
+                    }
+                } catch (Exception e) {
+                    e.printStackTrace();
+                    throw new IllegalArgumentException(e.getMessage());
+                }
             }
         } else {
             return null;
