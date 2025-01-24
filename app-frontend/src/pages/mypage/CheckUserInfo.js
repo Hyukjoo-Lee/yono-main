@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
-import { deleteUser, modifyUser } from '../../apis/userApi';
+import { deleteUser } from '../../apis/userApi';
 import CommonButton from '../../common/CommonButton';
 import CommonInput from '../../common/CommonInput';
 import {
@@ -9,7 +9,7 @@ import {
   PASSWORD_MISMATCH_MESSAGE,
   SPENDINGTARGET_REGEX_MESSAGE,
 } from '../../common/Message';
-import { logoutUser } from '../../redux/actions/userAction';
+import { logoutUser, updateUserProfile } from '../../redux/actions/userAction';
 import { useDispatch } from 'react-redux';
 import theme from '../../theme/theme';
 import SearchAddressDialog from '../auth/modal/SearchAddressDialog';
@@ -228,7 +228,7 @@ const CheckUserInfo = ({
     spendingTarget: /^[0-9]*$/,
   };
 
-  const save = () => {
+  const save = async () => {
     let isInvalid = true;
 
     if (!isFormValid()) {
@@ -268,9 +268,12 @@ const CheckUserInfo = ({
       formData.append('profileText', profileImage);
     }
 
-    modifyUser(formData).then(() => {
+    try {
+      await dispatch(updateUserProfile(formData));
       navigate(0);
-    });
+    } catch (error) {
+      console.error('유저 정보 변경 오류', error);
+    }
   };
 
   const dispatch = useDispatch();
