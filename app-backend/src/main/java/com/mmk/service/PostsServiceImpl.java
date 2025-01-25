@@ -134,4 +134,26 @@ public void save(PostsDTO postsData) {
         }
         return dto;
     }
+
+
+    @Override
+    public PostsDTO findById(String postId) {
+    try {
+        // 게시글 ID로 게시글 엔티티 조회
+        PostsEntity postEntity = postsDao.findById(Integer.parseInt(postId));
+
+        if (postEntity == null) {
+            throw new RuntimeException("게시글을 찾을 수 없습니다. 게시글 ID: " + postId);
+        }
+
+        // Entity → DTO 변환 후 반환
+        return convertToDto(postEntity);
+
+    } catch (NumberFormatException e) {
+        throw new RuntimeException("입력된 값: " + postId, e);
+    } catch (Exception e) {
+        throw new RuntimeException("게시글 조회 중 오류 발생. 게시글 ID: " + postId, e);
+    }
+}
+
 }
