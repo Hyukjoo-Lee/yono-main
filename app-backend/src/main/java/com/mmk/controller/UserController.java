@@ -234,9 +234,7 @@ public class UserController {
 
             if (profileImage != null && !profileImage.isEmpty()) {
                 if (uv.getProfile() != null && !uv.getProfile().isEmpty()) {
-                    File existingFile = new File(
-                            System.getProperty("user.dir").replace("\\app-backend", "").replace("/app-backend", "")
-                                    + uv.getProfile());
+                    File existingFile = new File(propertyPath + uv.getProfile());
 
                     System.out.println("existingFile: " + existingFile);
                     if (existingFile.exists()) {

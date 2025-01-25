@@ -27,6 +27,8 @@ const userSlice = createSlice({
       if (state.user) {
         state.user = { ...state.user, ...action.payload.data };
       }
+
+      sessionStorage.setItem('user', JSON.stringify(state.user));
     },
   },
 });
