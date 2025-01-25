@@ -191,7 +191,7 @@ export function CommunityPost() {
       .catch((error) => {
         console.error('댓글 데이터 요청 실패:', error);
       });
-  }, [rowData.no]);
+  }, [rowData.no, commentsData]);
   const handleDeletecommentClick = async (rno) => {
     if (!user) {
       setIsDialogOpen(true);
