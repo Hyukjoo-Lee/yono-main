@@ -78,9 +78,10 @@ function App() {
             <Route path="/communityFormBox" element={<CommunityFormBox />} />
             <Route path="/mycard" element={<MyCard />} />
             <Route path="/communityPost" element={<CommunityPost />} />
-            <Route path="/noticePost" element={<NoticePost />} />
+            <Route path="/notice/:id" element={<NoticePost />} />
             <Route path="/editFormBox" element={<EditFormBox />} />
             <Route path="/noticeFormBox" element={<NoticeFormBox />} />
+            <Route path="/noticeList" element={<Community />} />
           </Routes>
         </Layout>
       </Router>

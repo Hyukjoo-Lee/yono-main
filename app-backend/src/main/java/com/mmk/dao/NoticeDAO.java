@@ -9,5 +9,7 @@ public interface NoticeDAO {
   void saveNotice(NoticeEntity notice);
 
   List<NoticeEntity> searchNotice(String keyword);
+
+  NoticeEntity findById(int id);
   
 }

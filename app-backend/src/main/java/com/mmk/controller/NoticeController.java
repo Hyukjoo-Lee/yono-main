@@ -26,66 +26,90 @@ import lombok.extern.slf4j.Slf4j;
 @RequestMapping("/notice")
 public class NoticeController {
 
-    @Autowired
-    private NoticeService noticeService;
+  @Autowired
+  private NoticeService noticeService;
 
-    @PostMapping("/write")
-    public ResponseEntity<Void> saveNotice(@RequestBody NoticeDTO noticeDTO,
+  //글 쓰기
+  @PostMapping("/write")
+  public ResponseEntity<Void> saveNotice(@RequestBody NoticeDTO noticeDTO,
     @RequestParam(value = "file", required= false) MultipartFile file) throws IOException{
-        System.out.println("아이디 : " + noticeDTO);
-        if(file != null && !file.isEmpty()){
-            String fileName = saveFile(file);
-            noticeDTO.setImgurl(fileName);
-        }
-        noticeDTO.setUpdatedAt(null);
-        noticeDTO.setUserId(noticeDTO.getUserId());
-        noticeService.saveNotice(noticeDTO);
-        return ResponseEntity.ok().build();
+    System.out.println("아이디 : " + noticeDTO);
+    if(file != null && !file.isEmpty()){
+      String fileName = saveFile(file);
+      noticeDTO.setImgurl(fileName);
+    }
+    noticeDTO.setUpdatedAt(null);
+    noticeDTO.setUserId(noticeDTO.getUserId());
+    noticeService.saveNotice(noticeDTO);
+    return ResponseEntity.ok().build();
     }
 
     private String saveFile(MultipartFile file) throws IOException{
-        String propertyPath = System.getProperty("user.dir").replace("\\app-backend","");
-        String uploadFolder = propertyPath + "\\uploads\\images";
+    String propertyPath = System.getProperty("user.dir").replace("\\app-backend","");
+    String uploadFolder = propertyPath + "\\uploads\\images";
 
-        Calendar cal = Calendar.getInstance();
-        int year = cal.get(Calendar.YEAR);
-        int month = cal.get(Calendar.MONTH) + 1;
-        int date = cal.get(Calendar.DATE);
-        String homedir = uploadFolder + "/" + year + "-" + month + "-" + date;
+    Calendar cal = Calendar.getInstance();
+    int year = cal.get(Calendar.YEAR);
+    int month = cal.get(Calendar.MONTH) + 1;
+    int date = cal.get(Calendar.DATE);
+    String homedir = uploadFolder + "/" + year + "-" + month + "-" + date;
 
-        File path = new File(homedir);
-        if(!path.exists()){
-            path.mkdirs();
-        }
-
-        String fileName = file.getOriginalFilename();
-        if(fileName == null || fileName.isEmpty()){
-            fileName = "default_filename.jpg";
-        }
-
-        Random r = new Random();
-        int random = r.nextInt(100000000);
-        int index = fileName.lastIndexOf(".");
-        String fileExtension = fileName.substring(index + 1);
-        String originalFileName = fileName.substring(0,fileName.length() - fileExtension.length() -1);
-        String newFileName = originalFileName + year + month + date + random + "." + fileExtension;
-        String fileDBName = "/uploads/images" + year + "-" + month + "-" + date + "/" + newFileName;
-
-        File saveFile = new File(homedir + "/" + newFileName);
-        log.info("파일 저장 경로 : " + saveFile.getAbsolutePath());
-
-        try{
-            file.transferTo(saveFile);
-        }catch(Exception e){
-            e.printStackTrace();
-        }
-
-        return fileDBName;
+    File path = new File(homedir);
+    if(!path.exists()){
+      path.mkdirs();
     }
 
-    //글 목록 불러오기
-    @GetMapping("/list")
-    public List<NoticeDTO> searchNotice(@RequestParam("keyword") String keyword){
-        return noticeService.searchNotice(keyword);
+    String fileName = file.getOriginalFilename();
+    if(fileName == null || fileName.isEmpty()){
+      fileName = "default_filename.jpg";
     }
+
+    Random r = new Random();
+    int random = r.nextInt(100000000);
+    int index = fileName.lastIndexOf(".");
+    String fileExtension = fileName.substring(index + 1);
+    String originalFileName = fileName.substring(0,fileName.length() - fileExtension.length() -1);
+    String newFileName = originalFileName + year + month + date + random + "." + fileExtension;
+    String fileDBName = "/uploads/images" + year + "-" + month + "-" + date + "/" + newFileName;
+
+    File saveFile = new File(homedir + "/" + newFileName);
+    log.info("파일 저장 경로 : " + saveFile.getAbsolutePath());
+
+    try{
+      file.transferTo(saveFile);
+    }catch(Exception e){
+      e.printStackTrace();
+    }
+
+    return fileDBName;
+    }
+
+  //글 목록 불러오기
+  @GetMapping("/list")
+  public List<NoticeDTO> searchNotice(@RequestParam("keyword") String keyword){
+    return noticeService.searchNotice(keyword);
+  }
+
+  //글 상세보기
+  @GetMapping("/{id}")
+  public ResponseEntity<NoticeDTO> getNoticeDetail(@RequestParam("id") int id){
+    NoticeDTO notice = noticeService.getNoticeById(id);
+    if(notice != null){
+      return ResponseEntity.ok(notice);
+    }else{
+        return ResponseEntity.notFound().build();
+    }
+  }
+
+  // //글 수정
+  // @PostMapping("/edit")
+  // public ResponseEntity<Void> editNotice(
+  //   @RequestParam("id") int id,
+  //   @RequestParam("title") String title,
+  //   @RequestParam("content") String content,
+  //   @RequestParam(value = "file",required = false) MultipartFile file,
+  //   @RequestParam(value = "imgurl" , required = false) String imgurl) throws IOExeception{
+
+  //   NoticeDTO existingNotice = noticeService.getNoticeById(id);
+  // }
 }

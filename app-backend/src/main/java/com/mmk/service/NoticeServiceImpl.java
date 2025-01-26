@@ -33,6 +33,16 @@ public class NoticeServiceImpl implements NoticeService {
     List<NoticeEntity> entities = noticeDAO.searchNotice(keyword);
     return entities.stream().map(this::toDTO).collect(Collectors.toList());
   }
+
+  //글 상세보기
+  @Override
+  public NoticeDTO getNoticeById(int id) {
+    NoticeEntity noticeEntity = noticeDAO.findById(id);
+    if(noticeEntity == null){
+      throw new RuntimeException("Notice not found with ID : "+id);
+    }
+    return toDTO(noticeEntity);
+  }
   
   private NoticeDTO toDTO(NoticeEntity entity){
     if(entity == null){

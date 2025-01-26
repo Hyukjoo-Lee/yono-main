@@ -10,4 +10,6 @@ public interface NoticeService{
 
   List<NoticeDTO> searchNotice(String keyword);
 
+  NoticeDTO getNoticeById(int id);
+
 }

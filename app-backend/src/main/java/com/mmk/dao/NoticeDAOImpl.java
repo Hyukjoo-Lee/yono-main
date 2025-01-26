@@ -22,5 +22,10 @@ public class NoticeDAOImpl implements NoticeDAO{
   public List<NoticeEntity> searchNotice(String keyword) {
     return noticeRepo.searchNotice(keyword);
   }
+
+  @Override
+  public NoticeEntity findById(int id) {
+    return noticeRepo.findById(id).orElse(null);
+  }
   
 }
