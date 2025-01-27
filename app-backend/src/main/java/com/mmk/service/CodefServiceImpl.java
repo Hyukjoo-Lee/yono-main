@@ -39,8 +39,8 @@ public class CodefServiceImpl implements CodefService {
     @Autowired
     private CardCompanyDAO cardCompanyDAO;
 
-    @Autowired
-    private CardService cardService;
+    // @Autowired
+    // private CardService cardService;
 
     // @Autowired
     // private CardBenefitService cardBenefitService;
@@ -289,69 +289,69 @@ public class CodefServiceImpl implements CodefService {
      * 현재 CODEF 조회 시 혜택이 제대로 불러 와지지 않아 문의를 넣은 상태
      * 현재는 보유 카드만 저장 가능
      */
-    @Override
-    public CardCompanyDTO saveCodefCard(CardCompanyDTO cardCompanyDTO) {
+    // @Override
+    // public CardCompanyDTO saveCodefCard(CardCompanyDTO cardCompanyDTO) {
 
-        int userNum = cardCompanyDTO.getUserNum();
-        String organization = cardCompanyDTO.getOrganization();
+    //     int userNum = cardCompanyDTO.getUserNum();
+    //     String organization = cardCompanyDTO.getOrganization();
 
-        CardCompanyEntity cardCompanyEntity = cardCompanyDAO.findByUserNumAndOrganization(userNum, organization);
+    //     CardCompanyEntity cardCompanyEntity = cardCompanyDAO.findByUserNumAndOrganization(userNum, organization);
 
-        if (cardCompanyEntity == null) {
-            throw new RuntimeException("카드 회사 정보가 존재하지 않습니다.");
-        } else {
-            int companyNum = cardCompanyEntity.getCardCompanyNum();
-            String companyId = cardCompanyEntity.getCompanyId();
-            String companyPwd = cardCompanyEntity.getCompanyPwd();
-            String connectedId = cardCompanyEntity.getConnedtedId();
+    //     if (cardCompanyEntity == null) {
+    //         throw new RuntimeException("카드 회사 정보가 존재하지 않습니다.");
+    //     } else {
+    //         int companyNum = cardCompanyEntity.getCardCompanyNum();
+    //         String companyId = cardCompanyEntity.getCompanyId();
+    //         String companyPwd = cardCompanyEntity.getCompanyPwd();
+    //         String connectedId = cardCompanyEntity.getConnedtedId();
 
-            System.out.println(companyNum + " :companyNum");
-            System.out.println(companyId + " :companyId");
-            System.out.println(companyPwd + " :companyPwd");
-            System.out.println(connectedId + " :connectedId");
+    //         System.out.println(companyNum + " :companyNum");
+    //         System.out.println(companyId + " :companyId");
+    //         System.out.println(companyPwd + " :companyPwd");
+    //         System.out.println(connectedId + " :connectedId");
 
-            cardCompanyDTO.setCardCompanyNum(companyNum);
-            cardCompanyDTO.setCompanyId(companyId);
-            cardCompanyDTO.setCompanyPwd(companyPwd);
-            cardCompanyDTO.setConnectedId(connectedId);
-        }
-        // Codef API로 카드 정보 요청
-        List<Map<String, Object>> cardList = getUserCardList(cardCompanyDTO.getConnectedId(), organization);
+    //         cardCompanyDTO.setCardCompanyNum(companyNum);
+    //         cardCompanyDTO.setCompanyId(companyId);
+    //         cardCompanyDTO.setCompanyPwd(companyPwd);
+    //         cardCompanyDTO.setConnectedId(connectedId);
+    //     }
+    //     // Codef API로 카드 정보 요청
+    //     List<Map<String, Object>> cardList = getUserCardList(cardCompanyDTO.getConnectedId(), organization);
 
-        if (cardList.isEmpty()) {
-            throw new RuntimeException("Codef API로부터 카드 정보를 가져오지 못했습니다.");
-        }
-        System.out.println("cardList: " + cardList);
-        // 마스터 카드, 유저 카드 저장
-        cardList.forEach(card -> {
-            CardDTO cardDTO = new CardDTO();
-            cardDTO.setCardTitle((String) card.get("cardName"));
-            cardDTO.setCardProvider(getCardProvider(organization));
-            cardDTO.setOrganizationCode((String) card.get("organizationCode"));
-            cardDTO.setCardImgUrl((String) card.get("imageLink"));
+    //     if (cardList.isEmpty()) {
+    //         throw new RuntimeException("Codef API로부터 카드 정보를 가져오지 못했습니다.");
+    //     }
+    //     System.out.println("cardList: " + cardList);
+    //     // 마스터 카드, 유저 카드 저장
+    //     cardList.forEach(card -> {
+    //         CardDTO cardDTO = new CardDTO();
+    //         cardDTO.setCardTitle((String) card.get("cardName"));
+    //         cardDTO.setCardProvider(getCardProvider(organization));
+    //         cardDTO.setOrganizationCode((String) card.get("organizationCode"));
+    //         cardDTO.setCardImgUrl((String) card.get("imageLink"));
 
-            cardService.createCard(cardDTO);
-        });
+    //         cardService.createCard(cardDTO);
+    //     });
 
-        // Codef API로 카드 혜택 요청
-        List<Map<String, Object>> benefitList = getUserPerformance(cardCompanyDTO.getConnectedId(), organization);
+    //     // Codef API로 카드 혜택 요청
+    //     List<Map<String, Object>> benefitList = getUserPerformance(cardCompanyDTO.getConnectedId(), organization);
 
-        if (benefitList.isEmpty()) {
-            throw new RuntimeException("Codef API로부터 카드 혜택 정보를 가져오지 못했습니다.");
-        }
-        System.out.println("cardList: " + cardList);
-        // 마스터 카드, 유저 카드 저장
-        cardList.forEach(card -> {
-            CardDTO cardDTO = new CardDTO();
-            cardDTO.setCardTitle((String) card.get("cardName"));
-            cardDTO.setCardProvider(getCardProvider(organization));
-            cardDTO.setOrganizationCode((String) card.get("organizationCode"));
-            cardDTO.setCardImgUrl((String) card.get("imageLink"));
+    //     if (benefitList.isEmpty()) {
+    //         throw new RuntimeException("Codef API로부터 카드 혜택 정보를 가져오지 못했습니다.");
+    //     }
+    //     System.out.println("cardList: " + cardList);
+    //     // 마스터 카드, 유저 카드 저장
+    //     cardList.forEach(card -> {
+    //         CardDTO cardDTO = new CardDTO();
+    //         cardDTO.setCardTitle((String) card.get("cardName"));
+    //         cardDTO.setCardProvider(getCardProvider(organization));
+    //         cardDTO.setOrganizationCode((String) card.get("organizationCode"));
+    //         cardDTO.setCardImgUrl((String) card.get("imageLink"));
 
-            cardService.createCard(cardDTO);
-        });
-        return cardCompanyDTO;
-    }
+    //         cardService.createCard(cardDTO);
+    //     });
+    //     return cardCompanyDTO;
+    // }
 
     // 기관코드에 따른 CARD_PROVIDER 설정
     private String getCardProvider(String organization) {

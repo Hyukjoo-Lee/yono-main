@@ -10,12 +10,16 @@ import org.springframework.stereotype.Service;
 import com.mmk.dao.CardDAO;
 import com.mmk.dto.CardDTO;
 import com.mmk.entity.CardEntity;
+import com.mmk.entity.UserCardEntity;
 
 @Service
 public class CardServiceImpl implements CardService {
 
     @Autowired
     private CardDAO cardDAO;
+
+    @Autowired
+    private UserCardService userCardService;
 
     @Override
     public CardDTO createCard(CardDTO cardDTO) {
@@ -73,6 +77,12 @@ public class CardServiceImpl implements CardService {
         }
 
         return cardDTOs;
+    }
+
+    @Override
+    public CardDTO findByUserNum(int userNum) {
+        int cardId = userCardService.findPrimaryCardByUserNum(userNum).getCardId();
+        return toDTO(cardDAO.findByCardId(cardId));
     }
 
     private CardEntity toEntity(CardDTO dto) {

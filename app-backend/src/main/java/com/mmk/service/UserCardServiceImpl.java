@@ -110,6 +110,12 @@ public class UserCardServiceImpl implements UserCardService {
         return toDTO(userCardDAO.findByUserCardId(userCardId));
     }
 
+    // 유저 정보로 대표 카드 조회
+    @Override
+    public UserCardDTO findPrimaryCardByUserNum(int userNum) {
+        return toDTO(userCardDAO.findByUserNumAndPrimaryCard(userDAO.findByUserNum(userNum), 1));
+    }
+
     private UserCardEntity toEntity(UserCardDTO dto) {
         UserCardEntity entity = new UserCardEntity();
         entity.setUserCardId(dto.getUserCardId());

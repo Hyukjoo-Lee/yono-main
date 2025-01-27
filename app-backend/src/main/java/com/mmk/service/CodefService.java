@@ -13,7 +13,7 @@ public interface CodefService {
 
     List<Map<String, Object>> getUserPerformance(String connectedId, String organization);
 
-    CardCompanyDTO saveCodefCard(CardCompanyDTO cardCompanyDTO);
+    // CardCompanyDTO saveCodefCard(CardCompanyDTO cardCompanyDTO);
 
     String getCardHistory(UserCardEntity userCardEntity, String startDate, String endDate);
 }
