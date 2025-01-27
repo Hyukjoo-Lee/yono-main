@@ -18,4 +18,7 @@ public interface CardHistoryRepository extends JpaRepository<CardHistoryEntity, 
     @Query("SELECT c FROM CardHistoryEntity c " + 
         "WHERE c.userCardEntity.userCardId = :userCardId AND c.resUsedDate >= :recentDate")
     List<CardHistoryEntity> findRecentHistory(@Param("userCardId") int userCardId, @Param("recentDate") String recentDate);
+
+    List<CardHistoryEntity> findByUserCardEntity_UserEntity_UserNum(int userNum);
+
 }

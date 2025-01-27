@@ -5,6 +5,7 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.mmk.dto.DailyStatisticsDTO;
@@ -18,8 +19,8 @@ public class DailyStatisticsController {
     private CardHistoryService cardHistoryService;
 
     @GetMapping("/daily-statistics")
-    public List<DailyStatisticsDTO> getDailyStatistics() {
-        return cardHistoryService.getDailyStatistics();
+    public List<DailyStatisticsDTO> getDailyStatistics(@RequestParam("userNum") int userNum) {
+        return cardHistoryService.getDailyStatistics(userNum);
     }
 
     

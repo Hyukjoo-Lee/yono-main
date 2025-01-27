@@ -111,8 +111,8 @@ public class CardHistoryServiceImpl implements CardHistoryService {
 
     // 일별 통계 -> DB에서 데이터 불러오기
     @Override
-    public List<DailyStatisticsDTO> getDailyStatistics() {
-        return cardHistoryDAO.getDailyStatistics().stream()
+    public List<DailyStatisticsDTO> getDailyStatistics(int userNum) {
+        return cardHistoryDAO.getDailyStatistics(userNum).stream()
                 .map(cardDto -> {
                     DailyStatisticsDTO dailyDto = new DailyStatisticsDTO();
                     dailyDto.setResApprovalNo(cardDto.getResApprovalNo());
