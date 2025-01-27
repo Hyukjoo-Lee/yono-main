@@ -19,8 +19,8 @@ public class DailyStatisticsController {
     private CardHistoryService cardHistoryService;
 
     @GetMapping("/daily-statistics")
-    public List<DailyStatisticsDTO> getDailyStatistics(@RequestParam("userNum") int userNum) {
-        return cardHistoryService.getDailyStatistics(userNum);
+    public List<DailyStatisticsDTO> getCardHistoryByUserAndPrimaryCard(@RequestParam("userNum") int userNum) {
+        return cardHistoryService.getCardHistoryByUserAndPrimaryCard(userNum);
     }
 
     

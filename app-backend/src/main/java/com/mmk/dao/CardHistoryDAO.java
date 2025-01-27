@@ -13,5 +13,5 @@ public interface CardHistoryDAO {
     List<CardHistoryEntity> findRecentHistory(int userCardId, String recentDate);
 
     // 일별 통계
-    List<CardHistoryEntity> getDailyStatistics(int userNum);
+    List<CardHistoryEntity> findByUserNumAndPrimaryCard(int userNum);
 }

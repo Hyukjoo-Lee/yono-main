@@ -11,5 +11,5 @@ public interface CardHistoryService {
     List<MonthlySummaryDTO> uploadMonthlyHistory(int userNum);
 
     // 일별통계계
-    List<DailyStatisticsDTO> getDailyStatistics(int userNum);
+    List<DailyStatisticsDTO> getCardHistoryByUserAndPrimaryCard(int userNum);
 }
