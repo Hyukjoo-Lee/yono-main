@@ -120,6 +120,8 @@ const CheckUserInfo = ({ users }) => {
       spendingTarget: users.spendingTarget || 0,
       profile: users.profile || '',
       createdAt: users.createdAt || '',
+      state: users.state || '',
+      userRole: users.userRole || '',
     });
 
     setPreviewImage(users.profile);
@@ -174,6 +176,8 @@ const CheckUserInfo = ({ users }) => {
       spendingTarget: users.spendingTarget || '',
       profile: users.profile || '',
       createdAt: users.createdAt || '',
+      state: users.state || '',
+      userRole: users.userRole || '',
     });
 
     setIsEditing(!isEditing);

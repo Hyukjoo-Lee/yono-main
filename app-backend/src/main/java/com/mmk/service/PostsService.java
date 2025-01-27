@@ -18,7 +18,5 @@ public interface PostsService {
 
     void updatePost(PostsDTO postsDTO);
 
-   
-
-
+    PostsDTO findById(String postId);
 }

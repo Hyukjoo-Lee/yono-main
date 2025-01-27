@@ -185,10 +185,43 @@ public class PostsController {
 
     // 게시글 삭제
     @DeleteMapping("/delete/{postId}")
-    public ResponseEntity<String> deletePost(@PathVariable String postId) {
-    postsService.deletePostById(postId);
-    return ResponseEntity.ok("게시글이 삭제되었습니다.");
+    public ResponseEntity<ApiResponse<String>> deletePost(@PathVariable String postId) {
+    try {
+        // 삭제하려는 게시글을 조회하여 이미지 경로를 가져옴
+        PostsDTO post = postsService.findById(postId);
+
+        if (post == null) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND)
+                    .body(new ApiResponse<>(404, "게시글을 찾을 수 없습니다.", null));
+        }
+
+        // 게시글과 연결된 이미지 파일 삭제
+        if (post.getImgurl() != null && !post.getImgurl().isEmpty()) {
+            String uploadFolder = System.getProperty("user.dir")
+                    + "/mickle-muckle/app-backend/src/main/resources/static/fileuploadfolder";
+            String filePath = uploadFolder + "/" + post.getImgurl().replace("/fileuploadfolder/", "");
+            File file = new File(filePath);
+            if (file.exists() && file.isFile()) {
+                boolean deleted = file.delete();
+                if (!deleted) {
+                    System.err.println("이미지 파일 삭제 실패: " + filePath);
+                }
+            }
+        }
+
+        // 데이터베이스에서 게시글 삭제
+        postsService.deletePostById(postId);
+
+        // 성공 응답 반환
+        return ResponseEntity.ok(new ApiResponse<>(200, "게시글과 이미지가 성공적으로 삭제되었습니다.", null));
+
+    } catch (Exception e) {
+        e.printStackTrace();
+        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                .body(new ApiResponse<>(500, "서버 오류: " + e.getMessage(), null));
     }
+}
+
 
 
 };

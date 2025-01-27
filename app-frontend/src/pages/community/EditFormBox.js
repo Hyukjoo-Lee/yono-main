@@ -111,7 +111,7 @@ export function EditFormBox() {
     title: '',
     category: '',
     content: '',
-    file: '',
+    imgurl: '',
   });
 
   // 제목, 카테고리, 내용 변경 시 처리 함수
@@ -119,7 +119,7 @@ export function EditFormBox() {
     const { value } = e.target;
     setPostFormData((prev) => ({
       ...prev,
-      [field]: value,
+      [field]: value || '',
     }));
     setAlertMessage((prev) => ({
       ...prev,
@@ -180,14 +180,13 @@ export function EditFormBox() {
 
   useEffect(() => {
     if (rowData) {
-      //userId가 존재하지 않을 경우 수정 폼 초기화
       setPostFormData({
         userId: rowData.userId,
         no: rowData.no,
         title: rowData.title || '',
         category: rowData.category || '',
         content: rowData.content || '',
-        file: rowData.file || '',
+        imgurl: rowData.imgurl || '',
         regdate: rowData.regdate || '',
       });
     }
@@ -214,8 +213,8 @@ export function EditFormBox() {
       formData.append('content', postFormData.content);
       formData.append('regdate', postFormData.regdate);
 
-      if (postFormData.file) {
-        formData.append('file', postFormData.file);
+      if (postFormData.imgurl) {
+        formData.append('imgurl', postFormData.imgurl);
       }
 
       console.log(postFormData);
@@ -316,7 +315,7 @@ export function EditFormBox() {
                 height="40px"
                 placeholder="사진 첨부"
                 accept=".jpg, .jpeg, .png, .gif"
-                value={postFormData.imgurl}
+                value={postFormData.imgurl || ''}
                 readOnly
               />
               <input

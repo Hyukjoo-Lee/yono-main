@@ -9,9 +9,10 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 public class WebConfig implements WebMvcConfigurer {
     @Override
     public void addResourceHandlers(@NonNull ResourceHandlerRegistry registry) {
-        String uploadDir = System.getProperty("user.dir").replace("\\app-backend", "").replace("/app-backend", "") + "/uploads/images/";
+        String uploadDir = System.getProperty("user.dir").replace("\\app-backend", "").replace("/app-backend", "")
+                + "/uploads/images/";
 
-        try {    
+        try {
             registry.addResourceHandler("/uploads/images/**")
                     .addResourceLocations("file:" + uploadDir);
 
