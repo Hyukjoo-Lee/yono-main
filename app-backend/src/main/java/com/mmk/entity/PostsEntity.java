@@ -4,7 +4,7 @@ import java.sql.Timestamp;
 import java.time.LocalDate;
 
 import org.hibernate.annotations.CreationTimestamp;
-
+import org.hibernate.annotations.UpdateTimestamp;
 
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -54,7 +54,7 @@ public class PostsEntity {
     @CreationTimestamp
     private Timestamp createdAt;
 
-    @CreationTimestamp
+    @UpdateTimestamp 
     private Timestamp updatedAt;
     
     @ManyToOne
