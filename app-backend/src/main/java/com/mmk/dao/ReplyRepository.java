@@ -13,5 +13,7 @@ public interface ReplyRepository extends JpaRepository<ReplyEntity, Integer> {
     List<ReplyEntity> findByPno(int pno);
 
     Optional<ReplyEntity> findByRno(int rno);
+
+    void deleteByPno(int pno);
     
 } 

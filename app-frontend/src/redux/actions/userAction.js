@@ -40,4 +40,18 @@ export const logoutUser = createAsyncThunk(
   },
 );
 
-export const updateUser = createAsyncThunk();
+// 유저 정보 업데이트
+export const updateUserProfile = createAsyncThunk(
+  'user/update',
+  async (updatedData, { dispatch, rejectWithValue }) => {
+    try {
+      const response = await userApi.modifyUser(updatedData);
+
+      dispatch(userActions.updateUserProfile({ data: response.data }));
+      return response;
+    } catch (error) {
+      console.error('유저 정보 업데이트 실패: ', error);
+      return rejectWithValue(error.response?.data || '유저 정보 업데이트 오류');
+    }
+  },
+);

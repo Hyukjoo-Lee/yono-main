@@ -112,7 +112,12 @@ const CommonCardListBox = ({
         { title: '날짜', value: cardItem.resUsedDate || 'N/A' },
         { title: '사용처', value: cardItem.resMemberStoreName || 'N/A' },
         { title: '카테고리', value: cardItem.resMemberStoreType || 'N/A' },
-        { title: '사용금액', value: cardItem.resUsedAmount || 'N/A' },
+        {
+          title: '사용금액',
+          value: cardItem.resUsedAmount
+            ? new Intl.NumberFormat('ko-KR').format(cardItem.resUsedAmount)
+            : 'N/A',
+        },
       ]
     : [];
 

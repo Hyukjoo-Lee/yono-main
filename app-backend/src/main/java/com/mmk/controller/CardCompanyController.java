@@ -27,6 +27,9 @@ public class CardCompanyController {
             if (ccd == null) {
                 ApiResponse<CardCompanyDTO> response = new ApiResponse<>(401, "이미 등록한 카드사입니다", null);
                 return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(response);
+            } else if (ccd.getConnectedId().startsWith("error")) {
+                ApiResponse<CardCompanyDTO> response = new ApiResponse<>(401, ccd.getConnectedId().replace("error",""), null);
+                return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(response);
             } else {
                 ApiResponse<CardCompanyDTO> response = new ApiResponse<>(200, "카드사 등록 성공", ccd);
                 return ResponseEntity.ok(response);

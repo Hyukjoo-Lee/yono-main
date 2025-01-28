@@ -4,7 +4,6 @@ import { useNavigate, useParams } from 'react-router-dom';
 import styled from 'styled-components';
 import CommonButton from '../../common/CommonButton';
 import CommonHr from '../../common/CommonHr';
-// import CommonPageInfo from '../../common/CommonPageInfo';
 
 const Root = styled.div`
   width: ${(props) => props.theme.display.lg};
@@ -12,6 +11,19 @@ const Root = styled.div`
   box-sizing: border-box;
   padding-top: ${(props) => props.theme.headerHeight};
   height: 100%;
+`;
+
+const MoveButtonWrap = styled.div`
+  display: flex;
+  justify-content: space-between;
+`;
+
+const MoveButton = styled.button`
+  font-size: ${(props) => props.theme.fontSize.sm};
+  border: none;
+  background: none;
+  cursor: pointer;
+  font-weight: bold;
 `;
 
 const Box = styled.div`
@@ -50,7 +62,7 @@ export function NoticePost() {
   useEffect(() => {
     const fetchPostData = async () => {
       try {
-        const response = await axios.get(`/notice/${id}`);
+        const response = await axios.get(`/notice/detail?id=${id}`);
         setnoticeData(response.data);
         console.log(response.data);
       } catch (error) {
@@ -64,13 +76,24 @@ export function NoticePost() {
     navigate('/notice/list');
   };
 
+  const handleNavigateToNotice = () => {
+    navigate('/noticeList');
+  };
+
+  const handleNavigateToNext = () => {
+    const nextId = parseInt(id, 10) + 1;
+    navigate(`/notice/${nextId}`);
+  };
   if (!noticeData) {
     return <div>Loading ..</div>;
   }
 
   return (
     <Root>
-      {/* <CommonPageInfo title={'공지사항'} text={<p></p>} /> */}
+      <MoveButtonWrap>
+        <MoveButton onClick={handleNavigateToNotice}>&lt; 목록</MoveButton>
+        <MoveButton onClick={handleNavigateToNext}>다음 &gt;</MoveButton>
+      </MoveButtonWrap>
       <p style={{ fontWeight: 'bold', fontSize: '18px' }}>
         공지사항 <span style={{ color: '#4064e6' }}>{noticeData.noticeNo}</span>
       </p>

@@ -8,6 +8,12 @@ commit;
 
 delete from CARD_HISTORY where USER_CARD_ID = 23;
 
+SELECT index_name, table_name, uniqueness
+FROM user_indexes
+WHERE table_name = 'CARD_HISTORY';
+
+DROP INDEX idx_res_used_date;
+
 drop table card;
 drop table card_company;
 drop table user_card;

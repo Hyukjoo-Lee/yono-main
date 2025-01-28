@@ -1,34 +1,69 @@
+alter sequence badge_seq
+nocache;
+
+SELECT badge_seq.NEXTVAL FROM DUAL;
+
+
+select * from badge;
+drop table badge;
+DROP SEQUENCE badge_seq;
+
+INSERT INTO badge (badge_num, badge_date, badge, user_num)
+VALUES (badge_seq.nextval, '202501', 30000 , 15);
+INSERT INTO badge (badge_num, badge_date, badge, user_num)
+VALUES (badge_seq.nextval, '202501', 50000 , 18);
+
+INSERT INTO badge (badge_num, badge_date, badge, user_num)
+VALUES (badge_seq.nextval, '202501', 20000 , 20);
+INSERT INTO badge (badge_num, badge_date, badge, user_num)
+VALUES (badge_seq.nextval, '202501', 10000 , 21);
+INSERT INTO badge (badge_num, badge_date, badge, user_num)
+VALUES (badge_seq.nextval, '202501', 25000 , 22);
+INSERT INTO badge (badge_num, badge_date, badge, user_num)
+VALUES (badge_seq.nextval, '202501', 25000 , 23);
+INSERT INTO badge (badge_num, badge_date, badge, user_num)
+VALUES (badge_seq.nextval, '202501', 50000 , 24);
+
+
+COMMIT;
+update badge set badge = 25000 where user_num = 61;
+
+
 alter sequence ranking_seq
 nocache;
 
 SELECT ranking_seq.NEXTVAL FROM DUAL;
 
-
 select * from ranking;
 drop table ranking;
+TRUNCATE TABLE ranking; 
 DROP SEQUENCE ranking_seq;
 
-
-INSERT INTO ranking (ranking_id, ranking_position, user_name, user_id, total_badges, ranking_month, ranking_img_url, created_at, updated_at)
-VALUES (user_seq.nextval, 3, '김지훈', 'jh_ID', 65000, '2024-12', '/images/image1.jpg', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP);
-INSERT INTO ranking (ranking_id, ranking_position, user_name, user_id, total_badges, ranking_month, ranking_img_url, created_at, updated_at)
-VALUES (user_seq.nextval, 5, '박지은', 'je_ID', 30000, '2024-12', '/images/image2.jpg', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP);
-INSERT INTO ranking (ranking_id, ranking_position, user_name, user_id, total_badges, ranking_month, ranking_img_url, created_at, updated_at)
-VALUES (user_seq.nextval, 1, '김채림', 'cr_ID', 70000, '2024-12', '/images/image3.png', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP);
-INSERT INTO ranking (ranking_id, ranking_position, user_name, user_id, total_badges, ranking_month, ranking_img_url, created_at, updated_at)
-VALUES (user_seq.nextval, 4, '이혁주', 'hj_ID', 40000, '2024-12', '/images/image4.jpg', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP);
-INSERT INTO ranking (ranking_id, ranking_position, user_name, user_id, total_badges, ranking_month, ranking_img_url, created_at, updated_at)
-VALUES (user_seq.nextval, 2, '허민경', 'mk_ID', 67000, '2024-12', '/images/image5.jpg', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP);
-INSERT INTO ranking (ranking_id, ranking_position, user_name, user_id, total_badges, ranking_month, ranking_img_url, created_at, updated_at)
-VALUES (user_seq.nextval, 6, '홍길동', 'kd_ID', 20000, '2024-12', '', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP);
-INSERT INTO ranking (ranking_id, ranking_position, user_name, user_id, total_badges, ranking_month, ranking_img_url, created_at, updated_at)
-VALUES (user_seq.nextval, 7, '수지', 'sj_ID', 10000, '2024-12', '/images/image2.jpg', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP);
-INSERT INTO ranking (ranking_id, ranking_position, user_name, user_id, total_badges, ranking_month, ranking_img_url, created_at, updated_at)
-VALUES (user_seq.nextval, 8, '아이유', 'iu_ID', 5000, '2024-12', '/images/image3.png', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP);
-INSERT INTO ranking (ranking_id, ranking_position, user_name, user_id, total_badges, ranking_month, ranking_img_url, created_at, updated_at)
-VALUES (user_seq.nextval, 9, '김석진', 'sj_ID', 700, '2024-12', '/images/image4.jpg', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP);
-
-UPDATE ranking SET ranking_img_url=' ' where user_id='kd_ID';
-
-
+INSERT INTO ranking (ranking_num, badge_num, ranking_position, user_num)
+VALUES (ranking_seq.nextval, 7, 2, 6);
+INSERT INTO ranking (ranking_num, badge_num, ranking_position, user_num)
+VALUES (ranking_seq.nextval, 8, 1, 7);
+INSERT INTO ranking (ranking_num, badge_num, ranking_position, user_num)
+VALUES (ranking_seq.nextval, 9, 4, 8);
+INSERT INTO ranking (ranking_num, badge_num, ranking_position, user_num)
+VALUES (ranking_seq.nextval, 10, 5, 9);
+INSERT INTO ranking (ranking_num, badge_num, ranking_position, user_num)
+VALUES (ranking_seq.nextval, 11, 3, 10);
 COMMIT;
+
+
+MERGE INTO ranking r
+USING (
+    SELECT 
+        b.badge_num,
+        b.user_num,
+        b.badge,
+        DENSE_RANK()  OVER (ORDER BY b.badge DESC) AS ranking_position
+    FROM badge b
+) rb
+ON (r.badge_num = rb.badge_num)
+WHEN MATCHED THEN
+    UPDATE SET r.ranking_position = rb.ranking_position
+WHEN NOT MATCHED THEN
+    INSERT (ranking_num, badge_num, user_num, ranking_position)
+    VALUES (ranking_seq.nextval, rb.badge_num, rb.user_num, rb.ranking_position);

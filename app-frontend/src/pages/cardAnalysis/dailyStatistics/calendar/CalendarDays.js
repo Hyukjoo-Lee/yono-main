@@ -12,6 +12,9 @@ const Root = styled.div`
     padding: 5px 10px;
     width: calc(100% / 7);
     text-align: center;
+    &:first-child {
+      color: ${(props) => props.theme.color.red};
+    }
     &:last-child {
       border-right: 0px;
     }

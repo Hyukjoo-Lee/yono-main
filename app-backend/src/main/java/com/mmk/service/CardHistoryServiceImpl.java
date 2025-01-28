@@ -20,6 +20,7 @@ import com.mmk.dao.CardHistoryDAO;
 import com.mmk.dao.UserCardDAO;
 import com.mmk.dao.UserDAO;
 import com.mmk.dto.CardHistoryDTO;
+import com.mmk.dto.DailyStatisticsDTO;
 import com.mmk.dto.MonthlySummaryDTO;
 import com.mmk.entity.CardHistoryEntity;
 import com.mmk.entity.UserCardEntity;
@@ -106,6 +107,28 @@ public class CardHistoryServiceImpl implements CardHistoryService {
         } catch (Exception e) {
             e.printStackTrace();
         }
+    }
+
+    // 일별 통계 -> DB에서 데이터 불러오기
+    @Override
+    public List<DailyStatisticsDTO> getDailyStatistics() {
+        return cardHistoryDAO.getDailyStatistics().stream()
+                .map(cardDto -> {
+                    DailyStatisticsDTO dailyDto = new DailyStatisticsDTO();
+                    dailyDto.setResApprovalNo(cardDto.getResApprovalNo());
+                    dailyDto.setResUsedDate(cardDto.getResUsedDate());
+                    dailyDto.setResMemberStoreName(cardDto.getResMemberStoreName());
+                    dailyDto.setResUsedAmount(cardDto.getResUsedAmount());
+                    dailyDto.setResMemberStoreType(cardDto.getResMemberStoreType());
+
+                    dailyDto.setSpendingTarget(cardDto.getUserCardEntity().getUserEntity().getSpendingTarget());
+                    dailyDto.setUserCardId(cardDto.getUserCardEntity().getUserCardId());
+                    dailyDto.setCardTitle(cardDto.getUserCardEntity().getCardEntity().getCardTitle());
+                    dailyDto.setCardImgUrl(cardDto.getUserCardEntity().getCardEntity().getCardImgUrl());
+                    dailyDto.setUserNum(cardDto.getUserCardEntity().getUserEntity().getUserNum());
+                    return dailyDto;
+                })
+                .collect(Collectors.toList());
     }
 
     // 월별통계 - DB에 있는 최근 3개월 카드내역 불러오기

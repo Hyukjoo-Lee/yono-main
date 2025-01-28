@@ -1,8 +1,9 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import styled from 'styled-components';
 import { format } from 'date-fns';
 import { ReactComponent as ArrowIcon } from '../../../../assets/images/ArrowIcon.svg';
 import { ReactComponent as ArrowsIcon } from '../../../../assets/images/ArrowsIcon.svg';
+import { useSelector } from 'react-redux';
 
 const Root = styled.div`
   width: 100%;
@@ -36,6 +37,12 @@ const TextStyle = styled.p`
   color: ${(props) => props.theme.color.black};
   font-weight: bold;
   margin: 0px;
+  & span {
+    font-size: ${(props) => props.theme.fontSize.sm};
+    font-weight: 500;
+    margin-left: 16px;
+    color: ${(props) => props.theme.color.lightGray};
+  }
 `;
 
 const CalendarHeader = ({
@@ -45,11 +52,26 @@ const CalendarHeader = ({
   prevYear,
   nextYear,
 }) => {
+  const isSpendingTarget = useSelector(
+    (state) => state.user.user?.spendingTarget,
+  );
+  const [money, setMoney] = useState();
+
+  const formatMoney = (value) => {
+    if (value == null) return '-'; // 값이 없을 때 처리
+    return new Intl.NumberFormat('ko-KR').format(value);
+  };
+
+  useEffect(() => {
+    setMoney(isSpendingTarget);
+  }, [isSpendingTarget]);
+
   return (
     <Root>
       <Box>
         <TextStyle>
           {format(currentMonth, 'yyyy')}년 {format(currentMonth, 'M')}월
+          <span>일일 목표 금액: {formatMoney(money)}원</span>
         </TextStyle>
       </Box>
       <Box>
