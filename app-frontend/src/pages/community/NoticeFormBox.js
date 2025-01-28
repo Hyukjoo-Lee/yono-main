@@ -36,11 +36,11 @@ const Row = styled.div`
   margin: 10px 0;
   display: flex;
   align-items: center;
-  gap: 10px;
+  gap: 20px;
   justify-content: center;
   & > span {
-    width: 60px;
-    margin-right: 100px;
+    width: 30px;
+    margin-right: 20px;
     white-space: nowrap;
     display: flex;
   }
@@ -51,7 +51,7 @@ const Row = styled.div`
     border: 1px solid #d7d7d7;
     resize: none;
     font-size: 16px;
-    width: 500px;
+    width: 1120px;
     height: 390px;
     box-sizing: border-box;
   }
@@ -172,19 +172,12 @@ export function NoticeFormBox() {
         <Row style={{ display: 'flex', justifyContent: 'space-between' }}>
           <span>제목</span>
           <CommonInput
-            width="1000px"
+            width="500px"
             height="40px"
             placeholder="제목을 입력해주세요"
             value={title}
             onChange={handleTitleChange}
           />
-        </Row>
-
-        <Row>
-          <span>내용</span>
-          <textarea value={content} onChange={handleContentChange} />
-        </Row>
-        <Row>
           <span>사진</span>
           <CommonInput
             width="390px"
@@ -196,11 +189,17 @@ export function NoticeFormBox() {
           <HiddenInput type="file" onChange={handleImageChange} />
           <CommonButton
             text="사진 찾기"
-            width="100px"
+            width="120px"
             height="40px"
             font-size="10px"
             onClick={() => document.querySelector('input[type="file"]').click()}
           />
+        </Row>
+        <Row></Row>
+
+        <Row>
+          <span>내용</span>
+          <textarea value={content} onChange={handleContentChange} />
         </Row>
       </FormBox>
     </Root>
