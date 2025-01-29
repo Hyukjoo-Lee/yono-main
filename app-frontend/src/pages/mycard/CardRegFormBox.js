@@ -118,6 +118,11 @@ const CardRegFormBox = ({ cardImg }) => {
       setCardList(response.data);
     } catch (error) {
       console.log(error);
+      setCardList([]);
+      setFormMessage((prev) => ({
+        ...prev,
+        selectedCardType: '카드 목록을 불러오는 데 실패했습니다.',
+      }));
     }
   };
 
@@ -135,7 +140,7 @@ const CardRegFormBox = ({ cardImg }) => {
     if (selectedCard) {
       setCardImages(cardImgArr);
     } else {
-      setCardImages();
+      setCardImages([]);
     }
   };
 
@@ -148,6 +153,12 @@ const CardRegFormBox = ({ cardImg }) => {
 
   const handleCardNumChange = (e) => {
     const { value } = e.target;
+
+    setFormMessage((prev) => ({
+      ...prev,
+      cardNumber: '',
+    }));
+
     const numericValue = value.replace(/\D/g, '');
 
     if (numericValue.length > 16) return; // 최대 16자리 제한
@@ -273,7 +284,6 @@ const CardRegFormBox = ({ cardImg }) => {
             </Grid2>
           ))}
 
-          {/* 카드 회사  */}
           <Grid2 size={6}>
             <CommonSelect
               text={FORM_FIELDS.selectedCardType.text}
@@ -320,18 +330,18 @@ const CardRegFormBox = ({ cardImg }) => {
 
           <Grid2 size={12}>
             <CardSlider
-              cardImages={cardImages}
+              cardImages={cardImages || []}
               onImageSelect={handleImageSelect}
             />
           </Grid2>
 
           <Grid2 container justifyContent="center" size={12} pt={3}>
             <CommonButton
+              type="submit"
               fontSize="16px"
               width="120px"
               height="35px"
               text="카드 등록"
-              onClick={handleSubmit}
             />
           </Grid2>
         </Grid2>
