@@ -56,7 +56,7 @@ public class UserCardServiceImpl implements UserCardService {
                 int cardId = cardDAO.findByCardTitle(cardTitle).getCardId();
                 userCardDTO.setCardCompanyNum(cardCompanyNum);
                 userCardDTO.setCardId(cardId);
-                
+
                 UserCardEntity userCardEntity = toEntity(userCardDTO);
 
                 LocalDate today = LocalDate.now();
@@ -123,6 +123,7 @@ public class UserCardServiceImpl implements UserCardService {
         entity.setExpiryDate(dto.getExpiryDate());
         entity.setUserName(dto.getUserName());
         entity.setCardPwd(dto.getCardPwd());
+        entity.setCardImg(dto.getCardImg());
         entity.setPrimaryCard(dto.getPrimaryCard());
         entity.setCreatedAt(dto.getCreatedAt());
         entity.setUpdatedAt(dto.getUpdatedAt());
@@ -144,6 +145,7 @@ public class UserCardServiceImpl implements UserCardService {
         dto.setExpiryDate(entity.getExpiryDate());
         dto.setUserName(entity.getUserName());
         dto.setCardPwd(entity.getCardPwd());
+        dto.setCardImg(entity.getCardImg());
         dto.setPrimaryCard(entity.getPrimaryCard());
         dto.setCreatedAt(entity.getCreatedAt());
         dto.setUpdatedAt(entity.getUpdatedAt());
