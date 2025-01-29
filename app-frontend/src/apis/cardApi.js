@@ -49,3 +49,12 @@ export const getprimaryCardInfo = async (userNum) => {
     }
   }
 };
+
+export const getCardListByCompany = async (organization) => {
+  try {
+    const response = await axios.get(`/card/${organization}`);
+    return response.data;
+  } catch (error) {
+    console.error('데이터 조회 중 오류 발생', error);
+  }
+};

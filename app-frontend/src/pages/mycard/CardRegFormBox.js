@@ -4,7 +4,7 @@ import CommonSelect from '../../common/CommonSelect';
 import { Box, Grid2 } from '@mui/material';
 import CardSlider from './CardSlider';
 import CommonButton from '../../common/CommonButton';
-import { useState, useEffect } from 'react';
+import { useCallback, useState } from 'react';
 import ValidationMessage from '../../common/ValidationMessage';
 import theme from '../../theme/theme';
 import {
@@ -18,6 +18,7 @@ import {
   EMPTY_VALIDITY_MESSAGE,
   VALIDITY_REGEX_MESSAGE,
 } from '../../common/Message';
+import { getCardListByCompany } from '../../apis/cardApi';
 
 const FormBox = styled.form`
   width: 100%;
@@ -80,23 +81,6 @@ const CARD_COMPANY_LIST = [
   { value: '0306', label: '신한카드' },
 ];
 
-// const useCardImages = (cardImg, selectedCardType) => {
-//   const [cardImages, setCardImages] = useState(null);
-
-//   useEffect(() => {
-//     if (cardImg && selectedCardType) {
-//       const selectedCardData = cardImg[selectedCardType];
-//       if (selectedCardData) {
-//         const cardTypeKey = Object.keys(selectedCardData)[0];
-//         const images = Object.values(selectedCardData[cardTypeKey]);
-//         setCardImages(images);
-//       }
-//     }
-//   }, [cardImg, selectedCardType]);
-
-//   return cardImages;
-// };
-
 const CardRegFormBox = ({ cardImg }) => {
   const [formData, setFormData] = useState({
     cardNumber: '',
@@ -104,6 +88,7 @@ const CardRegFormBox = ({ cardImg }) => {
     cardValidity: '',
     selectedCardTitle: '', // 카드이름
     selectedCardType: '', // 기관코드
+    selectedCardImg: '',
   });
 
   const [formMessage, setFormMessage] = useState({
@@ -112,52 +97,54 @@ const CardRegFormBox = ({ cardImg }) => {
     cardValidity: '',
     selectedCardTitle: '',
     selectedCardType: '',
+    selectedCardImg: '',
   });
+  const [cardList, setCardList] = useState([]);
 
-  const fetchCardData = async (cardCompany) => {
-    try {
-      const response = await fetch(
-        `http://localhost:8065/card/company?organization=${cardCompany}`,
-      );
-      const data = await response.json();
-
-      if (data.status === 200) {
-        setCardList(data.data.map((card) => card.cardTitle)); // 카드 이름 목록 저장
-        setCardImages(data.data.map((card) => card.imageUrl)); // 카드 이미지 목록 저장
-      } else {
-        console.error('카드 데이터를 가져오는 데 실패했습니다:', data.message);
-      }
-    } catch (error) {
-      console.error('API 요청 중 오류 발생:', error);
-    }
-  };
-
-  const [cardList, setCardList] = useState([]); // 카드 목록
-  const [cardImages, setCardImages] = useState([]); // 카드 이미지
-
-  // 카드 회사 선택 시 카드 목록 가져오기
-  const handleCardCompanyChange = async (value) => {
-    setFormData((prev) => ({
-      ...prev,
-      selectedCardType: value,
-      selectedCardTitle: '', // 카드 종류 초기화
-    }));
-    try {
-      const response = await fetch(`http://localhost:8065/card/${value}`); // API 요청
-      const data = await response.json();
-
-      if (data.status === 200) {
-        setCardList(data.data); // 카드 목록 저장
-      } else {
-        setCardList([]);
-        console.error('카드 데이터를 가져오는 데 실패했습니다:', data.message);
-      }
-    } catch (error) {
-      console.error('API 요청 중 오류 발생:', error);
-    }
-  };
+  const [cardImages, setCardImages] = useState([]);
 
   const [cardNumToSave, setCardNumToSave] = useState('');
+
+  // 카드 회사 선택 시 카드 목록 가져오기
+  const handleCardCompanyChange = async (organization) => {
+    setFormData((prev) => ({
+      ...prev,
+      selectedCardType: organization,
+      selectedCardTitle: '',
+    }));
+
+    try {
+      const response = await getCardListByCompany(organization);
+      setCardList(response.data);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  // 카드 종류 선택 시 카드 이미지 설정
+  const handleCardTitleChange = (value) => {
+    setFormData((prev) => ({
+      ...prev,
+      selectedCardTitle: value,
+    }));
+
+    const selectedCard = cardList.find((card) => card.cardTitle === value);
+
+    const cardImgArr = selectedCard.cardImgUrl.split(',');
+
+    if (selectedCard) {
+      setCardImages(cardImgArr);
+    } else {
+      setCardImages();
+    }
+  };
+
+  const handleImageSelect = useCallback((image) => {
+    setFormData((prev) => ({
+      ...prev,
+      selectedCardImg: image,
+    }));
+  }, []);
 
   const handleCardNumChange = (e) => {
     const { value } = e.target;
@@ -182,14 +169,14 @@ const CardRegFormBox = ({ cardImg }) => {
 
     setFormData((prev) => ({
       ...prev,
-      cardNumber: formattedValue, // 화면 표시용 값
+      cardNumber: formattedValue,
     }));
-    setCardNumToSave(numericValue); // 저장용 값
+    setCardNumToSave(numericValue);
   };
 
   const handleInputChange = (field) => (e) => {
     if (field === 'cardNumber') {
-      handleCardNumChange(e); // 카드 번호 전용 처리
+      handleCardNumChange(e);
     } else {
       const { value } = e.target;
 
@@ -286,16 +273,13 @@ const CardRegFormBox = ({ cardImg }) => {
             </Grid2>
           ))}
 
+          {/* 카드 회사  */}
           <Grid2 size={6}>
             <CommonSelect
               text={FORM_FIELDS.selectedCardType.text}
               options={CARD_COMPANY_LIST}
               selectedValue={formData.selectedCardType}
-              setSelectedValue={(value) =>
-                handleInputChange('selectedCardType')({
-                  target: { value },
-                })
-              }
+              setSelectedValue={handleCardCompanyChange}
               margin="0"
               labelColor="#4a4a4a"
               width="227.75px"
@@ -313,23 +297,20 @@ const CardRegFormBox = ({ cardImg }) => {
           <Grid2 size={6}>
             <CommonSelect
               text={FORM_FIELDS.selectedCardTitle.text}
-              options={cardList.map((cardTitle) => ({
-                value: cardTitle,
-                label: cardTitle,
+              options={cardList.map((card) => ({
+                value: card.cardTitle,
+                label: card.cardTitle,
               }))}
               selectedValue={formData.selectedCardTitle}
-              setSelectedValue={(value) =>
-                handleInputChange('selectedCardTitle')({
-                  target: { value },
-                })
-              }
+              setSelectedValue={handleCardTitleChange}
+              find="카드 종류를 선택하세요"
               margin="0"
               labelColor="#4a4a4a"
               width="227.75px"
             />
-            {formMessage.selectedCardType && (
+            {formMessage.selectedCardTitle && (
               <ValidationMessage
-                text={formMessage.selectedCardType}
+                text={formMessage.selectedCardTitle}
                 type="error"
                 fontSize={theme.fontSize.small}
                 $margin="0 5px"
@@ -338,7 +319,10 @@ const CardRegFormBox = ({ cardImg }) => {
           </Grid2>
 
           <Grid2 size={12}>
-            <CardSlider cardImages={cardImages} />
+            <CardSlider
+              cardImages={cardImages}
+              onImageSelect={handleImageSelect}
+            />
           </Grid2>
 
           <Grid2 container justifyContent="center" size={12} pt={3}>
