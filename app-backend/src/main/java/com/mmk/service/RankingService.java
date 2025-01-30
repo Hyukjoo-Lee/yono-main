@@ -1,9 +1,9 @@
 package com.mmk.service;
 
 import java.util.List;
-import com.mmk.dto.RankingDTO;
+
+import com.mmk.dto.BadgeDTO;
 
 public interface RankingService {
-    List<RankingDTO> getAllRankings();
-    void updateRankings();
+    List<BadgeDTO> getBadgesForPreviousMonth();
 }

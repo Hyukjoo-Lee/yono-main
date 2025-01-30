@@ -118,27 +118,24 @@ const ProfileBox = styled.div`
   }
 `;
 
-const RankingTable = ({ isLoggedIn, rankingList, setRankingList }) => {
-  const [isLoading, setIsLoading] = useState(true); // 로딩 상태 추가
-  const [userList, setUserList] = useState([]);
+const RankingTable = ({ isLoggedIn, rankingList}) => {
+  const [isLoading, setIsLoading] = useState(true);
+  const [sortedRanking, setSortedRanking] = useState([]);
+  const [userRanking, setUserRanking] = useState(null);
 
   useEffect(() => {
-    const initializeRankings = async () => {
-      try {
-        //const sortedList = rankingList.sort((a, b) => b.badge - a.badge);
-        const filteredData = rankingList.filter(
-          (item) => item.userNum === isLoggedIn,
-        );
-        setUserList(filteredData);
-        //setRankingList(sortedList);
-      } catch (error) {
-        console.error('Error initializing rankings:', error);
-      } finally {
-        setIsLoading(false);
-      }
-    };
+    if (rankingList.length > 0) {
+      
+      const sortedList = rankingList.sort((a, b) => b.badge - a.badge);
+      setSortedRanking(sortedList);
 
-    initializeRankings();
+      // 현재 로그인한 유저의 데이터를 찾아서 설정
+      const currentUserData = sortedList.find(
+        (item) => item.userNum === isLoggedIn,
+      );
+      setUserRanking(currentUserData || null);
+    }
+    setIsLoading(false);
   }, [isLoggedIn, rankingList]);
 
   return (
@@ -157,27 +154,29 @@ const RankingTable = ({ isLoggedIn, rankingList, setRankingList }) => {
         </EmptyBox>
       ) : (
         <BoxStyle>
-          <BoxIn>
-            <TextBox>
-              <TextStyle>{userList[0]?.rankingPosition}</TextStyle>
-              <ProfileBox>
-                {userList[0]?.profile !== 'temp_profile' ? (
-                  <img
-                    src={`http://localhost:8065${userList[0]?.profile}`}
-                    alt={userList[0]?.name}
-                  />
-                ) : (
-                  <Profile />
-                )}
-              </ProfileBox>
-              <TextStyle>
-                {userList[0]?.name}({userList[0]?.userId})
-              </TextStyle>
-            </TextBox>
-            <NumberText>{userList[0]?.badge.toLocaleString()}</NumberText>
-          </BoxIn>
+          {userRanking && (
+            <BoxIn>
+              <TextBox>
+                <TextStyle>{userRanking.rankingPosition}</TextStyle>
+                <ProfileBox>
+                  {userRanking.profile !== 'temp_profile' ? (
+                    <img
+                      src={`http://localhost:8065${userRanking.profile}`}
+                      alt={userRanking.name}
+                    />
+                  ) : (
+                    <Profile />
+                  )}
+                </ProfileBox>
+                <TextStyle>
+                  {userRanking.name}({userRanking.userId})
+                </TextStyle>
+              </TextBox>
+              <NumberText>{userRanking.badge.toLocaleString()}</NumberText>
+            </BoxIn>
+          )}
           <BoxInStyle>
-            {rankingList.map((item, index) => (
+            {sortedRanking.map((item, index) => (
               <BoxIn key={index}>
                 <TextBox>
                   {item.rankingPosition === 1 ? (

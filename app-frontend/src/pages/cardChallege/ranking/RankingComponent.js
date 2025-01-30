@@ -73,29 +73,29 @@ const Box = styled.div`
 `;
 
 const RankingComponent = ({ rankingList }) => {
-  const [list, setList] = useState([]);
+  const [top3, setTop3] = useState([]);
 
   useEffect(() => {
-    const getRanking = async () => {
-      try {
-        const sortedList = rankingList
-          .sort((a, b) => b.badge - a.badge) // badge 기준 내림차순 정렬
-          .slice(0, 3); // 상위 3개만 추출
-        setList(sortedList);
-      } catch (error) {
-        console.error('Error fetching rankings: ', error);
-      }
-    };
+    if (rankingList.length > 0) {
+      // `badge`와 `previousMonthAmount`를 기준으로 정렬 (같은 배지 수라면 지난 달 금액이 높은 순으로)
+      const sortedList = rankingList.sort((a, b) => {
+        if (b.badge === a.badge) {
+          return b.previousMonthAmount - a.previousMonthAmount; // 지난 달 금액 기준 내림차순 정렬
+        }
+        return b.badge - a.badge; // 배지 수 기준 내림차순 정렬
+      });
 
-    getRanking();
+      // 상위 3명만 추출
+      setTop3(sortedList.slice(0, 3));
+    }
   }, [rankingList]);
 
   return (
     <Root>
-      {list.length === 0 ? (
+      {top3.length === 0 ? (
         <></>
       ) : (
-        list.map((item, index) => (
+        top3.map((item, index) => (
           <BoxStyle key={index}>
             <CircleBox $rank={index}>
               {item.profile !== 'temp_profile' ? (
@@ -111,13 +111,7 @@ const RankingComponent = ({ rankingList }) => {
               {item.name}({item.userId})
             </NameStyle>
             <Box>
-              {item.rankingPosition === 1 ? (
-                <Medal1 />
-              ) : item.rankingPosition === 2 ? (
-                <Medal2 />
-              ) : (
-                <Medal3 />
-              )}
+              {index === 0 ? <Medal1 /> : index === 1 ? <Medal2 /> : <Medal3 />}
               <p>{item.badge.toLocaleString()}</p>
             </Box>
           </BoxStyle>

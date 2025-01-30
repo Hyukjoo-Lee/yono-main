@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import styled from 'styled-components';
 import RankingComponent from './RankingComponent';
 import RankingTable from './RankingTable';
-import { updateRankings, fetchUserRanking } from '../../../apis/rankingApi';
+import { updateRankings } from '../../../apis/rankingApi';
 import { findUserById } from '../../../apis/userApi';
 import { useSelector } from 'react-redux';
 
@@ -36,11 +36,10 @@ const Ranking = () => {
   useEffect(() => {
     const initializeRankings = async () => {
       try {
-        await updateRankings(); // 등수 업데이트 호출
-        const data = await fetchUserRanking(); // API 호출
+        const data = await updateRankings();
         setRankingList(data);
       } catch (error) {
-        console.error('등수 업데이트 실패패', error);
+        console.error('등수 업데이트 실패', error);
       }
     };
 
@@ -49,15 +48,11 @@ const Ranking = () => {
 
   return (
     <Root>
-      <RankingComponent
-        rankingList={rankingList}
-        setRankingList={setRankingList}
-      />
+      <RankingComponent rankingList={rankingList} />
       <RankingTable
         users={users}
         isLoggedIn={isLoggedIn}
         rankingList={rankingList}
-        setRankingList={setRankingList}
       />
     </Root>
   );

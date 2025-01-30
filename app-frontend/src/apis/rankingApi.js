@@ -1,16 +1,11 @@
 import axios from 'axios';
 
-// 유저 랭킹 가져오기
-export const fetchUserRanking = async () => {
-  const response = await axios.get('/user/ranking');
-  return response.data;
-};
-
 // 등수 업데이트 호출
 export const updateRankings = async () => {
   try {
-    await axios.post('/user/ranking/update');
+    const response = await axios.get('/user/ranking/list');
+    return response.data;
   } catch (error) {
-    console.log(error);
+    console.error('등수 업데이트 실패:', error.response?.data || error.message);
   }
 };

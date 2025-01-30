@@ -1,5 +1,7 @@
 package com.mmk.service;
 
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -7,36 +9,46 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.mmk.dao.RankingDAO;
-import com.mmk.dto.RankingDTO;
+import com.mmk.dto.BadgeDTO;
+import com.mmk.entity.BadgeEntity;
 
 @Service
 public class RankingServiceImpl implements RankingService {
 
     @Autowired
-    private RankingDAO rankingDao;
+    private RankingDAO rankingDao; 
 
     @Override
-    public List<RankingDTO> getAllRankings() {
-        return rankingDao.getAllRankings().stream()
-                .map(entity -> {
-                    RankingDTO dto = new RankingDTO();
-                    dto.setRankingNum(entity.getRankingNum());
-                    dto.setBadgeNum(entity.getBadgeEntity().getBadgeNum());
-                    dto.setBadgeDate(entity.getBadgeEntity().getBadgeDate());
-                    dto.setBadge(entity.getBadgeEntity().getBadge());
-                    dto.setUserNum(entity.getUserEntity().getUserNum());
-                    dto.setName(entity.getBadgeEntity().getUserEntity().getName());
-                    dto.setUserId(entity.getBadgeEntity().getUserEntity().getUserId());
-                    dto.setProfile(entity.getBadgeEntity().getUserEntity().getProfile());
-                    dto.setRankingPosition(entity.getRankingPosition());
-                    return dto;
-                })
-                .collect(Collectors.toList());
+    public List<BadgeDTO> getBadgesForPreviousMonth() {
+        // 현재 날짜 기준으로 이전 달 계산
+        String previousMonth = getPreviousMonth();
+
+        // BadgeDAO를 통해 이전 달 배지 데이터 조회
+        List<BadgeEntity> badgeEntities = rankingDao.getBadgesForPreviousMonth(previousMonth);
+
+        // BadgeEntity -> BadgeDTO 변환
+        return badgeEntities.stream().map(this::convertToDTO).collect(Collectors.toList());
     }
 
-    @Override
-    public void updateRankings() {
-        rankingDao.updateRankings();
+    // 이전 달을 계산하는 메서드 (예: 2025년 1월 -> 2024년 12월)
+    private String getPreviousMonth() {
+        Calendar calendar = Calendar.getInstance();
+        calendar.add(Calendar.MONTH, -1); // 한 달을 빼기
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyyMM");
+        return sdf.format(calendar.getTime());
+    }
+
+    // Entity를 DTO로 변환하는 메서드
+    private BadgeDTO convertToDTO(BadgeEntity badgeEntity) {
+        BadgeDTO badgeDTO = new BadgeDTO();
+        badgeDTO.setBadgeNum(badgeEntity.getBadgeNum());
+        badgeDTO.setBadgeDate(badgeEntity.getBadgeDate());
+        badgeDTO.setBadge(badgeEntity.getBadge());
+        badgeDTO.setUserNum(badgeEntity.getUserEntity().getUserNum());
+        badgeDTO.setRanking(badgeEntity.getRanking());
+        badgeDTO.setPreviousMonthAmount(badgeEntity.getPreviousMonthAmount());
+        badgeDTO.setTwoMonthsAgoAmount(badgeEntity.getTwoMonthsAgoAmount());
+        return badgeDTO;
     }
 
 }
