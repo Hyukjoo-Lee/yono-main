@@ -32,3 +32,11 @@ export const fetchSearchNotice = async (keyword) => {
     return { success: false, message: 'API 요청에 실패했습니다.' };
   }
 };
+
+//공지사항 상세
+export const fetchNoticeDetail = async (id) => {
+  const response = await axios.get('/notice/detail', {
+    params: { id },
+  });
+  return response.data;
+};

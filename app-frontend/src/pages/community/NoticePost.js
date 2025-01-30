@@ -2,6 +2,7 @@ import axios from 'axios';
 import { useEffect, useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import styled from 'styled-components';
+import { fetchNoticeDetail } from '../../apis/noticeApi';
 import CommonButton from '../../common/CommonButton';
 import CommonHr from '../../common/CommonHr';
 
@@ -83,25 +84,25 @@ const EditBox = styled.div`
 `;
 
 export function NoticePost() {
-  const [noticeData, setnoticeData] = useState(null);
+  const [noticeData, setNoticeData] = useState(null);
   const navigate = useNavigate();
   const { id } = useParams();
 
   useEffect(() => {
-    const fetchPostData = async () => {
+    const fetchNoticeData = async () => {
       try {
-        const response = await axios.get(`/notice/detail?id=${id}`);
-        setnoticeData(response.data);
-        console.log(response.data);
+        const data = await fetchNoticeDetail(id); // API 호출을 함수로 변경
+        setNoticeData(data);
+        console.log(data);
       } catch (error) {
         console.error('Error fetching post data : ', error);
       }
     };
-    fetchPostData();
+    fetchNoticeData();
   }, [id]);
 
   const handleButtonClick = () => {
-    navigate('/notice/list');
+    navigate('noticeFormData');
   };
 
   const handleDelete = async () => {

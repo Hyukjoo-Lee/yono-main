@@ -9,8 +9,8 @@ export const EMPTY_DETAIL_ADDRESS_MESSAGE = '상세주소를 입력하세요.';
 export const EMPTY_CARDNUM_MESSAGE = '카드번호를 입력하세요.';
 export const EMPTY_CARDPWD_MESSAGE = '카드 비밀번호를 입력하세요.';
 export const EMPTY_VALIDITY_MESSAGE = '유효기간을 입력하세요.';
-export const EMPTY_CARD_SELECT_MESSAGE = '영문이름을 입력하세요.';
-export const EMPTY_COMPANY_SELECT_MESSAGE = '카드를 선택해주세요.';
+export const EMPTY_CARD_SELECT_MESSAGE = '카드 종류를 선택해주세요.';
+export const EMPTY_COMPANY_SELECT_MESSAGE = '카드 회사를 선택해주세요.';
 
 export const EMPTY_EMAILCODE_MESSAGE = '인증 코드를 입력해주세요.';
 // REGEX 관련

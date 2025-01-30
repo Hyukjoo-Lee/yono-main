@@ -20,4 +20,5 @@ public class CardBenefitDTO {
     private Timestamp updatedAt;
 
     private String cardTitle;
+    private int cardId;
 }
