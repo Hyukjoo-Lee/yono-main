@@ -7,7 +7,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.mmk.dto.BadgeDTO;
+import com.mmk.dto.RankingDTO;
 import com.mmk.service.RankingService;
 
 import java.util.List;
@@ -21,7 +21,7 @@ public class RankingController {
 
     // 오늘 날짜에 해당하는 배지 데이터 가져오기
     @GetMapping("/list")
-    public List<BadgeDTO> getBadges() {
+    public List<RankingDTO> getBadges() {
         return rankingService.getBadgesForPreviousMonth();
     }
 }

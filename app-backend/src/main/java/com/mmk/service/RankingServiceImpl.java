@@ -9,24 +9,24 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.mmk.dao.RankingDAO;
-import com.mmk.dto.BadgeDTO;
+import com.mmk.dto.RankingDTO;
 import com.mmk.entity.BadgeEntity;
 
 @Service
 public class RankingServiceImpl implements RankingService {
 
     @Autowired
-    private RankingDAO rankingDao; 
+    private RankingDAO rankingDao;
 
     @Override
-    public List<BadgeDTO> getBadgesForPreviousMonth() {
+    public List<RankingDTO> getBadgesForPreviousMonth() {
         // 현재 날짜 기준으로 이전 달 계산
         String previousMonth = getPreviousMonth();
 
         // BadgeDAO를 통해 이전 달 배지 데이터 조회
         List<BadgeEntity> badgeEntities = rankingDao.getBadgesForPreviousMonth(previousMonth);
 
-        // BadgeEntity -> BadgeDTO 변환
+        // BadgeEntity -> RankingDTO 변환
         return badgeEntities.stream().map(this::convertToDTO).collect(Collectors.toList());
     }
 
@@ -39,16 +39,19 @@ public class RankingServiceImpl implements RankingService {
     }
 
     // Entity를 DTO로 변환하는 메서드
-    private BadgeDTO convertToDTO(BadgeEntity badgeEntity) {
-        BadgeDTO badgeDTO = new BadgeDTO();
-        badgeDTO.setBadgeNum(badgeEntity.getBadgeNum());
-        badgeDTO.setBadgeDate(badgeEntity.getBadgeDate());
-        badgeDTO.setBadge(badgeEntity.getBadge());
-        badgeDTO.setUserNum(badgeEntity.getUserEntity().getUserNum());
-        badgeDTO.setRanking(badgeEntity.getRanking());
-        badgeDTO.setPreviousMonthAmount(badgeEntity.getPreviousMonthAmount());
-        badgeDTO.setTwoMonthsAgoAmount(badgeEntity.getTwoMonthsAgoAmount());
-        return badgeDTO;
+    private RankingDTO convertToDTO(BadgeEntity badgeEntity) {
+        RankingDTO rankingDTO = new RankingDTO();
+        rankingDTO.setBadgeNum(badgeEntity.getBadgeNum());
+        rankingDTO.setBadgeDate(badgeEntity.getBadgeDate());
+        rankingDTO.setBadge(badgeEntity.getBadge());
+        rankingDTO.setUserNum(badgeEntity.getUserEntity().getUserNum());
+        rankingDTO.setName(badgeEntity.getUserEntity().getName());
+        rankingDTO.setUserId(badgeEntity.getUserEntity().getUserId());
+        rankingDTO.setProfile(badgeEntity.getUserEntity().getProfile());
+        rankingDTO.setRanking(badgeEntity.getRanking());
+        rankingDTO.setPreviousMonthAmount(badgeEntity.getPreviousMonthAmount());
+        rankingDTO.setTwoMonthsAgoAmount(badgeEntity.getTwoMonthsAgoAmount());
+        return rankingDTO;
     }
 
 }

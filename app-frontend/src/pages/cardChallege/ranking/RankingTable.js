@@ -118,19 +118,43 @@ const ProfileBox = styled.div`
   }
 `;
 
-const RankingTable = ({ isLoggedIn, rankingList}) => {
+const RankingTable = ({ isLoggedIn, rankingList, maskName }) => {
   const [isLoading, setIsLoading] = useState(true);
   const [sortedRanking, setSortedRanking] = useState([]);
   const [userRanking, setUserRanking] = useState(null);
 
   useEffect(() => {
     if (rankingList.length > 0) {
-      
-      const sortedList = rankingList.sort((a, b) => b.badge - a.badge);
-      setSortedRanking(sortedList);
+      // 1. badge 기준 내림차순, 같은 badge면 previousMonthAmount 기준 내림차순 정렬
+      const sortedList = [...rankingList].sort((a, b) => {
+        if (b.badge === a.badge) {
+          return b.previousMonthAmount - a.previousMonthAmount;
+        }
+        return b.badge - a.badge;
+      });
 
-      // 현재 로그인한 유저의 데이터를 찾아서 설정
-      const currentUserData = sortedList.find(
+      // 2. 같은 순위 처리를 위해 finalRank 부여
+      let currentRank = 1;
+      const rankedList = sortedList.map((item, index, array) => {
+        if (index === 0) {
+          return { ...item, finalRank: currentRank };
+        }
+
+        if (
+          item.badge === array[index - 1].badge &&
+          item.previousMonthAmount === array[index - 1].previousMonthAmount
+        ) {
+          return { ...item, finalRank: array[index - 1].finalRank };
+        }
+
+        currentRank = index + 1;
+        return { ...item, finalRank: currentRank };
+      });
+
+      setSortedRanking(rankedList);
+
+      // 현재 로그인한 유저의 순위 찾기
+      const currentUserData = rankedList.find(
         (item) => item.userNum === isLoggedIn,
       );
       setUserRanking(currentUserData || null);
@@ -157,59 +181,59 @@ const RankingTable = ({ isLoggedIn, rankingList}) => {
           {userRanking && (
             <BoxIn>
               <TextBox>
-                <TextStyle>{userRanking.rankingPosition}</TextStyle>
+                <TextStyle>{userRanking.ranking}</TextStyle>
                 <ProfileBox>
                   {userRanking.profile !== 'temp_profile' ? (
                     <img
                       src={`http://localhost:8065${userRanking.profile}`}
-                      alt={userRanking.name}
+                      alt={maskName(userRanking.name)}
                     />
                   ) : (
                     <Profile />
                   )}
                 </ProfileBox>
                 <TextStyle>
-                  {userRanking.name}({userRanking.userId})
+                  {maskName(userRanking.name)}({userRanking.userId})
                 </TextStyle>
               </TextBox>
-              <NumberText>{userRanking.badge.toLocaleString()}</NumberText>
+              <NumberText>{userRanking.badge.toLocaleString()}개</NumberText>
             </BoxIn>
           )}
           <BoxInStyle>
-            {sortedRanking.map((item, index) => (
+            {sortedRanking.slice(0, 10).map((item, index) => (
               <BoxIn key={index}>
                 <TextBox>
-                  {item.rankingPosition === 1 ? (
+                  {item.ranking === 1 ? (
                     <MedalBox>
                       <Medal1 />
                     </MedalBox>
-                  ) : item.rankingPosition === 2 ? (
+                  ) : item.ranking === 2 ? (
                     <MedalBox>
                       <Medal2 />
                     </MedalBox>
-                  ) : item.rankingPosition === 3 ? (
+                  ) : item.ranking === 3 ? (
                     <MedalBox>
                       <Medal3 />
                     </MedalBox>
                   ) : (
-                    <TextStyle>{item.rankingPosition}</TextStyle>
+                    <TextStyle>{item.ranking}</TextStyle>
                   )}
 
                   <ProfileBox>
                     {item.profile !== 'temp_profile' ? (
                       <img
                         src={`http://localhost:8065${item.profile}`}
-                        alt={item.name}
+                        alt={maskName(item.name)}
                       />
                     ) : (
                       <Profile />
                     )}
                   </ProfileBox>
                   <TextStyle>
-                    {item.name}({item.userId})
+                    {maskName(item.name)}({item.userId})
                   </TextStyle>
                 </TextBox>
-                <NumberText>{item.badge.toLocaleString()}</NumberText>
+                <NumberText>{item.badge.toLocaleString()}개</NumberText>
               </BoxIn>
             ))}
           </BoxInStyle>

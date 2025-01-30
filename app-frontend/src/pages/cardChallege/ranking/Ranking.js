@@ -46,13 +46,24 @@ const Ranking = () => {
     initializeRankings();
   }, []);
 
+  // 이름을 마스킹하는 함수
+  const maskName = (name) => {
+    if (name.length === 3) {
+      return name[0] + '*' + name[2];
+    } else if (name.length > 3) {
+      return name[0] + '**' + name.slice(3);
+    }
+    return name; // 기본적으로 그대로 반환
+  };
+
   return (
     <Root>
-      <RankingComponent rankingList={rankingList} />
+      <RankingComponent rankingList={rankingList} maskName={maskName} />
       <RankingTable
         users={users}
         isLoggedIn={isLoggedIn}
         rankingList={rankingList}
+        maskName={maskName}
       />
     </Root>
   );
