@@ -12,4 +12,8 @@ public interface NoticeService{
 
   NoticeDTO getNoticeById(int id);
 
+  void deleteByNotice(List<Integer> ids);
+
+  // void save(NoticeDTO noticeData);
+
 }

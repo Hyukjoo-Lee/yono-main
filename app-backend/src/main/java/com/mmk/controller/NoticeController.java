@@ -9,6 +9,7 @@ import java.util.Random;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -31,9 +32,12 @@ public class NoticeController {
 
   //글 쓰기
   @PostMapping("/write")
-  public ResponseEntity<Void> saveNotice(@RequestBody NoticeDTO noticeDTO,
+  public ResponseEntity<Void> saveNotice(
+    @ModelAttribute NoticeDTO noticeDTO,
     @RequestParam(value = "file", required= false) MultipartFile file) throws IOException{
+    
     System.out.println("아이디 : " + noticeDTO);
+
     if(file != null && !file.isEmpty()){
       String fileName = saveFile(file);
       noticeDTO.setImgurl(fileName);
@@ -82,7 +86,7 @@ public class NoticeController {
     }
 
     return fileDBName;
-    }
+  }
 
   //글 목록 불러오기
   @GetMapping("/list")
@@ -101,6 +105,27 @@ public class NoticeController {
     }
   }
 
+  //글 삭제
+  @PostMapping("/delete")
+  public ResponseEntity<Void> deleteByNotice(@RequestBody List<Integer> ids){
+    for(Integer id : ids) {
+      NoticeDTO notice = noticeService.getNoticeById(id);
+      if(notice != null && notice.getImgurl() != null){
+        String filePath = System.getProperty("user.dir").replace("\\app-backend","").replace("/app-backend","")+notice.getImgurl();
+        File file = new File(filePath);
+        if(file.exists()){
+          if(file.delete()){
+            log.info("Deleted image file : " + filePath);
+          }else {
+            log.warn("Failed to delete image file : " + filePath);
+          }
+        }
+      }
+    }
+    noticeService.deleteByNotice(ids);
+    return ResponseEntity.ok().build();
+  }
+
   // //글 수정
   // @PostMapping("/edit")
   // public ResponseEntity<Void> editNotice(
@@ -108,8 +133,22 @@ public class NoticeController {
   //   @RequestParam("title") String title,
   //   @RequestParam("content") String content,
   //   @RequestParam(value = "file",required = false) MultipartFile file,
-  //   @RequestParam(value = "imgurl" , required = false) String imgurl) throws IOExeception{
+  //   @RequestParam(value = "imgurl" , required = false) String imgurl) throws IOException{
 
   //   NoticeDTO existingNotice = noticeService.getNoticeById(id);
+  //     if(existingNotice == null){
+  //       return ResponseEntity.notFound().build();
+  //     }
+
+  //     existingNotice.setTitle(title);
+  //     existingNotice.setContent(content);
+
+  //     if(file != null && !file.isEmpty()){
+  //       if("deleted".equals(imgurl)){
+  //         deleteFile(existingNotice.getImgurl());
+  //         existingNotice.setImgurl(null);
+  //       }
+
+  //     }
   // }
 }

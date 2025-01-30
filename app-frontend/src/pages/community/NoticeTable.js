@@ -12,10 +12,10 @@ import {
   TableHead,
   TableRow,
 } from '@mui/material';
-import axios from 'axios';
+// import axios from 'axios';
 import { Link, useNavigate } from 'react-router-dom';
-// import { Link } from 'react-router-dom';
 import styled from 'styled-components';
+import { fetchSearchNotice } from '../../apis/noticeApi';
 import CommonButton from '../../common/CommonButton';
 import CommonInput from '../../common/CommonInput';
 
@@ -97,8 +97,13 @@ export function NoticeTable() {
     setKeyword(e.target.value);
   };
 
-  const handleSerchSubmit = () => {
-    getNoticeData(keyword);
+  const handleSerchSubmit = async () => {
+    const { success, data, message } = await fetchSearchNotice(keyword);
+    if (success) {
+      setRows(data);
+    } else {
+      alert(`검색 오류: ${message}`);
+    }
   };
 
   useEffect(() => {
@@ -107,12 +112,16 @@ export function NoticeTable() {
 
   const getNoticeData = async (searchKeyword) => {
     try {
-      const response = await axios.get('/notice/list', {
-        params: { keyword: searchKeyword },
-      });
-      setRows(response.data);
+      const response = await fetchSearchNotice(searchKeyword);
+
+      if (Array.isArray(response) && response.length > 0) {
+        setRows(response);
+      } else {
+        setRows([]);
+      }
     } catch (error) {
       console.error('Error fetching data : ', error);
+      setRows([]);
     }
   };
 

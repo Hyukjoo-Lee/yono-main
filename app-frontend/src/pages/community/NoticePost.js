@@ -26,6 +26,33 @@ const MoveButton = styled.button`
   font-weight: bold;
 `;
 
+const NoticeHeader = styled.div`
+  width: 1200px;
+  height: 40px;
+  margin-top: 20px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+
+  & p {
+    font-weight: bold;
+    font-size: ${(props) => props.theme.fontSize.eighteen};
+    margin: 0;
+  }
+
+  & p span {
+    color: #4064e6;
+  }
+`;
+
+const StyledButton = styled(CommonButton).attrs({
+  width: '100px',
+  height: '40px',
+  fontSize: '20px',
+})`
+  margin-top: 20px;
+`;
+
 const Box = styled.div`
   display: flex;
   flex-direction: column;
@@ -36,7 +63,7 @@ const Box = styled.div`
   & > label.title {
     // margin-top: 20px;
     font-weight: bold;
-    font-size: 25px;
+    font-size: ${(props) => props.theme.fontSize.lg};
   }
   & > label.date {
     color: ${(props) => props.theme.color.gray};
@@ -50,8 +77,9 @@ const DataBox = styled.div`
   align-items: flex-start;
   height: 500px;
 `;
-const BackBox = styled.div`
-  margin: 20px 0px 20px 0px;
+const EditBox = styled.div`
+  gap: 10px;
+  display: flex;
 `;
 
 export function NoticePost() {
@@ -76,6 +104,20 @@ export function NoticePost() {
     navigate('/notice/list');
   };
 
+  const handleDelete = async () => {
+    if (!window.confirm('정말 삭제하시겠습니까?')) return;
+
+    try {
+      // DELETE 요청을 보내기 위해 axios.delete 사용
+      await axios.delete(`/notice/delete`, { data: [parseInt(id, 10)] });
+      alert('삭제되었습니다!');
+      navigate('/notice/list'); // 삭제 후 목록으로 이동
+    } catch (error) {
+      console.error('삭제 중 오류 발생 : ', error);
+      alert('삭제에 실패했습니다. 다시 시도해주세요.');
+    }
+  };
+
   const handleNavigateToNotice = () => {
     navigate('/noticeList');
   };
@@ -94,37 +136,33 @@ export function NoticePost() {
         <MoveButton onClick={handleNavigateToNotice}>&lt; 목록</MoveButton>
         <MoveButton onClick={handleNavigateToNext}>다음 &gt;</MoveButton>
       </MoveButtonWrap>
-      <p style={{ fontWeight: 'bold', fontSize: '18px' }}>
-        공지사항 <span style={{ color: '#4064e6' }}>{noticeData.noticeNo}</span>
-      </p>
+
+      <NoticeHeader>
+        <p>
+          공지사항 <span>{noticeData.noticeNo}</span>
+        </p>
+        <EditBox>
+          <StyledButton text="수정" onClick={handleButtonClick} />
+          <StyledButton text="삭제" onClick={handleDelete} />
+        </EditBox>
+      </NoticeHeader>
+
       <CommonHr
         width="1200px"
         margin="20px 0px"
         borderWidth="1.5px"
         borderColor="rgba(128, 128, 128, 0.7)"
       />
+
       <Box>
         <label className="title">{noticeData.title}</label>
 
         <label className="date">{noticeData.createdAt}</label>
       </Box>
-      <CommonHr />
-      <DataBox>{noticeData.content}</DataBox>
 
-      <div>
-        <BackBox>
-          <CommonButton
-            text="목록"
-            width="100px"
-            height="40px"
-            font-size="20px"
-            onClick={handleButtonClick}
-            style={{
-              marginTop: '20px',
-            }}
-          />
-        </BackBox>
-      </div>
+      <CommonHr />
+
+      <DataBox>{noticeData.content}</DataBox>
     </Root>
   );
 }

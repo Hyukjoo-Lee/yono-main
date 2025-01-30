@@ -11,11 +11,16 @@ import com.mmk.dao.NoticeDAO;
 import com.mmk.dto.NoticeDTO;
 import com.mmk.entity.NoticeEntity;
 
+import jakarta.transaction.Transactional;
+
 @Service
 public class NoticeServiceImpl implements NoticeService {
 
   @Autowired
   private NoticeDAO noticeDAO;
+
+  // @Autowired
+  // private UserDAO userDAO;
 
   @Autowired
   private UserService userService;
@@ -26,6 +31,16 @@ public class NoticeServiceImpl implements NoticeService {
     NoticeEntity entity = toEntity(noticeDTO);
     noticeDAO.saveNotice(entity);
   }
+
+  // //글+파일 저장2
+  // @Override
+  // public void save(NoticeDTO noticeData) {
+  //   System.out.println("사용자 ID : " + noticeData.getUserId());
+  //   UserEntity userEntity = userDAO.getUerByUserId(noticeData.getUerId());
+  //   if(userEntity == null){
+  //     throw new RuntimeException("유효하지 않은 사용자 ID : " + noticeData.getUserId());
+  //   }
+  // }
 
   //글 리스트 불러오기
   @Override
@@ -83,6 +98,12 @@ public class NoticeServiceImpl implements NoticeService {
       entity.setUserEntity(userService.findByUserId(dto.getUserId()));
     }
     return entity;
+  }
+
+  @Transactional
+  @Override
+  public void deleteByNotice(List<Integer> ids) {
+    noticeDAO.deleteByNotice(ids);
   }
   
 }

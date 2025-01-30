@@ -11,5 +11,7 @@ public interface NoticeDAO {
   List<NoticeEntity> searchNotice(String keyword);
 
   NoticeEntity findById(int id);
+
+  void deleteByNotice(List<Integer> ids);
   
 }
