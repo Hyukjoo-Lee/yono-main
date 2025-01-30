@@ -32,6 +32,13 @@ public class BadgeEntity {
     @Column(name = "badge")
     private int badge; // 12 -> 뱃지 갯수
 
+    @Column(name = "ranking")
+    private int ranking; // 랭킹 순위
+
+    // @ManyToOne
+    // @JoinColumn(name = "card_History", nullable = false)
+    // private CardHistoryEntity cardHistoryEntity;
+
     @ManyToOne
     @JoinColumn(name = "user_num", nullable = false)
     private UserEntity userEntity;

@@ -33,16 +33,18 @@ public class ReplyEntity {
     
     private int rno; //댓글  번호 
     private int pno; //게시판 번호 
-    private String userId; 
+    
     private String r_content;
     private int like_count;
-
-
+    
+    
     @CreationTimestamp
     private LocalDate regdate;
-
+    
     @CreationTimestamp
     private Timestamp createdAt;
     @CreationTimestamp
     private Timestamp updatedAt;
+    
+    private String userId; 
 }
