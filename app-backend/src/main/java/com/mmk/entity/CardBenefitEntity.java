@@ -48,6 +48,6 @@ public class CardBenefitEntity {
     private Timestamp updatedAt;
 
     @ManyToOne
-    @JoinColumn(name = "card_title", referencedColumnName = "card_title", nullable = false)
+    @JoinColumn(name = "card_id", referencedColumnName = "card_id", nullable = false)
     private CardEntity cardEntity;
 }

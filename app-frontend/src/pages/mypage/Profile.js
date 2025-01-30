@@ -44,7 +44,7 @@ const ProfileButton = styled.button`
   border: none;
   border-radius: 50%;
   // background-color: #4064e6;
-  background-color: transparent;
+  background-color: #f5f5f5;
   color: #4064e6;
   display: flex;
   justify-content: center;

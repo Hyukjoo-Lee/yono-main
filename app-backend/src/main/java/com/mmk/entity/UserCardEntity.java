@@ -40,6 +40,9 @@ public class UserCardEntity {
     @Column(name = "card_pwd", nullable = false)
     private String cardPwd;
 
+    @Column(name = "card_img", nullable = false)
+    private String cardImg;
+
     // 대표카드 설정
     // 대표카드가 아닌 경우 0, 대표카드인 경우 1
     @Column(name = "primary_card", columnDefinition = "int default 0")

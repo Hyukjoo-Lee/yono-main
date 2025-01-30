@@ -11,4 +11,6 @@ public interface UserCardService {
     List<UserCardDTO> getAllCardsByUserNum(int userNum);
 
     UserCardDTO setPrimaryCard(int userCardId, int userNum);
+
+    UserCardDTO findPrimaryCardByUserNum(int userNum);
 }

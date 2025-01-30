@@ -12,7 +12,7 @@ public interface CardHistoryRepository extends JpaRepository<CardHistoryEntity, 
     
     @Query("SELECT c.resUsedDate FROM CardHistoryEntity c " +
        "WHERE c.userCardEntity.userCardId = :userCardId " +
-       "ORDER BY c.resUsedDate DESC")
+       "ORDER BY c.resUsedDate DESC LIMIT 1")
     String findMaxResUsedDate(@Param("userCardId") int userCardId);
 
     @Query("SELECT c FROM CardHistoryEntity c " + 

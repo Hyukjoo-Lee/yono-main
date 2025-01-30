@@ -106,8 +106,12 @@ const CardSlider = ({
   cardInfo,
 }) => {
   return (
+    //   src={`${process.env.REACT_APP_API_URL}${cardImages[0]}`}
     <SlideContainer>
-      <img src={cardImages || CardDemoImage} alt="card" />
+      <img
+        src={`${process.env.REACT_APP_API_URL}${cardImages}` || CardDemoImage}
+        alt="card"
+      />
       {showDetailed && cardTitle && cardInfo && (
         <CardInfo>
           <CardTitle>{cardTitle}</CardTitle>
@@ -123,8 +127,19 @@ const CardSlider = ({
   );
 };
 
-const CustomSlides = ({ cardImages, showDetailed, cardData }) => {
+const CustomSlides = ({
+  cardImages,
+  showDetailed,
+  cardData,
+  onImageSelect,
+}) => {
   const sliderRef = useRef(null);
+
+  useEffect(() => {
+    if (onImageSelect && cardImages.length > 0) {
+      onImageSelect(cardImages[0]);
+    }
+  }, [cardImages, onImageSelect]);
 
   useEffect(() => {
     if (sliderRef.current) {
@@ -141,13 +156,31 @@ const CustomSlides = ({ cardImages, showDetailed, cardData }) => {
     arrows: true,
     nextArrow: <SlickArrow direction="right" />,
     prevArrow: <SlickArrow direction="left" />,
+    afterChange: (currentSlide) => {
+      if (onImageSelect) {
+        onImageSelect(cardImages[currentSlide]);
+      }
+    },
   };
 
-  if (!cardImages && !cardData) {
+  if (cardImages.length === 0 && !cardData) {
     return (
       <SlideContainer>
         <DefaultImageContainer>
           <img src={CardDemoImage} alt="default card" />
+        </DefaultImageContainer>
+      </SlideContainer>
+    );
+  }
+
+  if (cardImages.length === 1 && !cardData) {
+    return (
+      <SlideContainer>
+        <DefaultImageContainer>
+          <img
+            src={`${process.env.REACT_APP_API_URL}${cardImages[0]}`}
+            alt="single card"
+          />
         </DefaultImageContainer>
       </SlideContainer>
     );

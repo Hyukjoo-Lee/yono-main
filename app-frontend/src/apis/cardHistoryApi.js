@@ -1,8 +1,34 @@
 import axios from 'axios';
 
-export const uploadRecentHistory = async (userNum) => {
+export const uploadThreeMonthHistory = async (userNum) => {
   try {
     const response = await axios.get('/cardHistory/monthlyUpload', {
+      params: { userNum },
+    });
+    return response.data;
+  } catch (error) {
+    if (error.response) {
+      return error.response.data;
+    }
+  }
+};
+
+export const uploadOneMonthHistory = async (userNum) => {
+  try {
+    const response = await axios.get('/cardHistory/categoryUpload', {
+      params: { userNum },
+    });
+    return response.data;
+  } catch (error) {
+    if (error.response) {
+      return error.response.data;
+    }
+  }
+};
+
+export const monthData = async (userNum) => {
+  try {
+    const response = await axios.get('/cardHistory/monthData', {
       params: { userNum },
     });
     return response.data;

@@ -27,7 +27,13 @@ const processData = (data) => {
   }));
 };
 
-const Piechart = ({ data }) => {
+const Piechart = ({ data, onClick }) => {
+  const handleBarClick = (data) => {
+    if (onClick) {
+      onClick(data);
+    }
+  };
+
   return (
     <StyledChart>
       <ResponsivePie
@@ -69,6 +75,7 @@ const Piechart = ({ data }) => {
             },
           },
         }}
+        onClick={handleBarClick}
         // legends={[
         //   {
         //     anchor: 'bottom',
