@@ -1,8 +1,7 @@
-import axios from 'axios';
 import { useEffect, useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import styled from 'styled-components';
-import { fetchNoticeDetail } from '../../apis/noticeApi';
+import { deleteNotice, fetchNoticeDetail } from '../../apis/noticeApi';
 import CommonButton from '../../common/CommonButton';
 import CommonHr from '../../common/CommonHr';
 
@@ -91,7 +90,7 @@ export function NoticePost() {
   useEffect(() => {
     const fetchNoticeData = async () => {
       try {
-        const data = await fetchNoticeDetail(id); // API 호출을 함수로 변경
+        const data = await fetchNoticeDetail(id);
         setNoticeData(data);
         console.log(data);
       } catch (error) {
@@ -109,13 +108,12 @@ export function NoticePost() {
     if (!window.confirm('정말 삭제하시겠습니까?')) return;
 
     try {
-      // DELETE 요청을 보내기 위해 axios.delete 사용
-      await axios.delete(`/notice/delete`, { data: [parseInt(id, 10)] });
+      await deleteNotice([parseInt(id, 10)]);
       alert('삭제되었습니다!');
-      navigate('/notice/list'); // 삭제 후 목록으로 이동
+      navigate('/notice/list');
     } catch (error) {
       console.error('삭제 중 오류 발생 : ', error);
-      alert('삭제에 실패했습니다. 다시 시도해주세요.');
+      alert('삭제에 실패했습니다. 다시 시도해주세요!');
     }
   };
 
