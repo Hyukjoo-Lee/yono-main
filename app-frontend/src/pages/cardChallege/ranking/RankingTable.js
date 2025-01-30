@@ -18,13 +18,6 @@ const BoxStyle = styled.div`
   margin-bottom: 10px;
   border: 1px solid ${(props) => props.theme.color.mediumGray};
   overflow: hidden;
-  & > div:nth-child(1) {
-    background: ${(props) => props.theme.color.lightBlue} !important;
-    & p {
-      font-weight: bold !important;
-      color: ${(props) => props.theme.color.gray} !important;
-    }
-  }
 `;
 
 const EmptyBox = styled(BoxStyle)`
@@ -46,14 +39,6 @@ const LoadingBox = styled(EmptyBox)`
   }
 `;
 
-const BoxIn = styled.div`
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  padding: 16px 33px;
-  box-sizing: border-box;
-  border-bottom: 1px solid ${(props) => props.theme.color.mediumGray};
-`;
 const BoxInStyle = styled.div`
   max-height: 400px;
   overflow-y: auto;
@@ -73,6 +58,29 @@ const BoxInStyle = styled.div`
       font-weight: bold;
       color: ${(props) => props.theme.color.blue};
     }
+  }
+`;
+
+const BoxIn = styled.div`
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 16px 33px;
+  box-sizing: border-box;
+  border-bottom: 1px solid ${(props) => props.theme.color.mediumGray};
+`;
+
+const UserBoxIn = styled(BoxIn)`
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 16px 33px;
+  box-sizing: border-box;
+  border-bottom: 1px solid ${(props) => props.theme.color.mediumGray};
+  background: ${(props) => props.theme.color.lightBlue} !important;
+  & p {
+    font-weight: bold !important;
+    color: ${(props) => props.theme.color.gray} !important;
   }
 `;
 
@@ -179,7 +187,7 @@ const RankingTable = ({ isLoggedIn, rankingList, maskName }) => {
       ) : (
         <BoxStyle>
           {userRanking && (
-            <BoxIn>
+            <UserBoxIn>
               <TextBox>
                 <TextStyle>{userRanking.ranking}</TextStyle>
                 <ProfileBox>
@@ -197,7 +205,7 @@ const RankingTable = ({ isLoggedIn, rankingList, maskName }) => {
                 </TextStyle>
               </TextBox>
               <NumberText>{userRanking.badge.toLocaleString()}개</NumberText>
-            </BoxIn>
+            </UserBoxIn>
           )}
           <BoxInStyle>
             {sortedRanking.slice(0, 10).map((item, index) => (
