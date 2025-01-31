@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import styled from 'styled-components';
 import RankingComponent from './RankingComponent';
 import RankingTable from './RankingTable';
-import { updateRankings } from '../../../apis/rankingApi';
+import { updateRankings, userRankings } from '../../../apis/rankingApi';
 import { findUserById } from '../../../apis/userApi';
 import { useSelector } from 'react-redux';
 
@@ -14,6 +14,7 @@ const Root = styled.div`
 const Ranking = () => {
   const isLoggedIn = useSelector((state) => state.user.user?.userNum); // 현재 로그인한 유저의 userNum
   const [users, setUsers] = useState(null);
+  const [userRanking, setUserRanking] = useState([]);
   const [rankingList, setRankingList] = useState([]);
 
   useEffect(() => {
@@ -36,7 +37,9 @@ const Ranking = () => {
   useEffect(() => {
     const initializeRankings = async () => {
       try {
+        const userData = await userRankings(isLoggedIn);
         const data = await updateRankings();
+        setUserRanking(userData);
         setRankingList(data);
       } catch (error) {
         console.error('등수 업데이트 실패', error);
@@ -44,7 +47,7 @@ const Ranking = () => {
     };
 
     initializeRankings();
-  }, []);
+  }, [isLoggedIn]);
 
   // 이름을 마스킹하는 함수
   const maskName = (name) => {
@@ -62,6 +65,7 @@ const Ranking = () => {
       <RankingTable
         users={users}
         isLoggedIn={isLoggedIn}
+        userRanking={userRanking}
         rankingList={rankingList}
         maskName={maskName}
       />

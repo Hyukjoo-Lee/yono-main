@@ -6,4 +6,5 @@ import com.mmk.entity.BadgeEntity;
 
 public interface RankingDAO {
     List<BadgeEntity> getBadgesForPreviousMonth(String previousMonth);
+    BadgeEntity  getUserRanking(String previousMonth, int userNum);
 }

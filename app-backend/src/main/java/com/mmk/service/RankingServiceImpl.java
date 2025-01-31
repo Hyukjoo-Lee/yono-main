@@ -19,6 +19,18 @@ public class RankingServiceImpl implements RankingService {
     private RankingDAO rankingDao;
 
     @Override
+    public RankingDTO getUserRanking(int userNum) {
+        // 현재 날짜 기준으로 이전 달 계산
+        String previousMonth = getPreviousMonth();
+
+        // BadgeDAO를 통해 이전 달 배지 데이터 조회
+        BadgeEntity badgeEntity = rankingDao.getUserRanking(previousMonth, userNum);
+
+        // BadgeEntity -> RankingDTO 변환
+        return convertToDTO(badgeEntity);
+    }
+
+    @Override
     public List<RankingDTO> getBadgesForPreviousMonth() {
         // 현재 날짜 기준으로 이전 달 계산
         String previousMonth = getPreviousMonth();
@@ -26,8 +38,19 @@ public class RankingServiceImpl implements RankingService {
         // BadgeDAO를 통해 이전 달 배지 데이터 조회
         List<BadgeEntity> badgeEntities = rankingDao.getBadgesForPreviousMonth(previousMonth);
 
-        // BadgeEntity -> RankingDTO 변환
-        return badgeEntities.stream().map(this::convertToDTO).collect(Collectors.toList());
+        // BadgeEntity -> RankingDTO 변환 후 정렬 및 상위 100개 제한
+        List<RankingDTO> list = badgeEntities.stream()
+            .map(this::convertToDTO)
+            .sorted((a, b) -> {
+                int rankCompare = Integer.compare(a.getRanking(), b.getRanking());
+                if (rankCompare == 0) {
+                    return Double.compare(b.getPreviousMonthAmount(), a.getPreviousMonthAmount());
+                }
+                return rankCompare;
+            })
+            .limit(100)
+            .collect(Collectors.toList());
+        return list;
     }
 
     // 이전 달을 계산하는 메서드 (예: 2025년 1월 -> 2024년 12월)
@@ -40,6 +63,7 @@ public class RankingServiceImpl implements RankingService {
 
     // Entity를 DTO로 변환하는 메서드
     private RankingDTO convertToDTO(BadgeEntity badgeEntity) {
+        if (badgeEntity == null) return null; // null 체크 추가
         RankingDTO rankingDTO = new RankingDTO();
         rankingDTO.setBadgeNum(badgeEntity.getBadgeNum());
         rankingDTO.setBadgeDate(badgeEntity.getBadgeDate());

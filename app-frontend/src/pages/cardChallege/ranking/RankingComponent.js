@@ -87,21 +87,13 @@ const RankingComponent = ({ rankingList, maskName }) => {
 
   useEffect(() => {
     if (rankingList.length > 0) {
-      // 1. badge 개수 기준 내림차순 정렬, 같은 badge면 previousMonthAmount 기준 내림차순 정렬
-      const sortedList = [...rankingList].sort((a, b) => {
-        if (b.badge === a.badge) {
-          return b.previousMonthAmount - a.previousMonthAmount; // 지난달 사용 금액 기준 정렬
-        }
-        return b.badge - a.badge; // 배지 개수 기준 정렬
-      });
-
-      // 2. 최종 1~3등을 정리할 배열
+      // 최종 1~3등을 정리할 배열
       const top3 = [];
       let lastBadge = null;
       let lastAmount = null;
 
-      for (let i = 0; i < sortedList.length; i++) {
-        const user = sortedList[i];
+      for (let i = 0; i < rankingList.length; i++) {
+        const user = rankingList[i];
 
         // 같은 순위가 아니라면 추가
         if (

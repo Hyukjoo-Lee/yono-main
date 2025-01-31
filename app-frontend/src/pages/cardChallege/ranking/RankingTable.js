@@ -126,46 +126,24 @@ const ProfileBox = styled.div`
   }
 `;
 
-const RankingTable = ({ isLoggedIn, rankingList, maskName }) => {
+const RankingTable = ({
+  isLoggedIn,
+  userRanking,
+  rankingList,
+  maskName,
+}) => {
   const [isLoading, setIsLoading] = useState(true);
   const [sortedRanking, setSortedRanking] = useState([]);
-  const [userRanking, setUserRanking] = useState(null);
+  //const [userRanking, setUserRanking] = useState(null);
 
   useEffect(() => {
     if (rankingList.length > 0) {
-      // 1. badge 기준 내림차순, 같은 badge면 previousMonthAmount 기준 내림차순 정렬
-      const sortedList = [...rankingList].sort((a, b) => {
-        if (b.badge === a.badge) {
-          return b.previousMonthAmount - a.previousMonthAmount;
-        }
-        return b.badge - a.badge;
-      });
-
-      // 2. 같은 순위 처리를 위해 finalRank 부여
-      let currentRank = 1;
-      const rankedList = sortedList.map((item, index, array) => {
-        if (index === 0) {
-          return { ...item, finalRank: currentRank };
-        }
-
-        if (
-          item.badge === array[index - 1].badge &&
-          item.previousMonthAmount === array[index - 1].previousMonthAmount
-        ) {
-          return { ...item, finalRank: array[index - 1].finalRank };
-        }
-
-        currentRank = index + 1;
-        return { ...item, finalRank: currentRank };
-      });
-
-      setSortedRanking(rankedList);
-
+      setSortedRanking(rankingList);
       // 현재 로그인한 유저의 순위 찾기
-      const currentUserData = rankedList.find(
-        (item) => item.userNum === isLoggedIn,
-      );
-      setUserRanking(currentUserData || null);
+      // const currentUserData = rankingList.find(
+      //   (item) => item.userNum === isLoggedIn,
+      // );
+      // setUserRanking(currentUserData || null);
     }
     setIsLoading(false);
   }, [isLoggedIn, rankingList]);
@@ -208,7 +186,7 @@ const RankingTable = ({ isLoggedIn, rankingList, maskName }) => {
             </UserBoxIn>
           )}
           <BoxInStyle>
-            {sortedRanking.slice(0, 10).map((item, index) => (
+            {sortedRanking.map((item, index) => (
               <BoxIn key={index}>
                 <TextBox>
                   {item.ranking === 1 ? (
