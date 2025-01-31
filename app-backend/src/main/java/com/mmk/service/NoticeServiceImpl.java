@@ -19,9 +19,6 @@ public class NoticeServiceImpl implements NoticeService {
   @Autowired
   private NoticeDAO noticeDAO;
 
-  // @Autowired
-  // private UserDAO userDAO;
-
   @Autowired
   private UserService userService;
 
@@ -31,16 +28,6 @@ public class NoticeServiceImpl implements NoticeService {
     NoticeEntity entity = toEntity(noticeDTO);
     noticeDAO.saveNotice(entity);
   }
-
-  // //글+파일 저장2
-  // @Override
-  // public void save(NoticeDTO noticeData) {
-  //   System.out.println("사용자 ID : " + noticeData.getUserId());
-  //   UserEntity userEntity = userDAO.getUerByUserId(noticeData.getUerId());
-  //   if(userEntity == null){
-  //     throw new RuntimeException("유효하지 않은 사용자 ID : " + noticeData.getUserId());
-  //   }
-  // }
 
   //글 리스트 불러오기
   @Override
@@ -58,7 +45,32 @@ public class NoticeServiceImpl implements NoticeService {
     }
     return toDTO(noticeEntity);
   }
-  
+
+  //글 삭제
+  @Transactional
+  @Override
+  public void deleteByNotice(List<Integer> ids) {
+    noticeDAO.deleteByNotice(ids);
+  }
+
+  //글 수정
+  @Override
+  public boolean updateNotice(NoticeDTO noticeDTO) {
+    NoticeEntity existingNotice = noticeDAO.findById(noticeDTO.getNoticeNo());
+    if(existingNotice == null){
+      return false;
+    }
+
+    existingNotice.setTitle(noticeDTO.getTitle());
+    existingNotice.setContent(noticeDTO.getContent());
+    if(noticeDTO.getImgurl() != null){
+      existingNotice.setImgurl(noticeDTO.getImgurl());
+    }
+
+    noticeDAO.saveNotice(existingNotice);
+    return true;
+  }
+
   private NoticeDTO toDTO(NoticeEntity entity){
     if(entity == null){
       return null;
@@ -100,10 +112,5 @@ public class NoticeServiceImpl implements NoticeService {
     return entity;
   }
 
-  @Transactional
-  @Override
-  public void deleteByNotice(List<Integer> ids) {
-    noticeDAO.deleteByNotice(ids);
-  }
   
 }

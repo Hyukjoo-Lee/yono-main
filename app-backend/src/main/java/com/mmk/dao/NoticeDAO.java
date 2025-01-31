@@ -1,6 +1,7 @@
 package com.mmk.dao;
 
 import java.util.List;
+import java.util.Optional;
 
 import com.mmk.entity.NoticeEntity;
 
@@ -13,5 +14,7 @@ public interface NoticeDAO {
   NoticeEntity findById(int id);
 
   void deleteByNotice(List<Integer> ids);
+
+  Optional<NoticeEntity> findNoticeById(int id);
   
 }

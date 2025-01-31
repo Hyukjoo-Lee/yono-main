@@ -1,6 +1,7 @@
 package com.mmk.dao;
 
 import java.util.List;
+import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
@@ -31,6 +32,11 @@ public class NoticeDAOImpl implements NoticeDAO{
   @Override
   public void deleteByNotice(List<Integer> ids) {
     noticeRepo.deleteByNotice(ids);
+  }
+
+  @Override
+  public Optional<NoticeEntity> findNoticeById(int id) {
+    return noticeRepo.findById(id);
   }
   
 }

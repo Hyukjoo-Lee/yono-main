@@ -14,6 +14,6 @@ public interface NoticeService{
 
   void deleteByNotice(List<Integer> ids);
 
-  // void save(NoticeDTO noticeData);
+  boolean updateNotice(NoticeDTO noticeDTO);
 
 }

@@ -126,29 +126,54 @@ public class NoticeController {
     return ResponseEntity.ok().build();
   }
 
-  // //글 수정
-  // @PostMapping("/edit")
-  // public ResponseEntity<Void> editNotice(
-  //   @RequestParam("id") int id,
-  //   @RequestParam("title") String title,
-  //   @RequestParam("content") String content,
-  //   @RequestParam(value = "file",required = false) MultipartFile file,
-  //   @RequestParam(value = "imgurl" , required = false) String imgurl) throws IOException{
+  //글 수정
+  @PostMapping("/edit")
+  public ResponseEntity<Void> editNotice(
+    @RequestParam("id") int id,
+    @RequestParam("title") String title,
+    @RequestParam("content") String content,
+    @RequestParam(value = "file",required = false) MultipartFile file,
+    @RequestParam(value = "imgurl" , required = false) String imgurl) throws IOException{
 
-  //   NoticeDTO existingNotice = noticeService.getNoticeById(id);
-  //     if(existingNotice == null){
-  //       return ResponseEntity.notFound().build();
-  //     }
+    NoticeDTO existingNotice = noticeService.getNoticeById(id);
+      if(existingNotice == null){
+        return ResponseEntity.notFound().build();
+      }
 
-  //     existingNotice.setTitle(title);
-  //     existingNotice.setContent(content);
+      existingNotice.setTitle(title);
+      existingNotice.setContent(content);
 
-  //     if(file != null && !file.isEmpty()){
-  //       if("deleted".equals(imgurl)){
-  //         deleteFile(existingNotice.getImgurl());
-  //         existingNotice.setImgurl(null);
-  //       }
+      if(file != null && !file.isEmpty()){
+        if("deleted".equals(imgurl)){
+          deleteFile(existingNotice.getImgurl());
+          existingNotice.setImgurl(null);
+        }
+        String fileName = saveFile(file);
+        existingNotice.setImgurl(fileName);
+      }else if(imgurl != null && imgurl.isEmpty()){
+        existingNotice.setImgurl(null);
+      }else if("deleted".equals(imgurl)){
+        deleteFile(existingNotice.getImgurl());
+        existingNotice.setImgurl(null);
+      }
+      noticeService.saveNotice(existingNotice);
+      return ResponseEntity.ok().build();
+  }
 
-  //     }
-  // }
+  private void deleteFile(String filePath){
+    if(filePath == null || filePath.isEmpty()){
+      return;
+    }
+    String absolutePath = System.getProperty("user.dir").replace("\\app-backend","").replace("/app-backend","") + filePath;
+    File file = new File(absolutePath);
+    if(file.exists()){
+      if(file.delete()){
+        log.info("Deleted file : " + absolutePath);
+      }else{
+        log.warn("Failed to delete file : " + absolutePath);
+      }
+    }else{
+      log.warn("File does not exist : " + absolutePath);
+    }
+  }
 }
