@@ -2,11 +2,9 @@ import styled from 'styled-components';
 import CardRegFormBox from './CardRegFormBox';
 import CommonCardListBox from '../../common/CommonCardListBox';
 import CommonPageInfo from '../../common/CommonPageInfo';
-import {
-  registeredCardData,
-  card_images,
-} from '../../mockData/cardMockData.js';
-import { useState, useEffect } from 'react';
+import { setPrimaryCard } from '../../apis/cardApi';
+import { useState } from 'react';
+import CommonDialog from '../../common/CommonDialog';
 
 const Root = styled.div`
   width: 100%;
@@ -26,31 +24,34 @@ const ListBox = styled.div`
   }
 `;
 
-const CardRegTab = () => {
-  // 등록된 카드 데이터
-  const [cardData, setCardData] = useState([]);
-  // 카드사 별 이미지 데이터
-  const [cardImg, setCardImg] = useState(card_images);
-  const [isLoaded, setIsLoaded] = useState(false);
+const CardRegTab = ({ user, userCards }) => {
+  const [isPrimaryCardSetSuccess, setIsPrimaryCardSetSuccess] = useState(false);
+  const [isPrimaryCardSetFail, setIsPrimaryCardSetFail] = useState(false);
 
-  useEffect(() => {
-    if (isLoaded) return;
+  const handleCardSelect = async (card) => {
+    try {
+      const userNum = user?.userNum;
+      const userCardId = card?.cardId;
 
-    const fetchCardData = async () => {
-      try {
-        setCardData(registeredCardData);
-        setCardImg(card_images);
-        setIsLoaded(true);
-      } catch (error) {
-        console.error('등록한 카드 데이터 로딩 실패: ', error);
+      const response = await setPrimaryCard(userNum, userCardId);
+
+      if (response?.status === 200) {
+        setIsPrimaryCardSetSuccess(true);
+
+        setTimeout(() => {
+          window.location.reload();
+        }, 1000);
+      } else {
+        setIsPrimaryCardSetFail(true);
       }
-    };
-    fetchCardData();
-  }, [isLoaded]);
+    } catch (error) {
+      setIsPrimaryCardSetFail(true);
+    }
+  };
 
-  const handleCardSelect = (card) => {
-    // TODO: 카드 선택 로직 추가: 선택되면 카드 챌린지 페이지에 적용되는 카드가 변경됨
-    console.log(card);
+  const closeDialog = () => {
+    setIsPrimaryCardSetSuccess(false);
+    setIsPrimaryCardSetFail(false);
   };
 
   return (
@@ -65,15 +66,26 @@ const CardRegTab = () => {
         }
       />
       <Root>
-        <CardRegFormBox cardImg={cardImg} />
+        <CardRegFormBox user={user} />
         <ListBox>
           <CommonCardListBox
-            data={cardData}
-            cardImg={cardImg}
+            data={userCards}
             showDetailed={true}
             onCardSelect={handleCardSelect}
           />
         </ListBox>
+        <CommonDialog
+          open={isPrimaryCardSetSuccess}
+          children="대표 카드가 성공적으로 설정되었습니다."
+          onClose={closeDialog}
+          onConfirm={closeDialog}
+        />
+        <CommonDialog
+          open={isPrimaryCardSetFail}
+          children="대표 카드 설정에 실패했습니다."
+          onClose={closeDialog}
+          onConfirm={closeDialog}
+        />
       </Root>
     </>
   );

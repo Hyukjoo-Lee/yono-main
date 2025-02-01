@@ -213,10 +213,15 @@ export function EditFormBox() {
       formData.append('content', postFormData.content);
 
       const updatedDate = new Date().toISOString().split('T')[0]; // 수정된 날짜
-      formData.append('regdate', updatedDate);
+      formData.append('updatedAt', updatedDate);
 
+      // 이미지 파일이 있는 경우, 파일을 FormData에 추가
       if (postFormData.imgurl) {
-        formData.append('imgurl', postFormData.imgurl);
+        // 파일을 실제 FormData에 추가해야 합니다.
+        const file = document.querySelector('input[type="file"]').files[0]; // 선택된 파일
+        if (file) {
+          formData.append('file', file);
+        }
       }
 
       console.log(postFormData);
@@ -229,7 +234,8 @@ export function EditFormBox() {
         category: postFormData.category,
         content: postFormData.content,
         imgurl: postFormData.imgurl,
-        regdate: updatedDate, // 수정된 날짜
+        regdate: updatedDate,
+        updatedAt: updatedDate, // 수정된 날짜
       });
 
       formData.append('postFormData', postData);

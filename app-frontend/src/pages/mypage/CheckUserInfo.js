@@ -93,73 +93,43 @@ const InputUserIdBox = styled.div`
   align-items: flex-end;
 `;
 
-const CheckUserInfo = ({
-  userNum,
-  userId,
-  password,
-  email,
-  name,
-  address,
-  detailAddress,
-  postcode,
-  spendingTarget,
-  profile,
-  createdAt,
-}) => {
-  const [profileImage, setProfileImage] = useState(profile);
-  const [previewImage, setPreviewImage] = useState(profile);
+const CheckUserInfo = ({ users }) => {
+  console.log(users);
+  const [profileImage, setProfileImage] = useState(users.profile);
+  const [previewImage, setPreviewImage] = useState(users.profile);
   const [isEditing, setIsEditing] = useState(true);
   const [isShowDialog, setIsShowDialog] = useState(false);
   const [passwordError, setPasswordError] = useState('');
   const [isAddressModalOpen, setIsAddressModalOpen] = useState(false);
   const [isDeleteDialog, setIsDeleteDialog] = useState(false);
   const [userInfo, setUserInfo] = useState({
-    userNum: userNum,
-    userId: userId || '',
+    ...users,
     originPassword: '',
-    email: email || '',
-    name: name || '',
-    address: address || '',
-    detailAddress: detailAddress || '',
-    postcode: postcode || '',
-    spendingTarget: spendingTarget || 0,
-    profile: profile || '',
-    createdAt: createdAt || '',
   });
 
   useEffect(() => {
     setUserInfo({
-      userNum: userNum,
-      userId: userId || '',
+      userNum: users.userNum,
+      userId: users.userId || '',
       originPassword: '',
-      email: email || '',
-      name: name || '',
-      address: address || '',
-      detailAddress: detailAddress || '',
-      postcode: postcode || '',
-      spendingTarget: spendingTarget || 0,
-      profile: profile || '',
-      createdAt: createdAt || '',
+      email: users.email || '',
+      name: users.name || '',
+      address: users.address || '',
+      detailAddress: users.detailAddress || '',
+      postcode: users.postcode || '',
+      spendingTarget: users.spendingTarget || 0,
+      profile: users.profile || '',
+      createdAt: users.createdAt || '',
+      state: users.state || '',
+      userRole: users.userRole || '',
     });
 
-    setPreviewImage(profile);
+    setPreviewImage(users.profile);
 
     if (!isShowDialog) {
       document.getElementById('root').removeAttribute('inert');
     }
-  }, [
-    userNum,
-    userId,
-    email,
-    name,
-    address,
-    detailAddress,
-    postcode,
-    spendingTarget,
-    profile,
-    createdAt,
-    isShowDialog,
-  ]);
+  }, [users, isShowDialog]);
 
   const handleProfileChange = (e) => {
     const file = e.target.files[0];
@@ -191,21 +161,23 @@ const CheckUserInfo = ({
   };
 
   const cancelEdit = () => {
-    setProfileImage(profile);
-    setPreviewImage(profile);
+    setProfileImage(users.profile);
+    setPreviewImage(users.profile);
 
     setUserInfo({
-      userNum: userNum,
-      userId: userId || '',
+      userNum: users.userNum,
+      userId: users.userId || '',
       originPassword: '',
-      email: email || '',
-      name: name || '',
-      address: address || '',
-      detailAddress: detailAddress || '',
-      postcode: postcode || '',
-      spendingTarget: spendingTarget || '',
-      profile: profile || '',
-      createdAt: createdAt || '',
+      email: users.email || '',
+      name: users.name || '',
+      address: users.address || '',
+      detailAddress: users.detailAddress || '',
+      postcode: users.postcode || '',
+      spendingTarget: users.spendingTarget || '',
+      profile: users.profile || '',
+      createdAt: users.createdAt || '',
+      state: users.state || '',
+      userRole: users.userRole || '',
     });
 
     setIsEditing(!isEditing);
@@ -234,7 +206,7 @@ const CheckUserInfo = ({
     if (!isFormValid()) {
       setPasswordError('모든 정보를 입력해주세요!');
       isInvalid = false;
-    } else if (password !== userInfo.originPassword) {
+    } else if (users.password !== userInfo.originPassword) {
       setPasswordError(PASSWORD_MISMATCH_MESSAGE);
       isInvalid = false;
     }
@@ -322,12 +294,12 @@ const CheckUserInfo = ({
   };
 
   const nonEditField = [
-    { title: '아이디', value: userId },
-    { title: '이름', value: name },
-    { title: '이메일', value: email },
-    { title: '일일 목표 지출금액', value: spendingTarget },
-    { title: '주소', value: address },
-    { title: '상세주소', value: detailAddress },
+    { title: '아이디', value: users.userId },
+    { title: '이름', value: users.name },
+    { title: '이메일', value: users.email },
+    { title: '일일 목표 지출금액', value: users.spendingTarget },
+    { title: '주소', value: users.address },
+    { title: '상세주소', value: users.detailAddress },
   ];
 
   const editField = [
@@ -517,7 +489,7 @@ const CheckUserInfo = ({
           document.getElementById('root').setAttribute('inert', true);
           setIsShowDialog(false);
         }}
-        password={password}
+        password={users.password}
         userInfo={userInfo}
       />
 

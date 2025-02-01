@@ -50,9 +50,12 @@ public class CardBenefitServiceImpl implements CardBenefitService {
     @Override
     public List<CardBenefitDTO> registerCardBenefits(List<CardBenefitDTO> cardBenefitDTOs) {
         List<CardBenefitDTO> savedBenefits = new ArrayList<>();
-
         for (CardBenefitDTO dto : cardBenefitDTOs) {
             CardEntity cardEntity = cardRepository.findByCardTitle(dto.getCardTitle());
+
+            if (cardEntity == null) {
+                throw new RuntimeException("해당 카드 정보를 찾을 수 없습니다: " + dto.getCardTitle());
+            }
 
             boolean exists = cardBenefitDAO.existsByBenefitTitleAndCard(dto.getBenefitTitle(), cardEntity);
 
@@ -69,7 +72,7 @@ public class CardBenefitServiceImpl implements CardBenefitService {
     }
 
     @Override
-    public CardBenefitDTO createCardBenefit(CardBenefitDTO cardBenefitDTO) {
+    public CardBenefitDTO saveCardBenefit(CardBenefitDTO cardBenefitDTO) {
         CardEntity cardEntity = cardDAO.findByCardTitle(cardBenefitDTO.getCardTitle());
 
         if (cardEntity == null) {

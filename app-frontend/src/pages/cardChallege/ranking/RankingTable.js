@@ -18,13 +18,6 @@ const BoxStyle = styled.div`
   margin-bottom: 10px;
   border: 1px solid ${(props) => props.theme.color.mediumGray};
   overflow: hidden;
-  & > div:nth-child(1) {
-    background: ${(props) => props.theme.color.lightBlue} !important;
-    & p {
-      font-weight: bold !important;
-      color: ${(props) => props.theme.color.gray} !important;
-    }
-  }
 `;
 
 const EmptyBox = styled(BoxStyle)`
@@ -46,14 +39,6 @@ const LoadingBox = styled(EmptyBox)`
   }
 `;
 
-const BoxIn = styled.div`
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  padding: 16px 33px;
-  box-sizing: border-box;
-  border-bottom: 1px solid ${(props) => props.theme.color.mediumGray};
-`;
 const BoxInStyle = styled.div`
   max-height: 400px;
   overflow-y: auto;
@@ -73,6 +58,29 @@ const BoxInStyle = styled.div`
       font-weight: bold;
       color: ${(props) => props.theme.color.blue};
     }
+  }
+`;
+
+const BoxIn = styled.div`
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 16px 33px;
+  box-sizing: border-box;
+  border-bottom: 1px solid ${(props) => props.theme.color.mediumGray};
+`;
+
+const UserBoxIn = styled(BoxIn)`
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 16px 33px;
+  box-sizing: border-box;
+  border-bottom: 1px solid ${(props) => props.theme.color.mediumGray};
+  background: ${(props) => props.theme.color.lightBlue} !important;
+  & p {
+    font-weight: bold !important;
+    color: ${(props) => props.theme.color.gray} !important;
   }
 `;
 
@@ -118,27 +126,26 @@ const ProfileBox = styled.div`
   }
 `;
 
-const RankingTable = ({ isLoggedIn, rankingList, setRankingList }) => {
-  const [isLoading, setIsLoading] = useState(true); // 로딩 상태 추가
-  const [userList, setUserList] = useState([]);
+const RankingTable = ({
+  isLoggedIn,
+  userRanking,
+  rankingList,
+  maskName,
+}) => {
+  const [isLoading, setIsLoading] = useState(true);
+  const [sortedRanking, setSortedRanking] = useState([]);
+  //const [userRanking, setUserRanking] = useState(null);
 
   useEffect(() => {
-    const initializeRankings = async () => {
-      try {
-        //const sortedList = rankingList.sort((a, b) => b.badge - a.badge);
-        const filteredData = rankingList.filter(
-          (item) => item.userNum === isLoggedIn,
-        );
-        setUserList(filteredData);
-        //setRankingList(sortedList);
-      } catch (error) {
-        console.error('Error initializing rankings:', error);
-      } finally {
-        setIsLoading(false);
-      }
-    };
-
-    initializeRankings();
+    if (rankingList.length > 0) {
+      setSortedRanking(rankingList);
+      // 현재 로그인한 유저의 순위 찾기
+      // const currentUserData = rankingList.find(
+      //   (item) => item.userNum === isLoggedIn,
+      // );
+      // setUserRanking(currentUserData || null);
+    }
+    setIsLoading(false);
   }, [isLoggedIn, rankingList]);
 
   return (
@@ -157,60 +164,62 @@ const RankingTable = ({ isLoggedIn, rankingList, setRankingList }) => {
         </EmptyBox>
       ) : (
         <BoxStyle>
-          <BoxIn>
-            <TextBox>
-              <TextStyle>{userList[0]?.rankingPosition}</TextStyle>
-              <ProfileBox>
-                {userList[0]?.profile !== 'temp_profile' ? (
-                  <img
-                    src={`http://localhost:8065${userList[0]?.profile}`}
-                    alt={userList[0]?.name}
-                  />
-                ) : (
-                  <Profile />
-                )}
-              </ProfileBox>
-              <TextStyle>
-                {userList[0]?.name}({userList[0]?.userId})
-              </TextStyle>
-            </TextBox>
-            <NumberText>{userList[0]?.badge.toLocaleString()}</NumberText>
-          </BoxIn>
+          {userRanking && (
+            <UserBoxIn>
+              <TextBox>
+                <TextStyle>{userRanking.ranking}</TextStyle>
+                <ProfileBox>
+                  {userRanking.profile !== 'temp_profile' ? (
+                    <img
+                      src={`http://localhost:8065${userRanking.profile}`}
+                      alt={maskName(userRanking.name)}
+                    />
+                  ) : (
+                    <Profile />
+                  )}
+                </ProfileBox>
+                <TextStyle>
+                  {maskName(userRanking.name)}({userRanking.userId})
+                </TextStyle>
+              </TextBox>
+              <NumberText>{userRanking.badge.toLocaleString()}개</NumberText>
+            </UserBoxIn>
+          )}
           <BoxInStyle>
-            {rankingList.map((item, index) => (
+            {sortedRanking.map((item, index) => (
               <BoxIn key={index}>
                 <TextBox>
-                  {item.rankingPosition === 1 ? (
+                  {item.ranking === 1 ? (
                     <MedalBox>
                       <Medal1 />
                     </MedalBox>
-                  ) : item.rankingPosition === 2 ? (
+                  ) : item.ranking === 2 ? (
                     <MedalBox>
                       <Medal2 />
                     </MedalBox>
-                  ) : item.rankingPosition === 3 ? (
+                  ) : item.ranking === 3 ? (
                     <MedalBox>
                       <Medal3 />
                     </MedalBox>
                   ) : (
-                    <TextStyle>{item.rankingPosition}</TextStyle>
+                    <TextStyle>{item.ranking}</TextStyle>
                   )}
 
                   <ProfileBox>
                     {item.profile !== 'temp_profile' ? (
                       <img
                         src={`http://localhost:8065${item.profile}`}
-                        alt={item.name}
+                        alt={maskName(item.name)}
                       />
                     ) : (
                       <Profile />
                     )}
                   </ProfileBox>
                   <TextStyle>
-                    {item.name}({item.userId})
+                    {maskName(item.name)}({item.userId})
                   </TextStyle>
                 </TextBox>
-                <NumberText>{item.badge.toLocaleString()}</NumberText>
+                <NumberText>{item.badge.toLocaleString()}개</NumberText>
               </BoxIn>
             ))}
           </BoxInStyle>

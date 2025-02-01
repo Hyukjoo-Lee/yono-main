@@ -11,17 +11,18 @@ const StyledWrap = styled.div`
 `;
 
 export function MainPage() {
-  const isLoggedIn = useSelector((state) => state.user.isLoggedIn);
+  // const isLoggedIn = useSelector((state) => state.user.isLoggedIn);
+
   const user = useSelector((state) => state.user.user);
 
-  // redux 상태를 확인
   console.log('로그인 된 유저: ' + JSON.stringify(user));
 
   return (
     <CommonRoot>
       <StyledWrap>
         <MainIntro />
-        <MainCardBox isLoggedIn={isLoggedIn} />
+        {/* <MainCardBox isLoggedIn={isLoggedIn} /> */}
+        <MainCardBox />
         <MainBox />
       </StyledWrap>
     </CommonRoot>

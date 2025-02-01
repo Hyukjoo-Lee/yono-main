@@ -41,11 +41,11 @@ public class CardHistoryServiceImpl implements CardHistoryService {
     @Autowired
     CodefService codefService;
 
-    // DB에 있는 최근 3개월 카드내역 불러오기 
-    public List<CardHistoryDTO> uploadCardHistory(int userNum) {
+    // DB에 있는 카드내역 불러오기 
+    public List<CardHistoryDTO> uploadCardHistory(int userNum, int month) {
 
         LocalDate today = LocalDate.now();
-        LocalDate twoMonthsAgoFirstDay = today.minusMonths(2).withDayOfMonth(1);
+        LocalDate twoMonthsAgoFirstDay = today.minusMonths(month).withDayOfMonth(1);
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyyMMdd");
         String startDate = twoMonthsAgoFirstDay.format(formatter);
 
@@ -111,8 +111,8 @@ public class CardHistoryServiceImpl implements CardHistoryService {
 
     // 일별 통계 -> DB에서 데이터 불러오기
     @Override
-    public List<DailyStatisticsDTO> getDailyStatistics() {
-        return cardHistoryDAO.getDailyStatistics().stream()
+    public List<DailyStatisticsDTO> getCardHistoryByUserAndPrimaryCard(int userNum) {
+        return cardHistoryDAO.findByUserNumAndPrimaryCard(userNum).stream()
                 .map(cardDto -> {
                     DailyStatisticsDTO dailyDto = new DailyStatisticsDTO();
                     dailyDto.setResApprovalNo(cardDto.getResApprovalNo());
@@ -134,7 +134,7 @@ public class CardHistoryServiceImpl implements CardHistoryService {
     // 월별통계 - DB에 있는 최근 3개월 카드내역 불러오기
     @Override
     public List<MonthlySummaryDTO> uploadMonthlyHistory(int userNum) {
-        List<CardHistoryDTO> data = uploadCardHistory(userNum);
+        List<CardHistoryDTO> data = uploadCardHistory(userNum, 2);
         List<MonthlySummaryDTO> result = monthlyHistoryProcess(data);
         return result;
     }
@@ -165,6 +165,20 @@ public class CardHistoryServiceImpl implements CardHistoryService {
             e.printStackTrace();
             return Collections.emptyList();
         }
+    }
+
+    // 목차별통계 - DB에 있는 최근 1개월 카드내역 불러오기
+    @Override
+    public List<MonthlySummaryDTO> uploadCategoryHistory(int userNum) {
+        List<CardHistoryDTO> data = uploadCardHistory(userNum, 0);
+        List<MonthlySummaryDTO> result = monthlyHistoryProcess(data);
+        return result;
+    }
+
+    // 목차별통계 - DB에 있는 가공되지 않은 최근 1개월 카드내역 불러오기
+    @Override
+    public List<CardHistoryDTO> monthData(int userNum) {
+        return uploadCardHistory(userNum, 0);
     }
     
     private CardHistoryDTO toDTO(CardHistoryEntity entity) {

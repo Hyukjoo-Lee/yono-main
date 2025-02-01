@@ -5,12 +5,11 @@ import CheckUserInfo from './CheckUserInfo';
 import { useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
-import { findUserById } from '../../apis/userApi';
 import CommonDialog from '../../common/CommonDialog';
 
 export function MyPage() {
-  const userNum = useSelector((state) => state.user.user?.userNum);
-  const [users, setUsers] = useState(null);
+  const user = useSelector((state) => state.user.user);
+  const [users, setUsers] = useState({});
   const [loading, setLoading] = useState(true);
   const [isShowDialog, setIsShowDialog] = useState(false);
 
@@ -19,11 +18,10 @@ export function MyPage() {
   useEffect(() => {
     const fetchUser = async () => {
       try {
-        if (!userNum) {
+        if (!user) {
           setIsShowDialog(true);
         } else {
-          const user = await findUserById(userNum);
-          setUsers(user.data);
+          setUsers(user);
         }
       } catch (error) {
         setIsShowDialog(true);
@@ -33,7 +31,7 @@ export function MyPage() {
     };
 
     fetchUser();
-  }, [userNum]);
+  }, [user]);
 
   if (loading) {
     return <div>Loading...</div>;
@@ -53,7 +51,7 @@ export function MyPage() {
       ) : (
         <CommonRoot>
           <CommonPageInfo title="마이 페이지" text={<p></p>} />
-          <CheckUserInfo {...users} />
+          <CheckUserInfo users={users} />
         </CommonRoot>
       )}
     </>

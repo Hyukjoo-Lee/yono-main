@@ -1,11 +1,10 @@
 package com.mmk.entity;
 
 import java.sql.Timestamp;
+import jakarta.persistence.*;
 
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
-
-import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
@@ -32,13 +31,12 @@ public class UserCardEntity {
     @Column(name = "expiry_date", nullable = false)
     private String expiryDate;
 
-    // 사용자 이름 (카드 표기용)
-    @Column(name = "user_name", nullable = false)
-    private String userName;
-
     // 카드 비밀번호
     @Column(name = "card_pwd", nullable = false)
     private String cardPwd;
+
+    @Column(name = "card_img", nullable = false)
+    private String cardImg;
 
     // 대표카드 설정
     // 대표카드가 아닌 경우 0, 대표카드인 경우 1
@@ -56,10 +54,10 @@ public class UserCardEntity {
     private CardCompanyEntity cardCompanyEntity;
 
     @ManyToOne
-    @JoinColumn(name = "card_id", nullable = false)
+    @JoinColumn(name = "card_id", referencedColumnName = "card_id", nullable = false)
     private CardEntity cardEntity;
 
     @ManyToOne
-    @JoinColumn(name = "user_num", nullable = false)
+    @JoinColumn(name = "user_num", referencedColumnName = "user_num", nullable = false)
     private UserEntity userEntity;
 }

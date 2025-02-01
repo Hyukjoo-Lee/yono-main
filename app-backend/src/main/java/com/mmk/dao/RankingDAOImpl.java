@@ -1,36 +1,26 @@
 package com.mmk.dao;
 
 import java.util.List;
-import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
-import com.mmk.entity.RankingEntity;
+import com.mmk.entity.BadgeEntity;
 
 @Repository
 public class RankingDAOImpl implements RankingDAO {
 
     @Autowired
-    private RankingRepository rankingRepo;
+    private RankingRepository rankingRepository;
 
     @Override
-    public List<RankingEntity> getAllRankings() {
-        return rankingRepo.findAll();
-    }
-    
-    @Override
-    public void saveAll(List<RankingEntity> rankings) {
-        rankingRepo.saveAll(rankings);
+    public List<BadgeEntity> getBadgesForPreviousMonth(String previousMonth) {
+        // BadgeRepository를 통해 이전 달 기준 배지 데이터 조회
+        return rankingRepository.findByBadgeDate(previousMonth);
     }
 
     @Override
-    public Optional<RankingEntity> findByBadgeNum(int badgeNum) {
-        return rankingRepo.findByBadgeEntity_BadgeNum(badgeNum);
-    }
-
-    @Override
-    public void updateRankings() {
-        rankingRepo.updateRankings();
+    public BadgeEntity getUserRanking(String previousMonth, int userNum) {
+        return rankingRepository.findByBadgeDateAndUserEntity_UserNum(previousMonth, userNum);
     }
 }

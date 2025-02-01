@@ -120,14 +120,11 @@ const DailyStatistics = () => {
     fetchUser();
   }, [isLoggedIn]);
 
-  
   const fetchStatistics = useCallback(async () => {
     setIsLoading(true);
     try {
-      const data = await fetchDailyStatistics(); // API 호출
-      // 로그인한 사용자의 userNum과 일치하는 데이터만 필터링
-      const filteredData = data.filter((item) => item.userNum === isLoggedIn);
-      setStatistics(filteredData);
+      const data = await fetchDailyStatistics(isLoggedIn); // API 호출
+      setStatistics(data);
     } catch (error) {
       console.error('Failed to fetch statistics:', error);
       console.error('유저 정보 실패: ', users);

@@ -17,6 +17,13 @@ public interface UserCardRepository extends JpaRepository<UserCardEntity, Intege
     // 모든 카드 조회
     List<UserCardEntity> findByUserEntityUserNum(int userNum);
 
+    // 마스터 카드 정보와 혜택을 포함한 모든 카드 조회
+    @Query("SELECT uc FROM UserCardEntity uc " +
+            "JOIN FETCH uc.cardEntity c " +
+            "LEFT JOIN FETCH c.cardBenefits " +
+            "WHERE uc.userEntity.userNum = :userNum")
+    List<UserCardEntity> findAllByUserNum(@Param("userNum") int userNum);
+
     @Modifying
     @Transactional
     @Query("UPDATE UserCardEntity u SET u.primaryCard = 0 WHERE u.userEntity.userNum = :userNum")

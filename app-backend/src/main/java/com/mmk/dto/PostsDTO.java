@@ -19,7 +19,7 @@ public class PostsDTO {
     private int no;
     private String title;
     private String category;
-    private String userId;
+
     private String content;
 
     @JsonFormat(pattern = "yyyy-MM-dd") // 직렬화 시 형식 지정
@@ -32,6 +32,8 @@ public class PostsDTO {
     private Timestamp updatedAt;
     private String imgurl;
     private String file;
+
+    private String userId;
 
 
     
