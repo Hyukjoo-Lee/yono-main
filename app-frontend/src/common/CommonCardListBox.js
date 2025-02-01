@@ -51,6 +51,10 @@ const CardName = styled.p`
   font-size: 20px;
   color: #212121;
   font-weight: bold;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  max-width: 200px;
 `;
 
 const DailyCardName = styled(CardName)`
@@ -84,8 +88,7 @@ const TextStyle = styled(TitleStyle)`
 `;
 
 const CardImage = styled.img`
-  width: 100px;
-  height: auto;
+  width: 80px;
 `;
 
 const SmallCardImage = styled(CardImage)`
