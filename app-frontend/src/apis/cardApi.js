@@ -1,5 +1,6 @@
 import axios from 'axios';
 
+// Codef API 시작
 export const getToken = async () => {
   await axios.get('/codef/getToken');
 };
@@ -36,6 +37,7 @@ export const saveCodefCard = async (userNum, organization) => {
     console.error('데이터 저장 중 오류 발생:', error);
   }
 };
+// Codef API 끝
 
 export const getprimaryCardInfo = async (userNum) => {
   try {
@@ -72,5 +74,23 @@ export const registerCard = async (cardData) => {
   } catch (error) {
     console.error('카드 등록 중 알 수 없는 오류 발생:', error);
     return null;
+  }
+};
+
+export const getAllCardsInfoByUserNum = async (userNum) => {
+  try {
+    const response = await axios.get(`/card/user/${userNum}/details`);
+    return response.data;
+  } catch (error) {
+    console.error('데이터 조회 중 오류 발생', error);
+  }
+};
+
+export const getAllCardBenefitsByCardTitle = async (cardTitle) => {
+  try {
+    const response = await axios.get(`/benefit/${cardTitle}`);
+    return response.data;
+  } catch (error) {
+    console.error('데이터 조회 중 오류 발생', error);
   }
 };

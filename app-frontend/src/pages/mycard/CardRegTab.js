@@ -2,7 +2,6 @@ import styled from 'styled-components';
 import CardRegFormBox from './CardRegFormBox';
 import CommonCardListBox from '../../common/CommonCardListBox';
 import CommonPageInfo from '../../common/CommonPageInfo';
-import { useState, useEffect } from 'react';
 
 const Root = styled.div`
   width: 100%;
@@ -22,24 +21,7 @@ const ListBox = styled.div`
   }
 `;
 
-const CardRegTab = ({user}) => {
-  // 등록된 카드 데이터
-  const [cardData, setCardData] = useState([]);
-  const [isLoaded, setIsLoaded] = useState(false);
-  useEffect(() => {
-    if (isLoaded) return;
-
-    const fetchCardData = async () => {
-      try {
-        setCardData([]);
-        setIsLoaded(true);
-      } catch (error) {
-        console.error('등록한 카드 데이터 로딩 실패: ', error);
-      }
-    };
-    fetchCardData();
-  }, [isLoaded]);
-
+const CardRegTab = ({ user, userCards }) => {
   const handleCardSelect = (card) => {
     // TODO: 카드 선택 로직 추가: 선택되면 카드 챌린지 페이지에 적용되는 카드가 변경됨
     console.log(card);
@@ -57,10 +39,10 @@ const CardRegTab = ({user}) => {
         }
       />
       <Root>
-        <CardRegFormBox user={user}/>
+        <CardRegFormBox user={user} />
         <ListBox>
           <CommonCardListBox
-            data={cardData}
+            data={userCards}
             showDetailed={true}
             onCardSelect={handleCardSelect}
           />
