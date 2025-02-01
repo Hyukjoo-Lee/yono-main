@@ -39,6 +39,5 @@ drop table user_info;
 
 delete from user_info where name = '김지훈';
 
-update user_info set profile = '/images/image1.jpg' where user_num = 41;
-update user_info set state = 1 where user_num = 96;
+update user_info set name = '홍길동구리' where user_num = 30;
 update user_info set state = 1, USER_ROLE = 0 where user_num = 101;
