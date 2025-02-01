@@ -16,11 +16,11 @@ const LoadingText = styled(Typography)`
   font-size: ${theme.fontSize.lg};
 `;
 
-const CommonLoading = () => {
+const CommonLoading = ({ message = '데이터 로딩 중...' }) => {
   return (
     <LoadingContainer>
       <CircularProgress />
-      <LoadingText>데이터 로딩 중...</LoadingText>
+      <LoadingText>{message}</LoadingText>
     </LoadingContainer>
   );
 };

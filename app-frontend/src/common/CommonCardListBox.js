@@ -15,6 +15,7 @@ import HealthAndSafetyIcon from '@mui/icons-material/HealthAndSafety';
 import LocalPharmacyIcon from '@mui/icons-material/LocalPharmacy';
 import HomeIcon from '@mui/icons-material/Home';
 import HelpOutlineIcon from '@mui/icons-material/HelpOutline';
+import VerifiedIcon from '@mui/icons-material/Verified';
 
 const HoverButtonContainer = styled.div`
   margin: 0 10px 28px 0;
@@ -192,13 +193,23 @@ const CommonCardListBox = ({
                 </CardInfoContainer>
                 <CardInfoContainer>
                   <HoverButtonContainer>
-                    <CommonButton
-                      text={buttonText}
-                      fontSize="16px"
-                      width="100px"
-                      height="30px"
-                      onClick={() => onCardSelect(card)}
-                    />
+                    {card.primaryCard === 1 ? (
+                      <TitleStyle>
+                        대표카드
+                        <VerifiedIcon
+                          style={{ color: '#4CAF50' }}
+                          fontSize="24px"
+                        />
+                      </TitleStyle>
+                    ) : (
+                      <CommonButton
+                        text={buttonText}
+                        fontSize="16px"
+                        width="100px"
+                        height="30px"
+                        onClick={() => onCardSelect(card)}
+                      />
+                    )}
                   </HoverButtonContainer>
 
                   {card.cardInfo.slice(0, 3).map((benefit, index) => (

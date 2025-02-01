@@ -119,6 +119,7 @@ public class UserCardServiceImpl implements UserCardService {
             UserCardDTO dto = new UserCardDTO();
             dto.setUserCardId(entity.getUserCardId());
             dto.setUserCardNum(maskCardNumber(entity.getUserCardNum()));
+            dto.setPrimaryCard(entity.getPrimaryCard());
             dto.setCardImg(entity.getCardImg());
 
             dto.setCardTitle(entity.getCardEntity().getCardTitle());

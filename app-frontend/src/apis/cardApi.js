@@ -52,6 +52,18 @@ export const getprimaryCardInfo = async (userNum) => {
   }
 };
 
+export const setPrimaryCard = async (userNum, userCardId) => {
+  try {
+    const response = await axios.get(
+      `/card/setPrimaryCard?userCardId=${userCardId}&userNum=${userNum}`,
+    );
+    return response.data;
+  } catch (error) {
+    console.error('대표 카드 설정 중 오류 발생:', error);
+    throw error;
+  }
+};
+
 export const getCardListByCompany = async (organization) => {
   try {
     const response = await axios.get(`/card/${organization}`);

@@ -2,6 +2,9 @@ import styled from 'styled-components';
 import CardRegFormBox from './CardRegFormBox';
 import CommonCardListBox from '../../common/CommonCardListBox';
 import CommonPageInfo from '../../common/CommonPageInfo';
+import { setPrimaryCard } from '../../apis/cardApi';
+import { useState } from 'react';
+import CommonDialog from '../../common/CommonDialog';
 
 const Root = styled.div`
   width: 100%;
@@ -22,9 +25,33 @@ const ListBox = styled.div`
 `;
 
 const CardRegTab = ({ user, userCards }) => {
-  const handleCardSelect = (card) => {
-    // TODO: 카드 선택 로직 추가: 선택되면 카드 챌린지 페이지에 적용되는 카드가 변경됨
-    console.log(card);
+  const [isPrimaryCardSetSuccess, setIsPrimaryCardSetSuccess] = useState(false);
+  const [isPrimaryCardSetFail, setIsPrimaryCardSetFail] = useState(false);
+
+  const handleCardSelect = async (card) => {
+    try {
+      const userNum = user?.userNum;
+      const userCardId = card?.cardId;
+
+      const response = await setPrimaryCard(userNum, userCardId);
+
+      if (response?.status === 200) {
+        setIsPrimaryCardSetSuccess(true);
+
+        setTimeout(() => {
+          window.location.reload();
+        }, 1000);
+      } else {
+        setIsPrimaryCardSetFail(true);
+      }
+    } catch (error) {
+      setIsPrimaryCardSetFail(true);
+    }
+  };
+
+  const closeDialog = () => {
+    setIsPrimaryCardSetSuccess(false);
+    setIsPrimaryCardSetFail(false);
   };
 
   return (
@@ -47,6 +74,18 @@ const CardRegTab = ({ user, userCards }) => {
             onCardSelect={handleCardSelect}
           />
         </ListBox>
+        <CommonDialog
+          open={isPrimaryCardSetSuccess}
+          children="대표 카드가 성공적으로 설정되었습니다."
+          onClose={closeDialog}
+          onConfirm={closeDialog}
+        />
+        <CommonDialog
+          open={isPrimaryCardSetFail}
+          children="대표 카드 설정에 실패했습니다."
+          onClose={closeDialog}
+          onConfirm={closeDialog}
+        />
       </Root>
     </>
   );

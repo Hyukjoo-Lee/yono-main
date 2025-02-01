@@ -52,9 +52,11 @@ export function MyCard() {
         const response = await getAllCardsInfoByUserNum(userFromStore.userNum);
 
         const formattedCards = response.data.map((card) => ({
+          cardId: card.userCardId,
           cardNumber: card.userCardNum,
           cardTitle: card.cardTitle,
           cardImg: card.cardImg,
+          primaryCard: card.primaryCard,
           cardInfo: card.cardBenefits.map((benefit) => ({
             title: benefit.benefitTitle,
             value: benefit.benefitValue,

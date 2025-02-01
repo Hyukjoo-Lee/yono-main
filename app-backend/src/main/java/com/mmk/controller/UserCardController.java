@@ -69,9 +69,12 @@ public class UserCardController {
     @GetMapping("/setPrimaryCard")
     public ResponseEntity<ApiResponse<UserCardDTO>> setPrimaryCard(@RequestParam("userCardId") int userCardId,
             @RequestParam("userNum") int userNum) {
+
         try {
-            UserCardDTO userCardDTO = userCardService.setPrimaryCard(userCardId, userNum);
-            ApiResponse<UserCardDTO> response = new ApiResponse<>(201, "대표카드 등록성공", userCardDTO);
+            UserCardDTO userCardDTO = userCardService.setPrimaryCard(userCardId,
+                    userNum);
+            ApiResponse<UserCardDTO> response = new ApiResponse<>(200, "대표카드 등록성공",
+                    userCardDTO);
             return ResponseEntity.status(HttpStatus.CREATED).body(response);
         } catch (Exception e) {
             e.printStackTrace();
@@ -79,4 +82,5 @@ public class UserCardController {
                     .body(new ApiResponse<>(404, "대표카드 등록실패.", null));
         }
     }
+
 }
