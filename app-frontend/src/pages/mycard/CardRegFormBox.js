@@ -18,7 +18,8 @@ import {
   EMPTY_VALIDITY_MESSAGE,
   VALIDITY_REGEX_MESSAGE,
 } from '../../common/Message';
-import { getCardListByCompany } from '../../apis/cardApi';
+import { getCardListByCompany, registerCard } from '../../apis/cardApi';
+import CommonDialog from '../../common/CommonDialog';
 
 const FormBox = styled.form`
   width: 100%;
@@ -81,13 +82,14 @@ const CARD_COMPANY_LIST = [
   { value: '0306', label: '신한카드' },
 ];
 
-const CardRegFormBox = ({ cardImg }) => {
+const CardRegFormBox = ({user}) => {
   const [formData, setFormData] = useState({
+    userNum: user.userNum,
     cardNumber: '',
     cardPwd: '',
     cardValidity: '',
-    selectedCardTitle: '', // 카드이름
-    selectedCardType: '', // 기관코드
+    selectedCardTitle: '',
+    selectedCardType: '',
     selectedCardImg: '',
   });
 
@@ -104,6 +106,9 @@ const CardRegFormBox = ({ cardImg }) => {
   const [cardImages, setCardImages] = useState([]);
 
   const [cardNumToSave, setCardNumToSave] = useState('');
+
+  const [isRegSuccessVisible, setIsRegSuccessVisible] = useState(false);
+  const [isRegFailVisible, setIsRegFailVisible] = useState(false);
 
   // 카드 회사 선택 시 카드 목록 가져오기
   const handleCardCompanyChange = async (organization) => {
@@ -228,15 +233,43 @@ const CardRegFormBox = ({ cardImg }) => {
     return Object.keys(errors).length === 0;
   };
 
-  const handleSubmit = (event) => {
+  const handleSubmit = async (event) => {
     event.preventDefault();
 
     if (!validateForm()) return;
 
     const cardNumber = cardNumToSave;
     const updatedFormData = { ...formData, cardNumber };
-    // api 전송
-    console.log('data to send: ' + JSON.stringify(updatedFormData));
+
+    const body = {
+      userNum: updatedFormData.userNum,
+      userCardNum: updatedFormData.cardNumber,
+      cardPwd: updatedFormData.cardPwd,
+      expiryDate: updatedFormData.cardValidity,
+      cardTitle: updatedFormData.selectedCardTitle,
+      organization: updatedFormData.selectedCardType,
+      cardImg: updatedFormData.selectedCardImg,
+    };
+
+    try {
+      const response = await registerCard(body);
+      if (response) {
+        setIsRegSuccessVisible(true);
+      } else {
+        setIsRegFailVisible(true);
+      }
+    } catch (error) {
+      console.error('카드 등록 실패:', error);
+      setIsRegFailVisible(true);
+    }
+  };
+
+  const completeCardReg = () => {
+    setIsRegSuccessVisible(false);
+  };
+
+  const closeDialog = () => {
+    setIsRegFailVisible(false);
   };
 
   return (
@@ -346,6 +379,18 @@ const CardRegFormBox = ({ cardImg }) => {
           </Grid2>
         </Grid2>
       </Box>
+      <CommonDialog
+        open={isRegSuccessVisible}
+        children={'카드 등록에 성공했습니다.'}
+        onClose={completeCardReg}
+        onClick={completeCardReg}
+      />
+      <CommonDialog
+        open={isRegFailVisible}
+        children={'카드 등록에 실패했습니다.'}
+        onClose={closeDialog}
+        onClick={closeDialog}
+      />
     </FormBox>
   );
 };

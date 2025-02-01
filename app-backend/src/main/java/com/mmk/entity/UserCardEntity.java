@@ -32,10 +32,6 @@ public class UserCardEntity {
     @Column(name = "expiry_date", nullable = false)
     private String expiryDate;
 
-    // 사용자 이름 (카드 표기용)
-    @Column(name = "user_name", nullable = false)
-    private String userName;
-
     // 카드 비밀번호
     @Column(name = "card_pwd", nullable = false)
     private String cardPwd;

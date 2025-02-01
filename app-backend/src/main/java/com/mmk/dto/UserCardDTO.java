@@ -14,7 +14,6 @@ public class UserCardDTO {
     private int userCardId;
     private String userCardNum;
     private String expiryDate;
-    private String userName;
     private String cardPwd;
     private String cardImg;
     private int primaryCard = 0;

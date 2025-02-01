@@ -2,10 +2,6 @@ import styled from 'styled-components';
 import CardRegFormBox from './CardRegFormBox';
 import CommonCardListBox from '../../common/CommonCardListBox';
 import CommonPageInfo from '../../common/CommonPageInfo';
-import {
-  registeredCardData,
-  card_images,
-} from '../../mockData/cardMockData.js';
 import { useState, useEffect } from 'react';
 
 const Root = styled.div`
@@ -26,20 +22,16 @@ const ListBox = styled.div`
   }
 `;
 
-const CardRegTab = () => {
+const CardRegTab = ({user}) => {
   // 등록된 카드 데이터
   const [cardData, setCardData] = useState([]);
-  // 카드사 별 이미지 데이터
-  const [cardImg, setCardImg] = useState(card_images);
   const [isLoaded, setIsLoaded] = useState(false);
-
   useEffect(() => {
     if (isLoaded) return;
 
     const fetchCardData = async () => {
       try {
-        setCardData(registeredCardData);
-        setCardImg(card_images);
+        setCardData([]);
         setIsLoaded(true);
       } catch (error) {
         console.error('등록한 카드 데이터 로딩 실패: ', error);
@@ -65,11 +57,10 @@ const CardRegTab = () => {
         }
       />
       <Root>
-        <CardRegFormBox cardImg={cardImg} />
+        <CardRegFormBox user={user}/>
         <ListBox>
           <CommonCardListBox
             data={cardData}
-            cardImg={cardImg}
             showDetailed={true}
             onCardSelect={handleCardSelect}
           />
