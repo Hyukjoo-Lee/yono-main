@@ -114,6 +114,11 @@ const AdditionalInfo = styled.div`
   margin-bottom: 3px;
 `;
 
+const VerifiedTextContainer = styled.div`
+  margin: 0 10px 28px 0;
+  width: '100px';
+`;
+
 export const getBenefitIcon = (type) => {
   switch (type) {
     case '주유':
@@ -192,16 +197,14 @@ const CommonCardListBox = ({
                   ))}
                 </CardInfoContainer>
                 <CardInfoContainer>
-                  <HoverButtonContainer>
-                    {card.primaryCard === 1 ? (
-                      <TitleStyle>
-                        대표카드
-                        <VerifiedIcon
-                          style={{ color: '#4CAF50' }}
-                          fontSize="24px"
-                        />
-                      </TitleStyle>
-                    ) : (
+                  {card.primaryCard === 1 ? (
+                    <VerifiedTextContainer>
+                      <VerifiedIcon
+                        style={{ color: '#4CAF50', fontSize: '28px' }}
+                      />
+                    </VerifiedTextContainer>
+                  ) : (
+                    <HoverButtonContainer>
                       <CommonButton
                         text={buttonText}
                         fontSize="16px"
@@ -209,8 +212,8 @@ const CommonCardListBox = ({
                         height="30px"
                         onClick={() => onCardSelect(card)}
                       />
-                    )}
-                  </HoverButtonContainer>
+                    </HoverButtonContainer>
+                  )}
 
                   {card.cardInfo.slice(0, 3).map((benefit, index) => (
                     <AdditionalInfo key={index}>
