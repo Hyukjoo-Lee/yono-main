@@ -58,3 +58,19 @@ export const getCardListByCompany = async (organization) => {
     console.error('데이터 조회 중 오류 발생', error);
   }
 };
+
+export const registerCard = async (cardData) => {
+  try {
+    const organization = cardData.organization;
+    const cardTitle = cardData.cardTitle;
+
+    const response = await axios.post('/card/register', cardData, {
+      params: { organization, cardTitle },
+    });
+
+    return response.data;
+  } catch (error) {
+    console.error('카드 등록 중 알 수 없는 오류 발생:', error);
+    return null;
+  }
+};

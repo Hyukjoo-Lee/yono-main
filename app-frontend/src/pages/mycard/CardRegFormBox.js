@@ -4,7 +4,7 @@ import CommonSelect from '../../common/CommonSelect';
 import { Box, Grid2 } from '@mui/material';
 import CardSlider from './CardSlider';
 import CommonButton from '../../common/CommonButton';
-import { useCallback, useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import ValidationMessage from '../../common/ValidationMessage';
 import theme from '../../theme/theme';
 import {
@@ -82,9 +82,11 @@ const CARD_COMPANY_LIST = [
   { value: '0306', label: '신한카드' },
 ];
 
-const CardRegFormBox = ({user}) => {
+const CardRegFormBox = ({ user }) => {
+
+
   const [formData, setFormData] = useState({
-    userNum: user.userNum,
+    userNum: '',
     cardNumber: '',
     cardPwd: '',
     cardValidity: '',
@@ -92,6 +94,16 @@ const CardRegFormBox = ({user}) => {
     selectedCardType: '',
     selectedCardImg: '',
   });
+
+
+  useEffect(() => {
+    if (user && user.userNum) {
+      setFormData((prev) => ({
+        ...prev,
+        userNum: user.userNum,
+      }));
+    }
+  }, [user]);
 
   const [formMessage, setFormMessage] = useState({
     cardNumber: '',
@@ -101,6 +113,7 @@ const CardRegFormBox = ({user}) => {
     selectedCardType: '',
     selectedCardImg: '',
   });
+
   const [cardList, setCardList] = useState([]);
 
   const [cardImages, setCardImages] = useState([]);
@@ -116,6 +129,11 @@ const CardRegFormBox = ({user}) => {
       ...prev,
       selectedCardType: organization,
       selectedCardTitle: '',
+    }));
+
+    setFormMessage((prev) => ({
+      ...prev,
+      selectedCardType: '',
     }));
 
     try {
@@ -387,7 +405,7 @@ const CardRegFormBox = ({user}) => {
       />
       <CommonDialog
         open={isRegFailVisible}
-        children={'카드 등록에 실패했습니다.'}
+        children={'카드 등록에 실패했습니다. 카드 정보를 확인해주세요.'}
         onClose={closeDialog}
         onClick={closeDialog}
       />
