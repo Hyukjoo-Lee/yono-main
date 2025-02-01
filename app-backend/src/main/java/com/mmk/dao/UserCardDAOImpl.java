@@ -30,6 +30,11 @@ public class UserCardDAOImpl implements UserCardDAO {
     }
 
     @Override
+    public List<UserCardEntity> getAllCardsInfoByUserNum(int userNum) {
+        return userCardRepository.findAllByUserNum(userNum);
+    }
+
+    @Override
     public void removePrimaryCardAll(int userNum) {
         userCardRepository.removePrimaryCardAll(userNum);
     }

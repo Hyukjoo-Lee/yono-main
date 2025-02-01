@@ -1,11 +1,10 @@
 package com.mmk.entity;
 
 import java.sql.Timestamp;
+import jakarta.persistence.*;
 
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
-
-import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
@@ -55,10 +54,10 @@ public class UserCardEntity {
     private CardCompanyEntity cardCompanyEntity;
 
     @ManyToOne
-    @JoinColumn(name = "card_id", nullable = false)
+    @JoinColumn(name = "card_id", referencedColumnName = "card_id", nullable = false)
     private CardEntity cardEntity;
 
     @ManyToOne
-    @JoinColumn(name = "user_num", nullable = false)
+    @JoinColumn(name = "user_num", referencedColumnName = "user_num", nullable = false)
     private UserEntity userEntity;
 }

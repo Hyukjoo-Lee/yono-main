@@ -20,7 +20,7 @@ import lombok.ToString;
 
 @Setter
 @Getter
-@ToString
+@ToString(exclude = "cardEntity")
 @Entity
 @SequenceGenerator(name = "card_benefit_seq_generator", sequenceName = "card_benefit_seq", initialValue = 1, allocationSize = 1)
 @Table(name = "card_benefit")

@@ -35,6 +35,17 @@ public class UserCardController {
         return ResponseEntity.ok(new ApiResponse<>(200, "사용자 보유 카드조회 성공", userCards));
     }
 
+    // 특정 사용자의 보유 카드 조회 (마스터 카드 정보, 혜택 포함)
+    @GetMapping("/user/{userNum}/details")
+    public ResponseEntity<ApiResponse<List<UserCardDTO>>> getAllCardsInfoByUserNum(@PathVariable int userNum) {
+        List<UserCardDTO> userCards = userCardService.getAllCardsInfoByUserNum(userNum);
+        if (userCards.isEmpty()) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND)
+                    .body(new ApiResponse<>(404, "해당 사용자가 보유한 카드가 없습니다.", null));
+        }
+        return ResponseEntity.ok(new ApiResponse<>(200, "사용자 보유 카드조회 성공", userCards));
+    }
+
     // 사용자 카드 등록
     @PostMapping("/register")
     public ResponseEntity<ApiResponse<UserCardDTO>> registerUserCard(@RequestBody UserCardDTO userCardDTO,

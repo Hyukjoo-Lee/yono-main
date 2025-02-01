@@ -1,17 +1,11 @@
 package com.mmk.entity;
 
 import java.sql.Timestamp;
+import java.util.List;
+import jakarta.persistence.*;
 
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
-
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import jakarta.persistence.SequenceGenerator;
-import jakarta.persistence.Table;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
@@ -19,7 +13,7 @@ import lombok.ToString;
 // 카드 마스터 엔터티: 특정 카드 종류에 대한 공통 정보
 @Setter
 @Getter
-@ToString
+@ToString(exclude = "cardBenefits")
 @Entity
 @SequenceGenerator(name = "card_seq_generator", sequenceName = "card_seq", initialValue = 1, allocationSize = 1)
 @Table(name = "card")
@@ -53,4 +47,8 @@ public class CardEntity {
     @UpdateTimestamp
     @Column(name = "updated_at")
     private Timestamp updatedAt;
+
+    @OneToMany(mappedBy = "cardEntity", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
+    private List<CardBenefitEntity> cardBenefits;
+
 }
