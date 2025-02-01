@@ -80,11 +80,10 @@ const CARD_COMPANY_LIST = [
   { value: '0303', label: '삼성카드' },
   { value: '0304', label: '농협카드' },
   { value: '0306', label: '신한카드' },
+  { value: '0313', label: '하나카드' },
 ];
 
 const CardRegFormBox = ({ user }) => {
-
-
   const [formData, setFormData] = useState({
     userNum: '',
     cardNumber: '',
@@ -94,7 +93,6 @@ const CardRegFormBox = ({ user }) => {
     selectedCardType: '',
     selectedCardImg: '',
   });
-
 
   useEffect(() => {
     if (user && user.userNum) {
@@ -273,6 +271,15 @@ const CardRegFormBox = ({ user }) => {
       const response = await registerCard(body);
       if (response) {
         setIsRegSuccessVisible(true);
+        setFormData({
+          userNum: user.userNum || '',
+          cardNumber: '',
+          cardPwd: '',
+          cardValidity: '',
+          selectedCardTitle: '',
+          selectedCardType: '',
+          selectedCardImg: '',
+        });
       } else {
         setIsRegFailVisible(true);
       }
