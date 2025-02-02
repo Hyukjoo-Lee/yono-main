@@ -17,6 +17,7 @@ import { Link, useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
 import { fetchSearchNotice } from '../../apis/noticeApi';
 import CommonButton from '../../common/CommonButton';
+import CommonDialog from '../../common/CommonDialog';
 import CommonInput from '../../common/CommonInput';
 
 const Root = styled.div`
@@ -82,15 +83,27 @@ export function NoticeTable() {
   const [rows, setRows] = useState([]);
   const [page, setPage] = useState(0);
   const [keyword, setKeyword] = useState('');
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
+  const [isDialogOpen, setIsDialogOpen] = useState(false);
   const rowsPerPage = 10;
   const navigate = useNavigate();
+
+  useEffect(() => {
+    const user = localStorage.getItem('user');
+    setIsLoggedIn(!!user);
+    getNoticeData(keyword);
+  }, [keyword]);
 
   const handleChangePage = (event, newPage) => {
     setPage(newPage - 1);
   };
 
   const handleButtonClick = () => {
-    navigate('/noticeFormBox');
+    if (isLoggedIn) {
+      navigate('/noticeFormBox');
+    } else {
+      setIsDialogOpen(true);
+    }
   };
 
   const handleSearchChange = (e) => {
@@ -105,10 +118,6 @@ export function NoticeTable() {
       alert(`검색 오류: ${message}`);
     }
   };
-
-  useEffect(() => {
-    getNoticeData(keyword);
-  }, [keyword]);
 
   const getNoticeData = async (searchKeyword) => {
     try {
@@ -137,6 +146,15 @@ export function NoticeTable() {
 
   const handlePostClick = (id) => {
     navigate(`/notice/${id}`);
+  };
+
+  const handleDialogLogin = () => {
+    setIsDialogOpen(false);
+    navigate('/login');
+  };
+
+  const handleDialogClose = () => {
+    setIsDialogOpen(false);
   };
 
   return (
@@ -245,6 +263,13 @@ export function NoticeTable() {
             renderItem={(item) => <PaginationItem {...item} />}
           />
         </Paper>
+
+        <CommonDialog
+          open={isDialogOpen}
+          onClose={handleDialogClose}
+          children={'관리자만 등록 가능합니다.'}
+          onClick={handleDialogLogin}
+        />
       </Root>
     </>
   );

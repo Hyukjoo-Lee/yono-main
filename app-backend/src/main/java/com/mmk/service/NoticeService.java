@@ -16,4 +16,6 @@ public interface NoticeService{
 
   boolean updateNotice(NoticeDTO noticeDTO);
 
+  void increaseViewCount(int id);
+
 }

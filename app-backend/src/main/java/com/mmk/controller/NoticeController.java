@@ -10,6 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -94,16 +95,23 @@ public class NoticeController {
     return noticeService.searchNotice(keyword);
   }
 
-  //글 상세보기
+  //글 상세보기+조회수 증가
   @GetMapping("/{id}")
-  public ResponseEntity<NoticeDTO> getNoticeDetail(@RequestParam("id") int id){
-    NoticeDTO notice = noticeService.getNoticeById(id);
-    if(notice != null){
-      return ResponseEntity.ok(notice);
-    }else{
-        return ResponseEntity.notFound().build();
+public ResponseEntity<NoticeDTO> getNoticeDetail(@PathVariable("id") int id){
+    try {
+        noticeService.increaseViewCount(id);
+        
+        NoticeDTO notice = noticeService.getNoticeById(id);
+        if (notice != null) {
+            return ResponseEntity.ok(notice);
+        } else {
+            return ResponseEntity.notFound().build();
+        }
+    } catch (Exception e) {
+        log.error("Error while getting notice details: ", e);
+        return ResponseEntity.status(500).build();
     }
-  }
+}
 
   //글 삭제
   @PostMapping("/delete")

@@ -61,3 +61,22 @@ export const deleteNotice = async (ids) => {
     }
   }
 };
+
+export const getNoticeById = (id) => {
+  return axios.get(`/api/notice/${id}`);
+};
+
+//수정
+export const updateNotice = async (formData) => {
+  try {
+    const response = await axios.post('/notice/edit', formData, {
+      headers: {
+        'Content-Type': 'multipart/form-data',
+      },
+    });
+    return response.status === 200;
+  } catch (error) {
+    console.error('공지사항 수정 중 오류 발생 : ', error);
+    return false;
+  }
+};

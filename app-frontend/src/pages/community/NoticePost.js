@@ -101,7 +101,7 @@ export function NoticePost() {
   }, [id]);
 
   const handleButtonClick = () => {
-    navigate('noticeFormData');
+    navigate('/noticeEditFormBox');
   };
 
   const handleDelete = async () => {
@@ -110,7 +110,7 @@ export function NoticePost() {
     try {
       await deleteNotice([parseInt(id, 10)]);
       alert('삭제되었습니다!');
-      navigate('/notice/list');
+      navigate('/community');
     } catch (error) {
       console.error('삭제 중 오류 발생 : ', error);
       alert('삭제에 실패했습니다. 다시 시도해주세요!');
