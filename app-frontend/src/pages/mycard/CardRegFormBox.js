@@ -20,6 +20,7 @@ import {
 } from '../../common/Message';
 import { getCardListByCompany, registerCard } from '../../apis/cardApi';
 import CommonDialog from '../../common/CommonDialog';
+import CommonLoading from '../../common/CommonLoading';
 
 const FormBox = styled.form`
   width: 100%;
@@ -117,6 +118,8 @@ const CardRegFormBox = ({ user }) => {
   const [cardImages, setCardImages] = useState([]);
 
   const [cardNumToSave, setCardNumToSave] = useState('');
+
+  const [isLoading, setIsLoading] = useState(false);
 
   const [isRegSuccessVisible, setIsRegSuccessVisible] = useState(false);
   const [isRegFailVisible, setIsRegFailVisible] = useState(false);
@@ -268,9 +271,15 @@ const CardRegFormBox = ({ user }) => {
     };
 
     try {
+      setIsLoading(true);
       const response = await registerCard(body);
       if (response) {
         setIsRegSuccessVisible(true);
+
+        setTimeout(() => {
+          window.location.reload();
+        }, 1000);
+
         setFormData({
           userNum: user.userNum || '',
           cardNumber: '',
@@ -286,6 +295,8 @@ const CardRegFormBox = ({ user }) => {
     } catch (error) {
       console.error('카드 등록 실패:', error);
       setIsRegFailVisible(true);
+    } finally {
+      setIsLoading(false);
     }
   };
 
@@ -300,109 +311,113 @@ const CardRegFormBox = ({ user }) => {
   return (
     <FormBox onSubmit={handleSubmit}>
       <Box style={{ padding: '50px' }}>
-        <Grid2 container rowSpacing={1} columnSpacing={4}>
-          <Grid2 size={24}>
-            <CommonInput
-              placeholder={FORM_FIELDS.cardNumber.placeholder}
-              text={FORM_FIELDS.cardNumber.text}
-              value={formData.cardNumber}
-              onChange={handleInputChange('cardNumber')}
-              width="100%"
-              maxLength={FORM_FIELDS.cardNumber.maxLength}
-            />
-            {formMessage.cardNumber && (
-              <ValidationMessage
-                text={formMessage.cardNumber}
-                type="error"
-                fontSize={theme.fontSize.small}
-                $margin="0 5px"
-              />
-            )}
-          </Grid2>
-
-          {['cardPwd', 'cardValidity'].map((field) => (
-            <Grid2 key={field} size={6}>
+        {isLoading ? (
+          <CommonLoading message={'카드 등록 처리 중...'} />
+        ) : (
+          <Grid2 container rowSpacing={1} columnSpacing={4}>
+            <Grid2 size={24}>
               <CommonInput
-                type={FORM_FIELDS[field].type}
-                placeholder={FORM_FIELDS[field].placeholder}
-                text={FORM_FIELDS[field].text}
-                value={formData[field]}
-                onChange={handleInputChange(field)}
+                placeholder={FORM_FIELDS.cardNumber.placeholder}
+                text={FORM_FIELDS.cardNumber.text}
+                value={formData.cardNumber}
+                onChange={handleInputChange('cardNumber')}
                 width="100%"
-                maxLength={FORM_FIELDS[field].maxLength}
+                maxLength={FORM_FIELDS.cardNumber.maxLength}
               />
-              {formMessage[field] && (
+              {formMessage.cardNumber && (
                 <ValidationMessage
-                  text={formMessage[field]}
+                  text={formMessage.cardNumber}
                   type="error"
                   fontSize={theme.fontSize.small}
                   $margin="0 5px"
                 />
               )}
             </Grid2>
-          ))}
 
-          <Grid2 size={6}>
-            <CommonSelect
-              text={FORM_FIELDS.selectedCardType.text}
-              options={CARD_COMPANY_LIST}
-              selectedValue={formData.selectedCardType}
-              setSelectedValue={handleCardCompanyChange}
-              margin="0"
-              labelColor="#4a4a4a"
-              width="227.75px"
-            />
-            {formMessage.selectedCardType && (
-              <ValidationMessage
-                text={formMessage.selectedCardType}
-                type="error"
-                fontSize={theme.fontSize.small}
-                $margin="0 5px"
+            {['cardPwd', 'cardValidity'].map((field) => (
+              <Grid2 key={field} size={6}>
+                <CommonInput
+                  type={FORM_FIELDS[field].type}
+                  placeholder={FORM_FIELDS[field].placeholder}
+                  text={FORM_FIELDS[field].text}
+                  value={formData[field]}
+                  onChange={handleInputChange(field)}
+                  width="100%"
+                  maxLength={FORM_FIELDS[field].maxLength}
+                />
+                {formMessage[field] && (
+                  <ValidationMessage
+                    text={formMessage[field]}
+                    type="error"
+                    fontSize={theme.fontSize.small}
+                    $margin="0 5px"
+                  />
+                )}
+              </Grid2>
+            ))}
+
+            <Grid2 size={6}>
+              <CommonSelect
+                text={FORM_FIELDS.selectedCardType.text}
+                options={CARD_COMPANY_LIST}
+                selectedValue={formData.selectedCardType}
+                setSelectedValue={handleCardCompanyChange}
+                margin="0"
+                labelColor="#4a4a4a"
+                width="227.75px"
               />
-            )}
-          </Grid2>
+              {formMessage.selectedCardType && (
+                <ValidationMessage
+                  text={formMessage.selectedCardType}
+                  type="error"
+                  fontSize={theme.fontSize.small}
+                  $margin="0 5px"
+                />
+              )}
+            </Grid2>
 
-          <Grid2 size={6}>
-            <CommonSelect
-              text={FORM_FIELDS.selectedCardTitle.text}
-              options={cardList.map((card) => ({
-                value: card.cardTitle,
-                label: card.cardTitle,
-              }))}
-              selectedValue={formData.selectedCardTitle}
-              setSelectedValue={handleCardTitleChange}
-              find="카드 종류를 선택하세요"
-              margin="0"
-              labelColor="#4a4a4a"
-              width="227.75px"
-            />
-            {formMessage.selectedCardTitle && (
-              <ValidationMessage
-                text={formMessage.selectedCardTitle}
-                type="error"
-                fontSize={theme.fontSize.small}
-                $margin="0 5px"
+            <Grid2 size={6}>
+              <CommonSelect
+                text={FORM_FIELDS.selectedCardTitle.text}
+                options={cardList.map((card) => ({
+                  value: card.cardTitle,
+                  label: card.cardTitle,
+                }))}
+                selectedValue={formData.selectedCardTitle}
+                setSelectedValue={handleCardTitleChange}
+                find="카드 종류를 선택하세요"
+                margin="0"
+                labelColor="#4a4a4a"
+                width="227.75px"
               />
-            )}
-          </Grid2>
+              {formMessage.selectedCardTitle && (
+                <ValidationMessage
+                  text={formMessage.selectedCardTitle}
+                  type="error"
+                  fontSize={theme.fontSize.small}
+                  $margin="0 5px"
+                />
+              )}
+            </Grid2>
 
-          <Grid2 size={12}>
-            <CardSlider
-              cardImages={cardImages || []}
-              onImageSelect={handleImageSelect}
-            />
-          </Grid2>
+            <Grid2 size={12}>
+              <CardSlider
+                cardImages={cardImages || []}
+                onImageSelect={handleImageSelect}
+              />
+            </Grid2>
 
-          <Grid2 container justifyContent="center" size={12} pt={3}>
-            <CommonButton
-              type="submit"
-              fontSize="16px"
-              width="120px"
-              height="35px"
-              text="카드 등록"
-            />
+            <Grid2 container justifyContent="center" size={12} pt={3}>
+              <CommonButton
+                type="submit"
+                fontSize="16px"
+                width="120px"
+                height="35px"
+                text="카드 등록"
+              />
+            </Grid2>
           </Grid2>
-        </Grid2>
+        )}
       </Box>
       <CommonDialog
         open={isRegSuccessVisible}
@@ -412,7 +427,13 @@ const CardRegFormBox = ({ user }) => {
       />
       <CommonDialog
         open={isRegFailVisible}
-        children={'카드 등록에 실패했습니다. 카드 정보를 확인해주세요.'}
+        children={
+          <>
+            카드 등록에 실패했습니다.
+            <br />
+            카드사 등록 여부와 카드 정보를 확인해주세요.
+          </>
+        }
         onClose={closeDialog}
         onClick={closeDialog}
       />

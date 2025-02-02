@@ -8,6 +8,7 @@ import ValidationMessage from '../../common/ValidationMessage';
 import theme from '../../theme/theme';
 import { registerCardCompany } from '../../apis/cardApi';
 import CommonDialog from '../../common/CommonDialog';
+import CommonLoading from '../../common/CommonLoading';
 
 const FormBox = styled.form`
   width: 100%;
@@ -48,6 +49,8 @@ const CompanyRegFormBox = ({ user }) => {
     companyPwd: '',
   });
 
+  const [isLoading, setIsLoading] = useState(false);
+
   const [isRegSuccessVisible, setIsRegSuccessVisible] = useState(false);
   const [isRegFailVisible, setIsRegFailVisible] = useState(false);
 
@@ -86,9 +89,12 @@ const CompanyRegFormBox = ({ user }) => {
     if (!validateForm()) return;
 
     try {
+      setIsLoading(true);
+
       const response = await registerCardCompany(formData);
-      if (response?.status === 200) {
+      if (response) {
         setIsRegSuccessVisible(true);
+
         setFormData({
           userNum: user.userNum || '',
           organization: '',
@@ -101,6 +107,8 @@ const CompanyRegFormBox = ({ user }) => {
     } catch (error) {
       console.error('카드사 등록 실패:', error);
       setIsRegFailVisible(true);
+    } finally {
+      setIsLoading(false);
     }
   };
 
@@ -115,76 +123,80 @@ const CompanyRegFormBox = ({ user }) => {
   return (
     <FormBox onSubmit={handleSubmit}>
       <Box style={{ padding: '50px' }}>
-        <Grid2 container rowSpacing={2} columnSpacing={4}>
-          <Grid2 size={6}>
-            <CommonSelect
-              text="카드 회사"
-              options={CARD_COMPANY_LIST}
-              selectedValue={formData.organization}
-              setSelectedValue={(value) =>
-                setFormData((prev) => ({ ...prev, organization: value }))
-              }
-              margin="0"
-              labelColor="#4a4a4a"
-              width="227.75px"
-            />
-            {formMessage.organization && (
-              <ValidationMessage
-                text={formMessage.organization}
-                type="error"
-                fontSize={theme.fontSize.small}
-                $margin="0 5px"
+        {isLoading ? (
+          <CommonLoading message={'카드사 등록 처리 중...'} />
+        ) : (
+          <Grid2 container rowSpacing={2} columnSpacing={4}>
+            <Grid2 size={6}>
+              <CommonSelect
+                text="카드 회사"
+                options={CARD_COMPANY_LIST}
+                selectedValue={formData.organization}
+                setSelectedValue={(value) =>
+                  setFormData((prev) => ({ ...prev, organization: value }))
+                }
+                margin="0"
+                labelColor="#4a4a4a"
+                width="227.75px"
               />
-            )}
-          </Grid2>
+              {formMessage.organization && (
+                <ValidationMessage
+                  text={formMessage.organization}
+                  type="error"
+                  fontSize={theme.fontSize.small}
+                  $margin="0 5px"
+                />
+              )}
+            </Grid2>
 
-          <Grid2 size={6}>
-            <CommonInput
-              placeholder="카드사 아이디를 입력하세요"
-              text="아이디"
-              value={formData.companyId}
-              onChange={handleInputChange('companyId')}
-              width="100%"
-            />
-            {formMessage.companyId && (
-              <ValidationMessage
-                text={formMessage.companyId}
-                type="error"
-                fontSize={theme.fontSize.small}
-                $margin="0 5px"
+            <Grid2 size={6}>
+              <CommonInput
+                placeholder="카드사 아이디를 입력하세요"
+                text="아이디"
+                value={formData.companyId}
+                onChange={handleInputChange('companyId')}
+                width="100%"
               />
-            )}
-          </Grid2>
+              {formMessage.companyId && (
+                <ValidationMessage
+                  text={formMessage.companyId}
+                  type="error"
+                  fontSize={theme.fontSize.small}
+                  $margin="0 5px"
+                />
+              )}
+            </Grid2>
 
-          <Grid2 size={6}>
-            <CommonInput
-              type="password"
-              placeholder="카드사 비밀번호를 입력하세요"
-              text="비밀번호"
-              value={formData.companyPwd}
-              onChange={handleInputChange('companyPwd')}
-              width="100%"
-            />
-            {formMessage.companyPwd && (
-              <ValidationMessage
-                text={formMessage.companyPwd}
-                type="error"
-                fontSize={theme.fontSize.small}
-                $margin="0 5px"
+            <Grid2 size={6}>
+              <CommonInput
+                type="password"
+                placeholder="카드사 비밀번호를 입력하세요"
+                text="비밀번호"
+                value={formData.companyPwd}
+                onChange={handleInputChange('companyPwd')}
+                width="100%"
               />
-            )}
-          </Grid2>
+              {formMessage.companyPwd && (
+                <ValidationMessage
+                  text={formMessage.companyPwd}
+                  type="error"
+                  fontSize={theme.fontSize.small}
+                  $margin="0 5px"
+                />
+              )}
+            </Grid2>
 
-          <Grid2 container justifyContent="center" size={12} pt={3}>
-            <CommonButton
-              type="submit"
-              fontSize="16px"
-              width="150px"
-              height="40px"
-              text="카드사 등록"
-            />
+            <Grid2 container justifyContent="center" size={12} pt={3}>
+              <CommonButton
+                type="submit"
+                fontSize="16px"
+                width="150px"
+                height="40px"
+                text="카드사 등록"
+              />
+            </Grid2>
           </Grid2>
-        </Grid2>
+        )}
       </Box>
 
       <CommonDialog

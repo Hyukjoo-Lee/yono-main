@@ -63,7 +63,7 @@ const ListBox = styled.div`
   }
 `;
 
-const EmptyBox = styled.div`
+export const EmptyBox = styled.div`
   width: 100%;
   height: 100%;
   border-radius: 7px;
