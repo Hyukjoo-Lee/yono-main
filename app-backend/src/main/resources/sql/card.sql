@@ -20,7 +20,7 @@ VALUES (CARD_SEQ.nextval, '신한 처음카드', 'shinhan', '0306', '/images/car
 
 -- 하나 알뜰카드
 INSERT INTO card (CARD_ID, CARD_TITLE, CARD_PROVIDER, ORGANIZATION_CODE, CARD_IMG_URL, CREATED_AT, UPDATED_AT)
-VALUES (CARD_SEQ.nextval, '하나 알뜰카드', 'hana', '0313', '/images/cards/shinhan/shinhan-first1.png', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP);
+VALUES (CARD_SEQ.nextval, '하나 알뜰카드', 'hana', '0313', '/images/cards/hana/hana-kpass/hana-kpass1.png', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP);
 
 INSERT INTO card (CARD_ID, CARD_TITLE, CARD_PROVIDER, ORGANIZATION_CODE, CARD_IMG_URL, CREATED_AT, UPDATED_AT)
 VALUES (CARD_SEQ.nextval, '국민내일배움카드(체크)', 'nh', '0304', '/images/cards/nh/nh-bright-tmr/nh-bright-tmr1.png', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP);

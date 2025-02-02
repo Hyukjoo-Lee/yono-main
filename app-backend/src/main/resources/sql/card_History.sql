@@ -24,5 +24,4 @@ drop table badge;
 drop table tbl_posts;
 drop table tbl_reply;
 drop table reply_likes;
-drop table ranking;
 drop table notice;
