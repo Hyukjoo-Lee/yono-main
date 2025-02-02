@@ -126,24 +126,13 @@ const ProfileBox = styled.div`
   }
 `;
 
-const RankingTable = ({
-  isLoggedIn,
-  userRanking,
-  rankingList,
-  maskName,
-}) => {
+const RankingTable = ({ isLoggedIn, userRanking, rankingList, maskName }) => {
   const [isLoading, setIsLoading] = useState(true);
   const [sortedRanking, setSortedRanking] = useState([]);
-  //const [userRanking, setUserRanking] = useState(null);
 
   useEffect(() => {
     if (rankingList.length > 0) {
       setSortedRanking(rankingList);
-      // 현재 로그인한 유저의 순위 찾기
-      // const currentUserData = rankingList.find(
-      //   (item) => item.userNum === isLoggedIn,
-      // );
-      // setUserRanking(currentUserData || null);
     }
     setIsLoading(false);
   }, [isLoggedIn, rankingList]);

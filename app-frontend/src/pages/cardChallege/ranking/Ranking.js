@@ -42,7 +42,7 @@ const Ranking = () => {
         setUserRanking(userData);
         setRankingList(data);
       } catch (error) {
-        console.error('등수 업데이트 실패', error);
+        console.error('업데이트 실패', error);
       }
     };
 
