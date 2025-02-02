@@ -18,4 +18,6 @@ public interface CardHistoryService {
 
     // 일별통계
     List<DailyStatisticsDTO> getCardHistoryByUserAndPrimaryCard(int userNum);
+
+    int getMonthlyTotalAmount(int userNum, String yearMonth);
 }

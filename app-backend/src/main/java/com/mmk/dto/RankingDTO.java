@@ -12,8 +12,8 @@ public class RankingDTO {
     private String badgeDate; // 날짜
     private int badge; // 뱃지 갯수
     private int ranking; // 순위
-    private int previousMonthAmount; //지난 달
-    private int twoMonthsAgoAmount; //저저번  달
+    private int currentMonthAmount; //지난 달
+    private int previousMonthAmount; //저저번  달
 
     private int userNum; // 유저넘버
     private String name; // 유저이름

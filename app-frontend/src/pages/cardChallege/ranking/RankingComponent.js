@@ -98,11 +98,11 @@ const RankingComponent = ({ rankingList, maskName }) => {
         // 같은 순위가 아니라면 추가
         if (
           top3.length < 3 &&
-          !(user.badge === lastBadge && user.previousMonthAmount < lastAmount)
+          !(user.badge === lastBadge && user.currentMonthAmount < lastAmount)
         ) {
           top3.push(user);
           lastBadge = user.badge;
-          lastAmount = user.previousMonthAmount;
+          lastAmount = user.currentMonthAmount;
         }
 
         // 3명 이상 추가되면 중단

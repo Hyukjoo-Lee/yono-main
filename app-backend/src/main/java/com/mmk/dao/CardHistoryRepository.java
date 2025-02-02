@@ -25,4 +25,10 @@ public interface CardHistoryRepository extends JpaRepository<CardHistoryEntity, 
            "AND c.userCardEntity.primaryCard = 1")
     List<CardHistoryEntity> findByUserNumAndPrimaryCard(@Param("userNum") int userNum);
 
+    @Query("SELECT c FROM CardHistoryEntity c WHERE c.userCardEntity.userCardId = :userCardId AND c.resUsedDate BETWEEN :startDate AND :endDate")
+    List<CardHistoryEntity> findByUserCardIdAndResUsedDateBetween(
+            @Param("userCardId") int userCardId,
+            @Param("startDate") String startDate,
+            @Param("endDate") String endDate);
+
 }

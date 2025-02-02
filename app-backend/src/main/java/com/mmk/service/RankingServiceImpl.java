@@ -44,7 +44,7 @@ public class RankingServiceImpl implements RankingService {
             .sorted((a, b) -> {
                 int rankCompare = Integer.compare(a.getRanking(), b.getRanking());
                 if (rankCompare == 0) {
-                    return Double.compare(b.getPreviousMonthAmount(), a.getPreviousMonthAmount());
+                    return Double.compare(b.getCurrentMonthAmount(), a.getCurrentMonthAmount());
                 }
                 return rankCompare;
             })
@@ -73,8 +73,8 @@ public class RankingServiceImpl implements RankingService {
         rankingDTO.setUserId(badgeEntity.getUserEntity().getUserId());
         rankingDTO.setProfile(badgeEntity.getUserEntity().getProfile());
         rankingDTO.setRanking(badgeEntity.getRanking());
+        rankingDTO.setCurrentMonthAmount(badgeEntity.getCurrentMonthAmount());
         rankingDTO.setPreviousMonthAmount(badgeEntity.getPreviousMonthAmount());
-        rankingDTO.setTwoMonthsAgoAmount(badgeEntity.getTwoMonthsAgoAmount());
         return rankingDTO;
     }
 
