@@ -1,6 +1,5 @@
 import styled from 'styled-components';
 import CommonCardListBox from '../../../common/CommonCardListBox';
-import { dailyStatisticsCardData } from '../../../mockData/cardMockData';
 import Piechart from '../monthlyStatistics/chart/Piechart';
 import { useState, useEffect } from 'react';
 import { useSelector } from 'react-redux';
