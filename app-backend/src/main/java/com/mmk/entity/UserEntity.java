@@ -42,15 +42,6 @@ public class UserEntity {
     @Column(name = "name", nullable = false)
     private String name;
 
-    @Column(name = "address", nullable = false)
-    private String address;
-
-    @Column(name = "detail_address")
-    private String detailAddress;
-
-    @Column(name = "postcode")
-    private String postcode;
-
     @Column(name = "spending_target", columnDefinition = "int default 0")
     private int spendingTarget = 0;
 
@@ -70,5 +61,5 @@ public class UserEntity {
     @UpdateTimestamp
     @Column(name = "updated_at")
     private Timestamp updatedAt;
-    
+
 }

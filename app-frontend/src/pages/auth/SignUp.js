@@ -6,13 +6,9 @@ import CommonButton from '../../common/CommonButton';
 import CommonHr from '../../common/CommonHr';
 import CommonPageInfo from '../../common/CommonPageInfo';
 
-import SearchAddressDialog from './modal/SearchAddressDialog';
-
 import { checkUserIdExists, signUpUser } from '../../apis/userApi';
 import {
   EMAIL_REGEX_MESSAGE,
-  EMPTY_ADDRESS_MESSAGE,
-  EMPTY_DETAIL_ADDRESS_MESSAGE,
   EMPTY_EMAIL_MESSAGE,
   EMPTY_NAME_MESSAGE,
   EMPTY_PASSWORD_MESSAGE,
@@ -29,7 +25,6 @@ import {
 import ValidationMessage from '../../common/ValidationMessage';
 import CommonDialog from '../../common/CommonDialog';
 import { useLocation, useNavigate } from 'react-router-dom';
-import theme from '../../theme/theme';
 
 const FullContainer = styled.div`
   display: flex;
@@ -122,28 +117,11 @@ const FORM_FIELDS = {
       invalid: EMAIL_REGEX_MESSAGE,
     },
   },
-  address: {
-    placeholder: EMPTY_ADDRESS_MESSAGE,
-    text: '주소',
-    type: 'text',
-    errorMessage: {
-      empty: EMPTY_ADDRESS_MESSAGE,
-    },
-  },
-  detailAddress: {
-    placeholder: EMPTY_DETAIL_ADDRESS_MESSAGE,
-    text: '상세주소',
-    type: 'text',
-    errorMessage: {
-      empty: EMPTY_DETAIL_ADDRESS_MESSAGE,
-    },
-  },
 };
 
 const SignUp = () => {
   const [isSignUpSuccessVisible, setIsSignUpSuccessVisible] = useState(false);
   const [isSignUpFailVisible, setIsSignUpFailVisible] = useState(false);
-  const [isAddressModalOpen, setIsAddressModalOpen] = useState(false);
   const [isUserIdValidated, setIsUserIdValidated] = useState(false);
   const location = useLocation();
   const userInfo = location.state?.userInfo;
@@ -153,9 +131,6 @@ const SignUp = () => {
     confirmPassword: '',
     name: '',
     email: userInfo?.kakao_account.email || '',
-    address: '',
-    detailAddress: '',
-    postcode: '',
   });
 
   const [formMessage, setFormMessage] = useState({
@@ -164,8 +139,6 @@ const SignUp = () => {
     confirmPassword: '',
     name: '',
     email: '',
-    address: '',
-    detailAddress: '',
   });
 
   const inputRegexs = {
@@ -208,13 +181,6 @@ const SignUp = () => {
     if (formData.password !== formData.confirmPassword) {
       errors.confirmPassword =
         FORM_FIELDS.confirmPassword.errorMessage.mismatch;
-    }
-
-    if (!formData.address) {
-      errors.address = FORM_FIELDS.address.errorMessage.empty;
-    }
-    if (!formData.detailAddress) {
-      errors.detailAddress = FORM_FIELDS.detailAddress.errorMessage.empty;
     }
 
     return errors;
@@ -261,12 +227,6 @@ const SignUp = () => {
       }));
       setIsUserIdValidated(false);
     }
-  };
-
-  const handleAddressSelect = (address) => {
-    setFormData((prev) => ({ ...prev, address }));
-    setFormMessage((prev) => ({ ...prev, address: '' }));
-    setIsAddressModalOpen(false);
   };
 
   /**
@@ -364,36 +324,6 @@ const SignUp = () => {
           {renderInputField('confirmPassword')}
           {renderInputField('name')}
           {renderInputField('email')}
-          <InputUserIdBox>
-            <CommonInput
-              placeholder={FORM_FIELDS['address'].placeholder}
-              text="주소"
-              value={formData.address}
-              readOnly={true}
-              onChange={(e) => handleInputChange(e, 'address')}
-              {...InputProps}
-            />
-            <ButtonWrapper>
-              <CommonButton
-                {...ButtonProps}
-                text="주소검색"
-                width="100px"
-                fontSize={theme.fontSize.base}
-                onClick={() => setIsAddressModalOpen(true)}
-              />
-            </ButtonWrapper>
-          </InputUserIdBox>
-          {formMessage['address'] && (
-            <ValidationMessage
-              text={formMessage['address']}
-              type={'error'}
-              $margin="0 10px"
-            />
-          )}
-          <CommonHr />
-          <div style={ContainerProps} />
-          {renderInputField('detailAddress')}
-          <div style={{ marginBottom: '15px' }}></div>
         </MiddleContainer>
         <CommonButton {...ButtonProps} text="회원가입" onClick={handleSubmit} />
         <CommonDialog
@@ -409,12 +339,6 @@ const SignUp = () => {
           }
           onClose={closeDialog}
           onClick={closeDialog}
-        />
-        <SearchAddressDialog
-          open={isAddressModalOpen}
-          setModalVisible={setIsAddressModalOpen}
-          onCompletePost={handleAddressSelect}
-          setFormData={setFormData}
         />
       </FullContainer>
     </CommonRoot>
