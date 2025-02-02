@@ -14,6 +14,7 @@ drop table user_info; -- 4
 drop table card_benefit; -- 1
 drop table card_history; -- 2
 drop table tbl_posts; -- 7
+drop table tbl_reply; -- 8
 
 insert into user_info (user_num, user_id, name, profile, email, password,  address, detail_Address, postcode, spending_target, created_at, updated_at) 
 values (user_seq.nextval, 'hjtestid', '이혁주', '/images/image2.jpg', 'hj@google.com', '1234', '서울시 용산구', '1415호', '11111', 500000, sysdate, sysdate);

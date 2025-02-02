@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import styled from 'styled-components';
 import Barchart from './Barchart';
 import MonthComparisionTable from './MonthComparisonTable';
@@ -16,25 +16,29 @@ const BarchartWrap = styled.div`
   height: 530px;
 `;
 
-const barchart_data = [
-  {
-    bottle: '저번달',
-    목표금액: 3000,
-    사용금액: 2000,
-  },
-  {
-    bottle: '이번달',
-    목표금액: 2000,
-    사용금액: 1500,
-  },
-];
-
 const MonthComparision = () => {
+  const [barData, setBarData] = useState([]); // 차트 데이터 상태
+
+  // 월별 데이터가 업데이트되면 차트 데이터 업데이트
+  const handleMonthComparisonData = (data) => {
+    const transformedData = [
+      {
+        bottle: '저저번달',
+        사용금액: data.previousToPreviousMonthAmount,
+      },
+      {
+        bottle: '저번달',
+        사용금액: data.previousMonthAmount,
+      },
+    ];
+    setBarData(transformedData);
+  };
+
   return (
     <Root>
-      <MonthComparisionTable />
+      <MonthComparisionTable onDataUpdate={handleMonthComparisonData} />
       <BarchartWrap>
-        <Barchart data={barchart_data} />
+        <Barchart data={barData} />
       </BarchartWrap>
     </Root>
   );

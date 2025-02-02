@@ -1,6 +1,5 @@
 package com.mmk.dto;
 
-import java.util.Map;
 
 import lombok.Getter;
 import lombok.Setter;
@@ -18,6 +17,6 @@ public class BadgeDTO {
     private int ranking; // 순위
     private double  savingRate; //절약률률
 
-    private int previousMonthAmount; //지난 달
-    private int twoMonthsAgoAmount; //저저번  달
+    private int currentMonthAmount; //지난 달
+    private int previousMonthAmount; //저저번  달
 }

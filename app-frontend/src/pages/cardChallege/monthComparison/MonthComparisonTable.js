@@ -2,7 +2,6 @@ import React, { useEffect, useState } from 'react';
 import styled from 'styled-components';
 import axios from 'axios';
 import { useSelector } from 'react-redux';
-import Barchart from './Barchart';
 
 const TextWrap = styled.div`
   width: 720px;
@@ -48,7 +47,7 @@ const TitleGroup = styled.div`
   width: 100%;
 `;
 
-const MonthComparisonTable = () => {
+const MonthComparisionTable = ({ onDataUpdate }) => {
   const [monthlyData, setMonthlyData] = useState(null); // API로부터 받은 데이터 저장
 
   // 로그인한 사용자 정보 가져오기
@@ -86,21 +85,24 @@ const MonthComparisonTable = () => {
           },
         });
 
-        console.log('로그인 :' + userNum);
-
         if (response.status === 200) {
-          // API 응답에서 data를 추출
-          const data = response.data.data; // 실제 응답 데이터는 response.data.data 안에 있음
-
-          console.log('받은 데이터: ', data);
+          const data = response.data.data;
 
           // 상태 업데이트
           setMonthlyData({
-            previousMonthAmount: data.previousMonthAmount || 0, // 저번 달 금액
-            previousToPreviousMonthAmount: data.currentMonthAmount || 0, // 이전 달 금액
-            previousBadgeRanking: data.badge || 0, // 절약률로 얻은 배지 개수
-            PreviousBadgeCount: data.badge || 0, // 배지 개수
+            previousMonthAmount: data.previousMonthAmount || 0,
+            previousToPreviousMonthAmount: data.currentMonthAmount || 0,
+            previousBadgeRanking: data.badge || 0,
+            PreviousBadgeCount: data.badge || 0,
           });
+
+          // 부모 컴포넌트에 데이터 전달
+          if (onDataUpdate) {
+            onDataUpdate({
+              previousMonthAmount: data.currentMonthAmount || 0,
+              previousToPreviousMonthAmount: data.previousMonthAmount || 0,
+            });
+          }
         }
       } catch (error) {
         console.error('리액트에서 월별 금액 조회 실패:', error);
@@ -108,7 +110,7 @@ const MonthComparisonTable = () => {
     };
 
     fetchData();
-  }, [userNum]);
+  }, [userNum, onDataUpdate]);
 
   if (!monthlyData) {
     return <div>Loading...</div>;
@@ -142,10 +144,8 @@ const MonthComparisonTable = () => {
           <span>{monthlyData.PreviousBadgeCount.toLocaleString()}개</span>
         </Titlediv>
       </TitleGroup>
-
-      {/* <Barchart data={Barchart} /> */}
     </TextWrap>
   );
 };
 
-export default MonthComparisonTable;
+export default MonthComparisionTable;

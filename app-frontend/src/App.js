@@ -16,6 +16,7 @@ import { MyCard } from './pages/mycard/MyCard';
 import { MyPage } from './pages/mypage/MyPage';
 import theme from './theme/theme';
 import { CommunityPost } from './pages/community/CommunityPost';
+import { NoticeFormBox } from './pages/community/NoticeFormBox';
 import { NoticePost } from './pages/community/NoticePost';
 import { EditFormBox } from './pages/community/EditFormBox';
 import ResetPassword from './pages/auth/ResetPassword';
@@ -78,6 +79,7 @@ function App() {
             <Route path="/mycard" element={<MyCard />} />
             <Route path="/communityPost" element={<CommunityPost />} />
             <Route path="/noticePost" element={<NoticePost />} />
+            <Route path="/noticeFormBox" element={<NoticeFormBox />} />
             <Route path="/editFormBox" element={<EditFormBox />} />
           </Routes>
         </Layout>

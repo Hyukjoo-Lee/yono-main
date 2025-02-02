@@ -1,11 +1,13 @@
+import axios from 'axios';
+import { useEffect, useState } from 'react';
+import { useNavigate, useParams } from 'react-router-dom';
 import styled from 'styled-components';
-import CommonPageInfo from '../../common/CommonPageInfo';
 import CommonButton from '../../common/CommonButton';
-import { useNavigate } from 'react-router-dom';
 import CommonHr from '../../common/CommonHr';
+// import CommonPageInfo from '../../common/CommonPageInfo';
 
 const Root = styled.div`
-  width: ${(props) => props.theme.display.sm};
+  width: ${(props) => props.theme.display.lg};
   margin: 0 auto;
   box-sizing: border-box;
   padding-top: ${(props) => props.theme.headerHeight};
@@ -20,7 +22,7 @@ const Box = styled.div`
   width: 100%;
   margin: 0 auto;
   & > label.title {
-    margin-top: 20px;
+    // margin-top: 20px;
     font-weight: bold;
     font-size: 25px;
   }
@@ -41,24 +43,55 @@ const BackBox = styled.div`
 `;
 
 export function NoticePost() {
+  const [noticeData, setnoticeData] = useState(null);
   const navigate = useNavigate();
+  const { id } = useParams();
+
+  useEffect(() => {
+    const fetchPostData = async () => {
+      try {
+        const response = await axios.get(`/notice/${id}`);
+        setnoticeData(response.data);
+        console.log(response.data);
+      } catch (error) {
+        console.error('Error fetching post data : ', error);
+      }
+    };
+    fetchPostData();
+  }, [id]);
+
   const handleButtonClick = () => {
-    navigate('/community');
+    navigate('/noticeList');
   };
+
+  if (!noticeData) {
+    return <div>Loading ..</div>;
+  }
+
   return (
     <Root>
-      <CommonPageInfo title={'공지사항'} text={<p></p>} />
+      {/* <CommonPageInfo title={'공지사항'} text={<p></p>} /> */}
+      <p style={{ fontWeight: 'bold', fontSize: '18px' }}>
+        공지사항 <span style={{ color: '#4064e6' }}>{noticeData.noticeNo}</span>
+      </p>
+      <CommonHr
+        width="1200px"
+        margin="20px 0px"
+        borderWidth="1.5px"
+        borderColor="rgba(128, 128, 128, 0.7)"
+      />
       <Box>
-        <label className="title">점검시간을 알려드립니다</label>
+        <label className="title">{noticeData.noticeTitle}</label>
+
         <label className="date">2024.11.22</label>
       </Box>
       <CommonHr />
-      <DataBox>공지사항에 대해서 알려드리겠습니다</DataBox>
+      <DataBox>{noticeData.noticeCont}</DataBox>
 
       <div>
         <BackBox>
           <CommonButton
-            text="목록으로 돌아가기"
+            text="목록"
             width="100px"
             height="40px"
             font-size="20px"

@@ -32,7 +32,7 @@ public class MonthlyCompController {
         @RequestParam("yearMonth") String yearMonth) {
 
         try {
-            // 현재 월의 총 사용 금액을 조회
+            // 리액트에서 previousMonthStr로 전달 / 현재 월의 총 사용 금액을 조회
             int currentMonthAmount = cardHistoryService.getMonthlyTotalAmount(userNum, yearMonth);
 
             LocalDate currentMonthStart = LocalDate.parse(yearMonth + "01", DateTimeFormatter.ofPattern("yyyyMMdd"));

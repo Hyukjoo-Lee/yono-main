@@ -211,10 +211,14 @@ const CommunityComment = ({
             {editingComment !== comment.rno && (
               <>
                 <LikeBox>
-                  <HeartButton
-                    like={user && comment.likedByUser.includes(user.userId)}
-                    onClick={user ? () => toggleLike(comment.rno) : null}
-                  />
+                  {user ? (
+                    <HeartButton
+                      like={comment.likedByUser.includes(user.userId)} // userId가 likedByUser에 포함되면 하트가 채워짐
+                      onClick={() => toggleLike(comment.rno)} // 하트를 클릭하면 toggleLike 실행
+                    />
+                  ) : (
+                    <HeartButton like={false} /> // user가 없으면 빈 하트로 표시
+                  )}
                   <p>{comment.like_count}</p>
                 </LikeBox>
               </>

@@ -305,6 +305,7 @@ export function CommunityPost() {
             : comment,
         );
         setCommentsData(updatedCommentsWithServerData);
+        console.log('좋아요 토글 성공:', response.data);
       }
     } catch (error) {
       console.error('좋아요 토글 실패', error);
@@ -356,7 +357,7 @@ export function CommunityPost() {
       />
       <Detailbox>
         <label>
-          등록일 :{rowData.userId} | 작성자 {rowData.userId} | 조회수:
+          등록일 :{rowData.regdate} | 작성자 {rowData.userId} | 조회수:
           {rowData.viewcnt}
         </label>
       </Detailbox>
