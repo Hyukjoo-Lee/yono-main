@@ -10,4 +10,10 @@ public interface CardHistoryDAO {
     String findMaxResUsedDate(int userCardId);
 
     List<CardHistoryEntity> findRecentHistory(int userCardId, String recentDate);
+
+    List<CardHistoryEntity> findByUserCardIdAndResUsedDateBetween(int userCardId, String startDate, String endDate);
+
+
+
+
 }

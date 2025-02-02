@@ -8,4 +8,10 @@ public interface CardHistoryService {
     void updateCardHistory(int userNum);
 
     List<MonthlySummaryDTO> uploadMonthlyHistory(int userNum);
+
+    int getMonthlyTotalAmount(int userNum, String yearMonth);
+
+
+
+    
 }
