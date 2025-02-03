@@ -19,15 +19,13 @@ const Ranking = () => {
 
   useEffect(() => {
     const fetchUser = async () => {
-      try {
-        if (!isLoggedIn) {
-          console.log('로그인 정보가 없습니다.');
-        } else {
-          const user = await findUserById(isLoggedIn);
+      if (!isLoggedIn) {
+        console.log('로그인 정보가 없습니다.');
+      } else {
+        const user = await findUserById(isLoggedIn);
+        if (user != null && typeof user != 'string') {
           setUsers(user.data);
         }
-      } catch (error) {
-        console.log('에러메시지: ', error);
       }
     };
 
