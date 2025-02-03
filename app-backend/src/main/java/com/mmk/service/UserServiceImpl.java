@@ -33,18 +33,12 @@ public class UserServiceImpl implements UserService {
     @Override
     public UserDTO findByUserNum(int userNum) {
         UserEntity userEntity = userDAO.findByUserNum(userNum);
-        if (userEntity == null) {
-            throw new NoSuchElementException("userNum: " + userNum + "에 해당하는 사용자가 없습니다.");
-        }
         return toDTO(userEntity);
     }
 
     @Override
     public UserDTO getUserByUserId(String userId) {
         UserEntity userEntity = userDAO.getUserByUserId(userId);
-        if (userEntity == null) {
-            throw new NoSuchElementException("아이디 " + userId + "에 해당하는 사용자가 없습니다.");
-        }
         return toDTO(userEntity);
     }
 
@@ -60,9 +54,6 @@ public class UserServiceImpl implements UserService {
     @Override
     public UserDTO getUserByEmail(String email) {
         UserEntity userEntity = userDAO.getUserByEmail(email);
-        if (userEntity == null) {
-            throw new NoSuchElementException("이메일 " + email + "에 해당하는 사용자가 없습니다.");
-        }
         return toDTO(userEntity);
     }
 
@@ -146,19 +137,23 @@ public class UserServiceImpl implements UserService {
 
     // Entity → DTO 변환
     private UserDTO toDTO(UserEntity entity) {
-        UserDTO dto = new UserDTO();
-        dto.setUserNum(entity.getUserNum());
-        dto.setUserId(entity.getUserId());
-        dto.setPassword(entity.getPassword());
-        dto.setEmail(entity.getEmail());
-        dto.setName(entity.getName());
-        dto.setSpendingTarget(entity.getSpendingTarget());
-        dto.setProfile(entity.getProfile());
-        dto.setCreatedAt(entity.getCreatedAt());
-        dto.setUpdatedAt(entity.getUpdatedAt());
-        dto.setState(entity.getState());
-        dto.setUserRole(entity.getUserRole());
-        return dto;
+        if (entity != null) {
+            UserDTO dto = new UserDTO();
+            dto.setUserNum(entity.getUserNum());
+            dto.setUserId(entity.getUserId());
+            dto.setPassword(entity.getPassword());
+            dto.setEmail(entity.getEmail());
+            dto.setName(entity.getName());
+            dto.setSpendingTarget(entity.getSpendingTarget());
+            dto.setProfile(entity.getProfile());
+            dto.setCreatedAt(entity.getCreatedAt());
+            dto.setUpdatedAt(entity.getUpdatedAt());
+            dto.setState(entity.getState());
+            dto.setUserRole(entity.getUserRole());
+            return dto;
+        } else {
+            return null;
+        }
     }
 
 }

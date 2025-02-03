@@ -182,26 +182,30 @@ public class UserCardServiceImpl implements UserCardService {
     }
 
     private UserCardDTO toDTO(UserCardEntity entity) {
-        UserCardDTO dto = new UserCardDTO();
-        dto.setUserCardId(entity.getUserCardId());
-        dto.setUserCardNum(entity.getUserCardNum());
-        dto.setExpiryDate(entity.getExpiryDate());
-        dto.setCardPwd(entity.getCardPwd());
-        dto.setCardImg(entity.getCardImg());
-        dto.setPrimaryCard(entity.getPrimaryCard());
-        dto.setCreatedAt(entity.getCreatedAt());
-        dto.setUpdatedAt(entity.getUpdatedAt());
-
-        dto.setCardCompanyNum(entity.getCardCompanyEntity().getCardCompanyNum());
-        dto.setCardId(entity.getCardEntity().getCardId());
-        dto.setUserNum(entity.getUserEntity().getUserNum());
-        dto.setCardBenefits(
-                entity.getCardEntity().getCardBenefits() == null ? Collections.emptyList()
-                        : entity.getCardEntity().getCardBenefits().stream()
-                                .map(b -> new CardBenefitDTO(b.getBenefitTitle(), b.getBenefitValue(),
-                                        b.getBenefitType()))
-                                .collect(Collectors.toList()));
-        dto.setCardTitle(entity.getCardEntity().getCardTitle());
-        return dto;
+        if (entity != null) {
+            UserCardDTO dto = new UserCardDTO();
+            dto.setUserCardId(entity.getUserCardId());
+            dto.setUserCardNum(entity.getUserCardNum());
+            dto.setExpiryDate(entity.getExpiryDate());
+            dto.setCardPwd(entity.getCardPwd());
+            dto.setCardImg(entity.getCardImg());
+            dto.setPrimaryCard(entity.getPrimaryCard());
+            dto.setCreatedAt(entity.getCreatedAt());
+            dto.setUpdatedAt(entity.getUpdatedAt());
+    
+            dto.setCardCompanyNum(entity.getCardCompanyEntity().getCardCompanyNum());
+            dto.setCardId(entity.getCardEntity().getCardId());
+            dto.setUserNum(entity.getUserEntity().getUserNum());
+            dto.setCardBenefits(
+                    entity.getCardEntity().getCardBenefits() == null ? Collections.emptyList()
+                            : entity.getCardEntity().getCardBenefits().stream()
+                                    .map(b -> new CardBenefitDTO(b.getBenefitTitle(), b.getBenefitValue(),
+                                            b.getBenefitType()))
+                                    .collect(Collectors.toList()));
+            dto.setCardTitle(entity.getCardEntity().getCardTitle());
+            return dto;
+        } else {
+            return null;
+        }
     }
 }

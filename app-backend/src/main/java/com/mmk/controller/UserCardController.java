@@ -87,8 +87,17 @@ public class UserCardController {
     // 로그인 유저의 대표카드의 카드 조회
     @GetMapping("/primaryCard")
     public ResponseEntity<ApiResponse<UserCardDTO>> getPrimaryCard(@RequestParam("userNum") int userNum) {
-        UserCardDTO userCardDTO = userCardService.findPrimaryCardByUserNum(userNum);
-        return ResponseEntity.ok(new ApiResponse<>(200, "대표카드의 카드 정보 조회 성공", userCardDTO));
+        try {
+            UserCardDTO userCardDTO = userCardService.findPrimaryCardByUserNum(userNum);
+            if (userCardDTO != null) {
+                return ResponseEntity.ok(new ApiResponse<>(200, "대표카드의 카드 정보 조회 성공", userCardDTO));
+            } else {
+                return ResponseEntity.noContent().build();
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(new ApiResponse<>(500, "대표카드 조회 중 오류 발생", null));
+        }
     }
 
 }
