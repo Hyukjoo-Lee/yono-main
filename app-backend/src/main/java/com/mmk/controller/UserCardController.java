@@ -95,7 +95,8 @@ public class UserCardController {
             }
         } catch (Exception e) {
             e.printStackTrace();
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(new ApiResponse<>(500, "대표카드 조회 중 오류 발생", null));
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                    .body(new ApiResponse<>(500, "대표카드 조회 중 오류 발생", null));
         }
     }
 

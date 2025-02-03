@@ -92,10 +92,6 @@ public class UserCardServiceImpl implements UserCardService {
     @Override
     public List<UserCardDTO> getAllCardsByUserNum(int userNum) {
         List<UserCardEntity> userCardEntities = userCardDAO.getAllCardsByUserNum(userNum);
-        if (userCardEntities.isEmpty()) {
-            throw new NoSuchElementException("해당 사용자가 소유한 카드가 없습니다.");
-        }
-
         List<UserCardDTO> userCardDTOs = new ArrayList<>();
         for (UserCardEntity entity : userCardEntities) {
             UserCardDTO dto = toDTO(entity);
@@ -109,10 +105,6 @@ public class UserCardServiceImpl implements UserCardService {
     @Override
     public List<UserCardDTO> getAllCardsInfoByUserNum(int userNum) {
         List<UserCardEntity> userCardEntities = userCardDAO.getAllCardsInfoByUserNum(userNum);
-
-        if (userCardEntities.isEmpty()) {
-            throw new NoSuchElementException("해당 사용자가 소유한 카드가 없습니다.");
-        }
 
         // 사용자 카드 리스트 필요한 데이터만 가공, 현재는 나머지 null, 0 으로 처리됨
         return userCardEntities.stream().map(entity -> {
