@@ -39,9 +39,9 @@ public class NoticeDAOImpl implements NoticeDAO{
     return noticeRepo.findById(id);
   }
 
-  @Override
-  public void updateNotice(NoticeEntity noticeEntity) {
-    noticeRepo.updateNotice(noticeEntity.getTitle(),noticeEntity.getContent(),noticeEntity.getViewCount(),noticeEntity.getImgurl(),noticeEntity.getNoticeNo());
-  }
+  // @Override
+  // public void updateNotice(NoticeEntity noticeEntity) {
+  //   noticeRepo.updateNotice(noticeEntity.getTitle(),noticeEntity.getContent(),noticeEntity.getViewCount(),noticeEntity.getImgurl(),noticeEntity.getNoticeNo());
+  // }
   
 }

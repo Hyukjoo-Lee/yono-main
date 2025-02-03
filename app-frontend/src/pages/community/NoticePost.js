@@ -72,9 +72,9 @@ const Box = styled.div`
 `;
 
 const DataBox = styled.div`
-  display: flex;
-  justify-content: flex-start;
-  align-items: flex-start;
+  // display: flex;
+  // justify-content: flex-start;
+  // align-items: flex-start;
   height: 500px;
 `;
 const EditBox = styled.div`
@@ -86,9 +86,11 @@ export function NoticePost() {
   const [noticeData, setNoticeData] = useState(null);
   const navigate = useNavigate();
   const { id } = useParams();
+  const baseURL = process.env.REACT_APP_API_URL;
 
   useEffect(() => {
     const fetchNoticeData = async () => {
+      console.log(id);
       try {
         const data = await fetchNoticeDetail(id);
         setNoticeData(data);
@@ -100,8 +102,8 @@ export function NoticePost() {
     fetchNoticeData();
   }, [id]);
 
-  const handleButtonClick = () => {
-    navigate('/noticeEditFormBox');
+  const handleEditClick = (id) => {
+    navigate(`/noticeEditFormBox/${id}`);
   };
 
   const handleDelete = async () => {
@@ -138,10 +140,10 @@ export function NoticePost() {
 
       <NoticeHeader>
         <p>
-          공지사항 <span>{noticeData.noticeNo}</span>
+          공지사항 <span>{noticeData?.noticeNo}</span>
         </p>
         <EditBox>
-          <StyledButton text="수정" onClick={handleButtonClick} />
+          <StyledButton text="수정" onClick={() => handleEditClick(id)} />
           <StyledButton text="삭제" onClick={handleDelete} />
         </EditBox>
       </NoticeHeader>
@@ -161,7 +163,18 @@ export function NoticePost() {
 
       <CommonHr />
 
-      <DataBox>{noticeData.content}</DataBox>
+      <DataBox>
+        <div>{noticeData.content}</div>
+        {noticeData.imgurl && (
+          <div>
+            <img
+              src={`${baseURL}${noticeData.imgurl}`}
+              alt="공지 이미지"
+              style={{ marginTop: '20px' }}
+            />
+          </div>
+        )}
+      </DataBox>
     </Root>
   );
 }

@@ -72,7 +72,7 @@ public class CardBenefitServiceImpl implements CardBenefitService {
     }
 
     @Override
-    public CardBenefitDTO createCardBenefit(CardBenefitDTO cardBenefitDTO) {
+    public CardBenefitDTO saveCardBenefit(CardBenefitDTO cardBenefitDTO) {
         CardEntity cardEntity = cardDAO.findByCardTitle(cardBenefitDTO.getCardTitle());
 
         if (cardEntity == null) {

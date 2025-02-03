@@ -7,7 +7,10 @@ import { ReactComponent as Profile } from '../../../assets/images/Profile.svg';
 
 const Root = styled.div`
   width: 100%;
-  margin-bottom: 50px;
+`;
+
+const RootIn = styled.div`
+  width: 100%;
   display: flex;
   justify-content: space-around;
   align-items: flex-end;
@@ -56,6 +59,13 @@ const NameStyle = styled.p`
   margin: 0 0 24px;
 `;
 
+const TextStyle = styled.p`
+  font-size: ${(props) => props.theme.fontSize.base};
+  color: ${(props) => props.theme.color.gray};
+  margin: 20px 0 20px;
+  text-align: center;
+`;
+
 const Box = styled.div`
   min-width: 180px;
   border-radius: 5px;
@@ -72,57 +82,75 @@ const Box = styled.div`
   }
 `;
 
-const RankingComponent = ({ rankingList }) => {
-  const [list, setList] = useState([]);
+const RankingComponent = ({ rankingList, maskName }) => {
+  const [top3, setTop3] = useState([]);
 
   useEffect(() => {
-    const getRanking = async () => {
-      try {
-        const sortedList = rankingList
-          .sort((a, b) => b.badge - a.badge) // badge 기준 내림차순 정렬
-          .slice(0, 3); // 상위 3개만 추출
-        setList(sortedList);
-      } catch (error) {
-        console.error('Error fetching rankings: ', error);
-      }
-    };
+    if (rankingList.length > 0) {
+      // 최종 1~3등을 정리할 배열
+      const top3 = [];
+      let lastBadge = null;
+      let lastAmount = null;
 
-    getRanking();
+      for (let i = 0; i < rankingList.length; i++) {
+        const user = rankingList[i];
+
+        // 같은 순위가 아니라면 추가
+        if (
+          top3.length < 3 &&
+          !(user.badge === lastBadge && user.currentMonthAmount < lastAmount)
+        ) {
+          top3.push(user);
+          lastBadge = user.badge;
+          lastAmount = user.currentMonthAmount;
+        }
+
+        // 3명 이상 추가되면 중단
+        if (top3.length === 3) break;
+      }
+
+      setTop3(top3);
+    }
   }, [rankingList]);
 
   return (
     <Root>
-      {list.length === 0 ? (
-        <></>
-      ) : (
-        list.map((item, index) => (
-          <BoxStyle key={index}>
-            <CircleBox $rank={index}>
-              {item.profile !== 'temp_profile' ? (
-                <img
-                  src={`http://localhost:8065${item.profile}`}
-                  alt={item.name}
-                />
-              ) : (
-                <Profile />
-              )}
-            </CircleBox>
-            <NameStyle>
-              {item.name}({item.userId})
-            </NameStyle>
-            <Box>
-              {item.rankingPosition === 1 ? (
-                <Medal1 />
-              ) : item.rankingPosition === 2 ? (
-                <Medal2 />
-              ) : (
-                <Medal3 />
-              )}
-              <p>{item.badge.toLocaleString()}</p>
-            </Box>
-          </BoxStyle>
-        ))
-      )}
+      <RootIn>
+        {top3.length === 0 ? (
+          <></>
+        ) : (
+          top3.map((item, index) => (
+            <BoxStyle key={index}>
+              <CircleBox $rank={index}>
+                {item.profile !== 'temp_profile' ? (
+                  <img
+                    src={`http://localhost:8065${item.profile}`}
+                    alt={maskName(item.name)}
+                  />
+                ) : (
+                  <Profile />
+                )}
+              </CircleBox>
+              <NameStyle>
+                {maskName(item.name)}({item.userId})
+              </NameStyle>
+              <Box>
+                {index === 0 ? (
+                  <Medal1 />
+                ) : index === 1 ? (
+                  <Medal2 />
+                ) : (
+                  <Medal3 />
+                )}
+                <p>{item.badge.toLocaleString()}개</p>
+              </Box>
+            </BoxStyle>
+          ))
+        )}
+      </RootIn>
+      <TextStyle>
+        공동 순위인 경우, 소수점 자리까지 기준을 적용하여 순위를 산정합니다.
+      </TextStyle>
     </Root>
   );
 };

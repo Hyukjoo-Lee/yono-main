@@ -158,7 +158,7 @@ public class CardServiceImpl implements CardService {
                 String businessType = (String) b.get("businessTypes");
                 cardBenefitDTO.setBenefitTitle(benefitTitle);
                 cardBenefitDTO.setBenefitType(businessType);
-                cardBenefitService.createCardBenefit(cardBenefitDTO);
+                cardBenefitService.saveCardBenefit(cardBenefitDTO);
             });
         });
         return cardCompanyDTO;

@@ -15,11 +15,12 @@ export default function useCountUp(end, start = 0, duration = 2000) {
 
     let currentNumber = start;
 
+    // 수치가 10000 이상일 때 증가 값을 크게 설정
     const increaseAmount = end >= 10000 ? 10000 : 1;
 
     const counter = setInterval(() => {
       currentNumber += increaseAmount;
-      setCount(currentNumber);
+      setCount(currentNumber); // 반올림 없이 그대로 설정
 
       // 목표 값에 도달했으면 카운터 종료
       if (
@@ -27,6 +28,7 @@ export default function useCountUp(end, start = 0, duration = 2000) {
         (increaseAmount === 1 && currentNumber >= end)
       ) {
         clearInterval(counter);
+        setCount(end); // 정확한 값 설정
       }
     }, stepTime);
 

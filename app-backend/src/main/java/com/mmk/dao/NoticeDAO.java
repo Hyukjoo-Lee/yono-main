@@ -13,10 +13,10 @@ public interface NoticeDAO {
 
   NoticeEntity findById(int id);
 
-  void deleteByNotice(List<Integer> ids);
-
   Optional<NoticeEntity> findNoticeById(int id);
 
-  void updateNotice(NoticeEntity noticeEntity);
+  void deleteByNotice(List<Integer> ids);
+
+  // void updateNotice(NoticeEntity noticeEntity);
   
 }

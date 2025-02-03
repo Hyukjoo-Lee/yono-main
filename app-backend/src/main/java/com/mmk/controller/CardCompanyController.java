@@ -15,25 +15,26 @@ import com.mmk.service.CardCompanyService;
 @RestController
 @RequestMapping("/cardCompany")
 public class CardCompanyController {
-    
+
     @Autowired
     private CardCompanyService cardCompanyService;
 
     // 카드사 등록
     @PostMapping("/register")
-    public ResponseEntity<ApiResponse<CardCompanyDTO>> registerCardCompany (
-        @RequestBody CardCompanyDTO cardCompanyDTO) {
-            CardCompanyDTO ccd = cardCompanyService.registerCardCompany(cardCompanyDTO);
-            if (ccd == null) {
-                ApiResponse<CardCompanyDTO> response = new ApiResponse<>(401, "이미 등록한 카드사입니다", null);
-                return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(response);
-            } else if (ccd.getConnectedId().startsWith("error")) {
-                ApiResponse<CardCompanyDTO> response = new ApiResponse<>(401, ccd.getConnectedId().replace("error",""), null);
-                return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(response);
-            } else {
-                ApiResponse<CardCompanyDTO> response = new ApiResponse<>(200, "카드사 등록 성공", ccd);
-                return ResponseEntity.ok(response);
-            }
+    public ResponseEntity<ApiResponse<CardCompanyDTO>> registerCardCompany(
+            @RequestBody CardCompanyDTO cardCompanyDTO) {
+        CardCompanyDTO ccd = cardCompanyService.registerCardCompany(cardCompanyDTO);
+        if (ccd == null) {
+            ApiResponse<CardCompanyDTO> response = new ApiResponse<>(401, "이미 등록한 카드사입니다", null);
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(response);
+        } else if (ccd.getConnectedId().startsWith("error")) {
+            ApiResponse<CardCompanyDTO> response = new ApiResponse<>(401, ccd.getConnectedId().replace("error", ""),
+                    null);
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(response);
+        } else {
+            ApiResponse<CardCompanyDTO> response = new ApiResponse<>(200, "카드사 등록 성공", ccd);
+            return ResponseEntity.ok(response);
         }
+    }
 
 }

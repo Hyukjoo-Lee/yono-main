@@ -1,5 +1,4 @@
 import React, { useEffect, useState } from 'react';
-import { useSelector } from 'react-redux';
 import { useNavigate, useParams } from 'react-router-dom';
 import styled from 'styled-components';
 import { getNoticeById, updateNotice } from '../../apis/noticeApi';
@@ -77,35 +76,32 @@ const HiddenInput = styled.input`
 `;
 export function NoticeEditFormBox() {
   const navigate = useNavigate();
-  const { noticeId } = useParams();
+  const { id } = useParams();
   const [title, setTitle] = useState('');
   const [content, setContent] = useState('');
   const [imgurl, setImgurl] = useState(null);
   const [existingImage, setExistingImage] = useState(null);
-  const user = useSelector((state) => state.user.user);
 
   //아이디 확인
-  console.log('Notice Id : ', noticeId);
+  console.log('Notice Id : ', id);
 
   useEffect(() => {
     const fetchNotice = async () => {
       try {
-        console.log(`Fetching notice with Id : ${noticeId}`);
-        const data = await getNoticeById(noticeId);
+        console.log(`Fetching notice with Id: ${id}`);
+        const data = await getNoticeById(id); // ✅ 데이터 가져오기 API 호출
+        console.log('Fetched data:', data); // 데이터가 제대로 오는지 확인
         setTitle(data.title);
         setContent(data.content);
-        setExistingImage(data.imgurl);
+        setExistingImage(data.imgurl); // 기존 이미지 설정
       } catch (error) {
-        console.error(
-          '공지사항 불러오기 실패 : ',
-          error.response || error.message,
-        );
+        console.error('공지사항 불러오기 실패: ', error);
         alert('공지사항 정보를 불러오지 못했습니다!');
       }
     };
 
     fetchNotice();
-  }, [noticeId]);
+  }, [id]);
 
   const handleTitleChange = (e) => setTitle(e.target.value);
   const handleContentChange = (e) => setContent(e.target.value);
@@ -136,16 +132,16 @@ export function NoticeEditFormBox() {
     }
 
     const formData = new FormData();
-    formData.append('userId', user.userId);
+    formData.append('id', id);
     formData.append('title', title);
     formData.append('content', content);
     if (imgurl) formData.append('file', imgurl);
 
     try {
-      const { success, message } = await updateNotice(noticeId, formData);
+      const { success, message } = await updateNotice(id, formData);
       if (success) {
         alert('공지사항이 수정되었습니다');
-        navigate(`/notice/${noticeId}`);
+        navigate(`/notice/${id}`);
       } else {
         alert(`수정실패 : ${message}`);
       }

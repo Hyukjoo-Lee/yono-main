@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import styled from 'styled-components';
 import RankingComponent from './RankingComponent';
 import RankingTable from './RankingTable';
-import { updateRankings, fetchUserRanking } from '../../../apis/rankingApi';
+import { updateRankings, userRankings } from '../../../apis/rankingApi';
 import { findUserById } from '../../../apis/userApi';
 import { useSelector } from 'react-redux';
 
@@ -14,6 +14,7 @@ const Root = styled.div`
 const Ranking = () => {
   const isLoggedIn = useSelector((state) => state.user.user?.userNum); // 현재 로그인한 유저의 userNum
   const [users, setUsers] = useState(null);
+  const [userRanking, setUserRanking] = useState([]);
   const [rankingList, setRankingList] = useState([]);
 
   useEffect(() => {
@@ -36,28 +37,37 @@ const Ranking = () => {
   useEffect(() => {
     const initializeRankings = async () => {
       try {
-        await updateRankings(); // 등수 업데이트 호출
-        const data = await fetchUserRanking(); // API 호출
+        const userData = await userRankings(isLoggedIn);
+        const data = await updateRankings();
+        setUserRanking(userData);
         setRankingList(data);
       } catch (error) {
-        console.error('등수 업데이트 실패패', error);
+        console.error('등수 업데이트 실패', error);
       }
     };
 
     initializeRankings();
-  }, []);
+  }, [isLoggedIn]);
+
+  // 이름을 마스킹하는 함수
+  const maskName = (name) => {
+    if (name.length === 3) {
+      return name[0] + '*' + name[2];
+    } else if (name.length > 3) {
+      return name[0] + '**' + name.slice(3);
+    }
+    return name; // 기본적으로 그대로 반환
+  };
 
   return (
     <Root>
-      <RankingComponent
-        rankingList={rankingList}
-        setRankingList={setRankingList}
-      />
+      <RankingComponent rankingList={rankingList} maskName={maskName} />
       <RankingTable
         users={users}
         isLoggedIn={isLoggedIn}
+        userRanking={userRanking}
         rankingList={rankingList}
-        setRankingList={setRankingList}
+        maskName={maskName}
       />
     </Root>
   );

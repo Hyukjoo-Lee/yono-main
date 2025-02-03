@@ -1,7 +1,8 @@
+// import React, { useEffect } from 'react';
 import React from 'react';
 import styled from 'styled-components';
 import { registeredCardData } from '../../mockData/cardMockData';
-import CustomSlides from '../mycard/CardSlider';
+// import CustomSlides from '../mycard/CardSlider';
 
 const StyledWrap = styled.div`
   margin-top: 50px;
@@ -26,7 +27,7 @@ const EmptyBox = styled.div`
   height: 100px;
   border: 1px solid ${(props) => props.theme.color.mediumGray};
   border-radius: 7px;
-  boxshadow: 0px 4px 5px rgba(0, 0, 0, 0.1);
+  box-shadow: 0px 4px 5px rgba(0, 0, 0, 0.1);
   display: flex;
   align-items: center;
   justify-content: center;
@@ -45,12 +46,13 @@ const MainCardBox = ({ isLoggedIn }) => {
     <StyledWrap>
       <StyledCardP>나의 등록 카드</StyledCardP>
       <StyledCardContainer>
-        {cardData.length === 0 ? (
+        {!cardData || cardData.length === 0 ? (
           <EmptyBox>
             <p>등록된 카드가 없습니다! (카드 등록 후 보여집니다.)</p>
           </EmptyBox>
         ) : (
-          <CustomSlides cardData={cardData} showDetailed={true} />
+          // <CustomSlides cardData={cardData} showDetailed={true} />
+          <></> // TODO: 카드 등록 폼 내 슬라이드 변경으로 인해 에러 발생 => 메인 페이지 내 알맞게 적용 필요
         )}
       </StyledCardContainer>
     </StyledWrap>

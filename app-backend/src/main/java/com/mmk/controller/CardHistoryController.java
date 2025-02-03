@@ -21,7 +21,7 @@ public class CardHistoryController {
 
     @Autowired
     CardHistoryService cardHistoryService;
-    
+
     // 카드내역 DB에 갱신
     @GetMapping("/update")
     public void updateCardHistory(@RequestParam("userNum") int userNum) {
@@ -30,7 +30,8 @@ public class CardHistoryController {
 
     // 월별통계 - DB에 있는 최근 3개월 카드내역 불러오기
     @GetMapping("/monthlyUpload")
-    public ResponseEntity<ApiResponse<List<MonthlySummaryDTO>>> uploadMonthlyHistory(@RequestParam("userNum") int userNum) {
+    public ResponseEntity<ApiResponse<List<MonthlySummaryDTO>>> uploadMonthlyHistory(
+            @RequestParam("userNum") int userNum) {
         List<MonthlySummaryDTO> result = cardHistoryService.uploadMonthlyHistory(userNum);
         if (result.isEmpty()) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND)
@@ -42,7 +43,8 @@ public class CardHistoryController {
 
     // 목차별통계 - DB에 있는 최근 1개월 카드내역 불러오기
     @GetMapping("/categoryUpload")
-    public ResponseEntity<ApiResponse<List<MonthlySummaryDTO>>> uploadCategoryHistory(@RequestParam("userNum") int userNum) {
+    public ResponseEntity<ApiResponse<List<MonthlySummaryDTO>>> uploadCategoryHistory(
+            @RequestParam("userNum") int userNum) {
         List<MonthlySummaryDTO> result = cardHistoryService.uploadCategoryHistory(userNum);
         if (result.isEmpty()) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND)

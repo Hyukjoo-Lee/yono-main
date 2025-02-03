@@ -3,8 +3,10 @@ package com.mmk.service;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.NoSuchElementException;
+import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -16,6 +18,7 @@ import com.mmk.dao.CardCompanyDAO;
 import com.mmk.dao.CardDAO;
 import com.mmk.dao.UserCardDAO;
 import com.mmk.dao.UserDAO;
+import com.mmk.dto.CardBenefitDTO;
 import com.mmk.dto.UserCardDTO;
 import com.mmk.entity.CardCompanyEntity;
 import com.mmk.entity.CardEntity;
@@ -85,6 +88,7 @@ public class UserCardServiceImpl implements UserCardService {
         }
     }
 
+    // 사용자 보유 카드 조회
     @Override
     public List<UserCardDTO> getAllCardsByUserNum(int userNum) {
         List<UserCardEntity> userCardEntities = userCardDAO.getAllCardsByUserNum(userNum);
@@ -99,6 +103,38 @@ public class UserCardServiceImpl implements UserCardService {
         }
 
         return userCardDTOs;
+    }
+
+    // 사용자 보유 카드 조회 (카드정보, 혜택 포함)
+    @Override
+    public List<UserCardDTO> getAllCardsInfoByUserNum(int userNum) {
+        List<UserCardEntity> userCardEntities = userCardDAO.getAllCardsInfoByUserNum(userNum);
+
+        if (userCardEntities.isEmpty()) {
+            throw new NoSuchElementException("해당 사용자가 소유한 카드가 없습니다.");
+        }
+
+        // 사용자 카드 리스트 필요한 데이터만 가공, 현재는 나머지 null, 0 으로 처리됨
+        return userCardEntities.stream().map(entity -> {
+            UserCardDTO dto = new UserCardDTO();
+            dto.setUserCardId(entity.getUserCardId());
+            dto.setUserCardNum(maskCardNumber(entity.getUserCardNum()));
+            dto.setPrimaryCard(entity.getPrimaryCard());
+            dto.setCardImg(entity.getCardImg());
+
+            dto.setCardTitle(entity.getCardEntity().getCardTitle());
+
+            dto.setCardBenefits(
+                    entity.getCardEntity().getCardBenefits() == null ? Collections.emptyList()
+                            : entity.getCardEntity().getCardBenefits().stream()
+                                    .map(b -> new CardBenefitDTO(
+                                            b.getBenefitTitle(),
+                                            b.getBenefitValue(),
+                                            b.getBenefitType()))
+                                    .collect(Collectors.toList()));
+
+            return dto;
+        }).collect(Collectors.toList());
     }
 
     // 대표 카드 등록
@@ -116,12 +152,19 @@ public class UserCardServiceImpl implements UserCardService {
         return toDTO(userCardDAO.findByUserNumAndPrimaryCard(userDAO.findByUserNum(userNum), 1));
     }
 
+    // 카드 번호 마스킹 처리 (앞 4자리만)
+    private String maskCardNumber(String cardNumber) {
+        if (cardNumber == null || cardNumber.length() < 16) {
+            return "****-****-****-****";
+        }
+        return cardNumber.substring(0, 4) + "-****-****-****";
+    }
+
     private UserCardEntity toEntity(UserCardDTO dto) {
         UserCardEntity entity = new UserCardEntity();
         entity.setUserCardId(dto.getUserCardId());
         entity.setUserCardNum(dto.getUserCardNum());
         entity.setExpiryDate(dto.getExpiryDate());
-        entity.setUserName(dto.getUserName());
         entity.setCardPwd(dto.getCardPwd());
         entity.setCardImg(dto.getCardImg());
         entity.setPrimaryCard(dto.getPrimaryCard());
@@ -143,7 +186,6 @@ public class UserCardServiceImpl implements UserCardService {
         dto.setUserCardId(entity.getUserCardId());
         dto.setUserCardNum(entity.getUserCardNum());
         dto.setExpiryDate(entity.getExpiryDate());
-        dto.setUserName(entity.getUserName());
         dto.setCardPwd(entity.getCardPwd());
         dto.setCardImg(entity.getCardImg());
         dto.setPrimaryCard(entity.getPrimaryCard());
@@ -153,6 +195,12 @@ public class UserCardServiceImpl implements UserCardService {
         dto.setCardCompanyNum(entity.getCardCompanyEntity().getCardCompanyNum());
         dto.setCardId(entity.getCardEntity().getCardId());
         dto.setUserNum(entity.getUserEntity().getUserNum());
+        dto.setCardBenefits(
+                entity.getCardEntity().getCardBenefits() == null ? Collections.emptyList()
+                        : entity.getCardEntity().getCardBenefits().stream()
+                                .map(b -> new CardBenefitDTO(b.getBenefitTitle(), b.getBenefitValue(),
+                                        b.getBenefitType()))
+                                .collect(Collectors.toList()));
         return dto;
     }
 }

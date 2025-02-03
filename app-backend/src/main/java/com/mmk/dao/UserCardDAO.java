@@ -14,6 +14,9 @@ public interface UserCardDAO {
     // userNum 로 모든 카드 조회
     List<UserCardEntity> getAllCardsByUserNum(int userNum);
 
+    // userNum 로 모든 카드 조회 (카드 혜택, 정보 포함)
+    List<UserCardEntity> getAllCardsInfoByUserNum(int userNum);
+
     void removePrimaryCardAll(int userNum);
 
     void setPrimaryCard(int userCardId);

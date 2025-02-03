@@ -1,12 +1,12 @@
+import { useState } from 'react';
 import styled from 'styled-components';
 import CardRegFormBox from './CardRegFormBox';
+import CompanyRegFormBox from './CompanyRegFormBox';
 import CommonCardListBox from '../../common/CommonCardListBox';
 import CommonPageInfo from '../../common/CommonPageInfo';
-import {
-  registeredCardData,
-  card_images,
-} from '../../mockData/cardMockData.js';
-import { useState, useEffect } from 'react';
+import CommonButton from '../../common/CommonButton';
+import { setPrimaryCard } from '../../apis/cardApi';
+import CommonDialog from '../../common/CommonDialog';
 
 const Root = styled.div`
   width: 100%;
@@ -26,31 +26,35 @@ const ListBox = styled.div`
   }
 `;
 
-const CardRegTab = () => {
-  // 등록된 카드 데이터
-  const [cardData, setCardData] = useState([]);
-  // 카드사 별 이미지 데이터
-  const [cardImg, setCardImg] = useState(card_images);
-  const [isLoaded, setIsLoaded] = useState(false);
+const CardRegTab = ({ user, userCards }) => {
+  const [isPrimaryCardSetSuccess, setIsPrimaryCardSetSuccess] = useState(false);
+  const [isPrimaryCardSetFail, setIsPrimaryCardSetFail] = useState(false);
+  const [isRegisteringCompany, setIsRegisteringCompany] = useState(false);
 
-  useEffect(() => {
-    if (isLoaded) return;
+  const handleCardSelect = async (card) => {
+    try {
+      const userNum = user?.userNum;
+      const userCardId = card?.cardId;
 
-    const fetchCardData = async () => {
-      try {
-        setCardData(registeredCardData);
-        setCardImg(card_images);
-        setIsLoaded(true);
-      } catch (error) {
-        console.error('등록한 카드 데이터 로딩 실패: ', error);
+      const response = await setPrimaryCard(userNum, userCardId);
+
+      if (response?.status === 200) {
+        setIsPrimaryCardSetSuccess(true);
+
+        setTimeout(() => {
+          window.location.reload();
+        }, 1000);
+      } else {
+        setIsPrimaryCardSetFail(true);
       }
-    };
-    fetchCardData();
-  }, [isLoaded]);
+    } catch (error) {
+      setIsPrimaryCardSetFail(true);
+    }
+  };
 
-  const handleCardSelect = (card) => {
-    // TODO: 카드 선택 로직 추가: 선택되면 카드 챌린지 페이지에 적용되는 카드가 변경됨
-    console.log(card);
+  const closeDialog = () => {
+    setIsPrimaryCardSetSuccess(false);
+    setIsPrimaryCardSetFail(false);
   };
 
   return (
@@ -59,21 +63,50 @@ const CardRegTab = () => {
         title="나의 카드 등록"
         text={
           <p>
-            소비패턴을 확인하고 싶은 카드로 등록하세요. <br />
-            등록하고 싶은 카드를 입력 후 카드 리스트에서 확인하세요.
+            소비패턴을 확인하고 싶은 카드를 등록하세요. <br />
+            등록하고 싶은 카드를 입력 후 카드 리스트에서 확인하세요. <br />
+            <strong style={{ color: '#cc0000' }}>
+              카드 등록을 위해서는 먼저 카드사 등록이 필요합니다! <br />
+              카드사 등록 후, 카드 등록을 진행해 주세요.
+            </strong>
           </p>
         }
       />
+      <CommonButton
+        text={isRegisteringCompany ? '카드 등록하기' : '카드사 등록하기'}
+        fontSize="16px"
+        background="#EFF3FD"
+        $hoverBk="#EFF3FD"
+        $hoverColor="black"
+        color="#4A4A4A"
+        $borderRadius="0"
+        onClick={() => setIsRegisteringCompany((prev) => !prev)}
+      />
       <Root>
-        <CardRegFormBox cardImg={cardImg} />
+        {isRegisteringCompany ? (
+          <CompanyRegFormBox user={user} />
+        ) : (
+          <CardRegFormBox user={user} />
+        )}
         <ListBox>
           <CommonCardListBox
-            data={cardData}
-            cardImg={cardImg}
+            data={userCards}
             showDetailed={true}
             onCardSelect={handleCardSelect}
           />
         </ListBox>
+        <CommonDialog
+          open={isPrimaryCardSetSuccess}
+          children="대표 카드가 성공적으로 설정되었습니다."
+          onClose={closeDialog}
+          onConfirm={closeDialog}
+        />
+        <CommonDialog
+          open={isPrimaryCardSetFail}
+          children="대표 카드 설정에 실패했습니다."
+          onClose={closeDialog}
+          onConfirm={closeDialog}
+        />
       </Root>
     </>
   );

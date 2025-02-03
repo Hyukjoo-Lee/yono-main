@@ -83,7 +83,10 @@ function App() {
             <Route path="/editFormBox" element={<EditFormBox />} />
             <Route path="/noticeFormBox" element={<NoticeFormBox />} />
             <Route path="/noticeList" element={<Community />} />
-            <Route path="/noticeEditFormBox" element={<NoticeEditFormBox />} />
+            <Route
+              path="/noticeEditFormBox/:id"
+              element={<NoticeEditFormBox />}
+            />
           </Routes>
         </Layout>
       </Router>

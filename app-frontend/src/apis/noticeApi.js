@@ -1,5 +1,8 @@
 import axios from 'axios';
 
+const API_BASE_URL = process.env.REACT_APP_API_URL;
+console.log('API_BASE_URL:', API_BASE_URL);
+
 // 공지사항 등록
 export const createNotice = async (formData) => {
   try {
@@ -8,7 +11,7 @@ export const createNotice = async (formData) => {
         'Content-Type': 'multipart/form-data',
       },
     });
-    return { success: true, data: response.date };
+    return { success: true, data: response.data };
   } catch (error) {
     console.error('API 호출 오류 : ', error);
     return {
@@ -62,8 +65,20 @@ export const deleteNotice = async (ids) => {
   }
 };
 
-export const getNoticeById = (id) => {
-  return axios.get(`/api/notice/${id}`);
+export const getNoticeById = async (id) => {
+  try {
+    // id가 객체라면 문자열로 변환해서 전달
+    const response = await axios.post(`/notice/edit`, {
+      params: { id },
+    });
+    // const response = await axios.get(`/notice/${id}`);
+    // const response = await axios.get(`${API_BASE_URL}/notice/${id}`);
+
+    return response.data;
+  } catch (error) {
+    console.error('공지사항 불러오기 실패 11: ', error);
+    throw error; // 오류 발생 시 그대로 던져줍니다.
+  }
 };
 
 //수정
@@ -74,9 +89,9 @@ export const updateNotice = async (formData) => {
         'Content-Type': 'multipart/form-data',
       },
     });
-    return response.status === 200;
+    return response.data;
   } catch (error) {
     console.error('공지사항 수정 중 오류 발생 : ', error);
-    return false;
+    return { success: false, message: '수정 중 오류 발생' };
   }
 };

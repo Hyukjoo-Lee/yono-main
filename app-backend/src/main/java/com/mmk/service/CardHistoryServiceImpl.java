@@ -89,9 +89,11 @@ public class CardHistoryServiceImpl implements CardHistoryService {
         try {
             ObjectMapper objectMapper = new ObjectMapper();
             objectMapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
-    
+
             String dataArrayJson = objectMapper.readTree(result).get("data").toString();
-            List<CardHistoryDTO> cardHistoryDTOList = objectMapper.readValue(dataArrayJson, new TypeReference<List<CardHistoryDTO>>() {});
+            List<CardHistoryDTO> cardHistoryDTOList = objectMapper.readValue(dataArrayJson,
+                    new TypeReference<List<CardHistoryDTO>>() {
+            });
 
             for (CardHistoryDTO cardHistoryDTO : cardHistoryDTOList) {
                 try {
@@ -111,8 +113,8 @@ public class CardHistoryServiceImpl implements CardHistoryService {
 
     // 일별 통계 -> DB에서 데이터 불러오기
     @Override
-    public List<DailyStatisticsDTO> getDailyStatistics() {
-        return cardHistoryDAO.getDailyStatistics().stream()
+    public List<DailyStatisticsDTO> getCardHistoryByUserAndPrimaryCard(int userNum) {
+        return cardHistoryDAO.findByUserNumAndPrimaryCard(userNum).stream()
                 .map(cardDto -> {
                     DailyStatisticsDTO dailyDto = new DailyStatisticsDTO();
                     dailyDto.setResApprovalNo(cardDto.getResApprovalNo());
@@ -143,24 +145,25 @@ public class CardHistoryServiceImpl implements CardHistoryService {
     private List<MonthlySummaryDTO> monthlyHistoryProcess(List<CardHistoryDTO> cardHistoryDTOList) {
         try {
             Map<String, Map<String, Integer>> groupedData = cardHistoryDTOList.parallelStream()
-                .collect(Collectors.groupingBy(
-                    card -> card.getResUsedDate().substring(0, 6),
-                    LinkedHashMap::new,
-                    Collectors.groupingBy(
-                        CardHistoryDTO::getResMemberStoreType,
-                        Collectors.summingInt(card -> Integer.parseInt(card.getResUsedAmount()))
-                    )
-                ));
-    
+                    .collect(Collectors.groupingBy(
+                            card -> card.getResUsedDate().substring(0, 6),
+                            Collectors.groupingBy(
+                                    card -> (card.getResMemberStoreType() != null && !card.getResMemberStoreType().isEmpty())
+                                    ? card.getResMemberStoreType()
+                                    : "기타",
+                                    Collectors.summingInt(card -> Integer.parseInt(card.getResUsedAmount()))
+                            )
+                    ));
+
             return groupedData.entrySet().stream()
-                .map(entry -> {
-                    MonthlySummaryDTO summary = new MonthlySummaryDTO();
-                    summary.setMonth(entry.getKey().substring(4) + "월");
-                    summary.setCategoryTotals(entry.getValue());
-                    return summary;
-                })
-                .collect(Collectors.toList());
-    
+                    .map(entry -> {
+                        MonthlySummaryDTO summary = new MonthlySummaryDTO();
+                        summary.setMonth(entry.getKey().substring(4) + "월");
+                        summary.setCategoryTotals(entry.getValue());
+                        return summary;
+                    })
+                    .collect(Collectors.toList());
+
         } catch (Exception e) {
             e.printStackTrace();
             return Collections.emptyList();
@@ -180,7 +183,7 @@ public class CardHistoryServiceImpl implements CardHistoryService {
     public List<CardHistoryDTO> monthData(int userNum) {
         return uploadCardHistory(userNum, 0);
     }
-    
+
     private CardHistoryDTO toDTO(CardHistoryEntity entity) {
         CardHistoryDTO dto = new CardHistoryDTO();
         dto.setResApprovalNo(entity.getResApprovalNo());
@@ -190,7 +193,7 @@ public class CardHistoryServiceImpl implements CardHistoryService {
         dto.setResMemberStoreName(entity.getResMemberStoreName());
         dto.setResUsedAmount(entity.getResUsedAmount());
         dto.setResMemberStoreType(entity.getResMemberStoreType());
-        
+
         dto.setUserCardId(entity.getUserCardEntity().getUserCardId());
         return dto;
     }
@@ -208,4 +211,37 @@ public class CardHistoryServiceImpl implements CardHistoryService {
         entity.setUserCardEntity(userCardDAO.findByUserCardId(dto.getUserCardId()));
         return entity;
     }
+
+    @Override
+    public int getMonthlyTotalAmount(int userNum, String yearMonth) {
+        // yearMonth는 yyyyMM 형식 (예: 202301)
+
+        // 월의 첫 날과 마지막 날 계산
+        LocalDate startOfMonth = LocalDate.parse(yearMonth + "01", DateTimeFormatter.ofPattern("yyyyMMdd"));
+        LocalDate endOfMonth = startOfMonth.withDayOfMonth(startOfMonth.lengthOfMonth());
+
+        // yyyyMMdd 형식으로 변환 (startDate와 endDate는 필터링에만 사용)
+        String startDate = startOfMonth.format(DateTimeFormatter.ofPattern("yyyyMMdd"));
+        String endDate = endOfMonth.format(DateTimeFormatter.ofPattern("yyyyMMdd"));
+
+        // 최근 3개월 카드 내역을 가져옵니다.
+        List<CardHistoryDTO> historyList = uploadCardHistory(userNum, 2);
+
+        // 해당 월에 해당하는 내역만 필터링
+        List<CardHistoryDTO> filteredHistoryList = historyList.stream()
+                .filter(cardHistory -> {
+                    // 카드 사용 날짜가 startDate와 endDate 사이에 있는지 확인
+                    String usedDate = cardHistory.getResUsedDate().substring(0, 8);  // yyyyMMdd 형식
+                    return usedDate.compareTo(startDate) >= 0 && usedDate.compareTo(endDate) <= 0;
+                })
+                .collect(Collectors.toList());
+
+        // 금액 합산 (금액을 숫자로 변환 후 합산)
+        int totalAmount = filteredHistoryList.stream()
+                .mapToInt(history -> Integer.parseInt(history.getResUsedAmount()))
+                .sum();
+
+        return totalAmount;
+    }
+
 }

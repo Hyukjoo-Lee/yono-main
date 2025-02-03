@@ -10,7 +10,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -50,8 +49,8 @@ public class NoticeController {
     }
 
     private String saveFile(MultipartFile file) throws IOException{
-    String propertyPath = System.getProperty("user.dir").replace("\\app-backend","");
-    String uploadFolder = propertyPath + "\\uploads\\images";
+      String propertyPath = System.getProperty("user.dir").replace("\\app-backend", "").replace("/app-backend", "");
+      String uploadFolder = propertyPath + "/uploads/images";
 
     Calendar cal = Calendar.getInstance();
     int year = cal.get(Calendar.YEAR);
@@ -75,7 +74,7 @@ public class NoticeController {
     String fileExtension = fileName.substring(index + 1);
     String originalFileName = fileName.substring(0,fileName.length() - fileExtension.length() -1);
     String newFileName = originalFileName + year + month + date + random + "." + fileExtension;
-    String fileDBName = "/uploads/images" + year + "-" + month + "-" + date + "/" + newFileName;
+    String fileDBName = "/uploads/images/" + year + "-" + month + "-" + date + "/" + newFileName;
 
     File saveFile = new File(homedir + "/" + newFileName);
     log.info("파일 저장 경로 : " + saveFile.getAbsolutePath());
@@ -96,22 +95,32 @@ public class NoticeController {
   }
 
   //글 상세보기+조회수 증가
-  @GetMapping("/{id}")
-public ResponseEntity<NoticeDTO> getNoticeDetail(@PathVariable("id") int id){
-    try {
-        noticeService.increaseViewCount(id);
+//   @GetMapping("/{id}")
+// public ResponseEntity<NoticeDTO> getNoticeDetail(@PathVariable("id") int id){
+//     try {
+//         noticeService.increaseViewCount(id);
         
-        NoticeDTO notice = noticeService.getNoticeById(id);
-        if (notice != null) {
-            return ResponseEntity.ok(notice);
-        } else {
-            return ResponseEntity.notFound().build();
-        }
-    } catch (Exception e) {
-        log.error("Error while getting notice details: ", e);
-        return ResponseEntity.status(500).build();
+//         NoticeDTO notice = noticeService.getNoticeById(id);
+//         if (notice != null) {
+//             return ResponseEntity.ok(notice);
+//         } else {
+//             return ResponseEntity.notFound().build();
+//         }
+//     } catch (Exception e) {
+//         log.error("Error while getting notice details: ", e);
+//         return ResponseEntity.status(500).build();
+//     }
+// }
+  //글 상세보기
+  @GetMapping("/detail")
+  public ResponseEntity<NoticeDTO> getNoticeDetail(@RequestParam("id") int id){
+    NoticeDTO notice = noticeService.getNoticeById(id);
+    if(notice != null){
+      return ResponseEntity.ok(notice);
+    }else{
+        return ResponseEntity.notFound().build();
     }
-}
+  }
 
   //글 삭제
   @PostMapping("/delete")

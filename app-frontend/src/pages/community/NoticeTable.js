@@ -1,6 +1,3 @@
-//NoticeTable 수정버전
-import React, { useEffect, useState } from 'react';
-
 import {
   Pagination,
   PaginationItem,
@@ -12,12 +9,11 @@ import {
   TableHead,
   TableRow,
 } from '@mui/material';
-// import axios from 'axios';
+import React, { useEffect, useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
 import { fetchSearchNotice } from '../../apis/noticeApi';
 import CommonButton from '../../common/CommonButton';
-import CommonDialog from '../../common/CommonDialog';
 import CommonInput from '../../common/CommonInput';
 
 const Root = styled.div`
@@ -68,6 +64,7 @@ const PaginationStyle = styled(Pagination)`
     color: #3563e9;
   }
 `;
+
 const Box = styled.div`
   display: flex;
   justify-content: start;
@@ -79,18 +76,15 @@ const Box = styled.div`
     margin-left: 10px;
   }
 `;
+
 export function NoticeTable() {
   const [rows, setRows] = useState([]);
   const [page, setPage] = useState(0);
   const [keyword, setKeyword] = useState('');
-  const [isLoggedIn, setIsLoggedIn] = useState(false);
-  const [isDialogOpen, setIsDialogOpen] = useState(false);
   const rowsPerPage = 10;
   const navigate = useNavigate();
 
   useEffect(() => {
-    const user = localStorage.getItem('user');
-    setIsLoggedIn(!!user);
     getNoticeData(keyword);
   }, [keyword]);
 
@@ -99,11 +93,7 @@ export function NoticeTable() {
   };
 
   const handleButtonClick = () => {
-    if (isLoggedIn) {
-      navigate('/noticeFormBox');
-    } else {
-      setIsDialogOpen(true);
-    }
+    navigate('/noticeFormBox'); // 로그인 여부와 상관없이 글쓰기 폼으로 이동
   };
 
   const handleSearchChange = (e) => {
@@ -127,10 +117,12 @@ export function NoticeTable() {
         setRows(response);
       } else {
         setRows([]);
+        setPage(0);
       }
     } catch (error) {
       console.error('Error fetching data : ', error);
       setRows([]);
+      setPage(0);
     }
   };
 
@@ -142,19 +134,6 @@ export function NoticeTable() {
     const day = date.getDate().toString().padStart(2, '0');
 
     return `${year}-${month}-${day}`;
-  };
-
-  const handlePostClick = (id) => {
-    navigate(`/notice/${id}`);
-  };
-
-  const handleDialogLogin = () => {
-    setIsDialogOpen(false);
-    navigate('/login');
-  };
-
-  const handleDialogClose = () => {
-    setIsDialogOpen(false);
   };
 
   return (
@@ -184,7 +163,7 @@ export function NoticeTable() {
             width="100px"
             height="39px"
             text="글등록"
-            onClick={handleButtonClick}
+            onClick={handleButtonClick} // 로그인 여부와 상관없이 글쓰기 폼으로 이동
           />
         </Container>
 
@@ -210,13 +189,7 @@ export function NoticeTable() {
                   rows
                     .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
                     .map((row, index) => (
-                      <TableRow
-                        hover
-                        role="checkbox"
-                        tabIndex={-1}
-                        key={index}
-                        onClick={() => handlePostClick(row.noticeNo)}
-                      >
+                      <TableRow hover role="checkbox" tabIndex={-1} key={index}>
                         {columns.map((column) => {
                           let value = row[column.id];
                           if (column.id === 'createdAt') {
@@ -229,8 +202,7 @@ export function NoticeTable() {
                               sx={{ borderBottom: '0.5px solid #757575' }}
                             >
                               <Link
-                                // to="/no"
-                                state={{ rowData: row }}
+                                to={`/notice/${row.noticeNo}`} // Link로 상세 페이지 이동
                                 style={{
                                   textDecoration: 'none',
                                   color: 'black',
@@ -263,15 +235,9 @@ export function NoticeTable() {
             renderItem={(item) => <PaginationItem {...item} />}
           />
         </Paper>
-
-        <CommonDialog
-          open={isDialogOpen}
-          onClose={handleDialogClose}
-          children={'관리자만 등록 가능합니다.'}
-          onClick={handleDialogLogin}
-        />
       </Root>
     </>
   );
 }
+
 export default NoticeTable;

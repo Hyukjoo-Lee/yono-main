@@ -58,6 +58,14 @@ module.exports = function (app) {
   );
 
   app.use(
+    '/cardCompany',
+    createProxyMiddleware({
+      target: process.env.REACT_APP_API_URL,
+      changeOrigin: true,
+    }),
+  );
+
+  app.use(
     '/notice',
     createProxyMiddleware({
       target: process.env.REACT_APP_API_URL,

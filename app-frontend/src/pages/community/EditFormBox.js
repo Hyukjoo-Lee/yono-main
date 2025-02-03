@@ -235,7 +235,7 @@ export function EditFormBox() {
         content: postFormData.content,
         imgurl: postFormData.imgurl,
         regdate: updatedDate,
-        updatedAt: updatedDate,
+        updatedAt: updatedDate, // 수정된 날짜
       });
 
       formData.append('postFormData', postData);
