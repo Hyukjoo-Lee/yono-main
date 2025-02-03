@@ -7,6 +7,7 @@ import CommonPageInfo from '../../common/CommonPageInfo';
 import CommonButton from '../../common/CommonButton';
 import { setPrimaryCard } from '../../apis/cardApi';
 import CommonDialog from '../../common/CommonDialog';
+import { EmptyBox } from '../cardAnalysis/dailyStatistics/DailyStatistics';
 
 const Root = styled.div`
   width: 100%;
@@ -88,13 +89,19 @@ const CardRegTab = ({ user, userCards }) => {
         ) : (
           <CardRegFormBox user={user} />
         )}
-        <ListBox>
-          <CommonCardListBox
-            data={userCards}
-            showDetailed={true}
-            onCardSelect={handleCardSelect}
-          />
-        </ListBox>
+        {userCards.length > 0 ? (
+          <ListBox>
+            <CommonCardListBox
+              data={userCards}
+              showDetailed={true}
+              onCardSelect={handleCardSelect}
+            />
+          </ListBox>
+        ) : (
+          <EmptyBox>
+            <p>등록된 카드가 없습니다.</p>
+          </EmptyBox>
+        )}
         <CommonDialog
           open={isPrimaryCardSetSuccess}
           children="대표 카드가 성공적으로 설정되었습니다."

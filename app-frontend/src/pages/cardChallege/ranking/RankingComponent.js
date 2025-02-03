@@ -10,18 +10,22 @@ const Root = styled.div`
 `;
 
 const RootIn = styled.div`
-  width: 100%;
-  display: flex;
-  justify-content: space-around;
-  align-items: flex-end;
-  & > div:nth-child(1) {
-    order: 2;
-  }
-  & > div:nth-child(2) {
-    order: 1;
-  }
-  & > div:nth-child(3) {
-    order: 3;
+  & > div {
+    width: 100%;
+    & > div {
+      display: flex;
+      justify-content: space-around;
+      align-items: flex-end;
+      & > div:nth-child(1) {
+        order: 2;
+      }
+      & > div:nth-child(2) {
+        order: 1;
+      }
+      & > div:nth-child(3) {
+        order: 3;
+      }
+    }
   }
 `;
 
@@ -119,38 +123,44 @@ const RankingComponent = ({ rankingList, maskName }) => {
         {top3.length === 0 ? (
           <></>
         ) : (
-          top3.map((item, index) => (
-            <BoxStyle key={index}>
-              <CircleBox $rank={index}>
-                {item.profile !== 'temp_profile' ? (
-                  <img
-                    src={`http://localhost:8065${item.profile}`}
-                    alt={maskName(item.name)}
-                  />
-                ) : (
-                  <Profile />
-                )}
-              </CircleBox>
-              <NameStyle>
-                {maskName(item.name)}({item.userId})
-              </NameStyle>
-              <Box>
-                {index === 0 ? (
-                  <Medal1 />
-                ) : index === 1 ? (
-                  <Medal2 />
-                ) : (
-                  <Medal3 />
-                )}
-                <p>{item.badge.toLocaleString()}개</p>
-              </Box>
-            </BoxStyle>
-          ))
+          <div>
+            <div>
+              {top3.map((item, index) => (
+                <BoxStyle key={index}>
+                  <CircleBox $rank={index}>
+                    {item.profile !== 'temp_profile' ? (
+                      <img
+                        src={`http://localhost:8065${item.profile}`}
+                        alt={maskName(item.name)}
+                      />
+                    ) : (
+                      <Profile />
+                    )}
+                  </CircleBox>
+                  <NameStyle>
+                    {maskName(item.name)}({item.userId})
+                  </NameStyle>
+                  <Box>
+                    {index === 0 ? (
+                      <Medal1 />
+                    ) : index === 1 ? (
+                      <Medal2 />
+                    ) : (
+                      <Medal3 />
+                    )}
+                    <p>{item.badge.toLocaleString()}개</p>
+                  </Box>
+                </BoxStyle>
+              ))}
+            </div>
+
+            <TextStyle>
+              공동 순위인 경우, 소수점 자리까지 기준을 적용하여 순위를
+              산정합니다.
+            </TextStyle>
+          </div>
         )}
       </RootIn>
-      <TextStyle>
-        공동 순위인 경우, 소수점 자리까지 기준을 적용하여 순위를 산정합니다.
-      </TextStyle>
     </Root>
   );
 };

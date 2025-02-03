@@ -12,7 +12,6 @@ import {
 import { logoutUser, updateUserProfile } from '../../redux/actions/userAction';
 import { useDispatch } from 'react-redux';
 import theme from '../../theme/theme';
-import SearchAddressDialog from '../auth/modal/SearchAddressDialog';
 import PasswordDialog from './PasswordDialog';
 import Profile from './Profile';
 import CommonDialog from '../../common/CommonDialog';
@@ -100,7 +99,6 @@ const CheckUserInfo = ({ users }) => {
   const [isEditing, setIsEditing] = useState(true);
   const [isShowDialog, setIsShowDialog] = useState(false);
   const [passwordError, setPasswordError] = useState('');
-  const [isAddressModalOpen, setIsAddressModalOpen] = useState(false);
   const [isDeleteDialog, setIsDeleteDialog] = useState(false);
   const [userInfo, setUserInfo] = useState({
     ...users,
@@ -114,9 +112,6 @@ const CheckUserInfo = ({ users }) => {
       originPassword: '',
       email: users.email || '',
       name: users.name || '',
-      address: users.address || '',
-      detailAddress: users.detailAddress || '',
-      postcode: users.postcode || '',
       spendingTarget: users.spendingTarget || 0,
       profile: users.profile || '',
       createdAt: users.createdAt || '',
@@ -150,11 +145,6 @@ const CheckUserInfo = ({ users }) => {
     console.log('previewImage: ' + previewImage);
   };
 
-  const handleAddressSelect = (address) => {
-    setUserInfo((prev) => ({ ...prev, address }));
-    setIsAddressModalOpen(false);
-  };
-
   const toggleEdit = () => {
     setIsEditing(!isEditing);
     setPasswordError('');
@@ -170,9 +160,6 @@ const CheckUserInfo = ({ users }) => {
       originPassword: '',
       email: users.email || '',
       name: users.name || '',
-      address: users.address || '',
-      detailAddress: users.detailAddress || '',
-      postcode: users.postcode || '',
       spendingTarget: users.spendingTarget || '',
       profile: users.profile || '',
       createdAt: users.createdAt || '',
@@ -298,8 +285,6 @@ const CheckUserInfo = ({ users }) => {
     { title: '이름', value: users.name },
     { title: '이메일', value: users.email },
     { title: '일일 목표 지출금액', value: users.spendingTarget },
-    { title: '주소', value: users.address },
-    { title: '상세주소', value: users.detailAddress },
   ];
 
   const editField = [
@@ -422,49 +407,7 @@ const CheckUserInfo = ({ users }) => {
             </InnerSection>
           ))}
 
-          <InnerSection>
-            <InputUserIdBox>
-              <CommonInput
-                placeholder="주소를 입력하세요"
-                text="주소"
-                value={userInfo.address}
-                {...abledInputProps}
-                width="100%"
-                onChange={(e) => handleInputChange(e, 'address')}
-              />
-              <ButtonWrapper>
-                <CommonButton
-                  width="100px"
-                  height="40px"
-                  text="주소검색"
-                  fontSize={theme.fontSize.base}
-                  onClick={() => setIsAddressModalOpen(true)}
-                />
-              </ButtonWrapper>
-            </InputUserIdBox>
-
-            <StyledHr />
-          </InnerSection>
-
-          <InnerSection>
-            <CommonInput
-              placeholder="상세 주소를 입력하세요"
-              text="상세 주소"
-              value={userInfo.detailAddress}
-              onChange={(e) => handleChange('detailAddress', e.target.value)}
-              {...abledInputProps}
-            />
-            <StyledHr />
-          </InnerSection>
-
           {passwordError && <ErrorText>{passwordError}</ErrorText>}
-
-          <SearchAddressDialog
-            open={isAddressModalOpen}
-            setModalVisible={setIsAddressModalOpen}
-            onCompletePost={handleAddressSelect}
-            setFormData={setUserInfo}
-          />
         </>
       )}
 

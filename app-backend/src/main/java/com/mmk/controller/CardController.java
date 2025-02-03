@@ -10,7 +10,6 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.mmk.common.ApiResponse;
@@ -47,13 +46,6 @@ public class CardController {
                     .body(new ApiResponse<>(404, "해당 기관 코드에 등록된 카드가 없습니다.", null));
         }
         return ResponseEntity.ok(new ApiResponse<>(200, "기관 코드별 카드 검색 성공", cardDTOs));
-    }
-
-    // 로그인 유저의 대표카드의 카드 조회
-    @GetMapping("/primaryCard")
-    public ResponseEntity<ApiResponse<CardDTO>> getPrimaryCard(@RequestParam("userNum") int userNum) {
-        CardDTO cardDTO = cardService.findByUserNum(userNum);
-        return ResponseEntity.ok(new ApiResponse<>(200, "대표카드의 카드 정보 조회 성공", cardDTO));
     }
 
     // 마스터 카드 생성

@@ -1,6 +1,6 @@
 import styled from 'styled-components';
 import CommonCardListBox from '../../../common/CommonCardListBox';
-import { dailyStatisticsCardData } from '../../../mockData/cardMockData';
+import CommonLoading from '../../../common/CommonLoading';
 import Piechart from '../monthlyStatistics/chart/Piechart';
 import { useState, useEffect } from 'react';
 import { useSelector } from 'react-redux';
@@ -35,11 +35,6 @@ const ListBox = styled.div`
   &::-webkit-scrollbar-track {
     background: transparent;
   }
-`;
-
-const LoadingText = styled.div`
-  font-size: 24px;
-  color: #999;
 `;
 
 const MessageText = styled.p`
@@ -109,16 +104,17 @@ const CategoryStatics = () => {
   }, [userNum]);
 
   if (loading) {
-    return <LoadingText>로딩 중...</LoadingText>;
+    return <CommonLoading />;
   }
 
   const handleClick = (data) => {
     setCategory(data.id);
   };
 
-  const filteredData = monthlyData.filter((item) => {
-    return category === item.resMemberStoreType;
-  });
+  const filteredData =
+    monthlyData?.filter((item) => {
+      return category === item.resMemberStoreType;
+    }) || [];
 
   const formatDate = (date) => {
     if (typeof date === 'string' && date.length === 8) {
@@ -151,7 +147,7 @@ const CategoryStatics = () => {
                     ...item,
                     resUsedDate: formatDate(item.resUsedDate), // 변환된 날짜 전달
                     cardTitle: card.cardTitle,
-                    cardImgUrl: card.cardImgUrl,
+                    cardImgUrl: card.cardImg,
                   }}
                   showDetailed={false}
                 />

@@ -13,8 +13,13 @@ drop table user_card; -- 3
 drop table user_info; -- 4
 drop table card_benefit; -- 1
 drop table card_history; -- 2
+drop table badge;
+drop table daily_statistics;
+drop table notice;
 drop table tbl_posts; -- 7
 drop table tbl_reply; -- 8
+drop table reply_likes;
+drop table ranking;
 
 insert into user_info (user_num, user_id, name, profile, email, password,  address, detail_Address, postcode, spending_target, created_at, updated_at) 
 values (user_seq.nextval, 'hjtestid', '이혁주', '/images/image2.jpg', 'hj@google.com', '1234', '서울시 용산구', '1415호', '11111', 500000, sysdate, sysdate);
@@ -41,3 +46,17 @@ commit;
 
 insert into card_company (CARD_COMPANY.CARD_COMPANY_NUM, user_num, company_id, company_pwd, CARD_COMPANY.CONNECTED_ID, organization) 
 values (cardCompany_seq.nextval, '1', 'BIGIE2', '*As89117465', 'aIrIVPH3kPh95dvn6AkgKR', '0304');
+
+
+
+
+
+
+SELECT constraint_name, table_name
+FROM all_constraints
+WHERE constraint_type = 'R' -- 외래 키 제약 조건만 조회
+AND r_constraint_name IN (
+SELECT constraint_name
+FROM all_constraints
+WHERE table_name = 'user_info' AND owner = 'MMK' -- 스키마 이름은 문자열로 입력
+);
