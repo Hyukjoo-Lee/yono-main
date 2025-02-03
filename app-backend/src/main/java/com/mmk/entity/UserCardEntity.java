@@ -61,7 +61,7 @@ public class UserCardEntity {
     private Timestamp updatedAt;
 
     @ManyToOne
-    @JoinColumn(name = "card_company_num", nullable = false, foreignKey = @ForeignKey(name = "fk_user_card_company"))
+    @JoinColumn(name = "card_company_num", nullable = false)
     private UserCardCompanyEntity userCardCompanyEntity;
 
     @ManyToOne
