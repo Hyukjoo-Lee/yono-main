@@ -114,7 +114,6 @@ const DailyStatistics = () => {
 
           try {
             const card = await getprimaryCardInfo(isLoggedIn);
-            console.log('card.data: ' + card.data);
             if (!card.data) {
               setIsShowCardDialog(true);
             }

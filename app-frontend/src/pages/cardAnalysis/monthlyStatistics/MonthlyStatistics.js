@@ -1,13 +1,13 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
+import { useSelector } from 'react-redux';
 import styled from 'styled-components';
-import { useState, useEffect } from 'react';
-import Barchart from '../../../pages/cardAnalysis/monthlyStatistics/chart/Barchart';
-import Piechart from '../../../pages/cardAnalysis/monthlyStatistics/chart/Piechart';
 import {
   // updateHistory,
   uploadThreeMonthHistory,
 } from '../../../apis/cardHistoryApi';
-import { useSelector } from 'react-redux';
+import Barchart from '../../../pages/cardAnalysis/monthlyStatistics/chart/Barchart';
+import Piechart from '../../../pages/cardAnalysis/monthlyStatistics/chart/Piechart';
+import CommonLoading from '../../../common/CommonLoading';
 
 const Root = styled.div`
   display: flex;
@@ -19,11 +19,6 @@ const ChartsContainer = styled.div`
   display: flex;
   justify-content: space-around;
   width: 100%;
-`;
-
-const LoadingText = styled.div`
-  font-size: 24px;
-  color: #999;
 `;
 
 const MessageText = styled.p`
@@ -62,19 +57,17 @@ const MonthlyStatistics = () => {
   }, [userNum]);
 
   if (loading) {
-    return <LoadingText>로딩 중...</LoadingText>;
+    return <CommonLoading />;
   }
 
   return (
     <Root>
       <ChartsContainer>
         {cardData ? (
-          <Barchart data={cardData} />
-        ) : (
-          <p>집계된 데이터가 없습니다.</p>
-        )}
-        {cardData ? (
-          <Piechart data={cardData} />
+          <>
+            <Barchart data={cardData} />
+            <Piechart data={cardData} />
+          </>
         ) : (
           <p>집계된 데이터가 없습니다.</p>
         )}
