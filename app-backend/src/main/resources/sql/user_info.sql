@@ -25,7 +25,7 @@ insert into user_info (user_num, user_id, name, email, password,  spending_targe
 values (user_seq.nextval, 'jetestid', '박지은', 'je@google.com', '1234',  500000, sysdate, sysdate);
 
 insert into user_info (user_num, user_id, name, email, password,  spending_target, created_at, updated_at) 
-values (user_seq.nextval, 'hongid', '홍길동', 'hong@google.com', '1234',  500000, sysdate, sysdate);
+values (user_seq.nextval, 'hongid', '홍길동구리', 'hong@google.com', '1234',  500000, sysdate, sysdate);
 
 insert into user_info (user_num, user_id, name, email, password,  spending_target, created_at, updated_at) 
 values (user_seq.nextval, 'leeid', '이순신', 'lee@google.com', '1234', 500000, sysdate, sysdate);

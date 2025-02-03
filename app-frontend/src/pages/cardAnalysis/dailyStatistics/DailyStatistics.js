@@ -222,12 +222,13 @@ const DailyStatistics = () => {
             <CommonLoading />
           </EmptyBox>
         ) : filteredStatistics.length > 0 ? (
-          filteredStatistics.map((item) => (
+          filteredStatistics.map((item, index) => (
             <CommonCardListBox
               key={item.resApprovalNo}
               cardItem={{
                 ...item,
                 resUsedDate: formatDate(item.resUsedDate), // 변환된 날짜 전달
+                cardImgUrl: filteredStatistics[index].cardImg,
               }}
               showDetailed={false}
             />
