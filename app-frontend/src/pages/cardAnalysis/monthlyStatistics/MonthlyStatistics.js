@@ -1,13 +1,13 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
+import { useSelector } from 'react-redux';
 import styled from 'styled-components';
-import { useState, useEffect } from 'react';
-import Barchart from '../../../pages/cardAnalysis/monthlyStatistics/chart/Barchart';
-import Piechart from '../../../pages/cardAnalysis/monthlyStatistics/chart/Piechart';
 import {
   // updateHistory,
   uploadThreeMonthHistory,
 } from '../../../apis/cardHistoryApi';
-import { useSelector } from 'react-redux';
+import Barchart from '../../../pages/cardAnalysis/monthlyStatistics/chart/Barchart';
+import Piechart from '../../../pages/cardAnalysis/monthlyStatistics/chart/Piechart';
+import CommonLoading from '../../../common/CommonLoading';
 
 const Root = styled.div`
   display: flex;
@@ -19,11 +19,6 @@ const ChartsContainer = styled.div`
   display: flex;
   justify-content: space-around;
   width: 100%;
-`;
-
-const LoadingText = styled.div`
-  font-size: 24px;
-  color: #999;
 `;
 
 const MessageText = styled.p`
@@ -41,19 +36,18 @@ const MonthlyStatistics = () => {
 
   useEffect(() => {
     const fetchUser = async () => {
-      try {
-        const response = await uploadThreeMonthHistory(userNum);
+      const response = await uploadThreeMonthHistory(userNum);
+      if (typeof response === 'string') {
+        console.log(response); // 예외 발생시 다이얼로그 처리 필요
+      } else if (response != null) {
         setCardData(response.data);
-        setLoading(false);
-
-        // await updateHistory(userNum);
-        // const updatedData = await uploadRecentHistory(userNum);
-        // setCardData(updatedData.data);
-        setMessage(false);
-      } catch (error) {
-        console.error('카드 정보를 불러오는 중 오류 발생:', error);
-        setCardData(null);
       }
+      setLoading(false);
+
+      // await updateHistory(userNum);
+      // const updatedData = await uploadRecentHistory(userNum);
+      // setCardData(updatedData.data);
+      setMessage(false);
     };
 
     if (userNum) {
@@ -62,19 +56,17 @@ const MonthlyStatistics = () => {
   }, [userNum]);
 
   if (loading) {
-    return <LoadingText>로딩 중...</LoadingText>;
+    return <CommonLoading />;
   }
 
   return (
     <Root>
       <ChartsContainer>
         {cardData ? (
-          <Barchart data={cardData} />
-        ) : (
-          <p>집계된 데이터가 없습니다.</p>
-        )}
-        {cardData ? (
-          <Piechart data={cardData} />
+          <>
+            <Barchart data={cardData} />
+            <Piechart data={cardData} />
+          </>
         ) : (
           <p>집계된 데이터가 없습니다.</p>
         )}

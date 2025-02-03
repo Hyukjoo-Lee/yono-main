@@ -1,5 +1,6 @@
 package com.mmk.controller;
 
+import java.util.Collections;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -32,12 +33,16 @@ public class CardHistoryController {
     @GetMapping("/monthlyUpload")
     public ResponseEntity<ApiResponse<List<MonthlySummaryDTO>>> uploadMonthlyHistory(
             @RequestParam("userNum") int userNum) {
-        List<MonthlySummaryDTO> result = cardHistoryService.uploadMonthlyHistory(userNum);
-        if (result.isEmpty()) {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND)
-                    .body(new ApiResponse<>(404, "최근 카드내역이 존재하지 않습니다", null));
-        } else {
-            return ResponseEntity.ok(new ApiResponse<>(200, "최근 카드내역 조회 성공", result));
+        try {
+            List<MonthlySummaryDTO> result = cardHistoryService.uploadMonthlyHistory(userNum);
+            if (result.isEmpty()) {
+                return ResponseEntity.noContent().build();
+            } else {
+                return ResponseEntity.ok(new ApiResponse<>(200, "최근 카드내역 조회 성공", result));
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(new ApiResponse<>(500, "카드내역 불러오는 중 오류 발생", null));
         }
     }
 
@@ -45,24 +50,32 @@ public class CardHistoryController {
     @GetMapping("/categoryUpload")
     public ResponseEntity<ApiResponse<List<MonthlySummaryDTO>>> uploadCategoryHistory(
             @RequestParam("userNum") int userNum) {
-        List<MonthlySummaryDTO> result = cardHistoryService.uploadCategoryHistory(userNum);
-        if (result.isEmpty()) {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND)
-                    .body(new ApiResponse<>(404, "최근 카드내역이 존재하지 않습니다", null));
-        } else {
-            return ResponseEntity.ok(new ApiResponse<>(200, "최근 카드내역 조회 성공", result));
+        try {
+            List<MonthlySummaryDTO> result = cardHistoryService.uploadCategoryHistory(userNum);
+            if (result.isEmpty()) {
+                return ResponseEntity.noContent().build();
+            } else {
+                return ResponseEntity.ok(new ApiResponse<>(200, "최근 카드내역 조회 성공", result));
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(new ApiResponse<>(500, "카드내역 불러오는 중 오류 발생", null));
         }
     }
 
     // 목차별통계 - 가공되지 않는 DB 의 최근 1개월 카드내역 불러오기
     @GetMapping("/monthData")
     public ResponseEntity<ApiResponse<List<CardHistoryDTO>>> monthData(@RequestParam("userNum") int userNum) {
-        List<CardHistoryDTO> result = cardHistoryService.monthData(userNum);
-        if (result.isEmpty()) {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND)
-                    .body(new ApiResponse<>(404, "최근 카드내역이 존재하지 않습니다", null));
-        } else {
-            return ResponseEntity.ok(new ApiResponse<>(200, "최근 카드내역 조회 성공", result));
+        try {
+            List<CardHistoryDTO> result = cardHistoryService.monthData(userNum);
+            if (result.isEmpty()) {
+                return ResponseEntity.noContent().build();
+            } else {
+                return ResponseEntity.ok(new ApiResponse<>(200, "최근 카드내역 조회 성공", result));
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(new ApiResponse<>(500, "카드내역 불러오는 중 오류 발생", null));
         }
     }
 
