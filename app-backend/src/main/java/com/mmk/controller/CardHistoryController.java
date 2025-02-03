@@ -1,6 +1,5 @@
 package com.mmk.controller;
 
-import java.util.Collections;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -25,8 +24,14 @@ public class CardHistoryController {
 
     // 카드내역 DB에 갱신
     @GetMapping("/update")
-    public void updateCardHistory(@RequestParam("userNum") int userNum) {
-        cardHistoryService.updateCardHistory(userNum);
+    public ResponseEntity<ApiResponse<Boolean>> updateCardHistory(@RequestParam("userNum") int userNum) {
+        try {
+            cardHistoryService.updateCardHistory(userNum);
+            return ResponseEntity.ok(new ApiResponse<>(200, "카드 내역 DB에 갱신 성공", true));
+        } catch (Exception e) {
+            e.printStackTrace();
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(new ApiResponse<>(500, "카드 내역 DB에 갱신 실패", false));
+        }
     }
 
     // 월별통계 - DB에 있는 최근 3개월 카드내역 불러오기

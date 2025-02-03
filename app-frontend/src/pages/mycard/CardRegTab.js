@@ -7,7 +7,6 @@ import CommonPageInfo from '../../common/CommonPageInfo';
 import CommonButton from '../../common/CommonButton';
 import { setPrimaryCard } from '../../apis/cardApi';
 import CommonDialog from '../../common/CommonDialog';
-import { EmptyBox } from '../cardAnalysis/dailyStatistics/DailyStatistics';
 
 const Root = styled.div`
   width: 100%;
@@ -25,6 +24,17 @@ const ListBox = styled.div`
   &::-webkit-scrollbar {
     width: 0;
   }
+`;
+
+const EmptyBox = styled.div`
+  width: 100%;
+  height: 100px;
+  border: 1px solid ${(props) => props.theme.color.mediumGray};
+  border-radius: 7px;
+  box-shadow: 0px 4px 5px rgba(0, 0, 0, 0.1);
+  display: flex;
+  align-items: center;
+  justify-content: center;
 `;
 
 const CardRegTab = ({ user, userCards }) => {

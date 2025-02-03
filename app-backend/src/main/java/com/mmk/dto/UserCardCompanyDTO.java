@@ -7,9 +7,9 @@ import lombok.ToString;
 @Getter
 @Setter
 @ToString
-public class CardCompanyDTO {
+public class UserCardCompanyDTO {
     private int cardCompanyNum;
-    
+
     private int userNum;
 
     private String organization;

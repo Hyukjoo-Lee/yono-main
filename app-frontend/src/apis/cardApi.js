@@ -40,15 +40,16 @@ export const saveCodefCard = async (userNum, organization) => {
 // Codef API 끝
 
 export const getprimaryCardInfo = async (userNum) => {
-  try {
-    const response = await axios.get('/card/primaryCard', {
-      params: { userNum },
-    });
+  const response = await axios.get('/card/primaryCard', {
+    params: { userNum },
+  });
+
+  if (response.status === 204) {
+    return null;
+  } else if (response.status === 200) {
     return response.data;
-  } catch (error) {
-    if (error.response) {
-      return error.response.data;
-    }
+  } else {
+    return response.message;
   }
 };
 

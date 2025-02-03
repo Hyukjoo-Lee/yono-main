@@ -63,8 +63,7 @@ export function MyCard() {
             type: benefit.benefitType,
           })),
         }));
-
-        setUserCards(formattedCards);
+        if (response) setUserCards(formattedCards);
       } catch (error) {
         console.error('사용자 카드 목록 로딩 실패: ', error);
       } finally {
