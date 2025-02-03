@@ -4,7 +4,7 @@ import { ReactComponent as Medal1 } from '../../../assets/images/Medal1.svg';
 import { ReactComponent as Medal2 } from '../../../assets/images/Medal2.svg';
 import { ReactComponent as Medal3 } from '../../../assets/images/Medal3.svg';
 import { ReactComponent as Profile } from '../../../assets/images/Profile.svg';
-import CircularProgress from '@mui/material/CircularProgress';
+import CommonLoading from '../../../common/CommonLoading';
 
 const Root = styled.div`
   width: 100%;
@@ -32,11 +32,8 @@ const EmptyBox = styled(BoxStyle)`
   }
 `;
 
-const LoadingBox = styled(EmptyBox)`
-  flex-direction: column;
-  & p {
-    margin-top: 10px;
-  }
+const LoadingBox = styled.div`
+  padding: 40px;
 `;
 
 const BoxInStyle = styled.div`
@@ -141,8 +138,7 @@ const RankingTable = ({ isLoggedIn, userRanking, rankingList, maskName }) => {
     <Root>
       {isLoading ? (
         <LoadingBox>
-          <CircularProgress />
-          <p>데이터 불러오는 중...</p>
+          <CommonLoading />
         </LoadingBox>
       ) : rankingList.length === 0 ? (
         <EmptyBox>

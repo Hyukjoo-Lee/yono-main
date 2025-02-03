@@ -40,3 +40,9 @@ drop table user_card;
 
 select * from user_card;
 select * from card;
+
+
+
+
+
+
