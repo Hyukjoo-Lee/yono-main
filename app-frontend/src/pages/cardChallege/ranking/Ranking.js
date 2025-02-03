@@ -36,13 +36,18 @@ const Ranking = () => {
 
   useEffect(() => {
     const initializeRankings = async () => {
-      try {
-        const userData = await userRankings(isLoggedIn);
-        const data = await updateRankings();
+      const userData = await userRankings(isLoggedIn);
+      const data = await updateRankings();
+      if (typeof userData === 'string') {
+        console.log(userData); // 예외 발생시 다이얼로그 처리 필요
+      } else if (userData != null) {
         setUserRanking(userData);
+      }
+
+      if (typeof data === 'string') {
+        console.log(data); // 예외 발생시 다이얼로그 처리 필요
+      } else if (data != null) {
         setRankingList(data);
-      } catch (error) {
-        console.error('업데이트 실패', error);
       }
     };
 

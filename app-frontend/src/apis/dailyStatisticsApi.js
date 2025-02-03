@@ -5,5 +5,11 @@ export const fetchDailyStatistics = async (userNum) => {
   const response = await axios.get('/user/daily-statistics', {
     params: { userNum },
   });
-  return response.data;
+  if (response.status === 204) {
+    return null;
+  } else if (response.status === 200) {
+    return response.data;
+  } else {
+    return response.message;
+  }
 };
