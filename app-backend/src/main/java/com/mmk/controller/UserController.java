@@ -228,7 +228,7 @@ public class UserController {
             @RequestParam("userInfo") String userInfoJson,
             @RequestParam(value = "profileImage", required = false) MultipartFile profileImage,
             @RequestParam(value = "profileText", required = false) String profileText) {
-
+        System.out.println("profileImage: " + profileImage);
         try {
             UserDTO uv = new ObjectMapper().readValue(userInfoJson, UserDTO.class);
             String propertyPath = System.getProperty("user.dir").replace("\\app-backend", "").replace("/app-backend",

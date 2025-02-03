@@ -14,7 +14,6 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.mmk.common.ApiResponse;
-import com.mmk.dto.CardDTO;
 import com.mmk.dto.UserCardDTO;
 import com.mmk.service.UserCardService;
 

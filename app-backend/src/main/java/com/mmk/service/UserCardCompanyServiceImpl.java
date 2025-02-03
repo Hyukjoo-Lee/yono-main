@@ -3,28 +3,28 @@ package com.mmk.service;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.mmk.dao.CardCompanyDAO;
-import com.mmk.dto.CardCompanyDTO;
-import com.mmk.entity.CardCompanyEntity;
+import com.mmk.dao.UserCardCompanyDAO;
+import com.mmk.dto.UserCardCompanyDTO;
+import com.mmk.entity.UserCardCompanyEntity;
 
 @Service
-public class CardCompanyServiceImpl implements CardCompanyService {
-    
+public class UserCardCompanyServiceImpl implements UserCardCompanyService {
+
     @Autowired
-    private CardCompanyDAO cardCompanyDAO;
+    private UserCardCompanyDAO cardCompanyDAO;
 
     @Autowired
     private CodefService codefService;
 
     // 카드사 등록
     @Override
-    public CardCompanyDTO registerCardCompany(CardCompanyDTO cardCompanyDTO) {
+    public UserCardCompanyDTO registerCardCompany(UserCardCompanyDTO cardCompanyDTO) {
         int userNum = cardCompanyDTO.getUserNum();
         String organization = cardCompanyDTO.getOrganization();
         String companyId = cardCompanyDTO.getCompanyId();
         String companyPwd = cardCompanyDTO.getCompanyPwd();
         boolean exists = cardCompanyDAO.existsCompany(userNum, organization);
-        
+
         if (exists) {
             return null;
         } else {
@@ -42,25 +42,14 @@ public class CardCompanyServiceImpl implements CardCompanyService {
         }
     }
 
-    private CardCompanyDTO toDTO(CardCompanyEntity entity) {
-        CardCompanyDTO dto = new CardCompanyDTO();
-        dto.setCardCompanyNum(entity.getCardCompanyNum());
-        dto.setCompanyId(entity.getCompanyId());
-        dto.setCompanyPwd(entity.getCompanyPwd());
-        dto.setOrganization(entity.getOrganization());
-        dto.setUserNum(entity.getUserNum());
-        dto.setConnectedId(entity.getConnedtedId());
-        return dto;
-    }
-
-    private CardCompanyEntity toEntity(CardCompanyDTO dto) {
-        CardCompanyEntity entity = new CardCompanyEntity();
+    private UserCardCompanyEntity toEntity(UserCardCompanyDTO dto) {
+        UserCardCompanyEntity entity = new UserCardCompanyEntity();
         entity.setCardCompanyNum(dto.getCardCompanyNum());
         entity.setCompanyId(dto.getCompanyId());
         entity.setCompanyPwd(dto.getCompanyPwd());
-        entity.setOrganization(dto.getOrganization());
+        entity.setOrganizationCode(dto.getOrganization());
         entity.setUserNum(dto.getUserNum());
-        entity.setConnedtedId(dto.getConnectedId());
+        entity.setConnectedId(dto.getConnectedId());
         return entity;
     }
 }

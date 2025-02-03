@@ -51,7 +51,7 @@ public class UserCardEntity {
 
     @ManyToOne
     @JoinColumn(name = "card_company_num", nullable = false)
-    private CardCompanyEntity cardCompanyEntity;
+    private UserCardCompanyEntity userCardCompanyEntity;
 
     @ManyToOne
     @JoinColumn(name = "card_id", referencedColumnName = "card_id", nullable = false)
