@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import styled from 'styled-components';
 import axios from 'axios';
 import { useSelector } from 'react-redux';
-import Barchart from './Barchart';
+// import Barchart from './Barchart';
 
 const TextWrap = styled.div`
   width: 720px;
@@ -68,18 +68,18 @@ const MonthComparisonTable = () => {
     const previousMonthYear =
       currentMonth === 1 ? currentYear - 1 : currentYear;
 
-    const previousToPreviousMonth =
-      previousMonth === 1 ? 12 : previousMonth - 1;
-    const previousToPreviousMonthYear =
-      previousMonth === 1 ? previousMonthYear - 1 : previousMonthYear;
+    // const previousToPreviousMonth =
+    //   previousMonth === 1 ? 12 : previousMonth - 1;
+    // const previousToPreviousMonthYear =
+    //   previousMonth === 1 ? previousMonthYear - 1 : previousMonthYear;
 
     const previousMonthStr = `${previousMonthYear}${String(previousMonth).padStart(2, '0')}`;
-    const previousToPreviousMonthStr = `${previousToPreviousMonthYear}${String(previousToPreviousMonth).padStart(2, '0')}`;
+    // const previousToPreviousMonthStr = `${previousToPreviousMonthYear}${String(previousToPreviousMonth).padStart(2, '0')}`;
 
     // 백엔드로 API 요청을 보내고 금액 및 뱃지 데이터를 받아옴
     const fetchData = async () => {
       try {
-        const response = await axios.get('/month/Comparison', {
+        const response = await axios.get('/badge/Comparison', {
           params: {
             userNum,
             yearMonth: previousMonthStr,

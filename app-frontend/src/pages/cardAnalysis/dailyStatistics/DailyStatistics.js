@@ -8,11 +8,12 @@ import { ReactComponent as GoodCoin } from '../../../assets/images/GoodCoin.svg'
 import { ReactComponent as BadCoin } from '../../../assets/images/BadCoin.svg';
 import { fetchDailyStatistics } from '../../../apis/dailyStatisticsApi.js';
 import { findUserById } from '../../../apis/userApi';
-import CircularProgress from '@mui/material/CircularProgress';
 import ResizeObserver from 'resize-observer-polyfill';
 import CommonDialog from '../../../common/CommonDialog';
 import { useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
+import { getprimaryCardInfo } from '../../../apis/cardApi.js';
+import CommonLoading from '../../../common/CommonLoading.js';
 
 const Root = styled.div`
   width: 100%;
@@ -63,25 +64,13 @@ const ListBox = styled.div`
   }
 `;
 
-const EmptyBox = styled.div`
+export const EmptyBox = styled.div`
   width: 100%;
   height: 100%;
   border-radius: 7px;
   box-sizing: border-box;
   border: 1px solid ${(props) => props.theme.color.mediumGray};
   padding: 40px;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  & p {
-    margin: 0px;
-    font-size: ${(props) => props.theme.fontSize.eighteen};
-    color: ${(props) => props.theme.color.gray};
-  }
-  & .MuiCircularProgress-root {
-    margin-bottom: 10px;
-  }
 `;
 
 const DailyStatistics = () => {
@@ -96,7 +85,8 @@ const DailyStatistics = () => {
   const [selectedDate, setSelectedDate] = useState(new Date());
   const [isLoading, setIsLoading] = useState(true);
   const [users, setUsers] = useState(null);
-  const [isShowDialog, setIsShowDialog] = useState(false);
+  const [isShowLoginDialog, setIsShowLoginDialog] = useState(false);
+  const [isShowCardDialog, setIsShowCardDialog] = useState(false);
   const [dynamicHeight, setDynamicHeight] = useState(541); // 기본 높이 설정
   const calendarRef = useRef(null);
   const navigate = useNavigate();
@@ -105,13 +95,22 @@ const DailyStatistics = () => {
     const fetchUser = async () => {
       try {
         if (!isLoggedIn) {
-          setIsShowDialog(true);
+          setIsShowLoginDialog(true);
         } else {
           const user = await findUserById(isLoggedIn);
           setUsers(user.data);
+
+          try {
+            const card = await getprimaryCardInfo(isLoggedIn);
+            if (!card.data) {
+              setIsShowCardDialog(true);
+            }
+          } catch (error) {
+            setIsShowCardDialog(true);
+          }
         }
       } catch (error) {
-        setIsShowDialog(true);
+        setIsShowLoginDialog(true);
       } finally {
         setIsLoading(false);
       }
@@ -209,10 +208,9 @@ const DailyStatistics = () => {
       </CalendarBox>
 
       <ListBox $dynamicHeight={dynamicHeight}>
-        {isLoading ? (
+        {!isLoading ? (
           <EmptyBox>
-            <CircularProgress />
-            <p>데이터 불러오는 중...</p>
+            <CommonLoading />
           </EmptyBox>
         ) : filteredStatistics.length > 0 ? (
           filteredStatistics.map((item) => (
@@ -232,15 +230,28 @@ const DailyStatistics = () => {
         )}
       </ListBox>
 
-      {isShowDialog && (
+      {isShowLoginDialog && (
         <CommonDialog
-          open={isShowDialog}
+          open={isShowLoginDialog}
           onClick={() => navigate('/login')}
           onClose={() => navigate('/login')}
           submitText="로그인"
         >
           <p style={{ textAlign: 'center' }}>
             로그인 정보가 없습니다. 로그인을 진행해주세요!
+          </p>
+        </CommonDialog>
+      )}
+
+      {isShowCardDialog && (
+        <CommonDialog
+          open={isShowCardDialog}
+          onClick={() => navigate('/mycard')}
+          onClose={() => navigate('/mycard')}
+          submitText="대표카드 등록하기"
+        >
+          <p style={{ textAlign: 'center' }}>
+            등록된 대표카드가 없습니다! 대표카드를 등록해주세요.
           </p>
         </CommonDialog>
       )}

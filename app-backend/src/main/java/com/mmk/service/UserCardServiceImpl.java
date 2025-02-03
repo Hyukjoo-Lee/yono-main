@@ -201,6 +201,7 @@ public class UserCardServiceImpl implements UserCardService {
                                 .map(b -> new CardBenefitDTO(b.getBenefitTitle(), b.getBenefitValue(),
                                         b.getBenefitType()))
                                 .collect(Collectors.toList()));
+        dto.setCardTitle(entity.getCardEntity().getCardTitle());
         return dto;
     }
 }

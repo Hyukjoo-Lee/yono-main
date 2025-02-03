@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import styled from 'styled-components';
-import { getNoticeById, updateNotice } from '../../apis/noticeApi';
+import { fetchNoticeDetail, updateNotice } from '../../apis/noticeApi';
 import CommonButton from '../../common/CommonButton';
 import CommonHr from '../../common/CommonHr';
 import CommonInput from '../../common/CommonInput';
@@ -75,59 +75,75 @@ const HiddenInput = styled.input`
   display: none;
 `;
 export function NoticeEditFormBox() {
-  const navigate = useNavigate();
   const { id } = useParams();
   const [title, setTitle] = useState('');
   const [content, setContent] = useState('');
-  const [imgurl, setImgurl] = useState(null);
-  const [existingImage, setExistingImage] = useState(null);
-
-  //아이디 확인
-  console.log('Notice Id : ', id);
+  const [file, setFile] = useState(null);
+  const [errors, setErrors] = useState({ title: false, content: false });
+  const [notice, setNotice] = useState({ imgurl: '' });
+  const [isImageDeleted, setIsImageDeleted] = useState(false);
+  const navigate = useNavigate();
 
   useEffect(() => {
     const fetchNotice = async () => {
       try {
-        console.log(`Fetching notice with Id: ${id}`);
-        const data = await getNoticeById(id); // ✅ 데이터 가져오기 API 호출
-        console.log('Fetched data:', data); // 데이터가 제대로 오는지 확인
-        setTitle(data.title);
-        setContent(data.content);
-        setExistingImage(data.imgurl); // 기존 이미지 설정
+        const data = await fetchNoticeDetail(id);
+        setNotice(data);
+        setTitle(data.title || '');
+        setContent(data.content || '');
+        setFile(data.imgurl || null);
       } catch (error) {
-        console.error('공지사항 불러오기 실패: ', error);
-        alert('공지사항 정보를 불러오지 못했습니다!');
+        console.log('Error fetching notice : ', error);
       }
     };
-
     fetchNotice();
   }, [id]);
 
-  const handleTitleChange = (e) => setTitle(e.target.value);
-  const handleContentChange = (e) => setContent(e.target.value);
-  const handleImageChange = (e) => {
-    const file = e.target.files[0];
-    if (file) {
-      setImgurl(file);
-      setExistingImage(URL.createObjectURL(file));
+  const handleTitleChange = (e) => {
+    setTitle(e.target.value);
+    if (e.target.value.trim() !== '') {
+      setErrors((prev) => ({ ...prev, title: false }));
     }
   };
-  const validateForm = () => {
-    const errors = {};
-    if (!title.trim() || title.length > 50) {
-      errors.title = '제목을 1자 이상 50자 이내로 입력해주세요.';
-    }
 
-    if (!content.trim() || content.length > 2000) {
-      errors.content = '내용을 1자 이상 2000자 이내로 입력해주세요.';
+  const handleContentChange = (e) => {
+    setContent(e.target.value);
+    if (e.target.value.trim() !== '') {
+      setErrors((prev) => ({ ...prev, content: false }));
     }
-    return errors;
   };
 
-  const handleButtonClick = async () => {
-    const validationErrors = validateForm();
-    if (Object.keys(validationErrors).length > 0) {
-      alert(Object.values(validationErrors).join('\n'));
+  const handleFileChange = (e) => {
+    if (e.target.files && e.target.files[0]) {
+      const selectedFile = e.target.files[0];
+      setFile(selectedFile);
+      setNotice((prev) => ({
+        ...prev,
+        imgurl: selectedFile.name,
+      }));
+      setIsImageDeleted(false);
+    }
+    e.target.value = '';
+  };
+
+  const handleFileDelete = () => {
+    setFile(null);
+    setNotice((prev) => ({
+      ...prev,
+      imgurl: '',
+    }));
+    setIsImageDeleted(true);
+  };
+
+  const handleUpdate = async () => {
+    const newErrors = {
+      title: title.trim() === '',
+      content: content.trim() === '',
+    };
+
+    setErrors(newErrors);
+
+    if (newErrors.title || newErrors.content) {
       return;
     }
 
@@ -135,19 +151,24 @@ export function NoticeEditFormBox() {
     formData.append('id', id);
     formData.append('title', title);
     formData.append('content', content);
-    if (imgurl) formData.append('file', imgurl);
 
-    try {
-      const { success, message } = await updateNotice(id, formData);
-      if (success) {
-        alert('공지사항이 수정되었습니다');
-        navigate(`/notice/${id}`);
-      } else {
-        alert(`수정실패 : ${message}`);
-      }
-    } catch (error) {
-      console.error('수정 오류 : ', error);
-      alert('공지사항 수정 중 오류가 발생했습니다.');
+    if (file) {
+      formData.append('file', file); // 파일이 있으면 formData에 추가
+    }
+
+    if (isImageDeleted) {
+      formData.append('imgurl', 'deleted'); // 이미지가 삭제되었다면 'deleted'로 설정
+    } else if (!file && notice.imgurl) {
+      formData.append('imgurl', notice.imgurl); // 기존 이미지가 있다면 기존 이미지 URL을 유지
+    }
+
+    const success = await updateNotice(formData);
+    if (success) {
+      alert('공지사항 수정에 실패했습니다.');
+      navigate('/community');
+    } else {
+      alert('공지사항 수정 성공');
+      navigate('/community');
     }
   };
 
@@ -160,7 +181,7 @@ export function NoticeEditFormBox() {
           width="200px"
           height="50px"
           font-size="20px"
-          onClick={handleButtonClick}
+          onClick={handleUpdate}
         />
       </Wrapper>
       <CommonHr
@@ -171,7 +192,11 @@ export function NoticeEditFormBox() {
       />
       <FormBox>
         <Row>
-          <span>제목</span>
+          <span
+            style={!errors.title ? { paddingBottom: 0 } : { paddingBottom: 25 }}
+          >
+            제목
+          </span>
           <CommonInput
             width="500px"
             height="40px"
@@ -186,14 +211,14 @@ export function NoticeEditFormBox() {
             placeholder="사진 첨부"
             readOnly
             value={
-              imgurl
-                ? imgurl.name
-                : existingImage
-                  ? existingImage.split('/').pop()
-                  : ''
+              file && file.name // file이 존재하면 file.name 사용
+                ? file.name
+                : notice.imgurl // notice.imgurl이 존재하면 이를 사용
+                  ? notice.imgurl.split('/').pop()
+                  : '' // 둘 다 존재하지 않으면 빈 문자열
             }
           />
-          <HiddenInput type="file" onChange={handleImageChange} />
+          <HiddenInput type="file" onChange={handleFileChange} />
           <CommonButton
             text="사진 찾기"
             width="120px"
@@ -201,13 +226,16 @@ export function NoticeEditFormBox() {
             font-size="10px"
             onClick={() => document.querySelector('input[type="file"]').click()}
           />
+          {file && (
+            <CommonButton
+              text="삭제"
+              width="120px"
+              height="40px"
+              font-size="10px"
+              onClick={handleFileDelete}
+            />
+          )}
         </Row>
-
-        {existingImage && (
-          <Row>
-            <img src={existingImage} alt="기존 이미지" width="200" />
-          </Row>
-        )}
 
         <Row>
           <span>내용</span>

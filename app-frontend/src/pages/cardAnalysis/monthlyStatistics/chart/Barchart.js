@@ -22,13 +22,15 @@ const Barchart = ({ data }) => {
     };
   });
 
-  const keys = data[0] ? Object.keys(data[0].categoryTotals) : [];
+  const allKeys = [
+    ...new Set(data.flatMap((item) => Object.keys(item.categoryTotals))),
+  ];
 
   return (
     <StyledChart>
       <ResponsiveBar
         data={transformedData}
-        keys={keys}
+        keys={allKeys}
         indexBy="month"
         margin={{ top: 40, right: 40, bottom: 80, left: 80 }}
         valueFormat=" >-,"

@@ -5,7 +5,14 @@ export const uploadThreeMonthHistory = async (userNum) => {
     const response = await axios.get('/cardHistory/monthlyUpload', {
       params: { userNum },
     });
-    return response.data;
+
+    if (response.status === 204) {
+      return null;
+    } else if (response.status === 200) {
+      return response.data;
+    } else {
+      return response.message;
+    }
   } catch (error) {
     if (error.response) {
       return error.response.data;
@@ -18,7 +25,14 @@ export const uploadOneMonthHistory = async (userNum) => {
     const response = await axios.get('/cardHistory/categoryUpload', {
       params: { userNum },
     });
-    return response.data;
+
+    if (response.status === 204) {
+      return null;
+    } else if (response.status === 200) {
+      return response.data;
+    } else {
+      return response.message;
+    }
   } catch (error) {
     if (error.response) {
       return error.response.data;
@@ -31,7 +45,14 @@ export const monthData = async (userNum) => {
     const response = await axios.get('/cardHistory/monthData', {
       params: { userNum },
     });
-    return response.data;
+
+    if (response.status === 204) {
+      return null;
+    } else if (response.status === 200) {
+      return response.data;
+    } else {
+      return response.message;
+    }
   } catch (error) {
     if (error.response) {
       return error.response.data;

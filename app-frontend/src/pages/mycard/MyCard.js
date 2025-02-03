@@ -67,8 +67,9 @@ export function MyCard() {
         setUserCards(formattedCards);
       } catch (error) {
         console.error('사용자 카드 목록 로딩 실패: ', error);
+      } finally {
+        setIsLoading(false);
       }
-      setIsLoading(false);
     };
 
     if (isLoggedIn) {
