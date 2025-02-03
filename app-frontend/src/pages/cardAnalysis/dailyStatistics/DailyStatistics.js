@@ -8,12 +8,12 @@ import { ReactComponent as GoodCoin } from '../../../assets/images/GoodCoin.svg'
 import { ReactComponent as BadCoin } from '../../../assets/images/BadCoin.svg';
 import { fetchDailyStatistics } from '../../../apis/dailyStatisticsApi.js';
 import { findUserById } from '../../../apis/userApi';
-import CircularProgress from '@mui/material/CircularProgress';
 import ResizeObserver from 'resize-observer-polyfill';
 import CommonDialog from '../../../common/CommonDialog';
 import { useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 import { getprimaryCardInfo } from '../../../apis/cardApi.js';
+import CommonLoading from '../../../common/CommonLoading.js';
 
 const Root = styled.div`
   width: 100%;
@@ -71,18 +71,6 @@ export const EmptyBox = styled.div`
   box-sizing: border-box;
   border: 1px solid ${(props) => props.theme.color.mediumGray};
   padding: 40px;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  & p {
-    margin: 0px;
-    font-size: ${(props) => props.theme.fontSize.eighteen};
-    color: ${(props) => props.theme.color.gray};
-  }
-  & .MuiCircularProgress-root {
-    margin-bottom: 10px;
-  }
 `;
 
 const DailyStatistics = () => {
@@ -220,10 +208,9 @@ const DailyStatistics = () => {
       </CalendarBox>
 
       <ListBox $dynamicHeight={dynamicHeight}>
-        {isLoading ? (
+        {!isLoading ? (
           <EmptyBox>
-            <CircularProgress />
-            <p>데이터 불러오는 중...</p>
+            <CommonLoading />
           </EmptyBox>
         ) : filteredStatistics.length > 0 ? (
           filteredStatistics.map((item) => (

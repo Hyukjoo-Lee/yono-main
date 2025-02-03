@@ -2,6 +2,7 @@ package com.mmk.controller;
 
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
+import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -13,12 +14,13 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.mmk.common.ApiResponse;
 import com.mmk.dto.BadgeDTO;
+import com.mmk.dto.RankingDTO;
 import com.mmk.service.BadgeService;
 import com.mmk.service.CardHistoryService;
 
 @RestController
-@RequestMapping("/month")
-public class MonthlyCompController {
+@RequestMapping("/badge")
+public class BadgeController {
 
     @Autowired
     private CardHistoryService cardHistoryService;
@@ -82,5 +84,17 @@ public class MonthlyCompController {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
                     .body(new ApiResponse<>(500, "월별 금액 조회 실패: " + e.getMessage(), null));
         }
+    }
+
+    // 유저의 랭킹 데이터 가져오기
+    @GetMapping("/userList")
+    public RankingDTO getUserRanking(@RequestParam("userNum") int userNum) {
+        return badgeService.getUserRanking(userNum);
+    }
+
+    // 오늘 날짜에 해당하는 배지 데이터 가져오기
+    @GetMapping("/list")
+    public List<RankingDTO> getBadges() {
+        return badgeService.getBadgesForPreviousMonth();
     }
 }
