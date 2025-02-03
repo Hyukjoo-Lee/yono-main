@@ -9,30 +9,30 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.mmk.common.ApiResponse;
-import com.mmk.dto.CardCompanyDTO;
-import com.mmk.service.CardCompanyService;
+import com.mmk.dto.UserCardCompanyDTO;
+import com.mmk.service.UserCardCompanyService;
 
 @RestController
 @RequestMapping("/cardCompany")
-public class CardCompanyController {
+public class UserCardCompanyController {
 
     @Autowired
-    private CardCompanyService cardCompanyService;
+    private UserCardCompanyService userCardCompanyService;
 
     // 카드사 등록
     @PostMapping("/register")
-    public ResponseEntity<ApiResponse<CardCompanyDTO>> registerCardCompany(
-            @RequestBody CardCompanyDTO cardCompanyDTO) {
-        CardCompanyDTO ccd = cardCompanyService.registerCardCompany(cardCompanyDTO);
+    public ResponseEntity<ApiResponse<UserCardCompanyDTO>> registerCardCompany(
+            @RequestBody UserCardCompanyDTO userCardCompanyDTO) {
+        UserCardCompanyDTO ccd = userCardCompanyService.registerCardCompany(userCardCompanyDTO);
         if (ccd == null) {
-            ApiResponse<CardCompanyDTO> response = new ApiResponse<>(401, "이미 등록한 카드사입니다", null);
+            ApiResponse<UserCardCompanyDTO> response = new ApiResponse<>(401, "이미 등록한 카드사입니다", null);
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(response);
         } else if (ccd.getConnectedId().startsWith("error")) {
-            ApiResponse<CardCompanyDTO> response = new ApiResponse<>(401, ccd.getConnectedId().replace("error", ""),
+            ApiResponse<UserCardCompanyDTO> response = new ApiResponse<>(401, ccd.getConnectedId().replace("error", ""),
                     null);
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(response);
         } else {
-            ApiResponse<CardCompanyDTO> response = new ApiResponse<>(200, "카드사 등록 성공", ccd);
+            ApiResponse<UserCardCompanyDTO> response = new ApiResponse<>(200, "카드사 등록 성공", ccd);
             return ResponseEntity.ok(response);
         }
     }

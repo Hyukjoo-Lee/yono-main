@@ -2,7 +2,7 @@ package com.mmk.service;
 
 import java.util.List;
 
-import com.mmk.dto.CardCompanyDTO;
+import com.mmk.dto.UserCardCompanyDTO;
 import com.mmk.dto.CardDTO;
 import com.mmk.entity.CardEntity;
 
@@ -17,5 +17,5 @@ public interface CardService {
 
     CardDTO findByUserNum(int userNum);
 
-    CardCompanyDTO saveCodefCard(CardCompanyDTO cardCompanyDTO);
+    UserCardCompanyDTO saveCodefCard(UserCardCompanyDTO usrCardCompanyDTO);
 }
