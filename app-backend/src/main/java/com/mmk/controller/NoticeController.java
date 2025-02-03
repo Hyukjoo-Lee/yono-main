@@ -41,22 +41,18 @@ public ResponseEntity<ApiResponse<Void>> saveNotice(
     try {
         System.out.println("아이디 : " + noticeDTO);
 
-        // 파일이 존재하는 경우
         if (file != null && !file.isEmpty()) {
             ApiResponse<String> fileResponse = saveFile(file);
 
-            // 파일 저장이 성공한 경우
             if (fileResponse.getStatus() == 200) {
-                String fileName = fileResponse.getData();  // 파일 경로 가져오기
+                String fileName = fileResponse.getData();
                 noticeDTO.setImgurl(fileName);
             } else {
-                // 파일 저장 중 오류 발생 시
                 return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
                         .body(new ApiResponse<>(500, "파일 저장 중 오류 발생", null));
             }
         }
 
-        // 공지사항 작성
         noticeDTO.setUpdatedAt(null);
         noticeDTO.setUserId(noticeDTO.getUserId());
         noticeService.saveNotice(noticeDTO);
@@ -244,11 +240,9 @@ public ResponseEntity<ApiResponse<Void>> editNotice(
             existingNotice.setImgurl(null);
 
         } else if (imgurl != null && imgurl.isEmpty()) {
-            // 이미지 URL이 빈 문자열로 들어온 경우 이미지 제거
             existingNotice.setImgurl(null);
         }
 
-        // 공지사항 저장
         noticeService.saveNotice(existingNotice);
 
         return ResponseEntity.ok(new ApiResponse<>(200, "공지사항이 성공적으로 수정되었습니다.", null));
