@@ -36,19 +36,18 @@ const MonthlyStatistics = () => {
 
   useEffect(() => {
     const fetchUser = async () => {
-      try {
-        const response = await uploadThreeMonthHistory(userNum);
+      const response = await uploadThreeMonthHistory(userNum);
+      if (typeof response === 'string') {
+        console.log(response); // 예외 발생시 다이얼로그 처리 필요
+      } else if (response != null) {
         setCardData(response.data);
-        setLoading(false);
-
-        // await updateHistory(userNum);
-        // const updatedData = await uploadRecentHistory(userNum);
-        // setCardData(updatedData.data);
-        setMessage(false);
-      } catch (error) {
-        console.error('카드 정보를 불러오는 중 오류 발생:', error);
-        setCardData(null);
       }
+      setLoading(false);
+
+      // await updateHistory(userNum);
+      // const updatedData = await uploadRecentHistory(userNum);
+      // setCardData(updatedData.data);
+      setMessage(false);
     };
 
     if (userNum) {
