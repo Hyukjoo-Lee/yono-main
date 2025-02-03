@@ -34,18 +34,16 @@ public class BadgeEntity {
 
     @Column(name = "ranking")
     private int ranking; // 랭킹 순위
+    
+    @Column(name = "current_month_amount")
+    private int currentMonthAmount; // 지난 달의 총 사용 금액
 
-    @Column(name = "previous_month_amount")  
-    private int previousMonthAmount; // 지난 달의 총 사용 금액
-
-    @Column(name = "two_months_ago_amount")
-    private int twoMonthsAgoAmount; // 저저번 달 총 사용 금액
+    @Column(name = "previous_month_amount")
+    private int previousMonthAmount; // 저저번 달 총 사용 금액
 
     // @ManyToOne
     // @JoinColumn(name = "card_History", nullable = false)
     // private CardHistoryEntity cardHistoryEntity;
-
-
 
     @ManyToOne
     @JoinColumn(name = "user_num", nullable = false)

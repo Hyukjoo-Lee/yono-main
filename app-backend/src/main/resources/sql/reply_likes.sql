@@ -1,3 +1,3 @@
-SELECT * from reply_likes;
+drop table reply_likes;
 
-drop TABLE reply_likes;
+select * from reply_likes;

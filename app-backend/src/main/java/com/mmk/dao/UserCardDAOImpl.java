@@ -25,9 +25,13 @@ public class UserCardDAOImpl implements UserCardDAO {
     }
 
     @Override
-    public List<UserCardEntity> findUserCardEntityByUserId(int userId) {
-        return null;
-        // 구현중
+    public List<UserCardEntity> getAllCardsByUserNum(int userNum) {
+        return userCardRepository.findByUserEntityUserNum(userNum);
+    }
+
+    @Override
+    public List<UserCardEntity> getAllCardsInfoByUserNum(int userNum) {
+        return userCardRepository.findAllByUserNum(userNum);
     }
 
     @Override
@@ -51,7 +55,9 @@ public class UserCardDAOImpl implements UserCardDAO {
     }
 
     // @Override
-    // public void updateAllByUserNumAndOrganization(int userNum, String organization, String companyId, String companyPwd, String connectedId) {
-    //     userCardRepository.updateAllByUserNumAndOrganization(userNum, organization, companyId, companyPwd, connectedId);
+    // public void updateAllByUserNumAndOrganization(int userNum, String
+    // organization, String companyId, String companyPwd, String connectedId) {
+    // userCardRepository.updateAllByUserNumAndOrganization(userNum, organization,
+    // companyId, companyPwd, connectedId);
     // }
 }

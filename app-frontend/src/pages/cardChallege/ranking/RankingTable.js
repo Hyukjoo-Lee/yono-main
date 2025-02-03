@@ -4,7 +4,6 @@ import { ReactComponent as Medal1 } from '../../../assets/images/Medal1.svg';
 import { ReactComponent as Medal2 } from '../../../assets/images/Medal2.svg';
 import { ReactComponent as Medal3 } from '../../../assets/images/Medal3.svg';
 import { ReactComponent as Profile } from '../../../assets/images/Profile.svg';
-import { fetchUserRanking } from '../../../apis/rankingApi';
 import CircularProgress from '@mui/material/CircularProgress';
 
 const Root = styled.div`
@@ -19,13 +18,6 @@ const BoxStyle = styled.div`
   margin-bottom: 10px;
   border: 1px solid ${(props) => props.theme.color.mediumGray};
   overflow: hidden;
-  & > div:nth-child(1) {
-    background: ${(props) => props.theme.color.lightBlue} !important;
-    & p {
-      font-weight: bold !important;
-      color: ${(props) => props.theme.color.gray} !important;
-    }
-  }
 `;
 
 const EmptyBox = styled(BoxStyle)`
@@ -47,14 +39,6 @@ const LoadingBox = styled(EmptyBox)`
   }
 `;
 
-const BoxIn = styled.div`
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  padding: 16px 33px;
-  box-sizing: border-box;
-  border-bottom: 1px solid ${(props) => props.theme.color.mediumGray};
-`;
 const BoxInStyle = styled.div`
   max-height: 400px;
   overflow-y: auto;
@@ -74,6 +58,29 @@ const BoxInStyle = styled.div`
       font-weight: bold;
       color: ${(props) => props.theme.color.blue};
     }
+  }
+`;
+
+const BoxIn = styled.div`
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 16px 33px;
+  box-sizing: border-box;
+  border-bottom: 1px solid ${(props) => props.theme.color.mediumGray};
+`;
+
+const UserBoxIn = styled(BoxIn)`
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 16px 33px;
+  box-sizing: border-box;
+  border-bottom: 1px solid ${(props) => props.theme.color.mediumGray};
+  background: ${(props) => props.theme.color.lightBlue} !important;
+  & p {
+    font-weight: bold !important;
+    color: ${(props) => props.theme.color.gray} !important;
   }
 `;
 
@@ -119,26 +126,27 @@ const ProfileBox = styled.div`
   }
 `;
 
-const RankingTable = () => {
-  const [list, setList] = useState([]);
-  const [isLoading, setIsLoading] = useState(true); // 로딩 상태 추가
+const RankingTable = ({
+  isLoggedIn,
+  userRanking,
+  rankingList,
+  maskName,
+}) => {
+  const [isLoading, setIsLoading] = useState(true);
+  const [sortedRanking, setSortedRanking] = useState([]);
+  //const [userRanking, setUserRanking] = useState(null);
 
   useEffect(() => {
-    const getRanking = async () => {
-      setIsLoading(true); // 데이터 로드 시작 시 로딩 상태 true
-      try {
-        const data = await fetchUserRanking(); // API 호출
-        const sortedList = data.sort((a, b) => b.totalBadges - a.totalBadges); // badge 기준 내림차순 정렬
-        setList(sortedList); // 정렬된 데이터 상태로 저장
-      } catch (error) {
-        console.error('Error fetching rankings:', error);
-      } finally {
-        setIsLoading(false); // 데이터 로드 완료 후 로딩 상태 false
-      }
-    };
-
-    getRanking();
-  }, []);
+    if (rankingList.length > 0) {
+      setSortedRanking(rankingList);
+      // 현재 로그인한 유저의 순위 찾기
+      // const currentUserData = rankingList.find(
+      //   (item) => item.userNum === isLoggedIn,
+      // );
+      // setUserRanking(currentUserData || null);
+    }
+    setIsLoading(false);
+  }, [isLoggedIn, rankingList]);
 
   return (
     <Root>
@@ -147,7 +155,7 @@ const RankingTable = () => {
           <CircularProgress />
           <p>데이터 불러오는 중...</p>
         </LoadingBox>
-      ) : list.length === 0 ? (
+      ) : rankingList.length === 0 ? (
         <EmptyBox>
           <p>
             아직 집계된 데이터가 없습니다. (정해진 날짜가 지나지 않아 데이터가
@@ -156,60 +164,62 @@ const RankingTable = () => {
         </EmptyBox>
       ) : (
         <BoxStyle>
-          <BoxIn>
-            <TextBox>
-              <TextStyle>{list[3]?.rankingPosition}</TextStyle>
-              <ProfileBox>
-                {list[3]?.rankingImgUrl ? (
-                  <img
-                    src={`http://localhost:8065${list[3]?.rankingImgUrl}`}
-                    alt={list[3]?.userName}
-                  />
-                ) : (
-                  <Profile />
-                )}
-              </ProfileBox>
-              <TextStyle>
-                {list[3]?.userName}({list[3]?.userId})
-              </TextStyle>
-            </TextBox>
-            <NumberText>{list[3]?.totalBadges.toLocaleString()}</NumberText>
-          </BoxIn>
+          {userRanking && (
+            <UserBoxIn>
+              <TextBox>
+                <TextStyle>{userRanking.ranking}</TextStyle>
+                <ProfileBox>
+                  {userRanking.profile !== 'temp_profile' ? (
+                    <img
+                      src={`http://localhost:8065${userRanking.profile}`}
+                      alt={maskName(userRanking.name)}
+                    />
+                  ) : (
+                    <Profile />
+                  )}
+                </ProfileBox>
+                <TextStyle>
+                  {maskName(userRanking.name)}({userRanking.userId})
+                </TextStyle>
+              </TextBox>
+              <NumberText>{userRanking.badge.toLocaleString()}개</NumberText>
+            </UserBoxIn>
+          )}
           <BoxInStyle>
-            {list.map((item, index) => (
+            {sortedRanking.map((item, index) => (
               <BoxIn key={index}>
                 <TextBox>
-                  {index === 0 ? (
+                  {item.ranking === 1 ? (
                     <MedalBox>
                       <Medal1 />
                     </MedalBox>
-                  ) : index === 1 ? (
+                  ) : item.ranking === 2 ? (
                     <MedalBox>
                       <Medal2 />
                     </MedalBox>
-                  ) : index === 2 ? (
+                  ) : item.ranking === 3 ? (
                     <MedalBox>
                       <Medal3 />
                     </MedalBox>
                   ) : (
-                    <TextStyle>{index + 1}</TextStyle>
+                    <TextStyle>{item.ranking}</TextStyle>
                   )}
 
                   <ProfileBox>
-                    {item.rankingImgUrl !== ' ' ? (
+                    {item.profile !== 'temp_profile' ? (
                       <img
-                        src={`http://localhost:8065${item.rankingImgUrl}`}
-                        alt={item.userName}
+                        src={`http://localhost:8065${item.profile}`}
+                        alt={maskName(item.name)}
                       />
                     ) : (
                       <Profile />
                     )}
                   </ProfileBox>
                   <TextStyle>
-                    {item.userName}({item.userId})
+                    {maskName(item.name)}({item.userId})
                   </TextStyle>
                 </TextBox>
-                <NumberText>{item.totalBadges.toLocaleString()}</NumberText>
+                <NumberText>{item.badge.toLocaleString()}개</NumberText>
               </BoxIn>
             ))}
           </BoxInStyle>

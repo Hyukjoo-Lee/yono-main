@@ -37,7 +37,7 @@ public class UserDAOImpl implements UserDAO {
     }
 
     @Override
-    public UserEntity getUserByUserNum(int userNum) {
+    public UserEntity findByUserNum(int userNum) {
         UserEntity userInfoEntity = userRepository.getReferenceById(userNum);
         return userInfoEntity;
     }
@@ -64,8 +64,8 @@ public class UserDAOImpl implements UserDAO {
     }
 
     @Override
-    public void deleteUser(int id) {
-        userRepository.deleteById(id);
+    public void deleteUser(int userNum) {
+        userRepository.deleteById(userNum);
     }
 
     @Override

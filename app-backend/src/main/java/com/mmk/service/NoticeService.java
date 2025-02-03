@@ -4,11 +4,12 @@ import java.util.List;
 
 import com.mmk.dto.NoticeDTO;
 
-public interface NoticeService {
-  
-  void save(NoticeDTO noticeData);
+public interface NoticeService{
 
-  List<NoticeDTO> getNoticeList();
+  void saveNotice(NoticeDTO notice);
 
-  NoticeDTO findById(String id);
+  List<NoticeDTO> searchNotice(String keyword);
+
+  NoticeDTO getNoticeById(int id);
+
 }

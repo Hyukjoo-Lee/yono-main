@@ -4,21 +4,22 @@ import CommonSelect from '../../common/CommonSelect';
 import { Box, Grid2 } from '@mui/material';
 import CardSlider from './CardSlider';
 import CommonButton from '../../common/CommonButton';
-import { useState, useEffect } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import ValidationMessage from '../../common/ValidationMessage';
 import theme from '../../theme/theme';
 import {
   CARD_DUPLICATE_MESSAGE,
   CARD_REGEX_MESSAGE,
-  CVC_REGEX_MESSAGE,
+  CARDPWD_REGEX_MESSAGE,
+  EMPTY_CARD_SELECT_MESSAGE,
   EMPTY_CARDNUM_MESSAGE,
-  EMPTY_CARDSELECT_MESSAGE,
-  EMPTY_CVC_MESSAGE,
-  EMPTY_ENGNAME_MESSAGE,
+  EMPTY_CARDPWD_MESSAGE,
+  EMPTY_COMPANY_SELECT_MESSAGE,
   EMPTY_VALIDITY_MESSAGE,
-  ENGNAME_REGEX_MESSAGE,
   VALIDITY_REGEX_MESSAGE,
 } from '../../common/Message';
+import { getCardListByCompany, registerCard } from '../../apis/cardApi';
+import CommonDialog from '../../common/CommonDialog';
 
 const FormBox = styled.form`
   width: 100%;
@@ -38,15 +39,15 @@ const FORM_FIELDS = {
       duplicate: CARD_DUPLICATE_MESSAGE,
     },
   },
-  cvc: {
-    placeholder: '카드 뒷면 서명란 끝 3자리',
-    text: 'CVC',
-    regex: /^\d{3}$/,
-    maxLength: 3,
+  cardPwd: {
+    placeholder: '카드 비밀번호를 입력하세요',
+    text: '카드 비밀번호',
+    regex: /^\d{4}$/,
+    maxLength: 4,
     type: 'password',
     errorMessage: {
-      empty: EMPTY_CVC_MESSAGE,
-      invalid: CVC_REGEX_MESSAGE,
+      empty: EMPTY_CARDPWD_MESSAGE,
+      invalid: CARDPWD_REGEX_MESSAGE,
     },
   },
   cardValidity: {
@@ -59,76 +60,132 @@ const FORM_FIELDS = {
       invalid: VALIDITY_REGEX_MESSAGE,
     },
   },
-  englishName: {
-    placeholder: '영문이름을 입력하세요',
-    text: '영문이름',
-    regex: /^[a-zA-Z\s]+$/,
+  selectedCardTitle: {
+    text: '카드 종류',
     errorMessage: {
-      empty: EMPTY_ENGNAME_MESSAGE,
-      invalid: ENGNAME_REGEX_MESSAGE,
+      empty: EMPTY_CARD_SELECT_MESSAGE,
     },
   },
   selectedCardType: {
-    text: '카드 선택',
+    text: '카드 회사',
     errorMessage: {
-      empty: EMPTY_CARDSELECT_MESSAGE,
+      empty: EMPTY_COMPANY_SELECT_MESSAGE,
     },
   },
 };
 
-const CARD_LIST = [
+const CARD_COMPANY_LIST = [
   { value: '0301', label: '국민카드' },
   { value: '0302', label: '현대카드' },
   { value: '0303', label: '삼성카드' },
   { value: '0304', label: '농협카드' },
   { value: '0306', label: '신한카드' },
+  { value: '0313', label: '하나카드' },
 ];
 
-const useCardImages = (cardImg, selectedCardType) => {
-  const [cardImages, setCardImages] = useState(null);
+const CardRegFormBox = ({ user }) => {
+  const [formData, setFormData] = useState({
+    userNum: '',
+    cardNumber: '',
+    cardPwd: '',
+    cardValidity: '',
+    selectedCardTitle: '',
+    selectedCardType: '',
+    selectedCardImg: '',
+  });
 
   useEffect(() => {
-    if (cardImg && selectedCardType) {
-      const selectedCardData = cardImg[selectedCardType];
-      if (selectedCardData) {
-        const cardTypeKey = Object.keys(selectedCardData)[0];
-        const images = Object.values(selectedCardData[cardTypeKey]);
-        setCardImages(images);
-      }
+    if (user && user.userNum) {
+      setFormData((prev) => ({
+        ...prev,
+        userNum: user.userNum,
+      }));
     }
-  }, [cardImg, selectedCardType]);
-
-  return cardImages;
-};
-
-const CardRegFormBox = ({ cardImg }) => {
-  const [formData, setFormData] = useState({
-    cardNumber: '',
-    cvc: '',
-    cardValidity: '',
-    englishName: '',
-    selectedCardType: '',
-  });
+  }, [user]);
 
   const [formMessage, setFormMessage] = useState({
     cardNumber: '',
-    cvc: '',
+    cardPwd: '',
     cardValidity: '',
-    englishName: '',
+    selectedCardTitle: '',
     selectedCardType: '',
+    selectedCardImg: '',
   });
+
+  const [cardList, setCardList] = useState([]);
+
+  const [cardImages, setCardImages] = useState([]);
 
   const [cardNumToSave, setCardNumToSave] = useState('');
 
-  const cardImages = useCardImages(cardImg, formData.selectedCardType);
+  const [isRegSuccessVisible, setIsRegSuccessVisible] = useState(false);
+  const [isRegFailVisible, setIsRegFailVisible] = useState(false);
+
+  // 카드 회사 선택 시 카드 목록 가져오기
+  const handleCardCompanyChange = async (organization) => {
+    setFormData((prev) => ({
+      ...prev,
+      selectedCardType: organization,
+      selectedCardTitle: '',
+    }));
+
+    setFormMessage((prev) => ({
+      ...prev,
+      selectedCardType: '',
+    }));
+
+    try {
+      const response = await getCardListByCompany(organization);
+      setCardList(response.data);
+    } catch (error) {
+      console.log(error);
+      setCardList([]);
+      setFormMessage((prev) => ({
+        ...prev,
+        selectedCardType: '카드 목록을 불러오는 데 실패했습니다.',
+      }));
+    }
+  };
+
+  // 카드 종류 선택 시 카드 이미지 설정
+  const handleCardTitleChange = (value) => {
+    setFormData((prev) => ({
+      ...prev,
+      selectedCardTitle: value,
+    }));
+
+    const selectedCard = cardList.find((card) => card.cardTitle === value);
+
+    const cardImgArr = selectedCard.cardImgUrl.split(',');
+
+    if (selectedCard) {
+      setCardImages(cardImgArr);
+    } else {
+      setCardImages([]);
+    }
+  };
+
+  const handleImageSelect = useCallback((image) => {
+    setFormData((prev) => ({
+      ...prev,
+      selectedCardImg: image,
+    }));
+  }, []);
 
   const handleCardNumChange = (e) => {
     const { value } = e.target;
+
+    setFormMessage((prev) => ({
+      ...prev,
+      cardNumber: '',
+    }));
+
     const numericValue = value.replace(/\D/g, '');
 
     if (numericValue.length > 16) return; // 최대 16자리 제한
 
     // 하이픈 추가 로직
+    // TODO: 제거하고 빈칸 4개로 만들기 (마지막 8자리 마스킹 처리 예정)
     let formattedValue = numericValue;
     if (numericValue.length > 4) {
       formattedValue = numericValue.slice(0, 4) + '-' + numericValue.slice(4);
@@ -144,14 +201,14 @@ const CardRegFormBox = ({ cardImg }) => {
 
     setFormData((prev) => ({
       ...prev,
-      cardNumber: formattedValue, // 화면 표시용 값
+      cardNumber: formattedValue,
     }));
-    setCardNumToSave(numericValue); // 저장용 값
+    setCardNumToSave(numericValue);
   };
 
   const handleInputChange = (field) => (e) => {
     if (field === 'cardNumber') {
-      handleCardNumChange(e); // 카드 번호 전용 처리
+      handleCardNumChange(e);
     } else {
       const { value } = e.target;
 
@@ -192,15 +249,52 @@ const CardRegFormBox = ({ cardImg }) => {
     return Object.keys(errors).length === 0;
   };
 
-  const handleSubmit = (event) => {
+  const handleSubmit = async (event) => {
     event.preventDefault();
 
     if (!validateForm()) return;
 
     const cardNumber = cardNumToSave;
     const updatedFormData = { ...formData, cardNumber };
-    // api 전송
-    console.log('data to send: ' + updatedFormData);
+
+    const body = {
+      userNum: updatedFormData.userNum,
+      userCardNum: updatedFormData.cardNumber,
+      cardPwd: updatedFormData.cardPwd,
+      expiryDate: updatedFormData.cardValidity,
+      cardTitle: updatedFormData.selectedCardTitle,
+      organization: updatedFormData.selectedCardType,
+      cardImg: updatedFormData.selectedCardImg,
+    };
+
+    try {
+      const response = await registerCard(body);
+      if (response) {
+        setIsRegSuccessVisible(true);
+        setFormData({
+          userNum: user.userNum || '',
+          cardNumber: '',
+          cardPwd: '',
+          cardValidity: '',
+          selectedCardTitle: '',
+          selectedCardType: '',
+          selectedCardImg: '',
+        });
+      } else {
+        setIsRegFailVisible(true);
+      }
+    } catch (error) {
+      console.error('카드 등록 실패:', error);
+      setIsRegFailVisible(true);
+    }
+  };
+
+  const completeCardReg = () => {
+    setIsRegSuccessVisible(false);
+  };
+
+  const closeDialog = () => {
+    setIsRegFailVisible(false);
   };
 
   return (
@@ -226,7 +320,7 @@ const CardRegFormBox = ({ cardImg }) => {
             )}
           </Grid2>
 
-          {['cvc', 'cardValidity', 'englishName'].map((field) => (
+          {['cardPwd', 'cardValidity'].map((field) => (
             <Grid2 key={field} size={6}>
               <CommonInput
                 type={FORM_FIELDS[field].type}
@@ -251,13 +345,9 @@ const CardRegFormBox = ({ cardImg }) => {
           <Grid2 size={6}>
             <CommonSelect
               text={FORM_FIELDS.selectedCardType.text}
-              options={CARD_LIST}
+              options={CARD_COMPANY_LIST}
               selectedValue={formData.selectedCardType}
-              setSelectedValue={(value) =>
-                handleInputChange('selectedCardType')({
-                  target: { value },
-                })
-              }
+              setSelectedValue={handleCardCompanyChange}
               margin="0"
               labelColor="#4a4a4a"
               width="227.75px"
@@ -272,21 +362,60 @@ const CardRegFormBox = ({ cardImg }) => {
             )}
           </Grid2>
 
+          <Grid2 size={6}>
+            <CommonSelect
+              text={FORM_FIELDS.selectedCardTitle.text}
+              options={cardList.map((card) => ({
+                value: card.cardTitle,
+                label: card.cardTitle,
+              }))}
+              selectedValue={formData.selectedCardTitle}
+              setSelectedValue={handleCardTitleChange}
+              find="카드 종류를 선택하세요"
+              margin="0"
+              labelColor="#4a4a4a"
+              width="227.75px"
+            />
+            {formMessage.selectedCardTitle && (
+              <ValidationMessage
+                text={formMessage.selectedCardTitle}
+                type="error"
+                fontSize={theme.fontSize.small}
+                $margin="0 5px"
+              />
+            )}
+          </Grid2>
+
           <Grid2 size={12}>
-            <CardSlider cardImages={cardImages} />
+            <CardSlider
+              cardImages={cardImages || []}
+              onImageSelect={handleImageSelect}
+            />
           </Grid2>
 
           <Grid2 container justifyContent="center" size={12} pt={3}>
             <CommonButton
+              type="submit"
               fontSize="16px"
               width="120px"
               height="35px"
               text="카드 등록"
-              onClick={handleSubmit}
             />
           </Grid2>
         </Grid2>
       </Box>
+      <CommonDialog
+        open={isRegSuccessVisible}
+        children={'카드 등록에 성공했습니다.'}
+        onClose={completeCardReg}
+        onClick={completeCardReg}
+      />
+      <CommonDialog
+        open={isRegFailVisible}
+        children={'카드 등록에 실패했습니다. 카드 정보를 확인해주세요.'}
+        onClose={closeDialog}
+        onClick={closeDialog}
+      />
     </FormBox>
   );
 };

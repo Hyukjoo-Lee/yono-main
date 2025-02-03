@@ -31,10 +31,10 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public UserDTO getUserById(int id) {
-        UserEntity userEntity = userDAO.getUserByUserNum(id);
+    public UserDTO findByUserNum(int userNum) {
+        UserEntity userEntity = userDAO.findByUserNum(userNum);
         if (userEntity == null) {
-            throw new NoSuchElementException("ID " + id + "에 해당하는 사용자가 없습니다.");
+            throw new NoSuchElementException("userNum: " + userNum + "에 해당하는 사용자가 없습니다.");
         }
         return toDTO(userEntity);
     }
@@ -46,6 +46,15 @@ public class UserServiceImpl implements UserService {
             throw new NoSuchElementException("아이디 " + userId + "에 해당하는 사용자가 없습니다.");
         }
         return toDTO(userEntity);
+    }
+
+    @Override
+    public UserEntity findByUserId(String userId) {
+        UserEntity userEntity = userDAO.getUserByUserId(userId);
+        if (userEntity == null) {
+            throw new NoSuchElementException("아이디 " + userId + "에 해당하는 사용자가 없습니다.");
+        }
+        return userEntity;
     }
 
     @Override
@@ -67,12 +76,10 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public void deleteUser(int id) {
-        UserEntity userEntity = userDAO.getUserByUserNum(id);
-        if (userEntity == null) {
-            throw new NoSuchElementException("ID " + id + "에 해당하는 사용자가 없습니다.");
-        }
-        userDAO.deleteUser(id);
+    public void deleteUser(int userNum) {
+        UserDTO userDTO = toDTO(userDAO.findByUserNum(userNum));
+        userDTO.setState(0);
+        userDAO.updateUser(toEntity(userDTO));
     }
 
     @Override
@@ -135,6 +142,8 @@ public class UserServiceImpl implements UserService {
         entity.setProfile(dto.getProfile());
         entity.setCreatedAt(dto.getCreatedAt());
         entity.setUpdatedAt(dto.getUpdatedAt());
+        entity.setState(dto.getState());
+        entity.setUserRole(dto.getUserRole());
         return entity;
     }
 
@@ -153,6 +162,8 @@ public class UserServiceImpl implements UserService {
         dto.setProfile(entity.getProfile());
         dto.setCreatedAt(entity.getCreatedAt());
         dto.setUpdatedAt(entity.getUpdatedAt());
+        dto.setState(entity.getState());
+        dto.setUserRole(entity.getUserRole());
         return dto;
     }
 

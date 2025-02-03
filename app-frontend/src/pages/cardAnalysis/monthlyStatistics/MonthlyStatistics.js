@@ -5,7 +5,7 @@ import Barchart from '../../../pages/cardAnalysis/monthlyStatistics/chart/Barcha
 import Piechart from '../../../pages/cardAnalysis/monthlyStatistics/chart/Piechart';
 import {
   // updateHistory,
-  uploadRecentHistory,
+  uploadThreeMonthHistory,
 } from '../../../apis/cardHistoryApi';
 import { useSelector } from 'react-redux';
 
@@ -42,7 +42,7 @@ const MonthlyStatistics = () => {
   useEffect(() => {
     const fetchUser = async () => {
       try {
-        const response = await uploadRecentHistory(userNum);
+        const response = await uploadThreeMonthHistory(userNum);
         setCardData(response.data);
         setLoading(false);
 
@@ -71,12 +71,12 @@ const MonthlyStatistics = () => {
         {cardData ? (
           <Barchart data={cardData} />
         ) : (
-          <p>데이터가 존재하지 않습니다.</p>
+          <p>집계된 데이터가 없습니다.</p>
         )}
         {cardData ? (
           <Piechart data={cardData} />
         ) : (
-          <p>데이터가 존재하지 않습니다.</p>
+          <p>집계된 데이터가 없습니다.</p>
         )}
       </ChartsContainer>
       {message && (

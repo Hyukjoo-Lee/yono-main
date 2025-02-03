@@ -275,9 +275,6 @@ export function CommunityPost() {
               like_count: comment.likedByUser.includes(user.userId)
                 ? Math.max(comment.like_count - 1, 0) // 좋아요 취소 시 최소 0으로 유지
                 : comment.like_count + 1, // 좋아요를 누르면 1 증가
-              likedByUser: comment.likedByUser.includes(user.userId)
-                ? comment.likedByUser.filter((userId) => userId !== user.userId)
-                : [...comment.likedByUser, user.userId],
             }
           : comment,
       );
@@ -296,11 +293,6 @@ export function CommunityPost() {
             ? {
                 ...comment,
                 like_count: Math.max(response.data.likeCount, 0), // 서버에서 받은 likeCount가 0 미만이면 0으로 설정
-                likedByUser: response.data.isLiked
-                  ? [...comment.likedByUser, user.userId]
-                  : comment.likedByUser.filter(
-                      (userId) => userId !== user.userId,
-                    ),
               }
             : comment,
         );

@@ -14,6 +14,19 @@ const Root = styled.div`
   height: 100%;
 `;
 
+const MoveButtonWrap = styled.div`
+  display: flex;
+  justify-content: space-between;
+`;
+
+const MoveButton = styled.button`
+  font-size: ${(props) => props.theme.fontSize.sm};
+  border: none;
+  background: none;
+  cursor: pointer;
+  font-weight: bold;
+`;
+
 const Box = styled.div`
   display: flex;
   flex-direction: column;
@@ -50,7 +63,7 @@ export function NoticePost() {
   useEffect(() => {
     const fetchPostData = async () => {
       try {
-        const response = await axios.get(`/notice/${id}`);
+        const response = await axios.get(`/notice/detail?id=${id}`);
         setnoticeData(response.data);
         console.log(response.data);
       } catch (error) {
@@ -61,16 +74,27 @@ export function NoticePost() {
   }, [id]);
 
   const handleButtonClick = () => {
+    navigate('/notice/list');
+  };
+
+  const handleNavigateToNotice = () => {
     navigate('/noticeList');
   };
 
+  const handleNavigateToNext = () => {
+    const nextId = parseInt(id, 10) + 1;
+    navigate(`/notice/${nextId}`);
+  };
   if (!noticeData) {
     return <div>Loading ..</div>;
   }
 
   return (
     <Root>
-      {/* <CommonPageInfo title={'공지사항'} text={<p></p>} /> */}
+      <MoveButtonWrap>
+        <MoveButton onClick={handleNavigateToNotice}>&lt; 목록</MoveButton>
+        <MoveButton onClick={handleNavigateToNext}>다음 &gt;</MoveButton>
+      </MoveButtonWrap>
       <p style={{ fontWeight: 'bold', fontSize: '18px' }}>
         공지사항 <span style={{ color: '#4064e6' }}>{noticeData.noticeNo}</span>
       </p>
@@ -81,12 +105,12 @@ export function NoticePost() {
         borderColor="rgba(128, 128, 128, 0.7)"
       />
       <Box>
-        <label className="title">{noticeData.noticeTitle}</label>
+        <label className="title">{noticeData.title}</label>
 
-        <label className="date">2024.11.22</label>
+        <label className="date">{noticeData.createdAt}</label>
       </Box>
       <CommonHr />
-      <DataBox>{noticeData.noticeCont}</DataBox>
+      <DataBox>{noticeData.content}</DataBox>
 
       <div>
         <BackBox>

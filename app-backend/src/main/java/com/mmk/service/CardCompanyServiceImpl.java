@@ -29,9 +29,16 @@ public class CardCompanyServiceImpl implements CardCompanyService {
             return null;
         } else {
             String connectedId = codefService.getConId(organization, companyId, companyPwd);
+            System.out.println("connectedId: " + connectedId);
             cardCompanyDTO.setConnectedId(connectedId);
-            cardCompanyDAO.save(toEntity(cardCompanyDTO));
-            return cardCompanyDTO;
+            if (connectedId.isEmpty()) {
+                return cardCompanyDTO;
+            } else if (connectedId.startsWith("error")) {
+                return cardCompanyDTO;
+            } else {
+                cardCompanyDAO.save(toEntity(cardCompanyDTO));
+                return cardCompanyDTO;
+            }
         }
     }
 

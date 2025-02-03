@@ -38,4 +38,9 @@ public class CardDAOImpl implements CardDAO {
         return cardRepository.findByCardId(cardId);
     }
 
+    @Override
+    public List<CardEntity> getAllCardsByOrganizationCode(String organizationCode) {
+        return cardRepository.findByOrganizationCode(organizationCode);
+    }
+
 }

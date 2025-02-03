@@ -8,29 +8,24 @@ import org.springframework.stereotype.Repository;
 import com.mmk.entity.NoticeEntity;
 
 @Repository
-public class NoticeDAOImpl implements NoticeDAO {
+public class NoticeDAOImpl implements NoticeDAO{
 
   @Autowired
-  private NoticeRepository noticeRepo;
+  NoticeRepository noticeRepo;
 
   @Override
-  public void save(NoticeEntity noticeData) {
-    this.noticeRepo.save(noticeData);
+  public void saveNotice(NoticeEntity notice) {
+    noticeRepo.save(notice);
   }
 
   @Override
-  public List<NoticeEntity> getNoticeList() {
-    return this.noticeRepo.findAll();
+  public List<NoticeEntity> searchNotice(String keyword) {
+    return noticeRepo.searchNotice(keyword);
   }
 
-	@Override
-	public NoticeEntity findById(int adminId) {
-		NoticeEntity notice = noticeRepo.findById(adminId).orElse(null);
-
-    if(notice == null){
-      throw new RuntimeException("해당 공지사항을 찾을 수 없습니다!");
-    }
-    return notice;
-	}
+  @Override
+  public NoticeEntity findById(int id) {
+    return noticeRepo.findById(id).orElse(null);
+  }
   
 }

@@ -3,13 +3,16 @@ package com.mmk.service;
 import java.util.List;
 
 import com.mmk.dto.UserDTO;
+import com.mmk.entity.UserEntity;
 
 public interface UserService {
     UserDTO createUser(UserDTO userDTO);
 
-    UserDTO getUserById(int id);
+    UserDTO findByUserNum(int userNum);
 
     UserDTO getUserByUserId(String userId);
+
+    UserEntity findByUserId(String userId);
 
     UserDTO getUserByEmail(String email);
 

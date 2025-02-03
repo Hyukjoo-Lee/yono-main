@@ -25,6 +25,7 @@ public class PostsDTO {
     @JsonFormat(pattern = "yyyy-MM-dd") // 직렬화 시 형식 지정
     @JsonDeserialize(using = LocalDateDeserializer.class) // 역직렬화 시 커스텀 처리
     private LocalDate regdate;
+
     
     private int viewcnt=0;
     private Timestamp createdAt;

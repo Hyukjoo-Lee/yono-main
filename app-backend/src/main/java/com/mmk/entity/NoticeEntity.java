@@ -1,15 +1,19 @@
 package com.mmk.entity;
 
 import java.sql.Timestamp;
+import java.time.LocalDateTime;
 
 import org.hibernate.annotations.CreationTimestamp;
-import org.hibernate.annotations.UpdateTimestamp;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
+import jakarta.persistence.PrePersist;
+import jakarta.persistence.PreUpdate;
 import jakarta.persistence.SequenceGenerator;
 import jakarta.persistence.Table;
 import lombok.Getter;
@@ -21,7 +25,7 @@ import lombok.ToString;
 @ToString
 @Entity
 @SequenceGenerator(
-  name = "notice_seq",
+  name = "no_seq_genotice",
   sequenceName = "notice_seq",
   initialValue = 1,
   allocationSize = 1
@@ -30,31 +34,42 @@ import lombok.ToString;
 public class NoticeEntity {
   
   @Id
-  @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "notice_seq")
+  @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "no_seq_genotice")
   @Column(name = "notice_no")
   private int noticeNo;
 
-  @Column(name = "admin_id",nullable = false)
-  private String adminId;
-
-  @Column(name = "notice_title",nullable = false)
-  private String noticeTitle;
-
-  @Column(name = "notice_cont",nullable = false)
-  private String noticeCont;
-
-  @Column(name = "notice_img_url")
-  private String noticeImgUrl;
-
-  @Column(name="view_count", nullable=false, columnDefinition = "int default 0")
-  private int viewCount = 0;
+  @Column(name = "title")
+  private String title;
+  @Column(name = "content")
+  private String content;
+  @Column(name = "img_url")
+  private String imgurl;
 
   @CreationTimestamp
-  @Column(name="created_at")
+  @Column(name = "created_at")
   private Timestamp createdAt;
 
-  @UpdateTimestamp
-  @Column(name="updated_at")
-  private Timestamp updatedAt;
+  @Column(name = "updated_at")
+  private LocalDateTime updatedAt;
 
+  @ManyToOne
+  @JoinColumn(name = "user_num", referencedColumnName = "user_num")
+  private UserEntity userEntity;
+
+  @Column(name = "view_count", nullable=false, columnDefinition="int default 0")
+  private int viewCount=0;
+
+  @PrePersist
+  public void prePersist(){
+    if(updatedAt == null){
+      updatedAt = null;
+    }
+  }
+
+  @PreUpdate
+  public void preUpdate(){
+    if(updatedAt == null){
+      updatedAt = LocalDateTime.now();
+    }
+  }
 }

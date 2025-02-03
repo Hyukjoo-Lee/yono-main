@@ -5,6 +5,6 @@ import java.util.List;
 import com.mmk.dto.RankingDTO;
 
 public interface RankingService {
-
-    List<RankingDTO> getAllRankings();
+    RankingDTO getUserRanking(int userNum);
+    List<RankingDTO> getBadgesForPreviousMonth();
 }

@@ -31,13 +31,20 @@ export const findUserById = async (id) => {
 export const modifyUser = async (formData) => {
   try {
     const parsedUserInfo = JSON.parse(formData.get('userInfo'));
-    await axios.put(`/user/${parsedUserInfo.userNum}`, formData, {
-      headers: {
-        'Content-Type': 'multipart/form-data',
+    const response = await axios.put(
+      `/user/${parsedUserInfo.userNum}`,
+      formData,
+      {
+        headers: {
+          'Content-Type': 'multipart/form-data',
+        },
       },
-    });
+    );
+    return response.data;
   } catch (error) {
-    console.error('회원 정보 수정 실패', error);
+    if (error.response) {
+      return error.response.data;
+    }
   }
 };
 
@@ -82,6 +89,15 @@ export const updateTempPwd = async (email) => {
 export const updatePwd = async (password, userId) => {
   const response = await axios.put('/user/updatePwd', null, {
     params: { password, userId },
+  });
+
+  return response.data;
+};
+
+// 회원 탈퇴
+export const deleteUser = async (userNum) => {
+  const response = await axios.delete('/user/deleteUser', {
+    params: { userNum },
   });
 
   return response.data;

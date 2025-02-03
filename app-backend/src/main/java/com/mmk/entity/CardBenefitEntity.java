@@ -20,7 +20,7 @@ import lombok.ToString;
 
 @Setter
 @Getter
-@ToString
+@ToString(exclude = "cardEntity")
 @Entity
 @SequenceGenerator(name = "card_benefit_seq_generator", sequenceName = "card_benefit_seq", initialValue = 1, allocationSize = 1)
 @Table(name = "card_benefit")
@@ -33,8 +33,11 @@ public class CardBenefitEntity {
     @Column(name = "benefit_title", nullable = false)
     private String benefitTitle;
 
-    @Column(name = "benefit_types", nullable = false)
-    private String businessTypes;
+    @Column(name = "benefit_value", nullable = false)
+    private String benefitValue;
+
+    @Column(name = "benefit_type", nullable = false)
+    private String benefitType;
 
     @CreationTimestamp
     @Column(name = "created_at")
@@ -45,6 +48,6 @@ public class CardBenefitEntity {
     private Timestamp updatedAt;
 
     @ManyToOne
-    @JoinColumn(name = "card_title", referencedColumnName = "card_title", nullable = false)
+    @JoinColumn(name = "card_id", referencedColumnName = "card_id", nullable = false)
     private CardEntity cardEntity;
 }

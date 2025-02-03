@@ -2,9 +2,9 @@ package com.mmk.dao;
 
 import java.util.List;
 
-import com.mmk.entity.RankingEntity;
+import com.mmk.entity.BadgeEntity;
 
 public interface RankingDAO {
-
-    List<RankingEntity> getAllRankings();
+    List<BadgeEntity> getBadgesForPreviousMonth(String previousMonth);
+    BadgeEntity  getUserRanking(String previousMonth, int userNum);
 }
