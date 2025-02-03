@@ -78,13 +78,28 @@ const CategoryStatics = () => {
     const fetchUser = async () => {
       try {
         const response = await uploadOneMonthHistory(userNum);
-        setCardData(response.data);
+        if (typeof response == 'string') {
+          console.log(response);
+          // 예외 발생시 다이얼로그 처리 필요
+        } else if (response != null) {
+          setCardData(response.data);
+        }
 
         const data = await monthData(userNum);
-        setMonthlyData(data.data);
+        if (typeof data == 'string') {
+          console.log(data);
+          // 예외 발생시 다이얼로그 처리 필요
+        } else if (data != null) {
+          setMonthlyData(data.data);
+        }
 
         const cardInfo = await getprimaryCardInfo(userNum);
-        setCard(cardInfo.data);
+        if (typeof cardInfo == 'string') {
+          console.log(cardInfo);
+          // 예외 발생시 다이얼로그 처리 필요
+        } else if (cardInfo != null) {
+          setCard(cardInfo.data);
+        }
 
         setLoading(false);
 

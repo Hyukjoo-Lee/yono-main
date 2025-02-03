@@ -110,14 +110,12 @@ const DailyStatistics = () => {
           setIsShowLoginDialog(true);
         } else {
           const user = await findUserById(isLoggedIn);
-          setUsers(user.data);
+          if (user != null && typeof user != 'string') {
+            setUsers(user.data);
+          }
 
-          try {
-            const card = await getprimaryCardInfo(isLoggedIn);
-            if (!card.data) {
-              setIsShowCardDialog(true);
-            }
-          } catch (error) {
+          const card = await getprimaryCardInfo(isLoggedIn);
+          if (card == null || typeof card == 'string') {
             setIsShowCardDialog(true);
           }
         }
