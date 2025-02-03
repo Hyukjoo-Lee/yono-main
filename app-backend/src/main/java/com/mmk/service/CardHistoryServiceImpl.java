@@ -5,6 +5,7 @@ import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
@@ -143,15 +144,17 @@ public class CardHistoryServiceImpl implements CardHistoryService {
     // 월별통계 - DB 에서 불러온 내용 가공
     private List<MonthlySummaryDTO> monthlyHistoryProcess(List<CardHistoryDTO> cardHistoryDTOList) {
         try {
-            Map<String, Map<String, Integer>> groupedData = cardHistoryDTOList.parallelStream()
+            Map<String, Map<String, Integer>> groupedData = cardHistoryDTOList.stream()
                     .collect(Collectors.groupingBy(
-                            card -> card.getResUsedDate().substring(0, 6),
-                            Collectors.groupingBy(
-                                    card -> (card.getResMemberStoreType() != null && !card.getResMemberStoreType().isEmpty())
-                                    ? card.getResMemberStoreType()
-                                    : "기타",
-                                    Collectors.summingInt(card -> Integer.parseInt(card.getResUsedAmount()))
-                            )
+                        card -> card.getResUsedDate().substring(0, 6),
+                        LinkedHashMap::new,
+                        Collectors.groupingBy(
+                            card -> (card.getResMemberStoreType() != null && !card.getResMemberStoreType().isEmpty())
+                            ? card.getResMemberStoreType()
+                            : "기타",
+                            LinkedHashMap::new,
+                            Collectors.summingInt(card -> Integer.parseInt(card.getResUsedAmount()))
+                        )
                     ));
 
             return groupedData.entrySet().stream()

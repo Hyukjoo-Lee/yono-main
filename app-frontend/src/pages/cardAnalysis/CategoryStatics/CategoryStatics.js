@@ -147,7 +147,7 @@ const CategoryStatics = () => {
                     ...item,
                     resUsedDate: formatDate(item.resUsedDate), // 변환된 날짜 전달
                     cardTitle: card.cardTitle,
-                    cardImgUrl: card.cardImgUrl,
+                    cardImgUrl: card.cardImg,
                   }}
                   showDetailed={false}
                 />

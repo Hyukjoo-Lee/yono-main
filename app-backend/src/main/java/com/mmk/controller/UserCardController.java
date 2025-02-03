@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.mmk.common.ApiResponse;
+import com.mmk.dto.CardDTO;
 import com.mmk.dto.UserCardDTO;
 import com.mmk.service.UserCardService;
 
@@ -81,6 +82,13 @@ public class UserCardController {
             return ResponseEntity.status(HttpStatus.NOT_FOUND)
                     .body(new ApiResponse<>(404, "대표카드 등록실패.", null));
         }
+    }
+
+    // 로그인 유저의 대표카드의 카드 조회
+    @GetMapping("/primaryCard")
+    public ResponseEntity<ApiResponse<UserCardDTO>> getPrimaryCard(@RequestParam("userNum") int userNum) {
+        UserCardDTO userCardDTO = userCardService.findPrimaryCardByUserNum(userNum);
+        return ResponseEntity.ok(new ApiResponse<>(200, "대표카드의 카드 정보 조회 성공", userCardDTO));
     }
 
 }
