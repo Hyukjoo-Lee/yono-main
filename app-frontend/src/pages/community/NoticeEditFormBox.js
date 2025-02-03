@@ -84,6 +84,8 @@ export function NoticeEditFormBox() {
   const [isImageDeleted, setIsImageDeleted] = useState(false);
   const navigate = useNavigate();
 
+  console.log(id);
+
   useEffect(() => {
     const fetchNotice = async () => {
       try {
@@ -98,6 +100,30 @@ export function NoticeEditFormBox() {
     };
     fetchNotice();
   }, [id]);
+  // useEffect(() => {
+  //   const fetchNotice = async () => {
+  //     try {
+  //       // ID 값 확인
+  //       console.log('fetchNotice 호출, id:', id);
+
+  //       const data = await fetchNoticeDetail(id);
+  //       console.log('받은 공지사항 데이터:', data);
+
+  //       // 데이터를 정상적으로 불러오면 상태 업데이트
+  //       setNotice(data);
+  //       setTitle(data.title || '');
+  //       setContent(data.content || '');
+  //       setFile(data.imgurl || null);
+  //     } catch (error) {
+  //       console.log('Error fetching notice : ', error);
+  //     }
+  //   };
+
+  //   // ID가 없으면 실행하지 않도록 처리
+  //   if (id) {
+  //     fetchNotice();
+  //   }
+  // }, [id]);
 
   const handleTitleChange = (e) => {
     setTitle(e.target.value);
@@ -164,10 +190,10 @@ export function NoticeEditFormBox() {
 
     const success = await updateNotice(formData);
     if (success) {
-      alert('공지사항 수정에 실패했습니다.');
+      alert('공지사항 수정 성공');
       navigate('/community');
     } else {
-      alert('공지사항 수정 성공');
+      alert('공지사항 수정에 실패했습니다.');
       navigate('/community');
     }
   };
@@ -245,5 +271,3 @@ export function NoticeEditFormBox() {
     </Root>
   );
 }
-
-export default NoticeEditFormBox;

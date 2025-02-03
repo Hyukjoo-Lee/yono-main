@@ -93,7 +93,7 @@ export function NoticeTable() {
   };
 
   const handleButtonClick = () => {
-    navigate('/noticeFormBox'); // 로그인 여부와 상관없이 글쓰기 폼으로 이동
+    navigate('/noticeFormBox');
   };
 
   const handleSearchChange = (e) => {
@@ -111,10 +111,10 @@ export function NoticeTable() {
 
   const getNoticeData = async (searchKeyword) => {
     try {
-      const response = await fetchSearchNotice(searchKeyword);
+      const { success, data } = await fetchSearchNotice(searchKeyword);
 
-      if (Array.isArray(response) && response.length > 0) {
-        setRows(response);
+      if (success) {
+        setRows(data);
       } else {
         setRows([]);
         setPage(0);
@@ -163,7 +163,7 @@ export function NoticeTable() {
             width="100px"
             height="39px"
             text="글등록"
-            onClick={handleButtonClick} // 로그인 여부와 상관없이 글쓰기 폼으로 이동
+            onClick={handleButtonClick}
           />
         </Container>
 
@@ -202,7 +202,7 @@ export function NoticeTable() {
                               sx={{ borderBottom: '0.5px solid #757575' }}
                             >
                               <Link
-                                to={`/notice/${row.noticeNo}`} // Link로 상세 페이지 이동
+                                to={`/notice/${row.noticeNo}`}
                                 style={{
                                   textDecoration: 'none',
                                   color: 'black',

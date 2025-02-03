@@ -61,7 +61,6 @@ const Box = styled.div`
   width: 100%;
   margin: 0 auto;
   & > label.title {
-    // margin-top: 20px;
     font-weight: bold;
     font-size: ${(props) => props.theme.fontSize.lg};
   }
@@ -71,12 +70,8 @@ const Box = styled.div`
   }
 `;
 
-const DataBox = styled.div`
-  // display: flex;
-  // justify-content: flex-start;
-  // align-items: flex-start;
-  height: 500px;
-`;
+const DataBox = styled.div``;
+
 const EditBox = styled.div`
   gap: 10px;
   display: flex;
@@ -85,22 +80,28 @@ const EditBox = styled.div`
 export function NoticePost() {
   const [noticeData, setNoticeData] = useState(null);
   const navigate = useNavigate();
-  const { id } = useParams();
+  const { id } = useParams(); // URL에서 id 가져오기
   const baseURL = process.env.REACT_APP_API_URL;
 
   useEffect(() => {
     const fetchNoticeData = async () => {
-      console.log(id);
+      console.log('Fetching data for ID:', id); // ID가 잘 전달되는지 확인
       try {
-        const data = await fetchNoticeDetail(id);
-        setNoticeData(data);
-        console.log(data);
+        const data = await fetchNoticeDetail(id); // fetchNoticeDetail에서 데이터를 받아오기
+        console.log('Notice Data:', data); // 받아온 데이터 확인
+        if (data.success) {
+          setNoticeData(data.data); // 받아온 데이터 상태에 저장
+        } else {
+          alert(data.message); // 오류 메시지 처리
+        }
       } catch (error) {
         console.error('Error fetching post data : ', error);
       }
     };
-    fetchNoticeData();
-  }, [id]);
+    if (id) {
+      fetchNoticeData();
+    }
+  }, [id]); // id 값이 변경될 때마다 호출
 
   const handleEditClick = (id) => {
     navigate(`/noticeEditFormBox/${id}`);
@@ -127,8 +128,9 @@ export function NoticePost() {
     const nextId = parseInt(id, 10) + 1;
     navigate(`/notice/${nextId}`);
   };
+
   if (!noticeData) {
-    return <div>Loading ..</div>;
+    return <div>Loading ..</div>; // 로딩 중 표시
   }
 
   return (
@@ -157,7 +159,6 @@ export function NoticePost() {
 
       <Box>
         <label className="title">{noticeData.title}</label>
-
         <label className="date">{noticeData.createdAt}</label>
       </Box>
 
@@ -178,4 +179,5 @@ export function NoticePost() {
     </Root>
   );
 }
+
 export default NoticePost;
