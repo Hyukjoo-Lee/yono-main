@@ -4,6 +4,7 @@ import java.sql.Timestamp;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.*;
 
+import org.hibernate.annotations.ColumnDefault;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 import lombok.Getter;
@@ -50,6 +51,7 @@ public class UserCardEntity {
 
     // 대표카드 설정 (0: 일반카드, 1: 대표카드, 기본값: 0)
     @Column(name = "primary_card", nullable = false)
+    @ColumnDefault("0")
     private int primaryCard = 0;
 
     @CreationTimestamp

@@ -1,5 +1,7 @@
 package com.mmk.entity;
 
+import org.hibernate.annotations.ColumnDefault;
+
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.ForeignKey;
@@ -35,6 +37,7 @@ public class BadgeEntity {
     private String badgeDate; // 202501 -> 날짜
 
     @NotNull
+    @ColumnDefault("0")
     @Column(name = "badge", nullable = false)
     private int badge = 0; // 12 -> 뱃지 갯수
 
@@ -43,10 +46,12 @@ public class BadgeEntity {
     private int ranking; // 랭킹 순위
 
     @NotNull
+    @ColumnDefault("0")
     @Column(name = "current_month_amount", nullable = false)
     private int currentMonthAmount = 0; // 지난 달의 총 사용 금액
 
     @NotNull
+    @ColumnDefault("0")
     @Column(name = "previous_month_amount", nullable = false)
     private int previousMonthAmount = 0; // 저저번 달 총 사용 금액
 
