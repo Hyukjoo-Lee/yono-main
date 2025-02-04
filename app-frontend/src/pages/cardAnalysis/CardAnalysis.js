@@ -11,7 +11,7 @@ import CommonLoading from '../../common/CommonLoading';
 
 const CardAnalysis = () => {
   const { isLoggedIn, user } = useSelector((state) => state.user);
-  const [isLoading, setIsLoading] = useState(true);
+  const [isLoading, setIsLoading] = useState(false);
 
   const userNum = user?.userNum;
 
@@ -21,11 +21,12 @@ const CardAnalysis = () => {
     { text: '목차별 통계' },
     { text: '월별 통계' },
   ];
-
+  
+  카드 분석 페이지에서 소비 내역 업데이트 추가 
   useEffect(() => {
     const fetchHistory = async () => {
       if (!isLoggedIn || !userNum) return;
-
+      setIsLoading(true);
       try {
         const data = await updateHistory(userNum);
         console.log('업데이트된 데이터:', data);
