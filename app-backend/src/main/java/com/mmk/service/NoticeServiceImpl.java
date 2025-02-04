@@ -11,6 +11,8 @@ import com.mmk.dao.NoticeDAO;
 import com.mmk.dto.NoticeDTO;
 import com.mmk.entity.NoticeEntity;
 
+import jakarta.transaction.Transactional;
+
 @Service
 public class NoticeServiceImpl implements NoticeService {
 
@@ -34,7 +36,7 @@ public class NoticeServiceImpl implements NoticeService {
     return entities.stream().map(this::toDTO).collect(Collectors.toList());
   }
 
-  //글 상세보기
+  //글 상세보기 + 조회수
   @Override
   public NoticeDTO getNoticeById(int id) {
     NoticeEntity noticeEntity = noticeDAO.findById(id);
@@ -43,7 +45,43 @@ public class NoticeServiceImpl implements NoticeService {
     }
     return toDTO(noticeEntity);
   }
-  
+
+//   @Override
+// public void increaseViewCount(int id) {
+//     NoticeEntity noticeEntity = noticeDAO.findById(id);
+//     if(noticeEntity != null) {
+//         noticeEntity.setViewCount(noticeEntity.getViewCount() + 1);
+//         noticeDAO.saveNotice(noticeEntity);  // 기존 엔티티를 업데이트합니다.
+//     } else {
+//         throw new RuntimeException("공지사항을 찾을 수 없습니다. ID: " + id);
+//     }
+// }
+
+  //글 삭제
+  @Transactional
+  @Override
+  public void deleteByNotice(List<Integer> ids) {
+    noticeDAO.deleteByNotice(ids);
+  }
+
+  //글 수정
+  @Override
+  public boolean updateNotice(NoticeDTO noticeDTO) {
+    NoticeEntity existingNotice = noticeDAO.findById(noticeDTO.getNoticeNo());
+    if(existingNotice == null){
+      return false;
+    }
+
+    existingNotice.setTitle(noticeDTO.getTitle());
+    existingNotice.setContent(noticeDTO.getContent());
+    if(noticeDTO.getImgurl() != null){
+      existingNotice.setImgurl(noticeDTO.getImgurl());
+    }
+
+    noticeDAO.saveNotice(existingNotice);
+    return true;
+  }
+
   private NoticeDTO toDTO(NoticeEntity entity){
     if(entity == null){
       return null;
@@ -84,5 +122,4 @@ public class NoticeServiceImpl implements NoticeService {
     }
     return entity;
   }
-  
 }
