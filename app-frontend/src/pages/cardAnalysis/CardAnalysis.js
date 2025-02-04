@@ -21,8 +21,7 @@ const CardAnalysis = () => {
     { text: '목차별 통계' },
     { text: '월별 통계' },
   ];
-  
-  카드 분석 페이지에서 소비 내역 업데이트 추가 
+
   useEffect(() => {
     const fetchHistory = async () => {
       if (!isLoggedIn || !userNum) return;
