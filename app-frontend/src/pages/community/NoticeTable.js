@@ -192,7 +192,10 @@ export function NoticeTable() {
                       <TableRow hover role="checkbox" tabIndex={-1} key={index}>
                         {columns.map((column) => {
                           let value = row[column.id];
-                          if (column.id === 'createdAt') {
+                          if (
+                            column.id === 'createdAt' ||
+                            column.id === 'updatedAt'
+                          ) {
                             value = formatDate(value);
                           }
                           return (
