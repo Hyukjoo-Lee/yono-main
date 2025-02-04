@@ -7,7 +7,7 @@ import { ReactComponent as BadCoin } from '../../../assets/images/BadCoin.svg';
 import { ReactComponent as ExcellentCoin } from '../../../assets/images/ExcellentCoin.svg';
 import { ReactComponent as GoodCoin } from '../../../assets/images/GoodCoin.svg';
 import { ReactComponent as VeryGoodCoin } from '../../../assets/images/VeryGoodCoin.svg';
-import { updateHistory } from '../../../apis/cardHistoryApi.js';
+// import { updateHistory } from '../../../apis/cardHistoryApi.js';
 import CommonCardListBox from '../../../common/CommonCardListBox';
 import CommonLoading from '../../../common/CommonLoading.js';
 import Calendar from './calendar/Calendar';
@@ -98,23 +98,23 @@ const DailyStatistics = () => {
   const [dynamicHeight, setDynamicHeight] = useState(541); // 기본 높이 설정
   const calendarRef = useRef(null);
 
-  useEffect(() => {
-    const fetchUser = async () => {
-      const history = await updateHistory(isLoggedIn);
-      if (history) {
-        const updatedData = await fetchDailyStatistics(isLoggedIn);
-        if (typeof updatedData === 'string') {
-          console.log(updatedData);
-          // 예외 발생시 다이얼로그 처리 필요
-        } else if (updatedData != null) {
-          setStatistics(updatedData.data);
-        }
-        setIsUpdate(false);
-      }
-    };
+  // useEffect(() => {
+  //   const fetchUser = async () => {
+  //     const history = await updateHistory(isLoggedIn);
+  //     if (history) {
+  //       const updatedData = await fetchDailyStatistics(isLoggedIn);
+  //       if (typeof updatedData === 'string') {
+  //         console.log(updatedData);
+  //         // 예외 발생시 다이얼로그 처리 필요
+  //       } else if (updatedData != null) {
+  //         setStatistics(updatedData.data);
+  //       }
+  //       setIsUpdate(false);
+  //     }
+  //   };
 
-    fetchUser();
-  }, [isLoggedIn]);
+  //   fetchUser();
+  // }, [isLoggedIn]);
 
   const fetchStatistics = useCallback(async () => {
     setIsLoading(true);
