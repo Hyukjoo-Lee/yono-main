@@ -24,7 +24,7 @@ public class BageServiceImpl implements BadgeService {
     private UserDAO userDAO;
 
     @Override
-    public void save(int userNum, int badgeCount, String badgeDate, int currentMonthAmount, int previousMonthAmount) {
+    public void save(int userNum, int badgeCount, String badgeDate, int currentMonthAmount, int previousMonthAmount, int ranking) {
         // 사용자 정보 조회
         UserEntity userEntity = userDAO.findByUserNum(userNum);
         // 뱃지 정보 저장을 위한 엔티티 생성
@@ -34,6 +34,7 @@ public class BageServiceImpl implements BadgeService {
         badgeEntity.setUserEntity(userEntity); // 사용자 설정
         badgeEntity.setCurrentMonthAmount(currentMonthAmount); // 저번 달
         badgeEntity.setPreviousMonthAmount(previousMonthAmount); // 저저번달
+        badgeEntity.setRanking(ranking); // 순위
 
         // 뱃지 정보를 데이터베이스에 저장
         badgeDAO.save(badgeEntity); // BadgeDAO를 통해 저장
@@ -100,4 +101,38 @@ public class BageServiceImpl implements BadgeService {
         rankingDTO.setPreviousMonthAmount(badgeEntity.getPreviousMonthAmount());
         return rankingDTO;
     }
+
+    @Override
+    public int calculateUserRank(int userNum) {
+    // 현재 날짜 기준으로 이전 달 계산
+    String previousMonth = getPreviousMonth();
+
+    // 이전 달 모든 유저의 배지 데이터 조회
+    List<BadgeEntity> badgeEntities = badgeDAO.getBadgesForPreviousMonth(previousMonth);
+    System.out.println("badgeEntities" + badgeEntities);
+    // 유저가 한 명밖에 없으면 1등 반환
+    if (badgeEntities.size() == 1) {
+        return 1;
+    }
+
+    // 뱃지 개수로 내림차순 정렬
+    badgeEntities.sort((a, b) -> Integer.compare(b.getBadge(), a.getBadge()));
+
+    // 해당 유저의 랭킹 계산
+    for (int i = 0; i < badgeEntities.size(); i++) {
+        if (badgeEntities.get(i).getUserEntity().getUserNum() == userNum) {
+            return i + 1; // 인덱스는 0부터 시작하므로 +1
+        }
+    }
+
+    // 해당 유저가 목록에 없으면 0등 (또는 -1 반환)
+    return 0;
+}
+
+    @Override
+    public boolean existsBadgeForUserAndDate(int userNum, String badgeDate) {
+        return badgeDAO.existsByUserNumAndBadgeDate(userNum, badgeDate);
+
+    }
+
 }

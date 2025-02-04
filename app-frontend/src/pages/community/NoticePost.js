@@ -4,6 +4,7 @@ import { useNavigate, useParams } from 'react-router-dom';
 import styled from 'styled-components';
 import CommonButton from '../../common/CommonButton';
 import CommonHr from '../../common/CommonHr';
+// import CommonPageInfo from '../../common/CommonPageInfo';
 
 const Root = styled.div`
   width: ${(props) => props.theme.display.lg};

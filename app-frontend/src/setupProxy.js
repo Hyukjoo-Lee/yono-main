@@ -50,6 +50,14 @@ module.exports = function (app) {
   );
 
   app.use(
+    '/badge',
+    createProxyMiddleware({
+      target: process.env.REACT_APP_API_URL,
+      changeOrigin: true,
+    }),
+  );
+
+  app.use(
     '/cardHistory',
     createProxyMiddleware({
       target: process.env.REACT_APP_API_URL,

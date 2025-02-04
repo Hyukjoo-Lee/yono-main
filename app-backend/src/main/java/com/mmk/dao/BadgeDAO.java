@@ -6,6 +6,11 @@ import com.mmk.entity.BadgeEntity;
 
 public interface BadgeDAO {
     void save(BadgeEntity badgeEntity);
+
     List<BadgeEntity> getBadgesForPreviousMonth(String previousMonth);
+    
     BadgeEntity  getUserRanking(String previousMonth, int userNum);
+
+    boolean existsByUserNumAndBadgeDate(int userNum, String badgeDate);
+
 } 

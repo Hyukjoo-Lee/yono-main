@@ -11,4 +11,7 @@ alter table tbl_posts add imgurl VARCHAR2(500);
 
 select * from tbl_posts;
 
+
+
+
 drop table tbl_posts;

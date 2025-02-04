@@ -57,21 +57,31 @@ public class BadgeController {
 
             // 절약률 계산
             double savingsRate = 0;
-            if (previousMonthAmount != 0) {
-                savingsRate = ((double) (previousMonthAmount - currentMonthAmount) / previousMonthAmount) * 100;
+            if (previousMonthAmount != 0) { 
+            savingsRate = ((double)(previousMonthAmount - currentMonthAmount) / previousMonthAmount) * 100;
             } else {
-                savingsRate = 0; // 이전 달 사용 금액이 0이면 절약률을 0으로 설정
+            savingsRate = 0; // 이전 달 사용 금액이 0이면 절약률을 0으로 설정
             }
 
             System.out.println("절약률 : " + savingsRate);
 
             // 뱃지 지급 정책
-            int badgeCount = (int) (savingsRate * 10); // 절약률 * 10을 뱃지 개수로 설정
+            int badgeCount = (int) (savingsRate * 100); // 절약률 * 100을 뱃지 개수로 설정
             System.out.println("뱃지 개수: " + badgeCount);
+            
+            //등수 계산
+            int ranking = badgeService.calculateUserRank(userNum);
+            System.out.println("등수 : " + ranking);
 
-            // 뱃지 지급
             String badgeDate = yearMonth; // "202501" 형식
-            badgeService.save(userNum, badgeCount, badgeDate, currentMonthAmount, previousMonthAmount);
+            
+
+            if (!badgeService.existsBadgeForUserAndDate(userNum, badgeDate)) {
+            badgeService.save(userNum, badgeCount, badgeDate, currentMonthAmount, previousMonthAmount, ranking);
+            System.out.println("새로운 뱃지 저장 완료");
+            } else {
+            System.out.println("이미 저장된 뱃지입니다. 저장하지 않습니다.");
+            }
 
             // DTO에 설정
             BadgeDTO dto = new BadgeDTO();
@@ -79,6 +89,7 @@ public class BadgeController {
             dto.setBadge(badgeCount); // 뱃지 개수 추가
             dto.setCurrentMonthAmount(currentMonthAmount);
             dto.setPreviousMonthAmount(previousMonthAmount);
+            dto.setRanking(ranking);
 
             return ResponseEntity.ok(new ApiResponse<>(200, "월별 금액 조회 성공", dto));
         } catch (Exception e) {
