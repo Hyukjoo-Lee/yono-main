@@ -35,9 +35,7 @@ const MonthlyStatistics = () => {
       setLoading(false);
     };
 
-    if (userNum) {
-      fetchUser();
-    }
+    fetchUser();
   }, [userNum]);
 
   if (loading) {
