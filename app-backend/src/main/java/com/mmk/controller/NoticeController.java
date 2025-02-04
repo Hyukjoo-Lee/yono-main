@@ -33,80 +33,82 @@ public class NoticeController {
   private NoticeService noticeService;
 
   // 글 쓰기
-@PostMapping("/write")
-public ResponseEntity<ApiResponse<Void>> saveNotice(
+  @PostMapping("/write")
+  public ResponseEntity<ApiResponse<Void>> saveNotice(
     @ModelAttribute NoticeDTO noticeDTO,
     @RequestParam(value = "file", required = false) MultipartFile file) {
 
     try {
-        System.out.println("아이디 : " + noticeDTO);
+      System.out.println("아이디 : " + noticeDTO);
 
-        if (file != null && !file.isEmpty()) {
-            ApiResponse<String> fileResponse = saveFile(file);
+      if (file != null && !file.isEmpty()) {
+        ApiResponse<String> fileResponse = saveFile(file);
 
-            if (fileResponse.getStatus() == 200) {
-                String fileName = fileResponse.getData();
-                noticeDTO.setImgurl(fileName);
-            } else {
-                return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
-                        .body(new ApiResponse<>(500, "파일 저장 중 오류 발생", null));
-            }
-        }
+        if (fileResponse.getStatus() == 200) {
+          String fileName = fileResponse.getData();
+          noticeDTO.setImgurl(fileName);
+        } else {
+          return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+            .body(new ApiResponse<>(500, "파일 저장 중 오류 발생", null));
+          }
+      }
 
-        noticeDTO.setUpdatedAt(null);
-        noticeDTO.setUserId(noticeDTO.getUserId());
-        noticeService.saveNotice(noticeDTO);
+      noticeDTO.setUpdatedAt(null);
+      noticeDTO.setUserId(noticeDTO.getUserId());
+      noticeService.saveNotice(noticeDTO);
 
-        return ResponseEntity.ok(new ApiResponse<>(200, "공지사항 작성 성공", null));
+      return ResponseEntity.ok(new ApiResponse<>(200, "공지사항 작성 성공", null));
 
     } catch (Exception e) {
-        log.error("Error while saving notice: ", e);
-        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
-                .body(new ApiResponse<>(500, "공지사항 작성 중 오류 발생", null));
+      log.error("Error while saving notice: ", e);
+      return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+        .body(new ApiResponse<>(500, "공지사항 작성 중 오류 발생", null));
     }
-}
+  }
 
-// 파일 저장 메서드
-private ApiResponse<String> saveFile(MultipartFile file) {
+  // 파일 저장 메서드
+  private ApiResponse<String> saveFile(MultipartFile file) {
     try {
-        String propertyPath = System.getProperty("user.dir").replace("\\app-backend", "").replace("/app-backend", "");
-        String uploadFolder = propertyPath + "/uploads/images";
+      String propertyPath = System.getProperty("user.dir").replace("\\app-backend", "").replace("/app-backend", "");
+      String uploadFolder = propertyPath + "/uploads/images";
 
-        Calendar cal = Calendar.getInstance();
-        int year = cal.get(Calendar.YEAR);
-        int month = cal.get(Calendar.MONTH) + 1;
-        int date = cal.get(Calendar.DATE);
-        String homedir = uploadFolder + "/" + year + "-" + month + "-" + date;
+      Calendar cal = Calendar.getInstance();
+      int year = cal.get(Calendar.YEAR);
+      int month = cal.get(Calendar.MONTH) + 1;
+      int date = cal.get(Calendar.DATE);
+      String homedir = uploadFolder + "/" + year + "-" + month + "-" + date;
 
-        File path = new File(homedir);
+      File path = new File(homedir);
         if (!path.exists()) {
-            path.mkdirs();
+          path.mkdirs();
         }
 
-        String fileName = file.getOriginalFilename();
+      String fileName = file.getOriginalFilename();
         if (fileName == null || fileName.isEmpty()) {
-            fileName = "default_filename.jpg";
+          fileName = "default_filename.jpg";
         }
 
-        Random r = new Random();
-        int random = r.nextInt(100000000);
-        int index = fileName.lastIndexOf(".");
-        String fileExtension = fileName.substring(index + 1);
-        String originalFileName = fileName.substring(0, fileName.length() - fileExtension.length() - 1);
-        String newFileName = originalFileName + year + month + date + random + "." + fileExtension;
-        String fileDBName = "/uploads/images/" + year + "-" + month + "-" + date + "/" + newFileName;
+      Random r = new Random();
+      int random = r.nextInt(100000000);
+      int index = fileName.lastIndexOf(".");
+      String fileExtension = fileName.substring(index + 1);
+      String originalFileName = fileName.substring(0, fileName.length() - fileExtension.length() - 1);
+      String newFileName = originalFileName + year + month + date + random + "." + fileExtension;
+      String fileDBName = "/uploads/images/" + year + "-" + month + "-" + date + "/" + newFileName;
 
-        File saveFile = new File(homedir + "/" + newFileName);
-        log.info("파일 저장 경로: " + saveFile.getAbsolutePath());
+      File saveFile = new File(homedir + "/" + newFileName);
+      log.info("파일 저장 경로: " + saveFile.getAbsolutePath());
 
-        file.transferTo(saveFile);
-        return new ApiResponse<>(200, "파일 저장 성공", fileDBName);
+      file.transferTo(saveFile);
+      return new ApiResponse<>(200, "파일 저장 성공", fileDBName);
 
     } catch (Exception e) {
-        log.error("파일 저장 중 오류 발생: ", e);
-        return new ApiResponse<>(500, "파일 저장 중 오류 발생", null);
+      log.error("파일 저장 중 오류 발생: ", e);
+      return new ApiResponse<>(500, "파일 저장 중 오류 발생", null);
     }
-}
+  }
+
+
 
 
   //글 목록 불러오기

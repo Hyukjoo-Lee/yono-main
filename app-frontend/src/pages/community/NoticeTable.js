@@ -109,9 +109,9 @@ export function NoticeTable() {
     }
   };
 
-  const getNoticeData = async (searchKeyword) => {
+  const getNoticeData = async (keyword) => {
     try {
-      const { success, data } = await fetchSearchNotice(searchKeyword);
+      const { success, data } = await fetchSearchNotice(keyword);
 
       if (success) {
         setRows(data);
