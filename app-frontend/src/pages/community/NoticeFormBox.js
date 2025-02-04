@@ -1,8 +1,9 @@
-import axios from 'axios';
+// import axios from 'axios';
 import React, { useState } from 'react';
 import { useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
+import { createNotice } from '../../apis/noticeApi';
 import CommonButton from '../../common/CommonButton';
 import CommonHr from '../../common/CommonHr';
 import CommonInput from '../../common/CommonInput';
@@ -79,13 +80,12 @@ const HiddenInput = styled.input`
 
 export function NoticeFormBox() {
   const navigate = useNavigate();
+  // const fileInputRef = useRef(null);
 
   const [title, setTitle] = useState('');
   const [content, setContent] = useState('');
   const [image, setImage] = useState('');
   const user = useSelector((state) => state.user.user);
-
-  // const fileInputRef = useRef(null);
 
   const handleTitleChange = (e) => {
     setTitle(e.target.value);
@@ -117,7 +117,7 @@ export function NoticeFormBox() {
     const validationErrors = validateForm();
 
     if (Object.keys(validationErrors).length > 0) {
-      alert(Object.values(validationErrors)[0]);
+      alert(Object.values(validationErrors).join('\n'));
       return;
     }
 
@@ -128,25 +128,13 @@ export function NoticeFormBox() {
 
     if (image) formData.append('file', image);
 
-    try {
-      const response = await axios.post('/notice/write', formData, {
-        headers: {
-          'Content-Type': 'multipart/form-data',
-        },
-      });
+    const { success, message } = await createNotice(formData);
 
-      if (response.status === 200) {
-        alert('게시글이 등록되었습니다.');
-        navigate('/notice'); // notice 페이지로 이동
-      }
-    } catch (error) {
-      if (error.response) {
-        console.error('Server error: ', error.response.data);
-        alert(`오류: ${error.response.data.message}`);
-      } else {
-        console.error('Error: ', error);
-        alert('게시글 등록에 실패했습니다. 다시 시도해 주세요.');
-      }
+    if (success) {
+      alert('게시글이 등록되었습니다.');
+      navigate('/community');
+    } else {
+      alert(`오류 : ${message}`);
     }
   };
 

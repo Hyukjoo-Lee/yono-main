@@ -18,6 +18,7 @@ import { Community } from './pages/community/Community';
 import { CommunityFormBox } from './pages/community/CommunityFormBox';
 import { CommunityPost } from './pages/community/CommunityPost';
 import { EditFormBox } from './pages/community/EditFormBox';
+import { NoticeEditFormBox } from './pages/community/NoticeEditFormBox';
 import { NoticeFormBox } from './pages/community/NoticeFormBox';
 import { NoticePost } from './pages/community/NoticePost';
 import { Intro } from './pages/intro/Intro';
@@ -82,6 +83,10 @@ function App() {
             <Route path="/editFormBox" element={<EditFormBox />} />
             <Route path="/noticeFormBox" element={<NoticeFormBox />} />
             <Route path="/noticeList" element={<Community />} />
+            <Route
+              path="/noticeEditFormBox/:id"
+              element={<NoticeEditFormBox />}
+            />
           </Routes>
         </Layout>
       </Router>

@@ -1,13 +1,13 @@
-import styled from 'styled-components';
-import CommonInput from '../../common/CommonInput';
-import CommonSelect from '../../common/CommonSelect';
-import CommonButton from '../../common/CommonButton';
-import CommonPageInfo from '../../common/CommonPageInfo';
-import CommonHr from '../../common/CommonHr';
-import { useLocation, useNavigate } from 'react-router-dom';
-import { useEffect, useState } from 'react';
 import axios from 'axios';
+import { useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
+import { useLocation, useNavigate } from 'react-router-dom';
+import styled from 'styled-components';
+import CommonButton from '../../common/CommonButton';
+import CommonHr from '../../common/CommonHr';
+import CommonInput from '../../common/CommonInput';
+import CommonPageInfo from '../../common/CommonPageInfo';
+import CommonSelect from '../../common/CommonSelect';
 
 const Root = styled.div`
   width: ${(props) => props.theme.display.lg};

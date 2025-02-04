@@ -1,6 +1,3 @@
-//NoticeTable 수정버전
-import React, { useEffect, useState } from 'react';
-
 import {
   Pagination,
   PaginationItem,
@@ -12,10 +9,10 @@ import {
   TableHead,
   TableRow,
 } from '@mui/material';
-import axios from 'axios';
+import React, { useEffect, useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
-// import { Link } from 'react-router-dom';
 import styled from 'styled-components';
+import { fetchSearchNotice } from '../../apis/noticeApi';
 import CommonButton from '../../common/CommonButton';
 import CommonInput from '../../common/CommonInput';
 
@@ -67,6 +64,7 @@ const PaginationStyle = styled(Pagination)`
     color: #3563e9;
   }
 `;
+
 const Box = styled.div`
   display: flex;
   justify-content: start;
@@ -78,12 +76,17 @@ const Box = styled.div`
     margin-left: 10px;
   }
 `;
+
 export function NoticeTable() {
   const [rows, setRows] = useState([]);
   const [page, setPage] = useState(0);
   const [keyword, setKeyword] = useState('');
   const rowsPerPage = 10;
   const navigate = useNavigate();
+
+  useEffect(() => {
+    getNoticeData(keyword);
+  }, [keyword]);
 
   const handleChangePage = (event, newPage) => {
     setPage(newPage - 1);
@@ -97,22 +100,29 @@ export function NoticeTable() {
     setKeyword(e.target.value);
   };
 
-  const handleSerchSubmit = () => {
-    getNoticeData(keyword);
+  const handleSerchSubmit = async () => {
+    const { success, data, message } = await fetchSearchNotice(keyword);
+    if (success) {
+      setRows(data);
+    } else {
+      alert(`검색 오류: ${message}`);
+    }
   };
 
-  useEffect(() => {
-    getNoticeData(keyword);
-  }, [keyword]);
-
-  const getNoticeData = async (searchKeyword) => {
+  const getNoticeData = async (keyword) => {
     try {
-      const response = await axios.get('/notice/list', {
-        params: { keyword: searchKeyword },
-      });
-      setRows(response.data);
+      const { success, data } = await fetchSearchNotice(keyword);
+
+      if (success) {
+        setRows(data);
+      } else {
+        setRows([]);
+        setPage(0);
+      }
     } catch (error) {
       console.error('Error fetching data : ', error);
+      setRows([]);
+      setPage(0);
     }
   };
 
@@ -124,10 +134,6 @@ export function NoticeTable() {
     const day = date.getDate().toString().padStart(2, '0');
 
     return `${year}-${month}-${day}`;
-  };
-
-  const handlePostClick = (id) => {
-    navigate(`/notice/${id}`);
   };
 
   return (
@@ -183,13 +189,7 @@ export function NoticeTable() {
                   rows
                     .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
                     .map((row, index) => (
-                      <TableRow
-                        hover
-                        role="checkbox"
-                        tabIndex={-1}
-                        key={index}
-                        onClick={() => handlePostClick(row.noticeNo)}
-                      >
+                      <TableRow hover role="checkbox" tabIndex={-1} key={index}>
                         {columns.map((column) => {
                           let value = row[column.id];
                           if (column.id === 'createdAt') {
@@ -202,8 +202,7 @@ export function NoticeTable() {
                               sx={{ borderBottom: '0.5px solid #757575' }}
                             >
                               <Link
-                                // to="/no"
-                                state={{ rowData: row }}
+                                to={`/notice/${row.noticeNo}`}
                                 style={{
                                   textDecoration: 'none',
                                   color: 'black',
@@ -240,4 +239,5 @@ export function NoticeTable() {
     </>
   );
 }
+
 export default NoticeTable;

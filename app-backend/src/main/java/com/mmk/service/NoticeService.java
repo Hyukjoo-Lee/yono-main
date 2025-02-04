@@ -12,4 +12,10 @@ public interface NoticeService{
 
   NoticeDTO getNoticeById(int id);
 
+  void deleteByNotice(List<Integer> ids);
+
+  boolean updateNotice(NoticeDTO noticeDTO);
+
+  // void increaseViewCount(int id);
+
 }
