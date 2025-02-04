@@ -14,13 +14,13 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.mmk.dao.CardCompanyDAO;
+import com.mmk.dao.UserCardCompanyDAO;
 import com.mmk.dao.CardDAO;
 import com.mmk.dao.UserCardDAO;
 import com.mmk.dao.UserDAO;
 import com.mmk.dto.CardBenefitDTO;
 import com.mmk.dto.UserCardDTO;
-import com.mmk.entity.CardCompanyEntity;
+import com.mmk.entity.UserCardCompanyEntity;
 import com.mmk.entity.CardEntity;
 import com.mmk.entity.UserCardEntity;
 import com.mmk.entity.UserEntity;
@@ -39,7 +39,7 @@ public class UserCardServiceImpl implements UserCardService {
     private UserDAO userDAO;
 
     @Autowired
-    private CardCompanyDAO cardCompanyDAO;
+    private UserCardCompanyDAO cardCompanyDAO;
 
     @Autowired
     private CodefService codefService;
@@ -54,7 +54,7 @@ public class UserCardServiceImpl implements UserCardService {
             if (userCardDAO.existsByUserCardNum(userCardNum)) {
                 throw new IllegalArgumentException("이미 등록된 카드입니다.");
             } else {
-                int cardCompanyNum = cardCompanyDAO.findByUserNumAndOrganization(userNum, organization)
+                int cardCompanyNum = cardCompanyDAO.findByUserNumAndOrganizationCode(userNum, organization)
                         .getCardCompanyNum();
                 int cardId = cardDAO.findByCardTitle(cardTitle).getCardId();
                 userCardDTO.setCardCompanyNum(cardCompanyNum);
@@ -92,10 +92,6 @@ public class UserCardServiceImpl implements UserCardService {
     @Override
     public List<UserCardDTO> getAllCardsByUserNum(int userNum) {
         List<UserCardEntity> userCardEntities = userCardDAO.getAllCardsByUserNum(userNum);
-        if (userCardEntities.isEmpty()) {
-            throw new NoSuchElementException("해당 사용자가 소유한 카드가 없습니다.");
-        }
-
         List<UserCardDTO> userCardDTOs = new ArrayList<>();
         for (UserCardEntity entity : userCardEntities) {
             UserCardDTO dto = toDTO(entity);
@@ -109,10 +105,6 @@ public class UserCardServiceImpl implements UserCardService {
     @Override
     public List<UserCardDTO> getAllCardsInfoByUserNum(int userNum) {
         List<UserCardEntity> userCardEntities = userCardDAO.getAllCardsInfoByUserNum(userNum);
-
-        if (userCardEntities.isEmpty()) {
-            throw new NoSuchElementException("해당 사용자가 소유한 카드가 없습니다.");
-        }
 
         // 사용자 카드 리스트 필요한 데이터만 가공, 현재는 나머지 null, 0 으로 처리됨
         return userCardEntities.stream().map(entity -> {
@@ -171,37 +163,41 @@ public class UserCardServiceImpl implements UserCardService {
         entity.setCreatedAt(dto.getCreatedAt());
         entity.setUpdatedAt(dto.getUpdatedAt());
 
-        CardCompanyEntity cardCompanyEntity = cardCompanyDAO.findByCardCompanyNum(dto.getCardCompanyNum());
+        UserCardCompanyEntity cardCompanyEntity = cardCompanyDAO.findByCardCompanyNum(dto.getCardCompanyNum());
         CardEntity cardEntity = cardDAO.findByCardId(dto.getCardId());
         UserEntity userEntity = userDAO.findByUserNum(dto.getUserNum());
 
-        entity.setCardCompanyEntity(cardCompanyEntity);
+        entity.setUserCardCompanyEntity(cardCompanyEntity);
         entity.setCardEntity(cardEntity);
         entity.setUserEntity(userEntity);
         return entity;
     }
 
     private UserCardDTO toDTO(UserCardEntity entity) {
-        UserCardDTO dto = new UserCardDTO();
-        dto.setUserCardId(entity.getUserCardId());
-        dto.setUserCardNum(entity.getUserCardNum());
-        dto.setExpiryDate(entity.getExpiryDate());
-        dto.setCardPwd(entity.getCardPwd());
-        dto.setCardImg(entity.getCardImg());
-        dto.setPrimaryCard(entity.getPrimaryCard());
-        dto.setCreatedAt(entity.getCreatedAt());
-        dto.setUpdatedAt(entity.getUpdatedAt());
+        if (entity != null) {
+            UserCardDTO dto = new UserCardDTO();
+            dto.setUserCardId(entity.getUserCardId());
+            dto.setUserCardNum(entity.getUserCardNum());
+            dto.setExpiryDate(entity.getExpiryDate());
+            dto.setCardPwd(entity.getCardPwd());
+            dto.setCardImg(entity.getCardImg());
+            dto.setPrimaryCard(entity.getPrimaryCard());
+            dto.setCreatedAt(entity.getCreatedAt());
+            dto.setUpdatedAt(entity.getUpdatedAt());
 
-        dto.setCardCompanyNum(entity.getCardCompanyEntity().getCardCompanyNum());
-        dto.setCardId(entity.getCardEntity().getCardId());
-        dto.setUserNum(entity.getUserEntity().getUserNum());
-        dto.setCardBenefits(
-                entity.getCardEntity().getCardBenefits() == null ? Collections.emptyList()
-                        : entity.getCardEntity().getCardBenefits().stream()
-                                .map(b -> new CardBenefitDTO(b.getBenefitTitle(), b.getBenefitValue(),
-                                        b.getBenefitType()))
-                                .collect(Collectors.toList()));
-        dto.setCardTitle(entity.getCardEntity().getCardTitle());
-        return dto;
+            dto.setCardCompanyNum(entity.getUserCardCompanyEntity().getCardCompanyNum());
+            dto.setCardId(entity.getCardEntity().getCardId());
+            dto.setUserNum(entity.getUserEntity().getUserNum());
+            dto.setCardBenefits(
+                    entity.getCardEntity().getCardBenefits() == null ? Collections.emptyList()
+                            : entity.getCardEntity().getCardBenefits().stream()
+                                    .map(b -> new CardBenefitDTO(b.getBenefitTitle(), b.getBenefitValue(),
+                                            b.getBenefitType()))
+                                    .collect(Collectors.toList()));
+            dto.setCardTitle(entity.getCardEntity().getCardTitle());
+            return dto;
+        } else {
+            return null;
+        }
     }
 }

@@ -8,12 +8,12 @@ import java.util.NoSuchElementException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.mmk.dao.CardCompanyDAO;
+import com.mmk.dao.UserCardCompanyDAO;
 import com.mmk.dao.CardDAO;
 import com.mmk.dto.CardBenefitDTO;
-import com.mmk.dto.CardCompanyDTO;
+import com.mmk.dto.UserCardCompanyDTO;
 import com.mmk.dto.CardDTO;
-import com.mmk.entity.CardCompanyEntity;
+import com.mmk.entity.UserCardCompanyEntity;
 import com.mmk.entity.CardEntity;
 
 @Service
@@ -23,7 +23,7 @@ public class CardServiceImpl implements CardService {
     private CardDAO cardDAO;
 
     @Autowired
-    private CardCompanyDAO cardCompanyDAO;
+    private UserCardCompanyDAO cardCompanyDAO;
 
     @Autowired
     private UserCardService userCardService;
@@ -99,12 +99,13 @@ public class CardServiceImpl implements CardService {
     }
 
     @Override
-    public CardCompanyDTO saveCodefCard(CardCompanyDTO cardCompanyDTO) {
+    public UserCardCompanyDTO saveCodefCard(UserCardCompanyDTO cardCompanyDTO) {
 
         int userNum = cardCompanyDTO.getUserNum();
         String organization = cardCompanyDTO.getOrganization();
 
-        CardCompanyEntity cardCompanyEntity = cardCompanyDAO.findByUserNumAndOrganization(userNum, organization);
+        UserCardCompanyEntity cardCompanyEntity = cardCompanyDAO.findByUserNumAndOrganizationCode(userNum,
+                organization);
 
         if (cardCompanyEntity == null) {
             throw new RuntimeException("카드 회사 정보가 존재하지 않습니다.");
@@ -112,7 +113,7 @@ public class CardServiceImpl implements CardService {
             int companyNum = cardCompanyEntity.getCardCompanyNum();
             String companyId = cardCompanyEntity.getCompanyId();
             String companyPwd = cardCompanyEntity.getCompanyPwd();
-            String connectedId = cardCompanyEntity.getConnedtedId();
+            String connectedId = cardCompanyEntity.getConnectedId();
 
             cardCompanyDTO.setCardCompanyNum(companyNum);
             cardCompanyDTO.setCompanyId(companyId);

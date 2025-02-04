@@ -40,15 +40,16 @@ export const saveCodefCard = async (userNum, organization) => {
 // Codef API 끝
 
 export const getprimaryCardInfo = async (userNum) => {
-  try {
-    const response = await axios.get('/card/primaryCard', {
-      params: { userNum },
-    });
+  const response = await axios.get('/card/primaryCard', {
+    params: { userNum },
+  });
+
+  if (response.status === 204) {
+    return null;
+  } else if (response.status === 200) {
     return response.data;
-  } catch (error) {
-    if (error.response) {
-      return error.response.data;
-    }
+  } else {
+    return response.message;
   }
 };
 
@@ -90,11 +91,14 @@ export const registerCard = async (cardData) => {
 };
 
 export const getAllCardsInfoByUserNum = async (userNum) => {
-  try {
-    const response = await axios.get(`/card/user/${userNum}/details`);
+  const response = await axios.get(`/card/user/${userNum}/details`);
+
+  if (response.status === 200) {
     return response.data;
-  } catch (error) {
-    console.error('데이터 조회 중 오류 발생', error);
+  } else if (response.status === 404) {
+    return null;
+  } else {
+    return response.message;
   }
 };
 

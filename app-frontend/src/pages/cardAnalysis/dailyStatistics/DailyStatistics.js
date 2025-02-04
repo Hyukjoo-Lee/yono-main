@@ -71,6 +71,14 @@ export const EmptyBox = styled.div`
   box-sizing: border-box;
   border: 1px solid ${(props) => props.theme.color.mediumGray};
   padding: 40px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  & p {
+    margin: 0;
+    font-size: ${(props) => props.theme.fontSize.base};
+    color: ${(props) => props.theme.color.gray};
+  }
 `;
 
 const DailyStatistics = () => {
@@ -98,14 +106,12 @@ const DailyStatistics = () => {
           setIsShowLoginDialog(true);
         } else {
           const user = await findUserById(isLoggedIn);
-          setUsers(user.data);
+          if (user != null && typeof user != 'string') {
+            setUsers(user.data);
+          }
 
-          try {
-            const card = await getprimaryCardInfo(isLoggedIn);
-            if (!card.data) {
-              setIsShowCardDialog(true);
-            }
-          } catch (error) {
+          const card = await getprimaryCardInfo(isLoggedIn);
+          if (card == null || typeof card == 'string') {
             setIsShowCardDialog(true);
           }
         }
@@ -123,9 +129,12 @@ const DailyStatistics = () => {
     setIsLoading(true);
     try {
       const data = await fetchDailyStatistics(isLoggedIn); // API 호출
-      setStatistics(data);
+      if (typeof data === 'string') {
+        console.log(data); // 예외 발생시 다이얼로그 처리 필요
+      } else if (data != null) {
+        setStatistics(data.data);
+      }
     } catch (error) {
-      console.error('Failed to fetch statistics:', error);
       console.error('유저 정보 실패: ', users);
     } finally {
       setIsLoading(false); // 데이터 로드 완료 후 로딩 상태 false
@@ -208,17 +217,18 @@ const DailyStatistics = () => {
       </CalendarBox>
 
       <ListBox $dynamicHeight={dynamicHeight}>
-        {!isLoading ? (
+        {isLoading ? (
           <EmptyBox>
             <CommonLoading />
           </EmptyBox>
         ) : filteredStatistics.length > 0 ? (
-          filteredStatistics.map((item) => (
+          filteredStatistics.map((item, index) => (
             <CommonCardListBox
               key={item.resApprovalNo}
               cardItem={{
                 ...item,
                 resUsedDate: formatDate(item.resUsedDate), // 변환된 날짜 전달
+                cardImgUrl: filteredStatistics[index].cardImg,
               }}
               showDetailed={false}
             />

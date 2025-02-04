@@ -92,7 +92,7 @@ public class CodefServiceImpl implements CodefService {
         codef.setClientInfoForDemo(clientId, clientSecret);
         codef.setPublicKey(publickey);
 
-        String connectedId = userCardEntity.getCardCompanyEntity().getConnedtedId();
+        String connectedId = userCardEntity.getUserCardCompanyEntity().getConnectedId();
         String organization = userCardEntity.getCardEntity().getOrganizationCode();
         String cardNo = userCardEntity.getUserCardNum();
         String cardPwd = userCardEntity.getCardPwd();

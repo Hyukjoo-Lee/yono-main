@@ -145,7 +145,7 @@ const SignUp = () => {
     userId: /^[a-z][a-z0-9]{3,15}$/,
     email: /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/,
     password: /^(?=.*[a-z])(?=.*\d)(?=.*[*@#$%^&+=!]).{8,}$/,
-    name: /^[가-힣]{2,10}$/,
+    name: /^[가-힣]{2,17}$/,
   };
 
   const navigate = useNavigate();

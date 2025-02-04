@@ -120,13 +120,16 @@ public class UserController {
     // id(기본키) 기반으로 유저 정보를 검색
     @GetMapping("/{userNum}")
     public ResponseEntity<ApiResponse<UserDTO>> getUserDetails(@PathVariable("userNum") int userNum) {
-        UserDTO userDTO = userService.findByUserNum(userNum);
-        if (userDTO != null) {
-            ApiResponse<UserDTO> response = new ApiResponse<>(200, "유저 검색 성공", userDTO);
-            return ResponseEntity.ok(response);
-        } else {
-            ApiResponse<UserDTO> response = new ApiResponse<>(404, "유저 정보 찾을 수 없음", null);
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(response);
+        try {
+            UserDTO userDTO = userService.findByUserNum(userNum);
+            if (userDTO != null) {
+                return ResponseEntity.ok(new ApiResponse<>(200, "유저 정보 조회 성공", userDTO));
+            } else {
+                return ResponseEntity.noContent().build();
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(new ApiResponse<>(500, "유저정보 조회 중 오류 발생", null));
         }
     }
 
@@ -225,7 +228,7 @@ public class UserController {
             @RequestParam("userInfo") String userInfoJson,
             @RequestParam(value = "profileImage", required = false) MultipartFile profileImage,
             @RequestParam(value = "profileText", required = false) String profileText) {
-
+        System.out.println("profileImage: " + profileImage);
         try {
             UserDTO uv = new ObjectMapper().readValue(userInfoJson, UserDTO.class);
             String propertyPath = System.getProperty("user.dir").replace("\\app-backend", "").replace("/app-backend",

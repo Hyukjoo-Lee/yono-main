@@ -10,13 +10,12 @@ const LoadingContainer = styled.div`
   justify-content: center;
   height: 100%;
   & .MuiCircularProgress-root {
-    margin-bottom: 10px;
+    margin-bottom: 20px;
   }
 `;
 
 const LoadingText = styled(Typography)`
-  margin-top: 20px;
-  font-size: ${theme.fontSize.eighteen};
+  font-size: ${theme.fontSize.base};
   color: ${theme.color.gray};
 `;
 

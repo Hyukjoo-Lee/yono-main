@@ -48,7 +48,7 @@ const MonthComparision = () => {
     // 백엔드로 API 요청을 보내고 금액 및 뱃지 데이터를 받아옴
     const fetchData = async () => {
       try {
-        const response = await axios.get('/month/Comparison', {
+        const response = await axios.get('/badge/Comparison', {
           params: {
             userNum,
             yearMonth: previousMonthStr,

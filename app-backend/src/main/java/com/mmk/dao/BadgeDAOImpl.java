@@ -25,9 +25,17 @@ public class BadgeDAOImpl implements BadgeDAO {
         return badgeRepository.findByBadgeDate(previousMonth);
     }
 
-    // 로그인한 유저 랭킹정보
+     // 로그인한 유저 랭킹정보
     @Override
     public BadgeEntity getUserRanking(String previousMonth, int userNum) {
         return badgeRepository.findByBadgeDateAndUserEntity_UserNum(previousMonth, userNum);
     }
+
+    // BadgeDAOImpl에 구현
+@Override
+public boolean existsByUserNumAndBadgeDate(int userNum, String badgeDate) {
+    return badgeRepository.existsByUserEntity_UserNumAndBadgeDate(userNum, badgeDate);
+}
+
+
 }

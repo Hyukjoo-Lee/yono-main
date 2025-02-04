@@ -3,6 +3,7 @@ package com.mmk.entity;
 import java.sql.Timestamp;
 import java.time.LocalDateTime;
 
+import org.hibernate.annotations.ColumnDefault;
 import org.hibernate.annotations.CreationTimestamp;
 
 import jakarta.persistence.Column;
@@ -24,15 +25,10 @@ import lombok.ToString;
 @Getter
 @ToString
 @Entity
-@SequenceGenerator(
-  name = "no_seq_genotice",
-  sequenceName = "notice_seq",
-  initialValue = 1,
-  allocationSize = 1
-)
+@SequenceGenerator(name = "no_seq_genotice", sequenceName = "notice_seq", initialValue = 1, allocationSize = 1)
 @Table(name = "notice")
 public class NoticeEntity {
-  
+
   @Id
   @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "no_seq_genotice")
   @Column(name = "notice_no")
@@ -56,19 +52,20 @@ public class NoticeEntity {
   @JoinColumn(name = "user_num", referencedColumnName = "user_num")
   private UserEntity userEntity;
 
-  @Column(name = "view_count", nullable=false, columnDefinition="int default 0")
-  private int viewCount=0;
+  @Column(name = "view_count", nullable = false)
+  @ColumnDefault("0")
+  private int viewCount = 0;
 
   @PrePersist
-  public void prePersist(){
-    if(updatedAt == null){
+  public void prePersist() {
+    if (updatedAt == null) {
       updatedAt = null;
     }
   }
 
   @PreUpdate
-  public void preUpdate(){
-    if(updatedAt == null){
+  public void preUpdate() {
+    if (updatedAt == null) {
       updatedAt = LocalDateTime.now();
     }
   }
