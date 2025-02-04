@@ -1,10 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
 import styled from 'styled-components';
-import {
-  // updateHistory,
-  uploadThreeMonthHistory,
-} from '../../../apis/cardHistoryApi';
+import { uploadThreeMonthHistory } from '../../../apis/cardHistoryApi';
 import Barchart from '../../../pages/cardAnalysis/monthlyStatistics/chart/Barchart';
 import Piechart from '../../../pages/cardAnalysis/monthlyStatistics/chart/Piechart';
 import CommonLoading from '../../../common/CommonLoading';
@@ -21,18 +18,9 @@ const ChartsContainer = styled.div`
   width: 100%;
 `;
 
-const MessageText = styled.p`
-  margin-top: 20px;
-  font-size: 16px;
-  color: #666;
-  text-align: center;
-`;
-
 const MonthlyStatistics = () => {
   const [cardData, setCardData] = useState(null);
   const [loading, setLoading] = useState(true);
-  const [message, setMessage] = useState(true);
-  const [data, updateData] = useState(true);
   const userNum = useSelector((state) => state.user.user?.userNum);
 
   useEffect(() => {
@@ -45,22 +33,6 @@ const MonthlyStatistics = () => {
         setCardData(response.data);
       }
       setLoading(false);
-
-      // const update = await updateHistory(userNum);
-      // if (!update.data) {
-      //   updateData(false);
-      // }
-
-      // const updatedData = await uploadThreeMonthHistory(userNum);
-      // if (typeof updatedData === 'string') {
-      //   console.log(updatedData);
-      //   // 예외 발생시 다이얼로그 처리 필요
-      // } else if (updatedData != null) {
-      //   setCardData(updatedData.data);
-      // }
-
-      // setCardData(updatedData.data);
-      setMessage(false);
     };
 
     if (userNum) {
@@ -84,13 +56,6 @@ const MonthlyStatistics = () => {
           <p>집계된 데이터가 없습니다.</p>
         )}
       </ChartsContainer>
-      {message && (
-        <MessageText>
-          {data
-            ? '최근 데이터 갱신 중입니다. 이 작업은 몇 초 정도 소요될 수 있습니다.'
-            : '데이터 갱신에 실패했습니다. 새로고침 후 다시 시도해주세요.'}
-        </MessageText>
-      )}
     </Root>
   );
 };

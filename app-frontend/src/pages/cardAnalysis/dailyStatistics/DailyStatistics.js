@@ -1,19 +1,17 @@
-import React, { useState, useEffect, useRef, useCallback } from 'react';
-import Calendar from './calendar/Calendar';
+import React, { useCallback, useEffect, useRef, useState } from 'react';
+import { useSelector } from 'react-redux';
+import ResizeObserver from 'resize-observer-polyfill';
 import styled from 'styled-components';
-import CommonCardListBox from '../../../common/CommonCardListBox';
-import { ReactComponent as ExcellentCoin } from '../../../assets/images/ExcellentCoin.svg';
-import { ReactComponent as VeryGoodCoin } from '../../../assets/images/VeryGoodCoin.svg';
-import { ReactComponent as GoodCoin } from '../../../assets/images/GoodCoin.svg';
-import { ReactComponent as BadCoin } from '../../../assets/images/BadCoin.svg';
 import { fetchDailyStatistics } from '../../../apis/dailyStatisticsApi.js';
 import { findUserById } from '../../../apis/userApi';
-import ResizeObserver from 'resize-observer-polyfill';
-import CommonDialog from '../../../common/CommonDialog';
-import { useSelector } from 'react-redux';
-import { useNavigate } from 'react-router-dom';
-import { getprimaryCardInfo } from '../../../apis/cardApi.js';
+import { ReactComponent as BadCoin } from '../../../assets/images/BadCoin.svg';
+import { ReactComponent as ExcellentCoin } from '../../../assets/images/ExcellentCoin.svg';
+import { ReactComponent as GoodCoin } from '../../../assets/images/GoodCoin.svg';
+import { ReactComponent as VeryGoodCoin } from '../../../assets/images/VeryGoodCoin.svg';
+import { updateHistory } from '../../../apis/cardHistoryApi.js';
+import CommonCardListBox from '../../../common/CommonCardListBox';
 import CommonLoading from '../../../common/CommonLoading.js';
+import Calendar from './calendar/Calendar';
 
 const Root = styled.div`
   width: 100%;
@@ -64,6 +62,11 @@ const ListBox = styled.div`
   }
 `;
 
+const MessageBox = styled.p`
+  text-align: center;
+  color: gray;
+`;
+
 export const EmptyBox = styled.div`
   width: 100%;
   height: 100%;
@@ -92,33 +95,28 @@ const DailyStatistics = () => {
   const [statistics, setStatistics] = useState([]);
   const [selectedDate, setSelectedDate] = useState(new Date());
   const [isLoading, setIsLoading] = useState(true);
+  const [isUpdate, setIsUpdate] = useState(true);
   const [users, setUsers] = useState(null);
-  const [isShowLoginDialog, setIsShowLoginDialog] = useState(false);
-  const [isShowCardDialog, setIsShowCardDialog] = useState(false);
   const [dynamicHeight, setDynamicHeight] = useState(541); // 기본 높이 설정
   const calendarRef = useRef(null);
-  const navigate = useNavigate();
 
   useEffect(() => {
     const fetchUser = async () => {
-      try {
-        if (!isLoggedIn) {
-          setIsShowLoginDialog(true);
-        } else {
-          const user = await findUserById(isLoggedIn);
-          if (user != null && typeof user != 'string') {
-            setUsers(user.data);
-          }
+      const user = await findUserById(isLoggedIn);
+      if (user != null && typeof user != 'string') {
+        setUsers(user.data);
+      }
 
-          const card = await getprimaryCardInfo(isLoggedIn);
-          if (card == null || typeof card == 'string') {
-            setIsShowCardDialog(true);
-          }
+      const history = await updateHistory(isLoggedIn);
+      if (history) {
+        const updatedData = await fetchDailyStatistics(isLoggedIn);
+        if (typeof updatedData === 'string') {
+          console.log(updatedData);
+          // 예외 발생시 다이얼로그 처리 필요
+        } else if (updatedData != null) {
+          setStatistics(updatedData.data);
         }
-      } catch (error) {
-        setIsShowLoginDialog(true);
-      } finally {
-        setIsLoading(false);
+        setIsUpdate(false);
       }
     };
 
@@ -240,30 +238,10 @@ const DailyStatistics = () => {
         )}
       </ListBox>
 
-      {isShowLoginDialog && (
-        <CommonDialog
-          open={isShowLoginDialog}
-          onClick={() => navigate('/login')}
-          onClose={() => navigate('/login')}
-          submitText="로그인"
-        >
-          <p style={{ textAlign: 'center' }}>
-            로그인 정보가 없습니다. 로그인을 진행해주세요!
-          </p>
-        </CommonDialog>
-      )}
-
-      {isShowCardDialog && (
-        <CommonDialog
-          open={isShowCardDialog}
-          onClick={() => navigate('/mycard')}
-          onClose={() => navigate('/mycard')}
-          submitText="대표카드 등록하기"
-        >
-          <p style={{ textAlign: 'center' }}>
-            등록된 대표카드가 없습니다! 대표카드를 등록해주세요.
-          </p>
-        </CommonDialog>
+      {isUpdate && (
+        <MessageBox>
+          최신 데이터를 갱신 중입니다. 이 작업은 몇 초 정도 소요될 수 있습니다.
+        </MessageBox>
       )}
     </Root>
   );
