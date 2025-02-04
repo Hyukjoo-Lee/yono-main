@@ -11,4 +11,6 @@ public interface BadgeDAO {
     
     BadgeEntity  getUserRanking(String previousMonth, int userNum);
 
+    boolean existsByUserNumAndBadgeDate(int userNum, String badgeDate);
+
 } 

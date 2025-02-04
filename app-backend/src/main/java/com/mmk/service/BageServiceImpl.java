@@ -34,7 +34,7 @@ public class BageServiceImpl implements BadgeService {
         badgeEntity.setUserEntity(userEntity); // 사용자 설정
         badgeEntity.setCurrentMonthAmount(currentMonthAmount); // 저번 달
         badgeEntity.setPreviousMonthAmount(previousMonthAmount); // 저저번달
-        badgeEntity.setRanking(ranking); // 저저번달
+        badgeEntity.setRanking(ranking); // 순위
 
         // 뱃지 정보를 데이터베이스에 저장
         badgeDAO.save(badgeEntity); // BadgeDAO를 통해 저장
@@ -109,7 +109,7 @@ public class BageServiceImpl implements BadgeService {
 
     // 이전 달 모든 유저의 배지 데이터 조회
     List<BadgeEntity> badgeEntities = badgeDAO.getBadgesForPreviousMonth(previousMonth);
-
+    System.out.println("badgeEntities" + badgeEntities);
     // 유저가 한 명밖에 없으면 1등 반환
     if (badgeEntities.size() == 1) {
         return 1;

@@ -32,10 +32,10 @@ public class BadgeDAOImpl implements BadgeDAO {
     }
 
     // BadgeDAOImpl에 구현
-@Override
-public boolean existsByUserNumAndBadgeDate(int userNum, String badgeDate) {
-    return badgeRepository.existsByUserEntity_UserNumAndBadgeDate(userNum, badgeDate);
-}
+    @Override
+    public boolean existsByUserNumAndBadgeDate(int userNum, String badgeDate) {
+        return badgeRepository.existsByUserEntity_UserNumAndBadgeDate(userNum, badgeDate);
+    }
 
 
 }
