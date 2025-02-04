@@ -15,7 +15,7 @@ WHERE table_name = 'CARD_HISTORY';
 DROP INDEX idx_res_used_date;
 
 drop table card;
-drop table card_company;
+drop table user_card_company;
 drop table user_card;
 drop table user_info;
 drop table card_benefit;
@@ -24,5 +24,6 @@ drop table badge;
 drop table tbl_posts;
 drop table tbl_reply;
 drop table reply_likes;
-drop table ranking;
 drop table notice;
+
+

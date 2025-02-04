@@ -2,6 +2,7 @@ package com.mmk.entity;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.ForeignKey;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
@@ -9,6 +10,8 @@ import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.SequenceGenerator;
 import jakarta.persistence.Table;
+import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Size;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
@@ -26,26 +29,28 @@ public class BadgeEntity {
     @Column(name = "badge_num")
     private int badgeNum;
 
-    @Column(name = "badge_date")
+    @NotNull
+    @Size(max = 6)
+    @Column(name = "badge_date", nullable = false, length = 6)
     private String badgeDate; // 202501 -> 날짜
 
-    @Column(name = "badge")
-    private int badge; // 12 -> 뱃지 갯수
+    @NotNull
+    @Column(name = "badge", nullable = false)
+    private int badge = 0; // 12 -> 뱃지 갯수
 
-    @Column(name = "ranking")
+    @NotNull
+    @Column(name = "ranking", nullable = false)
     private int ranking; // 랭킹 순위
-    
-    @Column(name = "current_month_amount")
-    private int currentMonthAmount; // 지난 달의 총 사용 금액
 
-    @Column(name = "previous_month_amount")
-    private int previousMonthAmount; // 저저번 달 총 사용 금액
+    @NotNull
+    @Column(name = "current_month_amount", nullable = false)
+    private int currentMonthAmount = 0; // 지난 달의 총 사용 금액
 
-    // @ManyToOne
-    // @JoinColumn(name = "card_History", nullable = false)
-    // private CardHistoryEntity cardHistoryEntity;
+    @NotNull
+    @Column(name = "previous_month_amount", nullable = false)
+    private int previousMonthAmount = 0; // 저저번 달 총 사용 금액
 
     @ManyToOne
-    @JoinColumn(name = "user_num", nullable = false)
+    @JoinColumn(name = "user_num", referencedColumnName = "user_num", nullable = false, foreignKey = @ForeignKey(name = "fk_badge_user_num"))
     private UserEntity userEntity;
 }

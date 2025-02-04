@@ -89,13 +89,33 @@ public class BadgeController {
 
     // 유저의 랭킹 데이터 가져오기
     @GetMapping("/userList")
-    public RankingDTO getUserRanking(@RequestParam("userNum") int userNum) {
-        return badgeService.getUserRanking(userNum);
+    public ResponseEntity<ApiResponse<RankingDTO>> getUserRanking(@RequestParam("userNum") int userNum) {
+        try {
+            RankingDTO result = badgeService.getUserRanking(userNum);
+            if (result == null) {
+                return ResponseEntity.noContent().build();
+            } else {
+                return ResponseEntity.ok(new ApiResponse<>(200, "로그인한 유저 조회 성공", result));
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(new ApiResponse<>(500, "랭킹정보 불러오는 중 오류 발생", null));
+        }
     }
 
     // 오늘 날짜에 해당하는 배지 데이터 가져오기
     @GetMapping("/list")
-    public List<RankingDTO> getBadges() {
-        return badgeService.getBadgesForPreviousMonth();
+    public ResponseEntity<ApiResponse<List<RankingDTO>>> getBadges() {
+        try {
+            List<RankingDTO> result = badgeService.getBadgesForPreviousMonth();
+            if (result.isEmpty()) {
+                return ResponseEntity.noContent().build();
+            } else {
+                return ResponseEntity.ok(new ApiResponse<>(200, "랭킹정보 조회 성공", result));
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(new ApiResponse<>(500, "랭킹정보 불러오는 중 오류 발생", null));
+        }
     }
 }

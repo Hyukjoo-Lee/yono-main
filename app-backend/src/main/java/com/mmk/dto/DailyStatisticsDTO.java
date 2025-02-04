@@ -18,6 +18,6 @@ public class DailyStatisticsDTO {
     private int spendingTarget; // 일일 목표금액(UserEntity)
     private int userCardId;
     private String cardTitle; // 카드 이름 (CardEntity)
-    private String cardImgUrl; // 카드 이미지 (CardEntity)
+    private String cardImg; // 카드 이미지 (UserCardEntity)
     private int userNum; // 유저 넘버버 (UserEntity)
 }
