@@ -70,7 +70,7 @@ public class NoticeController {
   // 파일 저장 메서드
   @PostMapping(value = "/upload", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
   private ApiResponse<String> saveFile(@RequestParam("file") MultipartFile file) {
-    try {
+    try { //밑코드 삭제하고 두번째 줄 propertyPath 변수명 webConpig에 저장할 경로 지정하고 변수명 설정해서 넣어주기
       String propertyPath = System.getProperty("user.dir").replace("\\app-backend", "").replace("/app-backend", "");
       String uploadFolder = propertyPath + "/uploads/images";
 
@@ -125,25 +125,6 @@ public ResponseEntity<ApiResponse<List<NoticeDTO>>> searchNotice(@RequestParam("
     
     return ResponseEntity.ok(new ApiResponse<>(200, "조회 성공", notices));
 }
-
-
-  //글 상세보기+조회수 증가
-//   @GetMapping("/{id}")
-// public ResponseEntity<NoticeDTO> getNoticeDetail(@PathVariable("id") int id){
-//     try {
-//         noticeService.increaseViewCount(id);
-        
-//         NoticeDTO notice = noticeService.getNoticeById(id);
-//         if (notice != null) {
-//             return ResponseEntity.ok(notice);
-//         } else {
-//             return ResponseEntity.notFound().build();
-//         }
-//     } catch (Exception e) {
-//         log.error("Error while getting notice details: ", e);
-//         return ResponseEntity.status(500).build();
-//     }
-// }
 
   //글 상세보기
   @GetMapping("/detail")

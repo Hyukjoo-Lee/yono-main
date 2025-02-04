@@ -81,19 +81,19 @@ const EditBox = styled.div`
 export function NoticePost() {
   const [noticeData, setNoticeData] = useState(null);
   const navigate = useNavigate();
-  const { id } = useParams(); // URL에서 id 가져오기
+  const { id } = useParams();
   const baseURL = process.env.REACT_APP_API_URL;
 
   useEffect(() => {
     const fetchNoticeData = async () => {
-      console.log('Fetching data for ID:', id); // ID가 잘 전달되는지 확인
+      console.log('Fetching data for ID:', id);
       try {
-        const data = await fetchNoticeDetail(id); // fetchNoticeDetail에서 데이터를 받아오기
-        console.log('Notice Data:', data); // 받아온 데이터 확인
+        const data = await fetchNoticeDetail(id);
+        console.log('Notice Data:', data);
         if (data.success) {
-          setNoticeData(data.data); // 받아온 데이터 상태에 저장
+          setNoticeData(data.data);
         } else {
-          alert(data.message); // 오류 메시지 처리
+          alert(data.message);
         }
       } catch (error) {
         console.error('Error fetching post data : ', error);
@@ -102,7 +102,7 @@ export function NoticePost() {
     if (id) {
       fetchNoticeData();
     }
-  }, [id]); // id 값이 변경될 때마다 호출
+  }, [id]);
 
   const handleEditClick = (id) => {
     navigate(`/noticeEditFormBox/${id}`);
@@ -125,13 +125,27 @@ export function NoticePost() {
     navigate('/noticeList');
   };
 
-  const handleNavigateToNext = () => {
+  const handleNavigateToNext = async () => {
     const nextId = parseInt(id, 10) + 1;
-    navigate(`/notice/${nextId}`);
+    try {
+      // 다음 ID에 해당하는 공지사항이 존재하는지 API를 통해 확인
+      const response = await fetch(`/api/notice/${nextId}`);
+
+      if (response.ok) {
+        // 존재하면 페이지 이동
+        navigate(`/notice/${nextId}`);
+      } else {
+        // 없으면 사용자에게 알리거나 다른 처리
+        alert('다음 공지사항이 없습니다.');
+      }
+    } catch (error) {
+      console.error('API 요청 오류:', error);
+      alert('오류가 발생했습니다. 잠시 후 다시 시도해주세요.');
+    }
   };
 
   if (!noticeData) {
-    return <div>Loading ..</div>; // 로딩 중 표시
+    return <div>Loading ..</div>;
   }
 
   return (

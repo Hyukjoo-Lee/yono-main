@@ -16,7 +16,5 @@ public interface NoticeDAO {
   Optional<NoticeEntity> findNoticeById(int id);
 
   void deleteByNotice(List<Integer> ids);
-
-  // void updateNotice(NoticeEntity noticeEntity);
   
 }

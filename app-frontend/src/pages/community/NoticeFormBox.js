@@ -107,7 +107,7 @@ export function NoticeFormBox() {
       errors.title = '제목을 1자 이상 50자 이내로 입력해주세요.';
     }
 
-    if (!content?.trim() || content.length > 2000) {
+    if (!content?.trim() || content.length > 4000) {
       errors.content = '내용을 1자 이상 2000자 이내로 입력해주세요.';
     }
     return errors;
