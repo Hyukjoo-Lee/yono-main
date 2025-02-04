@@ -1,5 +1,5 @@
-select * from card_company;
+select * from user_card_company;
 drop sequence card_company_seq;
 
-delete from CARD_COMPANY where user_num = 5;
+delete from USER_CARD_COMPANY where user_num = 117;
 commit;

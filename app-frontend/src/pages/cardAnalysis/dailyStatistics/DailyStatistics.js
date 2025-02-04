@@ -3,12 +3,11 @@ import { useSelector } from 'react-redux';
 import ResizeObserver from 'resize-observer-polyfill';
 import styled from 'styled-components';
 import { fetchDailyStatistics } from '../../../apis/dailyStatisticsApi.js';
-import { findUserById } from '../../../apis/userApi';
 import { ReactComponent as BadCoin } from '../../../assets/images/BadCoin.svg';
 import { ReactComponent as ExcellentCoin } from '../../../assets/images/ExcellentCoin.svg';
 import { ReactComponent as GoodCoin } from '../../../assets/images/GoodCoin.svg';
 import { ReactComponent as VeryGoodCoin } from '../../../assets/images/VeryGoodCoin.svg';
-import { updateHistory } from '../../../apis/cardHistoryApi.js';
+// import { updateHistory } from '../../../apis/cardHistoryApi.js';
 import CommonCardListBox from '../../../common/CommonCardListBox';
 import CommonLoading from '../../../common/CommonLoading.js';
 import Calendar from './calendar/Calendar';
@@ -96,48 +95,38 @@ const DailyStatistics = () => {
   const [selectedDate, setSelectedDate] = useState(new Date());
   const [isLoading, setIsLoading] = useState(true);
   const [isUpdate, setIsUpdate] = useState(true);
-  const [users, setUsers] = useState(null);
   const [dynamicHeight, setDynamicHeight] = useState(541); // 기본 높이 설정
   const calendarRef = useRef(null);
 
-  useEffect(() => {
-    const fetchUser = async () => {
-      const user = await findUserById(isLoggedIn);
-      if (user != null && typeof user != 'string') {
-        setUsers(user.data);
-      }
+  // useEffect(() => {
+  //   const fetchUser = async () => {
+  //     const history = await updateHistory(isLoggedIn);
+  //     if (history) {
+  //       const updatedData = await fetchDailyStatistics(isLoggedIn);
+  //       if (typeof updatedData === 'string') {
+  //         console.log(updatedData);
+  //         // 예외 발생시 다이얼로그 처리 필요
+  //       } else if (updatedData != null) {
+  //         setStatistics(updatedData.data);
+  //       }
+  //       setIsUpdate(false);
+  //     }
+  //   };
 
-      const history = await updateHistory(isLoggedIn);
-      if (history) {
-        const updatedData = await fetchDailyStatistics(isLoggedIn);
-        if (typeof updatedData === 'string') {
-          console.log(updatedData);
-          // 예외 발생시 다이얼로그 처리 필요
-        } else if (updatedData != null) {
-          setStatistics(updatedData.data);
-        }
-        setIsUpdate(false);
-      }
-    };
-
-    fetchUser();
-  }, [isLoggedIn]);
+  //   fetchUser();
+  // }, [isLoggedIn]);
 
   const fetchStatistics = useCallback(async () => {
     setIsLoading(true);
-    try {
-      const data = await fetchDailyStatistics(isLoggedIn); // API 호출
-      if (typeof data === 'string') {
-        console.log(data); // 예외 발생시 다이얼로그 처리 필요
-      } else if (data != null) {
-        setStatistics(data.data);
-      }
-    } catch (error) {
-      console.error('유저 정보 실패: ', users);
-    } finally {
-      setIsLoading(false); // 데이터 로드 완료 후 로딩 상태 false
+    const data = await fetchDailyStatistics(isLoggedIn); // API 호출
+    if (typeof data === 'string') {
+      console.log(data);
+      // 예외 발생시 다이얼로그 처리 필요
+    } else if (data != null) {
+      setStatistics(data.data);
     }
-  }, [isLoggedIn, users]);
+    setIsLoading(false); // 데이터 로드 완료 후 로딩 상태 false
+  }, [isLoggedIn]);
 
   useEffect(() => {
     if (isLoggedIn) {
