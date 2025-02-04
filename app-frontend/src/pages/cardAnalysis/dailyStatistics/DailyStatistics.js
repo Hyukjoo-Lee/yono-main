@@ -7,7 +7,6 @@ import { ReactComponent as BadCoin } from '../../../assets/images/BadCoin.svg';
 import { ReactComponent as ExcellentCoin } from '../../../assets/images/ExcellentCoin.svg';
 import { ReactComponent as GoodCoin } from '../../../assets/images/GoodCoin.svg';
 import { ReactComponent as VeryGoodCoin } from '../../../assets/images/VeryGoodCoin.svg';
-// import { updateHistory } from '../../../apis/cardHistoryApi.js';
 import CommonCardListBox from '../../../common/CommonCardListBox';
 import CommonLoading from '../../../common/CommonLoading.js';
 import Calendar from './calendar/Calendar';
@@ -61,11 +60,6 @@ const ListBox = styled.div`
   }
 `;
 
-const MessageBox = styled.p`
-  text-align: center;
-  color: gray;
-`;
-
 export const EmptyBox = styled.div`
   width: 100%;
   height: 100%;
@@ -83,7 +77,7 @@ export const EmptyBox = styled.div`
   }
 `;
 
-const DailyStatistics = () => {
+const DailyStatistics = ({ isHistory }) => {
   const Lists = [
     { icon: <BadCoin />, text: '0~25% 소비절약' },
     { icon: <GoodCoin />, text: '26~50% 소비절약' },
@@ -94,27 +88,9 @@ const DailyStatistics = () => {
   const [statistics, setStatistics] = useState([]);
   const [selectedDate, setSelectedDate] = useState(new Date());
   const [isLoading, setIsLoading] = useState(true);
-  const [isUpdate, setIsUpdate] = useState(true);
+
   const [dynamicHeight, setDynamicHeight] = useState(541); // 기본 높이 설정
   const calendarRef = useRef(null);
-
-  // useEffect(() => {
-  //   const fetchUser = async () => {
-  //     const history = await updateHistory(isLoggedIn);
-  //     if (history) {
-  //       const updatedData = await fetchDailyStatistics(isLoggedIn);
-  //       if (typeof updatedData === 'string') {
-  //         console.log(updatedData);
-  //         // 예외 발생시 다이얼로그 처리 필요
-  //       } else if (updatedData != null) {
-  //         setStatistics(updatedData.data);
-  //       }
-  //       setIsUpdate(false);
-  //     }
-  //   };
-
-  //   fetchUser();
-  // }, [isLoggedIn]);
 
   const fetchStatistics = useCallback(async () => {
     setIsLoading(true);
@@ -129,10 +105,10 @@ const DailyStatistics = () => {
   }, [isLoggedIn]);
 
   useEffect(() => {
-    if (isLoggedIn) {
+    if (isHistory !== false) {
       fetchStatistics();
     }
-  }, [isLoggedIn, fetchStatistics]);
+  }, [fetchStatistics, isHistory]);
 
   // 동적으로 ListBox 높이 조정
   const adjustHeight = () => {
@@ -226,12 +202,6 @@ const DailyStatistics = () => {
           </EmptyBox>
         )}
       </ListBox>
-
-      {isUpdate && (
-        <MessageBox>
-          최신 데이터를 갱신 중입니다. 이 작업은 몇 초 정도 소요될 수 있습니다.
-        </MessageBox>
-      )}
     </Root>
   );
 };
