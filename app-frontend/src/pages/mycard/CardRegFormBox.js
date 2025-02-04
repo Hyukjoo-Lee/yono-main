@@ -56,6 +56,7 @@ const FORM_FIELDS = {
     text: '유효기간',
     regex: /^(0[1-9]|1[0-2])\d{2}$/,
     maxLength: 4,
+    type: 'password',
     errorMessage: {
       empty: EMPTY_VALIDITY_MESSAGE,
       invalid: VALIDITY_REGEX_MESSAGE,
@@ -343,6 +344,7 @@ const CardRegFormBox = ({ user }) => {
                   value={formData[field]}
                   onChange={handleInputChange(field)}
                   width="100%"
+                  autoComplete="off"
                   maxLength={FORM_FIELDS[field].maxLength}
                 />
                 {formMessage[field] && (

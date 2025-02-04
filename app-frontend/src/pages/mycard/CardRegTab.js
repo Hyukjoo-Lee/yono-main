@@ -37,6 +37,10 @@ const EmptyBox = styled.div`
   justify-content: center;
 `;
 
+const ButtonContainer = styled.div`
+  display: flex;
+  flex-direction: row;
+`;
 const CardRegTab = ({ user, userCards }) => {
   const [isPrimaryCardSetSuccess, setIsPrimaryCardSetSuccess] = useState(false);
   const [isPrimaryCardSetFail, setIsPrimaryCardSetFail] = useState(false);
@@ -83,16 +87,31 @@ const CardRegTab = ({ user, userCards }) => {
           </p>
         }
       />
-      <CommonButton
-        text={isRegisteringCompany ? '카드 등록하기' : '카드사 등록하기'}
-        fontSize="16px"
-        background="#EFF3FD"
-        $hoverBk="#EFF3FD"
-        $hoverColor="black"
-        color="#4A4A4A"
-        $borderRadius="0"
-        onClick={() => setIsRegisteringCompany((prev) => !prev)}
-      />
+      <ButtonContainer>
+        <CommonButton
+          text={'카드사 등록하기'}
+          fontSize="16px"
+          background="#EFF3FD"
+          $hoverBk="#EFF3FD"
+          $hoverColor="black"
+          $borderColor="white"
+          color="#4A4A4A"
+          $borderRadius="0"
+          onClick={() => setIsRegisteringCompany(true)}
+        />
+        <CommonButton
+          text={'카드 등록하기'}
+          fontSize="16px"
+          background="#EFF3FD"
+          $hoverBk="#EFF3FD"
+          $hoverColor="black"
+          $borderColor="white"
+          color="#4A4A4A"
+          $borderRadius="0"
+          onClick={() => setIsRegisteringCompany(false)}
+        />
+      </ButtonContainer>
+
       <Root>
         {isRegisteringCompany ? (
           <CompanyRegFormBox user={user} />

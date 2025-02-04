@@ -174,6 +174,7 @@ const CompanyRegFormBox = ({ user }) => {
                 text="비밀번호"
                 value={formData.companyPwd}
                 onChange={handleInputChange('companyPwd')}
+                autoComplete="off"
                 width="100%"
               />
               {formMessage.companyPwd && (
