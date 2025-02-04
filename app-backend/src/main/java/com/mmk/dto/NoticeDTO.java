@@ -17,7 +17,6 @@ public class NoticeDTO {
   private String userId;
   private String content;
   private String imgurl;
-  private int viewCount;
 
   private Timestamp createdAt;
   private Timestamp updatedAt;

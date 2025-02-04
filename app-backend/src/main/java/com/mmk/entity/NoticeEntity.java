@@ -59,10 +59,6 @@ public class NoticeEntity {
   @JoinColumn(name = "user_num", referencedColumnName = "user_num", nullable = false, foreignKey = @ForeignKey(name = "fk_notice_user_num"))
   private UserEntity userEntity;
 
-  // @Column(name = "view_count") //, nullable = false
-  // // @ColumnDefault("0")
-  // private int viewCount = 0;
-
   @PrePersist
   public void prePersist() {
     if (updatedAt == null) {

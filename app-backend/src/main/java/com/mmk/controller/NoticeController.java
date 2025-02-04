@@ -207,16 +207,6 @@ public ResponseEntity<ApiResponse<Void>> editNotice(
                 deleteFile(existingNotice.getImgurl());
                 existingNotice.setImgurl(null);
             }
-
-            // // 파일 저장 후 결과 처리
-            // ApiResponse<String> fileResponse = saveFile(file);
-            // if (fileResponse.getStatus() == 200) {
-            //     existingNotice.setImgurl(fileResponse.getData());
-            // } else {
-            //     return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
-            //         .body(new ApiResponse<>(500, "파일 저장 중 오류가 발생했습니다.", null));
-            // }
-
         } else if ("deleted".equals(imgurl)) {
             // 이미지 삭제 요청이 있을 경우
             if (existingNotice.getImgurl() != null) {
