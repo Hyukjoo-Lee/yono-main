@@ -50,4 +50,6 @@ VALUES (badge_seq.nextval, '202412', 3, 6, 150000, 160000, (SELECT user_num FROM
 INSERT INTO badge (badge_num, badge_date, badge, ranking, current_month_amount, previous_month_amount, user_num)
 VALUES (badge_seq.nextval, '202412', 2, 7, 100000, 120000, (SELECT user_num FROM user_info WHERE user_id = 'leeid'));
 
-delete from badge where badge_num = 61;
+delete from badge where badge_num = 93;
+
+select * from badge;

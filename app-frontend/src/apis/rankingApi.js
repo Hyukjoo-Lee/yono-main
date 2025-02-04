@@ -2,22 +2,26 @@ import axios from 'axios';
 
 // 로그인한 유저 정보
 export const userRankings = async (userNum) => {
-  try {
-    const response = await axios.get('/badge/userList', {
-      params: { userNum: Number(userNum) },
-    });
+  const response = await axios.get('/badge/userList', {
+    params: { userNum: Number(userNum) },
+  });
+  if (response.status === 204) {
+    return null;
+  } else if (response.status === 200) {
     return response.data;
-  } catch (error) {
-    console.error('유저 랭킹 정보 실패:', error.response?.data || error.message);
+  } else {
+    return response.message;
   }
 };
 
 // 등수 업데이트 호출
 export const updateRankings = async () => {
-  try {
-    const response = await axios.get('/badge/list');
+  const response = await axios.get('/badge/list');
+  if (response.status === 204) {
+    return null;
+  } else if (response.status === 200) {
     return response.data;
-  } catch (error) {
-    console.error('등수 업데이트 실패:', error.response?.data || error.message);
+  } else {
+    return response.message;
   }
 };

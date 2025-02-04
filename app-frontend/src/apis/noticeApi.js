@@ -28,31 +28,24 @@ export const createNotice = async (formData) => {
   }
 };
 
-// 공지사항 검색(리스트)
-// export const fetchSearchNotice = async (keyword) => {
-//   try {
-//     const response = await axios.get('/notice/list', {
-//       params: { keyword },
-//     });
-
-//     console.log('response.data:', response.data);
-
-//     if (response.data.status === 200) {
-//       return { success: true, data: response.data.data };
-//     } else {
-//       return { success: false, message: response.data.message };
-//     }
-//   } catch (error) {
-//     console.error('API 요청 실패:', error);
-//     return { success: false, message: 'API 요청에 실패했습니다.' };
-//   }
-// };
+//공지사항 검색(리스트)
 export const fetchSearchNotice = async (keyword) => {
-  console.log('잘됨?');
-  const response = await axios.get('/notice/list', {
-    params: { keyword },
-  });
-  return response.data;
+  try {
+    const response = await axios.get('/notice/list', {
+      params: { keyword },
+    });
+
+    console.log('response.data:', response.data);
+
+    if (response.data.status === 200) {
+      return { success: true, data: response.data.data };
+    } else {
+      return { success: false, message: response.data.message };
+    }
+  } catch (error) {
+    console.error('API 요청 실패:', error);
+    return { success: false, message: 'API 요청에 실패했습니다.' };
+  }
 };
 
 //공지사항 상세

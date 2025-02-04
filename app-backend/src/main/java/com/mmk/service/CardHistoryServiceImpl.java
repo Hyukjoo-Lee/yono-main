@@ -126,7 +126,7 @@ public class CardHistoryServiceImpl implements CardHistoryService {
                     dailyDto.setSpendingTarget(cardDto.getUserCardEntity().getUserEntity().getSpendingTarget());
                     dailyDto.setUserCardId(cardDto.getUserCardEntity().getUserCardId());
                     dailyDto.setCardTitle(cardDto.getUserCardEntity().getCardEntity().getCardTitle());
-                    dailyDto.setCardImgUrl(cardDto.getUserCardEntity().getCardEntity().getCardImgUrl());
+                    dailyDto.setCardImg(cardDto.getUserCardEntity().getCardImg());
                     dailyDto.setUserNum(cardDto.getUserCardEntity().getUserEntity().getUserNum());
                     return dailyDto;
                 })

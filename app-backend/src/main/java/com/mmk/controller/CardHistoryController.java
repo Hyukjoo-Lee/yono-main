@@ -30,7 +30,8 @@ public class CardHistoryController {
             return ResponseEntity.ok(new ApiResponse<>(200, "카드 내역 DB에 갱신 성공", true));
         } catch (Exception e) {
             e.printStackTrace();
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(new ApiResponse<>(500, "카드 내역 DB에 갱신 실패", false));
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                    .body(new ApiResponse<>(500, "카드 내역 DB에 갱신 실패", false));
         }
     }
 
@@ -47,7 +48,8 @@ public class CardHistoryController {
             }
         } catch (Exception e) {
             e.printStackTrace();
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(new ApiResponse<>(500, "카드내역 불러오는 중 오류 발생", null));
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                    .body(new ApiResponse<>(500, "카드내역 불러오는 중 오류 발생", null));
         }
     }
 
@@ -64,7 +66,8 @@ public class CardHistoryController {
             }
         } catch (Exception e) {
             e.printStackTrace();
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(new ApiResponse<>(500, "카드내역 불러오는 중 오류 발생", null));
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                    .body(new ApiResponse<>(500, "카드내역 불러오는 중 오류 발생", null));
         }
     }
 
@@ -80,7 +83,8 @@ public class CardHistoryController {
             }
         } catch (Exception e) {
             e.printStackTrace();
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(new ApiResponse<>(500, "카드내역 불러오는 중 오류 발생", null));
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                    .body(new ApiResponse<>(500, "카드내역 불러오는 중 오류 발생", null));
         }
     }
 

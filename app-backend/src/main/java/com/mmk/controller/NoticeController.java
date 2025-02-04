@@ -7,6 +7,7 @@ import java.util.Random;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
@@ -67,7 +68,8 @@ public class NoticeController {
   }
 
   // 파일 저장 메서드
-  private ApiResponse<String> saveFile(MultipartFile file) {
+  @PostMapping(value = "/upload", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+  private ApiResponse<String> saveFile(@RequestParam("file") MultipartFile file) {
     try {
       String propertyPath = System.getProperty("user.dir").replace("\\app-backend", "").replace("/app-backend", "");
       String uploadFolder = propertyPath + "/uploads/images";

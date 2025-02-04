@@ -7,6 +7,8 @@ import jakarta.persistence.Index;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
+import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Size;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
@@ -24,22 +26,33 @@ import lombok.ToString;
 public class CardHistoryEntity {
     
     @Id
-    @Column(name = "resApprovalNo", nullable = false)
+    @Size(max = 20)
+    @Column(name = "resApprovalNo", nullable = false, length = 20)
     private String resApprovalNo; // 승인번호
 
-    @Column(name = "resUsedDate", nullable = false)
+    @NotNull
+    @Size(max = 8)
+    @Column(name = "resUsedDate", nullable = false, length = 8)
     private String resUsedDate; // 사용 날짜
 
-    @Column(name = "resUsedTime", nullable = false)
+    @NotNull
+    @Size(max = 6)
+    @Column(name = "resUsedTime", nullable = false, length = 6)
     private String resUsedTime; // 사용 일시
 
-    @Column(name = "resMemberStoreName", nullable = false)
+    @NotNull
+    @Size(max = 50)
+    @Column(name = "resMemberStoreName", nullable = false, length = 50)
     private String resMemberStoreName; // 가맹점명
 
-    @Column(name = "resUsedAmount", nullable = false)
+    @NotNull
+    @Size(max = 50)
+    @Column(name = "resUsedAmount", nullable = false, length = 50)
     private String resUsedAmount; // 이용금액
 
-    @Column(name = "resMemberStoreType", nullable = false)
+    @NotNull
+    @Size(max = 20)
+    @Column(name = "resMemberStoreType", nullable = false, length = 20)
     private String resMemberStoreType; // 가맹점 업종
 
     @ManyToOne

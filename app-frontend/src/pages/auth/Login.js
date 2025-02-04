@@ -197,7 +197,7 @@ const Login = () => {
           localStorage.removeItem('savedUserId');
         }
         setIsLoginSuccessVisible(true);
-      } else if (result.status === 504) {
+      } else if (result.status === 504 || result.payload.status === 401) {
         setFormMessage({ error: LOGIN_VERIFIED_MESSAGE });
       } else {
         setFormMessage({ error: SERVER_MESSAGE });

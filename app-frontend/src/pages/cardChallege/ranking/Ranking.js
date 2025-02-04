@@ -19,15 +19,13 @@ const Ranking = () => {
 
   useEffect(() => {
     const fetchUser = async () => {
-      try {
-        if (!isLoggedIn) {
-          console.log('로그인 정보가 없습니다.');
-        } else {
-          const user = await findUserById(isLoggedIn);
+      if (!isLoggedIn) {
+        console.log('로그인 정보가 없습니다.');
+      } else {
+        const user = await findUserById(isLoggedIn);
+        if (user != null && typeof user != 'string') {
           setUsers(user.data);
         }
-      } catch (error) {
-        console.log('에러메시지: ', error);
       }
     };
 
@@ -36,13 +34,18 @@ const Ranking = () => {
 
   useEffect(() => {
     const initializeRankings = async () => {
-      try {
-        const userData = await userRankings(isLoggedIn);
-        const data = await updateRankings();
+      const userData = await userRankings(isLoggedIn);
+      const data = await updateRankings();
+      if (typeof userData === 'string') {
+        console.log(userData); // 예외 발생시 다이얼로그 처리 필요
+      } else if (userData != null) {
         setUserRanking(userData);
+      }
+
+      if (typeof data === 'string') {
+        console.log(data); // 예외 발생시 다이얼로그 처리 필요
+      } else if (data != null) {
         setRankingList(data);
-      } catch (error) {
-        console.error('업데이트 실패', error);
       }
     };
 
