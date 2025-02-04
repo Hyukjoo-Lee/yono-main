@@ -39,13 +39,13 @@ const Ranking = () => {
       if (typeof userData === 'string') {
         console.log(userData); // 예외 발생시 다이얼로그 처리 필요
       } else if (userData != null) {
-        setUserRanking(userData);
+        setUserRanking(userData.data);
       }
 
       if (typeof data === 'string') {
         console.log(data); // 예외 발생시 다이얼로그 처리 필요
       } else if (data != null) {
-        setRankingList(data);
+        setRankingList(data.data);
       }
     };
 

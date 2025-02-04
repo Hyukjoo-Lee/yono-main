@@ -1,6 +1,6 @@
 commit;
 
-update badge set ranking = 5 where badge_num = 26;
+update badge set ranking = 5 where badge_num = 21;
 
 select * from badge;
 
