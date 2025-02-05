@@ -47,7 +47,7 @@ public class UserCardEntity {
     @NotNull
     @Size(max = 255)
     @Column(name = "card_img", nullable = false, length = 255)
-    private String cardImg;
+    private String cardImgUrl;
 
     // 대표카드 설정 (0: 일반카드, 1: 대표카드, 기본값: 0)
     @Column(name = "primary_card", nullable = false)

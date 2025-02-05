@@ -125,7 +125,12 @@ const ProfileBox = styled.div`
   }
 `;
 
-const RankingTable = ({ isLoggedIn, userRanking, rankingList, maskName }) => {
+const RankingTable = ({
+  isLoggedIn,
+  userRanking,
+  rankingList,
+  maskName,
+}) => {
   const [isLoading, setIsLoading] = useState(true);
   const [sortedRanking, setSortedRanking] = useState([]);
 

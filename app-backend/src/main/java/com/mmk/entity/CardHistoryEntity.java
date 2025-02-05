@@ -2,6 +2,7 @@ package com.mmk.entity;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.ForeignKey;
 import jakarta.persistence.Id;
 import jakarta.persistence.Index;
 import jakarta.persistence.JoinColumn;
@@ -17,14 +18,11 @@ import lombok.ToString;
 @Getter
 @ToString
 @Entity
-@Table(
-    name = "card_History",
-    indexes = {
+@Table(name = "card_history", indexes = {
         @Index(name = "idx_user_card_and_date", columnList = "user_card_Id, resUsedDate")
-    }
-)
+})
 public class CardHistoryEntity {
-    
+
     @Id
     @Size(max = 20)
     @Column(name = "resApprovalNo", nullable = false, length = 20)
@@ -56,6 +54,7 @@ public class CardHistoryEntity {
     private String resMemberStoreType; // 가맹점 업종
 
     @ManyToOne
-    @JoinColumn(name = "user_card_Id", nullable = false)
+    @JoinColumn(name = "user_card_id", referencedColumnName = "user_card_id", nullable = false, foreignKey = @ForeignKey(name = "fk_card_history_user_card_id"))
     private UserCardEntity userCardEntity;
+
 }
