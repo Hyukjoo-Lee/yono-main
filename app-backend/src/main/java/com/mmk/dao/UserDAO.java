@@ -29,4 +29,6 @@ public interface UserDAO {
     UserEntity getFindId(String name, String email);
 
     UserEntity getFindPwd(String name, String email, String id);
+
+    List<UserEntity> findAll();
 }

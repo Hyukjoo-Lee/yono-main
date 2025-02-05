@@ -4,11 +4,11 @@ import java.util.List;
 
 import com.mmk.dto.BadgeDTO;
 import com.mmk.dto.RankingDTO;
+import com.mmk.entity.BadgeEntity;
 
 public interface BadgeService {
 
-    void save(int userNum, int badgeCount, String badgeDate, int currentMonthAmount, int previousMonthAmount,
-            int ranking);
+    void save(BadgeEntity badgeEntity);
     
     RankingDTO getUserRanking(int userNum);
 
@@ -16,8 +16,12 @@ public interface BadgeService {
     
     int calculateUserRank(int userNum);
 
-    boolean existsBadgeForUserAndDate(int userNum, String badgeDate);
+    boolean existsBadgeForUser(int userNum);
 
-    BadgeDTO getMonthlyComparison(int userNum, String yearMonth);
+    BadgeDTO updateBadgeByUserNum(int userNum, String yearMonth);
+
+    BadgeEntity findByUserNum(int userNum);
+
+    void updateBadge(String yearMonth);
     
 } 

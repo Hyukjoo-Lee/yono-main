@@ -1,5 +1,6 @@
 package com.mmk.service;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import com.mmk.dto.UserDTO;
@@ -9,6 +10,8 @@ public interface UserService {
     UserDTO createUser(UserDTO userDTO);
 
     UserDTO findByUserNum(int userNum);
+
+    UserEntity findEntityByUserNum(int nuserNum);
 
     UserDTO getUserByUserId(String userId);
 
@@ -33,4 +36,6 @@ public interface UserService {
     UserDTO getFindId(String name, String email);
 
     UserDTO getFindPwd(String name, String email, String id);
+
+    ArrayList<Integer> findAllUserNum();
 }
