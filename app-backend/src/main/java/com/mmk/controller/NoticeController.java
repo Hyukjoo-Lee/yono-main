@@ -182,52 +182,105 @@ public ResponseEntity<ApiResponse<List<NoticeDTO>>> searchNotice(@RequestParam("
     }
   }
 
-  // 글 수정
+//   // 글 수정
+// @PostMapping("/edit")
+// public ResponseEntity<ApiResponse<Void>> editNotice(
+//     @RequestParam("id") int id,
+//     @RequestParam("title") String title,
+//     @RequestParam("content") String content,
+//     @RequestParam(value = "file", required = false) MultipartFile file,
+//     @RequestParam(value = "imgurl", required = false) String imgurl) {
+
+//     try {
+//         NoticeDTO existingNotice = noticeService.getNoticeById(id);
+
+//         if (existingNotice == null) {
+//             return ResponseEntity.status(HttpStatus.NOT_FOUND)
+//                 .body(new ApiResponse<>(404, "해당 공지사항을 찾을 수 없습니다.", null));
+//         }
+
+//         existingNotice.setTitle(title);
+//         existingNotice.setContent(content);
+
+//         if (file != null && !file.isEmpty()) {
+//             if (existingNotice.getImgurl() != null && "deleted".equals(imgurl)) {
+//                 deleteFile(existingNotice.getImgurl());
+//                 existingNotice.setImgurl(null);
+//             }
+//         } else if ("deleted".equals(imgurl)) {
+//             // 이미지 삭제 요청이 있을 경우
+//             if (existingNotice.getImgurl() != null) {
+//                 deleteFile(existingNotice.getImgurl());
+//             }
+//             existingNotice.setImgurl(null);
+
+//         } else if (imgurl != null && imgurl.isEmpty()) {
+//             existingNotice.setImgurl(null);
+//         }
+
+//         noticeService.saveNotice(existingNotice);
+
+//         return ResponseEntity.ok(new ApiResponse<>(200, "공지사항이 성공적으로 수정되었습니다.", null));
+
+//     } catch (Exception e) {
+//         log.error("공지사항 수정 중 오류 발생: ", e);
+//         return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+//             .body(new ApiResponse<>(500, "공지사항 수정 중 오류가 발생했습니다.", null));
+//     }
+// }
+
 @PostMapping("/edit")
 public ResponseEntity<ApiResponse<Void>> editNotice(
-    @RequestParam("id") int id,
-    @RequestParam("title") String title,
-    @RequestParam("content") String content,
-    @RequestParam(value = "file", required = false) MultipartFile file,
-    @RequestParam(value = "imgurl", required = false) String imgurl) {
+  @RequestParam("id") int id,
+  @RequestParam("title") String title,
+  @RequestParam("content") String content,
+  @RequestParam(value = "file", required = false) MultipartFile file,
+  @RequestParam(value = "imgurl", required = false) String imgurl){
 
-    try {
-        NoticeDTO existingNotice = noticeService.getNoticeById(id);
+    try{
+      NoticeDTO existingNotice = noticeService.getNoticeById(id);
+      if(existingNotice == null){
+        return ResponseEntity.status(HttpStatus.NOT_FOUND)
+          .body(new ApiResponse<>(404, "해당 공지사항을 찾을 수 없습니다.", null));
+      }
 
-        if (existingNotice == null) {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND)
-                .body(new ApiResponse<>(404, "해당 공지사항을 찾을 수 없습니다.", null));
+      existingNotice.setTitle(title);
+      existingNotice.setContent(content);
+
+      if("deleted".equals(imgurl)){
+        if(existingNotice.getImgurl() != null){
+          deleteFile(existingNotice.getImgurl());
+        }
+        existingNotice.setImgurl(null);
+      }
+
+      if(file != null && !file.isEmpty()){
+        if(existingNotice.getImgurl() != null){
+          deleteFile(existingNotice.getImgurl());
         }
 
-        existingNotice.setTitle(title);
-        existingNotice.setContent(content);
-
-        if (file != null && !file.isEmpty()) {
-            if (existingNotice.getImgurl() != null && "deleted".equals(imgurl)) {
-                deleteFile(existingNotice.getImgurl());
-                existingNotice.setImgurl(null);
-            }
-        } else if ("deleted".equals(imgurl)) {
-            // 이미지 삭제 요청이 있을 경우
-            if (existingNotice.getImgurl() != null) {
-                deleteFile(existingNotice.getImgurl());
-            }
-            existingNotice.setImgurl(null);
-
-        } else if (imgurl != null && imgurl.isEmpty()) {
-            existingNotice.setImgurl(null);
+        ApiResponse<String> fileResponse = saveFile(file);
+        if(fileResponse.getStatus() == 200){
+          existingNotice.setImgurl(fileResponse.getData());
+        }else{
+          return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+            .body(new ApiResponse<>(500,"파일 저장 중 오류 발생",null));
         }
+      }
 
-        noticeService.saveNotice(existingNotice);
+      if(imgurl != null && imgurl.isEmpty()){
+        existingNotice.setImgurl(null);
+      }
 
-        return ResponseEntity.ok(new ApiResponse<>(200, "공지사항이 성공적으로 수정되었습니다.", null));
+      noticeService.saveNotice(existingNotice);
 
-    } catch (Exception e) {
-        log.error("공지사항 수정 중 오류 발생: ", e);
-        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
-            .body(new ApiResponse<>(500, "공지사항 수정 중 오류가 발생했습니다.", null));
+      return ResponseEntity.ok(new ApiResponse<>(200, "공지사항 수정 성공",null));
+    }catch(Exception e){
+      log.error("공지사항 수정 중 오류 발생 : ",e);
+      return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+        .body(new ApiResponse<>(500,"공지사항 수정 중 오류 발생",null));
     }
-}
+  }
 
 // 파일 삭제 메서드
 private void deleteFile(String filePath) {

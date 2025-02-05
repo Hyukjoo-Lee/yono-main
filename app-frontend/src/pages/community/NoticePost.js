@@ -4,7 +4,6 @@ import styled from 'styled-components';
 import { deleteNotice, fetchNoticeDetail } from '../../apis/noticeApi';
 import CommonButton from '../../common/CommonButton';
 import CommonHr from '../../common/CommonHr';
-// import CommonPageInfo from '../../common/CommonPageInfo';
 
 const Root = styled.div`
   width: ${(props) => props.theme.display.lg};
@@ -88,10 +87,10 @@ export function NoticePost() {
     const fetchNoticeData = async () => {
       console.log('Fetching data for ID:', id);
       try {
-        const data = await fetchNoticeDetail(id);
+        const data = await fetchNoticeDetail(id); // fetchNoticeDetail 호출
         console.log('Notice Data:', data);
         if (data.success) {
-          setNoticeData(data.data);
+          setNoticeData(data.data); // API가 반환하는 데이터는 data.data입니다.
         } else {
           alert(data.message);
         }

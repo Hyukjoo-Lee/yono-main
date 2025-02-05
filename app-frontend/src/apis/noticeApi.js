@@ -56,7 +56,11 @@ export const fetchNoticeDetail = async (id) => {
     });
 
     if (response.data.status === 200) {
-      return { success: true, data: response.data.data };
+      console.log('API 데이터:', response.data.data); // 여기서 데이터 확인!
+      return {
+        success: true,
+        data: response.data.data, // 실제 데이터가 여기 있어야 합니다.
+      };
     } else {
       return { success: false, message: response.data.message };
     }
