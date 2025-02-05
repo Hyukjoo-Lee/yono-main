@@ -77,4 +77,9 @@ public class UserDAOImpl implements UserDAO {
     public UserEntity getFindPwd(String name, String email, String id) {
         return userRepository.findByNameAndEmailAndUserId(name, email, id);
     }
+
+    @Override
+    public List<UserEntity> findAll() {
+        return userRepository.findAll();
+    }
 }
