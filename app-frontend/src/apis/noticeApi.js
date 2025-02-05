@@ -56,10 +56,10 @@ export const fetchNoticeDetail = async (id) => {
     });
 
     if (response.data.status === 200) {
-      console.log('API 데이터:', response.data.data); // 여기서 데이터 확인!
+      console.log('API 데이터:', response.data.data);
       return {
         success: true,
-        data: response.data.data, // 실제 데이터가 여기 있어야 합니다.
+        data: response.data.data,
       };
     } else {
       return { success: false, message: response.data.message };
@@ -108,7 +108,7 @@ export const updateNotice = async (formData) => {
       },
     });
 
-    console.log('공지사항 수정 응답:', response.data); // 응답 데이터 출력
+    console.log('공지사항 수정 응답:', response.data);
 
     if (response.data.status === 200) {
       return {

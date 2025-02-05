@@ -89,11 +89,10 @@ export function NoticeEditFormBox() {
       try {
         const data = await fetchNoticeDetail(id);
         if (data.success) {
-          // 데이터 성공적으로 가져오면 상태 업데이트
           setNotice(data.data);
           setTitle(data.data.title || '');
           setContent(data.data.content || '');
-          setFile(data.data.imgurl || null); // 이미지 URL이 있을 때, file 상태 업데이트
+          setFile(data.data.imgurl || null);
         } else {
           alert(data.message || '공지사항을 불러오는 데 실패했습니다.');
         }
