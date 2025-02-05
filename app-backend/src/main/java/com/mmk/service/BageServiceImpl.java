@@ -13,6 +13,7 @@ import org.springframework.stereotype.Service;
 
 import com.mmk.dao.BadgeDAO;
 import com.mmk.dto.BadgeDTO;
+import com.mmk.dto.CardHistoryDTO;
 import com.mmk.dto.RankingDTO;
 import com.mmk.entity.BadgeEntity;
 
@@ -100,15 +101,12 @@ public class BageServiceImpl implements BadgeService {
         String previousMonth = getPreviousMonth();
         List<BadgeEntity> badgeEntities = badgeDAO.getBadgesForPreviousMonth(previousMonth);
 
-        if (badgeEntities.size() == 1) {
-            return 1;
-        }
 
         badgeEntities.sort((a, b) -> Integer.compare(b.getBadge(), a.getBadge()));
 
         for (int i = 0; i < badgeEntities.size(); i++) {
             if (badgeEntities.get(i).getUserEntity().getUserNum() == userNum) {
-                return i;
+                return i+1;
             }
         }
 
@@ -120,17 +118,30 @@ public class BageServiceImpl implements BadgeService {
         return badgeDAO.existsByUserNum(userNum);
     }
 
+    private int getTotalAmount(List<CardHistoryDTO> historyList) {
+        int totalAmount = historyList.stream()
+                .mapToInt(history -> Integer.parseInt(history.getResUsedAmount()))
+                .sum();
+        return totalAmount;
+    }
+
     @Override
     public BadgeDTO updateBadgeByUserNum(int userNum, String yearMonth) {
         try {
-            int currentMonthAmount = cardHistoryService.getMonthlyTotalAmount(userNum, yearMonth);
+            List<CardHistoryDTO> currentMonthList = cardHistoryService.getMonthlyList(userNum, yearMonth);
+            int currentMonthTotalAmount = getTotalAmount(currentMonthList);
+
             LocalDate currentMonthStart = LocalDate.parse(yearMonth + "01", DateTimeFormatter.ofPattern("yyyyMMdd"));
             LocalDate previousMonthStart = currentMonthStart.minusMonths(1);
             String previousMonth = previousMonthStart.format(DateTimeFormatter.ofPattern("yyyyMM"));
-            int previousMonthAmount = cardHistoryService.getMonthlyTotalAmount(userNum, previousMonth);
+            System.out.println("previousMonth: " + previousMonth);
+            
+            List<CardHistoryDTO> previousMonthList = cardHistoryService.getMonthlyList(userNum, previousMonth);
+            int previousMonthTotalAmount = getTotalAmount(previousMonthList);
 
-            double savingsRate = (previousMonthAmount != 0)
-                ? ((double) (previousMonthAmount - currentMonthAmount) / previousMonthAmount) * 100
+
+            double savingsRate = (previousMonthTotalAmount != 0)
+                ? ((double) (previousMonthTotalAmount - currentMonthTotalAmount) / previousMonthTotalAmount) * 100
                 : 0;
 
             int badgeCount = (int) (savingsRate * 100); // 절약률 * 100을 뱃지 개수로 설정
@@ -155,8 +166,8 @@ public class BageServiceImpl implements BadgeService {
             BadgeEntity badgeEntity = new BadgeEntity();
             badgeEntity.setBadge(badgeCount);
             badgeEntity.setBadgeDate(badgeDate);
-            badgeEntity.setCurrentMonthAmount(currentMonthAmount);
-            badgeEntity.setPreviousMonthAmount(previousMonthAmount);
+            badgeEntity.setCurrentMonthAmount(currentMonthTotalAmount);
+            badgeEntity.setPreviousMonthAmount(previousMonthTotalAmount);
             badgeEntity.setUserEntity(userService.findEntityByUserNum(userNum));
             badgeEntity.setRanking(0);
 
@@ -197,16 +208,34 @@ public class BageServiceImpl implements BadgeService {
     }
 
     @Override
-    public BadgeEntity findByUserNum(int userNum) {
-        return badgeDAO.findByUserNum(userNum);
+    public BadgeDTO findByUserNum(int userNum) {
+        BadgeEntity badgeEntity = badgeDAO.findByUserNum(userNum);
+        int rank = badgeDAO.getRankingByUserNum(userNum);
+        BadgeDTO badgeDTO = toDTO(badgeEntity);
+        badgeDTO.setRanking(rank);
+
+        return badgeDTO;
     }
 
     @Override
     public void updateBadge(String yearMonth) {
         ArrayList<Integer> userNumList = userService.findAllUserNum();
-        
+
         for (int userNum : userNumList) {
             updateBadgeByUserNum(userNum, yearMonth);
         }
+    }
+    
+    private BadgeDTO toDTO(BadgeEntity entity) {
+        BadgeDTO dto = new BadgeDTO();
+        dto.setBadge(entity.getBadge());
+        dto.setBadgeDate(entity.getBadgeDate());
+        dto.setBadgeNum(entity.getBadgeNum());
+        dto.setCurrentMonthAmount(entity.getCurrentMonthAmount());
+        dto.setPreviousMonthAmount(entity.getPreviousMonthAmount());
+        dto.setRanking(entity.getRanking());
+        dto.setUserNum(entity.getUserEntity().getUserNum());
+
+        return dto;
     }
 }

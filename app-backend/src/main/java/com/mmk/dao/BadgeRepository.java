@@ -2,7 +2,9 @@ package com.mmk.dao;
 
 import java.util.List;
 
+import org.apache.ibatis.annotations.Param;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Query;
 
 import com.mmk.entity.BadgeEntity;
 
@@ -17,5 +19,7 @@ public interface BadgeRepository extends JpaRepository<BadgeEntity, Integer>{
 
     BadgeEntity findByUserEntity_UserNum(int userNum);
 
+    @Query(value = "SELECT r.rank FROM (SELECT b.user_num, RANK() OVER (ORDER BY b.badge DESC, b.current_month_amount DESC) AS rank FROM badge b) r WHERE r.user_num = :userNum", nativeQuery = true)
+    int getRankingByUserNum(@Param("userNum") int userNum);
 }
 

@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.mmk.common.ApiResponse;
 import com.mmk.dto.BadgeDTO;
 import com.mmk.dto.RankingDTO;
+import com.mmk.entity.BadgeEntity;
 import com.mmk.service.BadgeService;
 
 @RestController
@@ -24,19 +25,14 @@ public class BadgeController {
 
     @GetMapping("/Comparison")
     public ResponseEntity<ApiResponse<BadgeDTO>> getMonthlyComparison(
-            @RequestParam("userNum") int userNum,
-            @RequestParam("yearMonth") String yearMonth) {
-        // try {
-        //     BadgeDTO result = badgeService.updateBadgeByUserNum(userNum, yearMonth);
-        //     return ResponseEntity.ok(new ApiResponse<>(200, "월별 금액 조회 성공", result));
-        // } catch (Exception e) {
-        //     return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
-        //             .body(new ApiResponse<>(500, "월별 금액 조회 실패: " + e.getMessage(), null));
-        // }
-
-        // 저장한 DB 에서 유저넘버에 맞는 값만 가져오기
-
-        return null;
+            @RequestParam("userNum") int userNum) {
+        try {
+            BadgeDTO badgeDTO = badgeService.findByUserNum(userNum);
+            return ResponseEntity.ok(new ApiResponse<>(200, "유저 뱃지 정보 조회 성공", badgeDTO));
+        } catch (Exception e) {
+            e.printStackTrace();
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(new ApiResponse<>(500, "유저 뱃지 정보 조회 실패", null));
+        }
     }
 
     @GetMapping("/userList")

@@ -20,7 +20,7 @@ public interface BadgeService {
 
     BadgeDTO updateBadgeByUserNum(int userNum, String yearMonth);
 
-    BadgeEntity findByUserNum(int userNum);
+    BadgeDTO findByUserNum(int userNum);
 
     void updateBadge(String yearMonth);
     

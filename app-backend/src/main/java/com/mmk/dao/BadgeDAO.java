@@ -5,6 +5,7 @@ import java.util.List;
 import com.mmk.entity.BadgeEntity;
 
 public interface BadgeDAO {
+    
     void save(BadgeEntity badgeEntity);
 
     List<BadgeEntity> getBadgesForPreviousMonth(String previousMonth);
@@ -14,4 +15,6 @@ public interface BadgeDAO {
     boolean existsByUserNum(int userNum);
 
     BadgeEntity findByUserNum(int userNum);
+
+    int getRankingByUserNum(int userNum);
 } 

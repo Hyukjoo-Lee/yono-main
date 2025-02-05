@@ -34,12 +34,10 @@ public class CardHistoryDAOImpl implements CardHistoryDAO {
         // Repository의 메서드를 호출해 데이터 처리
         return cardHistoryRepository.findByUserNumAndPrimaryCard(userNum);
     }
-
+    
     @Override
-    public List<CardHistoryEntity> findByUserCardIdAndResUsedDateBetween(int userCardId, String startDate,
-            String endDate) {
-        return cardHistoryRepository.findByUserCardIdAndResUsedDateBetween(userCardId, startDate,endDate);
-
+    public List<CardHistoryEntity> findByPrimaryAndMonth(int userNum, String yearMonth) {
+        return cardHistoryRepository.findByPrimaryAndMonth(userNum, yearMonth);
     }
 }
 

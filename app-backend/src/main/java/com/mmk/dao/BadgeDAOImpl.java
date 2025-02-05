@@ -41,4 +41,9 @@ public class BadgeDAOImpl implements BadgeDAO {
     public BadgeEntity findByUserNum(int userNum) {
         return badgeRepository.findByUserEntity_UserNum(userNum);
     }
+
+    @Override
+    public int getRankingByUserNum(int userNum) {
+        return badgeRepository.getRankingByUserNum(userNum);
+    }
 }
