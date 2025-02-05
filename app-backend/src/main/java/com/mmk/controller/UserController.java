@@ -10,6 +10,7 @@ import java.util.Random;
 import java.util.UUID;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -35,6 +36,9 @@ import com.mmk.service.UserService;
 @RestController
 @RequestMapping("/user")
 public class UserController {
+
+    @Value("${IMAGE_PATH}")
+    private String uploadDir;
 
     @Autowired
     private UserService userService;
@@ -231,13 +235,11 @@ public class UserController {
         System.out.println("profileImage: " + profileImage);
         try {
             UserDTO uv = new ObjectMapper().readValue(userInfoJson, UserDTO.class);
-            String propertyPath = System.getProperty("user.dir").replace("\\app-backend", "").replace("/app-backend",
-                    "");
-            String uploadFolder = propertyPath + "/uploads/images";
+            String uploadFolder = uploadDir + "/uploads/images";
 
             if (profileImage != null && !profileImage.isEmpty()) {
                 if (uv.getProfile() != null && !uv.getProfile().isEmpty()) {
-                    File existingFile = new File(propertyPath + uv.getProfile());
+                    File existingFile = new File(uploadDir + uv.getProfile());
 
                     System.out.println("existingFile: " + existingFile);
                     if (existingFile.exists()) {
@@ -274,7 +276,6 @@ public class UserController {
                 String fileDBName = "/uploads/images/" + year + "-" + month + "-" + date + "/" + newFileName;
 
                 File saveFile = new File(homedir + "/" + newFileName);
-                System.out.println("파일 저장 경로: " + saveFile.getAbsolutePath());
 
                 try {
                     profileImage.transferTo(saveFile);
