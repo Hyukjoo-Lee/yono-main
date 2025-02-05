@@ -26,9 +26,6 @@ public class UserCardCompanyEntity {
     @Column(name = "card_company_num")
     private int cardCompanyNum;
 
-    @Column(name = "userNum", nullable = false)
-    private int userNum;
-
     @Size(min = 4, max = 4, message = "기관 코드는 정확히 4자리여야 합니다.")
     @Column(name = "organization_code", nullable = false, length = 4)
     private String organizationCode;
@@ -47,4 +44,6 @@ public class UserCardCompanyEntity {
     @Column(name = "connected_id", length = 255)
     private String connectedId;
 
+    @Column(name = "user_num", nullable = false)
+    private int userNum;
 }
