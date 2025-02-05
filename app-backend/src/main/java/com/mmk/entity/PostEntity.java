@@ -27,14 +27,14 @@ import lombok.ToString;
 @ToString
 @Entity
 @SequenceGenerator(name = "no_seq_gename", sequenceName = "posts_seq", initialValue = 1, allocationSize = 1)
-@Table(name = "tbl_posts")
-public class PostsEntity {
+@Table(name = "post")
+public class PostEntity {
 
         @Id
         @GeneratedValue(strategy = GenerationType.SEQUENCE, // 사용할 전략을 시퀀스로 선택
                         generator = "no_seq_gename") // 시퀀스 생성기에 설정해 놓은 시퀀스 제너레이터 이름
         @Column(name = "no")
-        private int no;
+        private int pno;
 
         @NotNull
         @Size(max = 100)
@@ -44,11 +44,11 @@ public class PostsEntity {
         @Size(max = 50)
         @Column(name = "category", nullable = false, length = 50)
         private String category;
+
         @Size(max = 4000)
         @Column(name = "content", nullable = false, length = 4000)
         private String content;
 
-        @Size(max = 8)
         @CreationTimestamp
         @Column(name = "regdate", updatable = false, nullable = false, length = 8)
         private LocalDate regdate;
@@ -69,6 +69,6 @@ public class PostsEntity {
         private Timestamp updatedAt;
 
         @ManyToOne
-        @JoinColumn(name = "user_num", referencedColumnName = "user_num", nullable = false, foreignKey = @ForeignKey(name = "fk_posts_user_num"))
+        @JoinColumn(name = "user_num", referencedColumnName = "user_num", nullable = false, foreignKey = @ForeignKey(name = "fk_post_user_num"))
         private UserEntity userEntity;
 }

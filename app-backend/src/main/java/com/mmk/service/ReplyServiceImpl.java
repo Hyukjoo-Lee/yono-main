@@ -8,41 +8,46 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.mmk.dao.ReplyDAO;
+import com.mmk.dao.UserDAO;
 import com.mmk.dto.ReplyDTO;
 import com.mmk.entity.ReplyEntity;
-
+import com.mmk.entity.UserEntity;
 
 @Service
 public class ReplyServiceImpl implements ReplyService {
 
     @Autowired
     private ReplyDAO replyDao; // 댓글 저장소
-    
 
+    @Autowired
+    private UserDAO userDao;
 
     @Override
     public boolean validate(ReplyDTO replyDTO) {
         // 예시: 댓글 내용이 비어 있거나 너무 길지 않은지 확인
         if (replyDTO.getR_content() == null || replyDTO.getR_content().trim().isEmpty()) {
-            return false;  // 댓글 내용이 없으면 유효하지 않음
+            return false; // 댓글 내용이 없으면 유효하지 않음
         }
         if (replyDTO.getR_content().length() > 500) {
-            return false;  // 댓글 내용이 500자 이상이면 유효하지 않음
+            return false; // 댓글 내용이 500자 이상이면 유효하지 않음
         }
-        return true;  // 유효한 댓글
+        return true; // 유효한 댓글
     }
 
     @Override
     public void add(ReplyDTO replyDTO) {
         // 유효성 검사
         if (!validate(replyDTO)) {
-            throw new IllegalArgumentException("Invalid comment data");  // 유효하지 않으면 예외 발생
+            throw new IllegalArgumentException("Invalid comment data"); // 유효하지 않으면 예외 발생
         }
+
+        UserEntity userEntity = userDao.getUserByUserId(replyDTO.getUserId());
 
         // ReplyDTO를 Reply 엔티티로 변환
         ReplyEntity comment = new ReplyEntity();
+
         comment.setPno(replyDTO.getPno());
-        comment.setUserId(replyDTO.getUserId());
+        comment.setUserEntity(userEntity);
         comment.setR_content(replyDTO.getR_content());
         comment.setLike_count(replyDTO.getLike_count());
         comment.setRegdate(replyDTO.getRegdate());
@@ -58,19 +63,19 @@ public class ReplyServiceImpl implements ReplyService {
 
         // ReplyEntity 리스트를 ReplyDTO 리스트로 변환하여 반환
         return replyEntities.stream()
-            .map(entity -> {
-                ReplyDTO dto = new ReplyDTO();
-                dto.setRno(entity.getRno());
-                dto.setPno(entity.getPno());
-                dto.setUserId(entity.getUserId());
-                dto.setR_content(entity.getR_content());
-                dto.setLike_count(entity.getLike_count());
-                dto.setCreatedAt(entity.getCreatedAt());
-                dto.setUpdatedAt(entity.getUpdatedAt());
-                dto.setRegdate(entity.getRegdate());
-                return dto;
-            })
-            .collect(Collectors.toList());
+                .map(entity -> {
+                    ReplyDTO dto = new ReplyDTO();
+                    dto.setRno(entity.getRno());
+                    dto.setPno(entity.getPno());
+                    dto.setUserId(entity.getUserEntity().getUserId());
+                    dto.setR_content(entity.getR_content());
+                    dto.setLike_count(entity.getLike_count());
+                    dto.setCreatedAt(entity.getCreatedAt());
+                    dto.setUpdatedAt(entity.getUpdatedAt());
+                    dto.setRegdate(entity.getRegdate());
+                    return dto;
+                })
+                .collect(Collectors.toList());
     }
 
     @Override
@@ -79,6 +84,7 @@ public class ReplyServiceImpl implements ReplyService {
         // 댓글 삭제
         replyDao.deleteById(rno);
     }
+
     @Override
     public boolean edit(int rno, ReplyDTO updatedComment) {
         // 댓글을 데이터베이스에서 찾음
@@ -107,7 +113,7 @@ public class ReplyServiceImpl implements ReplyService {
     public ReplyEntity findByRno(int rno) {
         // 댓글 번호로 댓글을 찾아서 반환
         Optional<ReplyEntity> replyEntity = replyDao.findById(rno);
-        return replyEntity.orElse(null);  // 댓글이 존재하지 않으면 null 반환
+        return replyEntity.orElse(null); // 댓글이 존재하지 않으면 null 반환
     }
 
 }
