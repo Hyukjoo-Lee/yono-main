@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import styled from 'styled-components';
 import CardRegFormBox from './CardRegFormBox';
 import CompanyRegFormBox from './CompanyRegFormBox';
@@ -47,6 +47,26 @@ const CardRegTab = ({ user, userCards }) => {
   const [isPrimaryCardSetSuccess, setIsPrimaryCardSetSuccess] = useState(false);
   const [isPrimaryCardSetFail, setIsPrimaryCardSetFail] = useState(false);
   const [isRegisteringCompany, setIsRegisteringCompany] = useState(false);
+  const [showTooltip, setShowTooltip] = useState(false);
+
+  // 5초 툴팁 후 자동 숨김
+  useEffect(() => {
+    setShowTooltip(true);
+    const timer = setTimeout(() => {
+      setShowTooltip(false);
+    }, 5000);
+
+    return () => clearTimeout(timer);
+  }, []);
+
+  const handleCardRegButtonClick = () => {
+    setIsRegisteringCompany(false);
+    setShowTooltip(true);
+
+    setTimeout(() => {
+      setShowTooltip(false);
+    }, 5000);
+  };
 
   const handleCardSelect = async (card) => {
     try {
@@ -86,40 +106,38 @@ const CardRegTab = ({ user, userCards }) => {
         }
       />
       <ButtonContainer>
-        <ButtonContainer>
-          <CommonButton
-            text={'카드사 등록하기'}
-            fontSize="16px"
-            background={theme.color.lightBlue}
-            $hoverBk={theme.color.lightBlue}
-            $hoverColor="#496CE8"
-            $borderColor={theme.color.white}
-            color={isRegisteringCompany ? '#496CE8' : '#4A4A4A'}
-            $borderRadius="0"
-            onClick={() => setIsRegisteringCompany(true)}
-          />
-
-          <Tooltip
-            title="카드사를 등록하지 않으셨다면, 먼저 카드사 등록을 진행해 주세요."
-            arrow
-            placement="top"
-            disableHoverListener={!isRegisteringCompany}
-          >
-            <span>
-              <CommonButton
-                text={'카드 등록하기'}
-                fontSize="16px"
-                background={theme.color.lightBlue}
-                $hoverBk={theme.color.lightBlue}
-                $hoverColor="#496CE8"
-                $borderColor={theme.color.white}
-                color={!isRegisteringCompany ? '#496CE8' : '#4A4A4A'}
-                $borderRadius="0"
-                onClick={() => setIsRegisteringCompany(false)}
-              />
-            </span>
-          </Tooltip>
-        </ButtonContainer>
+        <Tooltip
+          title="카드사를 등록하지 않으셨다면, 먼저 카드사 등록을 진행해 주세요."
+          arrow
+          placement="top"
+          disableHoverListener={!isRegisteringCompany} // 기존 마우스 호버 로직 유지
+          open={showTooltip}
+        >
+          <span>
+            <CommonButton
+              text={'카드 등록하기'}
+              fontSize="16px"
+              background={theme.color.lightBlue}
+              $hoverBk={theme.color.lightBlue}
+              $hoverColor="#496CE8"
+              $borderColor={theme.color.white}
+              color={!isRegisteringCompany ? '#496CE8' : '#4A4A4A'}
+              $borderRadius="0"
+              onClick={handleCardRegButtonClick}
+            />
+          </span>
+        </Tooltip>
+        <CommonButton
+          text={'카드사 등록하기'}
+          fontSize="16px"
+          background={theme.color.lightBlue}
+          $hoverBk={theme.color.lightBlue}
+          $hoverColor="#496CE8"
+          $borderColor={theme.color.white}
+          color={isRegisteringCompany ? '#496CE8' : '#4A4A4A'}
+          $borderRadius="0"
+          onClick={() => setIsRegisteringCompany(true)}
+        />
       </ButtonContainer>
 
       <Root>
