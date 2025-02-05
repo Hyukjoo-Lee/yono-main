@@ -8,9 +8,8 @@ import com.mmk.entity.ReplyLikeEntity;
 @Repository
 public interface ReplyLikeRepository extends JpaRepository<ReplyLikeEntity, Integer> {
 
-	void deleteByRnoAndUserId(int rno, String userId);
+    void deleteByRnoAndUserEntity_UserId(int rno, String userId);
 
-    boolean existsByRnoAndUserId(int rno, String userId);
+    boolean existsByRnoAndUserEntity_UserId(int rno, String userId);
 
-    
 }

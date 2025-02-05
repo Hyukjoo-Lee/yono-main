@@ -112,7 +112,7 @@ public class UserCardServiceImpl implements UserCardService {
             dto.setUserCardId(entity.getUserCardId());
             dto.setUserCardNum(maskCardNumber(entity.getUserCardNum()));
             dto.setPrimaryCard(entity.getPrimaryCard());
-            dto.setCardImg(entity.getCardImg());
+            dto.setCardImg(entity.getCardImgUrl());
 
             dto.setCardTitle(entity.getCardEntity().getCardTitle());
 
@@ -158,7 +158,7 @@ public class UserCardServiceImpl implements UserCardService {
         entity.setUserCardNum(dto.getUserCardNum());
         entity.setExpiryDate(dto.getExpiryDate());
         entity.setCardPwd(dto.getCardPwd());
-        entity.setCardImg(dto.getCardImg());
+        entity.setCardImgUrl(dto.getCardImg());
         entity.setPrimaryCard(dto.getPrimaryCard());
         entity.setCreatedAt(dto.getCreatedAt());
         entity.setUpdatedAt(dto.getUpdatedAt());
@@ -180,7 +180,7 @@ public class UserCardServiceImpl implements UserCardService {
             dto.setUserCardNum(entity.getUserCardNum());
             dto.setExpiryDate(entity.getExpiryDate());
             dto.setCardPwd(entity.getCardPwd());
-            dto.setCardImg(entity.getCardImg());
+            dto.setCardImg(entity.getCardImgUrl());
             dto.setPrimaryCard(entity.getPrimaryCard());
             dto.setCreatedAt(entity.getCreatedAt());
             dto.setUpdatedAt(entity.getUpdatedAt());

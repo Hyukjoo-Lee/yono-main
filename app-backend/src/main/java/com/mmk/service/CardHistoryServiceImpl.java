@@ -41,7 +41,7 @@ public class CardHistoryServiceImpl implements CardHistoryService {
     @Autowired
     CodefService codefService;
 
-    // DB에 있는 카드내역 불러오기 
+    // DB에 있는 카드내역 불러오기
     public List<CardHistoryDTO> uploadCardHistory(int userNum, int month) {
 
         LocalDate today = LocalDate.now();
@@ -93,7 +93,7 @@ public class CardHistoryServiceImpl implements CardHistoryService {
             String dataArrayJson = objectMapper.readTree(result).get("data").toString();
             List<CardHistoryDTO> cardHistoryDTOList = objectMapper.readValue(dataArrayJson,
                     new TypeReference<List<CardHistoryDTO>>() {
-            });
+                    });
 
             for (CardHistoryDTO cardHistoryDTO : cardHistoryDTOList) {
                 try {
@@ -126,7 +126,7 @@ public class CardHistoryServiceImpl implements CardHistoryService {
                     dailyDto.setSpendingTarget(cardDto.getUserCardEntity().getUserEntity().getSpendingTarget());
                     dailyDto.setUserCardId(cardDto.getUserCardEntity().getUserCardId());
                     dailyDto.setCardTitle(cardDto.getUserCardEntity().getCardEntity().getCardTitle());
-                    dailyDto.setCardImg(cardDto.getUserCardEntity().getCardImg());
+                    dailyDto.setCardImg(cardDto.getUserCardEntity().getCardImgUrl());
                     dailyDto.setUserNum(cardDto.getUserCardEntity().getUserEntity().getUserNum());
                     return dailyDto;
                 })
@@ -146,16 +146,15 @@ public class CardHistoryServiceImpl implements CardHistoryService {
         try {
             Map<String, Map<String, Integer>> groupedData = cardHistoryDTOList.stream()
                     .collect(Collectors.groupingBy(
-                        card -> card.getResUsedDate().substring(0, 6),
-                        LinkedHashMap::new,
-                        Collectors.groupingBy(
-                            card -> (card.getResMemberStoreType() != null && !card.getResMemberStoreType().isEmpty())
-                            ? card.getResMemberStoreType()
-                            : "기타",
+                            card -> card.getResUsedDate().substring(0, 6),
                             LinkedHashMap::new,
-                            Collectors.summingInt(card -> Integer.parseInt(card.getResUsedAmount()))
-                        )
-                    ));
+                            Collectors.groupingBy(
+                                    card -> (card.getResMemberStoreType() != null
+                                            && !card.getResMemberStoreType().isEmpty())
+                                                    ? card.getResMemberStoreType()
+                                                    : "기타",
+                                    LinkedHashMap::new,
+                                    Collectors.summingInt(card -> Integer.parseInt(card.getResUsedAmount())))));
 
             return groupedData.entrySet().stream()
                     .map(entry -> {
@@ -233,7 +232,7 @@ public class CardHistoryServiceImpl implements CardHistoryService {
         List<CardHistoryDTO> filteredHistoryList = historyList.stream()
                 .filter(cardHistory -> {
                     // 카드 사용 날짜가 startDate와 endDate 사이에 있는지 확인
-                    String usedDate = cardHistory.getResUsedDate().substring(0, 8);  // yyyyMMdd 형식
+                    String usedDate = cardHistory.getResUsedDate().substring(0, 8); // yyyyMMdd 형식
                     return usedDate.compareTo(startDate) >= 0 && usedDate.compareTo(endDate) <= 0;
                 })
                 .collect(Collectors.toList());

@@ -173,7 +173,7 @@ export function CommunityPost() {
       console.error('댓글 작성 실패', error);
     }
   };
-
+  // 혁주: commentsData 가 새로운 배열로 계속 바뀜으로 무한로딩 됨, 제거함으로써 무한로딩 방지
   useEffect(() => {
     axios
       .get(`/reply/list/${rowData.no}`)
@@ -191,7 +191,8 @@ export function CommunityPost() {
       .catch((error) => {
         console.error('댓글 데이터 요청 실패:', error);
       });
-  }, [rowData.no, commentsData]);
+  }, [rowData.no]);
+
   const handleDeletecommentClick = async (rno) => {
     if (!user) {
       setIsDialogOpen(true);

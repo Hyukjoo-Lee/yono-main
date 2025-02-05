@@ -25,7 +25,6 @@ const RootIn = styled.div`
 `;
 export function CardChallege() {
   const isLoggedIn = useSelector((state) => state.user.user?.userNum); // 현재 로그인한 유저의 userNum
-  const [users, setUsers] = useState(null);
   const [isShowLoginDialog, setIsShowLoginDialog] = useState(false);
   const [selectedTab, setSelectedTab] = useState(0);
   const items = [{ text: '전월비교' }, { text: '뱃지랭킹' }];
@@ -38,13 +37,13 @@ export function CardChallege() {
       } else {
         const user = await findUserById(isLoggedIn);
         if (user != null && typeof user != 'string') {
-          setUsers(user.data);
+          console.log("")
         }
       }
     };
 
     fetchUser();
-  }, [isLoggedIn, users]);
+  }, [isLoggedIn]);
 
   const panels = [<MonthComparision />, <Ranking />];
   return (

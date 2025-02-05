@@ -11,6 +11,8 @@ import com.mmk.dao.NoticeDAO;
 import com.mmk.dto.NoticeDTO;
 import com.mmk.entity.NoticeEntity;
 
+import jakarta.transaction.Transactional;
+
 @Service
 public class NoticeServiceImpl implements NoticeService {
 
@@ -34,7 +36,7 @@ public class NoticeServiceImpl implements NoticeService {
     return entities.stream().map(this::toDTO).collect(Collectors.toList());
   }
 
-  //글 상세보기
+  //글 상세보기 + 조회수
   @Override
   public NoticeDTO getNoticeById(int id) {
     NoticeEntity noticeEntity = noticeDAO.findById(id);
@@ -43,7 +45,33 @@ public class NoticeServiceImpl implements NoticeService {
     }
     return toDTO(noticeEntity);
   }
-  
+
+  //글 삭제
+  @Transactional
+  @Override
+  public void deleteByNotice(List<Integer> ids) {
+    noticeDAO.deleteByNotice(ids);
+  }
+
+  //글 수정
+  @Override
+  public boolean updateNotice(NoticeDTO noticeDTO) {
+    NoticeEntity existingNotice = noticeDAO.findById(noticeDTO.getNoticeNo());
+    if(existingNotice == null){
+      return false;
+    }
+
+    existingNotice.setTitle(noticeDTO.getTitle());
+    existingNotice.setContent(noticeDTO.getContent());
+    if(noticeDTO.getImgurl() != null){
+      existingNotice.setImgurl(noticeDTO.getImgurl());
+    }
+
+    noticeDAO.saveNotice(existingNotice);
+    return true;
+  }
+
+  //entity -> dto
   private NoticeDTO toDTO(NoticeEntity entity){
     if(entity == null){
       return null;
@@ -54,7 +82,7 @@ public class NoticeServiceImpl implements NoticeService {
     dto.setTitle(entity.getTitle());
     dto.setContent(entity.getContent());
     dto.setImgurl(entity.getImgurl());
-    dto.setViewCount(entity.getViewCount());
+    // dto.setViewCount(entity.getViewCount());
     dto.setCreatedAt(entity.getCreatedAt());
     dto.setUpdatedAt(entity.getUpdatedAt() != null ? Timestamp.valueOf(entity.getUpdatedAt()) : null);
 
@@ -65,6 +93,7 @@ public class NoticeServiceImpl implements NoticeService {
     return dto;
   }
 
+  //dto -> entity
   private NoticeEntity toEntity(NoticeDTO dto){
     if(dto == null){
       return null;
@@ -75,7 +104,7 @@ public class NoticeServiceImpl implements NoticeService {
     entity.setTitle(dto.getTitle());
     entity.setContent(dto.getContent());
     entity.setImgurl(dto.getImgurl());
-    entity.setViewCount(dto.getViewCount());
+    // entity.setViewCount(dto.getViewCount());
     entity.setCreatedAt(dto.getCreatedAt());
     entity.setUpdatedAt(dto.getUpdatedAt() != null ? dto.getUpdatedAt().toLocalDateTime() : null);
 
@@ -84,5 +113,4 @@ public class NoticeServiceImpl implements NoticeService {
     }
     return entity;
   }
-  
 }
