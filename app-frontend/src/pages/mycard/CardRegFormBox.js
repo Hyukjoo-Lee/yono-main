@@ -26,7 +26,8 @@ const FormBox = styled.form`
   width: 100%;
   border-radius: 5px;
   overflow-y: auto;
-  background-color: ${(props) => props.background || '#EFF3FD'};
+  background-color: ${(props) =>
+    props.background || props.theme.color.lightBlue};
 `;
 
 const FORM_FIELDS = {

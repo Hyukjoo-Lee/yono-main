@@ -7,6 +7,7 @@ import CommonPageInfo from '../../common/CommonPageInfo';
 import CommonButton from '../../common/CommonButton';
 import { setPrimaryCard } from '../../apis/cardApi';
 import CommonDialog from '../../common/CommonDialog';
+import theme from '../../theme/theme';
 
 const Root = styled.div`
   width: 100%;
@@ -88,28 +89,30 @@ const CardRegTab = ({ user, userCards }) => {
         }
       />
       <ButtonContainer>
-        <CommonButton
-          text={'카드사 등록하기'}
-          fontSize="16px"
-          background="#EFF3FD"
-          $hoverBk="#EFF3FD"
-          $hoverColor="black"
-          $borderColor="white"
-          color="#4A4A4A"
-          $borderRadius="0"
-          onClick={() => setIsRegisteringCompany(true)}
-        />
-        <CommonButton
-          text={'카드 등록하기'}
-          fontSize="16px"
-          background="#EFF3FD"
-          $hoverBk="#EFF3FD"
-          $hoverColor="black"
-          $borderColor="white"
-          color="#4A4A4A"
-          $borderRadius="0"
-          onClick={() => setIsRegisteringCompany(false)}
-        />
+        <ButtonContainer>
+          <CommonButton
+            text={'카드사 등록하기'}
+            fontSize="16px"
+            background={theme.color.lightBlue}
+            $hoverBk={theme.color.lightBlue}
+            $hoverColor="#496CE8"
+            $borderColor={theme.color.white}
+            color={isRegisteringCompany ? '#496CE8' : '#4A4A4A'}
+            $borderRadius="0"
+            onClick={() => setIsRegisteringCompany(true)}
+          />
+          <CommonButton
+            text={'카드 등록하기'}
+            fontSize="16px"
+            background={theme.color.lightBlue}
+            $hoverBk={theme.color.lightBlue}
+            $hoverColor="#496CE8"
+            $borderColor={theme.color.white}
+            color={!isRegisteringCompany ? '#496CE8' : '#4A4A4A'}
+            $borderRadius="0"
+            onClick={() => setIsRegisteringCompany(false)}
+          />
+        </ButtonContainer>
       </ButtonContainer>
 
       <Root>
