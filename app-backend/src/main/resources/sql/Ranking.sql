@@ -6,25 +6,25 @@ select * from badge;
 
 
 INSERT INTO badge (badge_num, badge_date, badge, ranking, current_month_amount, previous_month_amount, user_num)
-VALUES (badge_seq.nextval, '202501', 500, 4, 350000, 300000, (SELECT user_num FROM user_info WHERE user_id = 'crtestid'));
+VALUES (badge_seq.nextval, '202501', 500, 0, 350000, 300000, (SELECT user_num FROM user_info WHERE user_id = 'crtestid'));
 
 INSERT INTO badge (badge_num, badge_date, badge, ranking, current_month_amount, previous_month_amount, user_num)
-VALUES (badge_seq.nextval, '202501', 1000, 1, 500000, 400000, (SELECT user_num FROM user_info WHERE user_id = 'hjtestid'));
+VALUES (badge_seq.nextval, '202501', 1000, 0, 500000, 400000, (SELECT user_num FROM user_info WHERE user_id = 'hjtestid'));
 
 INSERT INTO badge (badge_num, badge_date, badge, ranking, current_month_amount, previous_month_amount, user_num)
-VALUES (badge_seq.nextval, '202501', 800, 2, 400000, 380000, (SELECT user_num FROM user_info WHERE user_id = 'mktestid'));
+VALUES (badge_seq.nextval, '202501', 800, 0, 400000, 380000, (SELECT user_num FROM user_info WHERE user_id = 'mktestid'));
 
 INSERT INTO badge (badge_num, badge_date, badge, ranking, current_month_amount, previous_month_amount, user_num)
-VALUES (badge_seq.nextval, '202501', 400, 5, 200000, 380000, (SELECT user_num FROM user_info WHERE user_id = 'jhtestid'));
+VALUES (badge_seq.nextval, '202501', 400, 0, 200000, 380000, (SELECT user_num FROM user_info WHERE user_id = 'jhtestid'));
 
 INSERT INTO badge (badge_num, badge_date, badge, ranking, current_month_amount, previous_month_amount, user_num)
-VALUES (badge_seq.nextval, '202501', 650, 3, 380000, 190000, (SELECT user_num FROM user_info WHERE user_id = 'jetestid'));
+VALUES (badge_seq.nextval, '202501', 650, 0, 380000, 190000, (SELECT user_num FROM user_info WHERE user_id = 'jetestid'));
 
 INSERT INTO badge (badge_num, badge_date, badge, ranking, current_month_amount, previous_month_amount, user_num)
-VALUES (badge_seq.nextval, '202501', 800, 2, 450000, 160000, (SELECT user_num FROM user_info WHERE user_id = 'hongid'));
+VALUES (badge_seq.nextval, '202501', 800, 0, 450000, 160000, (SELECT user_num FROM user_info WHERE user_id = 'hongid'));
 
 INSERT INTO badge (badge_num, badge_date, badge, ranking, current_month_amount, previous_month_amount, user_num)
-VALUES (badge_seq.nextval, '202501', 1000, 1, 600000, 120000, (SELECT user_num FROM user_info WHERE user_id = 'leeid'));
+VALUES (badge_seq.nextval, '202501', 1000, 0, 600000, 120000, (SELECT user_num FROM user_info WHERE user_id = 'leeid'));
 
 
 
