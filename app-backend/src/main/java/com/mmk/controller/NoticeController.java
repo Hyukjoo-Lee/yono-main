@@ -173,6 +173,10 @@ public class NoticeController {
             }
           }
         }
+
+        if (notice.getImgurl() != null) {
+          deleteFile(notice.getImgurl());
+        }
       }
 
       noticeService.deleteByNotice(ids);
@@ -211,6 +215,12 @@ public class NoticeController {
         existingNotice.setImgurl(null);
       }
 
+      // // 이미지 삭제 요청 시 기존 이미지 삭제
+      // if ("deleted".equals(imgurl) && existingNotice.getImgurl() != null) {
+      //   deleteFile(existingNotice.getImgurl());
+      //   existingNotice.setImgurl(null);
+      // }
+
       if(file != null && !file.isEmpty()){
         if(existingNotice.getImgurl() != null){
           deleteFile(existingNotice.getImgurl());
@@ -226,6 +236,9 @@ public class NoticeController {
       }
 
       if(imgurl != null && imgurl.isEmpty()){
+        if(existingNotice.getImgurl() != null){
+          deleteFile(existingNotice.getImgurl());
+        }
         existingNotice.setImgurl(null);
       }
 
@@ -246,17 +259,19 @@ public class NoticeController {
         return;
     }
 
-    String absolutePath = System.getProperty("user.dir").replace("\\app-backend", "").replace("/app-backend", "") + filePath;
+    String absolutePath = uploadDir + filePath;
+    log.info("삭제할 파일 경로:" + absolutePath);
+
     File file = new File(absolutePath);
 
     if (file.exists()) {
         if (file.delete()) {
-            log.info("Deleted file: " + absolutePath);
+            log.info("파일 삭제 성공: " + absolutePath);
         } else {
-            log.warn("Failed to delete file: " + absolutePath);
+            log.warn("파일 삭제 실패: " + absolutePath);
         }
     } else {
-        log.warn("File does not exist: " + absolutePath);
+        log.warn("파일이 존재하지 않음: " + absolutePath);
     }
   }
 }

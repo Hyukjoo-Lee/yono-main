@@ -121,6 +121,13 @@ export function NoticeFormBox() {
       return;
     }
 
+    // user 존재 여부 확인(수정)
+    if (!user || !user.userId) {
+      alert('로그인 후 이용 가능합니다.');
+      navigate('/login');
+      return;
+    }
+
     const formData = new FormData();
     formData.append('userId', user.userId);
     formData.append('title', title);
