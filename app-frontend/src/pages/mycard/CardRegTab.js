@@ -7,6 +7,7 @@ import CommonPageInfo from '../../common/CommonPageInfo';
 import CommonButton from '../../common/CommonButton';
 import { setPrimaryCard } from '../../apis/cardApi';
 import CommonDialog from '../../common/CommonDialog';
+import Tooltip from '@mui/material/Tooltip';
 import theme from '../../theme/theme';
 
 const Root = styled.div`
@@ -80,11 +81,7 @@ const CardRegTab = ({ user, userCards }) => {
         text={
           <p>
             소비패턴을 확인하고 싶은 카드를 등록하세요. <br />
-            등록하고 싶은 카드를 입력 후 카드 리스트에서 확인하세요. <br />
-            <strong style={{ color: '#cc0000' }}>
-              카드 등록을 위해서는 먼저 카드사 등록이 필요합니다! <br />
-              카드사 등록 후, 카드 등록을 진행해 주세요.
-            </strong>
+            등록하고 싶은 카드를 입력 후 카드 리스트에서 확인하세요.
           </p>
         }
       />
@@ -101,17 +98,27 @@ const CardRegTab = ({ user, userCards }) => {
             $borderRadius="0"
             onClick={() => setIsRegisteringCompany(true)}
           />
-          <CommonButton
-            text={'카드 등록하기'}
-            fontSize="16px"
-            background={theme.color.lightBlue}
-            $hoverBk={theme.color.lightBlue}
-            $hoverColor="#496CE8"
-            $borderColor={theme.color.white}
-            color={!isRegisteringCompany ? '#496CE8' : '#4A4A4A'}
-            $borderRadius="0"
-            onClick={() => setIsRegisteringCompany(false)}
-          />
+
+          <Tooltip
+            title="카드사를 등록하지 않으셨다면, 먼저 카드사 등록을 진행해 주세요."
+            arrow
+            placement="top"
+            disableHoverListener={!isRegisteringCompany}
+          >
+            <span>
+              <CommonButton
+                text={'카드 등록하기'}
+                fontSize="16px"
+                background={theme.color.lightBlue}
+                $hoverBk={theme.color.lightBlue}
+                $hoverColor="#496CE8"
+                $borderColor={theme.color.white}
+                color={!isRegisteringCompany ? '#496CE8' : '#4A4A4A'}
+                $borderRadius="0"
+                onClick={() => setIsRegisteringCompany(false)}
+              />
+            </span>
+          </Tooltip>
         </ButtonContainer>
       </ButtonContainer>
 
