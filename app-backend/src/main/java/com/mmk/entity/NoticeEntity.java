@@ -3,7 +3,6 @@ package com.mmk.entity;
 import java.sql.Timestamp;
 import java.time.LocalDateTime;
 
-import org.hibernate.annotations.ColumnDefault;
 import org.hibernate.annotations.CreationTimestamp;
 
 import jakarta.persistence.Column;
@@ -45,7 +44,7 @@ public class NoticeEntity {
   private String content;
 
 
-  @Size(min = 5, max = 255)
+  @Size(max = 255)
   @Column(name = "img_url", length = 255)
   private String imgurl;
 
@@ -59,10 +58,6 @@ public class NoticeEntity {
   @ManyToOne
   @JoinColumn(name = "user_num", referencedColumnName = "user_num", nullable = false, foreignKey = @ForeignKey(name = "fk_notice_user_num"))
   private UserEntity userEntity;
-
-  @Column(name = "view_count", nullable = false)
-  @ColumnDefault("0")
-  private int viewCount = 0;
 
   @PrePersist
   public void prePersist() {

@@ -28,7 +28,7 @@ const columns = [
   { id: 'title', label: '제목', minWidth: 150 },
   { id: 'userId', label: '작성자', minWidth: 100 },
   { id: 'createdAt', label: '등록일', minWidth: 100 },
-  { id: 'viewCount', label: '조회', minWidth: 50 },
+  { id: 'updatedAt', label: '수정일', minWidth: 100 },
 ];
 
 const TableContainerStyle = styled(TableContainer)`
@@ -192,7 +192,10 @@ export function NoticeTable() {
                       <TableRow hover role="checkbox" tabIndex={-1} key={index}>
                         {columns.map((column) => {
                           let value = row[column.id];
-                          if (column.id === 'createdAt') {
+                          if (
+                            column.id === 'createdAt' ||
+                            column.id === 'updatedAt'
+                          ) {
                             value = formatDate(value);
                           }
                           return (

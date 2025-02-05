@@ -179,21 +179,21 @@ export function NoticeEditFormBox() {
     formData.append('content', content);
 
     if (file) {
-      formData.append('file', file); // 파일이 있으면 formData에 추가
+      formData.append('file', file);
     }
 
     if (isImageDeleted) {
-      formData.append('imgurl', 'deleted'); // 이미지가 삭제되었다면 'deleted'로 설정
+      formData.append('imgurl', 'deleted');
     } else if (!file && notice.imgurl) {
-      formData.append('imgurl', notice.imgurl); // 기존 이미지가 있다면 기존 이미지 URL을 유지
+      formData.append('imgurl', notice.imgurl);
     }
 
     const success = await updateNotice(formData);
     if (success) {
-      alert('공지사항 수정 성공');
+      alert('공지사항 수정에 실패했습니다.');
       navigate('/community');
     } else {
-      alert('공지사항 수정에 실패했습니다.');
+      alert('공지사항 수정 성공');
       navigate('/community');
     }
   };
