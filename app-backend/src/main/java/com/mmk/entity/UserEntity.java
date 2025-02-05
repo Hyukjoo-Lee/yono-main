@@ -49,7 +49,6 @@ public class UserEntity {
 
     // 비밀번호 (최소 8자, 소문자 + 숫자 + 특수문자 포함, 필수)
     @NotNull
-    @Size(min = 8, max = 255)
     @Column(name = "password", nullable = false, length = 255)
     private String password;
 
