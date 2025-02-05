@@ -3,6 +3,7 @@ package com.mmk.dao;
 import java.util.List;
 
 import org.springframework.data.jpa.repository.JpaRepository;
+
 import com.mmk.entity.BadgeEntity;
 
 public interface BadgeRepository extends JpaRepository<BadgeEntity, Integer>{
@@ -12,9 +13,9 @@ public interface BadgeRepository extends JpaRepository<BadgeEntity, Integer>{
     // user 랭킹 가져오기기
     BadgeEntity findByBadgeDateAndUserEntity_UserNum(String previousMonth, int userNum);
 
-    boolean existsByUserEntity_UserNumAndBadgeDate(int userNum, String badgeDate);
+    boolean existsByUserEntity_UserNum(int userNum);
 
-
+    BadgeEntity findByUserEntity_UserNum(int userNum);
 
 }
 
