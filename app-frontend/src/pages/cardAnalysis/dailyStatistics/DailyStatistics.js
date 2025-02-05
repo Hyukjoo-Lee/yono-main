@@ -94,14 +94,16 @@ const DailyStatistics = ({ isHistory }) => {
 
   const fetchStatistics = useCallback(async () => {
     setIsLoading(true);
-    const data = await fetchDailyStatistics(isLoggedIn); // API 호출
-    if (typeof data === 'string') {
-      console.log(data);
-      // 예외 발생시 다이얼로그 처리 필요
-    } else if (data != null) {
-      setStatistics(data.data);
+    if (isLoggedIn) {
+      const data = await fetchDailyStatistics(isLoggedIn); // API 호출
+      if (typeof data === 'string') {
+        console.log(data);
+        // 예외 발생시 다이얼로그 처리 필요
+      } else if (data != null) {
+        setStatistics(data.data);
+      }
+      setIsLoading(false); // 데이터 로드 완료 후 로딩 상태 false
     }
-    setIsLoading(false); // 데이터 로드 완료 후 로딩 상태 false
   }, [isLoggedIn]);
 
   useEffect(() => {

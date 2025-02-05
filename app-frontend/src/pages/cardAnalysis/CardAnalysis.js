@@ -57,7 +57,7 @@ const CardAnalysis = () => {
       setIsShowPanels(true);
 
       const history = await updateHistory(userNum);
-      setIsHistory(history);
+      setIsHistory(history.data);
     };
 
     fetchHistory();
@@ -103,7 +103,7 @@ const CardAnalysis = () => {
         }
       />
       <div style={{ height: isHistory !== true ? 44 : 0 }}>
-        {isHistory !== true && (
+        {isHistory !== true && isLoggedIn && (
           <MessageBox>
             {isHistory === null
               ? '최신 데이터를 갱신 중입니다. 이 작업은 몇 초 정도 소요될 수 있습니다.'
