@@ -69,7 +69,7 @@ public class UserServiceImpl implements UserService {
     @Override
     public void deleteUser(int userNum) {
         UserDTO userDTO = toDTO(userDAO.findByUserNum(userNum));
-        userDTO.setState(0);
+        userDTO.setState("inactive");
         userDAO.updateUser(toEntity(userDTO));
     }
 

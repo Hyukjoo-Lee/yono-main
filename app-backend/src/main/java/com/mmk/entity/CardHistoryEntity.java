@@ -19,7 +19,8 @@ import lombok.ToString;
 @ToString
 @Entity
 @Table(name = "card_history", indexes = {
-        @Index(name = "idx_user_card_and_date", columnList = "user_card_Id, resUsedDate")
+        @Index(name = "idx_user_card_and_date", columnList = "user_card_Id, resUsedDate"),
+        @Index(name = "idx_user_card", columnList = "user_card_Id")
 })
 public class CardHistoryEntity {
 
