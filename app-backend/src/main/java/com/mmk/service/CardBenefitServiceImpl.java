@@ -54,7 +54,7 @@ public class CardBenefitServiceImpl implements CardBenefitService {
             CardEntity cardEntity = cardRepository.findByCardTitle(dto.getCardTitle());
 
             if (cardEntity == null) {
-                throw new RuntimeException("해당 카드 정보를 찾을 수 없습니다: " + dto.getCardTitle());
+                throw new RuntimeException("해당 카드 정보를 찾을 수 없습니다: " + dto.getCardTitle()); // 상태 코드에 따른 메세지 반환
             }
 
             boolean exists = cardBenefitDAO.existsByBenefitTitleAndCard(dto.getBenefitTitle(), cardEntity);

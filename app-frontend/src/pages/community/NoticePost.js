@@ -4,7 +4,6 @@ import styled from 'styled-components';
 import { deleteNotice, fetchNoticeDetail } from '../../apis/noticeApi';
 import CommonButton from '../../common/CommonButton';
 import CommonHr from '../../common/CommonHr';
-// import CommonPageInfo from '../../common/CommonPageInfo';
 
 const Root = styled.div`
   width: ${(props) => props.theme.display.lg};
@@ -128,14 +127,11 @@ export function NoticePost() {
   const handleNavigateToNext = async () => {
     const nextId = parseInt(id, 10) + 1;
     try {
-      // 다음 ID에 해당하는 공지사항이 존재하는지 API를 통해 확인
       const response = await fetch(`/api/notice/${nextId}`);
 
       if (response.ok) {
-        // 존재하면 페이지 이동
         navigate(`/notice/${nextId}`);
       } else {
-        // 없으면 사용자에게 알리거나 다른 처리
         alert('다음 공지사항이 없습니다.');
       }
     } catch (error) {

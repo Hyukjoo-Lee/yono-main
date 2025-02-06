@@ -65,4 +65,28 @@ public class CardController {
         return ResponseEntity.status(HttpStatus.CREATED).body(response);
     }
 
+    /**
+     * 최근 카드 3개월 사용내역을 분석해서 사용자에게 적합한 카드 5개를 반환
+     * 
+     * @param userNum 로그인된 User Number (PK)
+     * @return ResponseEntity<ApiResponse<List<CardDTO>>> 추천 카드 리스트
+     */
+    @GetMapping("/{userNum}/recommendations")
+    public ResponseEntity<ApiResponse<List<CardDTO>>> getRecommendedCards(@PathVariable int userNum) {
+
+        List<CardDTO> cardDTOs = cardService.getAllCards();
+
+        if (cardDTOs.isEmpty()) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND)
+                    .body(new ApiResponse<>(404, "등록된 마스터 카드가 없습니다.", null));
+        }
+
+        // 사용자 사용 내역 분석하고 적합한 카드 추천
+        List<CardDTO> recommnededCards = cardService.getRecommendedCards(userNum);
+
+        System.out.println(recommnededCards);
+
+        return null;
+    }
+
 }
