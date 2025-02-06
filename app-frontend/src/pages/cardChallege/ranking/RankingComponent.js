@@ -93,23 +93,12 @@ const RankingComponent = ({ rankingList, maskName }) => {
     if (rankingList.length > 0) {
       // 최종 1~3등을 정리할 배열
       const top3 = [];
-      let lastBadge = null;
-      let lastAmount = null;
 
       for (let i = 0; i < rankingList.length; i++) {
         const user = rankingList[i];
 
-        // 같은 순위가 아니라면 추가
-        if (
-          top3.length < 3 &&
-          !(user.badge === lastBadge && user.currentMonthAmount < lastAmount)
-        ) {
-          top3.push(user);
-          lastBadge = user.badge;
-          lastAmount = user.currentMonthAmount;
-        }
-
-        // 3명 이상 추가되면 중단
+        top3.push(user);
+ 
         if (top3.length === 3) break;
       }
 

@@ -48,6 +48,14 @@ const BoxInStyle = styled.div`
   &::-webkit-scrollbar-track {
     background: transparent;
   }
+  & > div:nth-child(1),
+  > div:nth-child(2),
+  > div:nth-child(3) {
+    & p {
+      font-weight: bold;
+      color: ${(props) => props.theme.color.blue};
+    }
+  }
 `;
 
 const BoxIn = styled.div`
@@ -89,18 +97,8 @@ const TextStyle = styled.p`
   margin: 0px;
 `;
 
-const TextStyleBold = styled(TextStyle)`
-  font-weight: bold;
-  color: ${(props) => props.theme.color.blue};
-`;
-
 const NumberText = styled(TextStyle)`
   text-align: right;
-`;
-
-const NumberTextBold = styled(NumberText)`
-  font-weight: bold;
-  color: ${(props) => props.theme.color.blue};
 `;
 
 const ProfileBox = styled.div`
@@ -125,21 +123,12 @@ const ProfileBox = styled.div`
   }
 `;
 
-const RankingTable = ({
-  isLoggedIn,
-  userRanking,
-  rankingList,
-  maskName,
-}) => {
+const RankingTable = ({ isLoggedIn, userRanking, rankingList, maskName }) => {
   const [isLoading, setIsLoading] = useState(true);
-  const [sortedRanking, setSortedRanking] = useState([]);
 
   useEffect(() => {
-    if (rankingList.length > 0) {
-      setSortedRanking(rankingList);
-    }
-    setIsLoading(false);
-  }, [isLoggedIn, rankingList]);
+    setIsLoading(rankingList.length === 0);
+  }, [rankingList]);
 
   return (
     <Root>
@@ -178,23 +167,23 @@ const RankingTable = ({
             </UserBoxIn>
           )}
           <BoxInStyle>
-            {sortedRanking.map((item, index) => (
+            {rankingList.map((item, index) => (
               <BoxIn key={index}>
                 <TextBox>
-                  {item.ranking === 1 ? (
+                  {index === 0 ? (
                     <MedalBox>
                       <Medal1 />
                     </MedalBox>
-                  ) : item.ranking === 2 ? (
+                  ) : index === 1 ? (
                     <MedalBox>
                       <Medal2 />
                     </MedalBox>
-                  ) : item.ranking === 3 ? (
+                  ) : index === 2 ? (
                     <MedalBox>
                       <Medal3 />
                     </MedalBox>
                   ) : (
-                    <TextStyle>{item.ranking}</TextStyle>
+                    <TextStyle>{index + 1}</TextStyle>
                   )}
 
                   <ProfileBox>
@@ -207,27 +196,11 @@ const RankingTable = ({
                       <Profile />
                     )}
                   </ProfileBox>
-                  {item.ranking === 1 ||
-                  item.ranking === 2 ||
-                  item.ranking === 3 ? (
-                    <TextStyleBold>
-                      {maskName(item.name)}({item.userId})
-                    </TextStyleBold>
-                  ) : (
-                    <TextStyle>
-                      {maskName(item.name)}({item.userId})
-                    </TextStyle>
-                  )}
+                  <TextStyle>
+                    {maskName(item.name)}({item.userId})
+                  </TextStyle>
                 </TextBox>
-                {item.ranking === 1 ||
-                item.ranking === 2 ||
-                item.ranking === 3 ? (
-                  <NumberTextBold>
-                    {item.badge.toLocaleString()}개
-                  </NumberTextBold>
-                ) : (
-                  <NumberText>{item.badge.toLocaleString()}개</NumberText>
-                )}
+                <NumberText>{item.badge.toLocaleString()}개</NumberText>
               </BoxIn>
             ))}
           </BoxInStyle>

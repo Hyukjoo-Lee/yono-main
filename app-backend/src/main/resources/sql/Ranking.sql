@@ -30,7 +30,7 @@ VALUES (badge_seq.nextval, '202501', 1000, 0, 600000, 120000, (SELECT user_num F
 
 
 INSERT INTO badge (badge_num, badge_date, badge, ranking, current_month_amount, previous_month_amount, user_num)
-VALUES (badge_seq.nextval, '202412', 10, 1, 480000, 450000, (SELECT user_num FROM user_info WHERE user_id = 'crtestid'));
+VALUES (badge_seq.nextval, '202412', 10, 0, 480000, 450000, (SELECT user_num FROM user_info WHERE user_id = 'crtestid'));
 
 INSERT INTO badge (badge_num, badge_date, badge, ranking, current_month_amount, previous_month_amount, user_num)
 VALUES (badge_seq.nextval, '202412', 8, 2, 420000, 400000, (SELECT user_num FROM user_info WHERE user_id = 'hjtestid'));
@@ -50,6 +50,6 @@ VALUES (badge_seq.nextval, '202412', 3, 6, 150000, 160000, (SELECT user_num FROM
 INSERT INTO badge (badge_num, badge_date, badge, ranking, current_month_amount, previous_month_amount, user_num)
 VALUES (badge_seq.nextval, '202412', 2, 7, 100000, 120000, (SELECT user_num FROM user_info WHERE user_id = 'leeid'));
 
-delete from badge where badge_num = 93;
+delete from badge where badge_num = 14;
 
 select * from badge;
