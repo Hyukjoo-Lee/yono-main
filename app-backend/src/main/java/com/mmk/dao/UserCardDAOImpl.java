@@ -45,7 +45,7 @@ public class UserCardDAOImpl implements UserCardDAO {
     }
 
     @Override
-    public UserCardEntity findByUserNumAndPrimaryCard(UserEntity userEntity, int primaryCard) {
+    public UserCardEntity findByUserNumAndPrimaryCard(UserEntity userEntity, String primaryCard) {
         return userCardRepository.findByUserEntityAndPrimaryCard(userEntity, primaryCard);
     }
 

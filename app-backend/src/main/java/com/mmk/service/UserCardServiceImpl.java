@@ -140,7 +140,7 @@ public class UserCardServiceImpl implements UserCardService {
     // 유저 정보로 대표 카드 조회
     @Override
     public UserCardDTO findPrimaryCardByUserNum(int userNum) {
-        return toDTO(userCardDAO.findByUserNumAndPrimaryCard(userDAO.findByUserNum(userNum), 1));
+        return toDTO(userCardDAO.findByUserNumAndPrimaryCard(userDAO.findByUserNum(userNum), "대표카드"));
     }
 
     // 카드 번호 마스킹 처리 (앞 4자리만)
