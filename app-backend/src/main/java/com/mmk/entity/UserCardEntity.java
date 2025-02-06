@@ -67,10 +67,10 @@ public class UserCardEntity {
     private UserCardCompanyEntity userCardCompanyEntity;
 
     @ManyToOne
-    @JoinColumn(name = "card_id", referencedColumnName = "card_id", nullable = false, foreignKey = @ForeignKey(name = "fk_user_card_card"))
+    @JoinColumn(name = "card_id", referencedColumnName = "card_id", nullable = false, foreignKey = @ForeignKey(name = "fk_user_card_card_id"))
     private CardEntity cardEntity;
 
     @ManyToOne
-    @JoinColumn(name = "user_num", referencedColumnName = "user_num", nullable = false, foreignKey = @ForeignKey(name = "fk_user_card_user"))
+    @JoinColumn(name = "user_num", referencedColumnName = "user_num", nullable = false, foreignKey = @ForeignKey(name = "fk_user_card_user_num"))
     private UserEntity userEntity;
 }

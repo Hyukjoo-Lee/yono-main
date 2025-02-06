@@ -14,6 +14,7 @@ import com.mmk.entity.NoticeEntity;
 import jakarta.transaction.Transactional;
 
 @Service
+@Transactional
 public class NoticeServiceImpl implements NoticeService {
 
   @Autowired
