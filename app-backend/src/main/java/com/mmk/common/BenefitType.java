@@ -17,6 +17,7 @@ public enum BenefitType {
     HEALTH, // 의료: 건강검진 할인, 약국 할인
     LIFE, // 생활: 전기세, 수도세 할인
     TRANSPORTATION, // 교통: 버스, 택시
+    PET, // 애완동물
     ETC; // 기타
 
     /**
@@ -34,10 +35,12 @@ public enum BenefitType {
 
         if (category.contains("주유") || category.contains("기름") || category.contains("lpg")) {
             return OIL;
-        } else if (category.contains("쇼핑") || category.contains("마트") || category.contains("온라인 쇼핑")) {
+        } else if (category.contains("쇼핑") || category.contains("마트") || category.contains("온라인 쇼핑")
+                || category.contains("브랜드") || category.contains("백화점")) {
             return SHOPPING;
         } else if (category.contains("음식") || category.contains("한식") || category.contains("중식")
-                || category.contains("양식") || category.contains("패스트푸드")) {
+                || category.contains("일식") || category.contains("서양식")
+                || category.contains("양식") || category.contains("푸드") || category.contains("주점")) {
             return FOOD;
         } else if (category.contains("카페") || category.contains("커피") || category.contains("디저트")) {
             return CAFE;
@@ -47,7 +50,7 @@ public enum BenefitType {
                 || category.contains("은행") || category.contains("카드")) {
             return FINANCE;
         } else if (category.contains("교육") || category.contains("학원") || category.contains("도서")
-                || category.contains("강의")) {
+                || category.contains("강의") || category.contains("서점")) {
             return EDUCATION;
         } else if (category.contains("통신") || category.contains("로밍") || category.contains("전화")
                 || category.contains("인터넷")) {
@@ -61,14 +64,14 @@ public enum BenefitType {
         } else if (category.contains("가맹") || category.contains("포인트") || category.contains("리워드")
                 || category.contains("할인")) {
             return ALLSTORES;
-        } else if (category.contains("차량") || category.contains("렌터카") || category.contains("하이패스")
+        } else if (category.contains("차량") || category.contains("렌터") || category.contains("하이패스")
                 || category.contains("주차")) {
             return VEHICLE;
         } else if (category.contains("보험")) {
             return INSURANCE;
         } else if (category.contains("의료") || category.contains("건강") || category.contains("검진")
                 || category.contains("약국")
-                || category.contains("병원")) {
+                || category.contains("병원") || category.contains("의원")) {
             return HEALTH;
         } else if (category.contains("생활") || category.contains("전기") || category.contains("수도")
                 || category.contains("공과")) {
@@ -76,6 +79,8 @@ public enum BenefitType {
         } else if (category.contains("교통") || category.contains("택시") || category.contains("버스")
                 || category.contains("대중")) {
             return TRANSPORTATION;
+        } else if (category.contains("애완") || category.contains("반려") || category.contains("펫")) {
+            return PET;
         } else {
             return ETC;
         }

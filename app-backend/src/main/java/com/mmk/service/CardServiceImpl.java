@@ -191,15 +191,16 @@ public class CardServiceImpl implements CardService {
 
     @Override
     public List<CardDTO> getRecommendedCards(int userNum) {
-        // 1. 혜택타입-값 이 들어있는 Map 가져오기
+        // 1. 소비내역 타입-값 이 들어있는 Map 가져오기
 
         // 테스트 Map
         Map<String, Integer> spendingMap = new HashMap<>();
-        spendingMap.put("PG쇼핑몰", 39500); // SHOPPING
-        spendingMap.put("교통", 69100); // TRANS
-        spendingMap.put("일반한식", 472200); // FOOD
+        spendingMap.put("쇼핑", 439500); // SHOPPING
+        spendingMap.put("교통", 109100); // TRANS
+        spendingMap.put("식당", 472200); // FOOD
         spendingMap.put("커피숍", 62800); // CAFE
         spendingMap.put("편의점", 82850); // CONVENIENCE
+
         return null;
     }
 
