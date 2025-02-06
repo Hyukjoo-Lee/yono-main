@@ -1,18 +1,15 @@
-import React, { useState, useEffect, useRef, useCallback } from 'react';
-import Calendar from './calendar/Calendar';
-import styled from 'styled-components';
-import CommonCardListBox from '../../../common/CommonCardListBox';
-import { ReactComponent as ExcellentCoin } from '../../../assets/images/ExcellentCoin.svg';
-import { ReactComponent as VeryGoodCoin } from '../../../assets/images/VeryGoodCoin.svg';
-import { ReactComponent as GoodCoin } from '../../../assets/images/GoodCoin.svg';
-import { ReactComponent as BadCoin } from '../../../assets/images/BadCoin.svg';
-import { fetchDailyStatistics } from '../../../apis/dailyStatisticsApi.js';
-import { findUserById } from '../../../apis/userApi';
-import CircularProgress from '@mui/material/CircularProgress';
-import ResizeObserver from 'resize-observer-polyfill';
-import CommonDialog from '../../../common/CommonDialog';
+import React, { useCallback, useEffect, useRef, useState } from 'react';
 import { useSelector } from 'react-redux';
-import { useNavigate } from 'react-router-dom';
+import ResizeObserver from 'resize-observer-polyfill';
+import styled from 'styled-components';
+import { fetchDailyStatistics } from '../../../apis/dailyStatisticsApi.js';
+import { ReactComponent as BadCoin } from '../../../assets/images/BadCoin.svg';
+import { ReactComponent as ExcellentCoin } from '../../../assets/images/ExcellentCoin.svg';
+import { ReactComponent as GoodCoin } from '../../../assets/images/GoodCoin.svg';
+import { ReactComponent as VeryGoodCoin } from '../../../assets/images/VeryGoodCoin.svg';
+import CommonCardListBox from '../../../common/CommonCardListBox';
+import CommonLoading from '../../../common/CommonLoading.js';
+import Calendar from './calendar/Calendar';
 
 const Root = styled.div`
   width: 100%;
@@ -63,7 +60,7 @@ const ListBox = styled.div`
   }
 `;
 
-const EmptyBox = styled.div`
+export const EmptyBox = styled.div`
   width: 100%;
   height: 100%;
   border-radius: 7px;
@@ -71,20 +68,16 @@ const EmptyBox = styled.div`
   border: 1px solid ${(props) => props.theme.color.mediumGray};
   padding: 40px;
   display: flex;
-  flex-direction: column;
   align-items: center;
   justify-content: center;
   & p {
-    margin: 0px;
-    font-size: ${(props) => props.theme.fontSize.eighteen};
+    margin: 0;
+    font-size: ${(props) => props.theme.fontSize.base};
     color: ${(props) => props.theme.color.gray};
-  }
-  & .MuiCircularProgress-root {
-    margin-bottom: 10px;
   }
 `;
 
-const DailyStatistics = () => {
+const DailyStatistics = ({ isHistory }) => {
   const Lists = [
     { icon: <BadCoin />, text: '0~25% 소비절약' },
     { icon: <GoodCoin />, text: '26~50% 소비절약' },
@@ -95,51 +88,29 @@ const DailyStatistics = () => {
   const [statistics, setStatistics] = useState([]);
   const [selectedDate, setSelectedDate] = useState(new Date());
   const [isLoading, setIsLoading] = useState(true);
-  const [users, setUsers] = useState(null);
-  const [isShowDialog, setIsShowDialog] = useState(false);
+
   const [dynamicHeight, setDynamicHeight] = useState(541); // 기본 높이 설정
   const calendarRef = useRef(null);
-  const navigate = useNavigate();
-
-  useEffect(() => {
-    const fetchUser = async () => {
-      try {
-        if (!isLoggedIn) {
-          setIsShowDialog(true);
-        } else {
-          const user = await findUserById(isLoggedIn);
-          setUsers(user.data);
-        }
-      } catch (error) {
-        setIsShowDialog(true);
-      } finally {
-        setIsLoading(false);
-      }
-    };
-
-    fetchUser();
-  }, [isLoggedIn]);
 
   const fetchStatistics = useCallback(async () => {
     setIsLoading(true);
-    try {
-      const data = await fetchDailyStatistics(); // API 호출
-      // 로그인한 사용자의 userNum과 일치하는 데이터만 필터링
-      const filteredData = data.filter((item) => item.userNum === isLoggedIn);
-      setStatistics(filteredData);
-    } catch (error) {
-      console.error('Failed to fetch statistics:', error);
-      console.error('유저 정보 실패: ', users);
-    } finally {
+    if (isLoggedIn) {
+      const data = await fetchDailyStatistics(isLoggedIn); // API 호출
+      if (typeof data === 'string') {
+        console.log(data);
+        // 예외 발생시 다이얼로그 처리 필요
+      } else if (data != null) {
+        setStatistics(data.data);
+      }
       setIsLoading(false); // 데이터 로드 완료 후 로딩 상태 false
     }
-  }, [isLoggedIn, users]);
+  }, [isLoggedIn]);
 
   useEffect(() => {
-    if (isLoggedIn) {
+    if (isHistory !== false) {
       fetchStatistics();
     }
-  }, [isLoggedIn, fetchStatistics]);
+  }, [fetchStatistics, isHistory]);
 
   // 동적으로 ListBox 높이 조정
   const adjustHeight = () => {
@@ -213,16 +184,16 @@ const DailyStatistics = () => {
       <ListBox $dynamicHeight={dynamicHeight}>
         {isLoading ? (
           <EmptyBox>
-            <CircularProgress />
-            <p>데이터 불러오는 중...</p>
+            <CommonLoading />
           </EmptyBox>
         ) : filteredStatistics.length > 0 ? (
-          filteredStatistics.map((item) => (
+          filteredStatistics.map((item, index) => (
             <CommonCardListBox
               key={item.resApprovalNo}
               cardItem={{
                 ...item,
                 resUsedDate: formatDate(item.resUsedDate), // 변환된 날짜 전달
+                cardImgUrl: filteredStatistics[index].cardImg,
               }}
               showDetailed={false}
             />
@@ -233,19 +204,6 @@ const DailyStatistics = () => {
           </EmptyBox>
         )}
       </ListBox>
-
-      {isShowDialog && (
-        <CommonDialog
-          open={isShowDialog}
-          onClick={() => navigate('/login')}
-          onClose={() => navigate('/login')}
-          submitText="로그인"
-        >
-          <p style={{ textAlign: 'center' }}>
-            로그인 정보가 없습니다. 로그인을 진행해주세요!
-          </p>
-        </CommonDialog>
-      )}
     </Root>
   );
 };

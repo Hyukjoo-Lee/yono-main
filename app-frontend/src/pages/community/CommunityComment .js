@@ -118,15 +118,15 @@ const TextBox = styled.div`
     margin-left: 25px;
   }
 
-  & > input {
-    width: 100%;
-    padding: 9px;
-    font-size: 16px;
+  & input {
+    width: 95%;
+    padding: 12px;
+    font-size: 18px;
     box-sizing: border-box;
     margin-top: 5px;
 
     &:focus {
-      border: 1px solid #1976d2;
+      border: 2px solid #1976d2;
       outline: none;
     }
 
@@ -155,8 +155,8 @@ const CommunityComment = ({
   };
   return (
     <CommentBox>
-      {commentsData.map((comment) => (
-        <div key={comment.rno}>
+      {commentsData.map((comment, index) => (
+        <div key={index}>
           <TopRow>
             <ImageBox>
               <Profile />
@@ -211,10 +211,14 @@ const CommunityComment = ({
             {editingComment !== comment.rno && (
               <>
                 <LikeBox>
-                  <HeartButton
-                    like={user && comment.likedByUser.includes(user.userId)}
-                    onClick={user ? () => toggleLike(comment.rno) : null}
-                  />
+                  {user ? (
+                    <HeartButton
+                      like={comment.likedByUser.includes(user.userId)} // userId가 likedByUser에 포함되면 하트가 채워짐
+                      onClick={() => toggleLike(comment.rno)} // 하트를 클릭하면 toggleLike 실행
+                    />
+                  ) : (
+                    <HeartButton like={false} /> // user가 없으면 빈 하트로 표시
+                  )}
                   <p>{comment.like_count}</p>
                 </LikeBox>
               </>

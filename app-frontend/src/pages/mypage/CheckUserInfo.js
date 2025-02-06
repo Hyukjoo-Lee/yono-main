@@ -1,18 +1,20 @@
 import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
-import { modifyUser } from '../../apis/userApi';
+import { deleteUser } from '../../apis/userApi';
 import CommonButton from '../../common/CommonButton';
 import CommonInput from '../../common/CommonInput';
-import SearchAddressDialog from '../auth/modal/SearchAddressDialog';
 import {
-  SPENDINGTARGET_REGEX_MESSAGE,
   EMAIL_REGEX_MESSAGE,
   PASSWORD_MISMATCH_MESSAGE,
+  SPENDINGTARGET_REGEX_MESSAGE,
 } from '../../common/Message';
-import Profile from './Profile';
+import { logoutUser, updateUserProfile } from '../../redux/actions/userAction';
+import { useDispatch } from 'react-redux';
 import theme from '../../theme/theme';
 import PasswordDialog from './PasswordDialog';
+import Profile from './Profile';
+import CommonDialog from '../../common/CommonDialog';
 
 const StyledHr = styled.hr`
   width: 100%;
@@ -37,6 +39,14 @@ const Section = styled.div`
 const InnerSection = styled.div`
   width: 100%;
   margin-bottom: 15px;
+`;
+
+const DeleteButtonContainer = styled.div`
+  width: 100%;
+  margin-bottom: 15px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
 `;
 
 const Button = styled.div`
@@ -82,72 +92,39 @@ const InputUserIdBox = styled.div`
   align-items: flex-end;
 `;
 
-const CheckUserInfo = ({
-  userNum,
-  userId,
-  password,
-  email,
-  name,
-  address,
-  detailAddress,
-  postcode,
-  spendingTarget,
-  profile,
-  createdAt,
-}) => {
-  const [profileImage, setProfileImage] = useState(profile);
-  const [previewImage, setPreviewImage] = useState(profile);
+const CheckUserInfo = ({ users }) => {
+  console.log(users);
+  const [profileImage, setProfileImage] = useState(users.profile);
+  const [previewImage, setPreviewImage] = useState(users.profile);
   const [isEditing, setIsEditing] = useState(true);
   const [isShowDialog, setIsShowDialog] = useState(false);
   const [passwordError, setPasswordError] = useState('');
-  const [isAddressModalOpen, setIsAddressModalOpen] = useState(false);
+  const [isDeleteDialog, setIsDeleteDialog] = useState(false);
   const [userInfo, setUserInfo] = useState({
-    userNum: userNum,
-    userId: userId || '',
+    ...users,
     originPassword: '',
-    email: email || '',
-    name: name || '',
-    address: address || '',
-    detailAddress: detailAddress || '',
-    postcode: postcode || '',
-    spendingTarget: spendingTarget || 0,
-    profile: profile || '',
-    createdAt: createdAt || '',
   });
 
   useEffect(() => {
     setUserInfo({
-      userNum: userNum,
-      userId: userId || '',
+      userNum: users.userNum,
+      userId: users.userId || '',
       originPassword: '',
-      email: email || '',
-      name: name || '',
-      address: address || '',
-      detailAddress: detailAddress || '',
-      postcode: postcode || '',
-      spendingTarget: spendingTarget || 0,
-      profile: profile || '',
-      createdAt: createdAt || '',
+      email: users.email || '',
+      name: users.name || '',
+      spendingTarget: users.spendingTarget || 0,
+      profile: users.profile || '',
+      createdAt: users.createdAt || '',
+      state: users.state || '',
+      userRole: users.userRole || '',
     });
 
-    setPreviewImage(profile);
+    setPreviewImage(users.profile);
 
     if (!isShowDialog) {
       document.getElementById('root').removeAttribute('inert');
     }
-  }, [
-    userNum,
-    userId,
-    email,
-    name,
-    address,
-    detailAddress,
-    postcode,
-    spendingTarget,
-    profile,
-    createdAt,
-    isShowDialog,
-  ]);
+  }, [users, isShowDialog]);
 
   const handleProfileChange = (e) => {
     const file = e.target.files[0];
@@ -161,9 +138,11 @@ const CheckUserInfo = ({
     }
   };
 
-  const handleAddressSelect = (address) => {
-    setUserInfo((prev) => ({ ...prev, address }));
-    setIsAddressModalOpen(false);
+  const handleProfileDelete = () => {
+    setProfileImage('temp_profile');
+    setPreviewImage(null);
+    console.log('profileImage: ' + profileImage);
+    console.log('previewImage: ' + previewImage);
   };
 
   const toggleEdit = () => {
@@ -172,21 +151,20 @@ const CheckUserInfo = ({
   };
 
   const cancelEdit = () => {
-    setProfileImage(profile);
-    setPreviewImage(profile);
+    setProfileImage(users.profile);
+    setPreviewImage(users.profile);
 
     setUserInfo({
-      userNum: userNum,
-      userId: userId || '',
+      userNum: users.userNum,
+      userId: users.userId || '',
       originPassword: '',
-      email: email || '',
-      name: name || '',
-      address: address || '',
-      detailAddress: detailAddress || '',
-      postcode: postcode || '',
-      spendingTarget: spendingTarget || '',
-      profile: profile || '',
-      createdAt: createdAt || '',
+      email: users.email || '',
+      name: users.name || '',
+      spendingTarget: users.spendingTarget || '',
+      profile: users.profile || '',
+      createdAt: users.createdAt || '',
+      state: users.state || '',
+      userRole: users.userRole || '',
     });
 
     setIsEditing(!isEditing);
@@ -209,13 +187,13 @@ const CheckUserInfo = ({
     spendingTarget: /^[0-9]*$/,
   };
 
-  const save = () => {
+  const save = async () => {
     let isInvalid = true;
 
     if (!isFormValid()) {
       setPasswordError('모든 정보를 입력해주세요!');
       isInvalid = false;
-    } else if (password !== userInfo.originPassword) {
+    } else if (users.password !== userInfo.originPassword) {
       setPasswordError(PASSWORD_MISMATCH_MESSAGE);
       isInvalid = false;
     }
@@ -249,13 +227,25 @@ const CheckUserInfo = ({
       formData.append('profileText', profileImage);
     }
 
-    modifyUser(formData).then((response) => {
+    try {
+      await dispatch(updateUserProfile(formData));
       navigate(0);
-    });
-    // window.location.reload();
+    } catch (error) {
+      console.error('유저 정보 변경 오류', error);
+    }
   };
 
-  const deleteId = () => {};
+  const dispatch = useDispatch();
+
+  const checkDeleteId = () => {
+    setIsDeleteDialog(true);
+  };
+
+  const deleteId = async () => {
+    navigate('/');
+    dispatch(logoutUser());
+    await deleteUser(userInfo.userNum);
+  };
 
   const disabledInputProps = {
     disabled: true,
@@ -291,12 +281,10 @@ const CheckUserInfo = ({
   };
 
   const nonEditField = [
-    { title: '아이디', value: userId },
-    { title: '이름', value: name },
-    { title: '이메일', value: email },
-    { title: '일일 목표 지출금액', value: spendingTarget },
-    { title: '주소', value: address },
-    { title: '상세주소', value: detailAddress },
+    { title: '아이디', value: users.userId },
+    { title: '이름', value: users.name },
+    { title: '이메일', value: users.email },
+    { title: '일일 목표 지출금액', value: users.spendingTarget },
   ];
 
   const editField = [
@@ -342,10 +330,24 @@ const CheckUserInfo = ({
         <>
           <Profile
             profileImage={previewImage}
-            onProfileChange={handleProfileChange}
+            onImageChange={handleProfileChange}
             isEditing={isEditing}
           />
-
+          <DeleteButtonContainer>
+            <CommonButton
+              width="50px"
+              height="30px"
+              text="프로필 삭제"
+              fontSize="10px"
+              color={theme.color.blue}
+              background="transparent"
+              $borderRadius="4px"
+              $borderColor={theme.color.blue}
+              $hoverBk="transparent"
+              $hoverColor={theme.color.blue}
+              onClick={handleProfileDelete}
+            />
+          </DeleteButtonContainer>
           <InnerSection>
             <CommonInput
               value={userInfo.userId}
@@ -405,49 +407,7 @@ const CheckUserInfo = ({
             </InnerSection>
           ))}
 
-          <InnerSection>
-            <InputUserIdBox>
-              <CommonInput
-                placeholder="주소를 입력하세요"
-                text="주소"
-                value={userInfo.address}
-                {...abledInputProps}
-                width="100%"
-                onChange={(e) => handleInputChange(e, 'address')}
-              />
-              <ButtonWrapper>
-                <CommonButton
-                  width="100px"
-                  height="40px"
-                  text="주소검색"
-                  fontSize={theme.fontSize.base}
-                  onClick={() => setIsAddressModalOpen(true)}
-                />
-              </ButtonWrapper>
-            </InputUserIdBox>
-
-            <StyledHr />
-          </InnerSection>
-
-          <InnerSection>
-            <CommonInput
-              placeholder="상세 주소를 입력하세요"
-              text="상세 주소"
-              value={userInfo.detailAddress}
-              onChange={(e) => handleChange('detailAddress', e.target.value)}
-              {...abledInputProps}
-            />
-            <StyledHr />
-          </InnerSection>
-
           {passwordError && <ErrorText>{passwordError}</ErrorText>}
-
-          <SearchAddressDialog
-            open={isAddressModalOpen}
-            setModalVisible={setIsAddressModalOpen}
-            onCompletePost={handleAddressSelect}
-            setFormData={setUserInfo}
-          />
         </>
       )}
 
@@ -460,7 +420,7 @@ const CheckUserInfo = ({
 
         <CommonButton
           text={isEditing ? '회원 탈퇴' : '취소'}
-          onClick={isEditing ? deleteId : cancelEdit}
+          onClick={isEditing ? checkDeleteId : cancelEdit}
           {...commonButtonProps}
         />
       </Button>
@@ -472,8 +432,17 @@ const CheckUserInfo = ({
           document.getElementById('root').setAttribute('inert', true);
           setIsShowDialog(false);
         }}
-        password={password}
+        password={users.password}
         userInfo={userInfo}
+      />
+
+      <CommonDialog
+        open={isDeleteDialog}
+        text="탈퇴"
+        onClose={() => setIsDeleteDialog(false)}
+        onClick={deleteId}
+        cancelBtn={true}
+        children={<p>정말로 탈퇴하시겠습니까?</p>}
       />
     </Root>
   );

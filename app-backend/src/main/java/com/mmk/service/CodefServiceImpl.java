@@ -5,18 +5,12 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.mmk.dao.CardCompanyDAO;
-import com.mmk.dto.CardBenefitDTO;
-import com.mmk.dto.CardCompanyDTO;
-import com.mmk.dto.CardDTO;
-import com.mmk.entity.CardCompanyEntity;
 import com.mmk.entity.UserCardEntity;
 
 import io.codef.api.EasyCodef;
@@ -34,19 +28,7 @@ public class CodefServiceImpl implements CodefService {
     @Value("${CODEF_PUBLIC_KEY}")
     private String publickey;
 
-    @Value("${CODEF_CONNECTEDID:defaultValue}")
-    private String connectedId;
-
     private EasyCodef codef;
-
-    @Autowired
-    private CardCompanyDAO cardCompanyDAO;
-
-    @Autowired
-    private CardService cardService;
-
-    @Autowired
-    private CardBenefitService cardBenefitService;
 
     // Connected Id 발급
     @Override
@@ -68,8 +50,15 @@ public class CodefServiceImpl implements CodefService {
             result = codef.createAccount(EasyCodefServiceType.DEMO, parameterMap);
             ObjectMapper objectMapper = new ObjectMapper();
             JsonNode jsonNode = objectMapper.readTree(result);
-            String connectedId = jsonNode.path("data").path("connectedId").asText();
-            return connectedId;
+            System.out.println("result: " + result);
+            String code = jsonNode.path("result").path("code").asText();
+            if (code.equals("CF-00000")) {
+                String connectedId = jsonNode.path("data").path("connectedId").asText();
+                return connectedId;
+            } else {
+                String errorMessage = jsonNode.path("data").path("errorList").get(0).path("message").asText();
+                return "error" + errorMessage;
+            }
         } catch (Exception e) {
             e.printStackTrace();
             return null;
@@ -103,7 +92,7 @@ public class CodefServiceImpl implements CodefService {
         codef.setClientInfoForDemo(clientId, clientSecret);
         codef.setPublicKey(publickey);
 
-        String connectedId = userCardEntity.getCardCompanyEntity().getConnedtedId();
+        String connectedId = userCardEntity.getUserCardCompanyEntity().getConnectedId();
         String organization = userCardEntity.getCardEntity().getOrganizationCode();
         String cardNo = userCardEntity.getUserCardNum();
         String cardPwd = userCardEntity.getCardPwd();
@@ -115,6 +104,7 @@ public class CodefServiceImpl implements CodefService {
             String result = codef.requestProduct(productUrl, EasyCodefServiceType.DEMO, parameterMap);
             long endTime = System.nanoTime();
             System.out.println("CODEF 데이터 호출 소요 시간: " + (endTime - startTime) + "ns");
+            System.out.println("result: " + result);
             return result;
         } catch (Exception e) {
             throw new RuntimeException(e);
@@ -156,16 +146,20 @@ public class CodefServiceImpl implements CodefService {
 
         try {
             String jsonResult = codef.requestProduct(productUrl, EasyCodefServiceType.DEMO, parameterMap);
+            System.out.println("jsonResult: " + jsonResult);
             ObjectMapper objectMapper = new ObjectMapper();
             JsonNode dataNode = objectMapper.readTree(jsonResult).get("data");
-
+            System.out.println("dataNode: " + dataNode);
             // 반환값이 배열인지 객체인지 확인 - 카드가 하나 일 때는 배열로 반환되고 두개 이상일 때는 객체로 반환됨
             List<Map<String, Object>> result;
 
             if (dataNode.isArray()) {
+                System.out.println("this is array: ");
                 result = objectMapper.convertValue(dataNode, new TypeReference<List<Map<String, Object>>>() {
                 });
+                System.out.println("this is array2: " + result);
             } else {
+
                 Map<String, Object> singleCard = objectMapper.convertValue(dataNode,
                         new TypeReference<Map<String, Object>>() {
                         });
@@ -275,105 +269,4 @@ public class CodefServiceImpl implements CodefService {
         }
     }
 
-    // 카드 정보, 혜택 호출 결과 저장 - 이미 회사가 등록 되어 있어야 함
-    @Override
-    public CardCompanyDTO saveCodefCard(CardCompanyDTO cardCompanyDTO) {
-
-        int userNum = cardCompanyDTO.getUserNum();
-        String organization = cardCompanyDTO.getOrganization();
-
-        CardCompanyEntity cardCompanyEntity = cardCompanyDAO.findByUserNumAndOrganization(userNum, organization);
-
-        if (cardCompanyEntity == null) {
-            throw new RuntimeException("카드 회사 정보가 존재하지 않습니다.");
-        } else {
-            int companyNum = cardCompanyEntity.getCardCompanyNum();
-            String companyId = cardCompanyEntity.getCompanyId();
-            String companyPwd = cardCompanyEntity.getCompanyPwd();
-            String connectedId = cardCompanyEntity.getConnedtedId();
-
-            cardCompanyDTO.setCardCompanyNum(companyNum);
-            cardCompanyDTO.setCompanyId(companyId);
-            cardCompanyDTO.setCompanyPwd(companyPwd);
-            cardCompanyDTO.setConnectedId(connectedId);
-        }
-        // Codef API로 카드 정보 요청
-        List<Map<String, Object>> cardList = getUserCardList(cardCompanyDTO.getConnectedId(), organization);
-
-        if (cardList.isEmpty()) {
-            throw new RuntimeException("Codef API로부터 카드 정보를 가져오지 못했습니다.");
-        }
-
-        // 마스터 카드, 유저 카드 저장
-        cardList.forEach(card -> {
-            CardDTO cardDTO = new CardDTO();
-            cardDTO.setCardTitle((String) card.get("cardName"));
-            cardDTO.setCardProvider(getCardProvider(organization));
-            cardDTO.setOrganizationCode((String) card.get("organizationCode"));
-            cardDTO.setCardImgUrl((String) card.get("imageLink"));
-
-            cardService.createCard(cardDTO);
-        });
-
-        // Codef API로 카드 혜택 요청
-        List<Map<String, Object>> benefitList = getUserPerformance(cardCompanyDTO.getConnectedId(), organization);
-
-        if (benefitList.isEmpty()) {
-            throw new RuntimeException("Codef API로부터 카드 혜택 정보를 가져오지 못했습니다.");
-        }
-        System.out.println("benefitList: " + benefitList);
-        // CardBenefitEntity 생성 및 저장
-        benefitList.forEach(benefit -> {
-            CardBenefitDTO cardBenefitDTO = new CardBenefitDTO();
-
-            String cardTitle = (String) benefit.get("cardName");
-
-            cardBenefitDTO.setCardTitle(cardTitle);
-
-            @SuppressWarnings("unchecked")
-            List<Map<String, Object>> benefits = (List<Map<String, Object>>) benefit.get("benefits");
-            benefits.forEach(b -> {
-
-                String benefitTitle = (String) b.get("benefitName");
-                String businessTypes = (String) b.get("businessTypes");
-
-                cardBenefitDTO.setBenefitTitle(benefitTitle);
-                cardBenefitDTO.setBusinessTypes(businessTypes);
-
-                cardBenefitService.createCardBenefit(cardBenefitDTO);
-            });
-        });
-
-        return cardCompanyDTO;
-    }
-
-    // 기관코드에 따른 CARD_PROVIDER 설정
-    private String getCardProvider(String organization) {
-        switch (organization) {
-            case "0301":
-                return "kb";
-            case "0302":
-                return "hyundai";
-            case "0303":
-                return "samsung";
-            case "0304":
-                return "nh";
-            case "0306":
-                return "shinhan";
-            case "0313":
-                return "hana";
-            case "NH":
-                return "NH농협카드";
-            case "SS":
-                return "삼성카드";
-            case "HD":
-                return "현대카드";
-            case "WF":
-                return "우리카드";
-            case "CT":
-                return "씨티카드";
-            default:
-                throw new IllegalArgumentException("유효하지 않은 기관코드: " + organization);
-        }
-    }
 }

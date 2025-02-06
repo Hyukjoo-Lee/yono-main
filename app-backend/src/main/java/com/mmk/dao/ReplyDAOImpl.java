@@ -49,4 +49,9 @@ public class ReplyDAOImpl implements ReplyDAO {
         return this.replyRepo.findByRno(rno).orElseThrow(() -> 
         new IllegalArgumentException("댓글을 찾을 수 없습니다: " + rno));
     }
+
+    @Override
+    public void deleteByPno(int pno) {
+        this.replyRepo.deleteByPno(pno);  // 댓글 삭제
+    }
 }

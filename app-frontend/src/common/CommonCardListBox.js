@@ -4,6 +4,18 @@ import CommonButton from './CommonButton';
 import LiveTvIcon from '@mui/icons-material/LiveTv';
 import CoffeeIcon from '@mui/icons-material/Coffee';
 import BusIcon from '@mui/icons-material/DirectionsBusFilled';
+import LocalGasStationIcon from '@mui/icons-material/LocalGasStation';
+import ShoppingCartIcon from '@mui/icons-material/ShoppingCart';
+import AttachMoneyIcon from '@mui/icons-material/AttachMoney';
+import SchoolIcon from '@mui/icons-material/School';
+import PhoneIphoneIcon from '@mui/icons-material/PhoneIphone';
+import FlightIcon from '@mui/icons-material/Flight';
+import StoreIcon from '@mui/icons-material/Store';
+import HealthAndSafetyIcon from '@mui/icons-material/HealthAndSafety';
+import LocalPharmacyIcon from '@mui/icons-material/LocalPharmacy';
+import HomeIcon from '@mui/icons-material/Home';
+import HelpOutlineIcon from '@mui/icons-material/HelpOutline';
+import VerifiedIcon from '@mui/icons-material/Verified';
 
 const HoverButtonContainer = styled.div`
   margin: 0 10px 28px 0;
@@ -40,6 +52,10 @@ const CardName = styled.p`
   font-size: 20px;
   color: #212121;
   font-weight: bold;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  max-width: 200px;
 `;
 
 const DailyCardName = styled(CardName)`
@@ -73,8 +89,7 @@ const TextStyle = styled(TitleStyle)`
 `;
 
 const CardImage = styled.img`
-  width: 100px;
-  height: auto;
+  width: 80px;
 `;
 
 const SmallCardImage = styled(CardImage)`
@@ -99,8 +114,45 @@ const AdditionalInfo = styled.div`
   margin-bottom: 3px;
 `;
 
+const VerifiedTextContainer = styled.div`
+  margin: 0 10px 28px 0;
+  width: '100px';
+`;
+
+export const getBenefitIcon = (type) => {
+  switch (type) {
+    case '주유':
+      return <LocalGasStationIcon />;
+    case '쇼핑':
+      return <ShoppingCartIcon />;
+    case '금융':
+      return <AttachMoneyIcon />;
+    case '교육':
+      return <SchoolIcon />;
+    case '통신':
+      return <PhoneIphoneIcon />;
+    case '여가':
+      return <CoffeeIcon />;
+    case '영화':
+      return <LiveTvIcon />;
+    case '항공':
+      return <FlightIcon />;
+    case '전 가맹점':
+      return <StoreIcon />;
+    case '교통':
+      return <BusIcon />;
+    case '보험':
+      return <HealthAndSafetyIcon />;
+    case '의료':
+      return <LocalPharmacyIcon />;
+    case '생활':
+      return <HomeIcon />;
+    default:
+      return <HelpOutlineIcon />;
+  }
+};
+
 const CommonCardListBox = ({
-  cardInfo,
   data,
   showDetailed,
   onCardSelect,
@@ -112,7 +164,12 @@ const CommonCardListBox = ({
         { title: '날짜', value: cardItem.resUsedDate || 'N/A' },
         { title: '사용처', value: cardItem.resMemberStoreName || 'N/A' },
         { title: '카테고리', value: cardItem.resMemberStoreType || 'N/A' },
-        { title: '사용금액', value: cardItem.resUsedAmount || 'N/A' },
+        {
+          title: '사용금액',
+          value: cardItem.resUsedAmount
+            ? new Intl.NumberFormat('ko-KR').format(cardItem.resUsedAmount)
+            : 'N/A',
+        },
       ]
     : [];
 
@@ -123,37 +180,44 @@ const CommonCardListBox = ({
           {data &&
             data.map((card, index) => (
               <BoxStyle key={index}>
-                <CardImage src={card.cardImg} alt="카드 이미지" />
+                <CardImage
+                  src={`http://localhost:8065${card.cardImg || ''}`}
+                  alt="카드 이미지"
+                />
+
                 <CardInfoContainer>
                   <CardName>{card.cardTitle}</CardName>
                   <CardNumber> {card.cardNumber || ''}</CardNumber>
-                  {card.cardInfo.map((benefit, index) => (
+                  {card.cardInfo.slice(0, 3).map((benefit, index) => (
                     <InfoRow key={index}>
                       <TitleStyle>
-                        {benefit.label === '스타벅스 할인' && <CoffeeIcon />}
-                        {benefit.label === '대중교통 할인' && <BusIcon />}
-                        {benefit.label === '영화 쿠폰 제공' && <LiveTvIcon />}
-                        {benefit.label}
+                        {getBenefitIcon(benefit.type)} {benefit.title}
                       </TitleStyle>
                     </InfoRow>
                   ))}
                 </CardInfoContainer>
                 <CardInfoContainer>
-                  <HoverButtonContainer>
-                    <CommonButton
-                      text={buttonText}
-                      fontSize="16px"
-                      width="100px"
-                      height="30px"
-                      onClick={() => onCardSelect(card)}
-                    />
-                  </HoverButtonContainer>
+                  {card.primaryCard === 1 ? (
+                    <VerifiedTextContainer>
+                      <VerifiedIcon
+                        style={{ color: '#4CAF50', fontSize: '28px' }}
+                      />
+                    </VerifiedTextContainer>
+                  ) : (
+                    <HoverButtonContainer>
+                      <CommonButton
+                        text={buttonText}
+                        fontSize="16px"
+                        width="100px"
+                        height="30px"
+                        onClick={() => onCardSelect(card)}
+                      />
+                    </HoverButtonContainer>
+                  )}
 
-                  {card.cardInfo.map((benefit, index) => (
+                  {card.cardInfo.slice(0, 3).map((benefit, index) => (
                     <AdditionalInfo key={index}>
-                      <TitleStyle>
-                        {benefit.value} ({benefit.additional})
-                      </TitleStyle>
+                      <TitleStyle>{benefit.value}</TitleStyle>
                     </AdditionalInfo>
                   ))}
                 </CardInfoContainer>

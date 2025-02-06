@@ -173,7 +173,7 @@ export function CommunityPost() {
       console.error('댓글 작성 실패', error);
     }
   };
-
+  // 혁주: commentsData 가 새로운 배열로 계속 바뀜으로 무한로딩 됨, 제거함으로써 무한로딩 방지
   useEffect(() => {
     axios
       .get(`/reply/list/${rowData.no}`)
@@ -192,6 +192,7 @@ export function CommunityPost() {
         console.error('댓글 데이터 요청 실패:', error);
       });
   }, [rowData.no]);
+
   const handleDeletecommentClick = async (rno) => {
     if (!user) {
       setIsDialogOpen(true);
@@ -275,9 +276,6 @@ export function CommunityPost() {
               like_count: comment.likedByUser.includes(user.userId)
                 ? Math.max(comment.like_count - 1, 0) // 좋아요 취소 시 최소 0으로 유지
                 : comment.like_count + 1, // 좋아요를 누르면 1 증가
-              likedByUser: comment.likedByUser.includes(user.userId)
-                ? comment.likedByUser.filter((userId) => userId !== user.userId)
-                : [...comment.likedByUser, user.userId],
             }
           : comment,
       );
@@ -296,15 +294,11 @@ export function CommunityPost() {
             ? {
                 ...comment,
                 like_count: Math.max(response.data.likeCount, 0), // 서버에서 받은 likeCount가 0 미만이면 0으로 설정
-                likedByUser: response.data.isLiked
-                  ? [...comment.likedByUser, user.userId]
-                  : comment.likedByUser.filter(
-                      (userId) => userId !== user.userId,
-                    ),
               }
             : comment,
         );
         setCommentsData(updatedCommentsWithServerData);
+        console.log('좋아요 토글 성공:', response.data);
       }
     } catch (error) {
       console.error('좋아요 토글 실패', error);
@@ -356,7 +350,7 @@ export function CommunityPost() {
       />
       <Detailbox>
         <label>
-          등록일 :{rowData.userId} | 작성자 {rowData.userId} | 조회수:
+          등록일 :{rowData.regdate} | 작성자 {rowData.userId} | 조회수:
           {rowData.viewcnt}
         </label>
       </Detailbox>

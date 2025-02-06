@@ -1,13 +1,13 @@
-import styled from 'styled-components';
-import CommonInput from '../../common/CommonInput';
-import CommonSelect from '../../common/CommonSelect';
-import CommonButton from '../../common/CommonButton';
-import CommonPageInfo from '../../common/CommonPageInfo';
-import CommonHr from '../../common/CommonHr';
-import { useLocation, useNavigate } from 'react-router-dom';
-import { useEffect, useState } from 'react';
 import axios from 'axios';
+import { useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
+import { useLocation, useNavigate } from 'react-router-dom';
+import styled from 'styled-components';
+import CommonButton from '../../common/CommonButton';
+import CommonHr from '../../common/CommonHr';
+import CommonInput from '../../common/CommonInput';
+import CommonPageInfo from '../../common/CommonPageInfo';
+import CommonSelect from '../../common/CommonSelect';
 
 const Root = styled.div`
   width: ${(props) => props.theme.display.lg};
@@ -111,7 +111,7 @@ export function EditFormBox() {
     title: '',
     category: '',
     content: '',
-    file: '',
+    imgurl: '',
   });
 
   // 제목, 카테고리, 내용 변경 시 처리 함수
@@ -119,7 +119,7 @@ export function EditFormBox() {
     const { value } = e.target;
     setPostFormData((prev) => ({
       ...prev,
-      [field]: value,
+      [field]: value || '',
     }));
     setAlertMessage((prev) => ({
       ...prev,
@@ -180,14 +180,13 @@ export function EditFormBox() {
 
   useEffect(() => {
     if (rowData) {
-      //userId가 존재하지 않을 경우 수정 폼 초기화
       setPostFormData({
         userId: rowData.userId,
         no: rowData.no,
         title: rowData.title || '',
         category: rowData.category || '',
         content: rowData.content || '',
-        file: rowData.file || '',
+        imgurl: rowData.imgurl || '',
         regdate: rowData.regdate || '',
       });
     }
@@ -212,10 +211,17 @@ export function EditFormBox() {
       formData.append('title', postFormData.title);
       formData.append('category', postFormData.category);
       formData.append('content', postFormData.content);
-      formData.append('regdate', postFormData.regdate);
 
-      if (postFormData.file) {
-        formData.append('file', postFormData.file);
+      const updatedDate = new Date().toISOString().split('T')[0]; // 수정된 날짜
+      formData.append('updatedAt', updatedDate);
+
+      // 이미지 파일이 있는 경우, 파일을 FormData에 추가
+      if (postFormData.imgurl) {
+        // 파일을 실제 FormData에 추가해야 합니다.
+        const file = document.querySelector('input[type="file"]').files[0]; // 선택된 파일
+        if (file) {
+          formData.append('file', file);
+        }
       }
 
       console.log(postFormData);
@@ -228,6 +234,8 @@ export function EditFormBox() {
         category: postFormData.category,
         content: postFormData.content,
         imgurl: postFormData.imgurl,
+        regdate: updatedDate,
+        updatedAt: updatedDate, // 수정된 날짜
       });
 
       formData.append('postFormData', postData);
@@ -316,7 +324,7 @@ export function EditFormBox() {
                 height="40px"
                 placeholder="사진 첨부"
                 accept=".jpg, .jpeg, .png, .gif"
-                value={postFormData.imgurl}
+                value={postFormData.imgurl || ''}
                 readOnly
               />
               <input

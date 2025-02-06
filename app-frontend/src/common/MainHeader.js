@@ -105,11 +105,18 @@ export function MainHeader() {
   };
 
   const list = isLoggedIn
-    ? [
-        { label: `${user?.name || '사용자'}님`, isText: true },
-        { label: '로그아웃', path: '/', onClick: handleLogout },
-        { label: '마이페이지', path: '/mypage' },
-      ]
+    ? user?.userRole === 0
+      ? [
+          { label: `${user?.name || '사용자'}님`, isText: true },
+          { label: '로그아웃', path: '/', onClick: handleLogout },
+          { label: '마이페이지', path: '/mypage' },
+          { label: '관리자페이지', path: 'http://localhost:3001' },
+        ]
+      : [
+          { label: `${user?.name || '사용자'}님`, isText: true },
+          { label: '로그아웃', path: '/', onClick: handleLogout },
+          { label: '마이페이지', path: '/mypage' },
+        ]
     : [
         { label: '로그인', path: '/login' },
         { label: '회원가입', path: '/signup' },

@@ -1,34 +1,55 @@
-alter sequence ranking_seq
-nocache;
+commit;
 
-SELECT ranking_seq.NEXTVAL FROM DUAL;
+update badge set ranking = 5 where badge_num = 21;
 
-
-select * from ranking;
-drop table ranking;
-DROP SEQUENCE ranking_seq;
+select * from badge;
 
 
-INSERT INTO ranking (ranking_id, ranking_position, user_name, user_id, total_badges, ranking_month, ranking_img_url, created_at, updated_at)
-VALUES (user_seq.nextval, 3, '김지훈', 'jh_ID', 65000, '2024-12', '/images/image1.jpg', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP);
-INSERT INTO ranking (ranking_id, ranking_position, user_name, user_id, total_badges, ranking_month, ranking_img_url, created_at, updated_at)
-VALUES (user_seq.nextval, 5, '박지은', 'je_ID', 30000, '2024-12', '/images/image2.jpg', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP);
-INSERT INTO ranking (ranking_id, ranking_position, user_name, user_id, total_badges, ranking_month, ranking_img_url, created_at, updated_at)
-VALUES (user_seq.nextval, 1, '김채림', 'cr_ID', 70000, '2024-12', '/images/image3.png', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP);
-INSERT INTO ranking (ranking_id, ranking_position, user_name, user_id, total_badges, ranking_month, ranking_img_url, created_at, updated_at)
-VALUES (user_seq.nextval, 4, '이혁주', 'hj_ID', 40000, '2024-12', '/images/image4.jpg', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP);
-INSERT INTO ranking (ranking_id, ranking_position, user_name, user_id, total_badges, ranking_month, ranking_img_url, created_at, updated_at)
-VALUES (user_seq.nextval, 2, '허민경', 'mk_ID', 67000, '2024-12', '/images/image5.jpg', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP);
-INSERT INTO ranking (ranking_id, ranking_position, user_name, user_id, total_badges, ranking_month, ranking_img_url, created_at, updated_at)
-VALUES (user_seq.nextval, 6, '홍길동', 'kd_ID', 20000, '2024-12', '', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP);
-INSERT INTO ranking (ranking_id, ranking_position, user_name, user_id, total_badges, ranking_month, ranking_img_url, created_at, updated_at)
-VALUES (user_seq.nextval, 7, '수지', 'sj_ID', 10000, '2024-12', '/images/image2.jpg', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP);
-INSERT INTO ranking (ranking_id, ranking_position, user_name, user_id, total_badges, ranking_month, ranking_img_url, created_at, updated_at)
-VALUES (user_seq.nextval, 8, '아이유', 'iu_ID', 5000, '2024-12', '/images/image3.png', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP);
-INSERT INTO ranking (ranking_id, ranking_position, user_name, user_id, total_badges, ranking_month, ranking_img_url, created_at, updated_at)
-VALUES (user_seq.nextval, 9, '김석진', 'sj_ID', 700, '2024-12', '/images/image4.jpg', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP);
+INSERT INTO badge (badge_num, badge_date, badge, ranking, current_month_amount, previous_month_amount, user_num)
+VALUES (badge_seq.nextval, '202501', 500, 4, 350000, 300000, (SELECT user_num FROM user_info WHERE user_id = 'crtestid'));
 
-UPDATE ranking SET ranking_img_url=' ' where user_id='kd_ID';
+INSERT INTO badge (badge_num, badge_date, badge, ranking, current_month_amount, previous_month_amount, user_num)
+VALUES (badge_seq.nextval, '202501', 1000, 1, 500000, 400000, (SELECT user_num FROM user_info WHERE user_id = 'hjtestid'));
+
+INSERT INTO badge (badge_num, badge_date, badge, ranking, current_month_amount, previous_month_amount, user_num)
+VALUES (badge_seq.nextval, '202501', 800, 2, 400000, 380000, (SELECT user_num FROM user_info WHERE user_id = 'mktestid'));
+
+INSERT INTO badge (badge_num, badge_date, badge, ranking, current_month_amount, previous_month_amount, user_num)
+VALUES (badge_seq.nextval, '202501', 400, 5, 200000, 380000, (SELECT user_num FROM user_info WHERE user_id = 'jhtestid'));
+
+INSERT INTO badge (badge_num, badge_date, badge, ranking, current_month_amount, previous_month_amount, user_num)
+VALUES (badge_seq.nextval, '202501', 650, 3, 380000, 190000, (SELECT user_num FROM user_info WHERE user_id = 'jetestid'));
+
+INSERT INTO badge (badge_num, badge_date, badge, ranking, current_month_amount, previous_month_amount, user_num)
+VALUES (badge_seq.nextval, '202501', 800, 2, 450000, 160000, (SELECT user_num FROM user_info WHERE user_id = 'hongid'));
+
+INSERT INTO badge (badge_num, badge_date, badge, ranking, current_month_amount, previous_month_amount, user_num)
+VALUES (badge_seq.nextval, '202501', 1000, 1, 600000, 120000, (SELECT user_num FROM user_info WHERE user_id = 'leeid'));
 
 
-COMMIT;
+
+
+INSERT INTO badge (badge_num, badge_date, badge, ranking, current_month_amount, previous_month_amount, user_num)
+VALUES (badge_seq.nextval, '202412', 10, 1, 480000, 450000, (SELECT user_num FROM user_info WHERE user_id = 'crtestid'));
+
+INSERT INTO badge (badge_num, badge_date, badge, ranking, current_month_amount, previous_month_amount, user_num)
+VALUES (badge_seq.nextval, '202412', 8, 2, 420000, 400000, (SELECT user_num FROM user_info WHERE user_id = 'hjtestid'));
+
+INSERT INTO badge (badge_num, badge_date, badge, ranking, current_month_amount, previous_month_amount, user_num)
+VALUES (badge_seq.nextval, '202412', 7, 3, 390000, 380000, (SELECT user_num FROM user_info WHERE user_id = 'mktestid'));
+
+INSERT INTO badge (badge_num, badge_date, badge, ranking, current_month_amount, previous_month_amount, user_num)
+VALUES (badge_seq.nextval, '202412', 5, 4, 250000, 300000, (SELECT user_num FROM user_info WHERE user_id = 'jhtestid'));
+
+INSERT INTO badge (badge_num, badge_date, badge, ranking, current_month_amount, previous_month_amount, user_num)
+VALUES (badge_seq.nextval, '202412', 4, 5, 180000, 190000, (SELECT user_num FROM user_info WHERE user_id = 'jetestid'));
+
+INSERT INTO badge (badge_num, badge_date, badge, ranking, current_month_amount, previous_month_amount, user_num)
+VALUES (badge_seq.nextval, '202412', 3, 6, 150000, 160000, (SELECT user_num FROM user_info WHERE user_id = 'hongid'));
+
+INSERT INTO badge (badge_num, badge_date, badge, ranking, current_month_amount, previous_month_amount, user_num)
+VALUES (badge_seq.nextval, '202412', 2, 7, 100000, 120000, (SELECT user_num FROM user_info WHERE user_id = 'leeid'));
+
+delete from badge where badge_num = 93;
+
+select * from badge;

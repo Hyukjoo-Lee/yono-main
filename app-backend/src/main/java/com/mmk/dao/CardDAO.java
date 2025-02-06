@@ -15,4 +15,6 @@ public interface CardDAO {
     CardEntity findByCardId(int cardId);
 
     CardEntity findByCardTitle(String cardTitle);
+
+    List<CardEntity> getAllCardsByOrganizationCode(String organizationCode);
 }

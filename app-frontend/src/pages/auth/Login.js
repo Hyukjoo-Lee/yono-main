@@ -9,6 +9,7 @@ import {
   EMPTY_PASSWORD_MESSAGE,
   EMPTY_USERID_MESSAGE,
   LOGIN_VERIFIED_MESSAGE,
+  SERVER_MESSAGE,
 } from '../../common/Message';
 import { useNavigate } from 'react-router-dom';
 import CommonDialog from '../../common/CommonDialog';
@@ -196,8 +197,10 @@ const Login = () => {
           localStorage.removeItem('savedUserId');
         }
         setIsLoginSuccessVisible(true);
-      } else {
+      } else if (result.status === 504 || result.payload.status === 401) {
         setFormMessage({ error: LOGIN_VERIFIED_MESSAGE });
+      } else {
+        setFormMessage({ error: SERVER_MESSAGE });
       }
       console.log(result);
     } catch (error) {
@@ -231,6 +234,7 @@ const Login = () => {
                 text="비밀번호"
                 width="100%"
                 type="password"
+                autoComplete="off"
                 onChange={(e) => handleInputChange(e, 'password')}
               />
               {formMessage.password && (

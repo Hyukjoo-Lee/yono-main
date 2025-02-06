@@ -1,50 +1,52 @@
 package com.mmk.entity;
 
 import java.sql.Timestamp;
+import jakarta.persistence.*;
+import jakarta.validation.constraints.*;
 
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
-
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.ManyToOne;
-import jakarta.persistence.SequenceGenerator;
-import jakarta.persistence.Table;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
 
 @Setter
 @Getter
-@ToString
+@ToString(exclude = "cardEntity")
 @Entity
 @SequenceGenerator(name = "card_benefit_seq_generator", sequenceName = "card_benefit_seq", initialValue = 1, allocationSize = 1)
 @Table(name = "card_benefit")
 public class CardBenefitEntity {
+
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "card_benefit_seq_generator")
     @Column(name = "benefit_id")
     private int benefitId;
 
-    @Column(name = "benefit_title", nullable = false)
+    @NotNull
+    @Size(max = 100)
+    @Column(name = "benefit_title", nullable = false, length = 100)
     private String benefitTitle;
 
-    @Column(name = "benefit_types", nullable = false)
-    private String businessTypes;
+    @NotNull
+    @Size(max = 50)
+    @Column(name = "benefit_value", nullable = false, length = 50)
+    private String benefitValue;
+
+    @NotNull
+    @Size(max = 50)
+    @Column(name = "benefit_type", nullable = false, length = 50)
+    private String benefitType;
 
     @CreationTimestamp
-    @Column(name = "created_at")
+    @Column(name = "created_at", updatable = false, nullable = false)
     private Timestamp createdAt;
 
     @UpdateTimestamp
-    @Column(name = "updated_at")
+    @Column(name = "updated_at", nullable = false)
     private Timestamp updatedAt;
 
     @ManyToOne
-    @JoinColumn(name = "card_title", referencedColumnName = "card_title", nullable = false)
+    @JoinColumn(name = "card_id", referencedColumnName = "card_id", nullable = false, foreignKey = @ForeignKey(name = "fk_card_benefit_card_id"))
     private CardEntity cardEntity;
 }

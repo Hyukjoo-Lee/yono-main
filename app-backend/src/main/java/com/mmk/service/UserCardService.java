@@ -7,7 +7,11 @@ import com.mmk.dto.UserCardDTO;
 public interface UserCardService {
     UserCardDTO registerCard(UserCardDTO userCardDTO, String organization, String cardTitle);
 
-    List<UserCardDTO> getUserCardsByUserId(int userId);
+    List<UserCardDTO> getAllCardsByUserNum(int userNum);
+
+    List<UserCardDTO> getAllCardsInfoByUserNum(int userNum);
 
     UserCardDTO setPrimaryCard(int userCardId, int userNum);
+
+    UserCardDTO findPrimaryCardByUserNum(int userNum);
 }

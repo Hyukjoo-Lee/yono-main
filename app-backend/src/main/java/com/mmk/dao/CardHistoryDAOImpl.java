@@ -27,4 +27,19 @@ public class CardHistoryDAOImpl implements CardHistoryDAO {
     public List<CardHistoryEntity> findRecentHistory(int userCardId, String recentDate) {
         return cardHistoryRepository.findRecentHistory(userCardId, recentDate);
     }
+
+    // 일별통계
+    @Override
+    public List<CardHistoryEntity> findByUserNumAndPrimaryCard(int userNum) {
+        // Repository의 메서드를 호출해 데이터 처리
+        return cardHistoryRepository.findByUserNumAndPrimaryCard(userNum);
+    }
+
+    @Override
+    public List<CardHistoryEntity> findByUserCardIdAndResUsedDateBetween(int userCardId, String startDate,
+            String endDate) {
+        return cardHistoryRepository.findByUserCardIdAndResUsedDateBetween(userCardId, startDate,endDate);
+
+    }
 }
+

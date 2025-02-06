@@ -24,7 +24,6 @@ git clone https://github.com/Hyukjoo-Lee/mickle-muckle.git
 
 ```env
   SERVER_PORT=8080
-
   ORACLE_DB_URL=URL
   ORACLE_DB_USERNAME=USERNAME
   ORACLE_DB_PASSWORD=PASSWORD
@@ -32,7 +31,7 @@ git clone https://github.com/Hyukjoo-Lee/mickle-muckle.git
 
 - **`SERVER_PORT`**: 프론트엔드와 통신할 서버의 포트 번호를 입력합니다.  
   (예: `8080` 또는 원하는 포트 번호)
-- **`ORACLE_DB_URL`**: 오라클 데이터베이스의 URL을 입력합니다.  
+- **`ORACLE_DB_URL`**: 오라클 데이터베이스의 URL을 입력합니다.
 - **`ORACLE_DB_USERNAME`**: 오라클 데이터베이스 사용자 이름을 입력합니다.
 - **`ORACLE_DB_PASSWORD`**: 오라클 데이터베이스 비밀번호를 입력합니다.
 
@@ -83,29 +82,20 @@ npm start
 이 예시는 CommonComponent을 만드는 중인 `hj/CommonComponent생성`이라는 브랜치에서 작업한다고 가정합니다.
 
 1. **작업 전 - 최신 코드 가져오기**
-
    먼저, 메인 브랜치의 최신 내용을 가져옵니다. 메인 브랜치로 이동한 후 최신 상태로 업데이트합니다.
-
    ```bash
    git checkout main  # 메인 브랜치로 이동
    git pull origin main  # 원격 저장소에서 최신 코드 가져오기
    ```
-
 2. **작업 브랜치로 이동해서 최신 코드 병합하기**
-
    이제 작업 브랜치로 돌아와, 메인 브랜치에서 가져온 최신 코드를 병합합니다.
-
    ```bash
    git checkout hj/CommonComponent생성  # 작업 브랜치로 이동
    git merge main  # 메인 브랜치에서 가져온 최신 코드 병합
    ```
-
 3. **작업 진행**
-
    병합된 상태에서 작업을 진행하고 완료합니다.
-
 4. **작업 후 작업 내용 원격 저장소에 commit & push**
-
    ```bash
    git commit -m "커밋메시지"
    git push

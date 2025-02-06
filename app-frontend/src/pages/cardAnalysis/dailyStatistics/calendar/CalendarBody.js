@@ -37,7 +37,7 @@ const DaysBox = styled.div`
   }
   &:first-child {
     & > div {
-      color: red;
+      color: ${(props) => props.theme.color.red};
     }
   }
   & svg {
@@ -64,6 +64,11 @@ const DayBox = styled.div`
     props.$selected ? props.theme.color.blue : 'transparent'};
 `;
 
+const MoneyText = styled.p`
+  font-size: ${(props) => props.theme.fontSize.xs};
+  margin: 4px 0 0;
+`;
+
 const CalendarBody = ({
   currentMonth,
   selectedDate,
@@ -82,9 +87,10 @@ const CalendarBody = ({
   // 백분율 범위를 계산
   const getIcon = (totalAmount, targetAmount) => {
     const percentage = (totalAmount / targetAmount) * 100;
-    if (percentage <= 26) return <ExcellentCoin />;
-    if (percentage <= 51) return <VeryGoodCoin />;
-    if (percentage <= 76) return <GoodCoin />;
+
+    if (percentage <= 25) return <ExcellentCoin />;
+    if (percentage <= 50) return <VeryGoodCoin />;
+    if (percentage <= 75) return <GoodCoin />;
     return <BadCoin />;
   };
 
@@ -97,14 +103,14 @@ const CalendarBody = ({
         (stat) => stat.resUsedDate === format(cloneDay, 'yyyyMMdd'),
       );
 
-      // 총액과 목표액을 계산
+      // 총액과 목표액을 계산 (문자열을 숫자로 변환)
       const totalAmount = dailyStats.reduce(
-        (sum, stat) => sum + stat.resUsedAmount,
+        (sum, stat) => sum + (parseFloat(stat.resUsedAmount) || 0), // resUsedAmount를 숫자로 변환
         0,
       );
 
       const targetAmount =
-        dailyStats.length > 0 ? dailyStats[0].spendingTarget : 0;
+        dailyStats.length > 0 ? parseFloat(dailyStats[0].spendingTarget) : 0; // spendingTarget을 숫자로 변환
 
       days.push(
         <DaysBox
@@ -127,6 +133,9 @@ const CalendarBody = ({
             {format(cloneDay, 'd')}
           </DayBox>
           {targetAmount > 0 ? getIcon(totalAmount, targetAmount) : null}
+          <MoneyText>
+            {totalAmount === 0 ? null : totalAmount.toLocaleString()}
+          </MoneyText>
         </DaysBox>,
       );
       day = addDays(day, 1);

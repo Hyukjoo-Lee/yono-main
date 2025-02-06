@@ -1,16 +1,21 @@
 package com.mmk.dao;
 
+import java.util.List;
+
 import org.springframework.data.jpa.repository.JpaRepository;
-import org.springframework.stereotype.Repository;
 
 import com.mmk.entity.BadgeEntity;
 
-@Repository
 public interface BadgeRepository extends JpaRepository<BadgeEntity, Integer>{
-  // // 사용자 카드 ID와 시작 날짜를 기준으로 최근 사용 내역 조회
-  //   List<CardHistoryEntity> findByUserCardEntityUserCardIdAndResUsedDateGreaterThanEqual(
-  //           int userCardId, String startDate);
+    // 배지 데이터에서 이전 달에 해당하는 데이터를 가져오는 메서드
+    List<BadgeEntity> findByBadgeDate(String previousMonth);
 
-  //   // 특정 승인번호로 카드 내역 조회
-  //   CardHistoryEntity findByResApprovalNo(String resApprovalNo);
+    // user 랭킹 가져오기기
+    BadgeEntity findByBadgeDateAndUserEntity_UserNum(String previousMonth, int userNum);
+
+    boolean existsByUserEntity_UserNumAndBadgeDate(int userNum, String badgeDate);
+
+
+
 }
+

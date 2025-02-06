@@ -4,22 +4,28 @@ import { ReactComponent as Medal1 } from '../../../assets/images/Medal1.svg';
 import { ReactComponent as Medal2 } from '../../../assets/images/Medal2.svg';
 import { ReactComponent as Medal3 } from '../../../assets/images/Medal3.svg';
 import { ReactComponent as Profile } from '../../../assets/images/Profile.svg';
-import { fetchUserRanking } from '../../../apis/rankingApi';
 
 const Root = styled.div`
   width: 100%;
-  margin-bottom: 50px;
-  display: flex;
-  justify-content: space-around;
-  align-items: flex-end;
-  & > div:nth-child(1) {
-    order: 2;
-  }
-  & > div:nth-child(2) {
-    order: 1;
-  }
-  & > div:nth-child(3) {
-    order: 3;
+`;
+
+const RootIn = styled.div`
+  & > div {
+    width: 100%;
+    & > div {
+      display: flex;
+      justify-content: space-around;
+      align-items: flex-end;
+      & > div:nth-child(1) {
+        order: 2;
+      }
+      & > div:nth-child(2) {
+        order: 1;
+      }
+      & > div:nth-child(3) {
+        order: 3;
+      }
+    }
   }
 `;
 
@@ -57,6 +63,13 @@ const NameStyle = styled.p`
   margin: 0 0 24px;
 `;
 
+const TextStyle = styled.p`
+  font-size: ${(props) => props.theme.fontSize.base};
+  color: ${(props) => props.theme.color.gray};
+  margin: 20px 0 20px;
+  text-align: center;
+`;
+
 const Box = styled.div`
   min-width: 180px;
   border-radius: 5px;
@@ -73,54 +86,81 @@ const Box = styled.div`
   }
 `;
 
-const RankingComponent = () => {
-  const [list, setList] = useState([]);
+const RankingComponent = ({ rankingList, maskName }) => {
+  const [top3, setTop3] = useState([]);
 
   useEffect(() => {
-    const getRanking = async () => {
-      try {
-        const data = await fetchUserRanking();
-        // badge 기준 내림차순 정렬하고 상위 3개 추출
-        const sortedList = data
-          .sort((a, b) => b.totalBadges - a.totalBadges) // badge 기준 내림차순 정렬
-          .slice(0, 3); // 상위 3개만 추출
+    if (rankingList.length > 0) {
+      // 최종 1~3등을 정리할 배열
+      const top3 = [];
+      let lastBadge = null;
+      let lastAmount = null;
 
-        setList(sortedList);
-      } catch (error) {
-        console.error('Error fetching rankings: ', error);
+      for (let i = 0; i < rankingList.length; i++) {
+        const user = rankingList[i];
+
+        // 같은 순위가 아니라면 추가
+        if (
+          top3.length < 3 &&
+          !(user.badge === lastBadge && user.currentMonthAmount < lastAmount)
+        ) {
+          top3.push(user);
+          lastBadge = user.badge;
+          lastAmount = user.currentMonthAmount;
+        }
+
+        // 3명 이상 추가되면 중단
+        if (top3.length === 3) break;
       }
-    };
 
-    getRanking();
-  }, []);
+      setTop3(top3);
+    }
+  }, [rankingList]);
 
   return (
     <Root>
-      {list.length === 0 ? (
-        <></>
-      ) : (
-        list.map((item, index) => (
-          <BoxStyle key={index}>
-            <CircleBox $rank={index}>
-              {item.rankingImgUrl ? (
-                <img
-                  src={`http://localhost:8065${item.rankingImgUrl}`}
-                  alt={item.userName}
-                />
-              ) : (
-                <Profile />
-              )}
-            </CircleBox>
-            <NameStyle>
-              {item.userName}({item.userId})
-            </NameStyle>
-            <Box>
-              {index === 0 ? <Medal1 /> : index === 1 ? <Medal2 /> : <Medal3 />}
-              <p>{item.totalBadges.toLocaleString()}</p>
-            </Box>
-          </BoxStyle>
-        ))
-      )}
+      <RootIn>
+        {top3.length === 0 ? (
+          <></>
+        ) : (
+          <div>
+            <div>
+              {top3.map((item, index) => (
+                <BoxStyle key={index}>
+                  <CircleBox $rank={index}>
+                    {item.profile !== 'temp_profile' ? (
+                      <img
+                        src={`http://localhost:8065${item.profile}`}
+                        alt={maskName(item.name)}
+                      />
+                    ) : (
+                      <Profile />
+                    )}
+                  </CircleBox>
+                  <NameStyle>
+                    {maskName(item.name)}({item.userId})
+                  </NameStyle>
+                  <Box>
+                    {index === 0 ? (
+                      <Medal1 />
+                    ) : index === 1 ? (
+                      <Medal2 />
+                    ) : (
+                      <Medal3 />
+                    )}
+                    <p>{item.badge.toLocaleString()}개</p>
+                  </Box>
+                </BoxStyle>
+              ))}
+            </div>
+
+            <TextStyle>
+              공동 순위인 경우, 소수점 자리까지 기준을 적용하여 순위를
+              산정합니다.
+            </TextStyle>
+          </div>
+        )}
+      </RootIn>
     </Root>
   );
 };

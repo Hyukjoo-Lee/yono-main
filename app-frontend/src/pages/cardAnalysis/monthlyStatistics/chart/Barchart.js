@@ -3,16 +3,16 @@ import styled from 'styled-components';
 import { ResponsiveBar } from '@nivo/bar';
 
 const StyledChart = styled.div`
-  width: 582px;
+  width: 45%;
   height: 600px;
   margin: 0 auto;
 `;
 
 const Barchart = ({ data }) => {
-  const handle = {
-    barClick: (data) => {},
-    legendClick: (data) => {},
-  };
+  // const handle = {
+  //   barClick: (data) => {},
+  //   legendClick: (data) => {},
+  // };
 
   const transformedData = data.map((item) => {
     const categoryTotals = item.categoryTotals;
@@ -22,15 +22,18 @@ const Barchart = ({ data }) => {
     };
   });
 
-  const keys = data[0] ? Object.keys(data[0].categoryTotals) : [];
+  const allKeys = [
+    ...new Set(data.flatMap((item) => Object.keys(item.categoryTotals))),
+  ];
 
   return (
     <StyledChart>
       <ResponsiveBar
         data={transformedData}
-        keys={keys}
+        keys={allKeys}
         indexBy="month"
-        margin={{ top: 40, right: 120, bottom: 80, left: 80 }}
+        margin={{ top: 40, right: 40, bottom: 80, left: 80 }}
+        valueFormat=" >-,"
         padding={0.3}
         groupMode="grouped"
         // colors={{ scheme: 'blues' }}
@@ -88,12 +91,14 @@ const Barchart = ({ data }) => {
           legend: '',
           legendPosition: 'middle',
           legendOffset: -60,
+          ticks: true,
+          format: (value) => new Intl.NumberFormat().format(value),
         }}
         labelSkipWidth={36}
         labelSkipHeight={12}
         // 토탈 값 표시
         // enableTotals = {true}
-        onClick={handle.barClick}
+        // onClick={handle.barClick}
         // legends={[
         //   {
         //     dataFrom: 'keys',

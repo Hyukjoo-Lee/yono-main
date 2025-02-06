@@ -1,6 +1,16 @@
 package com.mmk.dao;
 
+import java.util.List;
+
+import com.mmk.entity.BadgeEntity;
+
 public interface BadgeDAO {
-  // List<CardHistoryEntity> findRecentHistory(int userCardId, String startDate);
-  // void save(CardHistoryEntity cardHistoryEntity);
-}
+    void save(BadgeEntity badgeEntity);
+
+    List<BadgeEntity> getBadgesForPreviousMonth(String previousMonth);
+    
+    BadgeEntity  getUserRanking(String previousMonth, int userNum);
+
+    boolean existsByUserNumAndBadgeDate(int userNum, String badgeDate);
+
+} 

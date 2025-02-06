@@ -207,10 +207,10 @@ export function CommunityTable() {
               </TableRow>
             </TableHead>
             <TableBody>
-              {filteredRows
-                .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
-                .map((row, index) => {
-                  return (
+              {filteredRows.length > 0 ? (
+                filteredRows
+                  .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
+                  .map((row, index) => (
                     <TableRow
                       hover
                       role="checkbox"
@@ -218,21 +218,24 @@ export function CommunityTable() {
                       key={index}
                       onClick={() => handleRowClick(row)} // 행 클릭 시 이벤트 발생
                     >
-                      {columns.map((column) => {
-                        const value = row[column.id];
-                        return (
-                          <TableCell
-                            key={column.id}
-                            align="center"
-                            sx={{ borderBottom: '0.5px solid #757575' }}
-                          >
-                            {value}
-                          </TableCell>
-                        );
-                      })}
+                      {columns.map((column) => (
+                        <TableCell
+                          key={column.id}
+                          align="center"
+                          sx={{ borderBottom: '0.5px solid #757575' }}
+                        >
+                          {row[column.id]}
+                        </TableCell>
+                      ))}
                     </TableRow>
-                  );
-                })}
+                  ))
+              ) : (
+                <TableRow>
+                  <TableCell colSpan={columns.length} align="center">
+                    데이터가 없습니다.
+                  </TableCell>
+                </TableRow>
+              )}
             </TableBody>
           </Table>
         </TableContainerStyle>

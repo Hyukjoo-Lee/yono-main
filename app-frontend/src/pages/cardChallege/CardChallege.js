@@ -1,9 +1,13 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import styled from 'styled-components';
 import CommonPageInfo from '../../common/CommonPageInfo';
 import CommonTabs from '../../common/CommonTabs';
 import MonthComparision from './monthComparison/MonthComparison';
 import Ranking from './ranking/Ranking';
+import { useSelector } from 'react-redux';
+import { findUserById } from '../../apis/userApi';
+import CommonDialog from '../../common/CommonDialog';
+import { useNavigate } from 'react-router-dom';
 
 const Root = styled.div`
   width: 100%;
@@ -20,8 +24,26 @@ const RootIn = styled.div`
   box-sizing: border-box;
 `;
 export function CardChallege() {
+  const isLoggedIn = useSelector((state) => state.user.user?.userNum); // 현재 로그인한 유저의 userNum
+  const [isShowLoginDialog, setIsShowLoginDialog] = useState(false);
   const [selectedTab, setSelectedTab] = useState(0);
   const items = [{ text: '전월비교' }, { text: '뱃지랭킹' }];
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    const fetchUser = async () => {
+      if (!isLoggedIn) {
+        setIsShowLoginDialog(true);
+      } else {
+        const user = await findUserById(isLoggedIn);
+        if (user != null && typeof user != 'string') {
+          console.log("")
+        }
+      }
+    };
+
+    fetchUser();
+  }, [isLoggedIn]);
 
   const panels = [<MonthComparision />, <Ranking />];
   return (
@@ -53,6 +75,19 @@ export function CardChallege() {
         />
         {panels[selectedTab]}
       </RootIn>
+
+      {isShowLoginDialog && (
+        <CommonDialog
+          open={isShowLoginDialog}
+          onClick={() => navigate('/login')}
+          onClose={() => navigate('/login')}
+          submitText="로그인"
+        >
+          <p style={{ textAlign: 'center' }}>
+            로그인 정보가 없습니다. 로그인을 진행해주세요!
+          </p>
+        </CommonDialog>
+      )}
     </Root>
   );
 }

@@ -1,30 +1,41 @@
 package com.mmk.dao;
 
+import java.util.List;
+
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
+import com.mmk.entity.BadgeEntity;
+
 @Repository
-public class BadgeDAOImpl implements BadgeDAO{
+public class BadgeDAOImpl implements BadgeDAO {
+    
+    @Autowired
+    private BadgeRepository badgeRepository;
 
-//   @PersistenceContext
-//   private EntityManager entityManager;
+    @Override
+    public void save(BadgeEntity badgeEntity) {
+        badgeRepository.save(badgeEntity);
+    }
+    
+    // 랭킹 정보
+    @Override
+    public List<BadgeEntity> getBadgesForPreviousMonth(String previousMonth) {
+        // BadgeRepository를 통해 이전 달 기준 배지 데이터 조회
+        return badgeRepository.findByBadgeDate(previousMonth);
+    }
 
-//   @Override
-//     public List<CardHistoryEntity> findRecentHistory(int userCardId, String startDate) {
-//         String query = "SELECT c FROM CardHistoryEntity c " +
-//                       "WHERE c.userCardEntity.userCardId = :userCardId " +
-//                       "AND c.resUsedDate >= :startDate " +
-//                       "ORDER BY c.resUsedDate ASC";
+     // 로그인한 유저 랭킹정보
+    @Override
+    public BadgeEntity getUserRanking(String previousMonth, int userNum) {
+        return badgeRepository.findByBadgeDateAndUserEntity_UserNum(previousMonth, userNum);
+    }
 
-//         TypedQuery<CardHistoryEntity> typedQuery = entityManager.createQuery(query, CardHistoryEntity.class);
-//         typedQuery.setParameter("userCardId", userCardId);
-//         typedQuery.setParameter("startDate", startDate);
+    // BadgeDAOImpl에 구현
+    @Override
+    public boolean existsByUserNumAndBadgeDate(int userNum, String badgeDate) {
+        return badgeRepository.existsByUserEntity_UserNumAndBadgeDate(userNum, badgeDate);
+    }
 
-//         return typedQuery.getResultList(); // 쿼리 결과 반환
-//     }
 
-//     @Override
-//     public void save(CardHistoryEntity cardHistoryEntity) {
-//         entityManager.persist(cardHistoryEntity); // 엔티티 저장
-//     }
-  
 }

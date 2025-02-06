@@ -2,21 +2,19 @@ package com.mmk.dao;
 
 import java.util.List;
 
-
-import com.mmk.entity.PostsEntity;
+import com.mmk.entity.PostEntity;
 
 public interface PostsDAO {
 
-    void save(PostsEntity postsEntity);
+    void save(PostEntity postsEntity);
 
-    List<PostsEntity> getAllPosts();
+    List<PostEntity> getAllPosts();
 
-    PostsEntity findById(int postId);
+    PostEntity findById(int postId);
 
     void deleteById(String postId);
 
-    void updateCnt(PostsEntity postEntity);
+    void updateCnt(PostEntity postEntity);
 
-    void updatePost(PostsEntity pe);
+    void updatePost(PostEntity pe);
 }
- 

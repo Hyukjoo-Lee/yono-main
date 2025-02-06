@@ -7,9 +7,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.mmk.dao.PostsDAO;
+import com.mmk.dao.ReplyDAO;
 import com.mmk.dao.UserDAO;
 import com.mmk.dto.PostsDTO;
-import com.mmk.entity.PostsEntity;
+import com.mmk.entity.PostEntity;
 import com.mmk.entity.UserEntity;
 
 import jakarta.transaction.Transactional;
@@ -23,25 +24,27 @@ public class PostsServiceImpl implements PostsService {
     @Autowired
     private UserDAO userDao;
 
-@Override
-public void save(PostsDTO postsData) {
-    // 사용자 조회
-    System.out.println("사용자 ID: " + postsData.getUserId());
-    UserEntity userEntity = userDao.getUserByUserId(postsData.getUserId());  // userId로 UserEntity 조회
-    if (userEntity == null) {
-        throw new RuntimeException("유효하지 않은 사용자 ID: " + postsData.getUserId());
+    @Autowired
+    private ReplyDAO replyDAO;
+
+    @Override
+    public void save(PostsDTO postsData) {
+        // 사용자 조회
+        System.out.println("사용자 ID: " + postsData.getUserId());
+        UserEntity userEntity = userDao.getUserByUserId(postsData.getUserId()); // userId로 UserEntity 조회
+        if (userEntity == null) {
+            throw new RuntimeException("유효하지 않은 사용자 ID: " + postsData.getUserId());
+        }
+
+        // DTO → Entity 변환
+        PostEntity postsEntity = convertToEntity(postsData);
+
+        // UserEntity를 PostsEntity에 설정
+        postsEntity.setUserEntity(userEntity); // UserEntity를 PostsEntity에 설정
+
+        // 게시물 저장
+        postsDao.save(postsEntity);
     }
-
-    // DTO → Entity 변환
-    PostsEntity postsEntity = convertToEntity(postsData);
-
-    // UserEntity를 PostsEntity에 설정
-    postsEntity.setUserEntity(userEntity);  // UserEntity를 PostsEntity에 설정
-
-    // 게시물 저장
-    postsDao.save(postsEntity);  
-}
-
 
     @Override
     public List<PostsDTO> getAllPosts() {
@@ -56,7 +59,7 @@ public void save(PostsDTO postsData) {
     @Override
     public PostsDTO findByIdAndViewCnt(int id) {
         // 게시글 조회
-        PostsEntity postEntity = postsDao.findById(id);
+        PostEntity postEntity = postsDao.findById(id);
         if (postEntity == null) {
             throw new RuntimeException("게시글을 찾을 수 없습니다. 게시글 ID: " + id);
         }
@@ -73,6 +76,8 @@ public void save(PostsDTO postsData) {
     @Override
     public void deletePostById(String postId) {
         try {
+            replyDAO.deleteByPno(Integer.parseInt(postId)); // 댓글 삭제
+
             postsDao.deleteById(postId);
         } catch (NumberFormatException e) {
             throw new RuntimeException("게시글 ID는 숫자여야 합니다. 입력된 값: " + postId, e);
@@ -90,19 +95,15 @@ public void save(PostsDTO postsData) {
         }
 
         // DTO → Entity 변환 및 업데이트
-        PostsEntity postEntity = convertToEntity(postsDTO);
+        PostEntity postEntity = convertToEntity(postsDTO);
         postEntity.setUserEntity(userEntity);
         postsDao.updatePost(postEntity);
     }
 
     // Helper method: DTO → Entity 변환
-    private PostsEntity convertToEntity(PostsDTO dto) {
-        PostsEntity entity = new PostsEntity();
-        entity.setNo(dto.getNo());
-
-        UserEntity userEntity = new UserEntity();
-        userEntity.setUserId(dto.getUserId());  // userId로 UserEntity 설정
-        entity.setUserEntity(userEntity);  // UserEntity 설정
+    private PostEntity convertToEntity(PostsDTO dto) {
+        PostEntity entity = new PostEntity();
+        entity.setPno(dto.getNo());
         entity.setTitle(dto.getTitle());
         entity.setCategory(dto.getCategory());
         entity.setContent(dto.getContent());
@@ -115,18 +116,42 @@ public void save(PostsDTO postsData) {
     }
 
     // Helper method: Entity → DTO 변환
-    private PostsDTO convertToDto(PostsEntity entity) {
+    private PostsDTO convertToDto(PostEntity entity) {
         PostsDTO dto = new PostsDTO();
-        dto.setNo(entity.getNo());
+        dto.setNo(entity.getPno());
         dto.setTitle(entity.getTitle());
         dto.setCategory(entity.getCategory());
-        dto.setUserId(entity.getUserEntity().getUserId());
         dto.setContent(entity.getContent());
         dto.setRegdate(entity.getRegdate());
         dto.setViewcnt(entity.getViewcnt());
         dto.setImgurl(entity.getImgurl());
         dto.setCreatedAt(entity.getCreatedAt());
         dto.setUpdatedAt(entity.getUpdatedAt());
+
+        if (entity.getUserEntity() != null) {
+            dto.setUserId(entity.getUserEntity().getUserId());
+        }
         return dto;
     }
+
+    @Override
+    public PostsDTO findById(String postId) {
+        try {
+            // 게시글 ID로 게시글 엔티티 조회
+            PostEntity postEntity = postsDao.findById(Integer.parseInt(postId));
+
+            if (postEntity == null) {
+                throw new RuntimeException("게시글을 찾을 수 없습니다. 게시글 ID: " + postId);
+            }
+
+            // Entity → DTO 변환 후 반환
+            return convertToDto(postEntity);
+
+        } catch (NumberFormatException e) {
+            throw new RuntimeException("입력된 값: " + postId, e);
+        } catch (Exception e) {
+            throw new RuntimeException("게시글 조회 중 오류 발생. 게시글 ID: " + postId, e);
+        }
+    }
+
 }

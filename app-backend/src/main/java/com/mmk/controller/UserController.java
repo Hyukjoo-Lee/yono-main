@@ -10,6 +10,7 @@ import java.util.Random;
 import java.util.UUID;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -35,6 +36,9 @@ import com.mmk.service.UserService;
 @RestController
 @RequestMapping("/user")
 public class UserController {
+
+    @Value("${IMAGE_PATH}")
+    private String uploadDir;
 
     @Autowired
     private UserService userService;
@@ -79,7 +83,8 @@ public class UserController {
 
     // 이름, 이메일로 유저 검색
     @GetMapping("/findId")
-    public ResponseEntity<ApiResponse<UserDTO>> getFindId(@RequestParam("email") String email, @RequestParam("name") String name) {
+    public ResponseEntity<ApiResponse<UserDTO>> getFindId(@RequestParam("email") String email,
+            @RequestParam("name") String name) {
         boolean existsEmail = userService.existsByEmail(email);
         boolean existsName = userService.existByName(name);
 
@@ -100,7 +105,8 @@ public class UserController {
 
     // 이름, 메일, 아이디로 유저 검색
     @GetMapping("/findPwd")
-    public ResponseEntity<ApiResponse<UserDTO>> getFindPwd(@RequestParam("name") String name, @RequestParam("email") String email, @RequestParam("id") String id) {
+    public ResponseEntity<ApiResponse<UserDTO>> getFindPwd(@RequestParam("name") String name,
+            @RequestParam("email") String email, @RequestParam("id") String id) {
         boolean existsName = userService.existByName(name);
         boolean existsEmail = userService.existsByEmail(email);
         boolean existsId = userService.existsByUserId(id);
@@ -116,15 +122,19 @@ public class UserController {
     }
 
     // id(기본키) 기반으로 유저 정보를 검색
-    @GetMapping("/{id}")
-    public ResponseEntity<ApiResponse<UserDTO>> getUserDetails(@PathVariable("id") int id) {
-        UserDTO userDTO = userService.getUserById(id);
-        if (userDTO != null) {
-            ApiResponse<UserDTO> response = new ApiResponse<>(200, "유저 검색 성공", userDTO);
-            return ResponseEntity.ok(response);
-        } else {
-            ApiResponse<UserDTO> response = new ApiResponse<>(404, "유저 정보 찾을 수 없음", null);
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(response);
+    @GetMapping("/{userNum}")
+    public ResponseEntity<ApiResponse<UserDTO>> getUserDetails(@PathVariable("userNum") int userNum) {
+        try {
+            UserDTO userDTO = userService.findByUserNum(userNum);
+            if (userDTO != null) {
+                return ResponseEntity.ok(new ApiResponse<>(200, "유저 정보 조회 성공", userDTO));
+            } else {
+                return ResponseEntity.noContent().build();
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                    .body(new ApiResponse<>(500, "유저정보 조회 중 오류 발생", null));
         }
     }
 
@@ -132,9 +142,17 @@ public class UserController {
     // 회원가입
     @PostMapping("/signup")
     public ResponseEntity<ApiResponse<UserDTO>> createUser(@RequestBody UserDTO userDTO) {
-        UserDTO createdUser = userService.createUser(userDTO);
-        ApiResponse<UserDTO> response = new ApiResponse<>(201, "유저 생성 성공", createdUser);
-        return ResponseEntity.status(HttpStatus.CREATED).body(response);
+        try {
+            UserDTO createdUser = userService.createUser(userDTO);
+            return ResponseEntity.status(HttpStatus.CREATED)
+                    .body(new ApiResponse<>(201, "회원가입 성공", createdUser));
+        } catch (IllegalArgumentException e) {
+            return ResponseEntity.status(HttpStatus.CONFLICT)
+                    .body(new ApiResponse<>(409, e.getMessage(), null));
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+                    .body(new ApiResponse<>(400, "잘못된 요청", null));
+        }
     }
 
     // 로그인
@@ -179,19 +197,18 @@ public class UserController {
 
     // DELETE API
     // 유저 정보 삭제
-    @DeleteMapping("/{id}")
-    public ResponseEntity<ApiResponse<Object>> deleteUser(@PathVariable("id") int id) {
-        userService.deleteUser(id);
-        ApiResponse<Object> response = new ApiResponse<>(200, "유저 삭제 성공", null);
-        return ResponseEntity.ok(response);
+    @DeleteMapping("/deleteUser")
+    public ResponseEntity<ApiResponse<Object>> deleteUser(@RequestParam("userNum") int userNum) {
+        userService.deleteUser(userNum);
+        return null;
     }
 
     // PUT API
     // 임시비밀번호 발급 및 변경
     @PutMapping("/updateTempPwd")
     public String getUpdateTempPwd(@RequestParam("email") String email) {
-        String tempPwd=UUID.randomUUID().toString().replace("-", "");
-		tempPwd = tempPwd.substring(0,10);
+        String tempPwd = UUID.randomUUID().toString().replace("-", "");
+        tempPwd = tempPwd.substring(0, 10);
 
         UserDTO userDTO = userService.getUserByEmail(email);
         userDTO.setPassword(tempPwd);
@@ -202,12 +219,13 @@ public class UserController {
 
     // 비밀번호 변경
     @PutMapping("/updatePwd")
-    public ResponseEntity<ApiResponse<Object>> updatePwd(@RequestParam("password") String password, @RequestParam("userId") String userId) {
+    public ResponseEntity<ApiResponse<Object>> updatePwd(@RequestParam("password") String password,
+            @RequestParam("userId") String userId) {
         try {
             UserDTO userDTO = userService.getUserByUserId(userId);
             userDTO.setPassword(password);
             userService.updateUser(userDTO);
-    
+
             ApiResponse<Object> response = new ApiResponse<>(200, "비밀번호 변경 성공", null);
             return ResponseEntity.ok(response);
         } catch (Exception e) {
@@ -216,23 +234,22 @@ public class UserController {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(response);
         }
     };
-    
+
     // 유저 정보 업데이트
     @PutMapping("/{userNum}")
     public ResponseEntity<ApiResponse<UserDTO>> updateUser(
             @RequestParam("userInfo") String userInfoJson,
             @RequestParam(value = "profileImage", required = false) MultipartFile profileImage,
             @RequestParam(value = "profileText", required = false) String profileText) {
-
+        System.out.println("profileImage: " + profileImage);
         try {
             UserDTO uv = new ObjectMapper().readValue(userInfoJson, UserDTO.class);
-            String uploadFolder = System.getProperty("user.dir") + "/uploads/images";
-            System.out.println("uploadFolder :" + uploadFolder);
+            String uploadFolder = uploadDir + "/uploads/images";
 
             if (profileImage != null && !profileImage.isEmpty()) {
                 if (uv.getProfile() != null && !uv.getProfile().isEmpty()) {
-                    File existingFile = new File(System.getProperty("user.dir") + uv.getProfile());
-                    
+                    File existingFile = new File(uploadDir + uv.getProfile());
+
                     System.out.println("existingFile: " + existingFile);
                     if (existingFile.exists()) {
                         existingFile.delete();
@@ -263,11 +280,11 @@ public class UserController {
                 int index = fileName.lastIndexOf(".");
                 String fileExtension = fileName.substring(index + 1);
                 String newFileName = "profile_" + year + month + date + random + "." + fileExtension;
-                // String fileDBName = "/images/" + year + "-" + month + "-" + date + "/" + newFileName;
+                // String fileDBName = "/images/" + year + "-" + month + "-" + date + "/" +
+                // newFileName;
                 String fileDBName = "/uploads/images/" + year + "-" + month + "-" + date + "/" + newFileName;
 
                 File saveFile = new File(homedir + "/" + newFileName);
-                System.out.println("파일 저장 경로: " + saveFile.getAbsolutePath());
 
                 try {
                     profileImage.transferTo(saveFile);
@@ -277,6 +294,10 @@ public class UserController {
 
                 uv.setProfile(fileDBName);
 
+            }
+
+            if (profileText != null) {
+                uv.setProfile(profileText);
             }
 
             userService.updateUser(uv);
