@@ -225,12 +225,7 @@ public class CardHistoryServiceImpl implements CardHistoryService {
         
         return historyDTOList;
 
-        // 금액 합산 (금액을 숫자로 변환 후 합산)
-        // int totalAmount = historyList.stream()
-        //         .mapToInt(history -> Integer.parseInt(history.getResUsedAmount()))
-        //         .sum();
-
-        // return totalAmount;
+    
     }
 
 }
