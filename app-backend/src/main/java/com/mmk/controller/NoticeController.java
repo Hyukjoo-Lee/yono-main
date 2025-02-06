@@ -5,7 +5,6 @@ import java.util.Calendar;
 import java.util.List;
 import java.util.Random;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -21,7 +20,9 @@ import org.springframework.web.multipart.MultipartFile;
 
 import com.mmk.common.ApiResponse;
 import com.mmk.dto.NoticeDTO;
+import com.mmk.entity.UserEntity;
 import com.mmk.service.NoticeService;
+import com.mmk.service.UserService;
 
 import lombok.extern.slf4j.Slf4j;
 
@@ -34,8 +35,17 @@ public class NoticeController {
   @Value("${IMAGE_PATH}")
     private String uploadDir;
 
-  @Autowired
-  private NoticeService noticeService;
+  // @Autowired
+  // private NoticeService noticeService;
+
+  private final UserService userService;
+  private final NoticeService noticeService;
+
+  public NoticeController(NoticeService noticeService, UserService userService){
+    this.noticeService = noticeService;
+    this.userService = userService;
+  }
+
 
   // 글 쓰기
   @PostMapping("/write")
@@ -45,6 +55,15 @@ public class NoticeController {
 
     try {
       System.out.println("아이디 : " + noticeDTO);
+
+      String userId = noticeDTO.getUserId();
+
+      UserEntity userEntity = userService.findByUserId(userId);
+
+      if(userEntity == null || !"ADMIN".equals(userEntity.getUserRole())){
+        return ResponseEntity.status(HttpStatus.FORBIDDEN)
+          .body(new ApiResponse<>(403, "글쓰기 권한이 없습니다.", null));
+      }
 
       if (file != null && !file.isEmpty()) {
         ApiResponse<String> fileResponse = saveFile(file);
