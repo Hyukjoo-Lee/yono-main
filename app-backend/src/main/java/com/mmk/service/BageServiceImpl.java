@@ -60,7 +60,6 @@ public class BageServiceImpl implements BadgeService {
         // BadgeDAO를 통해 이전 달 배지 데이터 조회
         List<BadgeEntity> badgeEntities = badgeDAO.getBadgesForPreviousMonth(previousMonth);
 
-        // BadgeEntity -> RankingDTO 변환 후 정렬 및 상위 100개 제한
         List<RankingDTO> list = badgeEntities.stream()
                 .map(this::convertToDTO)
                 .sorted((a, b) -> {
@@ -75,7 +74,6 @@ public class BageServiceImpl implements BadgeService {
         return list;
     }
 
-    // 이전 달을 계산하는 메서드 (예: 2025년 1월 -> 2024년 12월)
     private String getPreviousMonth() {
         Calendar calendar = Calendar.getInstance();
         calendar.add(Calendar.MONTH, -1); // 한 달을 빼기
@@ -144,6 +142,7 @@ public class BageServiceImpl implements BadgeService {
 
             List<CardHistoryDTO> previousMonthList = cardHistoryService.getMonthlyList(userNum, previousMonth);
             int previousMonthTotalAmount = getTotalAmount(previousMonthList);
+            System.out.println("금액: "+previousMonthTotalAmount );
 
             double savingsRate = (previousMonthTotalAmount != 0)
                     ? ((double) (previousMonthTotalAmount - currentMonthTotalAmount) / previousMonthTotalAmount) * 100
@@ -154,20 +153,6 @@ public class BageServiceImpl implements BadgeService {
 
             String badgeDate = yearMonth;
 
-            //         if (!existsBadgeForUserAndDate(userNum, badgeDate)) {
-            //     // 데이터가 없으면 새로 저장
-            //     save(userNum, badgeCount, badgeDate, currentMonthAmount, previousMonthAmount, ranking);
-            // } else {
-            //     // 데이터가 있으면 등수 업데이트
-            //     BadgeEntity existingBadge = badgeDAO.getUserRanking(badgeDate, userNum);
-            //     if (existingBadge != null) {
-            //         existingBadge.setRanking(ranking);
-            //         existingBadge.setBadge(badgeCount); // 절약률이 바뀔 수도 있으니 뱃지도 업데이트
-            //         existingBadge.setCurrentMonthAmount(currentMonthAmount);
-            //         existingBadge.setPreviousMonthAmount(previousMonthAmount);
-            //         badgeDAO.save(existingBadge);
-            //     }
-            // }
             BadgeEntity badgeEntity = new BadgeEntity();
             badgeEntity.setBadge(badgeCount);
             badgeEntity.setBadgeDate(badgeDate);
@@ -182,28 +167,7 @@ public class BageServiceImpl implements BadgeService {
             }
 
             save(badgeEntity);
-            // // 배지 존재 여부 확인
-            // BadgeEntity badgeEntity = badgeDAO.getUserRanking(badgeDate, userNum);
 
-            // // 데이터가 없으면 새로 저장하고, 있으면 업데이트
-            // if (badgeEntity == null) {
-            //     // 배지 데이터를 새로 저장
-            //     save(userNum, badgeCount, badgeDate, currentMonthAmount, previousMonthAmount, ranking);
-            // } else {
-            //     // 기존 배지 데이터를 업데이트
-            //     badgeEntity.setRanking(ranking);
-            //     badgeEntity.setBadge(badgeCount);
-            //     badgeEntity.setCurrentMonthAmount(currentMonthAmount);
-            //     badgeEntity.setPreviousMonthAmount(previousMonthAmount);
-            //     badgeDAO.save(badgeEntity);
-            // }
-            //     // DTO 생성
-            //     BadgeDTO dto = new BadgeDTO();
-            //     dto.setSavingRate(savingsRate);
-            //     dto.setBadge(badgeCount);
-            //     dto.setCurrentMonthAmount(currentMonthAmount);
-            //     dto.setPreviousMonthAmount(previousMonthAmount);
-            //     dto.setRanking(ranking);
             return null;
         } catch (Exception e) {
             throw new RuntimeException("월별 금액 조회 실패: " + e.getMessage());
@@ -213,6 +177,10 @@ public class BageServiceImpl implements BadgeService {
     @Override
     public BadgeDTO findByUserNum(int userNum) {
         BadgeEntity badgeEntity = badgeDAO.findByUserNum(userNum);
+
+        if (badgeEntity == null) {
+            return null;
+        }
         int rank = badgeDAO.getRankingByUserNum(userNum);
         BadgeDTO badgeDTO = toDTO(badgeEntity);
         badgeDTO.setRanking(rank);
@@ -230,6 +198,10 @@ public class BageServiceImpl implements BadgeService {
     }
 
     private BadgeDTO toDTO(BadgeEntity entity) {
+        if (entity == null) {
+            return new BadgeDTO();
+        }
+
         BadgeDTO dto = new BadgeDTO();
         dto.setBadge(entity.getBadge());
         dto.setBadgeDate(entity.getBadgeDate());
@@ -238,6 +210,12 @@ public class BageServiceImpl implements BadgeService {
         dto.setPreviousMonthAmount(entity.getPreviousMonthAmount());
         dto.setRanking(entity.getRanking());
         dto.setUserNum(entity.getUserEntity().getUserNum());
+
+        if (entity.getUserEntity() != null) {
+            dto.setUserNum((entity.getUserEntity().getUserNum()));
+        } else {
+            dto.setUserNum(0);
+        }
 
         return dto;
     }
