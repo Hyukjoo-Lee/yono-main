@@ -40,4 +40,4 @@ drop table user_info;
 delete from user_info where name = '김지훈';
 
 update user_info set name = '홍길동구리' where user_num = 37;
-update user_info set state = 1, USER_ROLE = 0 where user_num = 21;
+update user_info set state = 1, USER_ROLE = 0 where user_num = 2;

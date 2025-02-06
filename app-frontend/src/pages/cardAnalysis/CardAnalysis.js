@@ -56,8 +56,8 @@ const CardAnalysis = () => {
       }
       setIsShowPanels(true);
 
-      const history = await updateHistory(userNum);
-      setIsHistory(history.data);
+      // const history = await updateHistory(userNum);
+      // setIsHistory(history.data);
     };
 
     fetchHistory();
@@ -65,8 +65,8 @@ const CardAnalysis = () => {
 
   const panels = [
     <DailyStatistics isHistory={isHistory} />,
-    <CategoryStatics />,
-    <MonthlyStatistics />,
+    <CategoryStatics isHistory={isHistory} />,
+    <MonthlyStatistics isHistory={isHistory} />,
   ];
   return (
     <CommonRoot>
