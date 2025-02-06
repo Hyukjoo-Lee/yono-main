@@ -1,24 +1,35 @@
 package com.mmk.common;
 
 public enum BenefitType {
-    OIL, // 주유: 주유소 리터당 할인, LPG 할인
-    SHOPPING, // 쇼핑: 대형마트, 온라인 쇼핑 할인
-    FOOD, // 음식점: (한식, 중식, 패스트푸드)
-    CAFE, // 카페: 커피, 디저트 할인
-    CONVENIENCE, // 편의점: 편의점 할인
-    FINANCE, // 금융: 외화 환전 수수료 할인, 캐시백
-    EDUCATION, // 교육: 학원비 할인, 도서 구매 할인
-    TELECOMMUNICATION, // 통신: 이동통신 요금 할인, 해외 로밍 할인
-    ENTERTAINMENT, // 여가: 영화, 놀이공원, 숙박 할인
-    FLIGHT, // 항공: 항공 마일리지 적립, 면세점 할인
-    ALLSTORES, // 전 가맹점: 모든 가맹점 포인트 적립, 캐시백
-    VEHICLE, // 차량: 렌터카 할인, 하이패스 통행료 할인
-    INSURANCE, // 보험: 자동차 보험료 할인, 건강보험 할인
-    HEALTH, // 의료: 건강검진 할인, 약국 할인
-    LIFE, // 생활: 전기세, 수도세 할인
-    TRANSPORTATION, // 교통: 버스, 택시
-    PET, // 애완동물
-    ETC; // 기타
+    OIL("주유"), // 주유: 주유소 리터당 할인, LPG 할인
+    SHOPPING("쇼핑"), // 쇼핑: 대형마트, 온라인 쇼핑 할인
+    FOOD("음식점"), // 음식점: (한식, 중식, 패스트푸드)
+    CAFE("카페"), // 카페: 커피, 디저트 할인
+    CONVENIENCE("편의점"), // 편의점: 편의점 할인
+    FINANCE("금융"), // 금융: 외화 환전 수수료 할인, 캐시백
+    EDUCATION("교육"), // 교육: 학원비 할인, 도서 구매 할인
+    TELECOMMUNICATION("통신"), // 통신: 이동통신 요금 할인, 해외 로밍 할인
+    ENTERTAINMENT("여가"), // 여가: 영화, 놀이공원, 숙박 할인
+    FLIGHT("항공"), // 항공: 항공 마일리지 적립, 면세점 할인
+    ALLSTORES("포인트 적립&캐시백"), // 전 가맹점: 모든 가맹점 포인트 적립, 캐시백
+    VEHICLE("차량"), // 차량: 렌터카 할인, 하이패스 통행료 할인
+    INSURANCE("보험"), // 보험: 자동차 보험료 할인, 건강보험 할인
+    HEALTH("의료"), // 의료: 건강검진 할인, 약국 할인
+    LIFE("생활"), // 생활: 전기세, 수도세 할인
+    TRANSPORTATION("교통"), // 교통: 버스, 택시
+    PET("애완동물"), // 애완동물
+    ETC("기타"); // 기타
+
+    private final String storeTypeName;
+
+    BenefitType(String storeTypeName) {
+        this.storeTypeName = storeTypeName;
+    }
+
+    @Override
+    public String toString() {
+        return storeTypeName;
+    }
 
     /**
      * 소비내역 카테고리 기반으로 해당하는 혜택 타입을 반환
