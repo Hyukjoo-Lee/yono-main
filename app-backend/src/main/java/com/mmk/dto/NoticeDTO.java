@@ -21,7 +21,4 @@ public class NoticeDTO {
   private Timestamp createdAt;
   private Timestamp updatedAt;
 
-    public String getUserId() {
-        throw new UnsupportedOperationException("Not supported yet.");
-    }
 }

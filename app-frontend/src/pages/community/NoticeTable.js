@@ -14,6 +14,7 @@ import { Link, useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
 import { fetchSearchNotice } from '../../apis/noticeApi';
 import CommonButton from '../../common/CommonButton';
+import CommonDialog from '../../common/CommonDialog';
 import CommonInput from '../../common/CommonInput';
 
 const Root = styled.div`
@@ -81,6 +82,7 @@ export function NoticeTable() {
   const [rows, setRows] = useState([]);
   const [page, setPage] = useState(0);
   const [keyword, setKeyword] = useState('');
+  const [isDialogOpne, setIsDialogOpen] = useState(false);
   const rowsPerPage = 10;
   const navigate = useNavigate();
 
@@ -93,6 +95,13 @@ export function NoticeTable() {
   };
 
   const handleButtonClick = () => {
+    const isAdmin = localStorage.getItem('role') === 'ADMIN';
+    if (!isAdmin) {
+      setIsDialogOpen(true);
+      return;
+    } else {
+      navigate('/noticeFormBox');
+    }
     navigate('/noticeFormBox');
   };
 
@@ -164,6 +173,14 @@ export function NoticeTable() {
             height="39px"
             text="글등록"
             onClick={handleButtonClick}
+          />
+          <CommonDialog
+            open={isDialogOpne}
+            onClose={() => setIsDialogOpen(false)}
+            title="접근제한"
+            children="관리자 권한 기능입니다."
+            submitText="확인"
+            onClick={() => setIsDialogOpen(false)}
           />
         </Container>
 

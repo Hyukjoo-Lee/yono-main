@@ -2,6 +2,16 @@ import axios from 'axios';
 
 //글 등록
 export const createNotice = async (formData) => {
+  //관리자 권한 수정
+  const isAdmin = localStorage.getItem('role') === 'ADMIN';
+  if (isAdmin) {
+    return {
+      succesee: false,
+      message: '관리자 권한이 없습니다.',
+    };
+  }
+  //수정 끝
+
   try {
     const response = await axios.post('/notice/write', formData, {
       headers: {
