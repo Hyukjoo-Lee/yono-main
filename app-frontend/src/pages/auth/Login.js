@@ -234,6 +234,7 @@ const Login = () => {
                 text="비밀번호"
                 width="100%"
                 type="password"
+                autoComplete="off"
                 onChange={(e) => handleInputChange(e, 'password')}
               />
               {formMessage.password && (

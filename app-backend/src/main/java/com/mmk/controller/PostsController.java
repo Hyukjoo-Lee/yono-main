@@ -7,6 +7,7 @@ import java.util.List;
 import java.util.Random;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -29,6 +30,9 @@ import com.mmk.service.PostsService;
 @RequestMapping("/posts")
 public class PostsController {
 
+    @Value("${IMAGE_PATH}")
+    private String uploadDir;
+
     @Autowired
     private PostsService postsService;
 
@@ -37,8 +41,8 @@ public class PostsController {
             @RequestParam("postFormData") String postFormData,
             @RequestParam(value = "file", required = false) MultipartFile postFile) {
 
-        String baseUploadFolder = System.getProperty("user.dir") + "/uploads/images";
-        System.out.println("Base Upload Folder: " + baseUploadFolder);
+    String baseUploadFolder = uploadDir + "/uploads/images";
+    System.out.println("Base Upload Folder: " + baseUploadFolder);
 
         try {
             PostsDTO pd = new ObjectMapper().readValue(postFormData, PostsDTO.class);

@@ -21,7 +21,7 @@ public class WebConfig implements WebMvcConfigurer {
                     .addResourceLocations("file:" + fullPath);
 
         } catch (Exception e) {
-            throw new RuntimeException("프로필 사진 파일 경로 에러", e);
+            throw new RuntimeException("사진 파일 경로 에러", e);
         }
     }
 }

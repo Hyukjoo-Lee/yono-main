@@ -1,4 +1,5 @@
 select * from user_card;
+
 commit;
 drop table user_card;
 
