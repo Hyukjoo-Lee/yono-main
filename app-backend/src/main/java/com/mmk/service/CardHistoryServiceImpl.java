@@ -16,6 +16,7 @@ import org.springframework.stereotype.Service;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.mmk.common.BenefitType;
 import com.mmk.dao.CardHistoryDAO;
 import com.mmk.dao.UserCardDAO;
 import com.mmk.dao.UserDAO;
@@ -99,6 +100,8 @@ public class CardHistoryServiceImpl implements CardHistoryService {
                 try {
                     if (cardHistoryDTO.getResMemberStoreType() == "") {
                         cardHistoryDTO.setResMemberStoreType("기타");
+                    } else {
+                        cardHistoryDTO.setResMemberStoreType(BenefitType.determineFromCategory(cardHistoryDTO.getResMemberStoreType()).toString());
                     }
                     cardHistoryDTO.setUserCardId(userCardId);
                     cardHistoryDAO.save(toEntity(cardHistoryDTO));

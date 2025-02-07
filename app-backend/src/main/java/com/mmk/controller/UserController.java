@@ -133,7 +133,8 @@ public class UserController {
             }
         } catch (Exception e) {
             e.printStackTrace();
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(new ApiResponse<>(500, "유저정보 조회 중 오류 발생", null));
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                    .body(new ApiResponse<>(500, "유저정보 조회 중 오류 발생", null));
         }
     }
 
@@ -141,9 +142,17 @@ public class UserController {
     // 회원가입
     @PostMapping("/signup")
     public ResponseEntity<ApiResponse<UserDTO>> createUser(@RequestBody UserDTO userDTO) {
-        UserDTO createdUser = userService.createUser(userDTO);
-        ApiResponse<UserDTO> response = new ApiResponse<>(201, "유저 생성 성공", createdUser);
-        return ResponseEntity.status(HttpStatus.CREATED).body(response);
+        try {
+            UserDTO createdUser = userService.createUser(userDTO);
+            return ResponseEntity.status(HttpStatus.CREATED)
+                    .body(new ApiResponse<>(201, "회원가입 성공", createdUser));
+        } catch (IllegalArgumentException e) {
+            return ResponseEntity.status(HttpStatus.CONFLICT)
+                    .body(new ApiResponse<>(409, e.getMessage(), null));
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+                    .body(new ApiResponse<>(400, "잘못된 요청", null));
+        }
     }
 
     // 로그인

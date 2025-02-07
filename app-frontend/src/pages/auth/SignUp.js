@@ -273,7 +273,9 @@ const SignUp = () => {
       <CommonInput
         placeholder={FORM_FIELDS[field].placeholder}
         text={FORM_FIELDS[field].text}
-        type={FORM_FIELDS[field].type}
+        {...(FORM_FIELDS[field].type === 'password'
+          ? { autoComplete: 'off' }
+          : {})}
         value={formData[field]}
         onChange={(e) => handleInputChange(e, field)}
         {...InputProps}
@@ -295,35 +297,37 @@ const SignUp = () => {
       <FullContainer>
         <MiddleContainer>
           <CommonPageInfo title="회원가입" />
-          <InputUserIdBox>
-            <CommonInput
-              placeholder="아이디를 입력하세요."
-              text="아이디"
-              value={formData.userId}
-              // readOnly={true}
-              onChange={(e) => handleInputChange(e, 'userId')}
-              {...InputProps}
-            />
-            <ButtonWrapper>
-              <CommonButton
-                {...ButtonProps}
-                text="중복확인"
-                width="100px"
-                onClick={validateUserId}
+          <form>
+            <InputUserIdBox>
+              <CommonInput
+                placeholder="아이디를 입력하세요."
+                text="아이디"
+                value={formData.userId}
+                // readOnly={true}
+                onChange={(e) => handleInputChange(e, 'userId')}
+                {...InputProps}
               />
-            </ButtonWrapper>
-          </InputUserIdBox>
+              <ButtonWrapper>
+                <CommonButton
+                  {...ButtonProps}
+                  text="중복확인"
+                  width="100px"
+                  onClick={validateUserId}
+                />
+              </ButtonWrapper>
+            </InputUserIdBox>
 
-          <ValidationMessage
-            text={formMessage.userId}
-            type={isUserIdValidated ? 'success' : 'error'}
-            $margin={'0 10px'}
-          />
-          <CommonHr />
-          {renderInputField('password')}
-          {renderInputField('confirmPassword')}
-          {renderInputField('name')}
-          {renderInputField('email')}
+            <ValidationMessage
+              text={formMessage.userId}
+              type={isUserIdValidated ? 'success' : 'error'}
+              $margin={'0 10px'}
+            />
+            <CommonHr />
+            {renderInputField('password')}
+            {renderInputField('confirmPassword')}
+            {renderInputField('name')}
+            {renderInputField('email')}
+          </form>
         </MiddleContainer>
         <CommonButton {...ButtonProps} text="회원가입" onClick={handleSubmit} />
         <CommonDialog

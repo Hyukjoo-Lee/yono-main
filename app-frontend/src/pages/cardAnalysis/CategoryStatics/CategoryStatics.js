@@ -1,11 +1,11 @@
+import { useCallback, useEffect, useState } from 'react';
+import { useSelector } from 'react-redux';
 import styled from 'styled-components';
+import { getprimaryCardInfo } from '../../../apis/cardApi';
+import { monthData, uploadOneMonthHistory } from '../../../apis/cardHistoryApi';
 import CommonCardListBox from '../../../common/CommonCardListBox';
 import CommonLoading from '../../../common/CommonLoading';
 import Piechart from '../monthlyStatistics/chart/Piechart';
-import { useState, useEffect } from 'react';
-import { useSelector } from 'react-redux';
-import { monthData, uploadOneMonthHistory } from '../../../apis/cardHistoryApi';
-import { getprimaryCardInfo } from '../../../apis/cardApi';
 
 const Root = styled.div`
   display: flex;
@@ -55,7 +55,7 @@ const EmptyBox = styled.div`
   }
 `;
 
-const CategoryStatics = () => {
+const CategoryStatics = (isHistory) => {
   const [cardData, setCardData] = useState(null);
   const [monthlyData, setMonthlyData] = useState(null);
   const [category, setCategory] = useState(null);
@@ -63,44 +63,44 @@ const CategoryStatics = () => {
   const [loading, setLoading] = useState(true);
   const userNum = useSelector((state) => state.user.user?.userNum);
 
-  useEffect(() => {
-    const fetchUser = async () => {
-      try {
-        const response = await uploadOneMonthHistory(userNum);
-        if (typeof response == 'string') {
-          console.log(response);
-          // 예외 발생시 다이얼로그 처리 필요
-        } else if (response != null) {
-          setCardData(response.data);
-        }
-
-        const data = await monthData(userNum);
-        if (typeof data == 'string') {
-          console.log(data);
-          // 예외 발생시 다이얼로그 처리 필요
-        } else if (data != null) {
-          setMonthlyData(data.data);
-        }
-
-        const cardInfo = await getprimaryCardInfo(userNum);
-        if (typeof cardInfo == 'string') {
-          console.log(cardInfo);
-          // 예외 발생시 다이얼로그 처리 필요
-        } else if (cardInfo != null) {
-          setCard(cardInfo.data);
-        }
-
-        setLoading(false);
-      } catch (error) {
-        console.error('카드 정보를 불러오는 중 오류 발생:', error);
-        setCardData(null);
+  const fetchUser = useCallback(async () => {
+    try {
+      const response = await uploadOneMonthHistory(userNum);
+      if (typeof response == 'string') {
+        console.log(response);
+        // 예외 발생시 다이얼로그 처리 필요
+      } else if (response != null) {
+        setCardData(response.data);
       }
-    };
 
-    if (userNum) {
-      fetchUser();
+      const data = await monthData(userNum);
+      if (typeof data == 'string') {
+        console.log(data);
+        // 예외 발생시 다이얼로그 처리 필요
+      } else if (data != null) {
+        setMonthlyData(data.data);
+      }
+
+      const cardInfo = await getprimaryCardInfo(userNum);
+      if (typeof cardInfo == 'string') {
+        console.log(cardInfo);
+        // 예외 발생시 다이얼로그 처리 필요
+      } else if (cardInfo != null) {
+        setCard(cardInfo.data);
+      }
+
+      setLoading(false);
+    } catch (error) {
+      console.error('카드 정보를 불러오는 중 오류 발생:', error);
+      setCardData(null);
     }
   }, [userNum]);
+
+  useEffect(() => {
+    if (isHistory !== false) {
+      fetchUser();
+    }
+  }, [fetchUser, isHistory]);
 
   if (loading) {
     return <CommonLoading />;

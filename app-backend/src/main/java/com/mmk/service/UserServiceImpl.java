@@ -9,6 +9,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+// import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+
 import com.mmk.dao.UserDAO;
 import com.mmk.dto.UserDTO;
 import com.mmk.entity.UserEntity;
@@ -20,11 +22,18 @@ public class UserServiceImpl implements UserService {
     @Autowired
     private UserDAO userDAO;
 
+    // private final BCryptPasswordEncoder passwordEncoder = new
+    // BCryptPasswordEncoder();
+
     @Override
     public UserDTO createUser(UserDTO userDTO) {
         if (userDAO.existsByUserId(userDTO.getUserId())) {
             throw new IllegalArgumentException("이미 존재하는 아이디입니다.");
         }
+
+        // 비밀번호 암호화
+        // String encodedPassword = passwordEncoder.encode(userDTO.getPassword());
+        // userDTO.setPassword((encodedPassword));
 
         UserEntity userEntity = toEntity(userDTO);
         userDAO.createUser(userEntity);
@@ -101,6 +110,10 @@ public class UserServiceImpl implements UserService {
         if (userEntity != null && userEntity.getPassword().equals(password)) {
             return true;
         }
+
+        // if (userEntity != null) {
+        // return passwordEncoder.matches(password, userEntity.getPassword());
+        // }
 
         return false;
     }

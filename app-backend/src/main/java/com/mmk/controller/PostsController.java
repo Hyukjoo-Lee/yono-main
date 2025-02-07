@@ -32,7 +32,6 @@ import com.mmk.service.PostsService;
 @RequestMapping("/posts")
 public class PostsController {
 
-
     @Value("${IMAGE_PATH}")
     private String uploadDir;
 
@@ -44,10 +43,12 @@ public class PostsController {
             @RequestParam("postFormData") String postFormData,
             @RequestParam(value = "file", required = false) MultipartFile postFile) {
 
-    try {
-        PostsDTO pd = new ObjectMapper().readValue(postFormData, PostsDTO.class);
-        System.out.println("UserId: " + pd.getUserId());
-        String uploadFolder = uploadDir + "/uploads/images";
+    String baseUploadFolder = uploadDir + "/uploads/images";
+    System.out.println("Base Upload Folder: " + baseUploadFolder);
+
+        try {
+            PostsDTO pd = new ObjectMapper().readValue(postFormData, PostsDTO.class);
+            System.out.println("UserId: " + pd.getUserId());
 
         if (postFile != null && !postFile.isEmpty()) {
             String fileName = postFile.getOriginalFilename();
