@@ -17,8 +17,10 @@ build/
 bin/
 !**/src/main/**/bin/
 !**/src/test/**/bin/
+
 ## 테스트 DB
 /src/main/resources/sql/test.sql
+/logs/application.log
 
 ### IntelliJ IDEA ###
 .idea
