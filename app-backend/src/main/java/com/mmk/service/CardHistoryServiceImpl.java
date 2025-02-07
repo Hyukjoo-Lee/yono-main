@@ -21,6 +21,7 @@ import com.mmk.dao.CardHistoryDAO;
 import com.mmk.dao.UserCardDAO;
 import com.mmk.dao.UserDAO;
 import com.mmk.dto.CardHistoryDTO;
+import com.mmk.dto.CardSummaryDTO;
 import com.mmk.dto.DailyStatisticsDTO;
 import com.mmk.dto.MonthlySummaryDTO;
 import com.mmk.entity.CardHistoryEntity;
@@ -101,7 +102,8 @@ public class CardHistoryServiceImpl implements CardHistoryService {
                     if (cardHistoryDTO.getResMemberStoreType() == "") {
                         cardHistoryDTO.setResMemberStoreType("기타");
                     } else {
-                        cardHistoryDTO.setResMemberStoreType(BenefitType.determineFromCategory(cardHistoryDTO.getResMemberStoreType()).toString());
+                        cardHistoryDTO.setResMemberStoreType(
+                                BenefitType.determineFromCategory(cardHistoryDTO.getResMemberStoreType()).toString());
                     }
                     cardHistoryDTO.setUserCardId(userCardId);
                     cardHistoryDAO.save(toEntity(cardHistoryDTO));
@@ -188,34 +190,6 @@ public class CardHistoryServiceImpl implements CardHistoryService {
         return uploadCardHistory(userNum, 0);
     }
 
-    private CardHistoryDTO toDTO(CardHistoryEntity entity) {
-        CardHistoryDTO dto = new CardHistoryDTO();
-        dto.setResApprovalNo(entity.getResApprovalNo());
-
-        dto.setResUsedDate(entity.getResUsedDate());
-        dto.setResUsedTime(entity.getResUsedTime());
-        dto.setResMemberStoreName(entity.getResMemberStoreName());
-        dto.setResUsedAmount(entity.getResUsedAmount());
-        dto.setResMemberStoreType(entity.getResMemberStoreType());
-
-        dto.setUserCardId(entity.getUserCardEntity().getUserCardId());
-        return dto;
-    }
-
-    private CardHistoryEntity toEntity(CardHistoryDTO dto) {
-        CardHistoryEntity entity = new CardHistoryEntity();
-        entity.setResApprovalNo(dto.getResApprovalNo());
-
-        entity.setResUsedDate(dto.getResUsedDate());
-        entity.setResUsedTime(dto.getResUsedTime());
-        entity.setResMemberStoreName(dto.getResMemberStoreName());
-        entity.setResUsedAmount(dto.getResUsedAmount());
-        entity.setResMemberStoreType(dto.getResMemberStoreType());
-
-        entity.setUserCardEntity(userCardDAO.findByUserCardId(dto.getUserCardId()));
-        return entity;
-    }
-
     @Override
     public int getMonthlyTotalAmount(int userNum, String yearMonth) {
         // yearMonth는 yyyyMM 형식 (예: 202301)
@@ -246,6 +220,52 @@ public class CardHistoryServiceImpl implements CardHistoryService {
                 .sum();
 
         return totalAmount;
+    }
+
+    @Override
+    public List<CardSummaryDTO> getUserTopSpendingCategories(int userNum) {
+        List<Object[]> cardHistoryEntities = cardHistoryDAO.getTopCategories(userNum);
+
+        List<CardSummaryDTO> cardSummaryList = new ArrayList<>();
+
+        // 쿼리문으로 받아온 Object를 리스트로 변환
+        for (Object[] data : cardHistoryEntities) {
+            String storeType = (String) data[0]; // 업종명
+            int usedAmount = ((Number) data[1]).intValue(); // 사용 금액
+
+            // CardSummaryDTO 객체 생성 후 리스트에 추가
+            cardSummaryList.add(new CardSummaryDTO(storeType, usedAmount));
+        }
+
+        return cardSummaryList;
+    }
+
+    private CardHistoryDTO toDTO(CardHistoryEntity entity) {
+        CardHistoryDTO dto = new CardHistoryDTO();
+        dto.setResApprovalNo(entity.getResApprovalNo());
+
+        dto.setResUsedDate(entity.getResUsedDate());
+        dto.setResUsedTime(entity.getResUsedTime());
+        dto.setResMemberStoreName(entity.getResMemberStoreName());
+        dto.setResUsedAmount(entity.getResUsedAmount());
+        dto.setResMemberStoreType(entity.getResMemberStoreType());
+
+        dto.setUserCardId(entity.getUserCardEntity().getUserCardId());
+        return dto;
+    }
+
+    private CardHistoryEntity toEntity(CardHistoryDTO dto) {
+        CardHistoryEntity entity = new CardHistoryEntity();
+        entity.setResApprovalNo(dto.getResApprovalNo());
+
+        entity.setResUsedDate(dto.getResUsedDate());
+        entity.setResUsedTime(dto.getResUsedTime());
+        entity.setResMemberStoreName(dto.getResMemberStoreName());
+        entity.setResUsedAmount(dto.getResUsedAmount());
+        entity.setResMemberStoreType(dto.getResMemberStoreType());
+
+        entity.setUserCardEntity(userCardDAO.findByUserCardId(dto.getUserCardId()));
+        return entity;
     }
 
 }

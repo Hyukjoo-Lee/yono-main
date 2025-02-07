@@ -1,24 +1,31 @@
 package com.mmk.service;
 
 import java.util.ArrayList;
-import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.NoSuchElementException;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.mmk.dao.UserCardCompanyDAO;
+import com.mmk.dao.CardBenefitDAO;
 import com.mmk.dao.CardDAO;
+import com.mmk.dao.UserCardCompanyDAO;
 import com.mmk.dto.CardBenefitDTO;
-import com.mmk.dto.UserCardCompanyDTO;
 import com.mmk.dto.CardDTO;
-import com.mmk.entity.UserCardCompanyEntity;
+import com.mmk.dto.CardSummaryDTO;
+import com.mmk.dto.RecCardDTO;
+import com.mmk.dto.UserCardCompanyDTO;
 import com.mmk.entity.CardEntity;
+import com.mmk.entity.UserCardCompanyEntity;
 
 @Service
 public class CardServiceImpl implements CardService {
+
+    private static final Logger logger = LoggerFactory.getLogger(CardServiceImpl.class);
 
     @Autowired
     private CardDAO cardDAO;
@@ -37,6 +44,9 @@ public class CardServiceImpl implements CardService {
 
     @Autowired
     private CardHistoryService cardHistoryService;
+
+    @Autowired
+    private CardBenefitDAO cardBenefitDAO;
 
     @Override
     public CardDTO createCard(CardDTO cardDTO) {
@@ -190,18 +200,83 @@ public class CardServiceImpl implements CardService {
     }
 
     @Override
-    public List<CardDTO> getRecommendedCards(int userNum) {
-        // 1. 소비내역 타입-값 이 들어있는 Map 가져오기
+    public List<RecCardDTO> getRecommendedCards(int userNum) {
 
-        // 테스트 Map
-        Map<String, Integer> spendingMap = new HashMap<>();
-        spendingMap.put("쇼핑", 439500); // SHOPPING
-        spendingMap.put("교통", 109100); // TRANS
-        spendingMap.put("식당", 472200); // FOOD
-        spendingMap.put("커피숍", 62800); // CAFE
-        spendingMap.put("편의점", 82850); // CONVENIENCE
+        logger.info("User {}: 추천 카드 조회 시작", userNum);
 
-        return null;
+        // 사용자가 가장 많이 소비한 상위 카테고리 목록 조회
+        List<CardSummaryDTO> topCategoryList = cardHistoryService.getUserTopSpendingCategories(userNum);
+
+        // 카드 추천 리스트 (LinkedHashMap 사용하여 순서 유지)
+        Map<String, RecCardDTO> recommendedCards = new LinkedHashMap<>();
+
+        for (CardSummaryDTO category : topCategoryList) {
+            String storeType = category.getStoreType();
+            logger.info("User {}: 소비 카테고리 - {}", userNum, storeType);
+
+            // 해당 카테고리와 매칭되는 카드 혜택 조회
+            List<Object[]> matchingBenefits = cardBenefitDAO.findMatchingCardBenefits(storeType);
+            if (matchingBenefits.isEmpty()) {
+                logger.warn("User {}: '{}' 카테고리에서 매칭되는 혜택 없음", userNum, storeType);
+                continue;
+            }
+
+            // 매칭된 카드 데이터 처리
+            processMatchingBenefits(recommendedCards, matchingBenefits);
+
+            // 최대 5개의 카드만 추천
+            if (recommendedCards.size() >= 5)
+                break;
+        }
+
+        return getSortedRecommendedCards(recommendedCards);
+    }
+
+    // 매칭된 카드 혜택 데이터 하여 추천 리스트에 추가
+    private void processMatchingBenefits(Map<String, RecCardDTO> recommendedCards, List<Object[]> matchingBenefits) {
+
+        for (Object[] cardData : matchingBenefits) {
+            String cardTitle = (String) cardData[0];
+            String cardImgUrl = (String) cardData[1];
+            String benefitTitle = (String) cardData[2];
+            String benefitType = (String) cardData[3];
+            String benefitValue = (String) cardData[4];
+
+            logger.debug("카드: {}, 혜택: {}", cardTitle, benefitTitle);
+
+            // 기존 카드가 존재 하면 가져옴
+            RecCardDTO recCard = recommendedCards.get(cardTitle);
+
+            // 기존 카드가 없으면 새로 생성하여 추가
+            if (recCard == null) {
+                recCard = new RecCardDTO(cardTitle, cardImgUrl, new ArrayList<>());
+                recommendedCards.put(cardTitle, recCard);
+            }
+
+            recCard.getBenefits().add(new CardBenefitDTO(benefitTitle, benefitValue, benefitType));
+
+            // 최대 5개 카드만 저장
+            if (recommendedCards.size() >= 5)
+                break;
+        }
+    }
+
+    // 추천된 카드 리스트를 혜택 개수 기준으로 정렬 후 반환
+    private List<RecCardDTO> getSortedRecommendedCards(Map<String, RecCardDTO> recommendedCards) {
+
+        List<RecCardDTO> cardList = new ArrayList<>(recommendedCards.values());
+
+        // 혜택 개수가 많은 순으로 정렬 (내림차순)
+        cardList.sort((c1, c2) -> Integer.compare(c2.getBenefits().size(), c1.getBenefits().size()));
+
+        // 최대 5개까지
+        List<RecCardDTO> sortedCards = new ArrayList<>();
+
+        for (int i = 0; i < Math.min(5, cardList.size()); i++) {
+            sortedCards.add(cardList.get(i));
+        }
+
+        return sortedCards;
     }
 
     private CardEntity toEntity(CardDTO dto) {

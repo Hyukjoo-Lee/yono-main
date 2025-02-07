@@ -14,5 +14,8 @@ public interface CardHistoryDAO {
 
     // 일별 통계
     List<CardHistoryEntity> findByUserNumAndPrimaryCard(int userNum);
+
     List<CardHistoryEntity> findByUserCardIdAndResUsedDateBetween(int userCardId, String startDate, String endDate);
+
+    List<Object[]> getTopCategories(int userNum);
 }
