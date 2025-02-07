@@ -36,7 +36,7 @@ public class CardController {
         List<CardDTO> cardDTOs = cardService.getAllCards();
         if (cardDTOs.isEmpty()) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND)
-                    .body(new ApiResponse<>(404, "등록된 마스터 카드가 없습니다.", null));
+                    .body(new ApiResponse<>(204, "등록된 마스터 카드가 없습니다.", null));
         }
         return ResponseEntity.ok(new ApiResponse<>(200, "전체 마스터 카드 검색 성공", cardDTOs));
     }

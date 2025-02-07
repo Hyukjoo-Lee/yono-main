@@ -92,14 +92,7 @@ export const registerCard = async (cardData) => {
 
 export const getAllCardsInfoByUserNum = async (userNum) => {
   const response = await axios.get(`/card/user/${userNum}/details`);
-
-  if (response.status === 200) {
-    return response.data;
-  } else if (response.status === 404) {
-    return null;
-  } else {
-    return response.message;
-  }
+  return response;
 };
 
 export const getAllCardBenefitsByCardTitle = async (cardTitle) => {

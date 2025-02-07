@@ -62,9 +62,6 @@ public class CardServiceImpl implements CardService {
     @Override
     public List<CardDTO> getAllCards() {
         List<CardEntity> cardEntities = cardDAO.getAllCards();
-        if (cardEntities.isEmpty()) {
-            throw new NoSuchElementException("현재 등록된 카드가 없습니다.");
-        }
 
         List<CardDTO> cardDTOs = new ArrayList<>();
 

@@ -40,8 +40,8 @@ public class UserCardController {
     public ResponseEntity<ApiResponse<List<UserCardDTO>>> getAllCardsInfoByUserNum(@PathVariable int userNum) {
         List<UserCardDTO> userCards = userCardService.getAllCardsInfoByUserNum(userNum);
         if (userCards.isEmpty()) {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND)
-                    .body(new ApiResponse<>(404, "해당 사용자가 보유한 카드가 없습니다.", null));
+            return ResponseEntity.status(HttpStatus.NO_CONTENT)
+                    .body(new ApiResponse<>(204, "해당 사용자가 보유한 카드가 없습니다.", null));
         }
         return ResponseEntity.ok(new ApiResponse<>(200, "사용자 보유 카드조회 성공", userCards));
     }

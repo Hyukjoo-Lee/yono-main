@@ -32,7 +32,7 @@ public interface CardHistoryRepository extends JpaRepository<CardHistoryEntity, 
                         @Param("startDate") String startDate,
                         @Param("endDate") String endDate);
 
-        @Query("SELECT c FROM CardHistoryEntity c WHERE c.userCardEntity.userEntity.userNum = :userNum AND c.resUsedDate LIKE CONCAT(:yearMonth, '%') AND c.userCardEntity.primaryCard = 1")
+        @Query("SELECT c FROM CardHistoryEntity c WHERE c.userCardEntity.userEntity.userNum = :userNum AND c.resUsedDate LIKE CONCAT(:yearMonth, '%') AND c.userCardEntity.primaryCard = '대표카드'")
         List<CardHistoryEntity> findByPrimaryAndMonth(
                         @Param("userNum") int userNum,
                         @Param("yearMonth") String yearMonth);

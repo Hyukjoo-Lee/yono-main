@@ -50,20 +50,23 @@ export function MyCard() {
       setIsLoading(true);
       try {
         const response = await getAllCardsInfoByUserNum(userFromStore.userNum);
-
-        const formattedCards = response.data.map((card) => ({
-          cardId: card.userCardId,
-          cardNumber: card.userCardNum,
-          cardTitle: card.cardTitle,
-          cardImg: card.cardImg,
-          primaryCard: card.primaryCard,
-          cardInfo: card.cardBenefits.map((benefit) => ({
-            title: benefit.benefitTitle,
-            value: benefit.benefitValue,
-            type: benefit.benefitType,
-          })),
-        }));
-        if (response) setUserCards(formattedCards);
+        if (response === 200) {
+          const formattedCards = response.data.map((card) => ({
+            cardId: card.userCardId,
+            cardNumber: card.userCardNum,
+            cardTitle: card.cardTitle,
+            cardImg: card.cardImg,
+            primaryCard: card.primaryCard,
+            cardInfo: card.cardBenefits.map((benefit) => ({
+              title: benefit.benefitTitle,
+              value: benefit.benefitValue,
+              type: benefit.benefitType,
+            })),
+          }));
+          setUserCards(formattedCards);
+        } else if (response.status === 204) {
+          setUserCards([]);
+        }
       } catch (error) {
         console.error('사용자 카드 목록 로딩 실패: ', error);
       } finally {
