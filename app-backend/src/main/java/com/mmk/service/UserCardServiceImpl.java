@@ -43,11 +43,15 @@ public class UserCardServiceImpl implements UserCardService {
     @Autowired
     private CodefService codefService;
 
+    @Autowired
+    private EncryptionService encryptionService;
+
     // 사용자 카드 등록
     @Override
     public UserCardDTO registerCard(UserCardDTO userCardDTO, String organization, String cardTitle) {
         String userCardNum = userCardDTO.getUserCardNum();
         int userNum = userCardDTO.getUserNum();
+        String userPwd = userCardDTO.getCardPwd();
 
         if (cardCompanyDAO.existsCompany(userNum, organization)) {
             if (userCardDAO.existsByUserCardNum(userCardNum)) {
@@ -56,6 +60,12 @@ public class UserCardServiceImpl implements UserCardService {
                 int cardCompanyNum = cardCompanyDAO.findByUserNumAndOrganizationCode(userNum, organization)
                         .getCardCompanyNum();
                 int cardId = cardDAO.findByCardTitle(cardTitle).getCardId();
+
+                try {
+                    userCardDTO.setCardPwd(encryptionService.encryptPassword(userPwd));
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
                 userCardDTO.setCardCompanyNum(cardCompanyNum);
                 userCardDTO.setCardId(cardId);
 
