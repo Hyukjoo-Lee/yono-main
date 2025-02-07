@@ -18,32 +18,51 @@ const BarchartWrap = styled.div`
   height: 530px;
 `;
 
+const BoxStyle = styled.div`
+  width: 100%;
+  border-radius: 7px;
+  box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.1);
+  box-sizing: border-box;
+  margin-bottom: 10px;
+  border: 1px solid ${(props) => props.theme.color.mediumGray};
+  overflow: hidden;
+`;
+
+const EmptyBox = styled(BoxStyle)`
+  padding: 40px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  & p {
+    margin: 0px;
+    font-size: ${(props) => props.theme.fontSize.eighteen};
+    color: ${(props) => props.theme.color.gray};
+  }
+`;
+
 const MonthComparision = () => {
   const [barData, setBarData] = useState([]); // 차트 데이터 상태
   const [monthlyData, setMonthlyData] = useState([]); // API로부터 받은 데이터 저장
-  const userNum = useSelector((state) => state.user.user?.userNum);
+  const { isLoggedIn, user } = useSelector((state) => state.user);
+
+  const userNum = user?.userNum;
+
+  const currentMonth = new Date();
+  const previousMonth = new Date(currentMonth);
+  previousMonth.setMonth(currentMonth.getMonth() - 1);
+  const previousToPreviousMonth = new Date(currentMonth);
+  previousToPreviousMonth.setMonth(currentMonth.getMonth() - 2);
+
+  const formatMonth = (date) => {
+    const month = String(date.getMonth() + 1);
+    return month;
+  };
+
+  const previousMonthString = formatMonth(previousMonth);
+  const previousToPreviousMonthString = formatMonth(previousToPreviousMonth);
 
   useEffect(() => {
-    if (!userNum) {
-      console.error('로그인된 사용자 정보가 없습니다.');
-      return;
-    }
-
-    const now = new Date();
-    const currentMonth = now.getMonth() + 1;
-    const currentYear = now.getFullYear();
-
-    const previousMonth = currentMonth === 1 ? 12 : currentMonth - 1;
-    const previousMonthYear =
-      currentMonth === 1 ? currentYear - 1 : currentYear;
-
-    // const previousToPreviousMonth =
-    //   previousMonth === 1 ? 12 : previousMonth - 1;
-    // const previousToPreviousMonthYear =
-    //   previousMonth === 1 ? previousMonthYear - 1 : previousMonthYear;
-
-    const previousMonthStr = `${previousMonthYear}${String(previousMonth).padStart(2, '0')}`;
-    // const previousToPreviousMonthStr = `${previousToPreviousMonthYear}${String(previousToPreviousMonth).padStart(2, '0')}`;
+    if (!isLoggedIn || !userNum) return;
 
     // 백엔드로 API 요청을 보내고 금액 및 뱃지 데이터를 받아옴
     const fetchData = async () => {
@@ -51,13 +70,12 @@ const MonthComparision = () => {
         const response = await axios.get('/badge/Comparison', {
           params: {
             userNum,
-            yearMonth: previousMonthStr,
           },
         });
 
         if (response.status === 200) {
           const data = response.data.data;
-          console.log(data);
+          console.log('data: ' + data);
 
           const formattedData = {
             previousMonthAmount: data.currentMonthAmount || 0,
@@ -70,10 +88,13 @@ const MonthComparision = () => {
 
           setBarData([
             {
-              bottle: '저저번달',
+              bottle: `${previousToPreviousMonthString}월`,
               사용금액: data.previousMonthAmount,
             },
-            { bottle: '저번달', 사용금액: data.currentMonthAmount },
+            {
+              bottle: `${previousMonthString} 월`,
+              사용금액: data.currentMonthAmount,
+            },
           ]);
         }
       } catch (error) {
@@ -82,14 +103,29 @@ const MonthComparision = () => {
     };
 
     fetchData();
-  }, [userNum]);
+  }, [userNum, isLoggedIn, previousToPreviousMonthString, previousMonthString]);
 
   return (
     <Root>
-      <MonthComparisionTable data={monthlyData} />
-      <BarchartWrap>
-        <Barchart data={barData} />
-      </BarchartWrap>
+      {monthlyData.length === 0 ? (
+        <EmptyBox>
+          <p>
+            새로 가입하신 계정입니다. 이전 달과 지지난 달의 정산 내역은 생성되지
+            않았습니다. 다음 달부터 확인하실 수 있습니다.
+          </p>
+        </EmptyBox>
+      ) : (
+        <>
+          <MonthComparisionTable
+            data={monthlyData}
+            previousMonthString={previousMonthString}
+            previousToPreviousMonthString={previousToPreviousMonthString}
+          />
+          <BarchartWrap>
+            <Barchart data={barData} />
+          </BarchartWrap>
+        </>
+      )}
     </Root>
   );
 };

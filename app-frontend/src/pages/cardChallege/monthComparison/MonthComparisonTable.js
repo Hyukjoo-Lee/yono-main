@@ -46,7 +46,11 @@ const TitleGroup = styled.div`
   width: 100%;
 `;
 
-const MonthComparisionTable = ({ data }) => {
+const MonthComparisionTable = ({
+  data,
+  previousMonthString,
+  previousToPreviousMonthString,
+}) => {
   if (!data) {
     return <div>Loading...</div>;
   }
@@ -55,14 +59,14 @@ const MonthComparisionTable = ({ data }) => {
     <TextWrap>
       <TitleGroup>
         <Titlediv>
-          <p>저저번달에 사용하신 금액</p>
+          <p>{previousToPreviousMonthString}월 지출 금액</p>
           <hr />
           <span>
             {(data.previousToPreviousMonthAmount ?? 0).toLocaleString()}원
           </span>
         </Titlediv>
         <Titlediv>
-          <p>저번달에 사용하신 금액</p>
+          <p>{previousMonthString}월 지출 금액</p>
           <hr />
           <span>{(data.previousMonthAmount ?? 0).toLocaleString()}원</span>
         </Titlediv>

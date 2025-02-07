@@ -1,7 +1,6 @@
 import styled from 'styled-components';
 import CommonButton from '../../common/CommonButton';
 import CommonInput from '../../common/CommonInput';
-import HeartImg from '../../assets/images/HeartImg.png';
 import EmptyHeartImg from '../../assets/images/EmptyHeartImg.png';
 import { ReactComponent as Profile } from '../../assets/images/Profile.svg';
 import ListIcon from '../../assets/images/ListIcon.png';
@@ -151,7 +150,7 @@ const CommunityComment = ({
   toggleLike,
 }) => {
   const HeartButton = ({ like, onClick }) => {
-    return <Heart src={like ? HeartImg : EmptyHeartImg} onClick={onClick} />;
+    return <Heart src={EmptyHeartImg} onClick={onClick} />;
   };
   return (
     <CommentBox>

@@ -3,6 +3,7 @@ package com.mmk.service;
 import java.text.SimpleDateFormat;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -11,12 +12,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.mmk.dao.BadgeDAO;
-
-import com.mmk.dao.UserDAO;
 import com.mmk.dto.BadgeDTO;
+import com.mmk.dto.CardHistoryDTO;
 import com.mmk.dto.RankingDTO;
 import com.mmk.entity.BadgeEntity;
-import com.mmk.entity.UserEntity;
 
 @Service
 public class BageServiceImpl implements BadgeService {
@@ -25,22 +24,13 @@ public class BageServiceImpl implements BadgeService {
     private BadgeDAO badgeDAO;
 
     @Autowired
-    private UserDAO userDAO;
-
-    @Autowired
     private CardHistoryService cardHistoryService;
 
+    @Autowired
+    private UserService userService;
+
     @Override
-    public void save(int userNum, int badgeCount, String badgeDate, int currentMonthAmount, int previousMonthAmount,
-            int ranking) {
-        UserEntity userEntity = userDAO.findByUserNum(userNum);
-        BadgeEntity badgeEntity = new BadgeEntity();
-        badgeEntity.setBadge(badgeCount);
-        badgeEntity.setBadgeDate(badgeDate);
-        badgeEntity.setUserEntity(userEntity);
-        badgeEntity.setCurrentMonthAmount(currentMonthAmount);
-        badgeEntity.setPreviousMonthAmount(previousMonthAmount);
-        badgeEntity.setRanking(ranking);
+    public void save(BadgeEntity badgeEntity) {
         badgeDAO.save(badgeEntity);
     }
     
@@ -66,7 +56,6 @@ public class BageServiceImpl implements BadgeService {
         // BadgeDAO를 통해 이전 달 배지 데이터 조회
         List<BadgeEntity> badgeEntities = badgeDAO.getBadgesForPreviousMonth(previousMonth);
 
-        // BadgeEntity -> RankingDTO 변환 후 정렬 및 상위 100개 제한
         List<RankingDTO> list = badgeEntities.stream()
             .map(this::convertToDTO)
             .sorted((a, b) -> {
@@ -81,7 +70,6 @@ public class BageServiceImpl implements BadgeService {
         return list;
     }
 
-    // 이전 달을 계산하는 메서드 (예: 2025년 1월 -> 2024년 12월)
     private String getPreviousMonth() {
         Calendar calendar = Calendar.getInstance();
         calendar.add(Calendar.MONTH, -1); // 한 달을 빼기
@@ -111,15 +99,12 @@ public class BageServiceImpl implements BadgeService {
         String previousMonth = getPreviousMonth();
         List<BadgeEntity> badgeEntities = badgeDAO.getBadgesForPreviousMonth(previousMonth);
 
-        if (badgeEntities.size() == 1) {
-            return 1;
-        }
 
         badgeEntities.sort((a, b) -> Integer.compare(b.getBadge(), a.getBadge()));
 
         for (int i = 0; i < badgeEntities.size(); i++) {
             if (badgeEntities.get(i).getUserEntity().getUserNum() == userNum) {
-                return i;
+                return i+1;
             }
         }
 
@@ -127,71 +112,105 @@ public class BageServiceImpl implements BadgeService {
     }
 
     @Override
-    public boolean existsBadgeForUserAndDate(int userNum, String badgeDate) {
-        return badgeDAO.existsByUserNumAndBadgeDate(userNum, badgeDate);
+    public boolean existsBadgeForUser(int userNum) {
+        return badgeDAO.existsByUserNum(userNum);
+    }
 
+    private int getTotalAmount(List<CardHistoryDTO> historyList) {
+        int totalAmount = historyList.stream()
+                .mapToInt(history -> Integer.parseInt(history.getResUsedAmount()))
+                .sum();
+        return totalAmount;
     }
 
     @Override
-    public BadgeDTO getMonthlyComparison(int userNum, String yearMonth) {
+    public BadgeDTO updateBadgeByUserNum(int userNum, String yearMonth) {
         try {
-            int currentMonthAmount = cardHistoryService.getMonthlyTotalAmount(userNum, yearMonth);
+            List<CardHistoryDTO> currentMonthList = cardHistoryService.getMonthlyList(userNum, yearMonth);
+            int currentMonthTotalAmount = getTotalAmount(currentMonthList);
+
             LocalDate currentMonthStart = LocalDate.parse(yearMonth + "01", DateTimeFormatter.ofPattern("yyyyMMdd"));
             LocalDate previousMonthStart = currentMonthStart.minusMonths(1);
             String previousMonth = previousMonthStart.format(DateTimeFormatter.ofPattern("yyyyMM"));
-            int previousMonthAmount = cardHistoryService.getMonthlyTotalAmount(userNum, previousMonth);
+            System.out.println("previousMonth: " + previousMonth);
+            
+            List<CardHistoryDTO> previousMonthList = cardHistoryService.getMonthlyList(userNum, previousMonth);
+            int previousMonthTotalAmount = getTotalAmount(previousMonthList);
+            System.out.println("금액: "+previousMonthTotalAmount );
 
-            double savingsRate = (previousMonthAmount != 0)
-                ? ((double) (previousMonthAmount - currentMonthAmount) / previousMonthAmount) * 100
+
+            double savingsRate = (previousMonthTotalAmount != 0)
+                ? ((double) (previousMonthTotalAmount - currentMonthTotalAmount) / previousMonthTotalAmount) * 100
                 : 0;
 
             int badgeCount = (int) (savingsRate * 100); // 절약률 * 100을 뱃지 개수로 설정
-            int ranking = calculateUserRank(userNum); // 랭킹 계산
+            // int ranking = calculateUserRank(userNum); // 랭킹 계산
 
             String badgeDate = yearMonth;
 
-    //         if (!existsBadgeForUserAndDate(userNum, badgeDate)) {
-    //     // 데이터가 없으면 새로 저장
-    //     save(userNum, badgeCount, badgeDate, currentMonthAmount, previousMonthAmount, ranking);
-    // } else {
-    //     // 데이터가 있으면 등수 업데이트
-    //     BadgeEntity existingBadge = badgeDAO.getUserRanking(badgeDate, userNum);
-    //     if (existingBadge != null) {
-    //         existingBadge.setRanking(ranking);
-    //         existingBadge.setBadge(badgeCount); // 절약률이 바뀔 수도 있으니 뱃지도 업데이트
-    //         existingBadge.setCurrentMonthAmount(currentMonthAmount);
-    //         existingBadge.setPreviousMonthAmount(previousMonthAmount);
-    //         badgeDAO.save(existingBadge);
-    //     }
-    // }
-
-        // 배지 존재 여부 확인
-        BadgeEntity badgeEntity = badgeDAO.getUserRanking(badgeDate, userNum);
-
-        // 데이터가 없으면 새로 저장하고, 있으면 업데이트
-        if (badgeEntity == null) {
-            // 배지 데이터를 새로 저장
-            save(userNum, badgeCount, badgeDate, currentMonthAmount, previousMonthAmount, ranking);
-        } else {
-            // 기존 배지 데이터를 업데이트
-            badgeEntity.setRanking(ranking);
+            BadgeEntity badgeEntity = new BadgeEntity();
             badgeEntity.setBadge(badgeCount);
-            badgeEntity.setCurrentMonthAmount(currentMonthAmount);
-            badgeEntity.setPreviousMonthAmount(previousMonthAmount);
-            badgeDAO.save(badgeEntity);
-        }
+            badgeEntity.setBadgeDate(badgeDate);
+            badgeEntity.setCurrentMonthAmount(currentMonthTotalAmount);
+            badgeEntity.setPreviousMonthAmount(previousMonthTotalAmount);
+            badgeEntity.setUserEntity(userService.findEntityByUserNum(userNum));
+            badgeEntity.setRanking(0);
 
-            // DTO 생성
-            BadgeDTO dto = new BadgeDTO();
-            dto.setSavingRate(savingsRate);
-            dto.setBadge(badgeCount);
-            dto.setCurrentMonthAmount(currentMonthAmount);
-            dto.setPreviousMonthAmount(previousMonthAmount);
-            dto.setRanking(ranking);
+            if (existsBadgeForUser(userNum)) {
+                int badgeNum = findByUserNum(userNum).getBadgeNum();
+                badgeEntity.setBadgeNum(badgeNum);
+            }
 
-            return dto;
+            save(badgeEntity);
+            return null;
         } catch (Exception e) {
             throw new RuntimeException("월별 금액 조회 실패: " + e.getMessage());
         }
+    }
+
+    @Override
+    public BadgeDTO findByUserNum(int userNum) {
+        BadgeEntity badgeEntity = badgeDAO.findByUserNum(userNum);
+
+        if (badgeEntity == null) {
+            return null;
+        }
+        int rank = badgeDAO.getRankingByUserNum(userNum);
+        BadgeDTO badgeDTO = toDTO(badgeEntity);
+        badgeDTO.setRanking(rank);
+
+        return badgeDTO;
+    }
+
+    @Override
+    public void updateBadge(String yearMonth) {
+        ArrayList<Integer> userNumList = userService.findAllUserNum();
+
+        for (int userNum : userNumList) {
+            updateBadgeByUserNum(userNum, yearMonth);
+        }
+    }
+    
+    private BadgeDTO toDTO(BadgeEntity entity) {
+        if (entity == null) {
+            return new BadgeDTO();
+        }
+
+        BadgeDTO dto = new BadgeDTO();
+        dto.setBadge(entity.getBadge());
+        dto.setBadgeDate(entity.getBadgeDate());
+        dto.setBadgeNum(entity.getBadgeNum());
+        dto.setCurrentMonthAmount(entity.getCurrentMonthAmount());
+        dto.setPreviousMonthAmount(entity.getPreviousMonthAmount());
+        dto.setRanking(entity.getRanking());
+        dto.setUserNum(entity.getUserEntity().getUserNum());
+
+        if (entity.getUserEntity() != null) {
+            dto.setUserNum((entity.getUserEntity().getUserNum()));
+        } else {
+            dto.setUserNum(0);
+        }
+
+        return dto;
     }
 }
