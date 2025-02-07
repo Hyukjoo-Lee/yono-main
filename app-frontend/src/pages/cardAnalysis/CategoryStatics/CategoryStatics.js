@@ -114,16 +114,18 @@ const CategoryStatics = (isHistory) => {
     return acc;
   }, {});
 
-  const updatedSummaries = cardData.map((summary) => {
-    const updatedCategoryTotals = Object.fromEntries(
-      Object.entries(summary.categoryTotals).map(([category, amount]) => {
-        const count = categoryCountMap[category] || 0;
-        return [`${category} (${count})`, amount];
-      }),
-    );
+  const updatedSummaries = cardData
+    ? cardData.map((summary) => {
+        const updatedCategoryTotals = Object.fromEntries(
+          Object.entries(summary.categoryTotals).map(([category, amount]) => {
+            const count = categoryCountMap[category] || 0;
+            return [`${category} (${count})`, amount];
+          }),
+        );
 
-    return { ...summary, categoryTotals: updatedCategoryTotals };
-  });
+        return { ...summary, categoryTotals: updatedCategoryTotals };
+      })
+    : [];
 
   const filteredData =
     monthlyData?.filter((item) => {
