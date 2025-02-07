@@ -64,20 +64,20 @@ const CategoryStatics = (isHistory) => {
 
   const fetchUser = useCallback(async () => {
     try {
-      const response = await uploadOneMonthHistory(userNum);
-      if (typeof response == 'string') {
-        console.log(response);
-        // 예외 발생시 다이얼로그 처리 필요
-      } else if (response != null) {
-        setCardData(response.data);
-      }
-
       const data = await monthData(userNum);
       if (typeof data == 'string') {
         console.log(data);
         // 예외 발생시 다이얼로그 처리 필요
       } else if (data != null) {
         setMonthlyData(data.data);
+      }
+
+      const response = await uploadOneMonthHistory(userNum);
+      if (typeof response == 'string') {
+        console.log(response);
+        // 예외 발생시 다이얼로그 처리 필요
+      } else if (response != null) {
+        setCardData(response.data);
       }
 
       const cardInfo = await getprimaryCardInfo(userNum);
@@ -106,8 +106,24 @@ const CategoryStatics = (isHistory) => {
   }
 
   const handleClick = (data) => {
-    setCategory(data.id);
+    setCategory(data.id.split(' (')[0]);
   };
+
+  const categoryCountMap = monthlyData.reduce((acc, { resMemberStoreType }) => {
+    acc[resMemberStoreType] = (acc[resMemberStoreType] || 0) + 1;
+    return acc;
+  }, {});
+
+  const updatedSummaries = cardData.map((summary) => {
+    const updatedCategoryTotals = Object.fromEntries(
+      Object.entries(summary.categoryTotals).map(([category, amount]) => {
+        const count = categoryCountMap[category] || 0;
+        return [`${category} (${count})`, amount];
+      }),
+    );
+
+    return { ...summary, categoryTotals: updatedCategoryTotals };
+  });
 
   const filteredData =
     monthlyData?.filter((item) => {
@@ -133,7 +149,7 @@ const CategoryStatics = (isHistory) => {
     <Root>
       {cardData ? (
         <ChartsContainer>
-          <Piechart data={cardData} onClick={handleClick} />
+          <Piechart data={updatedSummaries} onClick={handleClick} />
           {filteredData.length > 0 ? (
             <ListBox>
               {filteredData.map((item, index) => (
