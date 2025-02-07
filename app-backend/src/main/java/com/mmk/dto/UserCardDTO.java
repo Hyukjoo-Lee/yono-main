@@ -18,7 +18,7 @@ public class UserCardDTO {
     private String cardPwd;
     private String cardImg;
 
-    private int primaryCard = 0;
+    private String primaryCard = "일반카드";
 
     private int cardCompanyNum;
     private int cardId;

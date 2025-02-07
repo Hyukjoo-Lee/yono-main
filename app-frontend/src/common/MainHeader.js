@@ -105,7 +105,7 @@ export function MainHeader() {
   };
 
   const list = isLoggedIn
-    ? user?.userRole === 0
+    ? user?.userRole === 'ADMIN'
       ? [
           { label: `${user?.name || '사용자'}님`, isText: true },
           { label: '로그아웃', path: '/', onClick: handleLogout },

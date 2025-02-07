@@ -34,18 +34,25 @@ const Ranking = () => {
 
   useEffect(() => {
     const initializeRankings = async () => {
-      const userData = await userRankings(isLoggedIn);
-      const data = await updateRankings();
-      if (typeof userData === 'string') {
-        console.log(userData); // 예외 발생시 다이얼로그 처리 필요
-      } else if (userData != null) {
-        setUserRanking(userData.data);
-      }
+      if (isLoggedIn) {
+        const userData = await userRankings(isLoggedIn);
+        const data = await updateRankings();
 
-      if (typeof data === 'string') {
-        console.log(data); // 예외 발생시 다이얼로그 처리 필요
-      } else if (data != null) {
-        setRankingList(data.data);
+        if (userData?.status === 204) {
+          setUserRanking(null);
+        } else if (typeof userData === 'string') {
+          console.log(userData); // 예외 발생시 다이얼로그 처리 필요
+        } else if (userData?.data) {
+          setUserRanking(userData.data);
+        }
+
+        if (data?.status === 204 || !data?.data) {
+          setRankingList([]);
+        } else if (typeof data === 'string') {
+          console.log(data); // 예외 발생시 다이얼로그 처리 필요
+        } else if (data?.data) {
+          setRankingList(data.data);
+        }
       }
     };
 
@@ -54,12 +61,14 @@ const Ranking = () => {
 
   // 이름을 마스킹하는 함수
   const maskName = (name) => {
+    if (!name) return '이름 없음'; // name이 undefined 또는 null이면 기본값 반환
+
     if (name.length === 3) {
       return name[0] + '*' + name[2];
     } else if (name.length > 3) {
       return name[0] + '**' + name.slice(3);
     }
-    return name; // 기본적으로 그대로 반환
+    return name;
   };
 
   return (
@@ -68,8 +77,8 @@ const Ranking = () => {
       <RankingTable
         users={users}
         isLoggedIn={isLoggedIn}
-        userRanking={userRanking}
-        rankingList={rankingList}
+        userRanking={userRanking || {}}
+        rankingList={rankingList || []}
         maskName={maskName}
       />
     </Root>

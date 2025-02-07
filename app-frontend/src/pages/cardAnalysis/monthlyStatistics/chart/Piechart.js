@@ -3,9 +3,7 @@ import styled from 'styled-components';
 import { ResponsivePie } from '@nivo/pie';
 
 const StyledChart = styled.div`
-  width: 55%;
   height: 600px;
-  margin: 0 auto;
 `;
 
 const processData = (data) => {
@@ -27,7 +25,7 @@ const processData = (data) => {
   }));
 };
 
-const Piechart = ({ data, onClick }) => {
+const Piechart = ({ data, onClick, chartWidth }) => {
   const handleBarClick = (data) => {
     if (onClick) {
       onClick(data);
@@ -35,10 +33,10 @@ const Piechart = ({ data, onClick }) => {
   };
 
   return (
-    <StyledChart>
+    <StyledChart style={{ width: chartWidth }}>
       <ResponsivePie
         data={processData(data)}
-        margin={{ top: 40, right: 150, bottom: 80, left: 150 }}
+        margin={{ top: 40, right: 120, bottom: 80, left: 120 }}
         valueFormat=" >-,"
         innerRadius={0.5}
         padAngle={1}

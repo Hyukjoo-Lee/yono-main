@@ -10,7 +10,7 @@ import DailyStatistics from './dailyStatistics/DailyStatistics';
 import MonthlyStatistics from './monthlyStatistics/MonthlyStatistics';
 import { useNavigate } from 'react-router-dom';
 import styled, { keyframes } from 'styled-components';
-// import { updateHistory } from '../../apis/cardHistoryApi.js';
+import { updateHistory } from '../../apis/cardHistoryApi.js';
 
 const blink = keyframes`
   0% { opacity: 1; }
@@ -30,16 +30,16 @@ const CardAnalysis = () => {
   const [isShowLoginDialog, setIsShowLoginDialog] = useState(false);
   const [isShowCardDialog, setIsShowCardDialog] = useState(false);
   const [isShowPanels, setIsShowPanels] = useState(false);
-  // const [isHistory, setIsHistory] = useState(null);
-  const [isHistory] = useState(null);
+  const [isHistory, setIsHistory] = useState(null);
+  // const [isHistory] = useState(null);
   const navigate = useNavigate();
 
   const userNum = user?.userNum;
 
   const [selectedTab, setSelectedTab] = useState(0);
   const items = [
-    { text: '일별 통계' },
-    { text: '목차별 통계' },
+    { text: '소비 캘린더' },
+    { text: '업종별 소비' },
     { text: '월별 통계' },
   ];
 
@@ -57,8 +57,8 @@ const CardAnalysis = () => {
       }
       setIsShowPanels(true);
 
-      // const history = await updateHistory(userNum);
-      // setIsHistory(history.data);
+      const history = await updateHistory(userNum);
+      setIsHistory(history.data);
     };
 
     fetchHistory();
@@ -79,10 +79,10 @@ const CardAnalysis = () => {
       <CommonPageInfo
         title={
           selectedTab === 0
-            ? '일별통계(캘린더)'
+            ? '소비 캘린더'
             : selectedTab === 1
-              ? '목차별통계(원형그래프)'
-              : '월별통계(막대/원형그래프)'
+              ? '업종별 소비 (원형그래프)'
+              : '월별 통계 (막대/원형그래프)'
         }
         text={
           selectedTab === 0 ? (
@@ -92,7 +92,7 @@ const CardAnalysis = () => {
             </p>
           ) : selectedTab === 1 ? (
             <p>
-              최근 1개월의 목차별 원형그래프로 소비를 알려드립니다. <br />
+              이번 달의 업종별 소비를 원형그래프로 보여드립니다. <br />
               카테고리를 클릭하면 상세 내역을 확인할 수 있습니다.
             </p>
           ) : (

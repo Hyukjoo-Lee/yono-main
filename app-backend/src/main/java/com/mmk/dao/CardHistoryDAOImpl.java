@@ -38,8 +38,15 @@ public class CardHistoryDAOImpl implements CardHistoryDAO {
     @Override
     public List<CardHistoryEntity> findByUserCardIdAndResUsedDateBetween(int userCardId, String startDate,
             String endDate) {
-        return cardHistoryRepository.findByUserCardIdAndResUsedDateBetween(userCardId, startDate,endDate);
+        return cardHistoryRepository.findByUserCardIdAndResUsedDateBetween(userCardId, startDate, endDate);
+    }
 
+    public List<CardHistoryEntity> findByPrimaryAndMonth(int userNum, String yearMonth) {
+        return cardHistoryRepository.findByPrimaryAndMonth(userNum, yearMonth);
+    }
+
+    @Override
+    public List<Object[]> getTopCategories(int userNum) {
+        return cardHistoryRepository.findTopCategories(userNum);
     }
 }
-

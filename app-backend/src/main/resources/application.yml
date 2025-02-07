@@ -42,5 +42,8 @@ spring:
 
 logging:
   level:
-    org:
-      hibernate: info
+    '[org.hibernate]': info
+    '[org.springframework]': warn
+    '[com.mmk]': debug
+  file:
+    name: logs/application.log # 로그 파일 저장 경로
