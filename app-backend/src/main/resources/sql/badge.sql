@@ -1,12 +1,6 @@
+create sequence badge_seq
+start with 1
+increment by 1
+nocache;
+
 select * from badge;
-delete from badge where user_num = 45;
-
-drop table badge;
-
-DROP SEQUENCE badge_seq;
-TRUNCATE table badge;
-
-commit;
-
-
-
