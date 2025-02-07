@@ -21,6 +21,8 @@ const ChartsContainer = styled.div`
 const MonthlyStatistics = () => {
   const [cardData, setCardData] = useState(null);
   const [loading, setLoading] = useState(true);
+  const [message, setMessage] = useState(true);
+  const [data, setData] = useState(true);
   const userNum = useSelector((state) => state.user.user?.userNum);
 
   useEffect(() => {
@@ -28,6 +30,7 @@ const MonthlyStatistics = () => {
       const response = await uploadThreeMonthHistory(userNum);
       if (typeof response == 'string') {
         console.log(response);
+        setData(false);
         // 예외 발생시 다이얼로그 처리 필요
       } else if (response != null) {
         setCardData(response.data);

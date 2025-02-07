@@ -16,7 +16,6 @@ public class BadgeDTO {
     private int userNum; // 사용자 번호
     private int ranking; // 순위
     private double  savingRate; //절약률률
-
     private int currentMonthAmount; //지난 달
     private int previousMonthAmount; //저저번  달
 }

@@ -13,7 +13,6 @@ import org.springframework.web.bind.annotation.RestController;
 import com.mmk.common.ApiResponse;
 import com.mmk.dto.BadgeDTO;
 import com.mmk.dto.RankingDTO;
-import com.mmk.entity.BadgeEntity;
 import com.mmk.service.BadgeService;
 
 @RestController
