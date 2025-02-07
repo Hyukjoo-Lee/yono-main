@@ -21,6 +21,8 @@ const ChartsContainer = styled.div`
 const MonthlyStatistics = (isHistory) => {
   const [cardData, setCardData] = useState(null);
   const [loading, setLoading] = useState(true);
+  const [message, setMessage] = useState(true);
+  const [data, setData] = useState(true);
   const userNum = useSelector((state) => state.user.user?.userNum);
 
   const fetchUser = useCallback(async () => {

@@ -2,6 +2,7 @@ package com.mmk.service;
 
 import java.text.SimpleDateFormat;
 import java.time.LocalDate;
+import java.time.YearMonth;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -10,7 +11,9 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.mmk.dao.BadgeDAO;
 import com.mmk.dto.BadgeDTO;
@@ -19,7 +22,7 @@ import com.mmk.dto.RankingDTO;
 import com.mmk.entity.BadgeEntity;
 
 @Service
-public class BageServiceImpl implements BadgeService {
+public class BadgeServiceImpl implements BadgeService {
 
     @Autowired
     private BadgeDAO badgeDAO;
@@ -51,9 +54,9 @@ public class BageServiceImpl implements BadgeService {
         // 로그인한 유저 랭킹 순위
         int rank = badgeDAO.getRankingByUserNum(userNum);
         RankingDTO rankingDto = convertToDTO(badgeEntity);
-        
+
         rankingDto.setRanking(rank);
-         
+
         return rankingDto;
     }
 
@@ -69,18 +72,18 @@ public class BageServiceImpl implements BadgeService {
         if (badgeEntities.isEmpty()) {
             return Collections.emptyList(); // 빈 리스트 반환
         }
-        
+
         return badgeEntities.stream()
-        .map(this::convertToDTO)
-        .sorted((a, b) -> {
-            int rankCompare = Integer.compare(b.getBadge(), a.getBadge());
-            if (rankCompare == 0) {
-                return Double.compare(b.getCurrentMonthAmount(), a.getCurrentMonthAmount());
-            }
-            return rankCompare;
-        })
-        .limit(100)
-        .collect(Collectors.toList());
+                .map(this::convertToDTO)
+                .sorted((a, b) -> {
+                    int rankCompare = Integer.compare(b.getBadge(), a.getBadge());
+                    if (rankCompare == 0) {
+                        return Double.compare(b.getCurrentMonthAmount(), a.getCurrentMonthAmount());
+                    }
+                    return rankCompare;
+                })
+                .limit(100)
+                .collect(Collectors.toList());
     }
 
     private String getPreviousMonth() {
@@ -94,9 +97,8 @@ public class BageServiceImpl implements BadgeService {
     private RankingDTO convertToDTO(BadgeEntity badgeEntity) {
         if (badgeEntity == null) {
             return new RankingDTO(); // null 체크 추가
-            }
-        
-        
+        }
+
         RankingDTO rankingDTO = new RankingDTO();
         rankingDTO.setBadgeNum(badgeEntity.getBadgeNum());
         rankingDTO.setBadgeDate(badgeEntity.getBadgeDate());
@@ -108,7 +110,7 @@ public class BageServiceImpl implements BadgeService {
         rankingDTO.setCurrentMonthAmount(badgeEntity.getCurrentMonthAmount());
         rankingDTO.setPreviousMonthAmount(badgeEntity.getPreviousMonthAmount());
         rankingDTO.setRanking(badgeEntity.getRanking());
-        
+
         return rankingDTO;
     }
 
@@ -140,6 +142,7 @@ public class BageServiceImpl implements BadgeService {
         return totalAmount;
     }
 
+    @Transactional
     @Override
     public BadgeDTO updateBadgeByUserNum(int userNum, String yearMonth) {
         try {
@@ -153,7 +156,7 @@ public class BageServiceImpl implements BadgeService {
 
             List<CardHistoryDTO> previousMonthList = cardHistoryService.getMonthlyList(userNum, previousMonth);
             int previousMonthTotalAmount = getTotalAmount(previousMonthList);
-            System.out.println("금액: "+previousMonthTotalAmount );
+            System.out.println("금액: " + previousMonthTotalAmount);
 
             double savingsRate = (previousMonthTotalAmount != 0)
                     ? ((double) (previousMonthTotalAmount - currentMonthTotalAmount) / previousMonthTotalAmount) * 100
@@ -229,5 +232,19 @@ public class BageServiceImpl implements BadgeService {
         }
 
         return dto;
+    }
+
+    @Scheduled(cron = "0 01 00 01 * ?") // 초 분 시간 일 월 요일 => 00 01 00 01 *
+    public void scheduledUpdateBadges() {
+        String previousYearMonth = YearMonth.now().minusMonths(1).format((DateTimeFormatter.ofPattern("yyyyMM")));
+        System.out.println("배지 자동 정산 시작 :" + previousYearMonth);
+        try {
+            updateBadge(previousYearMonth);
+            System.out.println("배지 자동 정산 완료 : " + previousYearMonth);
+        } catch (Exception e) {
+            System.out.println("배지 자동 정산 중 오류 : "
+                    + previousYearMonth);
+            e.printStackTrace();
+        }
     }
 }

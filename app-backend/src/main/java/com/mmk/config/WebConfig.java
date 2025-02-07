@@ -24,4 +24,18 @@ public class WebConfig implements WebMvcConfigurer {
             throw new RuntimeException("사진 파일 경로 에러", e);
         }
     }
+
+
+    // @Override
+    // public void addResourceHandlers(@NonNull ResourceHandlerRegistry registry) {
+    //     String fullPath = uploadDir + "/uploads/images/";
+
+    //     try {
+    //         registry.addResourceHandler("/uploads/images/**")
+    //                 .addResourceLocations("file:" + fullPath);
+
+    //     } catch (Exception e) {
+    //         throw new RuntimeException("프로필 사진 파일 경로 에러", e);
+    //     }
+    // }
 }

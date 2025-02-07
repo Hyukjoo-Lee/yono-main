@@ -43,12 +43,10 @@ public class PostsController {
             @RequestParam("postFormData") String postFormData,
             @RequestParam(value = "file", required = false) MultipartFile postFile) {
 
-        String baseUploadFolder = uploadDir + "/uploads/images";
-        System.out.println("Base Upload Folder: " + baseUploadFolder);
-
         try {
             PostsDTO pd = new ObjectMapper().readValue(postFormData, PostsDTO.class);
             System.out.println("UserId: " + pd.getUserId());
+            String uploadFolder = uploadDir + "/uploads/images";
 
             if (postFile != null && !postFile.isEmpty()) {
                 String fileName = postFile.getOriginalFilename();
