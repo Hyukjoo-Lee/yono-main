@@ -82,7 +82,7 @@ export function NoticeTable() {
   const [rows, setRows] = useState([]);
   const [page, setPage] = useState(0);
   const [keyword, setKeyword] = useState('');
-  const [isDialogOpne, setIsDialogOpen] = useState(false);
+  const [isDialogOpen, setIsDialogOpen] = useState(false);
   const rowsPerPage = 10;
   const navigate = useNavigate();
 
@@ -95,16 +95,14 @@ export function NoticeTable() {
   };
 
   const handleButtonClick = () => {
-    const isAdmin = localStorage.getItem('role') === 'ADMIN';
-    if (!isAdmin) {
-      setIsDialogOpen(true);
-      return;
-    } else {
-      navigate('/noticeFormBox');
-    }
-    navigate('/noticeFormBox');
-  };
+    const isAdmin = localStorage.getItem('userRole') === 'ADMIN';
 
+    if (!isAdmin) {
+      setIsDialogOpen(true); // 권한이 없으면 다이얼로그를 열기
+    } else {
+      navigate('/noticeFormBox'); // 관리자라면 폼으로 이동
+    }
+  };
   const handleSearchChange = (e) => {
     setKeyword(e.target.value);
   };
@@ -174,14 +172,16 @@ export function NoticeTable() {
             text="글등록"
             onClick={handleButtonClick}
           />
-          <CommonDialog
-            open={isDialogOpne}
-            onClose={() => setIsDialogOpen(false)}
-            title="접근제한"
-            children="관리자 권한 기능입니다."
-            submitText="확인"
-            onClick={() => setIsDialogOpen(false)}
-          />
+          {isDialogOpen && (
+            <CommonDialog
+              open={isDialogOpen}
+              onClose={() => setIsDialogOpen(false)}
+              title="접근제한"
+              children="관리자 권한 기능입니다."
+              submitText="확인"
+              onClick={() => setIsDialogOpen(false)}
+            />
+          )}
         </Container>
 
         <Paper sx={{ width: '100%', overflow: 'hidden', boxShadow: 'none' }}>

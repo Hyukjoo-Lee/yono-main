@@ -3,6 +3,7 @@ import { useNavigate, useParams } from 'react-router-dom';
 import styled from 'styled-components';
 import { deleteNotice, fetchNoticeDetail } from '../../apis/noticeApi';
 import CommonButton from '../../common/CommonButton';
+import CommonDialog from '../../common/CommonDialog';
 import CommonHr from '../../common/CommonHr';
 
 const Root = styled.div`
@@ -79,6 +80,7 @@ const EditBox = styled.div`
 
 export function NoticePost() {
   const [noticeData, setNoticeData] = useState(null);
+  const [isDialogOpen, setIsDialogOpen] = useState(false);
   const navigate = useNavigate();
   const { id } = useParams();
   const baseURL = process.env.REACT_APP_API_URL;
@@ -104,19 +106,30 @@ export function NoticePost() {
   }, [id]);
 
   const handleEditClick = (id) => {
-    navigate(`/noticeEditFormBox/${id}`);
+    const isAdmin = localStorage.getItem('userRole') === 'ADMIN';
+
+    if (!isAdmin) {
+      setIsDialogOpen(true);
+    } else {
+      navigate(`/noticeEditFormBox/${id}`);
+    }
   };
 
   const handleDelete = async () => {
-    if (!window.confirm('정말 삭제하시겠습니까?')) return;
+    const isAdmin = localStorage.getItem('userRole') === 'ADMIN';
 
-    try {
-      await deleteNotice([parseInt(id, 10)]);
-      alert('삭제되었습니다!');
-      navigate('/community');
-    } catch (error) {
-      console.error('삭제 중 오류 발생 : ', error);
-      alert('삭제에 실패했습니다. 다시 시도해주세요!');
+    if (!isAdmin) {
+      setIsDialogOpen(true);
+    } else {
+      if (!window.confirm('정말 삭제하시겠습니까?')) return;
+      try {
+        await deleteNotice([parseInt(id, 10)]);
+        alert('삭제되었습니다!');
+        navigate('/community');
+      } catch (error) {
+        console.error('삭제 중 오류 발생 : ', error);
+        alert('삭제에 실패했습니다. 다시 시도해주세요!');
+      }
     }
   };
 
@@ -157,7 +170,27 @@ export function NoticePost() {
         </p>
         <EditBox>
           <StyledButton text="수정" onClick={() => handleEditClick(id)} />
+          {isDialogOpen && (
+            <CommonDialog
+              open={isDialogOpen}
+              onClose={() => setIsDialogOpen(false)}
+              title="접근제한"
+              children="관리자 권한 기능입니다."
+              submitText="확인"
+              onClick={() => setIsDialogOpen(false)}
+            />
+          )}
           <StyledButton text="삭제" onClick={handleDelete} />
+          {isDialogOpen && (
+            <CommonDialog
+              open={isDialogOpen}
+              onClose={() => setIsDialogOpen(false)}
+              title="접근제한"
+              children="관리자 권한 기능입니다."
+              submitText="확인"
+              onClick={() => setIsDialogOpen(false)}
+            />
+          )}
         </EditBox>
       </NoticeHeader>
 

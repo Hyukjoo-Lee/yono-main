@@ -65,6 +65,7 @@ public class NoticeController {
           .body(new ApiResponse<>(403, "글쓰기 권한이 없습니다.", null));
       }
 
+      //삭제 하기 saveFile apiResponse 호출하지말고 일반 메서드로 변경하기
       if (file != null && !file.isEmpty()) {
         ApiResponse<String> fileResponse = saveFile(file);
 
@@ -93,7 +94,7 @@ public class NoticeController {
   // 파일 저장 메서드
   @PostMapping(value = "/upload", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
   private ApiResponse<String> saveFile(@RequestParam("file") MultipartFile file) {
-    try { //밑코드 삭제하고 두번째 줄 propertyPath 변수명 webConpig에 저장할 경로 지정하고 변수명 설정해서 넣어주기
+    try {
       String uploadFolder = uploadDir + "/uploads/images";
 
       Calendar cal = Calendar.getInstance();
