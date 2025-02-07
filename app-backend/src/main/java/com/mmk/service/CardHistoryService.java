@@ -29,4 +29,6 @@ public interface CardHistoryService {
      * @return 사용자가 가장 많이 소비한 상위 카테고리 목록 (업종명과 총 사용 금액을 포함)
      */
     List<CardSummaryDTO> getUserTopSpendingCategories(int userNum);
+
+    List<CardHistoryDTO> getMonthlyList(int userNum, String yearMonth);
 }

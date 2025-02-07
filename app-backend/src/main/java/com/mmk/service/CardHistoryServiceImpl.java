@@ -194,15 +194,17 @@ public class CardHistoryServiceImpl implements CardHistoryService {
     public List<CardHistoryDTO> getMonthlyList(int userNum, String yearMonth) {
         // yearMonth는 yyyyMM 형식 (예: 202301)
 
-        List<CardHistoryEntity> historyEntityList = cardHistoryDAO.findByPrimaryAndMonth(userNum, yearMonth); //대표카드 일 때만 합산, yearmonth을 조회
+        List<CardHistoryEntity> historyEntityList = cardHistoryDAO.findByPrimaryAndMonth(userNum, yearMonth); // 대표카드 일
+                                                                                                              // 때만 합산,
+                                                                                                              // yearmonth을
+                                                                                                              // 조회
 
         List<CardHistoryDTO> historyDTOList = historyEntityList.stream()
-            .map(this::toDTO)
-            .collect(Collectors.toList());
-        
+                .map(this::toDTO)
+                .collect(Collectors.toList());
+
         return historyDTOList;
 
-    
     }
 
     @Override
@@ -249,6 +251,12 @@ public class CardHistoryServiceImpl implements CardHistoryService {
 
         entity.setUserCardEntity(userCardDAO.findByUserCardId(dto.getUserCardId()));
         return entity;
+    }
+
+    // 임시 에러 처리
+    @Override
+    public int getMonthlyTotalAmount(int userNum, String yearMonth) {
+        return 0;
     }
 
 }
