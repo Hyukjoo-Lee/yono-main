@@ -26,13 +26,13 @@ public interface UserCardRepository extends JpaRepository<UserCardEntity, Intege
 
     @Modifying
     @Transactional
-    @Query("UPDATE UserCardEntity u SET u.primaryCard = 0 WHERE u.userEntity.userNum = :userNum")
+    @Query("UPDATE UserCardEntity u SET u.primaryCard = '일반카드' WHERE u.userEntity.userNum = :userNum")
     void removePrimaryCardAll(@Param("userNum") int userNum);
 
-    UserCardEntity findByUserEntityAndPrimaryCard(UserEntity userEntity, int primaryCard);
+    UserCardEntity findByUserEntityAndPrimaryCard(UserEntity userEntity, String primaryCard);
 
     @Modifying
-    @Query("UPDATE UserCardEntity u SET u.primaryCard = 1 WHERE u.userCardId = :userCardId")
+    @Query("UPDATE UserCardEntity u SET u.primaryCard = '대표카드' WHERE u.userCardId = :userCardId")
     void setPrimaryCard(@Param("userCardId") int userCardId);
 
     UserCardEntity findByUserCardId(int userCardId);

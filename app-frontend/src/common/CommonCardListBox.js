@@ -189,7 +189,7 @@ const CommonCardListBox = ({
                   ))}
                 </CardInfoContainer>
                 <CardInfoContainer>
-                  {card.primaryCard === 1 ? (
+                  {card.primaryCard === '대표카드' ? (
                     <VerifiedTextContainer>
                       <VerifiedIcon
                         style={{ color: '#4CAF50', fontSize: '28px' }}

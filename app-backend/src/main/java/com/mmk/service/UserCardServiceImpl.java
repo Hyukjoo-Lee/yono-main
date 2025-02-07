@@ -43,11 +43,15 @@ public class UserCardServiceImpl implements UserCardService {
     @Autowired
     private CodefService codefService;
 
+    @Autowired
+    private EncryptionService encryptionService;
+
     // 사용자 카드 등록
     @Override
     public UserCardDTO registerCard(UserCardDTO userCardDTO, String organization, String cardTitle) {
         String userCardNum = userCardDTO.getUserCardNum();
         int userNum = userCardDTO.getUserNum();
+        String userPwd = userCardDTO.getCardPwd();
 
         if (cardCompanyDAO.existsCompany(userNum, organization)) {
             if (userCardDAO.existsByUserCardNum(userCardNum)) {
@@ -56,6 +60,12 @@ public class UserCardServiceImpl implements UserCardService {
                 int cardCompanyNum = cardCompanyDAO.findByUserNumAndOrganizationCode(userNum, organization)
                         .getCardCompanyNum();
                 int cardId = cardDAO.findByCardTitle(cardTitle).getCardId();
+
+                try {
+                    userCardDTO.setCardPwd(encryptionService.encryptPassword(userPwd));
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
                 userCardDTO.setCardCompanyNum(cardCompanyNum);
                 userCardDTO.setCardId(cardId);
 
@@ -140,7 +150,7 @@ public class UserCardServiceImpl implements UserCardService {
     // 유저 정보로 대표 카드 조회
     @Override
     public UserCardDTO findPrimaryCardByUserNum(int userNum) {
-        return toDTO(userCardDAO.findByUserNumAndPrimaryCard(userDAO.findByUserNum(userNum), 1));
+        return toDTO(userCardDAO.findByUserNumAndPrimaryCard(userDAO.findByUserNum(userNum), "대표카드"));
     }
 
     // 카드 번호 마스킹 처리 (앞 4자리만)

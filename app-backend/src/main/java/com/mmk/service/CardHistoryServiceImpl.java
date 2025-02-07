@@ -52,7 +52,7 @@ public class CardHistoryServiceImpl implements CardHistoryService {
         String startDate = twoMonthsAgoFirstDay.format(formatter);
 
         UserEntity userEntity = userDAO.findByUserNum(userNum);
-        UserCardEntity userCardEntity = userCardDAO.findByUserNumAndPrimaryCard(userEntity, 1);
+        UserCardEntity userCardEntity = userCardDAO.findByUserNumAndPrimaryCard(userEntity, "대표카드");
         int userCardId = userCardEntity.getUserCardId();
 
         List<CardHistoryEntity> entity = cardHistoryDAO.findRecentHistory(userCardId, startDate);
@@ -70,7 +70,7 @@ public class CardHistoryServiceImpl implements CardHistoryService {
     @Override
     public void updateCardHistory(int userNum) {
         UserEntity userEntity = userDAO.findByUserNum(userNum);
-        UserCardEntity userCardEntity = userCardDAO.findByUserNumAndPrimaryCard(userEntity, 1);
+        UserCardEntity userCardEntity = userCardDAO.findByUserNumAndPrimaryCard(userEntity, "대표카드");
         int userCardId = userCardEntity.getUserCardId();
 
         String recentDate = cardHistoryDAO.findMaxResUsedDate(userCardId);
