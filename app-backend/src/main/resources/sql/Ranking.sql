@@ -27,29 +27,7 @@ INSERT INTO badge (badge_num, badge_date, badge, ranking, current_month_amount, 
 VALUES (badge_seq.nextval, '202501', 1000, 0, 600000, 120000, (SELECT user_num FROM user_info WHERE user_id = 'leeid'));
 
 
-
-
-INSERT INTO badge (badge_num, badge_date, badge, ranking, current_month_amount, previous_month_amount, user_num)
-VALUES (badge_seq.nextval, '202412', 10, 0, 480000, 450000, (SELECT user_num FROM user_info WHERE user_id = 'crtestid'));
-
-INSERT INTO badge (badge_num, badge_date, badge, ranking, current_month_amount, previous_month_amount, user_num)
-VALUES (badge_seq.nextval, '202412', 8, 2, 420000, 400000, (SELECT user_num FROM user_info WHERE user_id = 'hjtestid'));
-
-INSERT INTO badge (badge_num, badge_date, badge, ranking, current_month_amount, previous_month_amount, user_num)
-VALUES (badge_seq.nextval, '202412', 7, 3, 390000, 380000, (SELECT user_num FROM user_info WHERE user_id = 'mktestid'));
-
-INSERT INTO badge (badge_num, badge_date, badge, ranking, current_month_amount, previous_month_amount, user_num)
-VALUES (badge_seq.nextval, '202412', 5, 4, 250000, 300000, (SELECT user_num FROM user_info WHERE user_id = 'jhtestid'));
-
-INSERT INTO badge (badge_num, badge_date, badge, ranking, current_month_amount, previous_month_amount, user_num)
-VALUES (badge_seq.nextval, '202412', 4, 5, 180000, 190000, (SELECT user_num FROM user_info WHERE user_id = 'jetestid'));
-
-INSERT INTO badge (badge_num, badge_date, badge, ranking, current_month_amount, previous_month_amount, user_num)
-VALUES (badge_seq.nextval, '202412', 3, 6, 150000, 160000, (SELECT user_num FROM user_info WHERE user_id = 'hongid'));
-
-INSERT INTO badge (badge_num, badge_date, badge, ranking, current_month_amount, previous_month_amount, user_num)
-VALUES (badge_seq.nextval, '202412', 2, 7, 100000, 120000, (SELECT user_num FROM user_info WHERE user_id = 'leeid'));
-
-delete from badge where badge_num = 14;
+delete from badge where badge_num = 36;
+commit;
 
 select * from badge;

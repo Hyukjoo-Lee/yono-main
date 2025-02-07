@@ -9,7 +9,7 @@ import com.mmk.entity.BadgeEntity;
 
 @Repository
 public class BadgeDAOImpl implements BadgeDAO {
-    
+
     @Autowired
     private BadgeRepository badgeRepository;
 
@@ -17,7 +17,7 @@ public class BadgeDAOImpl implements BadgeDAO {
     public void save(BadgeEntity badgeEntity) {
         badgeRepository.save(badgeEntity);
     }
-    
+
     // 랭킹 정보
     @Override
     public List<BadgeEntity> getBadgesForPreviousMonth(String previousMonth) {
@@ -25,7 +25,7 @@ public class BadgeDAOImpl implements BadgeDAO {
         return badgeRepository.findByBadgeDate(previousMonth);
     }
 
-     // 로그인한 유저 랭킹정보
+    // 로그인한 유저 랭킹정보
     @Override
     public BadgeEntity getUserRanking(String previousMonth, int userNum) {
         return badgeRepository.findByBadgeDateAndUserEntity_UserNum(previousMonth, userNum);

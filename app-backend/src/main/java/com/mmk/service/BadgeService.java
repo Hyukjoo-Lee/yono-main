@@ -9,7 +9,7 @@ import com.mmk.entity.BadgeEntity;
 public interface BadgeService {
 
     void save(BadgeEntity badgeEntity);
-    
+
     RankingDTO getUserRanking(int userNum);
 
     List<RankingDTO> getBadgesForPreviousMonth();

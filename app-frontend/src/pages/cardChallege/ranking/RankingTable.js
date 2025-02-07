@@ -123,12 +123,17 @@ const ProfileBox = styled.div`
   }
 `;
 
-const RankingTable = ({ isLoggedIn, userRanking, rankingList, maskName }) => {
+const RankingTable = ({
+  isLoggedIn,
+  userRanking,
+  rankingList = [],
+  maskName,
+}) => {
   const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
-    setIsLoading(rankingList.length === 0);
-  }, [rankingList]);
+    setIsLoading(false);
+  }, [isLoggedIn]);
 
   return (
     <Root>
@@ -136,7 +141,7 @@ const RankingTable = ({ isLoggedIn, userRanking, rankingList, maskName }) => {
         <LoadingBox>
           <CommonLoading />
         </LoadingBox>
-      ) : rankingList.length === 0 ? (
+      ) : Array.isArray(rankingList) && rankingList.length === 0 ? (
         <EmptyBox>
           <p>
             아직 집계된 데이터가 없습니다. (정해진 날짜가 지나지 않아 데이터가
@@ -145,7 +150,7 @@ const RankingTable = ({ isLoggedIn, userRanking, rankingList, maskName }) => {
         </EmptyBox>
       ) : (
         <BoxStyle>
-          {userRanking && (
+          {userRanking?.badge !== undefined && (
             <UserBoxIn>
               <TextBox>
                 <TextStyle>{userRanking.ranking}</TextStyle>
@@ -160,49 +165,56 @@ const RankingTable = ({ isLoggedIn, userRanking, rankingList, maskName }) => {
                   )}
                 </ProfileBox>
                 <TextStyle>
-                  {maskName(userRanking.name)}({userRanking.userId})
+                  {typeof maskName === 'function'
+                    ? maskName(userRanking?.name || '이름 없음')
+                    : userRanking?.name || '이름 없음'}{' '}
+                  ({userRanking?.userId || '알 수 없음'})
                 </TextStyle>
               </TextBox>
-              <NumberText>{userRanking.badge.toLocaleString()}개</NumberText>
+              <NumberText>
+                {userRanking?.badge?.toLocaleString() || '0'}개
+              </NumberText>
             </UserBoxIn>
           )}
-          <BoxInStyle>
-            {rankingList.map((item, index) => (
-              <BoxIn key={index}>
-                <TextBox>
-                  {index === 0 ? (
-                    <MedalBox>
-                      <Medal1 />
-                    </MedalBox>
-                  ) : index === 1 ? (
-                    <MedalBox>
-                      <Medal2 />
-                    </MedalBox>
-                  ) : index === 2 ? (
-                    <MedalBox>
-                      <Medal3 />
-                    </MedalBox>
-                  ) : (
-                    <TextStyle>{index + 1}</TextStyle>
-                  )}
 
-                  <ProfileBox>
-                    {item.profile !== 'temp_profile' ? (
-                      <img
-                        src={`http://localhost:8065${item.profile}`}
-                        alt={maskName(item.name)}
-                      />
+          <BoxInStyle>
+            {Array.isArray(rankingList) &&
+              rankingList.map((item, index) => (
+                <BoxIn key={index}>
+                  <TextBox>
+                    {index === 0 ? (
+                      <MedalBox>
+                        <Medal1 />
+                      </MedalBox>
+                    ) : index === 1 ? (
+                      <MedalBox>
+                        <Medal2 />
+                      </MedalBox>
+                    ) : index === 2 ? (
+                      <MedalBox>
+                        <Medal3 />
+                      </MedalBox>
                     ) : (
-                      <Profile />
+                      <TextStyle>{index + 1}</TextStyle>
                     )}
-                  </ProfileBox>
-                  <TextStyle>
-                    {maskName(item.name)}({item.userId})
-                  </TextStyle>
-                </TextBox>
-                <NumberText>{item.badge.toLocaleString()}개</NumberText>
-              </BoxIn>
-            ))}
+
+                    <ProfileBox>
+                      {item.profile !== 'temp_profile' ? (
+                        <img
+                          src={`http://localhost:8065${item.profile}`}
+                          alt={maskName(item.name)}
+                        />
+                      ) : (
+                        <Profile />
+                      )}
+                    </ProfileBox>
+                    <TextStyle>
+                      {maskName(item.name)}({item.userId})
+                    </TextStyle>
+                  </TextBox>
+                  <NumberText>{item.badge.toLocaleString()}개</NumberText>
+                </BoxIn>
+              ))}
           </BoxInStyle>
         </BoxStyle>
       )}

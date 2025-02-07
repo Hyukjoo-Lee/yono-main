@@ -12,19 +12,18 @@ const Root = styled.div`
 const RootIn = styled.div`
   & > div {
     width: 100%;
-    & > div {
-      display: flex;
-      justify-content: space-around;
-      align-items: flex-end;
-      & > div:nth-child(1) {
-        order: 2;
-      }
-      & > div:nth-child(2) {
-        order: 1;
-      }
-      & > div:nth-child(3) {
-        order: 3;
-      }
+    display: flex;
+    justify-content: space-around;
+    align-items: flex-end;
+    margin-bottom: 30px;
+    & > div:nth-child(1) {
+      order: 2;
+    }
+    & > div:nth-child(2) {
+      order: 1;
+    }
+    & > div:nth-child(3) {
+      order: 3;
     }
   }
 `;
@@ -63,13 +62,6 @@ const NameStyle = styled.p`
   margin: 0 0 24px;
 `;
 
-const TextStyle = styled.p`
-  font-size: ${(props) => props.theme.fontSize.base};
-  color: ${(props) => props.theme.color.gray};
-  margin: 20px 0 20px;
-  text-align: center;
-`;
-
 const Box = styled.div`
   min-width: 180px;
   border-radius: 5px;
@@ -86,7 +78,7 @@ const Box = styled.div`
   }
 `;
 
-const RankingComponent = ({ rankingList, maskName }) => {
+const RankingComponent = ({ rankingList = [], maskName }) => {
   const [top3, setTop3] = useState([]);
 
   useEffect(() => {
@@ -98,7 +90,7 @@ const RankingComponent = ({ rankingList, maskName }) => {
         const user = rankingList[i];
 
         top3.push(user);
- 
+
         if (top3.length === 3) break;
       }
 
@@ -113,8 +105,28 @@ const RankingComponent = ({ rankingList, maskName }) => {
           <></>
         ) : (
           <div>
-            <div>
-              {top3.map((item, index) => (
+            {top3.length === 2 ? (
+              <BoxStyle>
+                <CircleBox $rank={0}>
+                  {top3[0].profile !== 'temp_profile' ? (
+                    <img
+                      src={`http://localhost:8065${top3[0].profile}`}
+                      alt={maskName(top3[0].name)}
+                    />
+                  ) : (
+                    <Profile />
+                  )}
+                </CircleBox>
+                <NameStyle>
+                  {maskName(top3[0].name)}({top3[0].userId})
+                </NameStyle>
+                <Box>
+                  <Medal1 />
+                  <p>{top3[0].badge.toLocaleString()}개</p>
+                </Box>
+              </BoxStyle>
+            ) : (
+              top3.map((item, index) => (
                 <BoxStyle key={index}>
                   <CircleBox $rank={index}>
                     {item.profile !== 'temp_profile' ? (
@@ -140,13 +152,8 @@ const RankingComponent = ({ rankingList, maskName }) => {
                     <p>{item.badge.toLocaleString()}개</p>
                   </Box>
                 </BoxStyle>
-              ))}
-            </div>
-
-            <TextStyle>
-              공동 순위인 경우, 소수점 자리까지 기준을 적용하여 순위를
-              산정합니다.
-            </TextStyle>
+              ))
+            )}
           </div>
         )}
       </RootIn>

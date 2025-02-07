@@ -5,6 +5,7 @@ import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -42,6 +43,11 @@ public class BageServiceImpl implements BadgeService {
 
         // BadgeDAO를 통해 이전 달 배지 데이터 조회
         BadgeEntity badgeEntity = badgeDAO.getUserRanking(previousMonth, userNum);
+
+        if (badgeEntity == null) {
+            return null; // null 반환하여 컨트롤러에서 204 응답 처리
+        }
+
         // 로그인한 유저 랭킹 순위
         int rank = badgeDAO.getRankingByUserNum(userNum);
         RankingDTO rankingDto = convertToDTO(badgeEntity);
@@ -60,18 +66,21 @@ public class BageServiceImpl implements BadgeService {
         // BadgeDAO를 통해 이전 달 배지 데이터 조회
         List<BadgeEntity> badgeEntities = badgeDAO.getBadgesForPreviousMonth(previousMonth);
 
-        List<RankingDTO> list = badgeEntities.stream()
-                .map(this::convertToDTO)
-                .sorted((a, b) -> {
-                    int rankCompare = Integer.compare(a.getBadge(), b.getBadge());
-                    if (rankCompare == 0) {
-                        return Double.compare(b.getCurrentMonthAmount(), a.getCurrentMonthAmount());
-                    }
-                    return rankCompare;
-                })
-                .limit(100)
-                .collect(Collectors.toList());
-        return list;
+        if (badgeEntities.isEmpty()) {
+            return Collections.emptyList(); // 빈 리스트 반환
+        }
+        
+        return badgeEntities.stream()
+        .map(this::convertToDTO)
+        .sorted((a, b) -> {
+            int rankCompare = Integer.compare(b.getBadge(), a.getBadge());
+            if (rankCompare == 0) {
+                return Double.compare(b.getCurrentMonthAmount(), a.getCurrentMonthAmount());
+            }
+            return rankCompare;
+        })
+        .limit(100)
+        .collect(Collectors.toList());
     }
 
     private String getPreviousMonth() {
@@ -84,9 +93,11 @@ public class BageServiceImpl implements BadgeService {
     // Entity를 DTO로 변환하는 메서드
     private RankingDTO convertToDTO(BadgeEntity badgeEntity) {
         if (badgeEntity == null) {
-            return null; // null 체크 추가
-
-                }RankingDTO rankingDTO = new RankingDTO();
+            return new RankingDTO(); // null 체크 추가
+            }
+        
+        
+        RankingDTO rankingDTO = new RankingDTO();
         rankingDTO.setBadgeNum(badgeEntity.getBadgeNum());
         rankingDTO.setBadgeDate(badgeEntity.getBadgeDate());
         rankingDTO.setBadge(badgeEntity.getBadge());

@@ -1,4 +1,5 @@
 package com.mmk.controller;
+
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,7 +14,6 @@ import org.springframework.web.bind.annotation.RestController;
 import com.mmk.common.ApiResponse;
 import com.mmk.dto.BadgeDTO;
 import com.mmk.dto.RankingDTO;
-import com.mmk.entity.BadgeEntity;
 import com.mmk.service.BadgeService;
 
 @RestController
@@ -39,14 +39,15 @@ public class BadgeController {
     public ResponseEntity<ApiResponse<RankingDTO>> getUserRanking(@RequestParam("userNum") int userNum) {
         try {
             RankingDTO result = badgeService.getUserRanking(userNum);
+
             if (result == null) {
-                return ResponseEntity.noContent().build();
+                return ResponseEntity.status(HttpStatus.NO_CONTENT).body(new ApiResponse<>(204, "로그인한 유저 데이터가 없습니다.", null));
             } else {
                 return ResponseEntity.ok(new ApiResponse<>(200, "로그인한 유저 조회 성공", result));
             }
         } catch (Exception e) {
             e.printStackTrace();
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(new ApiResponse<>(500, "랭킹정보 불러오는 중 오류 발생", null));
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(new ApiResponse<>(500, "로그인한 유저 랭킹정보 불러오는 중 오류 발생", null));
         }
     }
 
@@ -55,7 +56,7 @@ public class BadgeController {
         try {
             List<RankingDTO> result = badgeService.getBadgesForPreviousMonth();
             if (result.isEmpty()) {
-                return ResponseEntity.noContent().build();
+                return ResponseEntity.status(HttpStatus.NO_CONTENT).body(new ApiResponse<>(204, "데이터가 없습니다.", null));
             } else {
                 return ResponseEntity.ok(new ApiResponse<>(200, "랭킹정보 조회 성공", result));
             }
