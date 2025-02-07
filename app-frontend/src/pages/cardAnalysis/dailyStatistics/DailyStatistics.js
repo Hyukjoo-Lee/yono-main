@@ -14,7 +14,7 @@ import Calendar from './calendar/Calendar';
 const Root = styled.div`
   width: 100%;
   display: grid;
-  grid-template-columns: 700px 1fr;
+  grid-template-columns: 750px 1fr;
   gap: 30px;
   box-sizing: border-box;
 `;

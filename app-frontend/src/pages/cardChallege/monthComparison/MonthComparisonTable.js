@@ -54,14 +54,14 @@ const MonthComparisionTable = ({ data }) => {
     <TextWrap>
       <TitleGroup>
         <Titlediv>
-          <p>저저번달에 사용하신 금액</p>
+          <p>지지난달 지출 금액</p>
           <hr />
           <span>
             {(data.previousToPreviousMonthAmount ?? 0).toLocaleString()}원
           </span>
         </Titlediv>
         <Titlediv>
-          <p>저번달에 사용하신 금액</p>
+          <p>지난달 지출 금액</p>
           <hr />
           <span>{(data.previousMonthAmount ?? 0).toLocaleString()}원</span>
         </Titlediv>

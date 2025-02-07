@@ -191,35 +191,18 @@ public class CardHistoryServiceImpl implements CardHistoryService {
     }
 
     @Override
-    public int getMonthlyTotalAmount(int userNum, String yearMonth) {
+    public List<CardHistoryDTO> getMonthlyList(int userNum, String yearMonth) {
         // yearMonth는 yyyyMM 형식 (예: 202301)
 
-        // 월의 첫 날과 마지막 날 계산
-        LocalDate startOfMonth = LocalDate.parse(yearMonth + "01", DateTimeFormatter.ofPattern("yyyyMMdd"));
-        LocalDate endOfMonth = startOfMonth.withDayOfMonth(startOfMonth.lengthOfMonth());
+        List<CardHistoryEntity> historyEntityList = cardHistoryDAO.findByPrimaryAndMonth(userNum, yearMonth); //대표카드 일 때만 합산, yearmonth을 조회
 
-        // yyyyMMdd 형식으로 변환 (startDate와 endDate는 필터링에만 사용)
-        String startDate = startOfMonth.format(DateTimeFormatter.ofPattern("yyyyMMdd"));
-        String endDate = endOfMonth.format(DateTimeFormatter.ofPattern("yyyyMMdd"));
+        List<CardHistoryDTO> historyDTOList = historyEntityList.stream()
+            .map(this::toDTO)
+            .collect(Collectors.toList());
+        
+        return historyDTOList;
 
-        // 최근 3개월 카드 내역을 가져옵니다.
-        List<CardHistoryDTO> historyList = uploadCardHistory(userNum, 2);
-
-        // 해당 월에 해당하는 내역만 필터링
-        List<CardHistoryDTO> filteredHistoryList = historyList.stream()
-                .filter(cardHistory -> {
-                    // 카드 사용 날짜가 startDate와 endDate 사이에 있는지 확인
-                    String usedDate = cardHistory.getResUsedDate().substring(0, 8); // yyyyMMdd 형식
-                    return usedDate.compareTo(startDate) >= 0 && usedDate.compareTo(endDate) <= 0;
-                })
-                .collect(Collectors.toList());
-
-        // 금액 합산 (금액을 숫자로 변환 후 합산)
-        int totalAmount = filteredHistoryList.stream()
-                .mapToInt(history -> Integer.parseInt(history.getResUsedAmount()))
-                .sum();
-
-        return totalAmount;
+    
     }
 
     @Override

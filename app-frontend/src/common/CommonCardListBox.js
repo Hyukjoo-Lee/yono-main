@@ -44,7 +44,7 @@ const BoxStyle = styled.div`
 `;
 
 const BoxInStyle = styled.div`
-  width: calc(100% - 80px - 24px);
+  width: 100%;
 `;
 
 const CardName = styled.p`
@@ -56,10 +56,6 @@ const CardName = styled.p`
   text-overflow: ellipsis;
   white-space: nowrap;
   max-width: 200px;
-`;
-
-const DailyCardName = styled(CardName)`
-  margin-bottom: 8px;
 `;
 
 const InfoRow = styled.div`
@@ -89,10 +85,6 @@ const TextStyle = styled(TitleStyle)`
 `;
 
 const CardImage = styled.img`
-  width: 80px;
-`;
-
-const SmallCardImage = styled(CardImage)`
   width: 80px;
 `;
 
@@ -226,14 +218,7 @@ const CommonCardListBox = ({
         </>
       ) : cardItem ? (
         <BoxStyle>
-          <SmallCardImage
-            src={`http://localhost:8065${cardItem.cardImgUrl || ''}`}
-            alt="카드이미지"
-          />
           <BoxInStyle>
-            <DailyCardName>
-              {cardItem.cardTitle || '카드 이름 없음'}
-            </DailyCardName>
             {fields.map((item, index) => (
               <InfoRow key={index}>
                 <TitleStyle>{item.title}</TitleStyle>

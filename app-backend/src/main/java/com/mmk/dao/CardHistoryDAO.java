@@ -18,4 +18,6 @@ public interface CardHistoryDAO {
     List<CardHistoryEntity> findByUserCardIdAndResUsedDateBetween(int userCardId, String startDate, String endDate);
 
     List<Object[]> getTopCategories(int userNum);
+
+    List<CardHistoryEntity> findByPrimaryAndMonth(int userNum, String yearMonth);
 }

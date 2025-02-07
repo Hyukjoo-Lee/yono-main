@@ -32,6 +32,11 @@ public interface CardHistoryRepository extends JpaRepository<CardHistoryEntity, 
                         @Param("startDate") String startDate,
                         @Param("endDate") String endDate);
 
+        @Query("SELECT c FROM CardHistoryEntity c WHERE c.userCardEntity.userEntity.userNum = :userNum AND c.resUsedDate LIKE CONCAT(:yearMonth, '%') AND c.userCardEntity.primaryCard = 1")
+        List<CardHistoryEntity> findByPrimaryAndMonth(
+                        @Param("userNum") int userNum,
+                        @Param("yearMonth") String yearMonth);
+
         /**
          * 사용자의 카드 내역에서 가장 많이 사용한 업종을 조회
          * 업종별 총 사용 금액을 합산하고, 가장 많이 소비한 순서로 정렬하여 반환합니다.

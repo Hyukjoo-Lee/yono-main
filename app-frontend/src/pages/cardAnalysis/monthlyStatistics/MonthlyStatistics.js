@@ -50,7 +50,7 @@ const MonthlyStatistics = (isHistory) => {
         {cardData ? (
           <>
             <Barchart data={cardData} />
-            <Piechart data={cardData} />
+            <Piechart data={cardData} chartWidth={'50%'} />
           </>
         ) : (
           <p>집계된 데이터가 없습니다.</p>

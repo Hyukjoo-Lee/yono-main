@@ -15,11 +15,12 @@ const Root = styled.div`
 
 const ChartsContainer = styled.div`
   display: flex;
-  justify-content: space-around;
+  justify-content: space-between;
   width: 100%;
 `;
 
 const ListBox = styled.div`
+  width: 420px;
   height: 488px;
   overflow-y: auto;
   &::-webkit-scrollbar {
@@ -34,7 +35,7 @@ const ListBox = styled.div`
 `;
 
 const EmptyBox = styled.div`
-  width: 403px;
+  width: 420px;
   height: 488px;
   border-radius: 7px;
   box-sizing: border-box;
@@ -133,7 +134,11 @@ const CategoryStatics = (isHistory) => {
     <Root>
       {cardData ? (
         <ChartsContainer>
-          <Piechart data={cardData} onClick={handleClick} />
+          <Piechart
+            data={cardData}
+            onClick={handleClick}
+            chartWidth={'calc(100% - 420px - 30px)'}
+          />
           {filteredData.length > 0 ? (
             <ListBox>
               {filteredData.map((item, index) => (
