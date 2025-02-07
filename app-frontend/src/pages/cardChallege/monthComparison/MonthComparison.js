@@ -3,7 +3,7 @@ import styled from 'styled-components';
 import Barchart from './Barchart';
 import MonthComparisionTable from './MonthComparisonTable';
 import { useSelector } from 'react-redux';
-import axios from 'axios';
+import { monthlyComparision } from '../../../apis/MonthComparisionApi';
 
 const Root = styled.div`
   width: 100%;
@@ -41,8 +41,8 @@ const EmptyBox = styled(BoxStyle)`
 `;
 
 const MonthComparision = () => {
-  const [barData, setBarData] = useState([]); // 차트 데이터 상태
-  const [monthlyData, setMonthlyData] = useState([]); // API로부터 받은 데이터 저장
+  const [barData, setBarData] = useState([]);
+  const [monthlyData, setMonthlyData] = useState({});
   const { isLoggedIn, user } = useSelector((state) => state.user);
 
   const userNum = user?.userNum;
@@ -53,52 +53,38 @@ const MonthComparision = () => {
   const previousToPreviousMonth = new Date(currentMonth);
   previousToPreviousMonth.setMonth(currentMonth.getMonth() - 2);
 
-  const formatMonth = (date) => {
-    const month = String(date.getMonth() + 1);
-    return month;
-  };
-
+  const formatMonth = (date) => String(date.getMonth() + 1);
   const previousMonthString = formatMonth(previousMonth);
   const previousToPreviousMonthString = formatMonth(previousToPreviousMonth);
 
   useEffect(() => {
     if (!isLoggedIn || !userNum) return;
 
-    // 백엔드로 API 요청을 보내고 금액 및 뱃지 데이터를 받아옴
     const fetchData = async () => {
-      try {
-        const response = await axios.get('/badge/Comparison', {
-          params: {
-            userNum,
+      const data = await monthlyComparision(userNum);
+      if (data) {
+        console.log('data:', data);
+
+        const formattedData = {
+          previousMonthAmount: data.currentMonthAmount || 0,
+          previousToPreviousMonthAmount: data.previousMonthAmount || 0,
+          previousBadgeRanking: data.ranking || 0,
+          previousBadgeCount: data.badge || 0,
+        };
+
+        setMonthlyData(formattedData);
+        console.log('받은 데이터:', formattedData);
+
+        setBarData([
+          {
+            bottle: `${previousToPreviousMonthString}월`,
+            사용금액: data.previousMonthAmount,
           },
-        });
-
-        if (response.status === 200) {
-          const data = response.data.data;
-          console.log('data: ' + data);
-
-          const formattedData = {
-            previousMonthAmount: data.currentMonthAmount || 0,
-            previousToPreviousMonthAmount: data.previousMonthAmount || 0,
-            previousBadgeRanking: data.ranking || 0,
-            PreviousBadgeCount: data.badge || 0,
-          };
-
-          setMonthlyData(formattedData);
-
-          setBarData([
-            {
-              bottle: `${previousToPreviousMonthString}월`,
-              사용금액: data.previousMonthAmount,
-            },
-            {
-              bottle: `${previousMonthString} 월`,
-              사용금액: data.currentMonthAmount,
-            },
-          ]);
-        }
-      } catch (error) {
-        console.error('리액트에서 월별 금액 조회 실패:', error);
+          {
+            bottle: `${previousMonthString} 월`,
+            사용금액: data.currentMonthAmount,
+          },
+        ]);
       }
     };
 
@@ -107,7 +93,7 @@ const MonthComparision = () => {
 
   return (
     <Root>
-      {monthlyData.length === 0 ? (
+      {Object.keys(monthlyData).length === 0 ? (
         <EmptyBox>
           <p>
             새로 가입하신 계정입니다. 이전 달과 지지난 달의 정산 내역은 생성되지

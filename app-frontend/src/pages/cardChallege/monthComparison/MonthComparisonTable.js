@@ -50,6 +50,7 @@ const MonthComparisionTable = ({
   previousMonthString,
   previousToPreviousMonthString,
 }) => {
+  console.log('뱃지 :' + data);
   if (!data) {
     return <div>Loading...</div>;
   }
@@ -79,7 +80,7 @@ const MonthComparisionTable = ({
         <Titlediv>
           <p>뱃지 갯수</p>
           <hr />
-          <span>{(data.PreviousBadgeCount ?? 0).toLocaleString()}개</span>
+          <span>{(data.previousBadgeCount ?? 0).toLocaleString()}개</span>
         </Titlediv>
       </TitleGroup>
     </TextWrap>
