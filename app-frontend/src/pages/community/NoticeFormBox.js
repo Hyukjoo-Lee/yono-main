@@ -108,7 +108,7 @@ export function NoticeFormBox() {
     }
 
     if (!content?.trim() || content.length > 4000) {
-      errors.content = '내용을 1자 이상 2000자 이내로 입력해주세요.';
+      errors.content = '내용을 10자 이상 2000자 이내로 입력해주세요.';
     }
     return errors;
   };
