@@ -1,5 +1,6 @@
 {
   "java.configuration.updateBuildConfiguration": "interactive",
   "java.compile.nullAnalysis.mode": "automatic",
-  "dataworkspace.excludedProjects": ["ss/ss.sqlproj"]
+  "dataworkspace.excludedProjects": ["ss/ss.sqlproj"],
+  "java.debug.settings.onBuildFailureProceed": true
 }

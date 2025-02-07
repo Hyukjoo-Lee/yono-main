@@ -4,8 +4,13 @@
   "settings": {
     "width": 2000,
     "height": 2000,
+<<<<<<< HEAD
     "scrollTop": -602,
     "scrollLeft": -124,
+=======
+    "scrollTop": -52,
+    "scrollLeft": -92,
+>>>>>>> f47f6fb9dcd4cda2334d204012848259309daa0d
     "zoomLevel": 1,
     "show": 431,
     "database": 4,
@@ -17,6 +22,7 @@
     "bracketType": 1,
     "relationshipDataTypeSync": true,
     "relationshipOptimization": false,
+<<<<<<< HEAD
     "columnOrder": [
       1,
       2,
@@ -26,10 +32,14 @@
       32,
       64
     ],
+=======
+    "columnOrder": [1, 2, 4, 8, 16, 32, 64],
+>>>>>>> f47f6fb9dcd4cda2334d204012848259309daa0d
     "maxWidthComment": -1,
     "ignoreSaveSettings": 0
   },
   "doc": {
+<<<<<<< HEAD
     "tableIds": [
       "FuA90EeZ-VCgqdNRPoJZy",
       "dVDZhBZXDPVApNXN-9wTC",
@@ -2603,3 +2613,20 @@
   },
   "lww": {}
 }
+=======
+    "tableIds": [],
+    "relationshipIds": [],
+    "indexIds": [],
+    "memoIds": []
+  },
+  "collections": {
+    "tableEntities": {},
+    "tableColumnEntities": {},
+    "relationshipEntities": {},
+    "indexEntities": {},
+    "indexColumnEntities": {},
+    "memoEntities": {}
+  },
+  "lww": {}
+}
+>>>>>>> f47f6fb9dcd4cda2334d204012848259309daa0d

@@ -1,9 +1,10 @@
 import React from 'react';
 import styled from 'styled-components';
+import MonthGuide from './MonthGuide';
 
 const TextWrap = styled.div`
   width: 720px;
-  height: 530px;
+  height: 570px;
   margin-right: 30px;
   display: flex;
   flex-direction: column;
@@ -19,7 +20,7 @@ const Titlediv = styled.div`
   border-radius: 7px;
   width: 335px;
   height: 235px;
-  margin-top: 20px;
+  // margin-top: 10px;
   background-color: ${(props) => props.theme.color.lightBlue};
 
   & p {
@@ -71,6 +72,7 @@ const MonthComparisionTable = ({
           <span>{(data.previousMonthAmount ?? 0).toLocaleString()}원</span>
         </Titlediv>
       </TitleGroup>
+      <MonthGuide />
       <TitleGroup>
         <Titlediv>
           <p>등수</p>

@@ -28,7 +28,6 @@ import com.mmk.common.ApiResponse;
 import com.mmk.dto.PostsDTO;
 import com.mmk.service.PostsService;
 
-
 @RestController
 @RequestMapping("/posts")
 public class PostsController {
@@ -42,8 +41,8 @@ public class PostsController {
 
     @PostMapping("/write")
     public ResponseEntity<ApiResponse<PostsDTO>> createPost(
-        @RequestParam("postFormData") String postFormData,
-        @RequestParam(value = "file", required = false) MultipartFile postFile) {
+            @RequestParam("postFormData") String postFormData,
+            @RequestParam(value = "file", required = false) MultipartFile postFile) {
 
     try {
         PostsDTO pd = new ObjectMapper().readValue(postFormData, PostsDTO.class);
@@ -94,29 +93,26 @@ public class PostsController {
             }
         }
 
-        postsService.save(pd);
+            postsService.save(pd);
 
-        ApiResponse<PostsDTO> response = new ApiResponse<>(201, "게시글 저장 성공", pd);
-        return ResponseEntity.ok(response);
-    } catch (JsonProcessingException e) {
-        e.printStackTrace();
-        ApiResponse<PostsDTO> response = new ApiResponse<>(400, "게시글 저장 오류", null);
-        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(response);
+            ApiResponse<PostsDTO> response = new ApiResponse<>(201, "게시글 저장 성공", pd);
+            return ResponseEntity.ok(response);
+        } catch (JsonProcessingException e) {
+            e.printStackTrace();
+            ApiResponse<PostsDTO> response = new ApiResponse<>(400, "게시글 저장 오류", null);
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(response);
+        }
     }
-}
 
-
-
-
-    //모든 게시글 목록 조회 
-    @GetMapping("/list") 
+    // 모든 게시글 목록 조회
+    @GetMapping("/list")
     public ResponseEntity<List<PostsDTO>> getPosts() {
-    List<PostsDTO> posts = postsService.getAllPosts(); // 모든 게시글을 가져옴
-    return ResponseEntity.ok(posts);
+        List<PostsDTO> posts = postsService.getAllPosts(); // 모든 게시글을 가져옴
+        return ResponseEntity.ok(posts);
     }
 
-    //게시글 상세 조회
-    @GetMapping("/list/{id}")                                                   
+    // 게시글 상세 조회
+    @GetMapping("/list/{id}")
     public ResponseEntity<PostsDTO> getPostsByIdAndIncreaseViewCount(@PathVariable int id) {
         PostsDTO posts = postsService.findByIdAndViewCnt(id);
         return ResponseEntity.ok(posts);
@@ -133,22 +129,22 @@ public class PostsController {
         PostsDTO ed = new ObjectMapper().readValue(postFormData, PostsDTO.class);
         String uploadFolder = uploadDir + "/uploads/images";
 
-        // 게시글 ID 설정
-        ed.setNo(no);
+            // 게시글 ID 설정
+            ed.setNo(no);
 
-        // 파일이 업로드된 경우 처리
-        if (file != null && !file.isEmpty()) {
-            String originalFileName = file.getOriginalFilename();
-            if (originalFileName == null || originalFileName.isEmpty()) {
-                throw new RuntimeException("파일 이름을 읽을 수 없습니다.");
-            }
-            System.out.println("업로드된 파일 이름: " + originalFileName);  
+            // 파일이 업로드된 경우 처리
+            if (file != null && !file.isEmpty()) {
+                String originalFileName = file.getOriginalFilename();
+                if (originalFileName == null || originalFileName.isEmpty()) {
+                    throw new RuntimeException("파일 이름을 읽을 수 없습니다.");
+                }
+                System.out.println("업로드된 파일 이름: " + originalFileName);
 
-            // 날짜별 폴더 생성
-            Calendar cal = Calendar.getInstance();
-            int year = cal.get(Calendar.YEAR);
-            int month = cal.get(Calendar.MONTH) + 1;
-            int date = cal.get(Calendar.DATE);
+                // 날짜별 폴더 생성
+                Calendar cal = Calendar.getInstance();
+                int year = cal.get(Calendar.YEAR);
+                int month = cal.get(Calendar.MONTH) + 1;
+                int date = cal.get(Calendar.DATE);
 
             String homedir = uploadFolder + "/" + year + "-" + month + "-" + date;
             // 폴더 생성
@@ -158,63 +154,62 @@ public class PostsController {
                 System.out.println("새로운 폴더 생성: " + homedir);  // 폴더 생성 확인
             }
 
-            // 랜덤 값으로 새 파일 이름 생성
-            Random random = new Random();
-            int randomNum = random.nextInt(100000000);
+                // 랜덤 값으로 새 파일 이름 생성
+                Random random = new Random();
+                int randomNum = random.nextInt(100000000);
 
-            int index = originalFileName.lastIndexOf(".");
-            String fileExtension = originalFileName.substring(index + 1);
-            String newFileName = "post_" + randomNum + "." + fileExtension;
+                int index = originalFileName.lastIndexOf(".");
+                String fileExtension = originalFileName.substring(index + 1);
+                String newFileName = "post_" + randomNum + "." + fileExtension;
 
             // 새 파일 경로 설정
             String fileDBName = "/uploads/images/" + year + "-" + month + "-" + date + "/" + newFileName;
             File saveFile = new File(homedir + "/" + newFileName); // 실제 파일 경로
 
-            // 파일 저장
-            try {
-                file.transferTo(saveFile);
-                System.out.println("새 파일 저장 성공: " + saveFile.getAbsolutePath());  // 파일 저장 경로 출력
-            } catch (IOException e) {
-                e.printStackTrace();
-                throw new RuntimeException("파일 저장 중 오류 발생: " + e.getMessage(), e);
+                // 파일 저장
+                try {
+                    file.transferTo(saveFile);
+                    System.out.println("새 파일 저장 성공: " + saveFile.getAbsolutePath()); // 파일 저장 경로 출력
+                } catch (IOException e) {
+                    e.printStackTrace();
+                    throw new RuntimeException("파일 저장 중 오류 발생: " + e.getMessage(), e);
+                }
+
+                // 새 파일 경로 업데이트
+                ed.setImgurl(fileDBName);
             }
 
-            // 새 파일 경로 업데이트
-            ed.setImgurl(fileDBName);
+            // 게시글 수정
+            postsService.updatePost(ed);
+
+            // 성공 응답
+            ApiResponse<PostsDTO> response = new ApiResponse<>(200, "게시글 수정 성공", ed);
+            return ResponseEntity.ok(response);
+
+        } catch (JsonProcessingException e) {
+            // JSON 파싱 오류 처리
+            e.printStackTrace();
+            ApiResponse<PostsDTO> response = new ApiResponse<>(400, "JSON 파싱 오류: " + e.getMessage(), null);
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(response);
+
+        } catch (Exception e) {
+            // 기타 서버 오류 처리
+            e.printStackTrace();
+            ApiResponse<PostsDTO> response = new ApiResponse<>(500, "서버 오류: " + e.getMessage(), null);
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(response);
         }
-
-        // 게시글 수정
-        postsService.updatePost(ed);
-
-        // 성공 응답
-        ApiResponse<PostsDTO> response = new ApiResponse<>(200, "게시글 수정 성공", ed);
-        return ResponseEntity.ok(response);
-
-    } catch (JsonProcessingException e) {
-        // JSON 파싱 오류 처리
-        e.printStackTrace();
-        ApiResponse<PostsDTO> response = new ApiResponse<>(400, "JSON 파싱 오류: " + e.getMessage(), null);
-        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(response);
-
-    } catch (Exception e) {
-        // 기타 서버 오류 처리
-        e.printStackTrace();
-        ApiResponse<PostsDTO> response = new ApiResponse<>(500, "서버 오류: " + e.getMessage(), null);
-        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(response);
     }
-}
-
 
     @DeleteMapping("/delete/{postId}")
     public ResponseEntity<ApiResponse<String>> deletePost(@PathVariable String postId) {
-    try {
-        // 삭제하려는 게시글 조회하여 이미지 경로 확인
-        PostsDTO post = postsService.findById(postId);
+        try {
+            // 삭제하려는 게시글 조회하여 이미지 경로 확인
+            PostsDTO post = postsService.findById(postId);
 
-        if (post == null) {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND)
-                    .body(new ApiResponse<>(404, "게시글을 찾을 수 없습니다.", null));
-        }
+            if (post == null) {
+                return ResponseEntity.status(HttpStatus.NOT_FOUND)
+                        .body(new ApiResponse<>(404, "게시글을 찾을 수 없습니다.", null));
+            }
 
         // 게시글과 연결된 이미지 파일 삭제
         if (post.getImgurl() != null && !post.getImgurl().isEmpty()) {
@@ -233,11 +228,11 @@ public class PostsController {
             }
         }
 
-        // 데이터베이스에서 게시글 삭제
-        postsService.deletePostById(postId);
+            // 데이터베이스에서 게시글 삭제
+            postsService.deletePostById(postId);
 
-        // 성공 응답 반환
-        return ResponseEntity.ok(new ApiResponse<>(200, "게시글과 이미지가 성공적으로 삭제되었습니다.", null));
+            // 성공 응답 반환
+            return ResponseEntity.ok(new ApiResponse<>(200, "게시글과 이미지가 성공적으로 삭제되었습니다.", null));
 
     } catch (Exception e) {
         e.printStackTrace();

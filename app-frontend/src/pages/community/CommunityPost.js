@@ -86,6 +86,7 @@ const Box = styled.div`
   justify-content: flex-start;
   height: 300px;
   margin-top: 10px;
+  gap: 20px;
 
   p {
     margin: 0;
@@ -107,6 +108,11 @@ const Detailbox = styled.div`
   }
 `;
 
+const ImgBox = styled.div`
+  heigt: 100%;
+  width: 100%;
+`;
+
 const BottomBox = styled.div`
   display: flex;
   margin: 20px 0px 20px 0px;
@@ -123,11 +129,11 @@ export function CommunityPost() {
   const [showOptions, setShowOptions] = useState(false);
   const { rowData } = location.state;
   const [comment, setComment] = useState('');
-  const [commentsData, setCommentsData] = useState([]); // 댓글 데이터를 배열로 관리
+  const [commentsData, setCommentsData] = useState([]);
   const [inputCount, setInputCount] = useState(0);
   const [isDialogOpen, setIsDialogOpen] = useState(false);
   const user = useSelector((state) => state.user.user);
-  const isLoggedIn = useSelector((state) => state.user.isLoggedIn); // 로그인 상태 확인
+  const isLoggedIn = useSelector((state) => state.user.isLoggedIn);
   const [editingComment, setEditingComment] = useState(null);
   const [editedContent, setEditedContent] = useState('');
   const MAX_LENGTH = 100;
@@ -136,7 +142,7 @@ export function CommunityPost() {
   const toggleOptions = (rno) => {
     setShowOptions((prev) => ({
       ...prev,
-      [rno]: !prev[rno], // 선택된 댓글의 옵션만 토글
+      [rno]: !prev[rno],
     }));
   };
 
@@ -160,9 +166,9 @@ export function CommunityPost() {
         setCommentsData((prev) => [
           ...prev,
           {
-            ...replyData, // 클라이언트에서 보낸 데이터
-            rno: response.data.rno, // 서버에서 반환된 댓글 고유 번호 (예: rno)
-            regdate: response.data.regdate || new Date().toISOString(), // 서버 응답 데이터에 따라 조정
+            ...replyData,
+            rno: response.data.rno,
+            regdate: response.data.regdate || new Date().toISOString(),
             likedByUser: [],
           },
         ]);
@@ -173,13 +179,12 @@ export function CommunityPost() {
       console.error('댓글 작성 실패', error);
     }
   };
-  // 혁주: commentsData 가 새로운 배열로 계속 바뀜으로 무한로딩 됨, 제거함으로써 무한로딩 방지
+
   useEffect(() => {
     axios
       .get(`/reply/list/${rowData.no}`)
       .then((response) => {
         if (response.status === 200) {
-          // 서버 응답 데이터를 상태에 설정
           setCommentsData(
             response.data.map((comment) => ({
               ...comment,
@@ -268,20 +273,18 @@ export function CommunityPost() {
 
       if (!commentToUpdate) return;
 
-      // 좋아요 취소 또는 추가
       const updatedComments = commentsData.map((comment) =>
         comment.rno === rno
           ? {
               ...comment,
               like_count: comment.likedByUser.includes(user.userId)
-                ? Math.max(comment.like_count - 1, 0) // 좋아요 취소 시 최소 0으로 유지
-                : comment.like_count + 1, // 좋아요를 누르면 1 증가
+                ? Math.max(comment.like_count - 1, 0)
+                : comment.like_count + 1,
             }
           : comment,
       );
       setCommentsData(updatedComments);
 
-      // 서버에도 좋아요 상태 업데이트 요청
       const response = await axios.post(`/reply/like/${rno}`, {
         rno,
         userId: user.userId,
@@ -293,7 +296,7 @@ export function CommunityPost() {
           comment.rno === rno
             ? {
                 ...comment,
-                like_count: Math.max(response.data.likeCount, 0), // 서버에서 받은 likeCount가 0 미만이면 0으로 설정
+                like_count: Math.max(response.data.likeCount, 0),
               }
             : comment,
         );
@@ -362,12 +365,14 @@ export function CommunityPost() {
       />{' '}
       <Box>
         <p>{rowData.content}</p>
-        {rowData.imgurl && (
-          <img
-            src={`${process.env.REACT_APP_API_URL}${rowData.imgurl}`}
-            alt="Post"
-          />
-        )}
+        <ImgBox>
+          {rowData.imgurl && (
+            <img
+              src={`${process.env.REACT_APP_API_URL}${rowData.imgurl}`}
+              alt="Post"
+            />
+          )}
+        </ImgBox>
       </Box>
       <Listbox>
         <textarea
