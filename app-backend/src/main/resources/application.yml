@@ -42,7 +42,7 @@ spring:
 
 logging:
   level:
-    '[org.hibernate]': info
+    hibernate: info
     '[org.springframework]': warn
     '[com.mmk]': debug
     '[org.springframework.boot]': info

@@ -11,6 +11,7 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.PrePersist;
 import jakarta.persistence.SequenceGenerator;
 import jakarta.persistence.Table;
 import jakarta.validation.constraints.NotNull;
@@ -85,4 +86,14 @@ public class UserEntity {
     @UpdateTimestamp
     @Column(name = "updated_at", nullable = false)
     private Timestamp updatedAt;
+
+    @PrePersist
+    public void prePersist() {
+        if (this.state == null || this.state.trim().isEmpty()) {
+            this.state = "ACTIVE";
+        }
+        if (this.userRole == null || this.userRole.trim().isEmpty()) {
+            this.userRole = "USER";
+        }
+    }
 }
