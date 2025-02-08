@@ -152,7 +152,11 @@ const CategoryStatics = (isHistory) => {
     <Root>
       {cardData ? (
         <ChartsContainer>
-          <Piechart data={updatedSummaries} onClick={handleClick} />
+          <Piechart
+            data={updatedSummaries}
+            onClick={handleClick}
+            chartWidth={'calc(100% - 420px - 30px)'}
+          />
           {filteredData.length > 0 ? (
             <ListBox>
               {filteredData.map((item, index) => (
