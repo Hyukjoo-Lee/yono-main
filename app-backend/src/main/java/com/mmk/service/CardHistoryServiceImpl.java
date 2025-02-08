@@ -116,7 +116,12 @@ public class CardHistoryServiceImpl implements CardHistoryService {
         }
     }
 
-    // 일별 통계 -> DB에서 데이터 불러오기
+    /**
+     * 특정 사용자의 대표카드와 관련된 카드 거래 내역을 조회합니다.
+     *
+     * @param userNum 거래 내역을 조회할 사용자 번호
+     * @return DailyStatisticsDTO 리스트를 반환합니다.
+     */
     @Override
     public List<DailyStatisticsDTO> getCardHistoryByUserAndPrimaryCard(int userNum) {
         return cardHistoryDAO.findByUserNumAndPrimaryCard(userNum).stream()

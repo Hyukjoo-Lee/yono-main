@@ -35,6 +35,12 @@ public class BadgeController {
         }
     }
 
+    /**
+     * 특정 사용자의 랭킹 정보를 조회합니다.
+     *
+     * @param userNum 사용자 번호
+     * @return RankingDTO를 포함하는 ApiResponse를 반환합니다.
+     */
     @GetMapping("/userList")
     public ResponseEntity<ApiResponse<RankingDTO>> getUserRanking(@RequestParam("userNum") int userNum) {
         try {
@@ -51,6 +57,11 @@ public class BadgeController {
         }
     }
 
+    /**
+     * 지난 달의 배지 데이터를 조회합니다.
+     *
+     * @return RankingDTO 리스트를 포함하는 ApiResponse를 반환합니다.
+     */
     @GetMapping("/list")
     public ResponseEntity<ApiResponse<List<RankingDTO>>> getBadges() {
         try {
