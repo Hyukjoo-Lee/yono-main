@@ -1,5 +1,5 @@
 import React from 'react';
-import { useSelector } from 'react-redux';
+// import { useSelector } from 'react-redux';
 import styled from 'styled-components';
 import CommonRoot from '../../common/CommonRoot';
 import MainBox from './MainBox';
@@ -13,9 +13,7 @@ const StyledWrap = styled.div`
 export function MainPage() {
   // const isLoggedIn = useSelector((state) => state.user.isLoggedIn);
 
-  const user = useSelector((state) => state.user.user);
-
-  console.log('로그인 된 유저: ' + JSON.stringify(user));
+  // const user = useSelector((state) => state.user.user);
 
   return (
     <CommonRoot>

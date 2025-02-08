@@ -95,13 +95,9 @@ export const getAllCardsInfoByUserNum = async (userNum) => {
   return response;
 };
 
-export const getAllCardBenefitsByCardTitle = async (cardTitle) => {
-  try {
-    const response = await axios.get(`/benefit/${cardTitle}`);
-    return response.data;
-  } catch (error) {
-    console.error('데이터 조회 중 오류 발생', error);
-  }
+export const getRecommendedCards = async (userNum) => {
+  const response = await axios.get(`/card/${userNum}/recommendations`);
+  return response;
 };
 
 export const registerCardCompany = async (cardCompanyData) => {

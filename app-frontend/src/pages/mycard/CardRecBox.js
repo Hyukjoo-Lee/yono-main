@@ -114,7 +114,6 @@ const CardRecBox = ({
   cardMainBenefit,
   cardApplyLink,
 }) => {
-  console.log(cardApplyLink, cardMainBenefit);
   return (
     <Root>
       <RootIn>

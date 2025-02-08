@@ -44,25 +44,29 @@ export function MyCard() {
     }
   }, [isLoggedIn, userFromStore]);
 
-  // 등록된 유저 카드 리스트와 카드 혜택 조회
   useEffect(() => {
     const fetchUserCardsWithBenefits = async () => {
       setIsLoading(true);
       try {
         const response = await getAllCardsInfoByUserNum(userFromStore.userNum);
-        if (response === 200) {
-          const formattedCards = response.data.map((card) => ({
+
+        if (response.status === 200) {
+          const formattedCards = response.data.data.map((card) => ({
             cardId: card.userCardId,
             cardNumber: card.userCardNum,
             cardTitle: card.cardTitle,
             cardImg: card.cardImg,
             primaryCard: card.primaryCard,
-            cardInfo: card.cardBenefits.map((benefit) => ({
-              title: benefit.benefitTitle,
-              value: benefit.benefitValue,
-              type: benefit.benefitType,
-            })),
+            cardInfo:
+              card.cardBenefits && card.cardBenefits.length > 0
+                ? card.cardBenefits.map((benefit) => ({
+                    title: benefit.benefitTitle || '혜택 없음',
+                    value: benefit.benefitValue || '0',
+                    type: benefit.benefitType || '기타',
+                  }))
+                : [{ title: '혜택 없음', value: '-', type: '기타' }],
           }));
+
           setUserCards(formattedCards);
         } else if (response.status === 204) {
           setUserCards([]);
