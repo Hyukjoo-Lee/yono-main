@@ -77,7 +77,7 @@ const ArrowWrapper = styled.div`
   }
 `;
 
-const DefaultImageContainer = styled.div`
+const SingleImageContainer = styled.div`
   width: 185px;
   height: 285px;
   margin: 47px auto 0;
@@ -99,14 +99,14 @@ const SlickArrow = ({ currentSlide, slideCount, direction, ...props }) => {
 };
 
 const CardSlider = ({
-  cardImages,
-  showDetailed,
+  cardImages = [],
   cardTitle,
   cardMainBenefit,
-  cardInfo,
+  cardInfo = [],
+  showDetailed,
 }) => {
+  console.log(cardInfo);
   return (
-    //   src={`${process.env.REACT_APP_API_URL}${cardImages[0]}`}
     <SlideContainer>
       <img
         src={`${process.env.REACT_APP_API_URL}${cardImages}` || CardDemoImage}
@@ -118,7 +118,7 @@ const CardSlider = ({
           <CardMainBenefit>{cardMainBenefit}</CardMainBenefit>
           {cardInfo.map((info, index) => (
             <CardBenefit key={index}>
-              {info.label} {info.value} ({info.additional})
+              {info.label} {info.value}
             </CardBenefit>
           ))}
         </CardInfo>
@@ -128,9 +128,9 @@ const CardSlider = ({
 };
 
 const CustomSlides = ({
-  cardImages,
+  cardImages = [],
   showDetailed,
-  cardData,
+  cardData = [],
   onImageSelect,
 }) => {
   const sliderRef = useRef(null);
@@ -163,25 +163,37 @@ const CustomSlides = ({
     },
   };
 
-  if (cardImages.length === 0 && !cardData) {
+  console.log('cardData:', JSON.stringify(cardData));
+
+  if (cardImages.length === 0 && cardData.length === 0) {
     return (
       <SlideContainer>
-        <DefaultImageContainer>
+        <SingleImageContainer>
           <img src={CardDemoImage} alt="default card" />
-        </DefaultImageContainer>
+        </SingleImageContainer>
       </SlideContainer>
     );
   }
 
-  if (cardImages.length === 1 && !cardData) {
+  if (cardImages.length === 1) {
     return (
       <SlideContainer>
-        <DefaultImageContainer>
+        <SingleImageContainer>
           <img
             src={`${process.env.REACT_APP_API_URL}${cardImages[0]}`}
             alt="single card"
           />
-        </DefaultImageContainer>
+        </SingleImageContainer>
+        {showDetailed && cardData.length > 0 && (
+          <CardInfo>
+            <CardTitle>{cardData[0].cardTitle}</CardTitle>
+            {cardData[0].cardInfo?.map((info, index) => (
+              <CardBenefit key={index}>
+                {info.type} {info.title}: {info.value}
+              </CardBenefit>
+            ))}
+          </CardInfo>
+        )}
       </SlideContainer>
     );
   }
@@ -189,21 +201,23 @@ const CustomSlides = ({
   return (
     <SliderContainer>
       <Slider ref={sliderRef} {...settings}>
-        {showDetailed && cardData
+        {showDetailed && cardData.length > 0
           ? cardData.map((card, index) => (
               <div key={index}>
                 <CardSlider
                   showDetailed={showDetailed}
                   cardTitle={card.cardTitle}
                   cardMainBenefit={card.mainBenefit}
-                  cardInfo={card.cardInfo}
-                  cardImages={card.cardImg}
+                  cardInfo={card.cardInfo || []}
+                  cardImages={
+                    Array.isArray(card.cardImg) ? card.cardImg : [card.cardImg]
+                  }
                 />
               </div>
             ))
-          : cardImages?.map((card, index) => (
+          : cardImages.map((card, index) => (
               <div key={index}>
-                <CardSlider cardImages={card} />
+                <CardSlider cardImages={[card]} />
               </div>
             ))}
       </Slider>
