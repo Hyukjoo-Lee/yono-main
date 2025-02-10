@@ -20,7 +20,7 @@ bin/
 ## 테스트 용도
 /src/main/resources/sql/test.sql
 /src/main/java/com/mmk/controller/TestController.java
-/logs/application.log
+application.log*
 
 ### IntelliJ IDEA ###
 .idea

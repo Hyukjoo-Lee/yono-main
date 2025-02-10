@@ -1,8 +1,8 @@
-// import React, { useEffect } from 'react';
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import styled from 'styled-components';
-import { registeredCardData } from '../../mockData/cardMockData';
-// import CustomSlides from '../mycard/CardSlider';
+import CustomSlides from '../mycard/CardSlider';
+import { getAllCardsInfoByUserNum } from '../../apis/cardApi';
+import CommonLoading from '../../common/CommonLoading';
 
 const StyledWrap = styled.div`
   margin-top: 50px;
@@ -34,25 +34,68 @@ const EmptyBox = styled.div`
   margin-top: 30px;
 `;
 
-const MainCardBox = ({ isLoggedIn }) => {
-  // 등록된 카드 데이터
-  const cardData = registeredCardData;
+const MainCardBox = ({ isLoggedIn, user }) => {
+  const [userCards, setUserCards] = useState([]);
+  const [cardImages, setCardImages] = useState([]);
+  const [isLoading, setIsLoading] = useState(false);
 
-  if (!isLoggedIn) {
-    return null;
-  }
+  useEffect(() => {
+    const fetchUserCardsWithBenefits = async () => {
+      setIsLoading(true);
+      try {
+        const response = await getAllCardsInfoByUserNum(user?.userNum);
 
+        if (response.status === 200) {
+          const formattedCards = response.data.data.map((card) => ({
+            cardId: card.userCardId,
+            cardNumber: card.userCardNum,
+            cardTitle: card.cardTitle,
+            cardImg: card.cardImg,
+            primaryCard: card.primaryCard,
+            cardInfo:
+              card.cardBenefits && card.cardBenefits.length > 0
+                ? card.cardBenefits.map((benefit) => ({
+                    title: benefit.benefitTitle || '혜택 없음',
+                    value: benefit.benefitValue || '0',
+                    type: benefit.benefitType || '기타',
+                  }))
+                : [{ title: '혜택 없음', value: '', type: '기타' }],
+          }));
+
+          setUserCards(formattedCards);
+          setCardImages(formattedCards.map((card) => card.cardImg));
+        } else if (response.status === 204) {
+          setUserCards([]);
+        }
+      } catch (error) {
+        console.error('사용자 카드 목록 로딩 실패: ', error);
+      } finally {
+        setIsLoading(false);
+      }
+    };
+
+    if (isLoggedIn) {
+      fetchUserCardsWithBenefits();
+    }
+  }, [isLoggedIn, user?.userNum]);
+
+  console.log('userCards: ' + JSON.stringify(userCards));
   return (
     <StyledWrap>
       <StyledCardP>나의 등록 카드</StyledCardP>
       <StyledCardContainer>
-        {!cardData || cardData.length === 0 ? (
+        {isLoading ? (
+          <CommonLoading />
+        ) : !userCards || userCards.length === 0 ? (
           <EmptyBox>
             <p>등록된 카드가 없습니다! (카드 등록 후 보여집니다.)</p>
           </EmptyBox>
         ) : (
-          // <CustomSlides cardData={cardData} showDetailed={true} />
-          <></> // TODO: 카드 등록 폼 내 슬라이드 변경으로 인해 에러 발생 => 메인 페이지 내 알맞게 적용 필요
+          <CustomSlides
+            cardImages={cardImages || []}
+            cardData={userCards}
+            showDetailed={true}
+          />
         )}
       </StyledCardContainer>
     </StyledWrap>

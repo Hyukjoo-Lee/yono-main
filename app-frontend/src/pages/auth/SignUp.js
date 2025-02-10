@@ -271,6 +271,7 @@ const SignUp = () => {
   const renderInputField = (field) => (
     <>
       <CommonInput
+        type={FORM_FIELDS[field].type === 'password' ? 'password' : 'text'}
         placeholder={FORM_FIELDS[field].placeholder}
         text={FORM_FIELDS[field].text}
         {...(FORM_FIELDS[field].type === 'password'
