@@ -291,3 +291,110 @@ This generated password is for development use only. Your security configuration
 2025-02-10T14:38:09.123+09:00  INFO 18980 --- [restartedMain] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat started on port(s): 8065 (http) with context path ''
 2025-02-10T14:38:09.145+09:00  INFO 18980 --- [restartedMain] com.mmk.BackendApplication               : Started BackendApplication in 10.752 seconds (process running for 12.458)
 2025-02-10T14:42:17.020+09:00  INFO 18980 --- [http-nio-8065-exec-1] o.a.c.c.C.[Tomcat].[localhost].[/]       : Initializing Spring DispatcherServlet 'dispatcherServlet'
+2025-02-10T15:50:46.861+09:00  INFO 18980 --- [File Watcher] rtingClassPathChangeChangedEventListener : Restarting due to 9 class path changes (0 additions, 9 deletions, 0 modifications)
+2025-02-10T15:50:46.976+09:00  INFO 18980 --- [Thread-8] o.apache.catalina.core.StandardService   : Stopping service [Tomcat]
+2025-02-10T15:50:46.998+09:00  INFO 18980 --- [Thread-8] o.a.c.c.C.[Tomcat].[localhost].[/]       : Destroying Spring FrameworkServlet 'dispatcherServlet'
+2025-02-10T15:50:47.123+09:00  INFO 18980 --- [Thread-8] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Shutdown initiated...
+2025-02-10T15:50:47.191+09:00  INFO 18980 --- [Thread-8] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Shutdown completed.
+2025-02-10T15:50:47.600+09:00  INFO 18980 --- [restartedMain] com.mmk.BackendApplication               : Starting BackendApplication using Java 17.0.13 with PID 18980 (C:\Users\jihun\Desktop\mickle-muckle\app-backend\build\classes\java\main started by jihun in C:\Users\jihun\Desktop\mickle-muckle)
+2025-02-10T15:50:47.605+09:00 DEBUG 18980 --- [restartedMain] com.mmk.BackendApplication               : Running with Spring Boot v3.1.9, Spring v6.0.17
+2025-02-10T15:50:47.606+09:00  INFO 18980 --- [restartedMain] com.mmk.BackendApplication               : No active profile set, falling back to 1 default profile: "default"
+2025-02-10T15:50:49.804+09:00  WARN 18980 --- [restartedMain] o.m.s.mapper.ClassPathMapperScanner      : No MyBatis mapper was found in '[com.mmk]' package. Please check your configuration.
+2025-02-10T15:50:50.250+09:00  INFO 18980 --- [restartedMain] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat initialized with port(s): 8065 (http)
+2025-02-10T15:50:50.254+09:00  INFO 18980 --- [restartedMain] o.apache.catalina.core.StandardService   : Starting service [Tomcat]
+2025-02-10T15:50:50.256+09:00  INFO 18980 --- [restartedMain] o.apache.catalina.core.StandardEngine    : Starting Servlet engine: [Apache Tomcat/10.1.19]
+2025-02-10T15:50:50.354+09:00  INFO 18980 --- [restartedMain] o.a.c.c.C.[Tomcat].[localhost].[/]       : Initializing Spring embedded WebApplicationContext
+2025-02-10T15:50:50.357+09:00  INFO 18980 --- [restartedMain] w.s.c.ServletWebServerApplicationContext : Root WebApplicationContext: initialization completed in 2739 ms
+2025-02-10T15:50:50.543+09:00  INFO 18980 --- [restartedMain] o.hibernate.jpa.internal.util.LogHelper  : HHH000204: Processing PersistenceUnitInfo [name: default]
+2025-02-10T15:50:50.726+09:00  INFO 18980 --- [restartedMain] com.zaxxer.hikari.HikariDataSource       : HikariPool-2 - Starting...
+2025-02-10T15:50:50.876+09:00  INFO 18980 --- [restartedMain] com.zaxxer.hikari.pool.HikariPool        : HikariPool-2 - Added connection oracle.jdbc.driver.T4CConnection@14ec228c
+2025-02-10T15:50:50.881+09:00  INFO 18980 --- [restartedMain] com.zaxxer.hikari.HikariDataSource       : HikariPool-2 - Start completed.
+2025-02-10T15:50:50.892+09:00  WARN 18980 --- [restartedMain] org.hibernate.orm.deprecation            : HHH90000025: OracleDialect does not need to be specified explicitly using 'hibernate.dialect' (remove the property setting and it will be selected by default)
+2025-02-10T15:50:51.648+09:00  INFO 18980 --- [restartedMain] o.h.e.t.j.p.i.JtaPlatformInitiator       : HHH000489: No JTA platform available (set 'hibernate.transaction.jta.platform' to enable JTA platform integration)
+2025-02-10T15:50:51.814+09:00  WARN 18980 --- [restartedMain] ConfigServletWebServerApplicationContext : Exception encountered during context initialization - cancelling refresh attempt: org.springframework.beans.factory.UnsatisfiedDependencyException: Error creating bean with name 'badgeController': Unsatisfied dependency expressed through field 'badgeService': No qualifying bean of type 'com.mmk.service.BadgeService' available: expected at least 1 bean which qualifies as autowire candidate. Dependency annotations: {@org.springframework.beans.factory.annotation.Autowired(required=true)}
+2025-02-10T15:50:51.817+09:00  INFO 18980 --- [restartedMain] com.zaxxer.hikari.HikariDataSource       : HikariPool-2 - Shutdown initiated...
+2025-02-10T15:50:51.899+09:00  INFO 18980 --- [restartedMain] com.zaxxer.hikari.HikariDataSource       : HikariPool-2 - Shutdown completed.
+2025-02-10T15:50:51.901+09:00  INFO 18980 --- [restartedMain] o.apache.catalina.core.StandardService   : Stopping service [Tomcat]
+2025-02-10T15:50:51.925+09:00  INFO 18980 --- [restartedMain] .s.b.a.l.ConditionEvaluationReportLogger : 
+
+Error starting ApplicationContext. To display the condition evaluation report re-run your application with 'debug' enabled.
+2025-02-10T15:50:52.133+09:00 ERROR 18980 --- [restartedMain] o.s.b.d.LoggingFailureAnalysisReporter   : 
+
+***************************
+APPLICATION FAILED TO START
+***************************
+
+Description:
+
+Field badgeService in com.mmk.controller.BadgeController required a bean of type 'com.mmk.service.BadgeService' that could not be found.
+
+The injection point has the following annotations:
+	- @org.springframework.beans.factory.annotation.Autowired(required=true)
+
+
+Action:
+
+Consider defining a bean of type 'com.mmk.service.BadgeService' in your configuration.
+
+2025-02-10T15:50:57.377+09:00  INFO 42548 --- [restartedMain] com.mmk.BackendApplication               : Starting BackendApplication using Java 17.0.13 with PID 42548 (C:\Users\jihun\Desktop\mickle-muckle\app-backend\build\classes\java\main started by jihun in C:\Users\jihun\Desktop\mickle-muckle)
+2025-02-10T15:50:57.385+09:00 DEBUG 42548 --- [restartedMain] com.mmk.BackendApplication               : Running with Spring Boot v3.1.9, Spring v6.0.17
+2025-02-10T15:50:57.387+09:00  INFO 42548 --- [restartedMain] com.mmk.BackendApplication               : No active profile set, falling back to 1 default profile: "default"
+2025-02-10T15:50:57.524+09:00  INFO 42548 --- [restartedMain] o.s.b.devtools.restart.ChangeableUrls    : The Class-Path manifest attribute in C:\Users\jihun\.gradle\caches\modules-2\files-2.1\com.oracle.database.jdbc\ojdbc8\21.9.0.0\a68f29ad2376bdb8c04a87cda70c62907995855d\ojdbc8-21.9.0.0.jar referenced one or more files that do not exist: file:/C:/Users/jihun/.gradle/caches/modules-2/files-2.1/com.oracle.database.jdbc/ojdbc8/21.9.0.0/a68f29ad2376bdb8c04a87cda70c62907995855d/oraclepki.jar
+2025-02-10T15:50:57.525+09:00  INFO 42548 --- [restartedMain] .e.DevToolsPropertyDefaultsPostProcessor : Devtools property defaults active! Set 'spring.devtools.add-properties' to 'false' to disable
+2025-02-10T15:50:57.526+09:00  INFO 42548 --- [restartedMain] .e.DevToolsPropertyDefaultsPostProcessor : For additional web related logging consider setting the 'logging.level.web' property to 'DEBUG'
+2025-02-10T15:50:59.237+09:00  WARN 42548 --- [restartedMain] o.m.s.mapper.ClassPathMapperScanner      : No MyBatis mapper was found in '[com.mmk]' package. Please check your configuration.
+2025-02-10T15:51:00.417+09:00  INFO 42548 --- [restartedMain] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat initialized with port(s): 8065 (http)
+2025-02-10T15:51:00.441+09:00  INFO 42548 --- [restartedMain] o.apache.catalina.core.StandardService   : Starting service [Tomcat]
+2025-02-10T15:51:00.442+09:00  INFO 42548 --- [restartedMain] o.apache.catalina.core.StandardEngine    : Starting Servlet engine: [Apache Tomcat/10.1.19]
+2025-02-10T15:51:00.572+09:00  INFO 42548 --- [restartedMain] o.a.c.c.C.[Tomcat].[localhost].[/]       : Initializing Spring embedded WebApplicationContext
+2025-02-10T15:51:00.572+09:00  INFO 42548 --- [restartedMain] w.s.c.ServletWebServerApplicationContext : Root WebApplicationContext: initialization completed in 3045 ms
+2025-02-10T15:51:00.874+09:00  INFO 42548 --- [restartedMain] o.hibernate.jpa.internal.util.LogHelper  : HHH000204: Processing PersistenceUnitInfo [name: default]
+2025-02-10T15:51:01.008+09:00  INFO 42548 --- [restartedMain] org.hibernate.Version                    : HHH000412: Hibernate ORM core version 6.2.22.Final
+2025-02-10T15:51:01.012+09:00  INFO 42548 --- [restartedMain] org.hibernate.cfg.Environment            : HHH000406: Using bytecode reflection optimizer
+2025-02-10T15:51:01.601+09:00  INFO 42548 --- [restartedMain] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Starting...
+2025-02-10T15:51:01.871+09:00  INFO 42548 --- [restartedMain] com.zaxxer.hikari.pool.HikariPool        : HikariPool-1 - Added connection oracle.jdbc.driver.T4CConnection@4fe8d346
+2025-02-10T15:51:01.873+09:00  INFO 42548 --- [restartedMain] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Start completed.
+2025-02-10T15:51:01.979+09:00  WARN 42548 --- [restartedMain] org.hibernate.orm.deprecation            : HHH90000025: OracleDialect does not need to be specified explicitly using 'hibernate.dialect' (remove the property setting and it will be selected by default)
+2025-02-10T15:51:03.576+09:00  INFO 42548 --- [restartedMain] o.h.e.t.j.p.i.JtaPlatformInitiator       : HHH000489: No JTA platform available (set 'hibernate.transaction.jta.platform' to enable JTA platform integration)
+2025-02-10T15:51:06.565+09:00  WARN 42548 --- [restartedMain] JpaBaseConfiguration$JpaWebConfiguration : spring.jpa.open-in-view is enabled by default. Therefore, database queries may be performed during view rendering. Explicitly configure spring.jpa.open-in-view to disable this warning
+2025-02-10T15:51:06.732+09:00  WARN 42548 --- [restartedMain] .s.s.UserDetailsServiceAutoConfiguration : 
+
+Using generated security password: 222ef9df-a906-4c12-bfa1-e977f91ee572
+
+This generated password is for development use only. Your security configuration must be updated before running your application in production.
+
+2025-02-10T15:51:07.758+09:00  INFO 42548 --- [restartedMain] o.s.b.d.a.OptionalLiveReloadServer       : LiveReload server is running on port 35729
+2025-02-10T15:51:07.809+09:00  INFO 42548 --- [restartedMain] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat started on port(s): 8065 (http) with context path ''
+2025-02-10T15:51:07.830+09:00  INFO 42548 --- [restartedMain] com.mmk.BackendApplication               : Started BackendApplication in 11.337 seconds (process running for 12.62)
+2025-02-10T15:51:11.795+09:00  INFO 42548 --- [http-nio-8065-exec-1] o.a.c.c.C.[Tomcat].[localhost].[/]       : Initializing Spring DispatcherServlet 'dispatcherServlet'
+2025-02-10T15:58:59.302+09:00  INFO 35248 --- [restartedMain] com.mmk.BackendApplication               : Starting BackendApplication using Java 17.0.13 with PID 35248 (C:\Users\jihun\Desktop\mickle-muckle\app-backend\build\classes\java\main started by jihun in C:\Users\jihun\Desktop\mickle-muckle)
+2025-02-10T15:58:59.305+09:00 DEBUG 35248 --- [restartedMain] com.mmk.BackendApplication               : Running with Spring Boot v3.1.9, Spring v6.0.17
+2025-02-10T15:58:59.307+09:00  INFO 35248 --- [restartedMain] com.mmk.BackendApplication               : No active profile set, falling back to 1 default profile: "default"
+2025-02-10T15:58:59.413+09:00  INFO 35248 --- [restartedMain] o.s.b.devtools.restart.ChangeableUrls    : The Class-Path manifest attribute in C:\Users\jihun\.gradle\caches\modules-2\files-2.1\com.oracle.database.jdbc\ojdbc8\21.9.0.0\a68f29ad2376bdb8c04a87cda70c62907995855d\ojdbc8-21.9.0.0.jar referenced one or more files that do not exist: file:/C:/Users/jihun/.gradle/caches/modules-2/files-2.1/com.oracle.database.jdbc/ojdbc8/21.9.0.0/a68f29ad2376bdb8c04a87cda70c62907995855d/oraclepki.jar
+2025-02-10T15:58:59.414+09:00  INFO 35248 --- [restartedMain] .e.DevToolsPropertyDefaultsPostProcessor : Devtools property defaults active! Set 'spring.devtools.add-properties' to 'false' to disable
+2025-02-10T15:58:59.416+09:00  INFO 35248 --- [restartedMain] .e.DevToolsPropertyDefaultsPostProcessor : For additional web related logging consider setting the 'logging.level.web' property to 'DEBUG'
+2025-02-10T15:59:01.014+09:00  WARN 35248 --- [restartedMain] o.m.s.mapper.ClassPathMapperScanner      : No MyBatis mapper was found in '[com.mmk]' package. Please check your configuration.
+2025-02-10T15:59:02.176+09:00  INFO 35248 --- [restartedMain] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat initialized with port(s): 8065 (http)
+2025-02-10T15:59:02.202+09:00  INFO 35248 --- [restartedMain] o.apache.catalina.core.StandardService   : Starting service [Tomcat]
+2025-02-10T15:59:02.203+09:00  INFO 35248 --- [restartedMain] o.apache.catalina.core.StandardEngine    : Starting Servlet engine: [Apache Tomcat/10.1.19]
+2025-02-10T15:59:02.442+09:00  INFO 35248 --- [restartedMain] o.a.c.c.C.[Tomcat].[localhost].[/]       : Initializing Spring embedded WebApplicationContext
+2025-02-10T15:59:02.443+09:00  INFO 35248 --- [restartedMain] w.s.c.ServletWebServerApplicationContext : Root WebApplicationContext: initialization completed in 3025 ms
+2025-02-10T15:59:02.811+09:00  INFO 35248 --- [restartedMain] o.hibernate.jpa.internal.util.LogHelper  : HHH000204: Processing PersistenceUnitInfo [name: default]
+2025-02-10T15:59:03.020+09:00  INFO 35248 --- [restartedMain] org.hibernate.Version                    : HHH000412: Hibernate ORM core version 6.2.22.Final
+2025-02-10T15:59:03.024+09:00  INFO 35248 --- [restartedMain] org.hibernate.cfg.Environment            : HHH000406: Using bytecode reflection optimizer
+2025-02-10T15:59:03.531+09:00  INFO 35248 --- [restartedMain] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Starting...
+2025-02-10T15:59:03.840+09:00  INFO 35248 --- [restartedMain] com.zaxxer.hikari.pool.HikariPool        : HikariPool-1 - Added connection oracle.jdbc.driver.T4CConnection@37718fe7
+2025-02-10T15:59:03.843+09:00  INFO 35248 --- [restartedMain] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Start completed.
+2025-02-10T15:59:04.046+09:00  WARN 35248 --- [restartedMain] org.hibernate.orm.deprecation            : HHH90000025: OracleDialect does not need to be specified explicitly using 'hibernate.dialect' (remove the property setting and it will be selected by default)
+2025-02-10T15:59:05.461+09:00  INFO 35248 --- [restartedMain] o.h.e.t.j.p.i.JtaPlatformInitiator       : HHH000489: No JTA platform available (set 'hibernate.transaction.jta.platform' to enable JTA platform integration)
+2025-02-10T15:59:07.615+09:00  WARN 35248 --- [restartedMain] JpaBaseConfiguration$JpaWebConfiguration : spring.jpa.open-in-view is enabled by default. Therefore, database queries may be performed during view rendering. Explicitly configure spring.jpa.open-in-view to disable this warning
+2025-02-10T15:59:07.660+09:00  WARN 35248 --- [restartedMain] .s.s.UserDetailsServiceAutoConfiguration : 
+
+Using generated security password: 990ba23c-2690-42dc-a17d-83da380e9417
+
+This generated password is for development use only. Your security configuration must be updated before running your application in production.
+
+2025-02-10T15:59:08.347+09:00  INFO 35248 --- [restartedMain] o.s.b.d.a.OptionalLiveReloadServer       : LiveReload server is running on port 35729
+2025-02-10T15:59:08.387+09:00  INFO 35248 --- [restartedMain] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat started on port(s): 8065 (http) with context path ''
+2025-02-10T15:59:08.405+09:00  INFO 35248 --- [restartedMain] com.mmk.BackendApplication               : Started BackendApplication in 10.229 seconds (process running for 11.069)
+2025-02-10T16:01:14.917+09:00  INFO 35248 --- [http-nio-8065-exec-1] o.a.c.c.C.[Tomcat].[localhost].[/]       : Initializing Spring DispatcherServlet 'dispatcherServlet'

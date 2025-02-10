@@ -3,6 +3,8 @@ package com.mmk.service;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.springframework.web.multipart.MultipartFile;
+
 import com.mmk.dto.UserDTO;
 import com.mmk.entity.UserEntity;
 
@@ -38,4 +40,6 @@ public interface UserService {
     UserDTO getFindPwd(String name, String email, String id);
 
     ArrayList<Integer> findAllUserNum();
+
+    UserDTO update(String userInfoJson, MultipartFile profileImage, String profileText);
 }

@@ -1,16 +1,12 @@
 package com.mmk.controller;
 
-import java.io.File;
-import java.util.Calendar;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.NoSuchElementException;
-import java.util.Random;
 import java.util.UUID;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -24,8 +20,6 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import com.mmk.common.ApiResponse;
 import com.mmk.dto.UserDTO;
 import com.mmk.service.UserService;
@@ -36,9 +30,6 @@ import com.mmk.service.UserService;
 @RestController
 @RequestMapping("/user")
 public class UserController {
-
-    @Value("${IMAGE_PATH}")
-    private String uploadDir;
 
     @Autowired
     private UserService userService;
@@ -241,71 +232,15 @@ public class UserController {
             @RequestParam("userInfo") String userInfoJson,
             @RequestParam(value = "profileImage", required = false) MultipartFile profileImage,
             @RequestParam(value = "profileText", required = false) String profileText) {
-        System.out.println("profileImage: " + profileImage);
-        try {
-            UserDTO uv = new ObjectMapper().readValue(userInfoJson, UserDTO.class);
-            String uploadFolder = uploadDir + "/uploads/images";
+            
+        UserDTO userDTO = userService.update(userInfoJson, profileImage, profileText);
+        
+        if (userDTO != null) {
+            userService.updateUser(userDTO);
 
-            if (profileImage != null && !profileImage.isEmpty()) {
-                if (uv.getProfile() != null && !uv.getProfile().isEmpty()) {
-                    File existingFile = new File(uploadDir + uv.getProfile());
-
-                    System.out.println("existingFile: " + existingFile);
-                    if (existingFile.exists()) {
-                        existingFile.delete();
-                    }
-                }
-            }
-
-            if (profileImage != null && !profileImage.isEmpty()) {
-                String fileName = profileImage.getOriginalFilename();
-
-                if (fileName == null || fileName.isEmpty()) {
-                    fileName = "default_filename.jpg";
-                }
-
-                Calendar cal = Calendar.getInstance();
-                int year = cal.get(Calendar.YEAR);
-                int month = cal.get(Calendar.MONTH) + 1;
-                int date = cal.get(Calendar.DATE);
-
-                String homedir = uploadFolder + "/" + year + "-" + month + "-" + date;
-
-                File path = new File(homedir);
-                if (!path.exists()) {
-                    path.mkdirs();
-                }
-                Random r = new Random();
-                int random = r.nextInt(100000000);
-                int index = fileName.lastIndexOf(".");
-                String fileExtension = fileName.substring(index + 1);
-                String newFileName = "profile_" + year + month + date + random + "." + fileExtension;
-                // String fileDBName = "/images/" + year + "-" + month + "-" + date + "/" +
-                // newFileName;
-                String fileDBName = "/uploads/images/" + year + "-" + month + "-" + date + "/" + newFileName;
-
-                File saveFile = new File(homedir + "/" + newFileName);
-
-                try {
-                    profileImage.transferTo(saveFile);
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }
-
-                uv.setProfile(fileDBName);
-
-            }
-
-            if (profileText != null) {
-                uv.setProfile(profileText);
-            }
-
-            userService.updateUser(uv);
-
-            ApiResponse<UserDTO> response = new ApiResponse<>(201, "회원 정보 수정 성공", uv);
+            ApiResponse<UserDTO> response = new ApiResponse<>(201, "회원 정보 수정 성공", userDTO);
             return ResponseEntity.ok(response);
-        } catch (JsonProcessingException e) {
-            e.printStackTrace();
+        } else {
             ApiResponse<UserDTO> response = new ApiResponse<>(400, "회원 정보 수정 오류", null);
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(response);
         }

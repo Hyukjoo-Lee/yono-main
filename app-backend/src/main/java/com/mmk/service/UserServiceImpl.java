@@ -1,13 +1,20 @@
 package com.mmk.service;
 
+import java.io.File;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.List;
 import java.util.NoSuchElementException;
+import java.util.Random;
 import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.multipart.MultipartFile;
+
+import com.fasterxml.jackson.databind.ObjectMapper;
 
 // import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
@@ -21,6 +28,9 @@ public class UserServiceImpl implements UserService {
 
     @Autowired
     private UserDAO userDAO;
+
+    @Value("${IMAGE_PATH}")
+    private String uploadDir;
 
     // private final BCryptPasswordEncoder passwordEncoder = new
     // BCryptPasswordEncoder();
@@ -136,6 +146,77 @@ public class UserServiceImpl implements UserService {
         UserEntity ue = userDAO.getFindPwd(name, email, id);
         UserDTO result = toDTO(ue);
         return result;
+    }
+
+    @Override
+    public UserDTO update(String userInfoJson, MultipartFile profileImage, String profileText) {
+        try {
+            UserDTO uv = new ObjectMapper().readValue(userInfoJson, UserDTO.class);
+            String uploadFolder = uploadDir + "/uploads/images";
+    
+            if (profileImage != null && !profileImage.isEmpty()) {
+                if (uv.getProfile() != null && !uv.getProfile().isEmpty()) {
+                    File existingFile = new File(uploadDir + uv.getProfile());
+    
+                    if (existingFile.exists()) {
+                        existingFile.delete();
+                    }
+                }
+            }
+    
+            if (profileImage != null && !profileImage.isEmpty()) {
+                String fileName = profileImage.getOriginalFilename();
+    
+                if (fileName == null || fileName.isEmpty()) {
+                    fileName = "default_filename.jpg";
+                }
+    
+                Calendar cal = Calendar.getInstance();
+                int year = cal.get(Calendar.YEAR);
+                int month = cal.get(Calendar.MONTH) + 1;
+                int date = cal.get(Calendar.DATE);
+    
+                String homedir = uploadFolder + "/" + year + "-" + month + "-" + date;
+    
+                File path = new File(homedir);
+                if (!path.exists()) {
+                    path.mkdirs();
+                }
+                Random r = new Random();
+                int random = r.nextInt(100000000);
+                int index = fileName.lastIndexOf(".");
+                String fileExtension = fileName.substring(index + 1);
+                String newFileName = "profile_" + year + month + date + random + "." + fileExtension;
+                String fileDBName = "/uploads/images/" + year + "-" + month + "-" + date + "/" + newFileName;
+    
+                File saveFile = new File(homedir + "/" + newFileName);
+    
+                try {
+                    profileImage.transferTo(saveFile);
+                } catch (Exception e) {
+                    throw e;
+                }
+    
+                uv.setProfile(fileDBName);
+    
+            }
+    
+            if (profileText != null) {
+                if (uv.getProfile() != null && !uv.getProfile().isEmpty()) {
+                    File existingFile = new File(uploadDir + uv.getProfile());
+    
+                    if (existingFile.exists()) {
+                        existingFile.delete();
+                    }
+                }
+                uv.setProfile(profileText);
+            }
+
+            return uv;
+        } catch (Exception e) {
+            e.printStackTrace();
+            return null;
+        }
     }
 
     // DTO → Entity 변환
