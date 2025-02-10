@@ -3,7 +3,7 @@ package com.mmk.common;
 public enum BenefitType {
     OIL("주유"), // 주유: 주유소 리터당 할인, LPG 할인
     SHOPPING("쇼핑"), // 쇼핑: 대형마트, 온라인 쇼핑 할인
-    FOOD("음식점"), // 음식점: (한식, 중식, 패스트푸드)
+    FOOD("음식"), // 음식: (한식, 중식, 패스트푸드, 배달)
     CAFE("카페"), // 카페: 커피, 디저트 할인
     CONVENIENCE("편의점"), // 편의점: 편의점 할인
     FINANCE("금융"), // 금융: 외화 환전 수수료 할인, 캐시백
@@ -11,7 +11,7 @@ public enum BenefitType {
     TELECOMMUNICATION("통신"), // 통신: 이동통신 요금 할인, 해외 로밍 할인
     ENTERTAINMENT("여가"), // 여가: 영화, 놀이공원, 숙박 할인
     FLIGHT("항공"), // 항공: 항공 마일리지 적립, 면세점 할인
-    ALLSTORES("포인트 적립&캐시백"), // 전 가맹점: 모든 가맹점 포인트 적립, 캐시백
+    ALLSTORES("가맹점"), // 전 가맹점: 모든 가맹점 포인트 적립, 캐시백
     VEHICLE("차량"), // 차량: 렌터카 할인, 하이패스 통행료 할인
     INSURANCE("보험"), // 보험: 자동차 보험료 할인, 건강보험 할인
     HEALTH("의료"), // 의료: 건강검진 할인, 약국 할인
@@ -51,7 +51,8 @@ public enum BenefitType {
             return SHOPPING;
         } else if (category.contains("음식") || category.contains("한식") || category.contains("중식")
                 || category.contains("일식") || category.contains("서양식")
-                || category.contains("양식") || category.contains("푸드") || category.contains("주점")) {
+                || category.contains("양식") || category.contains("푸드") || category.contains("주점")
+                || category.contains("배달")) {
             return FOOD;
         } else if (category.contains("카페") || category.contains("커피") || category.contains("디저트")) {
             return CAFE;

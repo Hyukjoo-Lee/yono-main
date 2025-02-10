@@ -10,7 +10,10 @@ import CommonLoading from '../../common/CommonLoading';
 
 import CardRegTab from './CardRegTab';
 import CardRecTab from './CardRecTab';
-import { getAllCardsInfoByUserNum } from '../../apis/cardApi';
+import {
+  getAllCardsInfoByUserNum,
+  getRecommendedCards,
+} from '../../apis/cardApi';
 
 const RootIn = styled.div`
   width: ${(props) => props.theme.display.lg};
@@ -25,6 +28,7 @@ export function MyCard() {
   const [selectedTab, setSelectedTab] = useState(0);
   const [user, setUser] = useState('');
   const [userCards, setUserCards] = useState([]);
+  const [recommendedCards, setRecommendedCards] = useState([]);
   const [isShowDialog, setIsShowDialog] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
 
@@ -33,7 +37,7 @@ export function MyCard() {
   const items = [{ text: '카드 등록' }, { text: '카드 추천' }];
   const panels = [
     <CardRegTab user={user} userCards={userCards} />,
-    <CardRecTab user={user} />,
+    <CardRecTab user={user} recommendedCards={recommendedCards} />,
   ];
 
   useEffect(() => {
@@ -80,6 +84,32 @@ export function MyCard() {
 
     if (isLoggedIn) {
       fetchUserCardsWithBenefits();
+    }
+  }, [isLoggedIn, userFromStore]);
+
+  useEffect(() => {
+    const fetchRecommendedCards = async () => {
+      setIsLoading(true);
+      try {
+        const response = await getRecommendedCards(userFromStore.userNum);
+        if (response.status === 200) {
+          setRecommendedCards(response);
+          console.log('recommendedCards:' + JSON.stringify(recommendedCards));
+        } else if (response.status === 204) {
+          console.log(
+            '추천할 카드가 없습니다. 사용 내역이 부족하거나 해당 카드가 없습니다.',
+          );
+          setRecommendedCards([]);
+        }
+      } catch (error) {
+        console.error('추천 카드 로딩 실패: ', error);
+      } finally {
+        setIsLoading(false);
+      }
+    };
+
+    if (isLoggedIn) {
+      fetchRecommendedCards();
     }
   }, [isLoggedIn, userFromStore]);
 

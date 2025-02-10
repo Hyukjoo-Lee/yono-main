@@ -18,7 +18,6 @@ import HelpOutlineIcon from '@mui/icons-material/HelpOutline';
 import VerifiedIcon from '@mui/icons-material/Verified';
 
 const HoverButtonContainer = styled.div`
-  margin: 0 10px 28px 0;
   opacity: 0;
   transition: opacity 0.5s ease;
   visibility: hidden;
@@ -48,6 +47,17 @@ const BoxInStyle = styled.div`
 `;
 
 const CardName = styled.p`
+  margin: 0px;
+  font-size: 20px;
+  color: #212121;
+  font-weight: bold;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  max-width: 200px;
+`;
+
+const SelectButtonContainer = styled.div`
   margin: 0px;
   font-size: 20px;
   color: #212121;
@@ -100,15 +110,15 @@ const CardNumber = styled.p`
   min-height: 27px;
 `;
 
+const EmptyBox = styled.div`
+  margin: 0 0 5px 0;
+  min-height: 27px;
+`;
+
 const AdditionalInfo = styled.div`
   font-size: 15px;
   color: #000000;
   margin-bottom: 3px;
-`;
-
-const VerifiedTextContainer = styled.div`
-  margin: 0 10px 28px 0;
-  width: '100px';
 `;
 
 export const getBenefitIcon = (type) => {
@@ -129,7 +139,7 @@ export const getBenefitIcon = (type) => {
       return <LiveTvIcon />;
     case '항공':
       return <FlightIcon />;
-    case '전 가맹점':
+    case '가맹점':
       return <StoreIcon />;
     case '교통':
       return <BusIcon />;
@@ -189,24 +199,24 @@ const CommonCardListBox = ({
                   ))}
                 </CardInfoContainer>
                 <CardInfoContainer>
-                  {card.primaryCard === '대표카드' ? (
-                    <VerifiedTextContainer>
+                  <SelectButtonContainer>
+                    {card.primaryCard === '대표카드' ? (
                       <VerifiedIcon
-                        style={{ color: '#4CAF50', fontSize: '28px' }}
+                        style={{ color: '#4CAF50', fontSize: '20px' }}
                       />
-                    </VerifiedTextContainer>
-                  ) : (
-                    <HoverButtonContainer>
-                      <CommonButton
-                        text={buttonText}
-                        fontSize="16px"
-                        width="100px"
-                        height="30px"
-                        onClick={() => onCardSelect(card)}
-                      />
-                    </HoverButtonContainer>
-                  )}
-
+                    ) : (
+                      <HoverButtonContainer>
+                        <CommonButton
+                          text={buttonText}
+                          fontSize="16px"
+                          width="100px"
+                          height="30px"
+                          onClick={() => onCardSelect(card)}
+                        />
+                      </HoverButtonContainer>
+                    )}
+                  </SelectButtonContainer>
+                  <EmptyBox />
                   {card.cardInfo.slice(0, 3).map((benefit, index) => (
                     <AdditionalInfo key={index}>
                       <TitleStyle>{benefit.value}</TitleStyle>
