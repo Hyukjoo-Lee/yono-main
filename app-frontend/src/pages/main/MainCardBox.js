@@ -79,7 +79,6 @@ const MainCardBox = ({ isLoggedIn, user }) => {
     }
   }, [isLoggedIn, user?.userNum]);
 
-  console.log('userCards: ' + JSON.stringify(userCards));
   return (
     <StyledWrap>
       <StyledCardP>나의 등록 카드</StyledCardP>
