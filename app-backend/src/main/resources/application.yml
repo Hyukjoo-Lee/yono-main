@@ -47,4 +47,4 @@ logging:
     '[com.mmk]': debug
     '[org.springframework.boot]': info
   file:
-    name: logs/application.log # 로그 파일 저장 경로
+    name: ${LOG_FILE_PATH}/application.log
