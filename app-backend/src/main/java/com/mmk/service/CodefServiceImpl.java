@@ -5,6 +5,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
@@ -29,6 +30,9 @@ public class CodefServiceImpl implements CodefService {
     private String publickey;
 
     private EasyCodef codef;
+
+    @Autowired
+    private EncryptionService encryptionService;
 
     // Connected Id 발급
     @Override
@@ -95,7 +99,12 @@ public class CodefServiceImpl implements CodefService {
         String connectedId = userCardEntity.getUserCardCompanyEntity().getConnectedId();
         String organization = userCardEntity.getCardEntity().getOrganizationCode();
         String cardNo = userCardEntity.getUserCardNum();
-        String cardPwd = userCardEntity.getCardPwd();
+        String cardPwd = "";
+        try {
+            cardPwd = encryptionService.decryptPassword(userCardEntity.getCardPwd());
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
 
         HashMap<String, Object> parameterMap = getCardHistoryParameterMap(connectedId, organization, cardNo, cardPwd,
                 startDate, endDate);

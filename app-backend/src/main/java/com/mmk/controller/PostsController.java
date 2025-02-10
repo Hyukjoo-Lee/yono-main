@@ -2,6 +2,8 @@ package com.mmk.controller;
 
 import java.io.File;
 import java.io.IOException;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.Calendar;
 import java.util.List;
 import java.util.Random;
@@ -41,49 +43,54 @@ public class PostsController {
             @RequestParam("postFormData") String postFormData,
             @RequestParam(value = "file", required = false) MultipartFile postFile) {
 
-    String baseUploadFolder = uploadDir + "/uploads/images";
-    System.out.println("Base Upload Folder: " + baseUploadFolder);
-
         try {
             PostsDTO pd = new ObjectMapper().readValue(postFormData, PostsDTO.class);
             System.out.println("UserId: " + pd.getUserId());
+            String uploadFolder = uploadDir + "/uploads/images";
 
             if (postFile != null && !postFile.isEmpty()) {
                 String fileName = postFile.getOriginalFilename();
 
-                // 날짜 기반 폴더 생성
-                Calendar cal = Calendar.getInstance();
-                int year = cal.get(Calendar.YEAR);
-                int month = cal.get(Calendar.MONTH) + 1;
-                int date = cal.get(Calendar.DATE);
+                if (fileName != null) {
 
-                String dateFolder = year + "-" + (month < 10 ? "0" + month : month) + "-"
-                        + (date < 10 ? "0" + date : date);
-                String uploadFolder = baseUploadFolder + "/" + dateFolder;
+                    // 날짜 기반 폴더 생성
+                    Calendar cal = Calendar.getInstance();
+                    int year = cal.get(Calendar.YEAR);
+                    int month = cal.get(Calendar.MONTH) + 1;
+                    int date = cal.get(Calendar.DATE);
 
-                // 폴더 생성
-                File folder = new File(uploadFolder);
-                if (!folder.exists()) {
-                    folder.mkdirs();
+                    // String homedir = uploadFolder + "/" + year + "-" + month + "-" + date;
+                    String homedir = uploadDir + "/" + year + "-" + month + "-" + date;
+
+                    // 폴더 생성
+                    File folder = new File(homedir);
+                    if (!folder.exists()) {
+                        folder.mkdirs();
+                    }
+
+                    // 랜덤 파일명 생성
+                    Random r = new Random();
+                    int random = r.nextInt(100000000);
+                    int index = fileName.lastIndexOf(".");
+                    String fileExtension = fileName.substring(index + 1);
+                    String newFileName = "post_" + random + "." + fileExtension;
+
+                    String fileDBName = "/uploads/images/" + year + "-" + month + "-" + date + "/" + newFileName;
+                    File saveFile = new File(homedir + "/" + newFileName);
+
+                    try {
+                        postFile.transferTo(saveFile);
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                        ApiResponse<PostsDTO> response = new ApiResponse<>(500, "파일 저장 실패", null);
+                        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(response);
+                    }
+
+                    pd.setImgurl(fileDBName); // DB에 저장될 이미지 URL 설정
+                } else {
+                    ApiResponse<PostsDTO> response = new ApiResponse<>(400, "파일 이름이 없습니다", null);
+                    return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(response);
                 }
-
-                // 랜덤 파일명 생성
-                Random r = new Random();
-                int random = r.nextInt(100000000);
-                int index = fileName.lastIndexOf(".");
-                String fileExtension = fileName.substring(index + 1);
-                String newFileName = "post_" + random + "." + fileExtension;
-
-                String fileDBName = "/uploads/images/" + dateFolder + "/" + newFileName; // DB에 저장될 경로
-                File saveFile = new File(uploadFolder + "/" + newFileName);
-
-                try {
-                    postFile.transferTo(saveFile);
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }
-
-                pd.setImgurl(fileDBName); // DB에 저장될 이미지 URL 설정
             }
 
             postsService.save(pd);
@@ -117,13 +124,10 @@ public class PostsController {
             @RequestParam("postFormData") String postFormData,
             @RequestParam(value = "file", required = false) MultipartFile file) {
 
-        // 기본 업로드 폴더 설정
-        String baseUploadFolder = System.getProperty("user.dir") + "/uploads/images";
-        System.out.println("사진 경로 " + baseUploadFolder);
-
         try {
             // JSON 문자열을 PostsDTO 객체로 변환
             PostsDTO ed = new ObjectMapper().readValue(postFormData, PostsDTO.class);
+            String uploadFolder = uploadDir + "/uploads/images";
 
             // 게시글 ID 설정
             ed.setNo(no);
@@ -142,15 +146,12 @@ public class PostsController {
                 int month = cal.get(Calendar.MONTH) + 1;
                 int date = cal.get(Calendar.DATE);
 
-                String dateFolder = year + "-" + (month < 10 ? "0" + month : month) + "-"
-                        + (date < 10 ? "0" + date : date);
-                String uploadFolder = baseUploadFolder + "/" + dateFolder;
-
+                String homedir = uploadFolder + "/" + year + "-" + month + "-" + date;
                 // 폴더 생성
-                File folder = new File(uploadFolder);
+                File folder = new File(homedir);
                 if (!folder.exists()) {
                     folder.mkdirs();
-                    System.out.println("새로운 폴더 생성: " + uploadFolder); // 폴더 생성 확인
+                    System.out.println("새로운 폴더 생성: " + homedir); // 폴더 생성 확인
                 }
 
                 // 랜덤 값으로 새 파일 이름 생성
@@ -162,8 +163,8 @@ public class PostsController {
                 String newFileName = "post_" + randomNum + "." + fileExtension;
 
                 // 새 파일 경로 설정
-                String fileDBName = "/uploads/images/" + dateFolder + "/" + newFileName; // DB에 저장할 경로
-                File saveFile = new File(uploadFolder + "/" + newFileName); // 실제 파일 경로
+                String fileDBName = "/uploads/images/" + year + "-" + month + "-" + date + "/" + newFileName;
+                File saveFile = new File(homedir + "/" + newFileName); // 실제 파일 경로
 
                 // 파일 저장
                 try {
@@ -199,7 +200,6 @@ public class PostsController {
         }
     }
 
-    // 게시글 삭제
     @DeleteMapping("/delete/{postId}")
     public ResponseEntity<ApiResponse<String>> deletePost(@PathVariable String postId) {
         try {
@@ -213,11 +213,11 @@ public class PostsController {
 
             // 게시글과 연결된 이미지 파일 삭제
             if (post.getImgurl() != null && !post.getImgurl().isEmpty()) {
-                // 저장된 경로에서 이미지 경로 추출
-                String baseUploadFolder = System.getProperty("user.dir") + "/uploads/images";
-                String filePath = baseUploadFolder + post.getImgurl().replace("/uploads/images", "");
+                // 절대 경로로 변환
+                Path filePath = Paths.get(uploadDir, post.getImgurl()).toAbsolutePath();
+                System.out.println("삭제 파일 :" + filePath);
 
-                File file = new File(filePath);
+                File file = filePath.toFile();
                 if (file.exists() && file.isFile()) {
                     boolean deleted = file.delete();
                     if (!deleted) {

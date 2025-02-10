@@ -1,3 +1,5 @@
+-- 마스터 카드
+
 -- KB국민 My WE:SH 카드 
 INSERT INTO card (CARD_ID, CARD_TITLE, CARD_PROVIDER, ORGANIZATION_CODE, CARD_IMG_URL, CREATED_AT, UPDATED_AT)
 VALUES (CARD_SEQ.nextval, 'KB국민 My WE:SH 카드', 'kb', '0301', '/uploads/images/card/kb/kb-my/kb-my1.png,/uploads/images/card/kb/kb-my/kb-my2.png,/uploads/images/card/kb/kb-my/kb-my3.png,/uploads/images/card/kb/kb-my/kb-my4.png', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP);
@@ -34,11 +36,7 @@ VALUES (CARD_SEQ.nextval, '현대카드 ZERO Edition2(할인형)', 'hyundai', '0
 update card set CARD_IMG_URL = '/uploads/images/card/hyundai/hyundai-zero/hyundai-zero1.png' where CARD_ID = 58;
 
 drop table card;
-commit;
-
-drop table user_card;
-
-select * from user_card;
+TRUNCATE table card;
 select * from card;
 
 

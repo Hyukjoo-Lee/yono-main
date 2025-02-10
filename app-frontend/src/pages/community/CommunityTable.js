@@ -96,9 +96,6 @@ export function CommunityTable() {
     setPage(newPage - 1);
   };
 
-  // redux 상태를 확인
-  // console.log('로그인 된 유저: ' + JSON.stringify(user.userId));
-
   const handleButtonClick = () => {
     if (isLoggedIn) {
       navigate('/communityFormBox');

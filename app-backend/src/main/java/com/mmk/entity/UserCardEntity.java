@@ -39,8 +39,8 @@ public class UserCardEntity {
 
     // 카드 비밀번호 (고정 길이 4자리, 필수)
     @NotNull
-    @Size(min = 4, max = 4, message = "카드 비밀번호는 정확히 4자리여야 합니다.")
-    @Column(name = "card_pwd", nullable = false, length = 4)
+    @Size(max = 255)
+    @Column(name = "card_pwd", nullable = false, length = 255)
     private String cardPwd;
 
     // 카드 이미지 (최대 길이 255, 필수)
@@ -49,10 +49,9 @@ public class UserCardEntity {
     @Column(name = "card_img", nullable = false, length = 255)
     private String cardImgUrl;
 
-    // 대표카드 설정 (0: 일반카드, 1: 대표카드, 기본값: 0)
     @Column(name = "primary_card", nullable = false)
-    @ColumnDefault("0")
-    private int primaryCard = 0;
+    @ColumnDefault("'일반카드'")
+    private String primaryCard;
 
     @CreationTimestamp
     @Column(name = "created_at", nullable = false)

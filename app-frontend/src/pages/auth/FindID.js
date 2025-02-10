@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
 import CustomButton from '../../common/CommonButton';
@@ -83,11 +83,19 @@ const EmailValidMessageStyle = styled.p`
   white-space: pre-line;
 `;
 
+const TimeLeftStyle = styled.p`
+  color: #b0b0b0;
+  margin-left: 10px;
+  margin-top: 0px;
+  font-size: 15px;
+`;
+
 const emailValidMessages = [
   '인증 완료!',
   '인증코드가 일치하지 않습니다.',
   '이메일 인증을 확인하세요.',
   '등록되지 않은 아이디이거나\n이름 혹은 이메일이 잘못 입력되었습니다.',
+  '인증 시간이 만료되었습니다. 다시 요청해주세요.',
 ];
 
 const FindID = () => {
@@ -105,7 +113,7 @@ const FindID = () => {
     emailCode: '',
   });
 
-  const [isEmailCodeVisible, setIsEmailCodeVisble] = useState(false);
+  const [isEmailCodeVisible, setIsEmailCodeVisible] = useState(false);
   const [emailValidVisible, setEmailValidVisible] = useState(false);
   const [emailValidMessageIndex, setEmailValidMessageIndex] = useState();
   const [isShowDialog, setIsShowDialog] = useState(false);
@@ -113,11 +121,25 @@ const FindID = () => {
   const [id, setId] = useState('');
   const [code, setCode] = useState('');
   const [isEmailValid, setIsEmailValid] = useState(false);
+  const [timeLeft, setTimeLeft] = useState(0);
 
   const inputRegexs = {
     email: /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/,
     name: /^[가-힣]{2,10}$/,
   };
+
+  useEffect(() => {
+    if (timeLeft > 0) {
+      const timer = setInterval(() => {
+        setTimeLeft((prev) => prev - 1);
+      }, 1000);
+      return () => clearInterval(timer);
+    } else if (timeLeft === 0) {
+      setEmailValidVisible(true);
+      setEmailValidMessageIndex(4);
+      setIsEmailCodeVisible(false);
+    }
+  }, [timeLeft]);
 
   const handleInputChange = (e, field) => {
     setFormData((prev) => ({ ...prev, [field]: e.target.value }));
@@ -171,10 +193,11 @@ const FindID = () => {
 
     setEmailValidVisible(false);
     setId(response.data.userId);
-    setIsEmailCodeVisble(!isEmailCodeVisible);
+    setIsEmailCodeVisible(!isEmailCodeVisible);
 
     const sendedCode = await sendMail(formData.email);
     setCode(sendedCode);
+    setTimeLeft(300);
   };
 
   const handleConfirmCode = () => {
@@ -196,7 +219,11 @@ const FindID = () => {
 
   const handleCheckCode = () => {
     setEmailValidVisible(true);
-    if (code === formData.emailCode) {
+
+    if (timeLeft === 0) {
+      setIsEmailValid(true);
+      setEmailValidMessageIndex(4);
+    } else if (code === formData.emailCode) {
       setIsEmailValid(true);
       setEmailValidMessageIndex(0);
     } else {
@@ -247,27 +274,35 @@ const FindID = () => {
             <CommonHr />
 
             {isEmailCodeVisible && (
-              <CodeContainer>
-                <CodeInput>
-                  <CommonInput
-                    text="인증코드"
-                    placeholder="인증코드를 입력하세요"
-                    width="100%"
-                    onChange={(e) => handleInputChange(e, 'emailCode')}
-                    {...styleProps}
-                  />
-                  <CommonHr />
-                </CodeInput>
-                <CodeButton>
-                  <CustomButton
-                    text="확인"
-                    width="50%"
-                    height="30px"
-                    fontSize={theme.fontSize.sm}
-                    onClick={handleCheckCode}
-                  />
-                </CodeButton>
-              </CodeContainer>
+              <>
+                <CodeContainer>
+                  <CodeInput>
+                    <CommonInput
+                      text="인증코드"
+                      placeholder="인증코드를 입력하세요"
+                      width="100%"
+                      onChange={(e) => handleInputChange(e, 'emailCode')}
+                      {...styleProps}
+                    />
+                    <CommonHr />
+                  </CodeInput>
+                  <CodeButton>
+                    <CustomButton
+                      text="확인"
+                      width="50%"
+                      height="30px"
+                      fontSize={theme.fontSize.sm}
+                      onClick={handleCheckCode}
+                    />
+                  </CodeButton>
+                </CodeContainer>
+                {timeLeft !== 0 && (
+                  <TimeLeftStyle>
+                    남은 시간: {Math.floor(timeLeft / 60)}:
+                    {(timeLeft % 60).toString().padStart(2, '0')}
+                  </TimeLeftStyle>
+                )}
+              </>
             )}
 
             {emailValidVisible && (
@@ -276,7 +311,6 @@ const FindID = () => {
               </EmailValidMessageStyle>
             )}
           </MiddleContainer>
-          {/* <HiddenBox></HiddenBox> */}
 
           <ButtonContainer>
             <CustomButton

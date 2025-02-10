@@ -1,5 +1,6 @@
 package com.mmk.service;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.NoSuchElementException;
 import java.util.stream.Collectors;
@@ -46,6 +47,12 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
+    public UserEntity findEntityByUserNum(int userNum) {
+        UserEntity userEntity = userDAO.findByUserNum(userNum);
+        return userEntity;
+    }
+
+    @Override
     public UserDTO getUserByUserId(String userId) {
         UserEntity userEntity = userDAO.getUserByUserId(userId);
         return toDTO(userEntity);
@@ -78,7 +85,7 @@ public class UserServiceImpl implements UserService {
     @Override
     public void deleteUser(int userNum) {
         UserDTO userDTO = toDTO(userDAO.findByUserNum(userNum));
-        userDTO.setState("inactive");
+        userDTO.setState("INACTIVE");
         userDAO.updateUser(toEntity(userDTO));
     }
 
@@ -167,6 +174,14 @@ public class UserServiceImpl implements UserService {
         } else {
             return null;
         }
+    }
+
+    @Override
+    public ArrayList<Integer> findAllUserNum() {
+        List<UserEntity> users = userDAO.findAll();
+        return users.stream()
+                    .map(UserEntity::getUserNum)
+                    .collect(Collectors.toCollection(ArrayList::new));
     }
 
 }

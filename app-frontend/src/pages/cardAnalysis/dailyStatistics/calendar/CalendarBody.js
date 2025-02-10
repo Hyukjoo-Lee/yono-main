@@ -24,7 +24,7 @@ const RowBox = styled.div`
 
 const DaysBox = styled.div`
   width: calc(100% / 7);
-  aspect-ratio: 1 / 0.8;
+  aspect-ratio: 1 / 0.9;
   cursor: pointer;
   padding: 5px 10px;
   box-sizing: border-box;

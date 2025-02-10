@@ -202,7 +202,6 @@ const Login = () => {
       } else {
         setFormMessage({ error: SERVER_MESSAGE });
       }
-      console.log(result);
     } catch (error) {
       setFormMessage({ error: LOGIN_VERIFIED_MESSAGE });
     }

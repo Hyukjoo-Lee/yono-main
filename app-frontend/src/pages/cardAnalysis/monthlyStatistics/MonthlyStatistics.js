@@ -21,6 +21,8 @@ const ChartsContainer = styled.div`
 const MonthlyStatistics = (isHistory) => {
   const [cardData, setCardData] = useState(null);
   const [loading, setLoading] = useState(true);
+  const [message, setMessage] = useState(true);
+  const [data, setData] = useState(true);
   const userNum = useSelector((state) => state.user.user?.userNum);
 
   const fetchUser = useCallback(async () => {
@@ -50,7 +52,7 @@ const MonthlyStatistics = (isHistory) => {
         {cardData ? (
           <>
             <Barchart data={cardData} />
-            <Piechart data={cardData} />
+            <Piechart data={cardData} chartWidth={'50%'} />
           </>
         ) : (
           <p>집계된 데이터가 없습니다.</p>

@@ -92,23 +92,12 @@ export const registerCard = async (cardData) => {
 
 export const getAllCardsInfoByUserNum = async (userNum) => {
   const response = await axios.get(`/card/user/${userNum}/details`);
-
-  if (response.status === 200) {
-    return response.data;
-  } else if (response.status === 404) {
-    return null;
-  } else {
-    return response.message;
-  }
+  return response;
 };
 
-export const getAllCardBenefitsByCardTitle = async (cardTitle) => {
-  try {
-    const response = await axios.get(`/benefit/${cardTitle}`);
-    return response.data;
-  } catch (error) {
-    console.error('데이터 조회 중 오류 발생', error);
-  }
+export const getRecommendedCards = async (userNum) => {
+  const response = await axios.get(`/card/${userNum}/recommendations`);
+  return response;
 };
 
 export const registerCardCompany = async (cardCompanyData) => {

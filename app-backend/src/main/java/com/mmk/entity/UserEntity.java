@@ -11,6 +11,7 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.PrePersist;
 import jakarta.persistence.SequenceGenerator;
 import jakarta.persistence.Table;
 import jakarta.validation.constraints.NotNull;
@@ -68,10 +69,10 @@ public class UserEntity {
     @ColumnDefault("'temp_profile'")
     private String profile = "temp_profile";
 
-    // 사용자 상태 (기본값 active, active: 회원, inactive: 탈퇴 회원)
+    // 사용자 상태 (기본값 ACTIVE, ACTIVE: 회원, INACTIVE: 탈퇴 회원)
     @Column(name = "state", nullable = false, length = 8)
-    @ColumnDefault("'active'")
-    private String state = "active";
+    @ColumnDefault("'ACTIVE'")
+    private String state = "ACTIVE";
 
     // 사용자 역할 (기본값 USER, ADMIN: 관리자, USER: 일반 회원)
     @Column(name = "user_role", nullable = false, length = 5)
@@ -85,4 +86,14 @@ public class UserEntity {
     @UpdateTimestamp
     @Column(name = "updated_at", nullable = false)
     private Timestamp updatedAt;
+
+    @PrePersist
+    public void prePersist() {
+        if (this.state == null || this.state.trim().isEmpty()) {
+            this.state = "ACTIVE";
+        }
+        if (this.userRole == null || this.userRole.trim().isEmpty()) {
+            this.userRole = "USER";
+        }
+    }
 }

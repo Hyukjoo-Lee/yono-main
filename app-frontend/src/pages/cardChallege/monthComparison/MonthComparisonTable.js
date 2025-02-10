@@ -1,9 +1,10 @@
 import React from 'react';
 import styled from 'styled-components';
+import MonthGuide from './MonthGuide';
 
 const TextWrap = styled.div`
   width: 720px;
-  height: 530px;
+  height: 570px;
   margin-right: 30px;
   display: flex;
   flex-direction: column;
@@ -19,7 +20,7 @@ const Titlediv = styled.div`
   border-radius: 7px;
   width: 335px;
   height: 235px;
-  margin-top: 20px;
+  // margin-top: 10px;
   background-color: ${(props) => props.theme.color.lightBlue};
 
   & p {
@@ -45,7 +46,12 @@ const TitleGroup = styled.div`
   width: 100%;
 `;
 
-const MonthComparisionTable = ({ data }) => {
+const MonthComparisionTable = ({
+  data,
+  previousMonthString,
+  previousToPreviousMonthString,
+}) => {
+  console.log('뱃지 :' + data);
   if (!data) {
     return <div>Loading...</div>;
   }
@@ -54,18 +60,19 @@ const MonthComparisionTable = ({ data }) => {
     <TextWrap>
       <TitleGroup>
         <Titlediv>
-          <p>저저번달에 사용하신 금액</p>
+          <p>{previousToPreviousMonthString}월 지출 금액</p>
           <hr />
           <span>
             {(data.previousToPreviousMonthAmount ?? 0).toLocaleString()}원
           </span>
         </Titlediv>
         <Titlediv>
-          <p>저번달에 사용하신 금액</p>
+          <p>{previousMonthString}월 지출 금액</p>
           <hr />
           <span>{(data.previousMonthAmount ?? 0).toLocaleString()}원</span>
         </Titlediv>
       </TitleGroup>
+      <MonthGuide />
       <TitleGroup>
         <Titlediv>
           <p>등수</p>
@@ -75,7 +82,7 @@ const MonthComparisionTable = ({ data }) => {
         <Titlediv>
           <p>뱃지 갯수</p>
           <hr />
-          <span>{(data.PreviousBadgeCount ?? 0).toLocaleString()}개</span>
+          <span>{(data.previousBadgeCount ?? 0).toLocaleString()}개</span>
         </Titlediv>
       </TitleGroup>
     </TextWrap>

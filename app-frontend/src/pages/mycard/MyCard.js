@@ -10,7 +10,10 @@ import CommonLoading from '../../common/CommonLoading';
 
 import CardRegTab from './CardRegTab';
 import CardRecTab from './CardRecTab';
-import { getAllCardsInfoByUserNum } from '../../apis/cardApi';
+import {
+  getAllCardsInfoByUserNum,
+  getRecommendedCards,
+} from '../../apis/cardApi';
 
 const RootIn = styled.div`
   width: ${(props) => props.theme.display.lg};
@@ -25,6 +28,7 @@ export function MyCard() {
   const [selectedTab, setSelectedTab] = useState(0);
   const [user, setUser] = useState('');
   const [userCards, setUserCards] = useState([]);
+  const [recommendedCards, setRecommendedCards] = useState([]);
   const [isShowDialog, setIsShowDialog] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
 
@@ -33,7 +37,7 @@ export function MyCard() {
   const items = [{ text: '카드 등록' }, { text: '카드 추천' }];
   const panels = [
     <CardRegTab user={user} userCards={userCards} />,
-    <CardRecTab user={user} />,
+    <CardRecTab user={user} recommendedCards={recommendedCards} />,
   ];
 
   useEffect(() => {
@@ -44,26 +48,33 @@ export function MyCard() {
     }
   }, [isLoggedIn, userFromStore]);
 
-  // 등록된 유저 카드 리스트와 카드 혜택 조회
   useEffect(() => {
     const fetchUserCardsWithBenefits = async () => {
       setIsLoading(true);
       try {
         const response = await getAllCardsInfoByUserNum(userFromStore.userNum);
 
-        const formattedCards = response.data.map((card) => ({
-          cardId: card.userCardId,
-          cardNumber: card.userCardNum,
-          cardTitle: card.cardTitle,
-          cardImg: card.cardImg,
-          primaryCard: card.primaryCard,
-          cardInfo: card.cardBenefits.map((benefit) => ({
-            title: benefit.benefitTitle,
-            value: benefit.benefitValue,
-            type: benefit.benefitType,
-          })),
-        }));
-        if (response) setUserCards(formattedCards);
+        if (response.status === 200) {
+          const formattedCards = response.data.data.map((card) => ({
+            cardId: card.userCardId,
+            cardNumber: card.userCardNum,
+            cardTitle: card.cardTitle,
+            cardImg: card.cardImg,
+            primaryCard: card.primaryCard,
+            cardInfo:
+              card.cardBenefits && card.cardBenefits.length > 0
+                ? card.cardBenefits.map((benefit) => ({
+                    title: benefit.benefitTitle || '혜택 없음',
+                    value: benefit.benefitValue || '0',
+                    type: benefit.benefitType || '기타',
+                  }))
+                : [{ title: '혜택 없음', value: '-', type: '기타' }],
+          }));
+
+          setUserCards(formattedCards);
+        } else if (response.status === 204) {
+          setUserCards([]);
+        }
       } catch (error) {
         console.error('사용자 카드 목록 로딩 실패: ', error);
       } finally {
@@ -73,6 +84,32 @@ export function MyCard() {
 
     if (isLoggedIn) {
       fetchUserCardsWithBenefits();
+    }
+  }, [isLoggedIn, userFromStore]);
+
+  useEffect(() => {
+    const fetchRecommendedCards = async () => {
+      setIsLoading(true);
+      try {
+        const response = await getRecommendedCards(userFromStore.userNum);
+        if (response.status === 200) {
+          setRecommendedCards(response);
+          console.log('recommendedCards:' + JSON.stringify(recommendedCards));
+        } else if (response.status === 204) {
+          console.log(
+            '추천할 카드가 없습니다. 사용 내역이 부족하거나 해당 카드가 없습니다.',
+          );
+          setRecommendedCards([]);
+        }
+      } catch (error) {
+        console.error('추천 카드 로딩 실패: ', error);
+      } finally {
+        setIsLoading(false);
+      }
+    };
+
+    if (isLoggedIn) {
+      fetchRecommendedCards();
     }
   }, [isLoggedIn, userFromStore]);
 

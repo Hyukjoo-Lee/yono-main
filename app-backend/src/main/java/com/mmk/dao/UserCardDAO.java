@@ -21,7 +21,7 @@ public interface UserCardDAO {
 
     void setPrimaryCard(int userCardId);
 
-    UserCardEntity findByUserNumAndPrimaryCard(UserEntity userEntity, int primaryCard);
+    UserCardEntity findByUserNumAndPrimaryCard(UserEntity userEntity, String primaryCard);
 
     UserCardEntity findByUserCardId(int userCardId);
 

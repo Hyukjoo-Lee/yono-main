@@ -11,18 +11,15 @@ const StyledWrap = styled.div`
 `;
 
 export function MainPage() {
-  // const isLoggedIn = useSelector((state) => state.user.isLoggedIn);
+  const isLoggedIn = useSelector((state) => state.user.isLoggedIn);
 
   const user = useSelector((state) => state.user.user);
-
-  console.log('로그인 된 유저: ' + JSON.stringify(user));
 
   return (
     <CommonRoot>
       <StyledWrap>
         <MainIntro />
-        {/* <MainCardBox isLoggedIn={isLoggedIn} /> */}
-        <MainCardBox />
+        <MainCardBox isLoggedIn={isLoggedIn} user={user} />
         <MainBox />
       </StyledWrap>
     </CommonRoot>

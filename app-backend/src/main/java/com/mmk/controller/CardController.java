@@ -15,11 +15,18 @@ import org.springframework.web.bind.annotation.RestController;
 import com.mmk.common.ApiResponse;
 import com.mmk.dto.UserCardCompanyDTO;
 import com.mmk.dto.CardDTO;
+import com.mmk.dto.RecCardDTO;
 import com.mmk.service.CardService;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 @RestController
 @RequestMapping("/card")
 public class CardController {
+
+    private static final Logger logger = LoggerFactory.getLogger(CardController.class);
+
     @Autowired
     private CardService cardService;
 
@@ -29,7 +36,7 @@ public class CardController {
         List<CardDTO> cardDTOs = cardService.getAllCards();
         if (cardDTOs.isEmpty()) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND)
-                    .body(new ApiResponse<>(404, "등록된 마스터 카드가 없습니다.", null));
+                    .body(new ApiResponse<>(204, "등록된 마스터 카드가 없습니다.", null));
         }
         return ResponseEntity.ok(new ApiResponse<>(200, "전체 마스터 카드 검색 성공", cardDTOs));
     }
@@ -61,32 +68,45 @@ public class CardController {
     public ResponseEntity<ApiResponse<UserCardCompanyDTO>> saveCodefCard(
             @RequestBody UserCardCompanyDTO userCardCompanyDTO) {
         UserCardCompanyDTO savedCard = cardService.saveCodefCard(userCardCompanyDTO);
-        ApiResponse<UserCardCompanyDTO> response = new ApiResponse<>(201, "마스터 카드,혜택 생성 성공", savedCard);
+        ApiResponse<UserCardCompanyDTO> response = new ApiResponse<>(201, "마스터 카드, 혜택 생성 성공", savedCard);
         return ResponseEntity.status(HttpStatus.CREATED).body(response);
     }
 
     /**
-     * 최근 카드 3개월 사용내역을 분석해서 사용자에게 적합한 카드 5개를 반환
+     * 사용자의 최근 3개월 카드 사용 내역을 분석해서 해당 사용자에게 적합한 카드 5개를 반환
      * 
-     * @param userNum 로그인된 User Number (PK)
+     * @param userNum 사용자 고유 번호 (UserInfo 테이블의 PK)
      * @return ResponseEntity<ApiResponse<List<CardDTO>>> 추천 카드 리스트
      */
     @GetMapping("/{userNum}/recommendations")
-    public ResponseEntity<ApiResponse<List<CardDTO>>> getRecommendedCards(@PathVariable int userNum) {
+    public ResponseEntity<ApiResponse<List<RecCardDTO>>> getRecommendedCards(@PathVariable int userNum) {
+        try {
+            List<CardDTO> cardDTOs = cardService.getAllCards();
 
-        List<CardDTO> cardDTOs = cardService.getAllCards();
+            if (cardDTOs.isEmpty()) {
+                logger.warn("등록된 마스터 카드가 없음");
+                return ResponseEntity.status(HttpStatus.NO_CONTENT)
+                        .body(new ApiResponse<>(204, "등록된 마스터 카드가 없습니다.", null));
+            }
 
-        if (cardDTOs.isEmpty()) {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND)
-                    .body(new ApiResponse<>(404, "등록된 마스터 카드가 없습니다.", null));
+            List<RecCardDTO> recommendedCards = cardService.getRecommendedCards(userNum);
+
+            if (recommendedCards.isEmpty()) {
+                logger.warn("사용자 넘버 {} 에 대한 추천 카드 없음", userNum);
+                return ResponseEntity.status(HttpStatus.NO_CONTENT)
+                        .body(new ApiResponse<>(204, "추천할 카드가 없습니다. 사용 내역이 부족하거나 해당 카드가 없습니다.", null));
+            }
+
+            // 응답 데이터 로깅용
+            logger.info("추천된 카드 목록 (카드 이름): {}", recommendedCards.stream().map(RecCardDTO::getCardTitle).toList());
+
+            return ResponseEntity.ok(new ApiResponse<>(200, "추천 카드 검색 성공", recommendedCards));
+        } catch (Exception e) {
+            logger.error("추천 카드 처리 중 오류 발생", e);
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                    .body(new ApiResponse<>(500, "서버 내부 오류가 발생했습니다.", null));
         }
 
-        // 사용자 사용 내역 분석하고 적합한 카드 추천
-        List<CardDTO> recommnededCards = cardService.getRecommendedCards(userNum);
-
-        System.out.println(recommnededCards);
-
-        return null;
     }
 
 }
