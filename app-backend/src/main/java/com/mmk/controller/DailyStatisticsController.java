@@ -14,6 +14,9 @@ import com.mmk.common.ApiResponse;
 import com.mmk.dto.DailyStatisticsDTO;
 import com.mmk.service.CardHistoryService;
 
+/**
+ * 사용자의 일별 카드 거래를 조회하는 컨트롤러입니다.
+ */
 @RestController
 @RequestMapping("/user")
 public class DailyStatisticsController {
@@ -21,6 +24,12 @@ public class DailyStatisticsController {
     @Autowired
     private CardHistoryService cardHistoryService;
 
+    /**
+     * 특정 사용자의 일별 카드 거래 내역을 조회합니다.
+     *
+     * @param userNum 거래 내역을 조회할 사용자 번호
+     * @return DailyStatisticsDTO 리스트를 포함하는 ApiResponse를 반환합니다.
+     */
     @GetMapping("/daily-statistics")
     public ResponseEntity<ApiResponse<List<DailyStatisticsDTO>>> getCardHistoryByUserAndPrimaryCard(@RequestParam("userNum") int userNum) {
         try {

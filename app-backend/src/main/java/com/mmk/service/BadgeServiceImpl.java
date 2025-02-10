@@ -38,7 +38,12 @@ public class BadgeServiceImpl implements BadgeService {
         badgeDAO.save(badgeEntity);
     }
 
-    // 로그인한 유저 랭킹 정보
+    /**
+     * 로그인한 유저의 랭킹 정보를 조회합니다.
+     *
+     * @param userNum 사용자 번호
+     * @return RankingDTO 객체 반환
+     */
     @Override
     public RankingDTO getUserRanking(int userNum) {
         // 현재 날짜 기준으로 이전 달 계산
@@ -60,7 +65,11 @@ public class BadgeServiceImpl implements BadgeService {
         return rankingDto;
     }
 
-    // 전달 랭킹 정보
+    /**
+     * 지난 달의 랭킹 정보를 조회합니다.
+     *
+     * @return RankingDTO 리스트 반환
+     */
     @Override
     public List<RankingDTO> getBadgesForPreviousMonth() {
         // 현재 날짜 기준으로 이전 달 계산
@@ -86,6 +95,11 @@ public class BadgeServiceImpl implements BadgeService {
                 .collect(Collectors.toList());
     }
 
+    /**
+     * 현재 날짜를 기준으로 지난 달을 계산하는 메서드
+     *
+     * @return 지난 달의 연월(yyyyMM) 문자열
+     */
     private String getPreviousMonth() {
         Calendar calendar = Calendar.getInstance();
         calendar.add(Calendar.MONTH, -1); // 한 달을 빼기
@@ -93,7 +107,12 @@ public class BadgeServiceImpl implements BadgeService {
         return sdf.format(calendar.getTime());
     }
 
-    // Entity를 DTO로 변환하는 메서드
+    /**
+     * BadgeEntity를 RankingDTO로 변환하는 메서드
+     *
+     * @param badgeEntity 변환할 BadgeEntity 객체
+     * @return 변환된 RankingDTO 객체
+     */
     private RankingDTO convertToDTO(BadgeEntity badgeEntity) {
         if (badgeEntity == null) {
             return new RankingDTO(); // null 체크 추가
