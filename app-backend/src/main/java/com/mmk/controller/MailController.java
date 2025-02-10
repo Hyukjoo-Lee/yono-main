@@ -21,12 +21,19 @@ public class MailController {
     
     private final MailService mailService;
 
-    // 아이디 인증코드 발송
+    /**
+     * 아이디 인증코드 발송
+     * 
+     * @param mailDTO 메일주소와 임시비밀번호를 담고 있는 DTO
+     * @return String
+     * 
+     */
     @ResponseBody
     @PostMapping("/sendCode")
     public String emailCheck(@RequestBody MailDTO mailDTO) throws MessagingException, UnsupportedEncodingException {
         String email = mailDTO.getEmail();
         String authCode = mailService.sendCodeMessage(email);
+        System.out.println("authCode: " + authCode);
         return authCode;
     }
 
