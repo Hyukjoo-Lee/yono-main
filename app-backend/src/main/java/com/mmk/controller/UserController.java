@@ -226,7 +226,19 @@ public class UserController {
         }
     };
 
-    // 유저 정보 업데이트
+    /**
+     * 유저 정보 업데이트
+     * 프로필 사진 변경 시 기존 사진은 삭제하고 새로운 사진 저장
+     * 
+     * @param userInfoJson 사용자 정보 폼
+     * @param profileImage 프로필 사진 등록 시 MultipartFile 형태로 받음 (등록 안 할 시 없음)
+     * @param profileText 프로필 사진 미등록 시 사용자의 프로필사진 경로 (등록할 시 없음)
+     * 프로필 사진을 등록하냐 아니냐에 따라 사진파일 경로(String), 파일(MultipartFile)
+     * 두 가지의 타입이 필요하기 때문에 두 가지 타입으로 Param 을 받음
+     * @return ResponseEntity<ApiResponse<UserDTO>>
+     * UserCardDTO 가 null 일 때 -> 회원 정보 수정 오류 (status: 400)
+     * UserCardDTO 가 null 이 아닐 때 -> 회원 정보 수정 성공, 저장한 정보를 담은 DTO 반환 (status: 200)
+     */
     @PutMapping("/{userNum}")
     public ResponseEntity<ApiResponse<UserDTO>> updateUser(
             @RequestParam("userInfo") String userInfoJson,
@@ -238,7 +250,7 @@ public class UserController {
         if (userDTO != null) {
             userService.updateUser(userDTO);
 
-            ApiResponse<UserDTO> response = new ApiResponse<>(201, "회원 정보 수정 성공", userDTO);
+            ApiResponse<UserDTO> response = new ApiResponse<>(200, "회원 정보 수정 성공", userDTO);
             return ResponseEntity.ok(response);
         } else {
             ApiResponse<UserDTO> response = new ApiResponse<>(400, "회원 정보 수정 오류", null);
