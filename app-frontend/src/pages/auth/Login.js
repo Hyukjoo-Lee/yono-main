@@ -16,6 +16,7 @@ import CommonDialog from '../../common/CommonDialog';
 import { useDispatch, useSelector } from 'react-redux';
 import { loginUser } from '../../redux/actions/userAction';
 import KakaoLoginButton from './components/KakaoLoginButton';
+import GoogleLoginButton from './components/GoogleLoginButton';
 
 const RootIn = styled.div`
   width: ${(props) => props.theme.display.lg};
@@ -106,21 +107,11 @@ const SocialLoginWrapper = styled.div`
   gap: 20px;
 `;
 
-const SocialButton = styled.div`
-  width: 50px;
-  height: 50px;
-  border-radius: 50%;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  border: 1px solid #ccc;
-  cursor: pointer;
-`;
-
 const Login = () => {
   const [formData, setFormData] = useState({
     userId: '',
     password: '',
+    isSocialLogin: false,
   });
 
   const [formMessage, setFormMessage] = useState({
@@ -273,9 +264,7 @@ const Login = () => {
             </Divider>
             <SocialLoginWrapper>
               <KakaoLoginButton />
-              <SocialButton>
-                {/* <img src={googleLogo} alt="구글 로그인" /> */}
-              </SocialButton>
+              <GoogleLoginButton />
             </SocialLoginWrapper>
           </FormWrapper>
           {isLoggedIn && (

@@ -216,7 +216,7 @@ const CommunityComment = ({
                       onClick={() => toggleLike(comment.rno)} // 하트를 클릭하면 toggleLike 실행
                     />
                   ) : (
-                    <HeartButton like={false} /> // user가 없으면 빈 하트로 표시
+                    <HeartButton like={false} />
                   )}
                   <p>{comment.like_count}</p>
                 </LikeBox>

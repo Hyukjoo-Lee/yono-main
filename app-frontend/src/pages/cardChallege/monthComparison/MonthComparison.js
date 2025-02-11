@@ -3,7 +3,7 @@ import styled from 'styled-components';
 import Barchart from './Barchart';
 import MonthComparisionTable from './MonthComparisonTable';
 import { useSelector } from 'react-redux';
-import { monthlyComparision } from '../../../apis/MonthComparisionApi';
+import { monthlyComparision } from '../../../apis/monthComparisionApi';
 
 const Root = styled.div`
   width: 100%;
