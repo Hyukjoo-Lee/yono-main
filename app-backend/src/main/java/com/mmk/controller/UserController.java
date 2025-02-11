@@ -30,12 +30,17 @@ import com.mmk.common.ApiResponse;
 import com.mmk.dto.UserDTO;
 import com.mmk.service.UserService;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 /**
  * Controller: 사용자 요청의 값을 DTO 에 담아 Service 계층으로 전달함.
  */
 @RestController
 @RequestMapping("/user")
 public class UserController {
+
+    private static final Logger logger = LoggerFactory.getLogger(CardController.class);
 
     @Value("${IMAGE_PATH}")
     private String uploadDir;
@@ -142,6 +147,7 @@ public class UserController {
     // 회원가입
     @PostMapping("/signup")
     public ResponseEntity<ApiResponse<UserDTO>> createUser(@RequestBody UserDTO userDTO) {
+        logger.debug("userDTO: {}", userDTO);
         try {
             UserDTO createdUser = userService.createUser(userDTO);
             return ResponseEntity.status(HttpStatus.CREATED)
@@ -158,9 +164,12 @@ public class UserController {
     // 로그인
     @PostMapping("/login")
     public ResponseEntity<ApiResponse<UserDTO>> login(@RequestBody UserDTO userDTO) {
+
+        logger.debug("userDTO: {}", userDTO);
         String userId = userDTO.getUserId();
         String password = userDTO.getPassword();
-        boolean isLoginSuccessful = userService.validateLogin(userId, password);
+        boolean isSocialLogin = userDTO.getIsSocialLogin();
+        boolean isLoginSuccessful = userService.validateLogin(userId, password, isSocialLogin);
 
         if (isLoginSuccessful) {
             UserDTO userInfo = userService.getUserByUserId(userId);

@@ -107,21 +107,11 @@ const SocialLoginWrapper = styled.div`
   gap: 20px;
 `;
 
-const SocialButton = styled.div`
-  width: 50px;
-  height: 50px;
-  border-radius: 50%;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  border: 1px solid #ccc;
-  cursor: pointer;
-`;
-
 const Login = () => {
   const [formData, setFormData] = useState({
     userId: '',
     password: '',
+    isSocialLogin: false,
   });
 
   const [formMessage, setFormMessage] = useState({
