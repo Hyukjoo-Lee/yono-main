@@ -20,7 +20,12 @@ public interface CardHistoryRepository extends JpaRepository<CardHistoryEntity, 
         List<CardHistoryEntity> findRecentHistory(@Param("userCardId") int userCardId,
                         @Param("recentDate") String recentDate);
 
-        // 특정 사용자의 대표카드와 관련된 카드 내역 조회
+        /**
+         * 특정 사용자의 대표카드와 관련된 거래 내역을 조회하는 쿼리입니다.
+         *
+         * @param userNum 거래 내역을 조회할 사용자 번호
+         * @return 해당 사용자 번호와 대표카드 조건을 만족하는 CardHistoryEntity 리스트를 반환합니다.
+         */
         @Query("SELECT c FROM CardHistoryEntity c " +
                         "WHERE c.userCardEntity.userEntity.userNum = :userNum " +
                         "AND c.userCardEntity.primaryCard = '대표카드'")

@@ -38,7 +38,6 @@ spring:
           connectiontimeout: 5000
           timeout: 5000
           writetimeout: 5000
-    auth-code-expiration-millis: 1800000 # 30 * 60 * 1000 == 30분
 
 logging:
   level:
@@ -47,4 +46,4 @@ logging:
     '[com.mmk]': debug
     '[org.springframework.boot]': info
   file:
-    name: logs/application.log # 로그 파일 저장 경로
+    name: ${LOG_FILE_PATH}/application.log
