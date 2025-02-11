@@ -33,6 +33,12 @@ export const findUserById = async (id) => {
   }
 };
 
+// 마이 페이지 내 패스워드 매칭 여부 판단
+export const validatePwd = async (userData) => {
+  const response = await axios.post('/user/validatePwd', userData);
+  return response;
+};
+
 // 회원정보 수정
 export const modifyUser = async (formData) => {
   try {
