@@ -1,4 +1,4 @@
-const headerHeight = '160.8px'; // header(110.8px) 높이 + padding(50px)
+const headerHeight = '158px'; // header(128px) 높이 + padding(30px)
 const contentsPaddingBottom = '30px';
 
 const display = {

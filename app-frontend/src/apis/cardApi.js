@@ -101,11 +101,7 @@ export const getRecommendedCards = async (userNum) => {
 };
 
 export const registerCardCompany = async (cardCompanyData) => {
-  try {
-    const response = await axios.post('/cardCompany/register', cardCompanyData);
-    return response.data;
-  } catch (error) {
-    console.error('카드사 등록 중 오류 발생:', error);
-    return null;
-  }
+  const response = await axios.post('/cardCompany/register', cardCompanyData);
+  console.log('response: ' + JSON.stringify(response));
+  return response;
 };

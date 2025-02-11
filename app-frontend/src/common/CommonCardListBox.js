@@ -45,7 +45,7 @@ const BoxStyle = styled.div`
 `;
 
 const BoxInStyle = styled.div`
-  width: 100%;
+  width: calc(100% - 80px - 24px);
 `;
 
 const CardName = styled.p`
@@ -233,6 +233,10 @@ const CommonCardListBox = ({
         </>
       ) : cardItem ? (
         <BoxStyle>
+          <CardImage
+            src={`http://localhost:8065${cardItem.cardImgUrl || ''}`}
+            alt="카드이미지"
+          />
           <BoxInStyle>
             {fields.map((item, index) => (
               <InfoRow key={index}>

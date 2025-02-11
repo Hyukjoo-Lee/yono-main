@@ -26,6 +26,7 @@ import { MainPage } from './pages/main/MainPage';
 import { MyCard } from './pages/mycard/MyCard';
 import { MyPage } from './pages/mypage/MyPage';
 import CardListTest from './test/CardListTest';
+import Common404Page from './common/Common404Page';
 import theme from './theme/theme';
 
 const Root = styled.div`
@@ -36,7 +37,7 @@ const Root = styled.div`
 `;
 
 const ContentsBox = styled.div`
-  min-height: calc(100vh - 84px);
+  min-height: calc(100vh - 85px);
 `;
 
 function Layout({ children }) {
@@ -83,6 +84,7 @@ function App() {
             <Route path="/editFormBox" element={<EditFormBox />} />
             <Route path="/noticeFormBox" element={<NoticeFormBox />} />
             <Route path="/noticeList" element={<Community />} />
+            <Route path="/error" element={<Common404Page />} />
             <Route
               path="/noticeEditFormBox/:id"
               element={<NoticeEditFormBox />}

@@ -3,12 +3,18 @@ package com.mmk.service;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.mmk.controller.CardController;
 import com.mmk.dao.UserCardCompanyDAO;
 import com.mmk.dto.UserCardCompanyDTO;
 import com.mmk.entity.UserCardCompanyEntity;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 @Service
 public class UserCardCompanyServiceImpl implements UserCardCompanyService {
+
+    private static final Logger logger = LoggerFactory.getLogger(CardController.class);
 
     @Autowired
     private UserCardCompanyDAO cardCompanyDAO;
@@ -24,12 +30,11 @@ public class UserCardCompanyServiceImpl implements UserCardCompanyService {
         String companyId = cardCompanyDTO.getCompanyId();
         String companyPwd = cardCompanyDTO.getCompanyPwd();
         boolean exists = cardCompanyDAO.existsCompany(userNum, organization);
-
         if (exists) {
             return null;
         } else {
             String connectedId = codefService.getConId(organization, companyId, companyPwd);
-            System.out.println("connectedId: " + connectedId);
+            logger.info("connectedId: {}", connectedId);
             cardCompanyDTO.setConnectedId(connectedId);
             if (connectedId.isEmpty()) {
                 return cardCompanyDTO;

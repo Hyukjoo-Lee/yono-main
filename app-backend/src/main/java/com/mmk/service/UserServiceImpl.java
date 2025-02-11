@@ -18,13 +18,19 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
+import com.mmk.controller.CardController;
 import com.mmk.dao.UserDAO;
 import com.mmk.dto.UserDTO;
 import com.mmk.entity.UserEntity;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 @Service
 @Transactional
 public class UserServiceImpl implements UserService {
+
+    private static final Logger logger = LoggerFactory.getLogger(CardController.class);
 
     @Autowired
     private UserDAO userDAO;
@@ -40,6 +46,7 @@ public class UserServiceImpl implements UserService {
             throw new IllegalArgumentException("이미 존재하는 아이디입니다.");
         }
 
+        // 비밀번호 암호화
         String encodedPassword = passwordEncoder.encode(userDTO.getPassword());
         userDTO.setPassword((encodedPassword));
 
@@ -120,12 +127,8 @@ public class UserServiceImpl implements UserService {
             return true;
         }
 
-        if (userEntity != null && userEntity.getPassword().equals(password)) {
-            return true;
-        }
-
         if (userEntity != null) {
-        return passwordEncoder.matches(password, userEntity.getPassword());
+            return passwordEncoder.matches(password, userEntity.getPassword());
         }
 
         return false;
@@ -134,6 +137,13 @@ public class UserServiceImpl implements UserService {
     @Override
     public void updateUser(UserDTO userDTO) {
         UserEntity ue = toEntity(userDTO);
+
+        // 비밀번호 암호화하여 저장
+        logger.debug(userDTO.getPassword());
+        if (userDTO.getPassword() != null && !userDTO.getPassword().isEmpty()) {
+            ue.setPassword(passwordEncoder.encode(userDTO.getPassword()));
+        }
+
         userDAO.updateUser(ue);
     }
 
@@ -156,31 +166,31 @@ public class UserServiceImpl implements UserService {
         try {
             UserDTO uv = new ObjectMapper().readValue(userInfoJson, UserDTO.class);
             String uploadFolder = uploadDir + "/uploads/images";
-    
+
             if (profileImage != null && !profileImage.isEmpty()) {
                 if (uv.getProfile() != null && !uv.getProfile().isEmpty()) {
                     File existingFile = new File(uploadDir + uv.getProfile());
-    
+
                     if (existingFile.exists()) {
                         existingFile.delete();
                     }
                 }
             }
-    
+
             if (profileImage != null && !profileImage.isEmpty()) {
                 String fileName = profileImage.getOriginalFilename();
-    
+
                 if (fileName == null || fileName.isEmpty()) {
                     fileName = "default_filename.jpg";
                 }
-    
+
                 Calendar cal = Calendar.getInstance();
                 int year = cal.get(Calendar.YEAR);
                 int month = cal.get(Calendar.MONTH) + 1;
                 int date = cal.get(Calendar.DATE);
-    
+
                 String homedir = uploadFolder + "/" + year + "-" + month + "-" + date;
-    
+
                 File path = new File(homedir);
                 if (!path.exists()) {
                     path.mkdirs();
@@ -191,23 +201,23 @@ public class UserServiceImpl implements UserService {
                 String fileExtension = fileName.substring(index + 1);
                 String newFileName = "profile_" + year + month + date + random + "." + fileExtension;
                 String fileDBName = "/uploads/images/" + year + "-" + month + "-" + date + "/" + newFileName;
-    
+
                 File saveFile = new File(homedir + "/" + newFileName);
-    
+
                 try {
                     profileImage.transferTo(saveFile);
                 } catch (Exception e) {
                     throw e;
                 }
-    
+
                 uv.setProfile(fileDBName);
-    
+
             }
-    
+
             if (profileText != null) {
                 if (uv.getProfile() != null && !uv.getProfile().isEmpty()) {
                     File existingFile = new File(uploadDir + uv.getProfile());
-    
+
                     if (existingFile.exists()) {
                         existingFile.delete();
                     }
@@ -220,6 +230,17 @@ public class UserServiceImpl implements UserService {
             e.printStackTrace();
             return null;
         }
+    }
+
+    @Override
+    public boolean validatePwd(String userId, String password) {
+        UserEntity userEntity = userDAO.getUserByUserId(userId);
+
+        if (userEntity != null) {
+            return passwordEncoder.matches(password, userEntity.getPassword());
+        }
+
+        return false;
     }
 
     // DTO → Entity 변환

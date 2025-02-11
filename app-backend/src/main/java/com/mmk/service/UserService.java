@@ -42,4 +42,6 @@ public interface UserService {
     ArrayList<Integer> findAllUserNum();
 
     UserDTO update(String userInfoJson, MultipartFile profileImage, String profileText);
+
+    boolean validatePwd(String userId, String password);
 }

@@ -213,7 +213,7 @@ public class UserController {
      * 
      * @param email 사용자를 조회할 수단으로 email 을 받음
      * @return String
-     * 변경한 임시비밀번호를 반환
+     *         변경한 임시비밀번호를 반환
      */
     @PutMapping("/updateTempPwd")
     public String getUpdateTempPwd(@RequestParam("email") String email) {
@@ -257,21 +257,22 @@ public class UserController {
      * 
      * @param userInfoJson 사용자 정보 폼
      * @param profileImage 프로필 사진 등록 시 MultipartFile 형태로 받음 (등록 안 할 시 없음)
-     * @param profileText 프로필 사진 미등록 시 사용자의 프로필사진 경로 (등록할 시 없음)
-     * 프로필 사진을 등록하냐 아니냐에 따라 사진파일 경로(String), 파일(MultipartFile)
-     * 두 가지의 타입이 필요하기 때문에 두 가지 타입으로 Param 을 받음
+     * @param profileText  프로필 사진 미등록 시 사용자의 프로필사진 경로 (등록할 시 없음)
+     *                     프로필 사진을 등록하냐 아니냐에 따라 사진파일 경로(String), 파일(MultipartFile)
+     *                     두 가지의 타입이 필요하기 때문에 두 가지 타입으로 Param 을 받음
      * @return ResponseEntity<ApiResponse<UserDTO>>
-     * UserCardDTO 가 null 일 때 -> 회원 정보 수정 오류 (status: 400)
-     * UserCardDTO 가 null 이 아닐 때 -> 회원 정보 수정 성공, 저장한 정보를 담은 DTO 반환 (status: 200)
+     *         UserCardDTO 가 null 일 때 -> 회원 정보 수정 오류 (status: 400)
+     *         UserCardDTO 가 null 이 아닐 때 -> 회원 정보 수정 성공, 저장한 정보를 담은 DTO 반환 (status:
+     *         200)
      */
     @PutMapping("/{userNum}")
     public ResponseEntity<ApiResponse<UserDTO>> updateUser(
             @RequestParam("userInfo") String userInfoJson,
             @RequestParam(value = "profileImage", required = false) MultipartFile profileImage,
             @RequestParam(value = "profileText", required = false) String profileText) {
-            
+
         UserDTO userDTO = userService.update(userInfoJson, profileImage, profileText);
-        
+
         if (userDTO != null) {
             userService.updateUser(userDTO);
 
@@ -280,6 +281,23 @@ public class UserController {
         } else {
             ApiResponse<UserDTO> response = new ApiResponse<>(400, "회원 정보 수정 오류", null);
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(response);
+        }
+    }
+
+    @PostMapping("/validatePwd")
+    public ResponseEntity<ApiResponse<UserDTO>> updateUser(@RequestBody UserDTO userDTO) {
+        logger.info("전달된 값: {}", userDTO);
+        String userId = userDTO.getUserId();
+        String password = userDTO.getPassword();
+        boolean isValidated = userService.validatePwd(userId, password);
+
+        if (isValidated) {
+            UserDTO userInfo = userService.getUserByUserId(userId);
+            ApiResponse<UserDTO> response = new ApiResponse<>(200, "비밀번호 인증 성공", userInfo);
+            return ResponseEntity.ok(response);
+        } else {
+            ApiResponse<UserDTO> response = new ApiResponse<>(401, "비밀번호가 올바르지 않습니다. 다시 확인해주세요.", null);
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(response);
         }
     }
 };
