@@ -121,7 +121,7 @@ const FindID = () => {
   const [id, setId] = useState('');
   const [code, setCode] = useState('');
   const [isEmailValid, setIsEmailValid] = useState(false);
-  const [timeLeft, setTimeLeft] = useState(0);
+  const [timeLeft, setTimeLeft] = useState();
 
   const inputRegexs = {
     email: /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/,
@@ -134,7 +134,7 @@ const FindID = () => {
         setTimeLeft((prev) => prev - 1);
       }, 1000);
       return () => clearInterval(timer);
-    } else if (timeLeft === 0) {
+    } else if (timeLeft && timeLeft === 0) {
       setEmailValidVisible(true);
       setEmailValidMessageIndex(4);
       setIsEmailCodeVisible(false);
@@ -296,7 +296,7 @@ const FindID = () => {
                     />
                   </CodeButton>
                 </CodeContainer>
-                {timeLeft !== 0 && (
+                {timeLeft !== 0 && timeLeft && (
                   <TimeLeftStyle>
                     남은 시간: {Math.floor(timeLeft / 60)}:
                     {(timeLeft % 60).toString().padStart(2, '0')}

@@ -21,7 +21,13 @@ public class MailController {
     
     private final MailService mailService;
 
-    // 아이디 인증코드 발송
+    /**
+     * 아이디 인증코드 발송
+     * 
+     * @param mailDTO 메일주소와 임시비밀번호를 담고 있는 DTO
+     * @return String
+     * 전송한 임시코드를 반환
+     */
     @ResponseBody
     @PostMapping("/sendCode")
     public String emailCheck(@RequestBody MailDTO mailDTO) throws MessagingException, UnsupportedEncodingException {
@@ -30,13 +36,17 @@ public class MailController {
         return authCode;
     }
 
-    // 임시 비밀번호 발송
+    /**
+     * 임시 비밀번호 발송
+     * 
+     * @param mailDTO 메일주소와 임시비밀번호를 담고 있는 DTO
+     * @return void
+     */
     @ResponseBody
     @PostMapping("/sendTempPwd")
     public void sendTempPwd(@RequestBody MailDTO mailDTO) throws MessagingException, UnsupportedEncodingException {
         String email = mailDTO.getEmail();
         String tempPwd = mailDTO.getTempPwd();
-        System.out.println(email + " " + tempPwd);
         mailService.sendTempPwd(email, tempPwd);
     }
     
