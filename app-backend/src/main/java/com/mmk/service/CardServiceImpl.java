@@ -1,10 +1,12 @@
 package com.mmk.service;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.NoSuchElementException;
+import java.util.Set;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -218,6 +220,11 @@ public class CardServiceImpl implements CardService {
                 continue;
             }
 
+            // List<CardBenefitDTO> cardBenefitDTOs = new ArrayList<>();
+
+            // 하나씩 나오는지 확인 해야함
+            logger.debug("매칭되는 베네핏들: ", matchingBenefits);
+
             // 매칭된 카드 데이터 처리
             processMatchingBenefits(recommendedCards, matchingBenefits);
 
@@ -230,18 +237,20 @@ public class CardServiceImpl implements CardService {
     }
 
     // 매칭된 카드 혜택 데이터 하여 추천 리스트에 추가
+    // 매칭된 카드 혜택 데이터 추가 (중복 제거)
     private void processMatchingBenefits(Map<String, RecCardDTO> recommendedCards, List<Object[]> matchingBenefits) {
-
         for (Object[] cardData : matchingBenefits) {
             String cardTitle = (String) cardData[0];
             String cardImgUrl = (String) cardData[1];
+
+            // 첫 번째 혜택 (현재 소비 패턴과 매칭된 혜택)
             String benefitTitle = (String) cardData[2];
             String benefitType = (String) cardData[3];
             String benefitValue = (String) cardData[4];
 
-            logger.debug("카드: {}, 혜택: {}", cardTitle, benefitTitle);
+            logger.debug("카드: {}, 첫 번째 혜택: {}", cardTitle, benefitTitle);
 
-            // 기존 카드가 존재 하면 가져옴
+            // 기존 카드가 존재하면 가져옴
             RecCardDTO recCard = recommendedCards.get(cardTitle);
 
             // 기존 카드가 없으면 새로 생성하여 추가
@@ -250,17 +259,27 @@ public class CardServiceImpl implements CardService {
                 recommendedCards.put(cardTitle, recCard);
             }
 
+            // 혜택 중복 방지 (Set 사용)
+            Set<String> addedBenefits = new HashSet<>();
+            addedBenefits.add(benefitTitle); // 첫 번째 혜택 추가
             recCard.getBenefits().add(new CardBenefitDTO(benefitTitle, benefitValue, benefitType));
 
-            // 최대 5개 카드만 저장
-            if (recommendedCards.size() >= 5)
-                break;
+            // 해당 카드의 추가 혜택 조회 후 중복 제거
+            List<CardBenefitDTO> allBenefits = cardBenefitService.getAllCardBenefitsByCardTitle(cardTitle);
+            logger.debug("매칭 카드의 추가 혜택: {}", allBenefits);
+
+            for (CardBenefitDTO benefit : allBenefits) {
+                // 이미 추가된 혜택은 제외
+                if (!addedBenefits.contains(benefit.getBenefitTitle())) {
+                    recCard.getBenefits().add(benefit);
+                    addedBenefits.add(benefit.getBenefitTitle());
+                }
+            }
         }
     }
 
     // 추천된 카드 리스트를 혜택 개수 기준으로 정렬 후 반환
     private List<RecCardDTO> getSortedRecommendedCards(Map<String, RecCardDTO> recommendedCards) {
-
         List<RecCardDTO> cardList = new ArrayList<>(recommendedCards.values());
 
         // 혜택 개수가 많은 순으로 정렬 (내림차순)

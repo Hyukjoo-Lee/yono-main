@@ -2,10 +2,8 @@ import styled from 'styled-components';
 import { Box } from '@mui/material';
 import CommonButton from '../../common/CommonButton';
 import theme from '../../theme/theme';
-import LiveTvIcon from '@mui/icons-material/LiveTv';
-import CoffeeIcon from '@mui/icons-material/Coffee';
-import BusIcon from '@mui/icons-material/DirectionsBusFilled';
 import StarIcon from '@mui/icons-material/Star';
+import { getBenefitIcon } from '../../common/CommonCardListBox';
 
 const Root = styled(Box)`
   width: 100%;
@@ -55,7 +53,7 @@ const BenefitItem = styled.div`
   align-items: center;
   justify-content: center;
   margin-bottom: 8px;
-  font-size: ${(props) => props.theme.fontSize.base};
+  font-size: ${(props) => props.theme.fontSize.sm};
 
   & > p {
     margin: 0 0 0 0;
@@ -63,7 +61,7 @@ const BenefitItem = styled.div`
 
   & > svg {
     margin-right: 5px;
-    font-size: ${(props) => props.theme.fontSize.md};
+    font-size: ${(props) => props.theme.fontSize.sm};
   }
 `;
 
@@ -94,19 +92,6 @@ const CardMainBenefit = styled.p`
   }
 `;
 
-const BenefitIcon = ({ benefit }) => {
-  switch (benefit) {
-    case '스타벅스 할인':
-      return <CoffeeIcon />;
-    case '대중교통 할인':
-      return <BusIcon />;
-    case '영화 쿠폰 제공':
-      return <LiveTvIcon />;
-    default:
-      return null;
-  }
-};
-
 const CardRecBox = ({
   cardTitle,
   cardImg,
@@ -117,7 +102,7 @@ const CardRecBox = ({
   return (
     <Root>
       <RootIn>
-        <CardImage src={cardImg} alt="카드 이미지" />
+        <CardImage src={`http://localhost:8065${cardImg}`} alt="카드 이미지" />
         <CardTitle>{cardTitle}</CardTitle>
         <CardSubTitle>카드 혜택</CardSubTitle>
         <CardMainBenefit>
@@ -125,13 +110,9 @@ const CardRecBox = ({
           {cardMainBenefit}
         </CardMainBenefit>
         <BenefitList>
-          {cardInfo.map((benefit, index) => (
+          {cardInfo.slice(1).map((benefit, index) => (
             <BenefitItem key={index}>
-              <BenefitIcon benefit={benefit.label} />
-              <p>
-                {benefit.label} <strong>{benefit.value}</strong> (
-                {benefit.additional})
-              </p>
+              {getBenefitIcon(benefit.type)} {benefit.title} ({benefit.value})
             </BenefitItem>
           ))}
         </BenefitList>

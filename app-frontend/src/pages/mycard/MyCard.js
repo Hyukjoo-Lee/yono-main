@@ -39,7 +39,6 @@ export function MyCard() {
     <CardRegTab user={user} userCards={userCards} />,
     <CardRecTab user={user} recommendedCards={recommendedCards} />,
   ];
-
   useEffect(() => {
     if (!isLoggedIn) {
       setIsShowDialog(true);
@@ -48,14 +47,16 @@ export function MyCard() {
     }
   }, [isLoggedIn, userFromStore]);
 
+  // 사용자 보유 카드 정보 조회
   useEffect(() => {
-    const fetchUserCardsWithBenefits = async () => {
+    const fetchUserData = async () => {
       setIsLoading(true);
       try {
-        const response = await getAllCardsInfoByUserNum(userFromStore.userNum);
-
-        if (response.status === 200) {
-          const formattedCards = response.data.data.map((card) => ({
+        const cardResponse = await getAllCardsInfoByUserNum(
+          userFromStore.userNum,
+        );
+        if (cardResponse.data.status === 200) {
+          const formattedCards = cardResponse.data.data.map((card) => ({
             cardId: card.userCardId,
             cardNumber: card.userCardNum,
             cardTitle: card.cardTitle,
@@ -70,46 +71,71 @@ export function MyCard() {
                   }))
                 : [{ title: '혜택 없음', value: '-', type: '기타' }],
           }));
-
           setUserCards(formattedCards);
-        } else if (response.status === 204) {
+        } else if (cardResponse.data.status === 204) {
           setUserCards([]);
         }
-      } catch (error) {
-        console.error('사용자 카드 목록 로딩 실패: ', error);
-      } finally {
-        setIsLoading(false);
-      }
-    };
 
-    if (isLoggedIn) {
-      fetchUserCardsWithBenefits();
-    }
-  }, [isLoggedIn, userFromStore]);
+        // 추천 카드 정보 불러오기
+        const recommendedResponse = await getRecommendedCards(
+          userFromStore.userNum,
+        );
 
-  useEffect(() => {
-    const fetchRecommendedCards = async () => {
-      setIsLoading(true);
-      try {
-        const response = await getRecommendedCards(userFromStore.userNum);
-        if (response.status === 200) {
-          setRecommendedCards(response);
-          console.log('recommendedCards:' + JSON.stringify(recommendedCards));
-        } else if (response.status === 204) {
-          console.log(
-            '추천할 카드가 없습니다. 사용 내역이 부족하거나 해당 카드가 없습니다.',
+        if (recommendedResponse.data.status === 200) {
+          // 중복된 카드 제거 (cardTitle을 기준으로 Set 사용)
+          const uniqueCards = Array.from(
+            new Map(
+              recommendedResponse.data.data.map((card) => [
+                card.cardTitle,
+                card,
+              ]),
+            ).values(),
           );
+
+          // 중복된 혜택 제거 (benefitTitle을 기준으로 Map 사용)
+          const formattedRecommendedCards = uniqueCards.map((card) => {
+            const uniqueBenefits = Array.from(
+              new Map(
+                card.benefits.map((benefit) => [benefit.benefitTitle, benefit]),
+              ).values(),
+            );
+
+            return {
+              cardTitle: card.cardTitle,
+              cardImg: card.cardImgUrl ? card.cardImgUrl.split(',')[0] : '',
+              mainBenefit:
+                uniqueBenefits.length > 0
+                  ? `${uniqueBenefits[0].benefitTitle} (${uniqueBenefits[0].benefitValue})`
+                  : '혜택 없음',
+              cardInfo: uniqueBenefits.map((benefit) => ({
+                title: benefit.benefitTitle,
+                value: benefit.benefitValue,
+                type: benefit.benefitType,
+              })),
+            };
+          });
+
+          setRecommendedCards((prevCards) => {
+            if (
+              JSON.stringify(prevCards) !==
+              JSON.stringify(formattedRecommendedCards)
+            ) {
+              return formattedRecommendedCards;
+            }
+            return prevCards;
+          });
+        } else {
           setRecommendedCards([]);
         }
       } catch (error) {
-        console.error('추천 카드 로딩 실패: ', error);
+        console.error('데이터 로딩 실패: ', error);
       } finally {
         setIsLoading(false);
       }
     };
 
     if (isLoggedIn) {
-      fetchRecommendedCards();
+      fetchUserData();
     }
   }, [isLoggedIn, userFromStore]);
 
