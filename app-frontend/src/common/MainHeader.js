@@ -143,23 +143,15 @@ export function MainHeader() {
             item.isText ? (
               <StyledText key={index}>{item.label} &nbsp; | </StyledText>
             ) : item.isExternal ? (
-              <a
+              <StyledLink
                 key={index}
                 href={item.path}
                 target="_blank"
                 rel="noopener noreferrer"
-                style={{
-                  color: '#666',
-                  textDecoration: 'none',
-                  fontSize: '14px',
-                  fontWeight: 500,
-                  display: 'flex',
-                  alignItems: 'center',
-                }}
               >
                 {item.label}
                 {index !== list.length - 1 && <LineStyle>|</LineStyle>}
-              </a>
+              </StyledLink>
             ) : (
               <StyledLink
                 to={item.path}
