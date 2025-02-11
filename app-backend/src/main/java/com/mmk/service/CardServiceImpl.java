@@ -220,11 +220,6 @@ public class CardServiceImpl implements CardService {
                 continue;
             }
 
-            // List<CardBenefitDTO> cardBenefitDTOs = new ArrayList<>();
-
-            // 하나씩 나오는지 확인 해야함
-            logger.debug("매칭되는 베네핏들: ", matchingBenefits);
-
             // 매칭된 카드 데이터 처리
             processMatchingBenefits(recommendedCards, matchingBenefits);
 
@@ -236,26 +231,26 @@ public class CardServiceImpl implements CardService {
         return getSortedRecommendedCards(recommendedCards);
     }
 
-    // 매칭된 카드 혜택 데이터 하여 추천 리스트에 추가
     // 매칭된 카드 혜택 데이터 추가 (중복 제거)
     private void processMatchingBenefits(Map<String, RecCardDTO> recommendedCards, List<Object[]> matchingBenefits) {
         for (Object[] cardData : matchingBenefits) {
             String cardTitle = (String) cardData[0];
             String cardImgUrl = (String) cardData[1];
+            String cardApplyUrl = (String) cardData[2];
 
             // 첫 번째 혜택 (현재 소비 패턴과 매칭된 혜택)
-            String benefitTitle = (String) cardData[2];
-            String benefitType = (String) cardData[3];
-            String benefitValue = (String) cardData[4];
+            String benefitTitle = (String) cardData[3];
+            String benefitType = (String) cardData[4];
+            String benefitValue = (String) cardData[5];
 
-            logger.debug("카드: {}, 첫 번째 혜택: {}", cardTitle, benefitTitle);
+            logger.debug("카드: {}, 매칭된 혜택: {}", cardTitle, benefitTitle);
 
             // 기존 카드가 존재하면 가져옴
             RecCardDTO recCard = recommendedCards.get(cardTitle);
 
             // 기존 카드가 없으면 새로 생성하여 추가
             if (recCard == null) {
-                recCard = new RecCardDTO(cardTitle, cardImgUrl, new ArrayList<>());
+                recCard = new RecCardDTO(cardTitle, cardImgUrl, cardApplyUrl, new ArrayList<>());
                 recommendedCards.put(cardTitle, recCard);
             }
 
