@@ -24,14 +24,16 @@ const MonthlyStatistics = (isHistory) => {
   const userNum = useSelector((state) => state.user.user?.userNum);
 
   const fetchUser = useCallback(async () => {
-    const response = await uploadThreeMonthHistory(userNum);
-    if (typeof response == 'string') {
-      console.log(response);
-      // 예외 발생시 다이얼로그 처리 필요
-    } else if (response != null) {
-      setCardData(response.data);
+    if (userNum) {
+      const response = await uploadThreeMonthHistory(userNum);
+      if (typeof response == 'string') {
+        console.log(response);
+        // 예외 발생시 다이얼로그 처리 필요
+      } else if (response != null) {
+        setCardData(response.data);
+      }
+      setLoading(false);
     }
-    setLoading(false);
   }, [userNum]);
 
   useEffect(() => {

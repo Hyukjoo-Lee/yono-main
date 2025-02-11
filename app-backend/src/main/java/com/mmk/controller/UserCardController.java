@@ -71,7 +71,7 @@ public class UserCardController {
             }
         } catch (Exception e) {
             ApiResponse<UserCardDTO> response = new ApiResponse<>(201, e.getMessage(), null);
-            return ResponseEntity.status(HttpStatus.CREATED).body(response);
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(response);
         }
     }
 
