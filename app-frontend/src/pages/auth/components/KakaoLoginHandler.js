@@ -1,8 +1,11 @@
 import { useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { useDispatch } from 'react-redux';
 import { getAccessToken, getUserInfo } from '../../../apis/authApi';
 import styled from 'styled-components';
-import { checkUserIdExists } from '../../../apis/userApi';
+import { checkUserIdExists, signUpUser } from '../../../apis/userApi';
+import { loginUser } from '../../../redux/actions/userAction';
+import { v4 as uuidv4 } from 'uuid';
 
 const Root = styled.div`
   display: flex;
@@ -18,6 +21,7 @@ const LoadingText = styled.div`
 
 const KakaoLoginHandler = () => {
   const navigate = useNavigate();
+  const dispatch = useDispatch();
   const code = new URL(window.location.href).searchParams.get('code'); // URL에서 'code' 추출
 
   useEffect(() => {
@@ -26,18 +30,54 @@ const KakaoLoginHandler = () => {
 
       try {
         const accessToken = await getAccessToken(code);
-        console.log('Access Token: ', accessToken);
-
         const userInfo = await getUserInfo(accessToken);
-        console.log('User Info ID: ', userInfo.id);
 
-        const userIdAvailable = await checkUserIdExists(userInfo.id);
-        console.log(userIdAvailable);
+        const userId = 'kakao' + userInfo.id.toString();
+        const formData = {
+          userId,
+          password: uuidv4(),
+          name: userInfo.kakao_account.profile.nickname,
+          email: userInfo.kakao_account.email,
+        };
 
-        if (userIdAvailable) {
-          navigate('/signup', { state: { userInfo } });
+        const loginFormData = {
+          userId,
+          password: '',
+          isSocialLogin: true,
+        };
+
+        console.log('formData:', formData);
+
+        // 중복 아이디 체크
+        const checkIdResponse = await checkUserIdExists(userId);
+        console.log(typeof userIdAvailable);
+
+        if (checkIdResponse.userIdAvailable) {
+          try {
+            // 회원가입
+            const registerResponse = await signUpUser(formData);
+            if (registerResponse.status === 201) {
+              console.log('회원가입 성공:', registerResponse);
+            } else {
+              console.log('회원가입 실패');
+            }
+
+            const loginResponse = await dispatch(loginUser(loginFormData));
+
+            if (loginResponse.payload.status === 200) {
+              localStorage.setItem('accessToken', loginResponse.payload?.token);
+              navigate('/');
+            }
+          } catch (error) {
+            console.error('회원가입 중 오류 발생:', error);
+          }
         } else {
-          console.log('로그인');
+          // 기존 회원이면 로그인
+          const loginResponse = await dispatch(loginUser(loginFormData));
+
+          if (loginResponse.payload.status === 200) {
+            navigate('/');
+          }
         }
       } catch (error) {
         console.error('카카오 로그인 에러:', error);
@@ -45,7 +85,7 @@ const KakaoLoginHandler = () => {
     };
 
     handleLogin();
-  }, [code, navigate]);
+  }, [code, navigate, dispatch]);
 
   return (
     <Root>

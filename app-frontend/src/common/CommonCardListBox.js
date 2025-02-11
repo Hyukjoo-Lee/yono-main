@@ -16,6 +16,8 @@ import LocalPharmacyIcon from '@mui/icons-material/LocalPharmacy';
 import HomeIcon from '@mui/icons-material/Home';
 import HelpOutlineIcon from '@mui/icons-material/HelpOutline';
 import VerifiedIcon from '@mui/icons-material/Verified';
+import RestaurantIcon from '@mui/icons-material/Restaurant';
+import LocalConvenienceStoreIcon from '@mui/icons-material/LocalConvenienceStore';
 
 const HoverButtonContainer = styled.div`
   opacity: 0;
@@ -106,12 +108,12 @@ const CardInfoContainer = styled.div`
 const CardNumber = styled.p`
   font-size: 16px;
   color: ${(props) => props.theme.color.black};
-  margin: 0 0 5px 0;
+  margin: 0;
   min-height: 27px;
 `;
 
 const EmptyBox = styled.div`
-  margin: 0 0 5px 0;
+  margin: 0;
   min-height: 27px;
 `;
 
@@ -149,6 +151,10 @@ export const getBenefitIcon = (type) => {
       return <LocalPharmacyIcon />;
     case '생활':
       return <HomeIcon />;
+    case '음식':
+      return <RestaurantIcon />;
+    case '편의점':
+      return <LocalConvenienceStoreIcon />;
     default:
       return <HelpOutlineIcon />;
   }
@@ -174,7 +180,6 @@ const CommonCardListBox = ({
         },
       ]
     : [];
-
   return (
     <>
       {showDetailed ? (
