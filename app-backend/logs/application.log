@@ -219,3 +219,67 @@ This generated password is for development use only. Your security configuration
 2025-02-11T14:32:21.071+09:00  INFO 10802 --- [restartedMain] o.s.b.d.a.OptionalLiveReloadServer       : LiveReload server is running on port 35729
 2025-02-11T14:32:21.084+09:00  INFO 10802 --- [restartedMain] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat started on port(s): 8065 (http) with context path ''
 2025-02-11T14:32:21.090+09:00  INFO 10802 --- [restartedMain] com.mmk.BackendApplication               : Started BackendApplication in 2.503 seconds (process running for 2.715)
+2025-02-11T16:27:40.807+09:00  INFO 19356 --- [restartedMain] com.mmk.BackendApplication               : Starting BackendApplication using Java 17.0.14 with PID 19356 (/Users/gimchaelim/Desktop/yono/mickle-muckle/app-backend/build/classes/java/main started by gimchaelim in /Users/gimchaelim/Desktop/yono/mickle-muckle/app-backend)
+2025-02-11T16:27:40.808+09:00 DEBUG 19356 --- [restartedMain] com.mmk.BackendApplication               : Running with Spring Boot v3.1.9, Spring v6.0.17
+2025-02-11T16:27:40.808+09:00  INFO 19356 --- [restartedMain] com.mmk.BackendApplication               : No active profile set, falling back to 1 default profile: "default"
+2025-02-11T16:27:40.825+09:00  INFO 19356 --- [restartedMain] o.s.b.devtools.restart.ChangeableUrls    : The Class-Path manifest attribute in /Users/gimchaelim/.gradle/caches/modules-2/files-2.1/com.oracle.database.jdbc/ojdbc8/21.9.0.0/a68f29ad2376bdb8c04a87cda70c62907995855d/ojdbc8-21.9.0.0.jar referenced one or more files that do not exist: file:/Users/gimchaelim/.gradle/caches/modules-2/files-2.1/com.oracle.database.jdbc/ojdbc8/21.9.0.0/a68f29ad2376bdb8c04a87cda70c62907995855d/oraclepki.jar
+2025-02-11T16:27:40.825+09:00  INFO 19356 --- [restartedMain] .e.DevToolsPropertyDefaultsPostProcessor : Devtools property defaults active! Set 'spring.devtools.add-properties' to 'false' to disable
+2025-02-11T16:27:40.826+09:00  INFO 19356 --- [restartedMain] .e.DevToolsPropertyDefaultsPostProcessor : For additional web related logging consider setting the 'logging.level.web' property to 'DEBUG'
+2025-02-11T16:27:41.178+09:00  WARN 19356 --- [restartedMain] o.m.s.mapper.ClassPathMapperScanner      : No MyBatis mapper was found in '[com.mmk]' package. Please check your configuration.
+2025-02-11T16:27:41.378+09:00  INFO 19356 --- [restartedMain] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat initialized with port(s): 8065 (http)
+2025-02-11T16:27:41.382+09:00  INFO 19356 --- [restartedMain] o.apache.catalina.core.StandardService   : Starting service [Tomcat]
+2025-02-11T16:27:41.382+09:00  INFO 19356 --- [restartedMain] o.apache.catalina.core.StandardEngine    : Starting Servlet engine: [Apache Tomcat/10.1.19]
+2025-02-11T16:27:41.406+09:00  INFO 19356 --- [restartedMain] o.a.c.c.C.[Tomcat].[localhost].[/]       : Initializing Spring embedded WebApplicationContext
+2025-02-11T16:27:41.406+09:00  INFO 19356 --- [restartedMain] w.s.c.ServletWebServerApplicationContext : Root WebApplicationContext: initialization completed in 580 ms
+2025-02-11T16:27:41.481+09:00  INFO 19356 --- [restartedMain] o.hibernate.jpa.internal.util.LogHelper  : HHH000204: Processing PersistenceUnitInfo [name: default]
+2025-02-11T16:27:41.498+09:00  INFO 19356 --- [restartedMain] org.hibernate.Version                    : HHH000412: Hibernate ORM core version 6.2.22.Final
+2025-02-11T16:27:41.499+09:00  INFO 19356 --- [restartedMain] org.hibernate.cfg.Environment            : HHH000406: Using bytecode reflection optimizer
+2025-02-11T16:27:41.584+09:00  INFO 19356 --- [restartedMain] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Starting...
+2025-02-11T16:27:41.716+09:00  INFO 19356 --- [restartedMain] com.zaxxer.hikari.pool.HikariPool        : HikariPool-1 - Added connection oracle.jdbc.driver.T4CConnection@d19038a
+2025-02-11T16:27:41.716+09:00  INFO 19356 --- [restartedMain] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Start completed.
+2025-02-11T16:27:41.757+09:00  WARN 19356 --- [restartedMain] org.hibernate.orm.deprecation            : HHH90000025: OracleDialect does not need to be specified explicitly using 'hibernate.dialect' (remove the property setting and it will be selected by default)
+2025-02-11T16:27:42.175+09:00  INFO 19356 --- [restartedMain] o.h.e.t.j.p.i.JtaPlatformInitiator       : HHH000489: No JTA platform available (set 'hibernate.transaction.jta.platform' to enable JTA platform integration)
+2025-02-11T16:27:42.884+09:00  WARN 19356 --- [restartedMain] JpaBaseConfiguration$JpaWebConfiguration : spring.jpa.open-in-view is enabled by default. Therefore, database queries may be performed during view rendering. Explicitly configure spring.jpa.open-in-view to disable this warning
+2025-02-11T16:27:42.896+09:00  WARN 19356 --- [restartedMain] .s.s.UserDetailsServiceAutoConfiguration : 
+
+Using generated security password: 6f814748-414e-4927-8fd5-a742b45b637f
+
+This generated password is for development use only. Your security configuration must be updated before running your application in production.
+
+2025-02-11T16:27:43.075+09:00  INFO 19356 --- [restartedMain] o.s.b.d.a.OptionalLiveReloadServer       : LiveReload server is running on port 35729
+2025-02-11T16:27:43.089+09:00  INFO 19356 --- [restartedMain] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat started on port(s): 8065 (http) with context path ''
+2025-02-11T16:27:43.095+09:00  INFO 19356 --- [restartedMain] com.mmk.BackendApplication               : Started BackendApplication in 2.425 seconds (process running for 2.668)
+2025-02-11T16:27:52.346+09:00  INFO 19356 --- [http-nio-8065-exec-1] o.a.c.c.C.[Tomcat].[localhost].[/]       : Initializing Spring DispatcherServlet 'dispatcherServlet'
+2025-02-11T16:46:22.195+09:00 DEBUG 19356 --- [http-nio-8065-exec-2] com.mmk.controller.CardController        : userDTO: UserDTO(userNum=0, userId=crtestid, password=1234, email=null, name=null, isSocialLogin=false, spendingTarget=0, profile=temp_profile, state=null, userRole=null, createdAt=null, updatedAt=null)
+2025-02-11T16:46:48.003+09:00  INFO 19356 --- [http-nio-8065-exec-4] com.mmk.service.CardServiceImpl          : User 1: 추천 카드 조회 시작
+2025-02-11T16:46:48.016+09:00  INFO 19356 --- [http-nio-8065-exec-4] com.mmk.service.CardServiceImpl          : User 1: 소비 카테고리 - 교통
+2025-02-11T16:46:48.027+09:00  WARN 19356 --- [http-nio-8065-exec-4] com.mmk.service.CardServiceImpl          : User 1: '교통' 카테고리에서 매칭되는 혜택 없음
+2025-02-11T16:46:48.028+09:00  INFO 19356 --- [http-nio-8065-exec-4] com.mmk.service.CardServiceImpl          : User 1: 소비 카테고리 - 쇼핑
+2025-02-11T16:46:48.030+09:00  WARN 19356 --- [http-nio-8065-exec-4] com.mmk.service.CardServiceImpl          : User 1: '쇼핑' 카테고리에서 매칭되는 혜택 없음
+2025-02-11T16:46:48.030+09:00  INFO 19356 --- [http-nio-8065-exec-4] com.mmk.service.CardServiceImpl          : User 1: 소비 카테고리 - 편의점
+2025-02-11T16:46:48.032+09:00  WARN 19356 --- [http-nio-8065-exec-4] com.mmk.service.CardServiceImpl          : User 1: '편의점' 카테고리에서 매칭되는 혜택 없음
+2025-02-11T16:46:48.032+09:00  INFO 19356 --- [http-nio-8065-exec-4] com.mmk.service.CardServiceImpl          : User 1: 소비 카테고리 - 교육
+2025-02-11T16:46:48.033+09:00  WARN 19356 --- [http-nio-8065-exec-4] com.mmk.service.CardServiceImpl          : User 1: '교육' 카테고리에서 매칭되는 혜택 없음
+2025-02-11T16:46:48.035+09:00  INFO 19356 --- [http-nio-8065-exec-4] com.mmk.service.CardServiceImpl          : User 1: 소비 카테고리 - 음식
+2025-02-11T16:46:48.037+09:00  WARN 19356 --- [http-nio-8065-exec-4] com.mmk.service.CardServiceImpl          : User 1: '음식' 카테고리에서 매칭되는 혜택 없음
+2025-02-11T16:46:48.037+09:00  INFO 19356 --- [http-nio-8065-exec-4] com.mmk.service.CardServiceImpl          : User 1: 소비 카테고리 - 기타
+2025-02-11T16:46:48.038+09:00  WARN 19356 --- [http-nio-8065-exec-4] com.mmk.service.CardServiceImpl          : User 1: '기타' 카테고리에서 매칭되는 혜택 없음
+2025-02-11T16:46:48.038+09:00  INFO 19356 --- [http-nio-8065-exec-4] com.mmk.service.CardServiceImpl          : User 1: 소비 카테고리 - 카페
+2025-02-11T16:46:48.040+09:00  WARN 19356 --- [http-nio-8065-exec-4] com.mmk.service.CardServiceImpl          : User 1: '카페' 카테고리에서 매칭되는 혜택 없음
+2025-02-11T16:46:48.040+09:00  WARN 19356 --- [http-nio-8065-exec-4] com.mmk.controller.CardController        : 사용자 넘버 1 에 대한 추천 카드 없음
+2025-02-11T16:46:50.545+09:00  INFO 19356 --- [http-nio-8065-exec-9] com.mmk.service.CardServiceImpl          : User 1: 추천 카드 조회 시작
+2025-02-11T16:46:50.547+09:00  INFO 19356 --- [http-nio-8065-exec-9] com.mmk.service.CardServiceImpl          : User 1: 소비 카테고리 - 교통
+2025-02-11T16:46:50.550+09:00  WARN 19356 --- [http-nio-8065-exec-9] com.mmk.service.CardServiceImpl          : User 1: '교통' 카테고리에서 매칭되는 혜택 없음
+2025-02-11T16:46:50.550+09:00  INFO 19356 --- [http-nio-8065-exec-9] com.mmk.service.CardServiceImpl          : User 1: 소비 카테고리 - 쇼핑
+2025-02-11T16:46:50.552+09:00  WARN 19356 --- [http-nio-8065-exec-9] com.mmk.service.CardServiceImpl          : User 1: '쇼핑' 카테고리에서 매칭되는 혜택 없음
+2025-02-11T16:46:50.552+09:00  INFO 19356 --- [http-nio-8065-exec-9] com.mmk.service.CardServiceImpl          : User 1: 소비 카테고리 - 편의점
+2025-02-11T16:46:50.553+09:00  WARN 19356 --- [http-nio-8065-exec-9] com.mmk.service.CardServiceImpl          : User 1: '편의점' 카테고리에서 매칭되는 혜택 없음
+2025-02-11T16:46:50.553+09:00  INFO 19356 --- [http-nio-8065-exec-9] com.mmk.service.CardServiceImpl          : User 1: 소비 카테고리 - 교육
+2025-02-11T16:46:50.555+09:00  WARN 19356 --- [http-nio-8065-exec-9] com.mmk.service.CardServiceImpl          : User 1: '교육' 카테고리에서 매칭되는 혜택 없음
+2025-02-11T16:46:50.555+09:00  INFO 19356 --- [http-nio-8065-exec-9] com.mmk.service.CardServiceImpl          : User 1: 소비 카테고리 - 음식
+2025-02-11T16:46:50.556+09:00  WARN 19356 --- [http-nio-8065-exec-9] com.mmk.service.CardServiceImpl          : User 1: '음식' 카테고리에서 매칭되는 혜택 없음
+2025-02-11T16:46:50.556+09:00  INFO 19356 --- [http-nio-8065-exec-9] com.mmk.service.CardServiceImpl          : User 1: 소비 카테고리 - 기타
+2025-02-11T16:46:50.558+09:00  WARN 19356 --- [http-nio-8065-exec-9] com.mmk.service.CardServiceImpl          : User 1: '기타' 카테고리에서 매칭되는 혜택 없음
+2025-02-11T16:46:50.558+09:00  INFO 19356 --- [http-nio-8065-exec-9] com.mmk.service.CardServiceImpl          : User 1: 소비 카테고리 - 카페
+2025-02-11T16:46:50.559+09:00  WARN 19356 --- [http-nio-8065-exec-9] com.mmk.service.CardServiceImpl          : User 1: '카페' 카테고리에서 매칭되는 혜택 없음
+2025-02-11T16:46:50.559+09:00  WARN 19356 --- [http-nio-8065-exec-9] com.mmk.controller.CardController        : 사용자 넘버 1 에 대한 추천 카드 없음
