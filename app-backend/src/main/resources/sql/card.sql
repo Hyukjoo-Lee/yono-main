@@ -38,6 +38,7 @@ update card set CARD_IMG_URL = '/uploads/images/card/hyundai/hyundai-zero/hyunda
 drop table card;
 TRUNCATE table card;
 select * from card;
+commit;
 
 
 

@@ -42,7 +42,9 @@ const CompanyRegFormBox = ({ user }) => {
       }));
     }
   }, [user]);
-
+  const [errorMessage, setErrorMessage] = useState(
+    '카드사 등록에 실패했습니다. 정보를 확인해주세요.',
+  );
   const [formMessage, setFormMessage] = useState({
     organization: '',
     companyId: '',
@@ -90,7 +92,6 @@ const CompanyRegFormBox = ({ user }) => {
 
     try {
       setIsLoading(true);
-
       const response = await registerCardCompany(formData);
       if (response) {
         setIsRegSuccessVisible(true);
@@ -105,7 +106,11 @@ const CompanyRegFormBox = ({ user }) => {
         setIsRegFailVisible(true);
       }
     } catch (error) {
-      console.error('카드사 등록 실패:', error);
+      if (error.response.data.status === 409) {
+        setErrorMessage('이미 등록된 카드사 입니다.');
+      } else {
+        setErrorMessage('API 호출에 실패 했습니다');
+      }
       setIsRegFailVisible(true);
     } finally {
       setIsLoading(false);
@@ -208,7 +213,7 @@ const CompanyRegFormBox = ({ user }) => {
       />
       <CommonDialog
         open={isRegFailVisible}
-        children={'카드사 등록에 실패했습니다. 정보를 확인해주세요.'}
+        children={errorMessage}
         onClose={closeDialog}
         onClick={closeDialog}
       />

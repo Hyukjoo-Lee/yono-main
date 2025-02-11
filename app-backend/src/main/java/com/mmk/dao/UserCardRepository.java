@@ -6,7 +6,6 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
-import org.springframework.transaction.annotation.Transactional;
 
 import com.mmk.entity.UserCardEntity;
 import com.mmk.entity.UserEntity;
@@ -24,14 +23,13 @@ public interface UserCardRepository extends JpaRepository<UserCardEntity, Intege
             "WHERE uc.userEntity.userNum = :userNum")
     List<UserCardEntity> findAllByUserNum(@Param("userNum") int userNum);
 
-    @Modifying
-    @Transactional
+    @Modifying(clearAutomatically = true, flushAutomatically = true)
     @Query("UPDATE UserCardEntity u SET u.primaryCard = '일반카드' WHERE u.userEntity.userNum = :userNum")
     void removePrimaryCardAll(@Param("userNum") int userNum);
 
     UserCardEntity findByUserEntityAndPrimaryCard(UserEntity userEntity, String primaryCard);
 
-    @Modifying
+    @Modifying(clearAutomatically = true, flushAutomatically = true)
     @Query("UPDATE UserCardEntity u SET u.primaryCard = '대표카드' WHERE u.userCardId = :userCardId")
     void setPrimaryCard(@Param("userCardId") int userCardId);
 

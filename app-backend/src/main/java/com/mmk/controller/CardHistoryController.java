@@ -22,7 +22,14 @@ public class CardHistoryController {
     @Autowired
     CardHistoryService cardHistoryService;
 
-    // 카드내역 DB에 갱신
+    /**
+     * 사용자 대표카드의 최근 3개월 카드 사용내역을 DB에 저장
+     * DB에 3개월 이내의 카드 사용내역이 이미 있다면 최근 날짜부터 실행 시점의 날짜까지의 내역을 DB에 저장
+     * 
+     * @param userNum 사용자 고유 번호 (UserInfo 테이블의 PK)
+     * @return ResponseEntity<ApiResponse<Boolean>>
+     * DB에 갱신 성공 시 true, 실패 시 false
+     */
     @GetMapping("/update")
     public ResponseEntity<ApiResponse<Boolean>> updateCardHistory(@RequestParam("userNum") int userNum) {
         try {
@@ -35,7 +42,13 @@ public class CardHistoryController {
         }
     }
 
-    // 월별통계 - DB에 있는 최근 3개월 카드내역 불러오기
+    /**
+     * 월별통계 - DB에 있는 최근 3개월 카드내역 불러오기
+     * 
+     * @param userNum 사용자 고유 번호 (UserInfo 테이블의 PK)
+     * @return ResponseEntity<ApiResponse<List<MonthlySummaryDTO>>>
+     * DB에서 가져온 데이터를 월, 카테고리 별로 그룹핑하여 합산금액과 함께 반환
+     */
     @GetMapping("/monthlyUpload")
     public ResponseEntity<ApiResponse<List<MonthlySummaryDTO>>> uploadMonthlyHistory(
             @RequestParam("userNum") int userNum) {
@@ -53,7 +66,13 @@ public class CardHistoryController {
         }
     }
 
-    // 목차별통계 - DB에 있는 최근 1개월 카드내역 불러오기
+    /**
+     * 목차별통계 - DB에 있는 최근 1개월 카드내역 불러오기
+     * 
+     * @param userNum 사용자 고유 번호 (UserInfo 테이블의 PK)
+     * @return ResponseEntity<ApiResponse<List<MonthlySummaryDTO>>>
+     * DB에서 가져온 데이터를 월, 카테고리 별로 그룹핑하여 합산금액과 함께 반환
+     */
     @GetMapping("/categoryUpload")
     public ResponseEntity<ApiResponse<List<MonthlySummaryDTO>>> uploadCategoryHistory(
             @RequestParam("userNum") int userNum) {
@@ -71,7 +90,12 @@ public class CardHistoryController {
         }
     }
 
-    // 목차별통계 - 가공되지 않는 DB 의 최근 1개월 카드내역 불러오기
+    /**
+     * 목차별통계 - 가공되지 않는 DB 의 최근 1개월 카드내역 불러오기
+     * 
+     * @param userNum 사용자 고유 번호 (UserInfo 테이블의 PK)
+     * @return ResponseEntity<ApiResponse<List<CardHistoryDTO>>> 카드 승인 내역 리스트
+     */
     @GetMapping("/monthData")
     public ResponseEntity<ApiResponse<List<CardHistoryDTO>>> monthData(@RequestParam("userNum") int userNum) {
         try {

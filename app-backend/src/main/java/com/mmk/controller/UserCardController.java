@@ -46,7 +46,17 @@ public class UserCardController {
         return ResponseEntity.ok(new ApiResponse<>(200, "사용자 보유 카드조회 성공", userCards));
     }
 
-    // 사용자 카드 등록
+    /**
+     * 사용자 카드 등록
+     * 등록된 카드사에 한하여 카드 등록, 실제 카드가 아닐 시엔 카드 등록 불가
+     * 
+     * @param userCardDTO 사용자의 카드 등록 폼
+     * @param organization 기관 코드
+     * @param cardTitle 카드 이름
+     * @return ResponseEntity<ApiResponse<UserCardDTO>>
+     * UserCardDTO 가 null 일 때 -> 등록되어 있지 않은 카드사 (status: 404)
+     * 이 외의 값일 때 저장하는 DTO 를 반환 (status: 200)
+     */
     @PostMapping("/register")
     public ResponseEntity<ApiResponse<UserCardDTO>> registerUserCard(@RequestBody UserCardDTO userCardDTO,
             @RequestParam String organization, @RequestParam String cardTitle) {
@@ -61,20 +71,26 @@ public class UserCardController {
             }
         } catch (Exception e) {
             ApiResponse<UserCardDTO> response = new ApiResponse<>(201, e.getMessage(), null);
-            return ResponseEntity.status(HttpStatus.CREATED).body(response);
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(response);
         }
     }
 
-    // 대표카드 설정
+    /**
+     * 대표카드 설정
+     * 사용자가 등록한 카드 중 대표카드를 지정
+     * 
+     * @param userCardId 사용자가 선택한 카드의 userCardId (UserCard 테이블의 PK)
+     * @param userNum 사용자 고유 번호 (UserInfo 테이블의 PK)
+     * @return ResponseEntity<ApiResponse<UserCardDTO>>
+     * 대표카드로 등록한 카드의 정보를 담은 DTO 반환
+     */
     @GetMapping("/setPrimaryCard")
     public ResponseEntity<ApiResponse<UserCardDTO>> setPrimaryCard(@RequestParam("userCardId") int userCardId,
             @RequestParam("userNum") int userNum) {
 
         try {
-            UserCardDTO userCardDTO = userCardService.setPrimaryCard(userCardId,
-                    userNum);
-            ApiResponse<UserCardDTO> response = new ApiResponse<>(200, "대표카드 등록성공",
-                    userCardDTO);
+            UserCardDTO userCardDTO = userCardService.setPrimaryCard(userCardId, userNum);
+            ApiResponse<UserCardDTO> response = new ApiResponse<>(200, "대표카드 등록성공", userCardDTO);
             return ResponseEntity.status(HttpStatus.CREATED).body(response);
         } catch (Exception e) {
             e.printStackTrace();
@@ -83,7 +99,14 @@ public class UserCardController {
         }
     }
 
-    // 로그인 유저의 대표카드의 카드 조회
+    /**
+     * 로그인 유저의 대표카드의 카드 조회
+     * 
+     * @param userNum 사용자 고유 번호 (UserInfo 테이블의 PK)
+     * @return ResponseEntity<ApiResponse<UserCardDTO>>
+     * 대표카드의 정보를 담은 DTO 반환
+     * 지정된 대표카드가 없을 시 noContent 반환 (status:204, data: null)
+     */
     @GetMapping("/primaryCard")
     public ResponseEntity<ApiResponse<UserCardDTO>> getPrimaryCard(@RequestParam("userNum") int userNum) {
         try {
