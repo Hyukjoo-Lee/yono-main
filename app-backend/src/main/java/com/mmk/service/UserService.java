@@ -31,7 +31,7 @@ public interface UserService {
 
     boolean existByName(String name);
 
-    boolean validateLogin(String userId, String password);
+    boolean validateLogin(String userId, String password, boolean isSocialLogin);
 
     void updateUser(UserDTO userDTO);
 

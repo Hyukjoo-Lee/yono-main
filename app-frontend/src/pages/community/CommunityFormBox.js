@@ -6,8 +6,8 @@ import CommonPageInfo from '../../common/CommonPageInfo';
 import CommonHr from '../../common/CommonHr';
 import { useNavigate } from 'react-router-dom';
 import { useState } from 'react';
-import axios from 'axios';
 import { useSelector } from 'react-redux';
+import { createPost } from '../../apis/communityApi';
 
 const Root = styled.div`
   width: ${(props) => props.theme.display.lg};
@@ -212,15 +212,12 @@ export function CommunityFormBox() {
     });
 
     try {
-      const response = await axios.post('/posts/write', formData);
+      const response = await createPost(postFormData, postImg);
 
-      console.log('게시글 등록 성공:', response.data);
+      console.log('게시글 등록 성공:', response);
       navigate('/community');
     } catch (error) {
-      console.error(
-        '게시글 등록 실패:',
-        error.response ? error.response.data : error,
-      );
+      console.error('게시글 등록 실패:', error);
     }
   };
 

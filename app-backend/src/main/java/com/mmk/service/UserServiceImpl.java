@@ -114,8 +114,13 @@ public class UserServiceImpl implements UserService {
         return userDAO.existsByName(name);
     }
 
-    public boolean validateLogin(String userId, String password) {
+    public boolean validateLogin(String userId, String password, boolean isSocialLogin) {
         UserEntity userEntity = userDAO.getUserByUserId(userId);
+
+        // 소셜 로그인 시 비밀번호 확인 없이 바로 로그인 처리
+        if (isSocialLogin) {
+            return true;
+        }
 
         if (userEntity != null && userEntity.getPassword().equals(password)) {
             return true;
@@ -261,8 +266,8 @@ public class UserServiceImpl implements UserService {
     public ArrayList<Integer> findAllUserNum() {
         List<UserEntity> users = userDAO.findAll();
         return users.stream()
-                    .map(UserEntity::getUserNum)
-                    .collect(Collectors.toCollection(ArrayList::new));
+                .map(UserEntity::getUserNum)
+                .collect(Collectors.toCollection(ArrayList::new));
     }
 
 }

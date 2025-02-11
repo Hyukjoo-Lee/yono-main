@@ -21,6 +21,7 @@ public class UserDTO {
     private String password;
     private String email;
     private String name;
+    private Boolean isSocialLogin;
 
     private int spendingTarget = 0;
     private String profile = "temp_profile";
