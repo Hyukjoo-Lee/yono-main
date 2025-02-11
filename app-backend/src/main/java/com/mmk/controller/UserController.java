@@ -186,16 +186,27 @@ public class UserController {
         return ResponseEntity.ok(response);
     }
 
-    // DELETE API
-    // 유저 정보 삭제
-    @DeleteMapping("/deleteUser")
-    public ResponseEntity<ApiResponse<Object>> deleteUser(@RequestParam("userNum") int userNum) {
+    // PUT API
+    /**
+     * 유저 탈퇴
+     * User 테이블의 state 값을 INACTIVE 로 변경
+     * 
+     * @param userNum 사용자 고유 번호 (UserInfo 테이블의 PK)
+     * @return void
+     */
+    @PutMapping("/deleteUser")
+    public void deleteUser(@RequestParam("userNum") int userNum) {
         userService.deleteUser(userNum);
-        return null;
     }
 
-    // PUT API
-    // 임시비밀번호 발급 및 변경
+    /**
+     * 임시비밀번호 발급 및 변경
+     * 임의의 임시비밀번호 10자리로 사용자의 비밀번호를 변경
+     * 
+     * @param email 사용자를 조회할 수단으로 email 을 받음
+     * @return String
+     * 변경한 임시비밀번호를 반환
+     */
     @PutMapping("/updateTempPwd")
     public String getUpdateTempPwd(@RequestParam("email") String email) {
         String tempPwd = UUID.randomUUID().toString().replace("-", "");
@@ -208,7 +219,13 @@ public class UserController {
         return tempPwd;
     }
 
-    // 비밀번호 변경
+    /**
+     * 비밀번호 변경
+     * 
+     * @param password 변경할 비밀번호
+     * @param userId
+     * @return ResponseEntity<ApiResponse<Object>>
+     */
     @PutMapping("/updatePwd")
     public ResponseEntity<ApiResponse<Object>> updatePwd(@RequestParam("password") String password,
             @RequestParam("userId") String userId) {
