@@ -49,6 +49,11 @@ public class CardEntity {
     @Column(name = "card_img_url", nullable = true, length = 255)
     private String cardImgUrl;
 
+    // 카드 이미지 URL (최대 길이 255, 선택)
+    @Size(max = 255)
+    @Column(name = "card_apply_url", nullable = true, length = 255)
+    private String cardApplyUrl;
+
     @CreationTimestamp
     @Column(name = "created_at", updatable = false, nullable = false)
     private Timestamp createdAt;

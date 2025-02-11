@@ -112,6 +112,7 @@ export function MyCard() {
                 value: benefit.benefitValue,
                 type: benefit.benefitType,
               })),
+              cardApplyLink: card.cardApplyUrl,
             };
           });
 
