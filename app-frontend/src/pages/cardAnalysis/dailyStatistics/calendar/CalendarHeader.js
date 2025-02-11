@@ -4,6 +4,7 @@ import { format } from 'date-fns';
 import { ReactComponent as ArrowIcon } from '../../../../assets/images/ArrowIcon.svg';
 import { ReactComponent as ArrowsIcon } from '../../../../assets/images/ArrowsIcon.svg';
 import { useSelector } from 'react-redux';
+import { createTheme, ThemeProvider } from '@mui/material/styles';
 import Tooltip from '@mui/material/Tooltip';
 
 const Root = styled.div`
@@ -47,6 +48,25 @@ const TextStyle = styled.p`
   }
 `;
 
+const themeTooltip = createTheme({
+  components: {
+    MuiTooltip: {
+      styleOverrides: {
+        tooltip: {
+          backgroundColor: '#4064e6',
+          color: 'white',
+          fontSize: '14px',
+          padding: '8px 16px 10px',
+          borderRadius: '6px',
+        },
+        arrow: {
+          color: '#4064e6',
+        },
+      },
+    },
+  },
+});
+
 const CalendarHeader = ({
   currentMonth,
   prevMonth,
@@ -59,7 +79,6 @@ const CalendarHeader = ({
   );
   const [money, setMoney] = useState();
   const [showTooltip, setShowTooltip] = useState(false);
-  const [test, setTest] = useState(0);
 
   const formatMoney = (value) => {
     if (value == null) return '-'; // 값이 없을 때 처리
@@ -81,35 +100,37 @@ const CalendarHeader = ({
   }, []);
 
   return (
-    <Root>
-      <Box>
-        <TextStyle>
-          {format(currentMonth, 'yyyy')}년 {format(currentMonth, 'M')}월
-          <Tooltip
-            title="마이페이지에서 일일목표금액을 설정해주세요."
-            arrow
-            placement="bottom"
-            open={formatMoney(money) === '0' && showTooltip}
-          >
-            <span>일일 목표 금액: {formatMoney(money)}원</span>
-          </Tooltip>
-        </TextStyle>
-      </Box>
-      <Box>
-        <IconButton onClick={prevYear}>
-          <ArrowsIcon />
-        </IconButton>
-        <IconButton onClick={prevMonth}>
-          <ArrowIcon />
-        </IconButton>
-        <IconButton onClick={nextMonth}>
-          <ArrowIcon style={{ transform: 'scaleX(-1)' }} />
-        </IconButton>
-        <IconButton onClick={nextYear}>
-          <ArrowsIcon style={{ transform: 'scaleX(-1)' }} />
-        </IconButton>
-      </Box>
-    </Root>
+    <ThemeProvider theme={themeTooltip}>
+      <Root>
+        <Box>
+          <TextStyle>
+            {format(currentMonth, 'yyyy')}년 {format(currentMonth, 'M')}월
+            <Tooltip
+              title="마이페이지에서 일일목표금액을 설정해주세요."
+              arrow
+              placement="bottom"
+              open={formatMoney(money) === '0' && showTooltip}
+            >
+              <span>일일 목표 금액: {formatMoney(money)}원</span>
+            </Tooltip>
+          </TextStyle>
+        </Box>
+        <Box>
+          <IconButton onClick={prevYear}>
+            <ArrowsIcon />
+          </IconButton>
+          <IconButton onClick={prevMonth}>
+            <ArrowIcon />
+          </IconButton>
+          <IconButton onClick={nextMonth}>
+            <ArrowIcon style={{ transform: 'scaleX(-1)' }} />
+          </IconButton>
+          <IconButton onClick={nextYear}>
+            <ArrowsIcon style={{ transform: 'scaleX(-1)' }} />
+          </IconButton>
+        </Box>
+      </Root>
+    </ThemeProvider>
   );
 };
 

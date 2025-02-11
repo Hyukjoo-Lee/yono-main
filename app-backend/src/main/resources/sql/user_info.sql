@@ -9,6 +9,7 @@ nocache;
 
 select * from user_info;
 
+
 insert into user_info (user_num, user_id, name, email,  password, spending_target, created_at, updated_at) 
 values (user_seq.nextval, 'crtestid', '김채림', 'cr@google.com', '1234', 500000, sysdate, sysdate);
 
