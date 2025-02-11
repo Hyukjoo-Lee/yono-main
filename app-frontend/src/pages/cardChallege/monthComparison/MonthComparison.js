@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
 import styled from 'styled-components';
-import { monthlyComparision } from '../../../apis/MonthComparisionApi';
+import { monthlyComparision } from '../../../apis/monthComparisionApi.js';
 import Barchart from './Barchart';
 import MonthComparisionTable from './MonthComparisonTable';
 
