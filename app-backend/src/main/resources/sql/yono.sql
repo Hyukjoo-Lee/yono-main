@@ -28,7 +28,7 @@ VALUES (CARD_SEQ.nextval, '삼성 iD SIMPLE카드', 'samsung', '0303', '/uploads
 
 -- 농협 별다줄카드
 INSERT INTO card (CARD_ID, CARD_TITLE, CARD_PROVIDER, ORGANIZATION_CODE, CARD_IMG_URL,CARD_APPLY_URL, CREATED_AT, UPDATED_AT)
-VALUES (CARD_SEQ.nextval, '농협 별다줄카드', 'nh', '0304', '/uploads/images/card/nh/nh-byul/nh-byul1.png,/uploads/images/card/nh/nh-byul/nh-byul2.png,/uploads/images/card/nh/nh-byul/nh-byul3.png', 'https://card.nonghyup.com/servlet/IpCc2021R.act',URRENT_TIMESTAMP, CURRENT_TIMESTAMP);
+VALUES (CARD_SEQ.nextval, '농협 별다줄카드', 'nh', '0304', '/uploads/images/card/nh/nh-byul/nh-byul1.png,/uploads/images/card/nh/nh-byul/nh-byul2.png,/uploads/images/card/nh/nh-byul/nh-byul3.png', 'https://card.nonghyup.com/servlet/IpCc2021R.act',CURRENT_TIMESTAMP, CURRENT_TIMESTAMP);
 
 -- 신한 처음카드
 INSERT INTO card (CARD_ID, CARD_TITLE, CARD_PROVIDER, ORGANIZATION_CODE, CARD_IMG_URL,CARD_APPLY_URL, CREATED_AT, UPDATED_AT)
