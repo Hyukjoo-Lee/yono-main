@@ -110,7 +110,8 @@ const CardRecBox = ({
           {cardMainBenefit}
         </CardMainBenefit>
         <BenefitList>
-          {cardInfo.slice(1).map((benefit, index) => (
+          {/* 메인 혜택 포함하며 최대 8개 혜택 보여짐 */}
+          {cardInfo.slice(1, 7).map((benefit, index) => (
             <BenefitItem key={index}>
               {getBenefitIcon(benefit.type)} {benefit.title} ({benefit.value})
             </BenefitItem>

@@ -17,5 +17,6 @@ import lombok.ToString;
 public class RecCardDTO {
     private String cardTitle;
     private String cardImgUrl;
+    private String cardApplyUrl;
     private List<CardBenefitDTO> benefits;
 }
