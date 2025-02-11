@@ -110,7 +110,11 @@ export function MainHeader() {
           { label: `${user?.name || '사용자'}님`, isText: true },
           { label: '로그아웃', path: '/', onClick: handleLogout },
           { label: '마이페이지', path: '/mypage' },
-          { label: '관리자페이지', path: 'http://localhost:3001' },
+          {
+            label: '관리자페이지',
+            path: 'http://localhost:3001',
+            isExternal: true,
+          },
         ]
       : [
           { label: `${user?.name || '사용자'}님`, isText: true },
@@ -138,6 +142,24 @@ export function MainHeader() {
           {list.map((item, index) =>
             item.isText ? (
               <StyledText key={index}>{item.label} &nbsp; | </StyledText>
+            ) : item.isExternal ? (
+              <a
+                key={index}
+                href={item.path}
+                target="_blank"
+                rel="noopener noreferrer"
+                style={{
+                  color: '#666',
+                  textDecoration: 'none',
+                  fontSize: '14px',
+                  fontWeight: 500,
+                  display: 'flex',
+                  alignItems: 'center',
+                }}
+              >
+                {item.label}
+                {index !== list.length - 1 && <LineStyle>|</LineStyle>}
+              </a>
             ) : (
               <StyledLink
                 to={item.path}
@@ -150,6 +172,7 @@ export function MainHeader() {
             ),
           )}
         </TopListBox>
+
         <MenuList>
           <LogoLink to="/">
             <Logo />
