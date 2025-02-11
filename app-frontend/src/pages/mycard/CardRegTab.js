@@ -8,6 +8,7 @@ import CommonButton from '../../common/CommonButton';
 import { setPrimaryCard } from '../../apis/cardApi';
 import CommonDialog from '../../common/CommonDialog';
 import Tooltip from '@mui/material/Tooltip';
+import { createTheme, ThemeProvider } from '@mui/material/styles';
 import theme from '../../theme/theme';
 
 const Root = styled.div`
@@ -43,6 +44,26 @@ const ButtonContainer = styled.div`
   display: flex;
   flex-direction: row;
 `;
+
+const themeTooltip = createTheme({
+  components: {
+    MuiTooltip: {
+      styleOverrides: {
+        tooltip: {
+          backgroundColor: '#4064e6',
+          color: 'white',
+          fontSize: '14px',
+          padding: '8px 16px 10px',
+          borderRadius: '6px',
+        },
+        arrow: {
+          color: '#4064e6',
+        },
+      },
+    },
+  },
+});
+
 const CardRegTab = ({ user, userCards }) => {
   const [isPrimaryCardSetSuccess, setIsPrimaryCardSetSuccess] = useState(false);
   const [isPrimaryCardSetFail, setIsPrimaryCardSetFail] = useState(false);
@@ -95,7 +116,7 @@ const CardRegTab = ({ user, userCards }) => {
   };
 
   return (
-    <>
+    <ThemeProvider theme={themeTooltip}>
       <CommonPageInfo
         title="나의 카드 등록"
         text={
@@ -172,7 +193,7 @@ const CardRegTab = ({ user, userCards }) => {
           onConfirm={closeDialog}
         />
       </Root>
-    </>
+    </ThemeProvider>
   );
 };
 

@@ -20,7 +20,7 @@ const ChartsContainer = styled.div`
 `;
 
 const ListBox = styled.div`
-  width: 420px;
+  width: 470px;
   height: 488px;
   overflow-y: auto;
   &::-webkit-scrollbar {
@@ -35,7 +35,7 @@ const ListBox = styled.div`
 `;
 
 const EmptyBox = styled.div`
-  width: 420px;
+  width: 470px;
   height: 488px;
   border-radius: 7px;
   box-sizing: border-box;
@@ -158,7 +158,7 @@ const CategoryStatics = (isHistory) => {
           <Piechart
             data={updatedSummaries}
             onClick={handleClick}
-            chartWidth={'calc(100% - 420px - 30px)'}
+            chartWidth={'calc(100% - 470px - 30px)'}
           />
           {filteredData.length > 0 ? (
             <ListBox>
