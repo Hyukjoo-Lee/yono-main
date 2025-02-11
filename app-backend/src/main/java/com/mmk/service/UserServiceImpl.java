@@ -18,13 +18,19 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
+import com.mmk.controller.CardController;
 import com.mmk.dao.UserDAO;
 import com.mmk.dto.UserDTO;
 import com.mmk.entity.UserEntity;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 @Service
 @Transactional
 public class UserServiceImpl implements UserService {
+
+    private static final Logger logger = LoggerFactory.getLogger(CardController.class);
 
     @Autowired
     private UserDAO userDAO;
@@ -135,6 +141,13 @@ public class UserServiceImpl implements UserService {
     @Override
     public void updateUser(UserDTO userDTO) {
         UserEntity ue = toEntity(userDTO);
+
+        // 비밀번호 암호화하여 저장
+        logger.debug(userDTO.getPassword());
+        if (userDTO.getPassword() != null && !userDTO.getPassword().isEmpty()) {
+            ue.setPassword(passwordEncoder.encode(userDTO.getPassword()));
+        }
+
         userDAO.updateUser(ue);
     }
 
@@ -221,6 +234,17 @@ public class UserServiceImpl implements UserService {
             e.printStackTrace();
             return null;
         }
+    }
+
+    @Override
+    public boolean validatePwd(String userId, String password) {
+        UserEntity userEntity = userDAO.getUserByUserId(userId);
+
+        if (userEntity != null) {
+            return passwordEncoder.matches(password, userEntity.getPassword());
+        }
+
+        return false;
     }
 
     // DTO → Entity 변환

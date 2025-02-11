@@ -30,14 +30,11 @@ public class UserCardCompanyServiceImpl implements UserCardCompanyService {
         String companyId = cardCompanyDTO.getCompanyId();
         String companyPwd = cardCompanyDTO.getCompanyPwd();
         boolean exists = cardCompanyDAO.existsCompany(userNum, organization);
-        logger.warn("exists: {}", exists);
         if (exists) {
-            logger.warn("exists1: {}", exists);
             return null;
         } else {
             String connectedId = codefService.getConId(organization, companyId, companyPwd);
-            logger.warn("exists2: {}", exists);
-            System.out.println("connectedId: " + connectedId);
+            logger.info("connectedId: {}", connectedId);
             cardCompanyDTO.setConnectedId(connectedId);
             if (connectedId.isEmpty()) {
                 return cardCompanyDTO;

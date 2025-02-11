@@ -91,6 +91,7 @@ const Box = styled.div`
   p {
     margin: 0;
     margin-right: 10px;
+    white-space: pre-line;
   }
 
   img {
@@ -109,7 +110,7 @@ const Detailbox = styled.div`
 `;
 
 const ImgBox = styled.div`
-  heigt: 100%;
+  height: 100%;
   width: 100%;
 `;
 

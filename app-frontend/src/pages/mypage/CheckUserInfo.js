@@ -1,12 +1,11 @@
 import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
-import { deleteUser } from '../../apis/userApi';
+import { deleteUser, validatePwd } from '../../apis/userApi';
 import CommonButton from '../../common/CommonButton';
 import CommonInput from '../../common/CommonInput';
 import {
   EMAIL_REGEX_MESSAGE,
-  PASSWORD_MISMATCH_MESSAGE,
   SPENDINGTARGET_REGEX_MESSAGE,
 } from '../../common/Message';
 import { logoutUser, updateUserProfile } from '../../redux/actions/userAction';
@@ -93,7 +92,7 @@ const InputUserIdBox = styled.div`
 `;
 
 const CheckUserInfo = ({ users }) => {
-  console.log(users);
+  // console.log(users);
   const [profileImage, setProfileImage] = useState(users.profile);
   const [previewImage, setPreviewImage] = useState(users.profile);
   const [isEditing, setIsEditing] = useState(true);
@@ -193,45 +192,57 @@ const CheckUserInfo = ({ users }) => {
     if (!isFormValid()) {
       setPasswordError('모든 정보를 입력해주세요!');
       isInvalid = false;
-    } else if (users.password !== userInfo.originPassword) {
-      setPasswordError(PASSWORD_MISMATCH_MESSAGE);
-      isInvalid = false;
     }
 
-    Object.keys(userInfo).forEach((field) => {
-      if (field === 'email' && !inputRegexs.email.test(userInfo.email)) {
-        setPasswordError(EMAIL_REGEX_MESSAGE);
-        isInvalid = false;
-      } else if (
-        field === 'spendingTarget' &&
-        !inputRegexs.spendingTarget.test(userInfo.spendingTarget)
-      ) {
-        setPasswordError(SPENDINGTARGET_REGEX_MESSAGE);
-        isInvalid = false;
-      }
-    });
-
-    if (!isInvalid) return;
-
-    const updatedUserInfo = {
-      ...userInfo,
-      password: userInfo.originPassword,
-      originPassword: undefined,
+    const userData = {
+      userId: userInfo?.userId,
+      password: userInfo?.originPassword,
     };
 
-    const formData = new FormData();
-    formData.append('userInfo', JSON.stringify(updatedUserInfo));
-    if (profileImage instanceof File) {
-      formData.append('profileImage', profileImage);
-    } else {
-      formData.append('profileText', profileImage);
-    }
-
     try {
-      await dispatch(updateUserProfile(formData));
-      navigate(0);
+      const response = await validatePwd(userData);
+
+      if (response.data.status === 200) {
+        Object.keys(userInfo).forEach((field) => {
+          if (field === 'email' && !inputRegexs.email.test(userInfo.email)) {
+            setPasswordError(EMAIL_REGEX_MESSAGE);
+            isInvalid = false;
+          } else if (
+            field === 'spendingTarget' &&
+            !inputRegexs.spendingTarget.test(userInfo.spendingTarget)
+          ) {
+            setPasswordError(SPENDINGTARGET_REGEX_MESSAGE);
+            isInvalid = false;
+          }
+        });
+
+        if (!isInvalid) return;
+
+        const updatedUserInfo = {
+          ...userInfo,
+          password: userInfo.originPassword,
+          originPassword: undefined,
+        };
+
+        const formData = new FormData();
+        formData.append('userInfo', JSON.stringify(updatedUserInfo));
+        if (profileImage instanceof File) {
+          formData.append('profileImage', profileImage);
+        } else {
+          formData.append('profileText', profileImage);
+        }
+
+        try {
+          await dispatch(updateUserProfile(formData));
+          navigate(0);
+        } catch (error) {
+          console.error('유저 정보 변경 오류', error);
+        }
+      } else {
+        console.warn('패스워드 검증 실패');
+      }
     } catch (error) {
-      console.error('유저 정보 변경 오류', error);
+      console.error(error);
     }
   };
 

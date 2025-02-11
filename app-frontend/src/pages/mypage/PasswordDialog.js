@@ -4,7 +4,7 @@ import CommonInput from '../../common/CommonInput';
 import { PASSWORDCONFIRM_FAIL_MESSAGE } from '../../common/Message';
 import styled from 'styled-components';
 import { useNavigate } from 'react-router-dom';
-import { updatePwd } from '../../apis/userApi';
+import { updatePwd, validatePwd } from '../../apis/userApi';
 
 const StyledHr = styled.hr`
   width: 100%;
@@ -86,21 +86,35 @@ const PasswordDialog = ({ isShowDialog, onClose, password, userInfo }) => {
 
   const handleClick = async (e) => {
     e.preventDefault();
-    if (password !== passwordInfo.originPassword) {
-      setPasswordError(true);
-      setErrorMessage('기존 비밀번호가 일치하지 않습니다!');
-    } else if (!passwordRegexs.password.test(passwordInfo.newPassword)) {
-      setPasswordError(true);
-      setErrorMessage(
-        '비밀번호는 소문자, 숫자, 특수문자(@#$%^&+=!)를\n포함해 8자 이상으로 입력해주세요.',
-      );
-    } else if (passwordInfo.newPassword !== passwordInfo.confirmPassword) {
-      setPasswordError(true);
-      setErrorMessage(PASSWORDCONFIRM_FAIL_MESSAGE);
-    } else {
-      setPasswordError(false);
-      await updatePwd(passwordInfo.newPassword, userInfo.userId);
-      navigate(0);
+
+    const userData = {
+      userId: userInfo?.userId,
+      password: passwordInfo.originPassword,
+    };
+
+    try {
+      const response = await validatePwd(userData);
+
+      // 성공 시
+      if (response.data.status === 200) {
+        setPasswordError(false);
+        await updatePwd(passwordInfo.newPassword, userInfo.userId);
+        navigate(0);
+      }
+    } catch (error) {
+      console.log(error.response.data.message);
+      if (error.response.status === 401) {
+        setPasswordError(true);
+        setErrorMessage('기존 비밀번호가 일치하지 않습니다!');
+      } else if (!passwordRegexs.password.test(passwordInfo.newPassword)) {
+        setPasswordError(true);
+        setErrorMessage(
+          '비밀번호는 소문자, 숫자, 특수문자(@#$%^&+=!)를\n포함해 8자 이상으로 입력해주세요.',
+        );
+      } else if (passwordInfo.newPassword !== passwordInfo.confirmPassword) {
+        setPasswordError(true);
+        setErrorMessage(PASSWORDCONFIRM_FAIL_MESSAGE);
+      }
     }
   };
 
