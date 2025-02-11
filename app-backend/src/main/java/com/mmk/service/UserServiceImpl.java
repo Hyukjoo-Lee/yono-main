@@ -16,7 +16,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 
-// import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
 import com.mmk.dao.UserDAO;
 import com.mmk.dto.UserDTO;
@@ -32,8 +32,7 @@ public class UserServiceImpl implements UserService {
     @Value("${IMAGE_PATH}")
     private String uploadDir;
 
-    // private final BCryptPasswordEncoder passwordEncoder = new
-    // BCryptPasswordEncoder();
+    private final BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
 
     @Override
     public UserDTO createUser(UserDTO userDTO) {
@@ -41,9 +40,8 @@ public class UserServiceImpl implements UserService {
             throw new IllegalArgumentException("이미 존재하는 아이디입니다.");
         }
 
-        // 비밀번호 암호화
-        // String encodedPassword = passwordEncoder.encode(userDTO.getPassword());
-        // userDTO.setPassword((encodedPassword));
+        String encodedPassword = passwordEncoder.encode(userDTO.getPassword());
+        userDTO.setPassword((encodedPassword));
 
         UserEntity userEntity = toEntity(userDTO);
         userDAO.createUser(userEntity);
@@ -126,9 +124,9 @@ public class UserServiceImpl implements UserService {
             return true;
         }
 
-        // if (userEntity != null) {
-        // return passwordEncoder.matches(password, userEntity.getPassword());
-        // }
+        if (userEntity != null) {
+        return passwordEncoder.matches(password, userEntity.getPassword());
+        }
 
         return false;
     }

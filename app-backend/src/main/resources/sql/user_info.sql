@@ -36,7 +36,7 @@ select * from user_info where email = 'mk@google.com';
 
 drop table user_info;
 
-delete from user_info where name = '김지훈';l
+delete from user_info where name = '테스트';
 
 update user_info set name = '홍길동구리' where user_num = 37;
 
