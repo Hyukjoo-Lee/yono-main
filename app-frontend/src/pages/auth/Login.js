@@ -16,6 +16,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { loginUser } from '../../redux/actions/userAction';
 import KakaoLoginButton from './components/KakaoLoginButton';
 import GoogleLoginButton from './components/GoogleLoginButton';
+import { GoogleOAuthProvider } from '@react-oauth/google';
 
 const RootIn = styled.div`
   width: ${(props) => props.theme.display.lg};
@@ -198,7 +199,7 @@ const Login = () => {
       setFormMessage({ error: SERVER_MESSAGE });
     }
   };
-
+  const GOOGLE_CLIENT_ID = process.env.REACT_APP_GOOGLE_CLIENT_ID;
   return (
     <CommonRoot>
       <RootIn>
@@ -265,7 +266,11 @@ const Login = () => {
             </Divider>
             <SocialLoginWrapper>
               <KakaoLoginButton />
-              <GoogleLoginButton />
+              {GOOGLE_CLIENT_ID && (
+                <GoogleOAuthProvider clientId={GOOGLE_CLIENT_ID}>
+                  <GoogleLoginButton />
+                </GoogleOAuthProvider>
+              )}
             </SocialLoginWrapper>
           </FormWrapper>
           {isLoggedIn && (
