@@ -80,7 +80,7 @@ const EditBox = styled.div`
 `;
 
 export function NoticePost() {
-  const { isLoggedIn, user } = useSelector((state) => state.user);
+  const { user } = useSelector((state) => state.user);
   const [noticeData, setNoticeData] = useState(null);
   const [isDialogOpen, setIsDialogOpen] = useState(false);
   const navigate = useNavigate();
@@ -198,7 +198,6 @@ export function NoticePost() {
       <CommonHr />
 
       <DataBox>
-        <div>{noticeData.content}</div>
         {noticeData.imgurl && (
           <div>
             <img
@@ -208,6 +207,7 @@ export function NoticePost() {
             />
           </div>
         )}
+        <div style={{ whiteSpace: 'pre-line' }}>{noticeData.content}</div>
       </DataBox>
     </Root>
   );
