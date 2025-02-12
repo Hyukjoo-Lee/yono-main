@@ -198,7 +198,6 @@ export function NoticePost() {
       <CommonHr />
 
       <DataBox>
-        <div>{noticeData.content}</div>
         {noticeData.imgurl && (
           <div>
             <img
@@ -208,6 +207,7 @@ export function NoticePost() {
             />
           </div>
         )}
+        <div style={{ whiteSpace: 'pre-line' }}>{noticeData.content}</div>
       </DataBox>
     </Root>
   );
