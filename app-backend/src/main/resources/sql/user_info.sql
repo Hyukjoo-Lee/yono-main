@@ -11,7 +11,8 @@ select * from user_info;
 
 
 insert into user_info (user_num, user_id, name, email,  password, spending_target, created_at, updated_at) 
-values (user_seq.nextval, 'crtestid', '김채림', 'cr@google.com', '1234', 500000, sysdate, sysdate);
+values (user_seq.nextval, 'crtestid', '김채림', 'cr@google.com', '1234', 500000, sysdate, sysdate); 
+
 
 insert into user_info (user_num, user_id, name, email, password,  spending_target, created_at, updated_at) 
 values (user_seq.nextval, 'hjtestid', '이혁주', 'hj@google.com', '1234', 500000, sysdate, sysdate);
@@ -41,4 +42,4 @@ delete from user_info where name = '김지훈';
 
 update user_info set name = '홍길동구리' where user_num = 37;
 
-update user_info set user_role = 'ADMIN' where user_num = 14; -- ADMIN / USER 직관적이게 수정
+update user_info set state = 'USER' where user_num = 7; -- ADMIN / USER 직관적이게 수정
