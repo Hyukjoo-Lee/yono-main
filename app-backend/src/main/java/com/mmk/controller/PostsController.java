@@ -129,24 +129,17 @@ public class PostsController {
     }
 
     @PutMapping("/update/{no}")
-public ResponseEntity<ApiResponse<PostsDTO>> updatePost(
+    public ResponseEntity<ApiResponse<PostsDTO>> updatePost(
     @PathVariable("no") int no,
     @RequestParam("postFormData") String postFormData,
     @RequestParam(value = "file", required = false) MultipartFile file,
     @RequestParam(value = "originalImage", required = false) String originalImage) {
 
     try {
-        logger.debug("postFormData: {}", postFormData);
-        // PostsDTO pd = new ObjectMapper().readValue(postFormData, PostsDTO.class);
         String pno = Integer.toString(no);
-         logger.debug("pno:  {}", pno);
         PostsDTO pd = postsService.findById(pno);
-        // no 에 해당되는 전 경로 가져오기
-        logger.debug("pd:  {}",pd);
         String uploadFolder = uploadDir + "/uploads/images/";
         pd.setNo(no);
-        logger.debug("업로드 폴더: {}", uploadDir);
-        // 새 파일이 업로드된 경우에만 기존 파일 삭제
         if (file != null && !file.isEmpty() && pd.getImgurl() != null && !pd.getImgurl().isEmpty()) {
             Path oldFilePath = Paths.get(uploadDir, pd.getImgurl()).toAbsolutePath();
             logger.debug("전 사진 경로: {}", oldFilePath);
@@ -160,14 +153,12 @@ public ResponseEntity<ApiResponse<PostsDTO>> updatePost(
             }
         }
 
-        // 새 파일 업로드 로직
         if (file != null && !file.isEmpty()) {
             String originalFileName = file.getOriginalFilename();
             if (originalFileName == null || originalFileName.isEmpty()) {
                 throw new RuntimeException("파일 이름을 읽을 수 없습니다.");
             }
 
-            // 저장할 디렉토리 생성
             Calendar cal = Calendar.getInstance();
             String todayDir = uploadFolder + "/" + cal.get(Calendar.YEAR) + "-" + (cal.get(Calendar.MONTH) + 1) + "-" + cal.get(Calendar.DATE);
             File folder = new File(todayDir);
@@ -181,16 +172,14 @@ public ResponseEntity<ApiResponse<PostsDTO>> updatePost(
             File saveFile = new File(todayDir + "/" + newFileName);
             file.transferTo(saveFile);
 
-            // 새 이미지 URL을 DB에 저장
+
             pd.setImgurl(fileDBName);
             System.out.println("새 파일 저장 성공: " + saveFile.getAbsolutePath());
         } else {
-            // 새 파일이 없으면 기존 이미지 유지
             pd.setImgurl(originalImage);
             System.out.println("새 파일이 없으므로 기존 이미지 유지: " + originalImage);
         }
 
-        // 게시글 업데이트
         postsService.updatePost(pd);
 
         return ResponseEntity.ok(new ApiResponse<>(200, "게시글 수정 성공", pd));
