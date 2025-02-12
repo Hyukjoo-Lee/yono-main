@@ -1886,3 +1886,671 @@ This generated password is for development use only. Your security configuration
 2025-02-11T22:56:31.894+09:00 DEBUG 34798 --- [http-nio-8065-exec-1] com.mmk.controller.CardController        : userDTO: UserDTO(userNum=0, userId=crtestid, password=1234, email=null, name=null, isSocialLogin=false, spendingTarget=0, profile=temp_profile, state=null, userRole=null, createdAt=null, updatedAt=null)
 2025-02-11T23:57:48.337+09:00  INFO 34798 --- [SpringApplicationShutdownHook] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Shutdown initiated...
 2025-02-11T23:57:48.520+09:00  INFO 34798 --- [SpringApplicationShutdownHook] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Shutdown completed.
+2025-02-12T09:32:49.846+09:00  INFO 76816 --- [restartedMain] com.mmk.BackendApplication               : Starting BackendApplication using Java 17.0.14 with PID 76816 (/Users/gimchaelim/Desktop/yono/mickle-muckle/app-backend/build/classes/java/main started by gimchaelim in /Users/gimchaelim/Desktop/yono/mickle-muckle/app-backend)
+2025-02-12T09:32:49.846+09:00 DEBUG 76816 --- [restartedMain] com.mmk.BackendApplication               : Running with Spring Boot v3.1.9, Spring v6.0.17
+2025-02-12T09:32:49.847+09:00  INFO 76816 --- [restartedMain] com.mmk.BackendApplication               : No active profile set, falling back to 1 default profile: "default"
+2025-02-12T09:32:49.866+09:00  INFO 76816 --- [restartedMain] o.s.b.devtools.restart.ChangeableUrls    : The Class-Path manifest attribute in /Users/gimchaelim/.gradle/caches/modules-2/files-2.1/com.oracle.database.jdbc/ojdbc11/21.9.0.0/1aad2e20684ee075bb9ebdca2d83f028e4fd35fa/ojdbc11-21.9.0.0.jar referenced one or more files that do not exist: file:/Users/gimchaelim/.gradle/caches/modules-2/files-2.1/com.oracle.database.jdbc/ojdbc11/21.9.0.0/1aad2e20684ee075bb9ebdca2d83f028e4fd35fa/oraclepki.jar
+2025-02-12T09:32:49.866+09:00  INFO 76816 --- [restartedMain] o.s.b.devtools.restart.ChangeableUrls    : The Class-Path manifest attribute in /Users/gimchaelim/.gradle/caches/modules-2/files-2.1/com.oracle.database.security/oraclepki/21.9.0.0/da2fce62922312f651d88c7ac4c86dba01e5e39c/oraclepki-21.9.0.0.jar referenced one or more files that do not exist: file:/Users/gimchaelim/.gradle/caches/modules-2/files-2.1/com.oracle.database.security/oraclepki/21.9.0.0/da2fce62922312f651d88c7ac4c86dba01e5e39c/osdt_core.jar,file:/Users/gimchaelim/.gradle/caches/modules-2/files-2.1/com.oracle.database.security/oraclepki/21.9.0.0/da2fce62922312f651d88c7ac4c86dba01e5e39c/osdt_cert.jar,file:/Users/gimchaelim/.gradle/caches/modules-2/files-2.1/com.oracle.database.security/oraclepki/21.9.0.0/oracle.osdt/osdt_core.jar,file:/Users/gimchaelim/.gradle/caches/modules-2/files-2.1/com.oracle.database.security/oraclepki/21.9.0.0/oracle.osdt/osdt_cert.jar
+2025-02-12T09:32:49.866+09:00  INFO 76816 --- [restartedMain] .e.DevToolsPropertyDefaultsPostProcessor : Devtools property defaults active! Set 'spring.devtools.add-properties' to 'false' to disable
+2025-02-12T09:32:49.866+09:00  INFO 76816 --- [restartedMain] .e.DevToolsPropertyDefaultsPostProcessor : For additional web related logging consider setting the 'logging.level.web' property to 'DEBUG'
+2025-02-12T09:32:50.231+09:00  WARN 76816 --- [restartedMain] o.m.s.mapper.ClassPathMapperScanner      : No MyBatis mapper was found in '[com.mmk]' package. Please check your configuration.
+2025-02-12T09:32:50.424+09:00  INFO 76816 --- [restartedMain] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat initialized with port(s): 8065 (http)
+2025-02-12T09:32:50.427+09:00  INFO 76816 --- [restartedMain] o.apache.catalina.core.StandardService   : Starting service [Tomcat]
+2025-02-12T09:32:50.428+09:00  INFO 76816 --- [restartedMain] o.apache.catalina.core.StandardEngine    : Starting Servlet engine: [Apache Tomcat/10.1.19]
+2025-02-12T09:32:50.451+09:00  INFO 76816 --- [restartedMain] o.a.c.c.C.[Tomcat].[localhost].[/]       : Initializing Spring embedded WebApplicationContext
+2025-02-12T09:32:50.451+09:00  INFO 76816 --- [restartedMain] w.s.c.ServletWebServerApplicationContext : Root WebApplicationContext: initialization completed in 585 ms
+2025-02-12T09:32:50.534+09:00  INFO 76816 --- [restartedMain] o.hibernate.jpa.internal.util.LogHelper  : HHH000204: Processing PersistenceUnitInfo [name: default]
+2025-02-12T09:32:50.559+09:00  INFO 76816 --- [restartedMain] org.hibernate.Version                    : HHH000412: Hibernate ORM core version 6.2.22.Final
+2025-02-12T09:32:50.560+09:00  INFO 76816 --- [restartedMain] org.hibernate.cfg.Environment            : HHH000406: Using bytecode reflection optimizer
+2025-02-12T09:32:50.666+09:00  INFO 76816 --- [restartedMain] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Starting...
+2025-02-12T09:32:51.225+09:00  INFO 76816 --- [restartedMain] com.zaxxer.hikari.pool.HikariPool        : HikariPool-1 - Added connection oracle.jdbc.driver.T4CConnection@383a452
+2025-02-12T09:32:51.226+09:00  INFO 76816 --- [restartedMain] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Start completed.
+2025-02-12T09:32:51.287+09:00  WARN 76816 --- [restartedMain] org.hibernate.orm.deprecation            : HHH90000025: OracleDialect does not need to be specified explicitly using 'hibernate.dialect' (remove the property setting and it will be selected by default)
+2025-02-12T09:32:51.707+09:00  INFO 76816 --- [restartedMain] o.h.e.t.j.p.i.JtaPlatformInitiator       : HHH000489: No JTA platform available (set 'hibernate.transaction.jta.platform' to enable JTA platform integration)
+2025-02-12T09:32:53.454+09:00  WARN 76816 --- [restartedMain] JpaBaseConfiguration$JpaWebConfiguration : spring.jpa.open-in-view is enabled by default. Therefore, database queries may be performed during view rendering. Explicitly configure spring.jpa.open-in-view to disable this warning
+2025-02-12T09:32:53.466+09:00  WARN 76816 --- [restartedMain] .s.s.UserDetailsServiceAutoConfiguration : 
+
+Using generated security password: 6868d002-2aeb-4b53-8bb7-335497c8bb43
+
+This generated password is for development use only. Your security configuration must be updated before running your application in production.
+
+2025-02-12T09:32:53.658+09:00  INFO 76816 --- [restartedMain] o.s.b.d.a.OptionalLiveReloadServer       : LiveReload server is running on port 35729
+2025-02-12T09:32:53.671+09:00  INFO 76816 --- [restartedMain] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat started on port(s): 8065 (http) with context path ''
+2025-02-12T09:32:53.677+09:00  INFO 76816 --- [restartedMain] com.mmk.BackendApplication               : Started BackendApplication in 3.987 seconds (process running for 4.297)
+2025-02-12T09:36:26.823+09:00  INFO 76816 --- [http-nio-8065-exec-1] o.a.c.c.C.[Tomcat].[localhost].[/]       : Initializing Spring DispatcherServlet 'dispatcherServlet'
+2025-02-12T09:36:26.876+09:00 DEBUG 76816 --- [http-nio-8065-exec-1] com.mmk.controller.CardController        : userDTO: UserDTO(userNum=0, userId=jhtestid, password=jhtestpwd123@, email=null, name=null, isSocialLogin=false, spendingTarget=0, profile=temp_profile, state=null, userRole=null, createdAt=null, updatedAt=null)
+2025-02-12T09:38:54.792+09:00 DEBUG 76816 --- [http-nio-8065-exec-1] com.mmk.controller.CardController        : userDTO: UserDTO(userNum=0, userId=admin, password=admin1234!, email=null, name=null, isSocialLogin=false, spendingTarget=0, profile=temp_profile, state=null, userRole=null, createdAt=null, updatedAt=null)
+2025-02-12T09:38:54.824+09:00  WARN 76816 --- [http-nio-8065-exec-1] o.s.s.c.bcrypt.BCryptPasswordEncoder     : Encoded password does not look like BCrypt
+2025-02-12T09:39:16.790+09:00 DEBUG 76816 --- [http-nio-8065-exec-2] com.mmk.controller.CardController        : userDTO: UserDTO(userNum=0, userId=admin, password=admin1234!, email=null, name=null, isSocialLogin=false, spendingTarget=0, profile=temp_profile, state=null, userRole=null, createdAt=null, updatedAt=null)
+2025-02-12T09:39:16.830+09:00  WARN 76816 --- [http-nio-8065-exec-2] o.s.s.c.bcrypt.BCryptPasswordEncoder     : Encoded password does not look like BCrypt
+2025-02-12T09:40:33.262+09:00  INFO 76816 --- [SpringApplicationShutdownHook] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Shutdown initiated...
+2025-02-12T09:40:33.350+09:00  INFO 76816 --- [SpringApplicationShutdownHook] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Shutdown completed.
+2025-02-12T09:40:34.077+09:00  INFO 79301 --- [restartedMain] com.mmk.BackendApplication               : Starting BackendApplication using Java 17.0.14 with PID 79301 (/Users/gimchaelim/Desktop/yono/mickle-muckle/app-backend/build/classes/java/main started by gimchaelim in /Users/gimchaelim/Desktop/yono/mickle-muckle)
+2025-02-12T09:40:34.077+09:00 DEBUG 79301 --- [restartedMain] com.mmk.BackendApplication               : Running with Spring Boot v3.1.9, Spring v6.0.17
+2025-02-12T09:40:34.077+09:00  INFO 79301 --- [restartedMain] com.mmk.BackendApplication               : No active profile set, falling back to 1 default profile: "default"
+2025-02-12T09:40:34.097+09:00  INFO 79301 --- [restartedMain] o.s.b.devtools.restart.ChangeableUrls    : The Class-Path manifest attribute in /Users/gimchaelim/.gradle/caches/modules-2/files-2.1/com.oracle.database.jdbc/ojdbc11/21.9.0.0/1aad2e20684ee075bb9ebdca2d83f028e4fd35fa/ojdbc11-21.9.0.0.jar referenced one or more files that do not exist: file:/Users/gimchaelim/.gradle/caches/modules-2/files-2.1/com.oracle.database.jdbc/ojdbc11/21.9.0.0/1aad2e20684ee075bb9ebdca2d83f028e4fd35fa/oraclepki.jar
+2025-02-12T09:40:34.097+09:00  INFO 79301 --- [restartedMain] o.s.b.devtools.restart.ChangeableUrls    : The Class-Path manifest attribute in /Users/gimchaelim/.gradle/caches/modules-2/files-2.1/com.oracle.database.security/oraclepki/21.9.0.0/da2fce62922312f651d88c7ac4c86dba01e5e39c/oraclepki-21.9.0.0.jar referenced one or more files that do not exist: file:/Users/gimchaelim/.gradle/caches/modules-2/files-2.1/com.oracle.database.security/oraclepki/21.9.0.0/da2fce62922312f651d88c7ac4c86dba01e5e39c/osdt_core.jar,file:/Users/gimchaelim/.gradle/caches/modules-2/files-2.1/com.oracle.database.security/oraclepki/21.9.0.0/da2fce62922312f651d88c7ac4c86dba01e5e39c/osdt_cert.jar,file:/Users/gimchaelim/.gradle/caches/modules-2/files-2.1/com.oracle.database.security/oraclepki/21.9.0.0/oracle.osdt/osdt_core.jar,file:/Users/gimchaelim/.gradle/caches/modules-2/files-2.1/com.oracle.database.security/oraclepki/21.9.0.0/oracle.osdt/osdt_cert.jar
+2025-02-12T09:40:34.097+09:00  INFO 79301 --- [restartedMain] .e.DevToolsPropertyDefaultsPostProcessor : Devtools property defaults active! Set 'spring.devtools.add-properties' to 'false' to disable
+2025-02-12T09:40:34.097+09:00  INFO 79301 --- [restartedMain] .e.DevToolsPropertyDefaultsPostProcessor : For additional web related logging consider setting the 'logging.level.web' property to 'DEBUG'
+2025-02-12T09:40:34.466+09:00  WARN 79301 --- [restartedMain] o.m.s.mapper.ClassPathMapperScanner      : No MyBatis mapper was found in '[com.mmk]' package. Please check your configuration.
+2025-02-12T09:40:34.698+09:00  INFO 79301 --- [restartedMain] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat initialized with port(s): 8065 (http)
+2025-02-12T09:40:34.702+09:00  INFO 79301 --- [restartedMain] o.apache.catalina.core.StandardService   : Starting service [Tomcat]
+2025-02-12T09:40:34.702+09:00  INFO 79301 --- [restartedMain] o.apache.catalina.core.StandardEngine    : Starting Servlet engine: [Apache Tomcat/10.1.19]
+2025-02-12T09:40:34.733+09:00  INFO 79301 --- [restartedMain] o.a.c.c.C.[Tomcat].[localhost].[/]       : Initializing Spring embedded WebApplicationContext
+2025-02-12T09:40:34.734+09:00  INFO 79301 --- [restartedMain] w.s.c.ServletWebServerApplicationContext : Root WebApplicationContext: initialization completed in 636 ms
+2025-02-12T09:40:34.827+09:00  INFO 79301 --- [restartedMain] o.hibernate.jpa.internal.util.LogHelper  : HHH000204: Processing PersistenceUnitInfo [name: default]
+2025-02-12T09:40:34.851+09:00  INFO 79301 --- [restartedMain] org.hibernate.Version                    : HHH000412: Hibernate ORM core version 6.2.22.Final
+2025-02-12T09:40:34.852+09:00  INFO 79301 --- [restartedMain] org.hibernate.cfg.Environment            : HHH000406: Using bytecode reflection optimizer
+2025-02-12T09:40:34.954+09:00  INFO 79301 --- [restartedMain] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Starting...
+2025-02-12T09:40:35.542+09:00  INFO 79301 --- [restartedMain] com.zaxxer.hikari.pool.HikariPool        : HikariPool-1 - Added connection oracle.jdbc.driver.T4CConnection@33b1cd2e
+2025-02-12T09:40:35.542+09:00  INFO 79301 --- [restartedMain] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Start completed.
+2025-02-12T09:40:35.600+09:00  WARN 79301 --- [restartedMain] org.hibernate.orm.deprecation            : HHH90000025: OracleDialect does not need to be specified explicitly using 'hibernate.dialect' (remove the property setting and it will be selected by default)
+2025-02-12T09:40:36.020+09:00  INFO 79301 --- [restartedMain] o.h.e.t.j.p.i.JtaPlatformInitiator       : HHH000489: No JTA platform available (set 'hibernate.transaction.jta.platform' to enable JTA platform integration)
+2025-02-12T09:40:38.240+09:00  WARN 79301 --- [restartedMain] JpaBaseConfiguration$JpaWebConfiguration : spring.jpa.open-in-view is enabled by default. Therefore, database queries may be performed during view rendering. Explicitly configure spring.jpa.open-in-view to disable this warning
+2025-02-12T09:40:38.250+09:00  WARN 79301 --- [restartedMain] .s.s.UserDetailsServiceAutoConfiguration : 
+
+Using generated security password: 25c550c8-532d-4889-8154-1a0bddc48939
+
+This generated password is for development use only. Your security configuration must be updated before running your application in production.
+
+2025-02-12T09:40:38.421+09:00  INFO 79301 --- [restartedMain] o.s.b.d.a.OptionalLiveReloadServer       : LiveReload server is running on port 35729
+2025-02-12T09:40:38.430+09:00  INFO 79301 --- [restartedMain] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat started on port(s): 8065 (http) with context path ''
+2025-02-12T09:40:38.436+09:00  INFO 79301 --- [restartedMain] com.mmk.BackendApplication               : Started BackendApplication in 4.508 seconds (process running for 4.678)
+2025-02-12T09:41:20.036+09:00  INFO 79301 --- [http-nio-8065-exec-1] o.a.c.c.C.[Tomcat].[localhost].[/]       : Initializing Spring DispatcherServlet 'dispatcherServlet'
+2025-02-12T09:41:20.079+09:00 DEBUG 79301 --- [http-nio-8065-exec-1] com.mmk.controller.CardController        : userDTO: UserDTO(userNum=0, userId=admin, password=admin1234!, email=null, name=null, isSocialLogin=false, spendingTarget=0, profile=temp_profile, state=null, userRole=null, createdAt=null, updatedAt=null)
+2025-02-12T09:41:25.868+09:00 DEBUG 79301 --- [http-nio-8065-exec-2] com.mmk.controller.CardController        : userDTO: UserDTO(userNum=0, userId=admin, password=admin1234!, email=null, name=null, isSocialLogin=false, spendingTarget=0, profile=temp_profile, state=null, userRole=null, createdAt=null, updatedAt=null)
+2025-02-12T09:43:00.513+09:00 DEBUG 79301 --- [http-nio-8065-exec-4] com.mmk.controller.CardController        : userDTO: UserDTO(userNum=0, userId=admin, password=admin1234!, email=admin@naver.com, name=관리자, isSocialLogin=null, spendingTarget=0, profile=temp_profile, state=null, userRole=null, createdAt=null, updatedAt=null)
+2025-02-12T09:44:35.508+09:00  INFO 79301 --- [SpringApplicationShutdownHook] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Shutdown initiated...
+2025-02-12T09:44:35.669+09:00  INFO 79301 --- [SpringApplicationShutdownHook] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Shutdown completed.
+2025-02-12T09:44:36.439+09:00  INFO 79779 --- [restartedMain] com.mmk.BackendApplication               : Starting BackendApplication using Java 17.0.14 with PID 79779 (/Users/gimchaelim/Desktop/yono/mickle-muckle/app-backend/build/classes/java/main started by gimchaelim in /Users/gimchaelim/Desktop/yono/mickle-muckle/app-backend)
+2025-02-12T09:44:36.440+09:00 DEBUG 79779 --- [restartedMain] com.mmk.BackendApplication               : Running with Spring Boot v3.1.9, Spring v6.0.17
+2025-02-12T09:44:36.440+09:00  INFO 79779 --- [restartedMain] com.mmk.BackendApplication               : No active profile set, falling back to 1 default profile: "default"
+2025-02-12T09:44:36.458+09:00  INFO 79779 --- [restartedMain] o.s.b.devtools.restart.ChangeableUrls    : The Class-Path manifest attribute in /Users/gimchaelim/.gradle/caches/modules-2/files-2.1/com.oracle.database.jdbc/ojdbc11/21.9.0.0/1aad2e20684ee075bb9ebdca2d83f028e4fd35fa/ojdbc11-21.9.0.0.jar referenced one or more files that do not exist: file:/Users/gimchaelim/.gradle/caches/modules-2/files-2.1/com.oracle.database.jdbc/ojdbc11/21.9.0.0/1aad2e20684ee075bb9ebdca2d83f028e4fd35fa/oraclepki.jar
+2025-02-12T09:44:36.458+09:00  INFO 79779 --- [restartedMain] o.s.b.devtools.restart.ChangeableUrls    : The Class-Path manifest attribute in /Users/gimchaelim/.gradle/caches/modules-2/files-2.1/com.oracle.database.security/oraclepki/21.9.0.0/da2fce62922312f651d88c7ac4c86dba01e5e39c/oraclepki-21.9.0.0.jar referenced one or more files that do not exist: file:/Users/gimchaelim/.gradle/caches/modules-2/files-2.1/com.oracle.database.security/oraclepki/21.9.0.0/da2fce62922312f651d88c7ac4c86dba01e5e39c/osdt_core.jar,file:/Users/gimchaelim/.gradle/caches/modules-2/files-2.1/com.oracle.database.security/oraclepki/21.9.0.0/da2fce62922312f651d88c7ac4c86dba01e5e39c/osdt_cert.jar,file:/Users/gimchaelim/.gradle/caches/modules-2/files-2.1/com.oracle.database.security/oraclepki/21.9.0.0/oracle.osdt/osdt_core.jar,file:/Users/gimchaelim/.gradle/caches/modules-2/files-2.1/com.oracle.database.security/oraclepki/21.9.0.0/oracle.osdt/osdt_cert.jar
+2025-02-12T09:44:36.458+09:00  INFO 79779 --- [restartedMain] .e.DevToolsPropertyDefaultsPostProcessor : Devtools property defaults active! Set 'spring.devtools.add-properties' to 'false' to disable
+2025-02-12T09:44:36.458+09:00  INFO 79779 --- [restartedMain] .e.DevToolsPropertyDefaultsPostProcessor : For additional web related logging consider setting the 'logging.level.web' property to 'DEBUG'
+2025-02-12T09:44:36.804+09:00  WARN 79779 --- [restartedMain] o.m.s.mapper.ClassPathMapperScanner      : No MyBatis mapper was found in '[com.mmk]' package. Please check your configuration.
+2025-02-12T09:44:37.005+09:00  INFO 79779 --- [restartedMain] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat initialized with port(s): 8065 (http)
+2025-02-12T09:44:37.009+09:00  INFO 79779 --- [restartedMain] o.apache.catalina.core.StandardService   : Starting service [Tomcat]
+2025-02-12T09:44:37.009+09:00  INFO 79779 --- [restartedMain] o.apache.catalina.core.StandardEngine    : Starting Servlet engine: [Apache Tomcat/10.1.19]
+2025-02-12T09:44:37.037+09:00  INFO 79779 --- [restartedMain] o.a.c.c.C.[Tomcat].[localhost].[/]       : Initializing Spring embedded WebApplicationContext
+2025-02-12T09:44:37.037+09:00  INFO 79779 --- [restartedMain] w.s.c.ServletWebServerApplicationContext : Root WebApplicationContext: initialization completed in 579 ms
+2025-02-12T09:44:37.116+09:00  INFO 79779 --- [restartedMain] o.hibernate.jpa.internal.util.LogHelper  : HHH000204: Processing PersistenceUnitInfo [name: default]
+2025-02-12T09:44:37.135+09:00  INFO 79779 --- [restartedMain] org.hibernate.Version                    : HHH000412: Hibernate ORM core version 6.2.22.Final
+2025-02-12T09:44:37.136+09:00  INFO 79779 --- [restartedMain] org.hibernate.cfg.Environment            : HHH000406: Using bytecode reflection optimizer
+2025-02-12T09:44:37.229+09:00  INFO 79779 --- [restartedMain] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Starting...
+2025-02-12T09:44:37.763+09:00  INFO 79779 --- [restartedMain] com.zaxxer.hikari.pool.HikariPool        : HikariPool-1 - Added connection oracle.jdbc.driver.T4CConnection@67c35fd
+2025-02-12T09:44:37.764+09:00  INFO 79779 --- [restartedMain] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Start completed.
+2025-02-12T09:44:37.816+09:00  WARN 79779 --- [restartedMain] org.hibernate.orm.deprecation            : HHH90000025: OracleDialect does not need to be specified explicitly using 'hibernate.dialect' (remove the property setting and it will be selected by default)
+2025-02-12T09:44:38.222+09:00  INFO 79779 --- [restartedMain] o.h.e.t.j.p.i.JtaPlatformInitiator       : HHH000489: No JTA platform available (set 'hibernate.transaction.jta.platform' to enable JTA platform integration)
+2025-02-12T09:44:40.119+09:00  WARN 79779 --- [restartedMain] JpaBaseConfiguration$JpaWebConfiguration : spring.jpa.open-in-view is enabled by default. Therefore, database queries may be performed during view rendering. Explicitly configure spring.jpa.open-in-view to disable this warning
+2025-02-12T09:44:40.130+09:00  WARN 79779 --- [restartedMain] .s.s.UserDetailsServiceAutoConfiguration : 
+
+Using generated security password: 95a1bba2-5a6a-4482-882e-aa01f64d1609
+
+This generated password is for development use only. Your security configuration must be updated before running your application in production.
+
+2025-02-12T09:44:40.306+09:00  INFO 79779 --- [restartedMain] o.s.b.d.a.OptionalLiveReloadServer       : LiveReload server is running on port 35729
+2025-02-12T09:44:40.318+09:00  INFO 79779 --- [restartedMain] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat started on port(s): 8065 (http) with context path ''
+2025-02-12T09:44:40.325+09:00  INFO 79779 --- [restartedMain] com.mmk.BackendApplication               : Started BackendApplication in 4.029 seconds (process running for 4.252)
+2025-02-12T09:44:47.387+09:00  INFO 79779 --- [http-nio-8065-exec-1] o.a.c.c.C.[Tomcat].[localhost].[/]       : Initializing Spring DispatcherServlet 'dispatcherServlet'
+2025-02-12T09:44:47.429+09:00 DEBUG 79779 --- [http-nio-8065-exec-1] com.mmk.controller.CardController        : userDTO: UserDTO(userNum=0, userId=admin, password=admin1234!, email=null, name=null, isSocialLogin=false, spendingTarget=0, profile=temp_profile, state=null, userRole=null, createdAt=null, updatedAt=null)
+2025-02-12T09:45:33.627+09:00  INFO 79779 --- [http-nio-8065-exec-5] com.mmk.controller.NoticeController      : 파일 저장 경로: /Users/gimchaelim/Desktop/yono/uploads/images/2025-2-12/AKR20240530147800005_10_i_P4202521237350716.jpg
+2025-02-12T09:49:44.731+09:00  INFO 79779 --- [SpringApplicationShutdownHook] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Shutdown initiated...
+2025-02-12T09:49:44.941+09:00  INFO 79779 --- [SpringApplicationShutdownHook] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Shutdown completed.
+2025-02-12T09:49:45.694+09:00  INFO 80490 --- [restartedMain] com.mmk.BackendApplication               : Starting BackendApplication using Java 17.0.14 with PID 80490 (/Users/gimchaelim/Desktop/yono/mickle-muckle/app-backend/build/classes/java/main started by gimchaelim in /Users/gimchaelim/Desktop/yono/mickle-muckle/app-backend)
+2025-02-12T09:49:45.694+09:00 DEBUG 80490 --- [restartedMain] com.mmk.BackendApplication               : Running with Spring Boot v3.1.9, Spring v6.0.17
+2025-02-12T09:49:45.695+09:00  INFO 80490 --- [restartedMain] com.mmk.BackendApplication               : No active profile set, falling back to 1 default profile: "default"
+2025-02-12T09:49:45.712+09:00  INFO 80490 --- [restartedMain] o.s.b.devtools.restart.ChangeableUrls    : The Class-Path manifest attribute in /Users/gimchaelim/.gradle/caches/modules-2/files-2.1/com.oracle.database.jdbc/ojdbc11/21.9.0.0/1aad2e20684ee075bb9ebdca2d83f028e4fd35fa/ojdbc11-21.9.0.0.jar referenced one or more files that do not exist: file:/Users/gimchaelim/.gradle/caches/modules-2/files-2.1/com.oracle.database.jdbc/ojdbc11/21.9.0.0/1aad2e20684ee075bb9ebdca2d83f028e4fd35fa/oraclepki.jar
+2025-02-12T09:49:45.712+09:00  INFO 80490 --- [restartedMain] o.s.b.devtools.restart.ChangeableUrls    : The Class-Path manifest attribute in /Users/gimchaelim/.gradle/caches/modules-2/files-2.1/com.oracle.database.security/oraclepki/21.9.0.0/da2fce62922312f651d88c7ac4c86dba01e5e39c/oraclepki-21.9.0.0.jar referenced one or more files that do not exist: file:/Users/gimchaelim/.gradle/caches/modules-2/files-2.1/com.oracle.database.security/oraclepki/21.9.0.0/da2fce62922312f651d88c7ac4c86dba01e5e39c/osdt_core.jar,file:/Users/gimchaelim/.gradle/caches/modules-2/files-2.1/com.oracle.database.security/oraclepki/21.9.0.0/da2fce62922312f651d88c7ac4c86dba01e5e39c/osdt_cert.jar,file:/Users/gimchaelim/.gradle/caches/modules-2/files-2.1/com.oracle.database.security/oraclepki/21.9.0.0/oracle.osdt/osdt_core.jar,file:/Users/gimchaelim/.gradle/caches/modules-2/files-2.1/com.oracle.database.security/oraclepki/21.9.0.0/oracle.osdt/osdt_cert.jar
+2025-02-12T09:49:45.712+09:00  INFO 80490 --- [restartedMain] .e.DevToolsPropertyDefaultsPostProcessor : Devtools property defaults active! Set 'spring.devtools.add-properties' to 'false' to disable
+2025-02-12T09:49:45.712+09:00  INFO 80490 --- [restartedMain] .e.DevToolsPropertyDefaultsPostProcessor : For additional web related logging consider setting the 'logging.level.web' property to 'DEBUG'
+2025-02-12T09:49:46.048+09:00  WARN 80490 --- [restartedMain] o.m.s.mapper.ClassPathMapperScanner      : No MyBatis mapper was found in '[com.mmk]' package. Please check your configuration.
+2025-02-12T09:49:46.230+09:00  INFO 80490 --- [restartedMain] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat initialized with port(s): 8065 (http)
+2025-02-12T09:49:46.233+09:00  INFO 80490 --- [restartedMain] o.apache.catalina.core.StandardService   : Starting service [Tomcat]
+2025-02-12T09:49:46.233+09:00  INFO 80490 --- [restartedMain] o.apache.catalina.core.StandardEngine    : Starting Servlet engine: [Apache Tomcat/10.1.19]
+2025-02-12T09:49:46.255+09:00  INFO 80490 --- [restartedMain] o.a.c.c.C.[Tomcat].[localhost].[/]       : Initializing Spring embedded WebApplicationContext
+2025-02-12T09:49:46.255+09:00  INFO 80490 --- [restartedMain] w.s.c.ServletWebServerApplicationContext : Root WebApplicationContext: initialization completed in 543 ms
+2025-02-12T09:49:46.326+09:00  INFO 80490 --- [restartedMain] o.hibernate.jpa.internal.util.LogHelper  : HHH000204: Processing PersistenceUnitInfo [name: default]
+2025-02-12T09:49:46.344+09:00  INFO 80490 --- [restartedMain] org.hibernate.Version                    : HHH000412: Hibernate ORM core version 6.2.22.Final
+2025-02-12T09:49:46.344+09:00  INFO 80490 --- [restartedMain] org.hibernate.cfg.Environment            : HHH000406: Using bytecode reflection optimizer
+2025-02-12T09:49:46.436+09:00  INFO 80490 --- [restartedMain] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Starting...
+2025-02-12T09:49:47.151+09:00  INFO 80490 --- [restartedMain] com.zaxxer.hikari.pool.HikariPool        : HikariPool-1 - Added connection oracle.jdbc.driver.T4CConnection@28872cfd
+2025-02-12T09:49:47.152+09:00  INFO 80490 --- [restartedMain] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Start completed.
+2025-02-12T09:49:47.218+09:00  WARN 80490 --- [restartedMain] org.hibernate.orm.deprecation            : HHH90000025: OracleDialect does not need to be specified explicitly using 'hibernate.dialect' (remove the property setting and it will be selected by default)
+2025-02-12T09:49:47.655+09:00  INFO 80490 --- [restartedMain] o.h.e.t.j.p.i.JtaPlatformInitiator       : HHH000489: No JTA platform available (set 'hibernate.transaction.jta.platform' to enable JTA platform integration)
+2025-02-12T09:49:49.962+09:00  WARN 80490 --- [restartedMain] JpaBaseConfiguration$JpaWebConfiguration : spring.jpa.open-in-view is enabled by default. Therefore, database queries may be performed during view rendering. Explicitly configure spring.jpa.open-in-view to disable this warning
+2025-02-12T09:49:49.973+09:00  WARN 80490 --- [restartedMain] .s.s.UserDetailsServiceAutoConfiguration : 
+
+Using generated security password: 618c8c2c-e131-4d48-8572-596935dba2cb
+
+This generated password is for development use only. Your security configuration must be updated before running your application in production.
+
+2025-02-12T09:49:50.152+09:00  INFO 80490 --- [restartedMain] o.s.b.d.a.OptionalLiveReloadServer       : LiveReload server is running on port 35729
+2025-02-12T09:49:50.165+09:00  INFO 80490 --- [restartedMain] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat started on port(s): 8065 (http) with context path ''
+2025-02-12T09:49:50.171+09:00  INFO 80490 --- [restartedMain] com.mmk.BackendApplication               : Started BackendApplication in 4.614 seconds (process running for 4.829)
+2025-02-12T09:49:54.194+09:00  INFO 80490 --- [http-nio-8065-exec-1] o.a.c.c.C.[Tomcat].[localhost].[/]       : Initializing Spring DispatcherServlet 'dispatcherServlet'
+2025-02-12T09:52:43.544+09:00  INFO 80490 --- [SpringApplicationShutdownHook] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Shutdown initiated...
+2025-02-12T09:52:45.101+09:00  INFO 80490 --- [SpringApplicationShutdownHook] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Shutdown completed.
+2025-02-12T09:52:45.901+09:00  INFO 80868 --- [restartedMain] com.mmk.BackendApplication               : Starting BackendApplication using Java 17.0.14 with PID 80868 (/Users/gimchaelim/Desktop/yono/mickle-muckle/app-backend/build/classes/java/main started by gimchaelim in /Users/gimchaelim/Desktop/yono/mickle-muckle/app-backend)
+2025-02-12T09:52:45.901+09:00 DEBUG 80868 --- [restartedMain] com.mmk.BackendApplication               : Running with Spring Boot v3.1.9, Spring v6.0.17
+2025-02-12T09:52:45.902+09:00  INFO 80868 --- [restartedMain] com.mmk.BackendApplication               : No active profile set, falling back to 1 default profile: "default"
+2025-02-12T09:52:45.921+09:00  INFO 80868 --- [restartedMain] o.s.b.devtools.restart.ChangeableUrls    : The Class-Path manifest attribute in /Users/gimchaelim/.gradle/caches/modules-2/files-2.1/com.oracle.database.jdbc/ojdbc11/21.9.0.0/1aad2e20684ee075bb9ebdca2d83f028e4fd35fa/ojdbc11-21.9.0.0.jar referenced one or more files that do not exist: file:/Users/gimchaelim/.gradle/caches/modules-2/files-2.1/com.oracle.database.jdbc/ojdbc11/21.9.0.0/1aad2e20684ee075bb9ebdca2d83f028e4fd35fa/oraclepki.jar
+2025-02-12T09:52:45.921+09:00  INFO 80868 --- [restartedMain] o.s.b.devtools.restart.ChangeableUrls    : The Class-Path manifest attribute in /Users/gimchaelim/.gradle/caches/modules-2/files-2.1/com.oracle.database.security/oraclepki/21.9.0.0/da2fce62922312f651d88c7ac4c86dba01e5e39c/oraclepki-21.9.0.0.jar referenced one or more files that do not exist: file:/Users/gimchaelim/.gradle/caches/modules-2/files-2.1/com.oracle.database.security/oraclepki/21.9.0.0/da2fce62922312f651d88c7ac4c86dba01e5e39c/osdt_core.jar,file:/Users/gimchaelim/.gradle/caches/modules-2/files-2.1/com.oracle.database.security/oraclepki/21.9.0.0/da2fce62922312f651d88c7ac4c86dba01e5e39c/osdt_cert.jar,file:/Users/gimchaelim/.gradle/caches/modules-2/files-2.1/com.oracle.database.security/oraclepki/21.9.0.0/oracle.osdt/osdt_core.jar,file:/Users/gimchaelim/.gradle/caches/modules-2/files-2.1/com.oracle.database.security/oraclepki/21.9.0.0/oracle.osdt/osdt_cert.jar
+2025-02-12T09:52:45.921+09:00  INFO 80868 --- [restartedMain] .e.DevToolsPropertyDefaultsPostProcessor : Devtools property defaults active! Set 'spring.devtools.add-properties' to 'false' to disable
+2025-02-12T09:52:45.921+09:00  INFO 80868 --- [restartedMain] .e.DevToolsPropertyDefaultsPostProcessor : For additional web related logging consider setting the 'logging.level.web' property to 'DEBUG'
+2025-02-12T09:52:46.289+09:00  WARN 80868 --- [restartedMain] o.m.s.mapper.ClassPathMapperScanner      : No MyBatis mapper was found in '[com.mmk]' package. Please check your configuration.
+2025-02-12T09:52:46.504+09:00  INFO 80868 --- [restartedMain] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat initialized with port(s): 8065 (http)
+2025-02-12T09:52:46.508+09:00  INFO 80868 --- [restartedMain] o.apache.catalina.core.StandardService   : Starting service [Tomcat]
+2025-02-12T09:52:46.508+09:00  INFO 80868 --- [restartedMain] o.apache.catalina.core.StandardEngine    : Starting Servlet engine: [Apache Tomcat/10.1.19]
+2025-02-12T09:52:46.535+09:00  INFO 80868 --- [restartedMain] o.a.c.c.C.[Tomcat].[localhost].[/]       : Initializing Spring embedded WebApplicationContext
+2025-02-12T09:52:46.535+09:00  INFO 80868 --- [restartedMain] w.s.c.ServletWebServerApplicationContext : Root WebApplicationContext: initialization completed in 614 ms
+2025-02-12T09:52:46.613+09:00  INFO 80868 --- [restartedMain] o.hibernate.jpa.internal.util.LogHelper  : HHH000204: Processing PersistenceUnitInfo [name: default]
+2025-02-12T09:52:46.635+09:00  INFO 80868 --- [restartedMain] org.hibernate.Version                    : HHH000412: Hibernate ORM core version 6.2.22.Final
+2025-02-12T09:52:46.636+09:00  INFO 80868 --- [restartedMain] org.hibernate.cfg.Environment            : HHH000406: Using bytecode reflection optimizer
+2025-02-12T09:52:46.730+09:00  INFO 80868 --- [restartedMain] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Starting...
+2025-02-12T09:52:49.055+09:00  INFO 80868 --- [restartedMain] com.zaxxer.hikari.pool.HikariPool        : HikariPool-1 - Added connection oracle.jdbc.driver.T4CConnection@394c528b
+2025-02-12T09:52:49.056+09:00  INFO 80868 --- [restartedMain] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Start completed.
+2025-02-12T09:52:49.136+09:00  WARN 80868 --- [restartedMain] org.hibernate.orm.deprecation            : HHH90000025: OracleDialect does not need to be specified explicitly using 'hibernate.dialect' (remove the property setting and it will be selected by default)
+2025-02-12T09:52:49.594+09:00  INFO 80868 --- [restartedMain] o.h.e.t.j.p.i.JtaPlatformInitiator       : HHH000489: No JTA platform available (set 'hibernate.transaction.jta.platform' to enable JTA platform integration)
+2025-02-12T09:52:52.200+09:00  WARN 80868 --- [restartedMain] JpaBaseConfiguration$JpaWebConfiguration : spring.jpa.open-in-view is enabled by default. Therefore, database queries may be performed during view rendering. Explicitly configure spring.jpa.open-in-view to disable this warning
+2025-02-12T09:52:52.211+09:00  WARN 80868 --- [restartedMain] .s.s.UserDetailsServiceAutoConfiguration : 
+
+Using generated security password: c9e0ebfa-d550-45fd-b6b6-99ac5726d7d0
+
+This generated password is for development use only. Your security configuration must be updated before running your application in production.
+
+2025-02-12T09:52:52.406+09:00  INFO 80868 --- [restartedMain] o.s.b.d.a.OptionalLiveReloadServer       : LiveReload server is running on port 35729
+2025-02-12T09:52:52.420+09:00  INFO 80868 --- [restartedMain] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat started on port(s): 8065 (http) with context path ''
+2025-02-12T09:52:52.427+09:00  INFO 80868 --- [restartedMain] com.mmk.BackendApplication               : Started BackendApplication in 6.698 seconds (process running for 6.912)
+2025-02-12T09:52:55.551+09:00  INFO 80868 --- [http-nio-8065-exec-1] o.a.c.c.C.[Tomcat].[localhost].[/]       : Initializing Spring DispatcherServlet 'dispatcherServlet'
+2025-02-12T09:53:19.984+09:00  INFO 80868 --- [http-nio-8065-exec-10] com.mmk.controller.NoticeController      : 삭제할 파일 경로:/Users/gimchaelim/Desktop/yono/uploads/images/2025-2-12/AKR20240530147800005_10_i_P4202521237350716.jpg
+2025-02-12T09:53:19.984+09:00  INFO 80868 --- [http-nio-8065-exec-10] com.mmk.controller.NoticeController      : 파일 삭제 성공: /Users/gimchaelim/Desktop/yono/uploads/images/2025-2-12/AKR20240530147800005_10_i_P4202521237350716.jpg
+2025-02-12T10:15:10.393+09:00  WARN 80868 --- [http-nio-8065-exec-10] com.zaxxer.hikari.pool.PoolBase          : HikariPool-1 - Failed to validate connection oracle.jdbc.driver.T4CConnection@394c528b (접속 종료). Possibly consider using a shorter maxLifetime value.
+2025-02-12T10:15:10.410+09:00  WARN 80868 --- [http-nio-8065-exec-10] com.zaxxer.hikari.pool.PoolBase          : HikariPool-1 - Failed to validate connection oracle.jdbc.driver.T4CConnection@60016da6 (접속 종료). Possibly consider using a shorter maxLifetime value.
+2025-02-12T10:15:10.425+09:00  WARN 80868 --- [http-nio-8065-exec-10] com.zaxxer.hikari.pool.PoolBase          : HikariPool-1 - Failed to validate connection oracle.jdbc.driver.T4CConnection@474950d (접속 종료). Possibly consider using a shorter maxLifetime value.
+2025-02-12T10:15:10.461+09:00  WARN 80868 --- [http-nio-8065-exec-10] com.zaxxer.hikari.pool.PoolBase          : HikariPool-1 - Failed to validate connection oracle.jdbc.driver.T4CConnection@18d9515f (접속 종료). Possibly consider using a shorter maxLifetime value.
+2025-02-12T10:15:10.506+09:00  WARN 80868 --- [http-nio-8065-exec-10] com.zaxxer.hikari.pool.PoolBase          : HikariPool-1 - Failed to validate connection oracle.jdbc.driver.T4CConnection@5f96efe2 (접속 종료). Possibly consider using a shorter maxLifetime value.
+2025-02-12T10:15:10.522+09:00  WARN 80868 --- [http-nio-8065-exec-10] com.zaxxer.hikari.pool.PoolBase          : HikariPool-1 - Failed to validate connection oracle.jdbc.driver.T4CConnection@7a7dca50 (접속 종료). Possibly consider using a shorter maxLifetime value.
+2025-02-12T10:15:10.566+09:00  WARN 80868 --- [http-nio-8065-exec-10] com.zaxxer.hikari.pool.PoolBase          : HikariPool-1 - Failed to validate connection oracle.jdbc.driver.T4CConnection@44af85a (접속 종료). Possibly consider using a shorter maxLifetime value.
+2025-02-12T10:15:10.580+09:00  WARN 80868 --- [http-nio-8065-exec-10] com.zaxxer.hikari.pool.PoolBase          : HikariPool-1 - Failed to validate connection oracle.jdbc.driver.T4CConnection@77231f9c (접속 종료). Possibly consider using a shorter maxLifetime value.
+2025-02-12T10:15:10.643+09:00  WARN 80868 --- [http-nio-8065-exec-10] com.zaxxer.hikari.pool.PoolBase          : HikariPool-1 - Failed to validate connection oracle.jdbc.driver.T4CConnection@6085b37e (접속 종료). Possibly consider using a shorter maxLifetime value.
+2025-02-12T10:15:10.666+09:00  WARN 80868 --- [http-nio-8065-exec-10] com.zaxxer.hikari.pool.PoolBase          : HikariPool-1 - Failed to validate connection oracle.jdbc.driver.T4CConnection@6eb5257a (접속 종료). Possibly consider using a shorter maxLifetime value.
+2025-02-12T10:17:39.331+09:00  INFO 80868 --- [SpringApplicationShutdownHook] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Shutdown initiated...
+2025-02-12T10:17:39.448+09:00  INFO 80868 --- [SpringApplicationShutdownHook] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Shutdown completed.
+2025-02-12T10:19:23.495+09:00  INFO 84228 --- [restartedMain] com.mmk.BackendApplication               : Starting BackendApplication using Java 17.0.14 with PID 84228 (/Users/gimchaelim/Desktop/yono/mickle-muckle/app-backend/build/classes/java/main started by gimchaelim in /Users/gimchaelim/Desktop/yono/mickle-muckle/app-backend)
+2025-02-12T10:19:23.496+09:00 DEBUG 84228 --- [restartedMain] com.mmk.BackendApplication               : Running with Spring Boot v3.1.9, Spring v6.0.17
+2025-02-12T10:19:23.496+09:00  INFO 84228 --- [restartedMain] com.mmk.BackendApplication               : No active profile set, falling back to 1 default profile: "default"
+2025-02-12T10:19:23.515+09:00  INFO 84228 --- [restartedMain] o.s.b.devtools.restart.ChangeableUrls    : The Class-Path manifest attribute in /Users/gimchaelim/.gradle/caches/modules-2/files-2.1/com.oracle.database.jdbc/ojdbc11/21.9.0.0/1aad2e20684ee075bb9ebdca2d83f028e4fd35fa/ojdbc11-21.9.0.0.jar referenced one or more files that do not exist: file:/Users/gimchaelim/.gradle/caches/modules-2/files-2.1/com.oracle.database.jdbc/ojdbc11/21.9.0.0/1aad2e20684ee075bb9ebdca2d83f028e4fd35fa/oraclepki.jar
+2025-02-12T10:19:23.515+09:00  INFO 84228 --- [restartedMain] o.s.b.devtools.restart.ChangeableUrls    : The Class-Path manifest attribute in /Users/gimchaelim/.gradle/caches/modules-2/files-2.1/com.oracle.database.security/oraclepki/21.9.0.0/da2fce62922312f651d88c7ac4c86dba01e5e39c/oraclepki-21.9.0.0.jar referenced one or more files that do not exist: file:/Users/gimchaelim/.gradle/caches/modules-2/files-2.1/com.oracle.database.security/oraclepki/21.9.0.0/da2fce62922312f651d88c7ac4c86dba01e5e39c/osdt_core.jar,file:/Users/gimchaelim/.gradle/caches/modules-2/files-2.1/com.oracle.database.security/oraclepki/21.9.0.0/da2fce62922312f651d88c7ac4c86dba01e5e39c/osdt_cert.jar,file:/Users/gimchaelim/.gradle/caches/modules-2/files-2.1/com.oracle.database.security/oraclepki/21.9.0.0/oracle.osdt/osdt_core.jar,file:/Users/gimchaelim/.gradle/caches/modules-2/files-2.1/com.oracle.database.security/oraclepki/21.9.0.0/oracle.osdt/osdt_cert.jar
+2025-02-12T10:19:23.516+09:00  INFO 84228 --- [restartedMain] .e.DevToolsPropertyDefaultsPostProcessor : Devtools property defaults active! Set 'spring.devtools.add-properties' to 'false' to disable
+2025-02-12T10:19:23.516+09:00  INFO 84228 --- [restartedMain] .e.DevToolsPropertyDefaultsPostProcessor : For additional web related logging consider setting the 'logging.level.web' property to 'DEBUG'
+2025-02-12T10:19:23.872+09:00  WARN 84228 --- [restartedMain] o.m.s.mapper.ClassPathMapperScanner      : No MyBatis mapper was found in '[com.mmk]' package. Please check your configuration.
+2025-02-12T10:19:24.085+09:00  INFO 84228 --- [restartedMain] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat initialized with port(s): 8065 (http)
+2025-02-12T10:19:24.089+09:00  INFO 84228 --- [restartedMain] o.apache.catalina.core.StandardService   : Starting service [Tomcat]
+2025-02-12T10:19:24.089+09:00  INFO 84228 --- [restartedMain] o.apache.catalina.core.StandardEngine    : Starting Servlet engine: [Apache Tomcat/10.1.19]
+2025-02-12T10:19:24.115+09:00  INFO 84228 --- [restartedMain] o.a.c.c.C.[Tomcat].[localhost].[/]       : Initializing Spring embedded WebApplicationContext
+2025-02-12T10:19:24.116+09:00  INFO 84228 --- [restartedMain] w.s.c.ServletWebServerApplicationContext : Root WebApplicationContext: initialization completed in 600 ms
+2025-02-12T10:19:24.195+09:00  INFO 84228 --- [restartedMain] o.hibernate.jpa.internal.util.LogHelper  : HHH000204: Processing PersistenceUnitInfo [name: default]
+2025-02-12T10:19:24.212+09:00  INFO 84228 --- [restartedMain] org.hibernate.Version                    : HHH000412: Hibernate ORM core version 6.2.22.Final
+2025-02-12T10:19:24.214+09:00  INFO 84228 --- [restartedMain] org.hibernate.cfg.Environment            : HHH000406: Using bytecode reflection optimizer
+2025-02-12T10:19:24.305+09:00  INFO 84228 --- [restartedMain] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Starting...
+2025-02-12T10:19:25.357+09:00 ERROR 84228 --- [restartedMain] com.zaxxer.hikari.pool.HikariPool        : HikariPool-1 - Exception during pool initialization.
+
+java.sql.SQLRecoverableException: IO 오류: The Network Adapter could not establish the connection (CONNECTION_ID=IZI4dnPsQ9+thY7UYhhb/w==)
+	at oracle.jdbc.driver.T4CConnection.handleLogonNetException(T4CConnection.java:902) ~[ojdbc11-21.9.0.0.jar:21.9.0.0.0]
+	at oracle.jdbc.driver.T4CConnection.logon(T4CConnection.java:707) ~[ojdbc11-21.9.0.0.jar:21.9.0.0.0]
+	at oracle.jdbc.driver.PhysicalConnection.connect(PhysicalConnection.java:1094) ~[ojdbc11-21.9.0.0.jar:21.9.0.0.0]
+	at oracle.jdbc.driver.T4CDriverExtension.getConnection(T4CDriverExtension.java:89) ~[ojdbc11-21.9.0.0.jar:21.9.0.0.0]
+	at oracle.jdbc.driver.OracleDriver.connect(OracleDriver.java:732) ~[ojdbc11-21.9.0.0.jar:21.9.0.0.0]
+	at oracle.jdbc.driver.OracleDriver.connect(OracleDriver.java:648) ~[ojdbc11-21.9.0.0.jar:21.9.0.0.0]
+	at com.zaxxer.hikari.util.DriverDataSource.getConnection(DriverDataSource.java:138) ~[HikariCP-5.0.1.jar:na]
+	at com.zaxxer.hikari.pool.PoolBase.newConnection(PoolBase.java:359) ~[HikariCP-5.0.1.jar:na]
+	at com.zaxxer.hikari.pool.PoolBase.newPoolEntry(PoolBase.java:201) ~[HikariCP-5.0.1.jar:na]
+	at com.zaxxer.hikari.pool.HikariPool.createPoolEntry(HikariPool.java:470) ~[HikariCP-5.0.1.jar:na]
+	at com.zaxxer.hikari.pool.HikariPool.checkFailFast(HikariPool.java:561) ~[HikariCP-5.0.1.jar:na]
+	at com.zaxxer.hikari.pool.HikariPool.<init>(HikariPool.java:100) ~[HikariCP-5.0.1.jar:na]
+	at com.zaxxer.hikari.HikariDataSource.getConnection(HikariDataSource.java:112) ~[HikariCP-5.0.1.jar:na]
+	at org.hibernate.engine.jdbc.connections.internal.DatasourceConnectionProviderImpl.getConnection(DatasourceConnectionProviderImpl.java:122) ~[hibernate-core-6.2.22.Final.jar:6.2.22.Final]
+	at org.hibernate.engine.jdbc.env.internal.JdbcEnvironmentInitiator$ConnectionProviderJdbcConnectionAccess.obtainConnection(JdbcEnvironmentInitiator.java:437) ~[hibernate-core-6.2.22.Final.jar:6.2.22.Final]
+	at org.hibernate.resource.transaction.backend.jdbc.internal.JdbcIsolationDelegate.delegateWork(JdbcIsolationDelegate.java:61) ~[hibernate-core-6.2.22.Final.jar:6.2.22.Final]
+	at org.hibernate.engine.jdbc.env.internal.JdbcEnvironmentInitiator.getJdbcEnvironmentUsingJdbcMetadata(JdbcEnvironmentInitiator.java:279) ~[hibernate-core-6.2.22.Final.jar:6.2.22.Final]
+	at org.hibernate.engine.jdbc.env.internal.JdbcEnvironmentInitiator.initiateService(JdbcEnvironmentInitiator.java:193) ~[hibernate-core-6.2.22.Final.jar:6.2.22.Final]
+	at org.hibernate.engine.jdbc.env.internal.JdbcEnvironmentInitiator.initiateService(JdbcEnvironmentInitiator.java:69) ~[hibernate-core-6.2.22.Final.jar:6.2.22.Final]
+	at org.hibernate.boot.registry.internal.StandardServiceRegistryImpl.initiateService(StandardServiceRegistryImpl.java:119) ~[hibernate-core-6.2.22.Final.jar:6.2.22.Final]
+	at org.hibernate.service.internal.AbstractServiceRegistryImpl.createService(AbstractServiceRegistryImpl.java:264) ~[hibernate-core-6.2.22.Final.jar:6.2.22.Final]
+	at org.hibernate.service.internal.AbstractServiceRegistryImpl.initializeService(AbstractServiceRegistryImpl.java:239) ~[hibernate-core-6.2.22.Final.jar:6.2.22.Final]
+	at org.hibernate.service.internal.AbstractServiceRegistryImpl.getService(AbstractServiceRegistryImpl.java:216) ~[hibernate-core-6.2.22.Final.jar:6.2.22.Final]
+	at org.hibernate.boot.model.relational.Database.<init>(Database.java:45) ~[hibernate-core-6.2.22.Final.jar:6.2.22.Final]
+	at org.hibernate.boot.internal.InFlightMetadataCollectorImpl.getDatabase(InFlightMetadataCollectorImpl.java:231) ~[hibernate-core-6.2.22.Final.jar:6.2.22.Final]
+	at org.hibernate.boot.internal.InFlightMetadataCollectorImpl.<init>(InFlightMetadataCollectorImpl.java:199) ~[hibernate-core-6.2.22.Final.jar:6.2.22.Final]
+	at org.hibernate.boot.model.process.spi.MetadataBuildingProcess.complete(MetadataBuildingProcess.java:169) ~[hibernate-core-6.2.22.Final.jar:6.2.22.Final]
+	at org.hibernate.jpa.boot.internal.EntityManagerFactoryBuilderImpl.metadata(EntityManagerFactoryBuilderImpl.java:1383) ~[hibernate-core-6.2.22.Final.jar:6.2.22.Final]
+	at org.hibernate.jpa.boot.internal.EntityManagerFactoryBuilderImpl.build(EntityManagerFactoryBuilderImpl.java:1454) ~[hibernate-core-6.2.22.Final.jar:6.2.22.Final]
+	at org.springframework.orm.jpa.vendor.SpringHibernateJpaPersistenceProvider.createContainerEntityManagerFactory(SpringHibernateJpaPersistenceProvider.java:75) ~[spring-orm-6.0.17.jar:6.0.17]
+	at org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean.createNativeEntityManagerFactory(LocalContainerEntityManagerFactoryBean.java:376) ~[spring-orm-6.0.17.jar:6.0.17]
+	at org.springframework.orm.jpa.AbstractEntityManagerFactoryBean.buildNativeEntityManagerFactory(AbstractEntityManagerFactoryBean.java:409) ~[spring-orm-6.0.17.jar:6.0.17]
+	at org.springframework.orm.jpa.AbstractEntityManagerFactoryBean.afterPropertiesSet(AbstractEntityManagerFactoryBean.java:396) ~[spring-orm-6.0.17.jar:6.0.17]
+	at org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean.afterPropertiesSet(LocalContainerEntityManagerFactoryBean.java:352) ~[spring-orm-6.0.17.jar:6.0.17]
+	at org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory.invokeInitMethods(AbstractAutowireCapableBeanFactory.java:1815) ~[spring-beans-6.0.17.jar:6.0.17]
+	at org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory.initializeBean(AbstractAutowireCapableBeanFactory.java:1764) ~[spring-beans-6.0.17.jar:6.0.17]
+	at org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory.doCreateBean(AbstractAutowireCapableBeanFactory.java:596) ~[spring-beans-6.0.17.jar:6.0.17]
+	at org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory.createBean(AbstractAutowireCapableBeanFactory.java:518) ~[spring-beans-6.0.17.jar:6.0.17]
+	at org.springframework.beans.factory.support.AbstractBeanFactory.lambda$doGetBean$0(AbstractBeanFactory.java:325) ~[spring-beans-6.0.17.jar:6.0.17]
+	at org.springframework.beans.factory.support.DefaultSingletonBeanRegistry.getSingleton(DefaultSingletonBeanRegistry.java:234) ~[spring-beans-6.0.17.jar:6.0.17]
+	at org.springframework.beans.factory.support.AbstractBeanFactory.doGetBean(AbstractBeanFactory.java:323) ~[spring-beans-6.0.17.jar:6.0.17]
+	at org.springframework.beans.factory.support.AbstractBeanFactory.getBean(AbstractBeanFactory.java:199) ~[spring-beans-6.0.17.jar:6.0.17]
+	at org.springframework.context.support.AbstractApplicationContext.getBean(AbstractApplicationContext.java:1165) ~[spring-context-6.0.17.jar:6.0.17]
+	at org.springframework.context.support.AbstractApplicationContext.finishBeanFactoryInitialization(AbstractApplicationContext.java:939) ~[spring-context-6.0.17.jar:6.0.17]
+	at org.springframework.context.support.AbstractApplicationContext.refresh(AbstractApplicationContext.java:615) ~[spring-context-6.0.17.jar:6.0.17]
+	at org.springframework.boot.web.servlet.context.ServletWebServerApplicationContext.refresh(ServletWebServerApplicationContext.java:146) ~[spring-boot-3.1.9.jar:3.1.9]
+	at org.springframework.boot.SpringApplication.refresh(SpringApplication.java:738) ~[spring-boot-3.1.9.jar:3.1.9]
+	at org.springframework.boot.SpringApplication.refreshContext(SpringApplication.java:440) ~[spring-boot-3.1.9.jar:3.1.9]
+	at org.springframework.boot.SpringApplication.run(SpringApplication.java:324) ~[spring-boot-3.1.9.jar:3.1.9]
+	at org.springframework.boot.SpringApplication.run(SpringApplication.java:1317) ~[spring-boot-3.1.9.jar:3.1.9]
+	at org.springframework.boot.SpringApplication.run(SpringApplication.java:1306) ~[spring-boot-3.1.9.jar:3.1.9]
+	at com.mmk.BackendApplication.main(BackendApplication.java:18) ~[main/:na]
+	at java.base/jdk.internal.reflect.NativeMethodAccessorImpl.invoke0(Native Method) ~[na:na]
+	at java.base/jdk.internal.reflect.NativeMethodAccessorImpl.invoke(NativeMethodAccessorImpl.java:77) ~[na:na]
+	at java.base/jdk.internal.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43) ~[na:na]
+	at java.base/java.lang.reflect.Method.invoke(Method.java:569) ~[na:na]
+	at org.springframework.boot.devtools.restart.RestartLauncher.run(RestartLauncher.java:50) ~[spring-boot-devtools-3.1.9.jar:3.1.9]
+Caused by: oracle.net.ns.NetException: The Network Adapter could not establish the connection (CONNECTION_ID=IZI4dnPsQ9+thY7UYhhb/w==)
+	at oracle.net.nt.ConnStrategy.execute(ConnStrategy.java:715) ~[ojdbc11-21.9.0.0.jar:21.9.0.0.0]
+	at oracle.net.resolver.AddrResolution.resolveAndExecute(AddrResolution.java:584) ~[ojdbc11-21.9.0.0.jar:21.9.0.0.0]
+	at oracle.net.ns.NSProtocol.establishConnection(NSProtocol.java:964) ~[ojdbc11-21.9.0.0.jar:21.9.0.0.0]
+	at oracle.net.ns.NSProtocol.connect(NSProtocol.java:350) ~[ojdbc11-21.9.0.0.jar:21.9.0.0.0]
+	at oracle.jdbc.driver.T4CConnection.connect(T4CConnection.java:2627) ~[ojdbc11-21.9.0.0.jar:21.9.0.0.0]
+	at oracle.jdbc.driver.T4CConnection.logon(T4CConnection.java:666) ~[ojdbc11-21.9.0.0.jar:21.9.0.0.0]
+	... 55 common frames omitted
+Caused by: java.io.IOException: Connection refused, socket connect lapse 0 ms. localhost 1521  30000 (2/2) true
+	at oracle.net.nt.TcpNTAdapter.establishSocket(TcpNTAdapter.java:425) ~[ojdbc11-21.9.0.0.jar:21.9.0.0.0]
+	at oracle.net.nt.TcpNTAdapter.doLocalDNSLookupConnect(TcpNTAdapter.java:307) ~[ojdbc11-21.9.0.0.jar:21.9.0.0.0]
+	at oracle.net.nt.TcpNTAdapter.connect(TcpNTAdapter.java:269) ~[ojdbc11-21.9.0.0.jar:21.9.0.0.0]
+	at oracle.net.nt.ConnOption.connect(ConnOption.java:230) ~[ojdbc11-21.9.0.0.jar:21.9.0.0.0]
+	at oracle.net.nt.ConnStrategy.executeConnOption(ConnStrategy.java:1014) ~[ojdbc11-21.9.0.0.jar:21.9.0.0.0]
+	at oracle.net.nt.ConnStrategy.execute(ConnStrategy.java:673) ~[ojdbc11-21.9.0.0.jar:21.9.0.0.0]
+	... 60 common frames omitted
+Caused by: java.net.ConnectException: Connection refused
+	at java.base/sun.nio.ch.Net.connect0(Native Method) ~[na:na]
+	at java.base/sun.nio.ch.Net.connect(Net.java:579) ~[na:na]
+	at java.base/sun.nio.ch.Net.connect(Net.java:586) ~[na:na]
+	at java.base/sun.nio.ch.SocketChannelImpl.connect(SocketChannelImpl.java:853) ~[na:na]
+	at java.base/java.nio.channels.SocketChannel.open(SocketChannel.java:285) ~[na:na]
+	at oracle.net.nt.TimeoutSocketChannel.connect(TimeoutSocketChannel.java:183) ~[ojdbc11-21.9.0.0.jar:21.9.0.0.0]
+	at oracle.net.nt.TimeoutSocketChannel.<init>(TimeoutSocketChannel.java:157) ~[ojdbc11-21.9.0.0.jar:21.9.0.0.0]
+	at oracle.net.nt.TcpNTAdapter.establishSocket(TcpNTAdapter.java:384) ~[ojdbc11-21.9.0.0.jar:21.9.0.0.0]
+	... 65 common frames omitted
+
+2025-02-12T10:19:25.373+09:00  WARN 84228 --- [restartedMain] o.h.e.j.e.i.JdbcEnvironmentInitiator     : HHH000342: Could not obtain connection to query metadata
+
+java.lang.NullPointerException: Cannot invoke "org.hibernate.engine.jdbc.spi.SqlExceptionHelper.convert(java.sql.SQLException, String)" because the return value of "org.hibernate.resource.transaction.backend.jdbc.internal.JdbcIsolationDelegate.sqlExceptionHelper()" is null
+	at org.hibernate.resource.transaction.backend.jdbc.internal.JdbcIsolationDelegate.delegateWork(JdbcIsolationDelegate.java:116) ~[hibernate-core-6.2.22.Final.jar:6.2.22.Final]
+	at org.hibernate.engine.jdbc.env.internal.JdbcEnvironmentInitiator.getJdbcEnvironmentUsingJdbcMetadata(JdbcEnvironmentInitiator.java:279) ~[hibernate-core-6.2.22.Final.jar:6.2.22.Final]
+	at org.hibernate.engine.jdbc.env.internal.JdbcEnvironmentInitiator.initiateService(JdbcEnvironmentInitiator.java:193) ~[hibernate-core-6.2.22.Final.jar:6.2.22.Final]
+	at org.hibernate.engine.jdbc.env.internal.JdbcEnvironmentInitiator.initiateService(JdbcEnvironmentInitiator.java:69) ~[hibernate-core-6.2.22.Final.jar:6.2.22.Final]
+	at org.hibernate.boot.registry.internal.StandardServiceRegistryImpl.initiateService(StandardServiceRegistryImpl.java:119) ~[hibernate-core-6.2.22.Final.jar:6.2.22.Final]
+	at org.hibernate.service.internal.AbstractServiceRegistryImpl.createService(AbstractServiceRegistryImpl.java:264) ~[hibernate-core-6.2.22.Final.jar:6.2.22.Final]
+	at org.hibernate.service.internal.AbstractServiceRegistryImpl.initializeService(AbstractServiceRegistryImpl.java:239) ~[hibernate-core-6.2.22.Final.jar:6.2.22.Final]
+	at org.hibernate.service.internal.AbstractServiceRegistryImpl.getService(AbstractServiceRegistryImpl.java:216) ~[hibernate-core-6.2.22.Final.jar:6.2.22.Final]
+	at org.hibernate.boot.model.relational.Database.<init>(Database.java:45) ~[hibernate-core-6.2.22.Final.jar:6.2.22.Final]
+	at org.hibernate.boot.internal.InFlightMetadataCollectorImpl.getDatabase(InFlightMetadataCollectorImpl.java:231) ~[hibernate-core-6.2.22.Final.jar:6.2.22.Final]
+	at org.hibernate.boot.internal.InFlightMetadataCollectorImpl.<init>(InFlightMetadataCollectorImpl.java:199) ~[hibernate-core-6.2.22.Final.jar:6.2.22.Final]
+	at org.hibernate.boot.model.process.spi.MetadataBuildingProcess.complete(MetadataBuildingProcess.java:169) ~[hibernate-core-6.2.22.Final.jar:6.2.22.Final]
+	at org.hibernate.jpa.boot.internal.EntityManagerFactoryBuilderImpl.metadata(EntityManagerFactoryBuilderImpl.java:1383) ~[hibernate-core-6.2.22.Final.jar:6.2.22.Final]
+	at org.hibernate.jpa.boot.internal.EntityManagerFactoryBuilderImpl.build(EntityManagerFactoryBuilderImpl.java:1454) ~[hibernate-core-6.2.22.Final.jar:6.2.22.Final]
+	at org.springframework.orm.jpa.vendor.SpringHibernateJpaPersistenceProvider.createContainerEntityManagerFactory(SpringHibernateJpaPersistenceProvider.java:75) ~[spring-orm-6.0.17.jar:6.0.17]
+	at org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean.createNativeEntityManagerFactory(LocalContainerEntityManagerFactoryBean.java:376) ~[spring-orm-6.0.17.jar:6.0.17]
+	at org.springframework.orm.jpa.AbstractEntityManagerFactoryBean.buildNativeEntityManagerFactory(AbstractEntityManagerFactoryBean.java:409) ~[spring-orm-6.0.17.jar:6.0.17]
+	at org.springframework.orm.jpa.AbstractEntityManagerFactoryBean.afterPropertiesSet(AbstractEntityManagerFactoryBean.java:396) ~[spring-orm-6.0.17.jar:6.0.17]
+	at org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean.afterPropertiesSet(LocalContainerEntityManagerFactoryBean.java:352) ~[spring-orm-6.0.17.jar:6.0.17]
+	at org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory.invokeInitMethods(AbstractAutowireCapableBeanFactory.java:1815) ~[spring-beans-6.0.17.jar:6.0.17]
+	at org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory.initializeBean(AbstractAutowireCapableBeanFactory.java:1764) ~[spring-beans-6.0.17.jar:6.0.17]
+	at org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory.doCreateBean(AbstractAutowireCapableBeanFactory.java:596) ~[spring-beans-6.0.17.jar:6.0.17]
+	at org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory.createBean(AbstractAutowireCapableBeanFactory.java:518) ~[spring-beans-6.0.17.jar:6.0.17]
+	at org.springframework.beans.factory.support.AbstractBeanFactory.lambda$doGetBean$0(AbstractBeanFactory.java:325) ~[spring-beans-6.0.17.jar:6.0.17]
+	at org.springframework.beans.factory.support.DefaultSingletonBeanRegistry.getSingleton(DefaultSingletonBeanRegistry.java:234) ~[spring-beans-6.0.17.jar:6.0.17]
+	at org.springframework.beans.factory.support.AbstractBeanFactory.doGetBean(AbstractBeanFactory.java:323) ~[spring-beans-6.0.17.jar:6.0.17]
+	at org.springframework.beans.factory.support.AbstractBeanFactory.getBean(AbstractBeanFactory.java:199) ~[spring-beans-6.0.17.jar:6.0.17]
+	at org.springframework.context.support.AbstractApplicationContext.getBean(AbstractApplicationContext.java:1165) ~[spring-context-6.0.17.jar:6.0.17]
+	at org.springframework.context.support.AbstractApplicationContext.finishBeanFactoryInitialization(AbstractApplicationContext.java:939) ~[spring-context-6.0.17.jar:6.0.17]
+	at org.springframework.context.support.AbstractApplicationContext.refresh(AbstractApplicationContext.java:615) ~[spring-context-6.0.17.jar:6.0.17]
+	at org.springframework.boot.web.servlet.context.ServletWebServerApplicationContext.refresh(ServletWebServerApplicationContext.java:146) ~[spring-boot-3.1.9.jar:3.1.9]
+	at org.springframework.boot.SpringApplication.refresh(SpringApplication.java:738) ~[spring-boot-3.1.9.jar:3.1.9]
+	at org.springframework.boot.SpringApplication.refreshContext(SpringApplication.java:440) ~[spring-boot-3.1.9.jar:3.1.9]
+	at org.springframework.boot.SpringApplication.run(SpringApplication.java:324) ~[spring-boot-3.1.9.jar:3.1.9]
+	at org.springframework.boot.SpringApplication.run(SpringApplication.java:1317) ~[spring-boot-3.1.9.jar:3.1.9]
+	at org.springframework.boot.SpringApplication.run(SpringApplication.java:1306) ~[spring-boot-3.1.9.jar:3.1.9]
+	at com.mmk.BackendApplication.main(BackendApplication.java:18) ~[main/:na]
+	at java.base/jdk.internal.reflect.NativeMethodAccessorImpl.invoke0(Native Method) ~[na:na]
+	at java.base/jdk.internal.reflect.NativeMethodAccessorImpl.invoke(NativeMethodAccessorImpl.java:77) ~[na:na]
+	at java.base/jdk.internal.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43) ~[na:na]
+	at java.base/java.lang.reflect.Method.invoke(Method.java:569) ~[na:na]
+	at org.springframework.boot.devtools.restart.RestartLauncher.run(RestartLauncher.java:50) ~[spring-boot-devtools-3.1.9.jar:3.1.9]
+
+2025-02-12T10:19:25.391+09:00  WARN 84228 --- [restartedMain] org.hibernate.orm.deprecation            : HHH90000025: OracleDialect does not need to be specified explicitly using 'hibernate.dialect' (remove the property setting and it will be selected by default)
+2025-02-12T10:19:25.752+09:00  INFO 84228 --- [restartedMain] o.h.e.t.j.p.i.JtaPlatformInitiator       : HHH000489: No JTA platform available (set 'hibernate.transaction.jta.platform' to enable JTA platform integration)
+2025-02-12T10:19:25.757+09:00  INFO 84228 --- [restartedMain] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Starting...
+2025-02-12T10:19:26.761+09:00 ERROR 84228 --- [restartedMain] com.zaxxer.hikari.pool.HikariPool        : HikariPool-1 - Exception during pool initialization.
+
+java.sql.SQLRecoverableException: IO 오류: The Network Adapter could not establish the connection (CONNECTION_ID=w4j7zAOWTZW391WBfMM35A==)
+	at oracle.jdbc.driver.T4CConnection.handleLogonNetException(T4CConnection.java:902) ~[ojdbc11-21.9.0.0.jar:21.9.0.0.0]
+	at oracle.jdbc.driver.T4CConnection.logon(T4CConnection.java:707) ~[ojdbc11-21.9.0.0.jar:21.9.0.0.0]
+	at oracle.jdbc.driver.PhysicalConnection.connect(PhysicalConnection.java:1094) ~[ojdbc11-21.9.0.0.jar:21.9.0.0.0]
+	at oracle.jdbc.driver.T4CDriverExtension.getConnection(T4CDriverExtension.java:89) ~[ojdbc11-21.9.0.0.jar:21.9.0.0.0]
+	at oracle.jdbc.driver.OracleDriver.connect(OracleDriver.java:732) ~[ojdbc11-21.9.0.0.jar:21.9.0.0.0]
+	at oracle.jdbc.driver.OracleDriver.connect(OracleDriver.java:648) ~[ojdbc11-21.9.0.0.jar:21.9.0.0.0]
+	at com.zaxxer.hikari.util.DriverDataSource.getConnection(DriverDataSource.java:138) ~[HikariCP-5.0.1.jar:na]
+	at com.zaxxer.hikari.pool.PoolBase.newConnection(PoolBase.java:359) ~[HikariCP-5.0.1.jar:na]
+	at com.zaxxer.hikari.pool.PoolBase.newPoolEntry(PoolBase.java:201) ~[HikariCP-5.0.1.jar:na]
+	at com.zaxxer.hikari.pool.HikariPool.createPoolEntry(HikariPool.java:470) ~[HikariCP-5.0.1.jar:na]
+	at com.zaxxer.hikari.pool.HikariPool.checkFailFast(HikariPool.java:561) ~[HikariCP-5.0.1.jar:na]
+	at com.zaxxer.hikari.pool.HikariPool.<init>(HikariPool.java:100) ~[HikariCP-5.0.1.jar:na]
+	at com.zaxxer.hikari.HikariDataSource.getConnection(HikariDataSource.java:112) ~[HikariCP-5.0.1.jar:na]
+	at org.hibernate.engine.jdbc.connections.internal.DatasourceConnectionProviderImpl.getConnection(DatasourceConnectionProviderImpl.java:122) ~[hibernate-core-6.2.22.Final.jar:6.2.22.Final]
+	at org.hibernate.engine.jdbc.env.internal.JdbcEnvironmentInitiator$ConnectionProviderJdbcConnectionAccess.obtainConnection(JdbcEnvironmentInitiator.java:437) ~[hibernate-core-6.2.22.Final.jar:6.2.22.Final]
+	at org.hibernate.resource.transaction.backend.jdbc.internal.DdlTransactionIsolatorNonJtaImpl.getIsolatedConnection(DdlTransactionIsolatorNonJtaImpl.java:46) ~[hibernate-core-6.2.22.Final.jar:6.2.22.Final]
+	at org.hibernate.resource.transaction.backend.jdbc.internal.DdlTransactionIsolatorNonJtaImpl.getIsolatedConnection(DdlTransactionIsolatorNonJtaImpl.java:39) ~[hibernate-core-6.2.22.Final.jar:6.2.22.Final]
+	at org.hibernate.tool.schema.internal.exec.ImprovedExtractionContextImpl.getJdbcConnection(ImprovedExtractionContextImpl.java:63) ~[hibernate-core-6.2.22.Final.jar:6.2.22.Final]
+	at org.hibernate.tool.schema.extract.spi.ExtractionContext.getQueryResults(ExtractionContext.java:43) ~[hibernate-core-6.2.22.Final.jar:6.2.22.Final]
+	at org.hibernate.tool.schema.extract.internal.SequenceInformationExtractorLegacyImpl.extractMetadata(SequenceInformationExtractorLegacyImpl.java:39) ~[hibernate-core-6.2.22.Final.jar:6.2.22.Final]
+	at org.hibernate.tool.schema.extract.internal.DatabaseInformationImpl.initializeSequences(DatabaseInformationImpl.java:66) ~[hibernate-core-6.2.22.Final.jar:6.2.22.Final]
+	at org.hibernate.tool.schema.extract.internal.DatabaseInformationImpl.<init>(DatabaseInformationImpl.java:60) ~[hibernate-core-6.2.22.Final.jar:6.2.22.Final]
+	at org.hibernate.tool.schema.internal.Helper.buildDatabaseInformation(Helper.java:185) ~[hibernate-core-6.2.22.Final.jar:6.2.22.Final]
+	at org.hibernate.tool.schema.internal.AbstractSchemaMigrator.doMigration(AbstractSchemaMigrator.java:98) ~[hibernate-core-6.2.22.Final.jar:6.2.22.Final]
+	at org.hibernate.tool.schema.spi.SchemaManagementToolCoordinator.performDatabaseAction(SchemaManagementToolCoordinator.java:284) ~[hibernate-core-6.2.22.Final.jar:6.2.22.Final]
+	at org.hibernate.tool.schema.spi.SchemaManagementToolCoordinator.lambda$process$5(SchemaManagementToolCoordinator.java:143) ~[hibernate-core-6.2.22.Final.jar:6.2.22.Final]
+	at java.base/java.util.HashMap.forEach(HashMap.java:1421) ~[na:na]
+	at org.hibernate.tool.schema.spi.SchemaManagementToolCoordinator.process(SchemaManagementToolCoordinator.java:140) ~[hibernate-core-6.2.22.Final.jar:6.2.22.Final]
+	at org.hibernate.boot.internal.SessionFactoryObserverForSchemaExport.sessionFactoryCreated(SessionFactoryObserverForSchemaExport.java:37) ~[hibernate-core-6.2.22.Final.jar:6.2.22.Final]
+	at org.hibernate.internal.SessionFactoryObserverChain.sessionFactoryCreated(SessionFactoryObserverChain.java:35) ~[hibernate-core-6.2.22.Final.jar:6.2.22.Final]
+	at org.hibernate.internal.SessionFactoryImpl.<init>(SessionFactoryImpl.java:293) ~[hibernate-core-6.2.22.Final.jar:6.2.22.Final]
+	at org.hibernate.boot.internal.SessionFactoryBuilderImpl.build(SessionFactoryBuilderImpl.java:444) ~[hibernate-core-6.2.22.Final.jar:6.2.22.Final]
+	at org.hibernate.jpa.boot.internal.EntityManagerFactoryBuilderImpl.build(EntityManagerFactoryBuilderImpl.java:1458) ~[hibernate-core-6.2.22.Final.jar:6.2.22.Final]
+	at org.springframework.orm.jpa.vendor.SpringHibernateJpaPersistenceProvider.createContainerEntityManagerFactory(SpringHibernateJpaPersistenceProvider.java:75) ~[spring-orm-6.0.17.jar:6.0.17]
+	at org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean.createNativeEntityManagerFactory(LocalContainerEntityManagerFactoryBean.java:376) ~[spring-orm-6.0.17.jar:6.0.17]
+	at org.springframework.orm.jpa.AbstractEntityManagerFactoryBean.buildNativeEntityManagerFactory(AbstractEntityManagerFactoryBean.java:409) ~[spring-orm-6.0.17.jar:6.0.17]
+	at org.springframework.orm.jpa.AbstractEntityManagerFactoryBean.afterPropertiesSet(AbstractEntityManagerFactoryBean.java:396) ~[spring-orm-6.0.17.jar:6.0.17]
+	at org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean.afterPropertiesSet(LocalContainerEntityManagerFactoryBean.java:352) ~[spring-orm-6.0.17.jar:6.0.17]
+	at org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory.invokeInitMethods(AbstractAutowireCapableBeanFactory.java:1815) ~[spring-beans-6.0.17.jar:6.0.17]
+	at org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory.initializeBean(AbstractAutowireCapableBeanFactory.java:1764) ~[spring-beans-6.0.17.jar:6.0.17]
+	at org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory.doCreateBean(AbstractAutowireCapableBeanFactory.java:596) ~[spring-beans-6.0.17.jar:6.0.17]
+	at org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory.createBean(AbstractAutowireCapableBeanFactory.java:518) ~[spring-beans-6.0.17.jar:6.0.17]
+	at org.springframework.beans.factory.support.AbstractBeanFactory.lambda$doGetBean$0(AbstractBeanFactory.java:325) ~[spring-beans-6.0.17.jar:6.0.17]
+	at org.springframework.beans.factory.support.DefaultSingletonBeanRegistry.getSingleton(DefaultSingletonBeanRegistry.java:234) ~[spring-beans-6.0.17.jar:6.0.17]
+	at org.springframework.beans.factory.support.AbstractBeanFactory.doGetBean(AbstractBeanFactory.java:323) ~[spring-beans-6.0.17.jar:6.0.17]
+	at org.springframework.beans.factory.support.AbstractBeanFactory.getBean(AbstractBeanFactory.java:199) ~[spring-beans-6.0.17.jar:6.0.17]
+	at org.springframework.context.support.AbstractApplicationContext.getBean(AbstractApplicationContext.java:1165) ~[spring-context-6.0.17.jar:6.0.17]
+	at org.springframework.context.support.AbstractApplicationContext.finishBeanFactoryInitialization(AbstractApplicationContext.java:939) ~[spring-context-6.0.17.jar:6.0.17]
+	at org.springframework.context.support.AbstractApplicationContext.refresh(AbstractApplicationContext.java:615) ~[spring-context-6.0.17.jar:6.0.17]
+	at org.springframework.boot.web.servlet.context.ServletWebServerApplicationContext.refresh(ServletWebServerApplicationContext.java:146) ~[spring-boot-3.1.9.jar:3.1.9]
+	at org.springframework.boot.SpringApplication.refresh(SpringApplication.java:738) ~[spring-boot-3.1.9.jar:3.1.9]
+	at org.springframework.boot.SpringApplication.refreshContext(SpringApplication.java:440) ~[spring-boot-3.1.9.jar:3.1.9]
+	at org.springframework.boot.SpringApplication.run(SpringApplication.java:324) ~[spring-boot-3.1.9.jar:3.1.9]
+	at org.springframework.boot.SpringApplication.run(SpringApplication.java:1317) ~[spring-boot-3.1.9.jar:3.1.9]
+	at org.springframework.boot.SpringApplication.run(SpringApplication.java:1306) ~[spring-boot-3.1.9.jar:3.1.9]
+	at com.mmk.BackendApplication.main(BackendApplication.java:18) ~[main/:na]
+	at java.base/jdk.internal.reflect.NativeMethodAccessorImpl.invoke0(Native Method) ~[na:na]
+	at java.base/jdk.internal.reflect.NativeMethodAccessorImpl.invoke(NativeMethodAccessorImpl.java:77) ~[na:na]
+	at java.base/jdk.internal.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43) ~[na:na]
+	at java.base/java.lang.reflect.Method.invoke(Method.java:569) ~[na:na]
+	at org.springframework.boot.devtools.restart.RestartLauncher.run(RestartLauncher.java:50) ~[spring-boot-devtools-3.1.9.jar:3.1.9]
+Caused by: oracle.net.ns.NetException: The Network Adapter could not establish the connection (CONNECTION_ID=w4j7zAOWTZW391WBfMM35A==)
+	at oracle.net.nt.ConnStrategy.execute(ConnStrategy.java:715) ~[ojdbc11-21.9.0.0.jar:21.9.0.0.0]
+	at oracle.net.resolver.AddrResolution.resolveAndExecute(AddrResolution.java:584) ~[ojdbc11-21.9.0.0.jar:21.9.0.0.0]
+	at oracle.net.ns.NSProtocol.establishConnection(NSProtocol.java:964) ~[ojdbc11-21.9.0.0.jar:21.9.0.0.0]
+	at oracle.net.ns.NSProtocol.connect(NSProtocol.java:350) ~[ojdbc11-21.9.0.0.jar:21.9.0.0.0]
+	at oracle.jdbc.driver.T4CConnection.connect(T4CConnection.java:2627) ~[ojdbc11-21.9.0.0.jar:21.9.0.0.0]
+	at oracle.jdbc.driver.T4CConnection.logon(T4CConnection.java:666) ~[ojdbc11-21.9.0.0.jar:21.9.0.0.0]
+	... 59 common frames omitted
+Caused by: java.io.IOException: Connection refused, socket connect lapse 0 ms. localhost 1521  30000 (2/2) true
+	at oracle.net.nt.TcpNTAdapter.establishSocket(TcpNTAdapter.java:425) ~[ojdbc11-21.9.0.0.jar:21.9.0.0.0]
+	at oracle.net.nt.TcpNTAdapter.doLocalDNSLookupConnect(TcpNTAdapter.java:307) ~[ojdbc11-21.9.0.0.jar:21.9.0.0.0]
+	at oracle.net.nt.TcpNTAdapter.connect(TcpNTAdapter.java:269) ~[ojdbc11-21.9.0.0.jar:21.9.0.0.0]
+	at oracle.net.nt.ConnOption.connect(ConnOption.java:230) ~[ojdbc11-21.9.0.0.jar:21.9.0.0.0]
+	at oracle.net.nt.ConnStrategy.executeConnOption(ConnStrategy.java:1014) ~[ojdbc11-21.9.0.0.jar:21.9.0.0.0]
+	at oracle.net.nt.ConnStrategy.execute(ConnStrategy.java:673) ~[ojdbc11-21.9.0.0.jar:21.9.0.0.0]
+	... 64 common frames omitted
+Caused by: java.net.ConnectException: Connection refused
+	at java.base/sun.nio.ch.Net.connect0(Native Method) ~[na:na]
+	at java.base/sun.nio.ch.Net.connect(Net.java:579) ~[na:na]
+	at java.base/sun.nio.ch.Net.connect(Net.java:586) ~[na:na]
+	at java.base/sun.nio.ch.SocketChannelImpl.connect(SocketChannelImpl.java:853) ~[na:na]
+	at java.base/java.nio.channels.SocketChannel.open(SocketChannel.java:285) ~[na:na]
+	at oracle.net.nt.TimeoutSocketChannel.connect(TimeoutSocketChannel.java:183) ~[ojdbc11-21.9.0.0.jar:21.9.0.0.0]
+	at oracle.net.nt.TimeoutSocketChannel.<init>(TimeoutSocketChannel.java:157) ~[ojdbc11-21.9.0.0.jar:21.9.0.0.0]
+	at oracle.net.nt.TcpNTAdapter.establishSocket(TcpNTAdapter.java:384) ~[ojdbc11-21.9.0.0.jar:21.9.0.0.0]
+	... 69 common frames omitted
+
+2025-02-12T10:19:26.764+09:00  WARN 84228 --- [restartedMain] o.h.engine.jdbc.spi.SqlExceptionHelper   : SQL Error: 17002, SQLState: 08006
+2025-02-12T10:19:26.764+09:00 ERROR 84228 --- [restartedMain] o.h.engine.jdbc.spi.SqlExceptionHelper   : IO 오류: The Network Adapter could not establish the connection (CONNECTION_ID=w4j7zAOWTZW391WBfMM35A==)
+2025-02-12T10:19:26.767+09:00 ERROR 84228 --- [restartedMain] j.LocalContainerEntityManagerFactoryBean : Failed to initialize JPA EntityManagerFactory: [PersistenceUnit: default] Unable to build Hibernate SessionFactory; nested exception is org.hibernate.exception.JDBCConnectionException: Unable to open JDBC Connection for DDL execution [IO 오류: The Network Adapter could not establish the connection (CONNECTION_ID=w4j7zAOWTZW391WBfMM35A==)] [n/a]
+2025-02-12T10:19:26.767+09:00  WARN 84228 --- [restartedMain] ConfigServletWebServerApplicationContext : Exception encountered during context initialization - cancelling refresh attempt: org.springframework.beans.factory.BeanCreationException: Error creating bean with name 'entityManagerFactory' defined in class path resource [org/springframework/boot/autoconfigure/orm/jpa/HibernateJpaConfiguration.class]: [PersistenceUnit: default] Unable to build Hibernate SessionFactory; nested exception is org.hibernate.exception.JDBCConnectionException: Unable to open JDBC Connection for DDL execution [IO 오류: The Network Adapter could not establish the connection (CONNECTION_ID=w4j7zAOWTZW391WBfMM35A==)] [n/a]
+2025-02-12T10:19:26.768+09:00  INFO 84228 --- [restartedMain] o.apache.catalina.core.StandardService   : Stopping service [Tomcat]
+2025-02-12T10:19:26.775+09:00  INFO 84228 --- [restartedMain] .s.b.a.l.ConditionEvaluationReportLogger : 
+
+Error starting ApplicationContext. To display the condition evaluation report re-run your application with 'debug' enabled.
+2025-02-12T10:19:26.785+09:00 ERROR 84228 --- [restartedMain] o.s.boot.SpringApplication               : Application run failed
+
+org.springframework.beans.factory.BeanCreationException: Error creating bean with name 'entityManagerFactory' defined in class path resource [org/springframework/boot/autoconfigure/orm/jpa/HibernateJpaConfiguration.class]: [PersistenceUnit: default] Unable to build Hibernate SessionFactory; nested exception is org.hibernate.exception.JDBCConnectionException: Unable to open JDBC Connection for DDL execution [IO 오류: The Network Adapter could not establish the connection (CONNECTION_ID=w4j7zAOWTZW391WBfMM35A==)] [n/a]
+	at org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory.initializeBean(AbstractAutowireCapableBeanFactory.java:1768) ~[spring-beans-6.0.17.jar:6.0.17]
+	at org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory.doCreateBean(AbstractAutowireCapableBeanFactory.java:596) ~[spring-beans-6.0.17.jar:6.0.17]
+	at org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory.createBean(AbstractAutowireCapableBeanFactory.java:518) ~[spring-beans-6.0.17.jar:6.0.17]
+	at org.springframework.beans.factory.support.AbstractBeanFactory.lambda$doGetBean$0(AbstractBeanFactory.java:325) ~[spring-beans-6.0.17.jar:6.0.17]
+	at org.springframework.beans.factory.support.DefaultSingletonBeanRegistry.getSingleton(DefaultSingletonBeanRegistry.java:234) ~[spring-beans-6.0.17.jar:6.0.17]
+	at org.springframework.beans.factory.support.AbstractBeanFactory.doGetBean(AbstractBeanFactory.java:323) ~[spring-beans-6.0.17.jar:6.0.17]
+	at org.springframework.beans.factory.support.AbstractBeanFactory.getBean(AbstractBeanFactory.java:199) ~[spring-beans-6.0.17.jar:6.0.17]
+	at org.springframework.context.support.AbstractApplicationContext.getBean(AbstractApplicationContext.java:1165) ~[spring-context-6.0.17.jar:6.0.17]
+	at org.springframework.context.support.AbstractApplicationContext.finishBeanFactoryInitialization(AbstractApplicationContext.java:939) ~[spring-context-6.0.17.jar:6.0.17]
+	at org.springframework.context.support.AbstractApplicationContext.refresh(AbstractApplicationContext.java:615) ~[spring-context-6.0.17.jar:6.0.17]
+	at org.springframework.boot.web.servlet.context.ServletWebServerApplicationContext.refresh(ServletWebServerApplicationContext.java:146) ~[spring-boot-3.1.9.jar:3.1.9]
+	at org.springframework.boot.SpringApplication.refresh(SpringApplication.java:738) ~[spring-boot-3.1.9.jar:3.1.9]
+	at org.springframework.boot.SpringApplication.refreshContext(SpringApplication.java:440) ~[spring-boot-3.1.9.jar:3.1.9]
+	at org.springframework.boot.SpringApplication.run(SpringApplication.java:324) ~[spring-boot-3.1.9.jar:3.1.9]
+	at org.springframework.boot.SpringApplication.run(SpringApplication.java:1317) ~[spring-boot-3.1.9.jar:3.1.9]
+	at org.springframework.boot.SpringApplication.run(SpringApplication.java:1306) ~[spring-boot-3.1.9.jar:3.1.9]
+	at com.mmk.BackendApplication.main(BackendApplication.java:18) ~[main/:na]
+	at java.base/jdk.internal.reflect.NativeMethodAccessorImpl.invoke0(Native Method) ~[na:na]
+	at java.base/jdk.internal.reflect.NativeMethodAccessorImpl.invoke(NativeMethodAccessorImpl.java:77) ~[na:na]
+	at java.base/jdk.internal.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43) ~[na:na]
+	at java.base/java.lang.reflect.Method.invoke(Method.java:569) ~[na:na]
+	at org.springframework.boot.devtools.restart.RestartLauncher.run(RestartLauncher.java:50) ~[spring-boot-devtools-3.1.9.jar:3.1.9]
+Caused by: jakarta.persistence.PersistenceException: [PersistenceUnit: default] Unable to build Hibernate SessionFactory; nested exception is org.hibernate.exception.JDBCConnectionException: Unable to open JDBC Connection for DDL execution [IO 오류: The Network Adapter could not establish the connection (CONNECTION_ID=w4j7zAOWTZW391WBfMM35A==)] [n/a]
+	at org.springframework.orm.jpa.AbstractEntityManagerFactoryBean.buildNativeEntityManagerFactory(AbstractEntityManagerFactoryBean.java:421) ~[spring-orm-6.0.17.jar:6.0.17]
+	at org.springframework.orm.jpa.AbstractEntityManagerFactoryBean.afterPropertiesSet(AbstractEntityManagerFactoryBean.java:396) ~[spring-orm-6.0.17.jar:6.0.17]
+	at org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean.afterPropertiesSet(LocalContainerEntityManagerFactoryBean.java:352) ~[spring-orm-6.0.17.jar:6.0.17]
+	at org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory.invokeInitMethods(AbstractAutowireCapableBeanFactory.java:1815) ~[spring-beans-6.0.17.jar:6.0.17]
+	at org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory.initializeBean(AbstractAutowireCapableBeanFactory.java:1764) ~[spring-beans-6.0.17.jar:6.0.17]
+	... 21 common frames omitted
+Caused by: org.hibernate.exception.JDBCConnectionException: Unable to open JDBC Connection for DDL execution [IO 오류: The Network Adapter could not establish the connection (CONNECTION_ID=w4j7zAOWTZW391WBfMM35A==)] [n/a]
+	at org.hibernate.exception.internal.SQLStateConversionDelegate.convert(SQLStateConversionDelegate.java:98) ~[hibernate-core-6.2.22.Final.jar:6.2.22.Final]
+	at org.hibernate.exception.internal.StandardSQLExceptionConverter.convert(StandardSQLExceptionConverter.java:56) ~[hibernate-core-6.2.22.Final.jar:6.2.22.Final]
+	at org.hibernate.engine.jdbc.spi.SqlExceptionHelper.convert(SqlExceptionHelper.java:108) ~[hibernate-core-6.2.22.Final.jar:6.2.22.Final]
+	at org.hibernate.engine.jdbc.spi.SqlExceptionHelper.convert(SqlExceptionHelper.java:94) ~[hibernate-core-6.2.22.Final.jar:6.2.22.Final]
+	at org.hibernate.resource.transaction.backend.jdbc.internal.DdlTransactionIsolatorNonJtaImpl.getIsolatedConnection(DdlTransactionIsolatorNonJtaImpl.java:74) ~[hibernate-core-6.2.22.Final.jar:6.2.22.Final]
+	at org.hibernate.resource.transaction.backend.jdbc.internal.DdlTransactionIsolatorNonJtaImpl.getIsolatedConnection(DdlTransactionIsolatorNonJtaImpl.java:39) ~[hibernate-core-6.2.22.Final.jar:6.2.22.Final]
+	at org.hibernate.tool.schema.internal.exec.ImprovedExtractionContextImpl.getJdbcConnection(ImprovedExtractionContextImpl.java:63) ~[hibernate-core-6.2.22.Final.jar:6.2.22.Final]
+	at org.hibernate.tool.schema.extract.spi.ExtractionContext.getQueryResults(ExtractionContext.java:43) ~[hibernate-core-6.2.22.Final.jar:6.2.22.Final]
+	at org.hibernate.tool.schema.extract.internal.SequenceInformationExtractorLegacyImpl.extractMetadata(SequenceInformationExtractorLegacyImpl.java:39) ~[hibernate-core-6.2.22.Final.jar:6.2.22.Final]
+	at org.hibernate.tool.schema.extract.internal.DatabaseInformationImpl.initializeSequences(DatabaseInformationImpl.java:66) ~[hibernate-core-6.2.22.Final.jar:6.2.22.Final]
+	at org.hibernate.tool.schema.extract.internal.DatabaseInformationImpl.<init>(DatabaseInformationImpl.java:60) ~[hibernate-core-6.2.22.Final.jar:6.2.22.Final]
+	at org.hibernate.tool.schema.internal.Helper.buildDatabaseInformation(Helper.java:185) ~[hibernate-core-6.2.22.Final.jar:6.2.22.Final]
+	at org.hibernate.tool.schema.internal.AbstractSchemaMigrator.doMigration(AbstractSchemaMigrator.java:98) ~[hibernate-core-6.2.22.Final.jar:6.2.22.Final]
+	at org.hibernate.tool.schema.spi.SchemaManagementToolCoordinator.performDatabaseAction(SchemaManagementToolCoordinator.java:284) ~[hibernate-core-6.2.22.Final.jar:6.2.22.Final]
+	at org.hibernate.tool.schema.spi.SchemaManagementToolCoordinator.lambda$process$5(SchemaManagementToolCoordinator.java:143) ~[hibernate-core-6.2.22.Final.jar:6.2.22.Final]
+	at java.base/java.util.HashMap.forEach(HashMap.java:1421) ~[na:na]
+	at org.hibernate.tool.schema.spi.SchemaManagementToolCoordinator.process(SchemaManagementToolCoordinator.java:140) ~[hibernate-core-6.2.22.Final.jar:6.2.22.Final]
+	at org.hibernate.boot.internal.SessionFactoryObserverForSchemaExport.sessionFactoryCreated(SessionFactoryObserverForSchemaExport.java:37) ~[hibernate-core-6.2.22.Final.jar:6.2.22.Final]
+	at org.hibernate.internal.SessionFactoryObserverChain.sessionFactoryCreated(SessionFactoryObserverChain.java:35) ~[hibernate-core-6.2.22.Final.jar:6.2.22.Final]
+	at org.hibernate.internal.SessionFactoryImpl.<init>(SessionFactoryImpl.java:293) ~[hibernate-core-6.2.22.Final.jar:6.2.22.Final]
+	at org.hibernate.boot.internal.SessionFactoryBuilderImpl.build(SessionFactoryBuilderImpl.java:444) ~[hibernate-core-6.2.22.Final.jar:6.2.22.Final]
+	at org.hibernate.jpa.boot.internal.EntityManagerFactoryBuilderImpl.build(EntityManagerFactoryBuilderImpl.java:1458) ~[hibernate-core-6.2.22.Final.jar:6.2.22.Final]
+	at org.springframework.orm.jpa.vendor.SpringHibernateJpaPersistenceProvider.createContainerEntityManagerFactory(SpringHibernateJpaPersistenceProvider.java:75) ~[spring-orm-6.0.17.jar:6.0.17]
+	at org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean.createNativeEntityManagerFactory(LocalContainerEntityManagerFactoryBean.java:376) ~[spring-orm-6.0.17.jar:6.0.17]
+	at org.springframework.orm.jpa.AbstractEntityManagerFactoryBean.buildNativeEntityManagerFactory(AbstractEntityManagerFactoryBean.java:409) ~[spring-orm-6.0.17.jar:6.0.17]
+	... 25 common frames omitted
+Caused by: java.sql.SQLRecoverableException: IO 오류: The Network Adapter could not establish the connection (CONNECTION_ID=w4j7zAOWTZW391WBfMM35A==)
+	at oracle.jdbc.driver.T4CConnection.handleLogonNetException(T4CConnection.java:902) ~[ojdbc11-21.9.0.0.jar:21.9.0.0.0]
+	at oracle.jdbc.driver.T4CConnection.logon(T4CConnection.java:707) ~[ojdbc11-21.9.0.0.jar:21.9.0.0.0]
+	at oracle.jdbc.driver.PhysicalConnection.connect(PhysicalConnection.java:1094) ~[ojdbc11-21.9.0.0.jar:21.9.0.0.0]
+	at oracle.jdbc.driver.T4CDriverExtension.getConnection(T4CDriverExtension.java:89) ~[ojdbc11-21.9.0.0.jar:21.9.0.0.0]
+	at oracle.jdbc.driver.OracleDriver.connect(OracleDriver.java:732) ~[ojdbc11-21.9.0.0.jar:21.9.0.0.0]
+	at oracle.jdbc.driver.OracleDriver.connect(OracleDriver.java:648) ~[ojdbc11-21.9.0.0.jar:21.9.0.0.0]
+	at com.zaxxer.hikari.util.DriverDataSource.getConnection(DriverDataSource.java:138) ~[HikariCP-5.0.1.jar:na]
+	at com.zaxxer.hikari.pool.PoolBase.newConnection(PoolBase.java:359) ~[HikariCP-5.0.1.jar:na]
+	at com.zaxxer.hikari.pool.PoolBase.newPoolEntry(PoolBase.java:201) ~[HikariCP-5.0.1.jar:na]
+	at com.zaxxer.hikari.pool.HikariPool.createPoolEntry(HikariPool.java:470) ~[HikariCP-5.0.1.jar:na]
+	at com.zaxxer.hikari.pool.HikariPool.checkFailFast(HikariPool.java:561) ~[HikariCP-5.0.1.jar:na]
+	at com.zaxxer.hikari.pool.HikariPool.<init>(HikariPool.java:100) ~[HikariCP-5.0.1.jar:na]
+	at com.zaxxer.hikari.HikariDataSource.getConnection(HikariDataSource.java:112) ~[HikariCP-5.0.1.jar:na]
+	at org.hibernate.engine.jdbc.connections.internal.DatasourceConnectionProviderImpl.getConnection(DatasourceConnectionProviderImpl.java:122) ~[hibernate-core-6.2.22.Final.jar:6.2.22.Final]
+	at org.hibernate.engine.jdbc.env.internal.JdbcEnvironmentInitiator$ConnectionProviderJdbcConnectionAccess.obtainConnection(JdbcEnvironmentInitiator.java:437) ~[hibernate-core-6.2.22.Final.jar:6.2.22.Final]
+	at org.hibernate.resource.transaction.backend.jdbc.internal.DdlTransactionIsolatorNonJtaImpl.getIsolatedConnection(DdlTransactionIsolatorNonJtaImpl.java:46) ~[hibernate-core-6.2.22.Final.jar:6.2.22.Final]
+	... 45 common frames omitted
+Caused by: oracle.net.ns.NetException: The Network Adapter could not establish the connection (CONNECTION_ID=w4j7zAOWTZW391WBfMM35A==)
+	at oracle.net.nt.ConnStrategy.execute(ConnStrategy.java:715) ~[ojdbc11-21.9.0.0.jar:21.9.0.0.0]
+	at oracle.net.resolver.AddrResolution.resolveAndExecute(AddrResolution.java:584) ~[ojdbc11-21.9.0.0.jar:21.9.0.0.0]
+	at oracle.net.ns.NSProtocol.establishConnection(NSProtocol.java:964) ~[ojdbc11-21.9.0.0.jar:21.9.0.0.0]
+	at oracle.net.ns.NSProtocol.connect(NSProtocol.java:350) ~[ojdbc11-21.9.0.0.jar:21.9.0.0.0]
+	at oracle.jdbc.driver.T4CConnection.connect(T4CConnection.java:2627) ~[ojdbc11-21.9.0.0.jar:21.9.0.0.0]
+	at oracle.jdbc.driver.T4CConnection.logon(T4CConnection.java:666) ~[ojdbc11-21.9.0.0.jar:21.9.0.0.0]
+	... 59 common frames omitted
+Caused by: java.io.IOException: Connection refused, socket connect lapse 0 ms. localhost 1521  30000 (2/2) true
+	at oracle.net.nt.TcpNTAdapter.establishSocket(TcpNTAdapter.java:425) ~[ojdbc11-21.9.0.0.jar:21.9.0.0.0]
+	at oracle.net.nt.TcpNTAdapter.doLocalDNSLookupConnect(TcpNTAdapter.java:307) ~[ojdbc11-21.9.0.0.jar:21.9.0.0.0]
+	at oracle.net.nt.TcpNTAdapter.connect(TcpNTAdapter.java:269) ~[ojdbc11-21.9.0.0.jar:21.9.0.0.0]
+	at oracle.net.nt.ConnOption.connect(ConnOption.java:230) ~[ojdbc11-21.9.0.0.jar:21.9.0.0.0]
+	at oracle.net.nt.ConnStrategy.executeConnOption(ConnStrategy.java:1014) ~[ojdbc11-21.9.0.0.jar:21.9.0.0.0]
+	at oracle.net.nt.ConnStrategy.execute(ConnStrategy.java:673) ~[ojdbc11-21.9.0.0.jar:21.9.0.0.0]
+	... 64 common frames omitted
+Caused by: java.net.ConnectException: Connection refused
+	at java.base/sun.nio.ch.Net.connect0(Native Method) ~[na:na]
+	at java.base/sun.nio.ch.Net.connect(Net.java:579) ~[na:na]
+	at java.base/sun.nio.ch.Net.connect(Net.java:586) ~[na:na]
+	at java.base/sun.nio.ch.SocketChannelImpl.connect(SocketChannelImpl.java:853) ~[na:na]
+	at java.base/java.nio.channels.SocketChannel.open(SocketChannel.java:285) ~[na:na]
+	at oracle.net.nt.TimeoutSocketChannel.connect(TimeoutSocketChannel.java:183) ~[ojdbc11-21.9.0.0.jar:21.9.0.0.0]
+	at oracle.net.nt.TimeoutSocketChannel.<init>(TimeoutSocketChannel.java:157) ~[ojdbc11-21.9.0.0.jar:21.9.0.0.0]
+	at oracle.net.nt.TcpNTAdapter.establishSocket(TcpNTAdapter.java:384) ~[ojdbc11-21.9.0.0.jar:21.9.0.0.0]
+	... 69 common frames omitted
+
+2025-02-12T12:43:57.993+09:00  INFO 12247 --- [restartedMain] com.mmk.BackendApplication               : Starting BackendApplication using Java 17.0.14 with PID 12247 (/Users/gimchaelim/Desktop/yono/mickle-muckle/app-backend/build/classes/java/main started by gimchaelim in /Users/gimchaelim/Desktop/yono/mickle-muckle/app-backend)
+2025-02-12T12:43:57.994+09:00 DEBUG 12247 --- [restartedMain] com.mmk.BackendApplication               : Running with Spring Boot v3.1.9, Spring v6.0.17
+2025-02-12T12:43:57.994+09:00  INFO 12247 --- [restartedMain] com.mmk.BackendApplication               : No active profile set, falling back to 1 default profile: "default"
+2025-02-12T12:43:58.014+09:00  INFO 12247 --- [restartedMain] o.s.b.devtools.restart.ChangeableUrls    : The Class-Path manifest attribute in /Users/gimchaelim/.gradle/caches/modules-2/files-2.1/com.oracle.database.jdbc/ojdbc11/21.9.0.0/1aad2e20684ee075bb9ebdca2d83f028e4fd35fa/ojdbc11-21.9.0.0.jar referenced one or more files that do not exist: file:/Users/gimchaelim/.gradle/caches/modules-2/files-2.1/com.oracle.database.jdbc/ojdbc11/21.9.0.0/1aad2e20684ee075bb9ebdca2d83f028e4fd35fa/oraclepki.jar
+2025-02-12T12:43:58.014+09:00  INFO 12247 --- [restartedMain] o.s.b.devtools.restart.ChangeableUrls    : The Class-Path manifest attribute in /Users/gimchaelim/.gradle/caches/modules-2/files-2.1/com.oracle.database.security/oraclepki/21.9.0.0/da2fce62922312f651d88c7ac4c86dba01e5e39c/oraclepki-21.9.0.0.jar referenced one or more files that do not exist: file:/Users/gimchaelim/.gradle/caches/modules-2/files-2.1/com.oracle.database.security/oraclepki/21.9.0.0/da2fce62922312f651d88c7ac4c86dba01e5e39c/osdt_core.jar,file:/Users/gimchaelim/.gradle/caches/modules-2/files-2.1/com.oracle.database.security/oraclepki/21.9.0.0/da2fce62922312f651d88c7ac4c86dba01e5e39c/osdt_cert.jar,file:/Users/gimchaelim/.gradle/caches/modules-2/files-2.1/com.oracle.database.security/oraclepki/21.9.0.0/oracle.osdt/osdt_core.jar,file:/Users/gimchaelim/.gradle/caches/modules-2/files-2.1/com.oracle.database.security/oraclepki/21.9.0.0/oracle.osdt/osdt_cert.jar
+2025-02-12T12:43:58.014+09:00  INFO 12247 --- [restartedMain] .e.DevToolsPropertyDefaultsPostProcessor : Devtools property defaults active! Set 'spring.devtools.add-properties' to 'false' to disable
+2025-02-12T12:43:58.014+09:00  INFO 12247 --- [restartedMain] .e.DevToolsPropertyDefaultsPostProcessor : For additional web related logging consider setting the 'logging.level.web' property to 'DEBUG'
+2025-02-12T12:43:58.350+09:00  WARN 12247 --- [restartedMain] o.m.s.mapper.ClassPathMapperScanner      : No MyBatis mapper was found in '[com.mmk]' package. Please check your configuration.
+2025-02-12T12:43:58.552+09:00  INFO 12247 --- [restartedMain] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat initialized with port(s): 8065 (http)
+2025-02-12T12:43:58.556+09:00  INFO 12247 --- [restartedMain] o.apache.catalina.core.StandardService   : Starting service [Tomcat]
+2025-02-12T12:43:58.556+09:00  INFO 12247 --- [restartedMain] o.apache.catalina.core.StandardEngine    : Starting Servlet engine: [Apache Tomcat/10.1.19]
+2025-02-12T12:43:58.579+09:00  INFO 12247 --- [restartedMain] o.a.c.c.C.[Tomcat].[localhost].[/]       : Initializing Spring embedded WebApplicationContext
+2025-02-12T12:43:58.579+09:00  INFO 12247 --- [restartedMain] w.s.c.ServletWebServerApplicationContext : Root WebApplicationContext: initialization completed in 565 ms
+2025-02-12T12:43:58.662+09:00  INFO 12247 --- [restartedMain] o.hibernate.jpa.internal.util.LogHelper  : HHH000204: Processing PersistenceUnitInfo [name: default]
+2025-02-12T12:43:58.678+09:00  INFO 12247 --- [restartedMain] org.hibernate.Version                    : HHH000412: Hibernate ORM core version 6.2.22.Final
+2025-02-12T12:43:58.679+09:00  INFO 12247 --- [restartedMain] org.hibernate.cfg.Environment            : HHH000406: Using bytecode reflection optimizer
+2025-02-12T12:43:58.779+09:00  INFO 12247 --- [restartedMain] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Starting...
+2025-02-12T12:43:59.266+09:00  INFO 12247 --- [restartedMain] com.zaxxer.hikari.pool.HikariPool        : HikariPool-1 - Added connection oracle.jdbc.driver.T4CConnection@2b802556
+2025-02-12T12:43:59.266+09:00  INFO 12247 --- [restartedMain] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Start completed.
+2025-02-12T12:43:59.316+09:00  WARN 12247 --- [restartedMain] org.hibernate.orm.deprecation            : HHH90000025: OracleDialect does not need to be specified explicitly using 'hibernate.dialect' (remove the property setting and it will be selected by default)
+2025-02-12T12:43:59.767+09:00  INFO 12247 --- [restartedMain] o.h.e.t.j.p.i.JtaPlatformInitiator       : HHH000489: No JTA platform available (set 'hibernate.transaction.jta.platform' to enable JTA platform integration)
+2025-02-12T12:44:02.103+09:00  WARN 12247 --- [restartedMain] JpaBaseConfiguration$JpaWebConfiguration : spring.jpa.open-in-view is enabled by default. Therefore, database queries may be performed during view rendering. Explicitly configure spring.jpa.open-in-view to disable this warning
+2025-02-12T12:44:02.113+09:00  WARN 12247 --- [restartedMain] .s.s.UserDetailsServiceAutoConfiguration : 
+
+Using generated security password: 73c4d73c-70b9-4ba8-a7e2-ac3a47c94cde
+
+This generated password is for development use only. Your security configuration must be updated before running your application in production.
+
+2025-02-12T12:44:02.291+09:00  INFO 12247 --- [restartedMain] o.s.b.d.a.OptionalLiveReloadServer       : LiveReload server is running on port 35729
+2025-02-12T12:44:02.304+09:00  INFO 12247 --- [restartedMain] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat started on port(s): 8065 (http) with context path ''
+2025-02-12T12:44:02.310+09:00  INFO 12247 --- [restartedMain] com.mmk.BackendApplication               : Started BackendApplication in 4.45 seconds (process running for 4.813)
+2025-02-12T12:44:45.699+09:00  INFO 12247 --- [http-nio-8065-exec-1] o.a.c.c.C.[Tomcat].[localhost].[/]       : Initializing Spring DispatcherServlet 'dispatcherServlet'
+2025-02-12T12:44:45.739+09:00 DEBUG 12247 --- [http-nio-8065-exec-1] com.mmk.controller.CardController        : userDTO: UserDTO(userNum=0, userId=jhtestid, password=jhtestpwd123@, email=null, name=null, isSocialLogin=false, spendingTarget=0, profile=temp_profile, state=null, userRole=null, createdAt=null, updatedAt=null)
+2025-02-12T12:45:23.751+09:00  INFO 12247 --- [SpringApplicationShutdownHook] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Shutdown initiated...
+2025-02-12T12:45:24.782+09:00  INFO 12247 --- [SpringApplicationShutdownHook] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Shutdown completed.
+2025-02-12T12:53:33.392+09:00  INFO 13889 --- [restartedMain] com.mmk.BackendApplication               : Starting BackendApplication using Java 17.0.14 with PID 13889 (/Users/gimchaelim/Desktop/yono/mickle-muckle/app-backend/build/classes/java/main started by gimchaelim in /Users/gimchaelim/Desktop/yono/mickle-muckle/app-backend)
+2025-02-12T12:53:33.393+09:00 DEBUG 13889 --- [restartedMain] com.mmk.BackendApplication               : Running with Spring Boot v3.1.9, Spring v6.0.17
+2025-02-12T12:53:33.393+09:00  INFO 13889 --- [restartedMain] com.mmk.BackendApplication               : No active profile set, falling back to 1 default profile: "default"
+2025-02-12T12:53:33.413+09:00  INFO 13889 --- [restartedMain] o.s.b.devtools.restart.ChangeableUrls    : The Class-Path manifest attribute in /Users/gimchaelim/.gradle/caches/modules-2/files-2.1/com.oracle.database.jdbc/ojdbc11/21.9.0.0/1aad2e20684ee075bb9ebdca2d83f028e4fd35fa/ojdbc11-21.9.0.0.jar referenced one or more files that do not exist: file:/Users/gimchaelim/.gradle/caches/modules-2/files-2.1/com.oracle.database.jdbc/ojdbc11/21.9.0.0/1aad2e20684ee075bb9ebdca2d83f028e4fd35fa/oraclepki.jar
+2025-02-12T12:53:33.413+09:00  INFO 13889 --- [restartedMain] o.s.b.devtools.restart.ChangeableUrls    : The Class-Path manifest attribute in /Users/gimchaelim/.gradle/caches/modules-2/files-2.1/com.oracle.database.security/oraclepki/21.9.0.0/da2fce62922312f651d88c7ac4c86dba01e5e39c/oraclepki-21.9.0.0.jar referenced one or more files that do not exist: file:/Users/gimchaelim/.gradle/caches/modules-2/files-2.1/com.oracle.database.security/oraclepki/21.9.0.0/da2fce62922312f651d88c7ac4c86dba01e5e39c/osdt_core.jar,file:/Users/gimchaelim/.gradle/caches/modules-2/files-2.1/com.oracle.database.security/oraclepki/21.9.0.0/da2fce62922312f651d88c7ac4c86dba01e5e39c/osdt_cert.jar,file:/Users/gimchaelim/.gradle/caches/modules-2/files-2.1/com.oracle.database.security/oraclepki/21.9.0.0/oracle.osdt/osdt_core.jar,file:/Users/gimchaelim/.gradle/caches/modules-2/files-2.1/com.oracle.database.security/oraclepki/21.9.0.0/oracle.osdt/osdt_cert.jar
+2025-02-12T12:53:33.413+09:00  INFO 13889 --- [restartedMain] .e.DevToolsPropertyDefaultsPostProcessor : Devtools property defaults active! Set 'spring.devtools.add-properties' to 'false' to disable
+2025-02-12T12:53:33.413+09:00  INFO 13889 --- [restartedMain] .e.DevToolsPropertyDefaultsPostProcessor : For additional web related logging consider setting the 'logging.level.web' property to 'DEBUG'
+2025-02-12T12:53:33.746+09:00  WARN 13889 --- [restartedMain] o.m.s.mapper.ClassPathMapperScanner      : No MyBatis mapper was found in '[com.mmk]' package. Please check your configuration.
+2025-02-12T12:53:33.932+09:00  INFO 13889 --- [restartedMain] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat initialized with port(s): 8065 (http)
+2025-02-12T12:53:33.936+09:00  INFO 13889 --- [restartedMain] o.apache.catalina.core.StandardService   : Starting service [Tomcat]
+2025-02-12T12:53:33.936+09:00  INFO 13889 --- [restartedMain] o.apache.catalina.core.StandardEngine    : Starting Servlet engine: [Apache Tomcat/10.1.19]
+2025-02-12T12:53:33.959+09:00  INFO 13889 --- [restartedMain] o.a.c.c.C.[Tomcat].[localhost].[/]       : Initializing Spring embedded WebApplicationContext
+2025-02-12T12:53:33.959+09:00  INFO 13889 --- [restartedMain] w.s.c.ServletWebServerApplicationContext : Root WebApplicationContext: initialization completed in 546 ms
+2025-02-12T12:53:34.028+09:00  INFO 13889 --- [restartedMain] o.hibernate.jpa.internal.util.LogHelper  : HHH000204: Processing PersistenceUnitInfo [name: default]
+2025-02-12T12:53:34.044+09:00  INFO 13889 --- [restartedMain] org.hibernate.Version                    : HHH000412: Hibernate ORM core version 6.2.22.Final
+2025-02-12T12:53:34.045+09:00  INFO 13889 --- [restartedMain] org.hibernate.cfg.Environment            : HHH000406: Using bytecode reflection optimizer
+2025-02-12T12:53:34.127+09:00  INFO 13889 --- [restartedMain] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Starting...
+2025-02-12T12:53:34.717+09:00  INFO 13889 --- [restartedMain] com.zaxxer.hikari.pool.HikariPool        : HikariPool-1 - Added connection oracle.jdbc.driver.T4CConnection@3c107c8f
+2025-02-12T12:53:34.718+09:00  INFO 13889 --- [restartedMain] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Start completed.
+2025-02-12T12:53:34.773+09:00  WARN 13889 --- [restartedMain] org.hibernate.orm.deprecation            : HHH90000025: OracleDialect does not need to be specified explicitly using 'hibernate.dialect' (remove the property setting and it will be selected by default)
+2025-02-12T12:53:35.187+09:00  INFO 13889 --- [restartedMain] o.h.e.t.j.p.i.JtaPlatformInitiator       : HHH000489: No JTA platform available (set 'hibernate.transaction.jta.platform' to enable JTA platform integration)
+2025-02-12T12:53:38.509+09:00  WARN 13889 --- [restartedMain] JpaBaseConfiguration$JpaWebConfiguration : spring.jpa.open-in-view is enabled by default. Therefore, database queries may be performed during view rendering. Explicitly configure spring.jpa.open-in-view to disable this warning
+2025-02-12T12:53:38.521+09:00  WARN 13889 --- [restartedMain] .s.s.UserDetailsServiceAutoConfiguration : 
+
+Using generated security password: 84ffa606-6e01-4190-a022-e18c7b74a301
+
+This generated password is for development use only. Your security configuration must be updated before running your application in production.
+
+2025-02-12T12:53:38.707+09:00  INFO 13889 --- [restartedMain] o.s.b.d.a.OptionalLiveReloadServer       : LiveReload server is running on port 35729
+2025-02-12T12:53:38.720+09:00  INFO 13889 --- [restartedMain] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat started on port(s): 8065 (http) with context path ''
+2025-02-12T12:53:38.726+09:00  INFO 13889 --- [restartedMain] com.mmk.BackendApplication               : Started BackendApplication in 5.486 seconds (process running for 5.795)
+2025-02-12T12:55:05.903+09:00  INFO 13889 --- [http-nio-8065-exec-1] o.a.c.c.C.[Tomcat].[localhost].[/]       : Initializing Spring DispatcherServlet 'dispatcherServlet'
+2025-02-12T12:55:05.947+09:00 DEBUG 13889 --- [http-nio-8065-exec-1] com.mmk.controller.CardController        : userDTO: UserDTO(userNum=0, userId=admin, password=admin1234!, email=null, name=null, isSocialLogin=false, spendingTarget=0, profile=temp_profile, state=null, userRole=null, createdAt=null, updatedAt=null)
+2025-02-12T12:55:36.367+09:00 DEBUG 13889 --- [http-nio-8065-exec-6] com.mmk.controller.CardController        : userDTO: UserDTO(userNum=0, userId=crtestid, password=jmcj793940!!, email=cr@naver.com, name=김채림, isSocialLogin=null, spendingTarget=0, profile=temp_profile, state=null, userRole=null, createdAt=null, updatedAt=null)
+2025-02-12T12:55:52.111+09:00 DEBUG 13889 --- [http-nio-8065-exec-8] com.mmk.controller.CardController        : userDTO: UserDTO(userNum=0, userId=crtestid, password=jmcj793940!!, email=null, name=null, isSocialLogin=false, spendingTarget=0, profile=temp_profile, state=null, userRole=null, createdAt=null, updatedAt=null)
+2025-02-12T13:04:42.156+09:00 DEBUG 13889 --- [http-nio-8065-exec-10] com.mmk.controller.CardController        : userDTO: UserDTO(userNum=0, userId=admin, password=admin1234!, email=null, name=null, isSocialLogin=false, spendingTarget=0, profile=temp_profile, state=null, userRole=null, createdAt=null, updatedAt=null)
+2025-02-12T13:15:13.379+09:00  INFO 13889 --- [http-nio-8065-exec-6] com.mmk.controller.NoticeController      : 파일 저장 경로: /Users/gimchaelim/Desktop/yono/uploads/images/2025-2-12/card_4202521263270727.png
+2025-02-12T13:16:11.047+09:00 DEBUG 13889 --- [http-nio-8065-exec-3] com.mmk.controller.CardController        : userDTO: UserDTO(userNum=0, userId=crtestid, password=jmcj793940!!, email=null, name=null, isSocialLogin=false, spendingTarget=0, profile=temp_profile, state=null, userRole=null, createdAt=null, updatedAt=null)
+2025-02-12T13:24:03.272+09:00  INFO 13889 --- [SpringApplicationShutdownHook] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Shutdown initiated...
+2025-02-12T13:24:03.463+09:00  INFO 13889 --- [SpringApplicationShutdownHook] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Shutdown completed.
+2025-02-12T13:24:04.172+09:00  INFO 24751 --- [restartedMain] com.mmk.BackendApplication               : Starting BackendApplication using Java 17.0.14 with PID 24751 (/Users/gimchaelim/Desktop/yono/mickle-muckle/app-backend/build/classes/java/main started by gimchaelim in /Users/gimchaelim/Desktop/yono/mickle-muckle)
+2025-02-12T13:24:04.172+09:00 DEBUG 24751 --- [restartedMain] com.mmk.BackendApplication               : Running with Spring Boot v3.1.9, Spring v6.0.17
+2025-02-12T13:24:04.173+09:00  INFO 24751 --- [restartedMain] com.mmk.BackendApplication               : No active profile set, falling back to 1 default profile: "default"
+2025-02-12T13:24:04.191+09:00  INFO 24751 --- [restartedMain] o.s.b.devtools.restart.ChangeableUrls    : The Class-Path manifest attribute in /Users/gimchaelim/.gradle/caches/modules-2/files-2.1/com.oracle.database.jdbc/ojdbc11/21.9.0.0/1aad2e20684ee075bb9ebdca2d83f028e4fd35fa/ojdbc11-21.9.0.0.jar referenced one or more files that do not exist: file:/Users/gimchaelim/.gradle/caches/modules-2/files-2.1/com.oracle.database.jdbc/ojdbc11/21.9.0.0/1aad2e20684ee075bb9ebdca2d83f028e4fd35fa/oraclepki.jar
+2025-02-12T13:24:04.191+09:00  INFO 24751 --- [restartedMain] o.s.b.devtools.restart.ChangeableUrls    : The Class-Path manifest attribute in /Users/gimchaelim/.gradle/caches/modules-2/files-2.1/com.oracle.database.security/oraclepki/21.9.0.0/da2fce62922312f651d88c7ac4c86dba01e5e39c/oraclepki-21.9.0.0.jar referenced one or more files that do not exist: file:/Users/gimchaelim/.gradle/caches/modules-2/files-2.1/com.oracle.database.security/oraclepki/21.9.0.0/da2fce62922312f651d88c7ac4c86dba01e5e39c/osdt_core.jar,file:/Users/gimchaelim/.gradle/caches/modules-2/files-2.1/com.oracle.database.security/oraclepki/21.9.0.0/da2fce62922312f651d88c7ac4c86dba01e5e39c/osdt_cert.jar,file:/Users/gimchaelim/.gradle/caches/modules-2/files-2.1/com.oracle.database.security/oraclepki/21.9.0.0/oracle.osdt/osdt_core.jar,file:/Users/gimchaelim/.gradle/caches/modules-2/files-2.1/com.oracle.database.security/oraclepki/21.9.0.0/oracle.osdt/osdt_cert.jar
+2025-02-12T13:24:04.191+09:00  INFO 24751 --- [restartedMain] .e.DevToolsPropertyDefaultsPostProcessor : Devtools property defaults active! Set 'spring.devtools.add-properties' to 'false' to disable
+2025-02-12T13:24:04.191+09:00  INFO 24751 --- [restartedMain] .e.DevToolsPropertyDefaultsPostProcessor : For additional web related logging consider setting the 'logging.level.web' property to 'DEBUG'
+2025-02-12T13:24:04.521+09:00  WARN 24751 --- [restartedMain] o.m.s.mapper.ClassPathMapperScanner      : No MyBatis mapper was found in '[com.mmk]' package. Please check your configuration.
+2025-02-12T13:24:04.713+09:00  INFO 24751 --- [restartedMain] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat initialized with port(s): 8065 (http)
+2025-02-12T13:24:04.716+09:00  INFO 24751 --- [restartedMain] o.apache.catalina.core.StandardService   : Starting service [Tomcat]
+2025-02-12T13:24:04.717+09:00  INFO 24751 --- [restartedMain] o.apache.catalina.core.StandardEngine    : Starting Servlet engine: [Apache Tomcat/10.1.19]
+2025-02-12T13:24:04.744+09:00  INFO 24751 --- [restartedMain] o.a.c.c.C.[Tomcat].[localhost].[/]       : Initializing Spring embedded WebApplicationContext
+2025-02-12T13:24:04.744+09:00  INFO 24751 --- [restartedMain] w.s.c.ServletWebServerApplicationContext : Root WebApplicationContext: initialization completed in 552 ms
+2025-02-12T13:24:04.835+09:00  INFO 24751 --- [restartedMain] o.hibernate.jpa.internal.util.LogHelper  : HHH000204: Processing PersistenceUnitInfo [name: default]
+2025-02-12T13:24:04.857+09:00  INFO 24751 --- [restartedMain] org.hibernate.Version                    : HHH000412: Hibernate ORM core version 6.2.22.Final
+2025-02-12T13:24:04.858+09:00  INFO 24751 --- [restartedMain] org.hibernate.cfg.Environment            : HHH000406: Using bytecode reflection optimizer
+2025-02-12T13:24:04.955+09:00  INFO 24751 --- [restartedMain] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Starting...
+2025-02-12T13:24:05.654+09:00  INFO 24751 --- [restartedMain] com.zaxxer.hikari.pool.HikariPool        : HikariPool-1 - Added connection oracle.jdbc.driver.T4CConnection@28ca4e05
+2025-02-12T13:24:05.655+09:00  INFO 24751 --- [restartedMain] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Start completed.
+2025-02-12T13:24:05.731+09:00  WARN 24751 --- [restartedMain] org.hibernate.orm.deprecation            : HHH90000025: OracleDialect does not need to be specified explicitly using 'hibernate.dialect' (remove the property setting and it will be selected by default)
+2025-02-12T13:24:06.166+09:00  INFO 24751 --- [restartedMain] o.h.e.t.j.p.i.JtaPlatformInitiator       : HHH000489: No JTA platform available (set 'hibernate.transaction.jta.platform' to enable JTA platform integration)
+2025-02-12T13:24:08.667+09:00  WARN 24751 --- [restartedMain] JpaBaseConfiguration$JpaWebConfiguration : spring.jpa.open-in-view is enabled by default. Therefore, database queries may be performed during view rendering. Explicitly configure spring.jpa.open-in-view to disable this warning
+2025-02-12T13:24:08.678+09:00  WARN 24751 --- [restartedMain] .s.s.UserDetailsServiceAutoConfiguration : 
+
+Using generated security password: 1d0e0a96-2713-4231-b7f8-1f1cfe3bd58f
+
+This generated password is for development use only. Your security configuration must be updated before running your application in production.
+
+2025-02-12T13:24:08.866+09:00  INFO 24751 --- [restartedMain] o.s.b.d.a.OptionalLiveReloadServer       : LiveReload server is running on port 35729
+2025-02-12T13:24:08.877+09:00  INFO 24751 --- [restartedMain] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat started on port(s): 8065 (http) with context path ''
+2025-02-12T13:24:08.883+09:00  INFO 24751 --- [restartedMain] com.mmk.BackendApplication               : Started BackendApplication in 4.857 seconds (process running for 5.015)
+2025-02-12T13:24:19.402+09:00  INFO 24751 --- [http-nio-8065-exec-1] o.a.c.c.C.[Tomcat].[localhost].[/]       : Initializing Spring DispatcherServlet 'dispatcherServlet'
+2025-02-12T13:24:19.444+09:00 DEBUG 24751 --- [http-nio-8065-exec-1] com.mmk.controller.CardController        : userDTO: UserDTO(userNum=0, userId=admin, password=admin1234!, email=null, name=null, isSocialLogin=false, spendingTarget=0, profile=temp_profile, state=null, userRole=null, createdAt=null, updatedAt=null)
+2025-02-12T13:24:38.203+09:00  INFO 24751 --- [http-nio-8065-exec-5] com.mmk.controller.NoticeController      : 파일 저장 경로: /Users/gimchaelim/Desktop/yono/uploads/images/2025-2-12/07972_img202521225190418.png
+2025-02-12T13:24:52.461+09:00  INFO 24751 --- [http-nio-8065-exec-6] com.mmk.controller.NoticeController      : 삭제할 파일 경로:/Users/gimchaelim/Desktop/yono/uploads/images/2025-2-12/card_4202521263270727.png
+2025-02-12T13:24:52.463+09:00  INFO 24751 --- [http-nio-8065-exec-6] com.mmk.controller.NoticeController      : 파일 삭제 성공: /Users/gimchaelim/Desktop/yono/uploads/images/2025-2-12/card_4202521263270727.png
+2025-02-12T13:25:31.201+09:00 DEBUG 24751 --- [http-nio-8065-exec-9] com.mmk.controller.CardController        : userDTO: UserDTO(userNum=0, userId=admin, password=admin1234!, email=null, name=null, isSocialLogin=false, spendingTarget=0, profile=temp_profile, state=null, userRole=null, createdAt=null, updatedAt=null)
+2025-02-12T13:25:36.293+09:00  INFO 24751 --- [http-nio-8065-exec-5] com.mmk.controller.NoticeController      : 삭제할 파일 경로:/Users/gimchaelim/Desktop/yono/uploads/images/2025-2-12/07972_img202521225190418.png
+2025-02-12T13:25:36.294+09:00  INFO 24751 --- [http-nio-8065-exec-5] com.mmk.controller.NoticeController      : 파일 삭제 성공: /Users/gimchaelim/Desktop/yono/uploads/images/2025-2-12/07972_img202521225190418.png
+2025-02-12T13:25:47.459+09:00 DEBUG 24751 --- [http-nio-8065-exec-7] com.mmk.controller.CardController        : userDTO: UserDTO(userNum=0, userId=crtestid, password=jmcj793940!!, email=null, name=null, isSocialLogin=false, spendingTarget=0, profile=temp_profile, state=null, userRole=null, createdAt=null, updatedAt=null)
+2025-02-12T13:26:07.602+09:00 DEBUG 24751 --- [http-nio-8065-exec-2] com.mmk.controller.CardController        : userDTO: UserDTO(userNum=0, userId=admin, password=admin1234!, email=null, name=null, isSocialLogin=false, spendingTarget=0, profile=temp_profile, state=null, userRole=null, createdAt=null, updatedAt=null)
+2025-02-12T13:26:28.824+09:00 DEBUG 24751 --- [http-nio-8065-exec-8] com.mmk.controller.CardController        : userDTO: UserDTO(userNum=0, userId=crtestid, password=jmcj793940!!, email=null, name=null, isSocialLogin=false, spendingTarget=0, profile=temp_profile, state=null, userRole=null, createdAt=null, updatedAt=null)
+2025-02-12T13:29:57.093+09:00 DEBUG 24751 --- [http-nio-8065-exec-4] com.mmk.controller.CardController        : userDTO: UserDTO(userNum=0, userId=crtestid, password=jmcj793940!!, email=null, name=null, isSocialLogin=false, spendingTarget=0, profile=temp_profile, state=null, userRole=null, createdAt=null, updatedAt=null)
+2025-02-12T13:33:17.023+09:00 DEBUG 24751 --- [http-nio-8065-exec-5] com.mmk.controller.CardController        : userDTO: UserDTO(userNum=0, userId=crtestid, password=jmcj793940!!, email=null, name=null, isSocialLogin=false, spendingTarget=0, profile=temp_profile, state=null, userRole=null, createdAt=null, updatedAt=null)
+2025-02-12T13:35:06.010+09:00 DEBUG 24751 --- [http-nio-8065-exec-10] com.mmk.controller.CardController        : userDTO: UserDTO(userNum=0, userId=crtestid, password=jmcj793940!!, email=null, name=null, isSocialLogin=false, spendingTarget=0, profile=temp_profile, state=null, userRole=null, createdAt=null, updatedAt=null)
