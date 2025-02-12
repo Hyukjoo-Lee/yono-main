@@ -10,7 +10,7 @@ import CommonTabs from '../../common/CommonTabs';
 import CategoryStatics from './CategoryStatics/CategoryStatics';
 import DailyStatistics from './dailyStatistics/DailyStatistics';
 import MonthlyStatistics from './monthlyStatistics/MonthlyStatistics';
-// import { updateHistory } from '../../apis/cardHistoryApi.js';
+import { updateHistory } from '../../apis/cardHistoryApi.js';
 
 const blink = keyframes`
   0% { opacity: 1; }
@@ -30,8 +30,8 @@ const CardAnalysis = () => {
   const [isShowLoginDialog, setIsShowLoginDialog] = useState(false);
   const [isShowCardDialog, setIsShowCardDialog] = useState(false);
   const [isShowPanels, setIsShowPanels] = useState(false);
-  // const [isHistory, setIsHistory] = useState(null);
-  const [isHistory] = useState(null);
+  const [isHistory, setIsHistory] = useState(null);
+  // const [isHistory] = useState(null);
   const navigate = useNavigate();
 
   const userNum = user?.userNum;
@@ -57,8 +57,8 @@ const CardAnalysis = () => {
       }
       setIsShowPanels(true);
 
-      // const history = await updateHistory(userNum);
-      // setIsHistory(history.data);
+      const history = await updateHistory(userNum);
+      setIsHistory(history.data);
     };
 
     fetchHistory();
