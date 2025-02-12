@@ -137,6 +137,7 @@ export function CommunityPost() {
   const isLoggedIn = useSelector((state) => state.user.isLoggedIn);
   const [editingComment, setEditingComment] = useState(null);
   const [editedContent, setEditedContent] = useState('');
+  const [dialogMessage, setDialogMessage] = useState('');
   const MAX_LENGTH = 100;
   const navigate = useNavigate();
 
@@ -150,6 +151,7 @@ export function CommunityPost() {
   const handleSubmit = async () => {
     if (!isLoggedIn || !user) {
       // user가 null일 경우 체크
+      setDialogMessage('로그인해주세요');
       setIsDialogOpen(true);
       return;
     }
@@ -204,6 +206,7 @@ export function CommunityPost() {
       setIsDialogOpen(true);
       return;
     }
+
     try {
       const comment = commentsData.find((comment) => comment.rno === rno);
       if (comment && comment.userId === user.userId) {
@@ -258,6 +261,11 @@ export function CommunityPost() {
     navigate('/community');
   };
   const handleNavigateToEditForm = () => {
+    if (!user || rowData.userId !== user.userId) {
+      setDialogMessage('작성자만 수정할 수 있습니다.');
+      setIsDialogOpen(true);
+      return;
+    }
     navigate('/editFormBox', { state: { rowData } });
   };
 
@@ -317,6 +325,11 @@ export function CommunityPost() {
   };
 
   const handleDeletePost = async () => {
+    if (!user || rowData.userId !== user.userId) {
+      setDialogMessage('작성자만 삭제할 수 있습니다.');
+      setIsDialogOpen(true);
+      return;
+    }
     console.log('삭제 버튼 클릭됨');
 
     try {
@@ -331,6 +344,7 @@ export function CommunityPost() {
       console.error('게시물 삭제에 실패했습니다.', error);
     }
   };
+
   const handleDialogLogin = () => {
     setIsDialogOpen(false);
     navigate('/login');
@@ -437,8 +451,8 @@ export function CommunityPost() {
       <CommonDialog
         open={isDialogOpen}
         onClose={handleDialogClose}
-        children={'로그인 해주세요'}
-        onClick={handleDialogLogin}
+        children={dialogMessage}
+        onClick={user ? handleDialogClose : handleDialogLogin}
       />
     </Root>
   );
