@@ -125,18 +125,24 @@ public class UserServiceImpl implements UserService {
         return userDAO.existsByName(name);
     }
 
-    public boolean validateLogin(String userId, String password, boolean isSocialLogin) {
+    @Override
+    public boolean checkUserState(String userId) {
         UserEntity userEntity = userDAO.getUserByUserId(userId);
 
+        if (userEntity == null) {
+            return false;
+        }
+
+        return "ACTIVE".equals(userEntity.getState());
+    }
+
+    public boolean validateLogin(String userId, String password, boolean isSocialLogin) {
+        UserEntity userEntity = userDAO.getUserByUserId(userId);
+        logger.debug("userEntity: {}", userEntity);
         // 소셜 로그인 시 비밀번호 확인 없이 바로 로그인 처리
         if (isSocialLogin) {
             return true;
         }
-
-        // if (userEntity != null && userEntity.getPassword().equals(password)) {
-        // return true;
-        // }
-
         if (userEntity != null) {
             return passwordEncoder.matches(password, userEntity.getPassword());
         }

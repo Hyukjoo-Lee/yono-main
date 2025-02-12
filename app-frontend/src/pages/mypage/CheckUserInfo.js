@@ -7,6 +7,7 @@ import CommonInput from '../../common/CommonInput';
 import {
   EMAIL_REGEX_MESSAGE,
   SPENDINGTARGET_REGEX_MESSAGE,
+  PASSWORD_MISMATCH_MESSAGE,
 } from '../../common/Message';
 import { logoutUser, updateUserProfile } from '../../redux/actions/userAction';
 import { useDispatch } from 'react-redux';
@@ -216,7 +217,9 @@ const CheckUserInfo = ({ users }) => {
           }
         });
 
-        if (!isInvalid) return;
+        if (!isInvalid) {
+          return;
+        }
 
         const updatedUserInfo = {
           ...userInfo,
@@ -242,6 +245,7 @@ const CheckUserInfo = ({ users }) => {
         console.warn('패스워드 검증 실패');
       }
     } catch (error) {
+      setPasswordError(PASSWORD_MISMATCH_MESSAGE);
       console.error(error);
     }
   };
