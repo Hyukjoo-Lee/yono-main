@@ -175,8 +175,8 @@ export function CommunityPost() {
             likedByUser: [],
           },
         ]);
-        setComment(''); // 입력창 초기화
-        setInputCount(0); // 입력 길이 초기화
+        setComment('');
+        setInputCount(0);
       }
     } catch (error) {
       console.error('댓글 작성 실패', error);
@@ -228,6 +228,12 @@ export function CommunityPost() {
   const handleSaveEdit = async (rno) => {
     if (!user || !user.userId) {
       setIsDialogOpen(true);
+      return;
+    }
+    const commentToEdit = commentsData.find((comment) => comment.rno === rno);
+
+    if (!commentToEdit || commentToEdit.userId !== user.userId) {
+      alert('댓글 작성자만 수정할 수 있습니다.');
       return;
     }
     try {

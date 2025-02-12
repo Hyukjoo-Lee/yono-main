@@ -19,6 +19,7 @@ public class ReplyDTO {
     private Timestamp createdAt;
     private Timestamp updatedAt;
     private int like_count;
+    private String profile;
 
     @JsonFormat(pattern = "yyyy-MM-dd")  // 날짜 포맷 지정
     private LocalDate regdate;//댓글 작성일
