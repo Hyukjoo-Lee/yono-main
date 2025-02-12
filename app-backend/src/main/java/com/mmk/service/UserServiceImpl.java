@@ -42,10 +42,16 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public UserDTO createUser(UserDTO userDTO) {
+
+        // 아이디 중복 체크
         if (userDAO.existsByUserId(userDTO.getUserId())) {
             throw new IllegalArgumentException("이미 존재하는 아이디입니다.");
         }
 
+        // 이메일 중복 체크
+        if (userDAO.existsByEmail(userDTO.getEmail())) {
+            throw new IllegalArgumentException("이미 존재하는 이메일입니다.");
+        }
         // 비밀번호 암호화
         String encodedPassword = passwordEncoder.encode(userDTO.getPassword());
         userDTO.setPassword((encodedPassword));

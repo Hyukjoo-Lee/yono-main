@@ -143,8 +143,10 @@ public class UserController {
             return ResponseEntity.status(HttpStatus.CREATED)
                     .body(new ApiResponse<>(201, "회원가입 성공", createdUser));
         } catch (IllegalArgumentException e) {
+            logger.debug("message: {}", e.getMessage());
+            ApiResponse<UserDTO> response = new ApiResponse<>(409, "중복된 데이터", null);
             return ResponseEntity.status(HttpStatus.CONFLICT)
-                    .body(new ApiResponse<>(409, e.getMessage(), null));
+                    .body(response);
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST)
                     .body(new ApiResponse<>(400, "잘못된 요청", null));

@@ -12,7 +12,7 @@ export const checkUserIdExists = async (userId) => {
 // 회원가입
 export const signUpUser = async (formData) => {
   const response = await axios.post('/user/signup', formData);
-  return response.data;
+  return response;
 };
 
 // 로그인
