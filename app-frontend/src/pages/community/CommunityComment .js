@@ -115,6 +115,7 @@ const TextBox = styled.div`
   & > p {
     color: ${(props) => props.theme.color.black};
     margin-left: 25px;
+    white-space: pre-line;
   }
 
   & input {
