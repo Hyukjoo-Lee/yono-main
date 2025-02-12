@@ -42,10 +42,16 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public UserDTO createUser(UserDTO userDTO) {
+
+        // 아이디 중복 체크
         if (userDAO.existsByUserId(userDTO.getUserId())) {
             throw new IllegalArgumentException("이미 존재하는 아이디입니다.");
         }
 
+        // 이메일 중복 체크
+        if (userDAO.existsByEmail(userDTO.getEmail())) {
+            throw new IllegalArgumentException("이미 존재하는 이메일입니다.");
+        }
         // 비밀번호 암호화
         String encodedPassword = passwordEncoder.encode(userDTO.getPassword());
         userDTO.setPassword((encodedPassword));
@@ -119,14 +125,24 @@ public class UserServiceImpl implements UserService {
         return userDAO.existsByName(name);
     }
 
-    public boolean validateLogin(String userId, String password, boolean isSocialLogin) {
+    @Override
+    public boolean checkUserState(String userId) {
         UserEntity userEntity = userDAO.getUserByUserId(userId);
 
+        if (userEntity == null) {
+            return false;
+        }
+
+        return "ACTIVE".equals(userEntity.getState());
+    }
+
+    public boolean validateLogin(String userId, String password, boolean isSocialLogin) {
+        UserEntity userEntity = userDAO.getUserByUserId(userId);
+        logger.debug("userEntity: {}", userEntity);
         // 소셜 로그인 시 비밀번호 확인 없이 바로 로그인 처리
         if (isSocialLogin) {
             return true;
         }
-
         if (userEntity != null) {
             return passwordEncoder.matches(password, userEntity.getPassword());
         }
@@ -214,13 +230,17 @@ public class UserServiceImpl implements UserService {
             }
 
             if (profileText != null) {
-                // if (uv.getProfile() != null && !uv.getProfile().isEmpty()) {
-                //     File existingFile = new File(uploadDir + uv.getProfile());
-
-                //     if (existingFile.exists()) {
-                //         existingFile.delete();
-                //     }
-                // }
+                System.out.println("profileText: " + profileText);
+                if (profileText.equals("temp_profile")) {
+                    if (uv.getProfile() != null && !uv.getProfile().isEmpty()) {
+                        File existingFile = new File(uploadDir + uv.getProfile());
+                        
+                        System.out.println("existingFile: " + existingFile);
+                        if (existingFile.exists()) {
+                            existingFile.delete();
+                        }
+                    }
+                }
                 uv.setProfile(profileText);
             }
 

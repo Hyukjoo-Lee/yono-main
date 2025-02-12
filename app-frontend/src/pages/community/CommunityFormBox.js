@@ -94,8 +94,9 @@ export function CommunityFormBox() {
   const [categoryOption, setCategoryOption] = useState('');
   const [postImg, setPostImg] = useState(null); //이미지 파일 자체의 상태
   const user = useSelector((state) => state.user.user);
+  const userId = user?.userId || '';
   const [postFormData, setPostFormData] = useState({
-    userId: user.userId,
+    userId: userId,
     title: '',
     category: '',
     content: '',

@@ -1,5 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
+import { useNavigate } from 'react-router-dom';
+import styled, { keyframes } from 'styled-components';
 import { getprimaryCardInfo } from '../../apis/cardApi.js';
 import CommonDialog from '../../common/CommonDialog.js';
 import CommonPageInfo from '../../common/CommonPageInfo';
@@ -8,8 +10,6 @@ import CommonTabs from '../../common/CommonTabs';
 import CategoryStatics from './CategoryStatics/CategoryStatics';
 import DailyStatistics from './dailyStatistics/DailyStatistics';
 import MonthlyStatistics from './monthlyStatistics/MonthlyStatistics';
-import { useNavigate } from 'react-router-dom';
-import styled, { keyframes } from 'styled-components';
 import { updateHistory } from '../../apis/cardHistoryApi.js';
 
 const blink = keyframes`

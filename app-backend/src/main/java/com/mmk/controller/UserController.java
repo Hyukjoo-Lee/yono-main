@@ -143,8 +143,10 @@ public class UserController {
             return ResponseEntity.status(HttpStatus.CREATED)
                     .body(new ApiResponse<>(201, "회원가입 성공", createdUser));
         } catch (IllegalArgumentException e) {
+            logger.debug("message: {}", e.getMessage());
+            ApiResponse<UserDTO> response = new ApiResponse<>(409, "중복된 데이터", null);
             return ResponseEntity.status(HttpStatus.CONFLICT)
-                    .body(new ApiResponse<>(409, e.getMessage(), null));
+                    .body(response);
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST)
                     .body(new ApiResponse<>(400, "잘못된 요청", null));
@@ -159,10 +161,20 @@ public class UserController {
         String userId = userDTO.getUserId();
         String password = userDTO.getPassword();
         boolean isSocialLogin = userDTO.getIsSocialLogin();
+        // 패스워드랑 비밀번호 매칭 되면
         boolean isLoginSuccessful = userService.validateLogin(userId, password, isSocialLogin);
 
         if (isLoginSuccessful) {
             UserDTO userInfo = userService.getUserByUserId(userId);
+
+            // 탈퇴 회원 여부 확인
+            boolean isUserActive = userService.checkUserState(userId);
+
+            if (!isUserActive) {
+                ApiResponse<UserDTO> response = new ApiResponse<>(403, "탈퇴한 회원입니다.", null);
+                return ResponseEntity.status(HttpStatus.FORBIDDEN).body(response);
+            }
+
             ApiResponse<UserDTO> response = new ApiResponse<>(200, "로그인 성공", userInfo);
             return ResponseEntity.ok(response);
         } else {

@@ -8,7 +8,6 @@ import theme from '../../theme/theme';
 import {
   EMPTY_PASSWORD_MESSAGE,
   EMPTY_USERID_MESSAGE,
-  LOGIN_VERIFIED_MESSAGE,
   SERVER_MESSAGE,
 } from '../../common/Message';
 import { useNavigate } from 'react-router-dom';
@@ -188,13 +187,15 @@ const Login = () => {
           localStorage.removeItem('savedUserId');
         }
         setIsLoginSuccessVisible(true);
-      } else if (result.status === 504 || result.payload.status === 401) {
-        setFormMessage({ error: LOGIN_VERIFIED_MESSAGE });
+      } else if (result.payload.status === 403) {
+        setFormMessage({ error: result.payload.message });
+      } else if (result.payload.status === 401) {
+        setFormMessage({ error: result.payload.message });
       } else {
         setFormMessage({ error: SERVER_MESSAGE });
       }
     } catch (error) {
-      setFormMessage({ error: LOGIN_VERIFIED_MESSAGE });
+      setFormMessage({ error: SERVER_MESSAGE });
     }
   };
 

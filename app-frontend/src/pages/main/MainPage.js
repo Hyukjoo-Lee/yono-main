@@ -19,7 +19,14 @@ export function MainPage() {
     <CommonRoot>
       <StyledWrap>
         <MainIntro />
-        <MainCardBox isLoggedIn={isLoggedIn} user={user} />
+        {isLoggedIn ? (
+          <>
+            <MainCardBox isLoggedIn={isLoggedIn} user={user} />
+          </>
+        ) : (
+          <></>
+        )}
+
         <MainBox />
       </StyledWrap>
     </CommonRoot>

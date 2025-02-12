@@ -10,7 +10,8 @@ nocache;
 select * from user_info;
 
 insert into user_info (user_num, user_id, name, email,  password, spending_target, created_at, updated_at) 
-values (user_seq.nextval, 'crtestid', '김채림', 'cr@google.com', '1234', 500000, sysdate, sysdate);
+values (user_seq.nextval, 'crtestid', '김채림', 'cr@google.com', '1234', 500000, sysdate, sysdate); 
+
 
 insert into user_info (user_num, user_id, name, email, password,  spending_target, created_at, updated_at) 
 values (user_seq.nextval, 'hjtestid', '이혁주', 'hj@google.com', '1234', 500000, sysdate, sysdate);
@@ -36,7 +37,7 @@ select * from user_info where email = 'mk@google.com';
 
 drop table user_info;
 
-delete from user_info where name = '테스트';
+delete from user_info where name = '김지훈';
 
 update user_info set name = '홍길동구리' where user_num = 37;
 

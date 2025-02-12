@@ -51,6 +51,25 @@ const LineStyle = styled.p`
   color: ${(props) => props.theme.color.gray};
 `;
 
+const ExternalLink = styled.a`
+  color: ${(props) => props.theme.color.gray};
+  text-decoration: none;
+  font-size: ${(props) => props.theme.fontSize.xs};
+  font-weight: 500;
+  padding: 0;
+  display: flex;
+  align-items: center;
+
+  &:hover {
+    background-color: transparent;
+    color: ${(props) => props.theme.color.blue};
+  }
+
+  &:active {
+    background-color: transparent;
+  }
+`;
+
 const LogoLink = styled(Link)`
   display: flex;
   align-items: center;
@@ -143,23 +162,15 @@ export function MainHeader() {
             item.isText ? (
               <StyledText key={index}>{item.label} &nbsp; | </StyledText>
             ) : item.isExternal ? (
-              <a
+              <ExternalLink
                 key={index}
                 href={item.path}
                 target="_blank"
                 rel="noopener noreferrer"
-                style={{
-                  color: '#666',
-                  textDecoration: 'none',
-                  fontSize: '14px',
-                  fontWeight: 500,
-                  display: 'flex',
-                  alignItems: 'center',
-                }}
               >
                 {item.label}
                 {index !== list.length - 1 && <LineStyle>|</LineStyle>}
-              </a>
+              </ExternalLink>
             ) : (
               <StyledLink
                 to={item.path}

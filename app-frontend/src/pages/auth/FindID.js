@@ -347,7 +347,7 @@ const FindID = () => {
             setIsShowDialog(false);
           }}
           onClick={() => {
-            setIsShowDialog(false);
+            navigate('/login');
           }}
         />
       )}

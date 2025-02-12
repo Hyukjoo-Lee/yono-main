@@ -26,7 +26,9 @@ import com.mmk.service.UserService;
 
 import lombok.extern.slf4j.Slf4j;
 
-
+/**
+ * 공지사항 관리를 위한 컨트롤러 클래스
+ */
 @Slf4j
 @RestController
 @RequestMapping("/notice")
@@ -34,9 +36,6 @@ public class NoticeController {
 
   @Value("${IMAGE_PATH}")
     private String uploadDir;
-
-  // @Autowired
-  // private NoticeService noticeService;
 
   private final UserService userService;
   private final NoticeService noticeService;
@@ -47,7 +46,12 @@ public class NoticeController {
   }
 
 
-  // 글 쓰기
+  /**
+   * 공지사항 작성 API
+   * @param noticeDTO 공지사항 정보
+   * @param file 업로드할 파일(선택 사항)
+   * @return 응답 결과
+   */
   @PostMapping("/write")
   public ResponseEntity<ApiResponse<Void>> saveNotice(
     @ModelAttribute NoticeDTO noticeDTO,
@@ -91,7 +95,11 @@ public class NoticeController {
     }
   }
 
-  // 파일 저장 메서드
+  /**
+   * 파일 저장 메서드
+   * @param file 업로드할 파일
+   * @return 저장된 파일의 경로
+   */
   @PostMapping(value = "/upload", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
   private ApiResponse<String> saveFile(@RequestParam("file") MultipartFile file) {
     try {
@@ -136,7 +144,11 @@ public class NoticeController {
 
 
 
-  //글 목록 불러오기
+  /**
+   * 공지사항 목록 조회 API
+   * @param keyword 검색 키워드
+   * @return 검색된 공지사항 목록
+   */
   @GetMapping("/list")
   public ResponseEntity<ApiResponse<List<NoticeDTO>>> searchNotice(@RequestParam("keyword") String keyword) {
     List<NoticeDTO> notices = noticeService.searchNotice(keyword);
@@ -149,7 +161,11 @@ public class NoticeController {
     return ResponseEntity.ok(new ApiResponse<>(200, "조회 성공", notices));
   }
 
-  //글 상세보기
+  /**
+   * 공지사항 상세 조회 API
+   * @param id 공지사항 ID
+   * @return 해당 공지사항 정보
+   */
   @GetMapping("/detail")
   public ResponseEntity<ApiResponse<NoticeDTO>> getNoticeDetail(@RequestParam("id") int id){
     try{
@@ -167,7 +183,11 @@ public class NoticeController {
     }
   }
 
-  //글 삭제
+  /**
+   * 공지사항 글 삭제 API
+   * @param ids 공지사항 ID
+   * @return 삭제할 공지사항 정보
+   */
   @PostMapping("/delete")
   public ResponseEntity<ApiResponse<Void>> deleteByNotice(@RequestBody List<Integer> ids) {
     try {
@@ -209,7 +229,15 @@ public class NoticeController {
     }
   }
 
-  // 글 수정
+  /**
+   * 공지사항 수정 API
+   * @param id 공지사항 ID
+   * @param title 공지사항 제목
+   * @param content 공지사항 내용
+   * @param file 공지사항 업로드할 파일 (선택 사항)
+   * @param imgurl 공지사항 이미지 url(선택 사항)
+   * @return 응답 결과
+   */
   @PostMapping("/edit")
   public ResponseEntity<ApiResponse<Void>> editNotice(
     @RequestParam("id") int id,
@@ -234,12 +262,6 @@ public class NoticeController {
         }
         existingNotice.setImgurl(null);
       }
-
-      // // 이미지 삭제 요청 시 기존 이미지 삭제
-      // if ("deleted".equals(imgurl) && existingNotice.getImgurl() != null) {
-      //   deleteFile(existingNotice.getImgurl());
-      //   existingNotice.setImgurl(null);
-      // }
 
       if(file != null && !file.isEmpty()){
         if(existingNotice.getImgurl() != null){
@@ -272,7 +294,10 @@ public class NoticeController {
     }
   }
 
-  //글 삭제
+  /**
+   * 파일 삭제 메서드
+   * @param filePath 삭제할 파일 경로
+   */
   private void deleteFile(String filePath) {
     if (filePath == null || filePath.isEmpty()) {
         log.warn("삭제할 파일 경로가 없습니다.");
