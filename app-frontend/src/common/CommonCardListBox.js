@@ -106,7 +106,7 @@ const CardInfoContainer = styled.div`
 `;
 
 const CardNumber = styled.p`
-  font-size: 16px;
+  font-size: ${(props) => props.theme.fontSize.sm};
   color: ${(props) => props.theme.color.black};
   margin: 0;
   min-height: 27px;
@@ -193,8 +193,16 @@ const CommonCardListBox = ({
                 />
 
                 <CardInfoContainer>
-                  <CardName>{card.cardTitle}</CardName>
-                  <CardNumber> {card.cardNumber || ''}</CardNumber>
+                  <CardName>{card.cardTitle}</CardName>{' '}
+                  <CardNumber>
+                    {card.matchedCategories
+                      ? `최근 소비 내역과 매칭된 카드 혜택: ${
+                          Array.isArray(card.matchedCategories)
+                            ? card.matchedCategories.join(', ')
+                            : card.matchedCategories
+                        }`
+                      : card.cardNumber || ''}
+                  </CardNumber>
                   {card.cardInfo.slice(0, 3).map((benefit, index) => (
                     <InfoRow key={index}>
                       <TitleStyle>

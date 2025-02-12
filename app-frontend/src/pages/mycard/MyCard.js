@@ -113,6 +113,7 @@ export function MyCard() {
                 type: benefit.benefitType,
               })),
               cardApplyLink: card.cardApplyUrl,
+              matchedCategories: card.matchedCategories,
             };
           });
 

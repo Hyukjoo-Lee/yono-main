@@ -19,4 +19,5 @@ public class RecCardDTO {
     private String cardImgUrl;
     private String cardApplyUrl;
     private List<CardBenefitDTO> benefits;
+    private List<String> matchedCategories; // 소비와 매칭되는 카테고리 리스트
 }
