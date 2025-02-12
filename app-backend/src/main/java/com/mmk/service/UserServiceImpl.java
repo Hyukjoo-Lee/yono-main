@@ -211,17 +211,16 @@ public class UserServiceImpl implements UserService {
                 }
 
                 uv.setProfile(fileDBName);
-
             }
 
             if (profileText != null) {
-                if (uv.getProfile() != null && !uv.getProfile().isEmpty()) {
-                    File existingFile = new File(uploadDir + uv.getProfile());
+                // if (uv.getProfile() != null && !uv.getProfile().isEmpty()) {
+                //     File existingFile = new File(uploadDir + uv.getProfile());
 
-                    if (existingFile.exists()) {
-                        existingFile.delete();
-                    }
-                }
+                //     if (existingFile.exists()) {
+                //         existingFile.delete();
+                //     }
+                // }
                 uv.setProfile(profileText);
             }
 
