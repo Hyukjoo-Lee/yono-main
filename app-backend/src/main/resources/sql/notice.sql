@@ -9,7 +9,7 @@ commit;
 
 drop table notice;
 
-purge table notice;
+purge table notice; 
 
 purge RECYCLEBIN;
 
