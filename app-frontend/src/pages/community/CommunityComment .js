@@ -5,15 +5,11 @@ import EmptyHeartImg from '../../assets/images/EmptyHeartImg.png';
 import { ReactComponent as Profile } from '../../assets/images/Profile.svg';
 import ListIcon from '../../assets/images/ListIcon.png';
 import CommonHr from '../../common/CommonHr';
-
 const CommentBox = styled.div`
   width: 1200px;
-  // height: 100px;
   display: flex;
   flex-direction: column;
   gap: 10px;
-  // border: 1px solid black;
-
   & > div > div {
     display: flex;
     flex-direction: row;
@@ -21,26 +17,34 @@ const CommentBox = styled.div`
     align-items: flex-start;
   }
 `;
+
 const TopRow = styled.div`
   margin-top: 5px;
-  // display: flex;
-  // align-items: center;
-  // gap: 5px;
-  // weight: 50px;
-  // height: 50px;
 `;
+
 const ImageBox = styled.div`
   width: 60px;
   height: 60px;
   flex-shrink: 0;
-  & > svg {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: 1px solid #d0d0d0;
+  border-radius: 50%;
+  overflow: hidden;
+
+  & img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    border-radius: 50%;
+  }
+
+  & svg {
     width: 100%;
     height: 100%;
     max-width: 50px;
     max-height: 50px;
-    border: 1px solid #d0d0d0;
-    border-radius: 50%;
-    // margin:10px;
   }
 `;
 
@@ -68,6 +72,7 @@ const LikeBox = styled.div`
     margin-left: 5px;
   }
 `;
+
 const Heart = styled.img`
   margin-left: 5px;
   width: 20px;
@@ -82,11 +87,13 @@ const ListIconBox = styled.div`
   height: 24px;
   margin-left: auto;
 `;
+
 const ListIconImage = styled.img`
   width: 30px;
   height: 24px;
   object-fit: contain;
 `;
+
 const OptionsBox = styled.div`
   width: 70px;
   position: absolute;
@@ -103,7 +110,6 @@ const OptionsBox = styled.div`
     padding: 10px 15px;
     cursor: pointer;
     font-size: 14px;
-
     &:hover {
       background-color: #f5f5f5;
     }
@@ -153,16 +159,40 @@ const CommunityComment = ({
   const HeartButton = ({ like, onClick }) => {
     return <Heart src={EmptyHeartImg} onClick={onClick} />;
   };
+
+  const handleDelete = (rno) => {
+    handleDeletecommentClick(rno);
+
+    commentsData = commentsData.filter((comment) => comment.rno !== rno);
+  };
+
+  const handleSave = (rno) => {
+    handleSaveEdit(rno);
+    commentsData = commentsData.map((comment) =>
+      comment.rno === rno ? { ...comment, r_content: editedContent } : comment,
+    );
+  };
+
   return (
     <CommentBox>
       {commentsData.map((comment, index) => (
         <div key={index}>
           <TopRow>
             <ImageBox>
-              <Profile />
+              {comment.profile && comment.profile !== 'temp_profile' ? (
+                <img
+                  src={`http://localhost:8065${comment.profile}`}
+                  alt="프로필"
+                />
+              ) : (
+                <Profile />
+              )}
             </ImageBox>
             <h3>
-              {comment.userId} <TimeText>{comment.regdate}</TimeText>
+              {comment.userId}{' '}
+              <TimeText>
+                {new Date(comment.regdate).toISOString().split('T')[0]}
+              </TimeText>
             </h3>
             <ListIconBox onClick={() => toggleOptions(comment.rno)}>
               <ListIconImage src={ListIcon} alt="옵션 아이콘" />
@@ -171,7 +201,7 @@ const CommunityComment = ({
                   <ul>
                     <li
                       key={`delete-${comment.rno}`}
-                      onClick={() => handleDeletecommentClick(comment.rno)}
+                      onClick={() => handleDelete(comment.rno)}
                     >
                       삭제
                     </li>
@@ -179,7 +209,7 @@ const CommunityComment = ({
                       key={`edit-${comment.rno}`}
                       onClick={() => {
                         setEditingComment(comment.rno);
-                        setEditedContent(comment.r_content); // 기존 댓글 내용을 상태에 설정
+                        setEditedContent(comment.r_content);
                       }}
                     >
                       수정
@@ -199,29 +229,27 @@ const CommunityComment = ({
                   placeholder="댓글을 수정하세요"
                 />
               ) : (
-                <p>{comment.r_content}</p> // 수정이 완료되면 텍스트만 보이게 함
+                <p>{comment.r_content}</p>
               )}
             </TextBox>
             {editingComment === comment.rno && (
               <CommonButton
                 text="저장"
-                onClick={() => handleSaveEdit(comment.rno)}
+                onClick={() => handleSave(comment.rno)}
               />
             )}
             {editingComment !== comment.rno && (
-              <>
-                <LikeBox>
-                  {user ? (
-                    <HeartButton
-                      like={comment.likedByUser.includes(user.userId)} // userId가 likedByUser에 포함되면 하트가 채워짐
-                      onClick={() => toggleLike(comment.rno)} // 하트를 클릭하면 toggleLike 실행
-                    />
-                  ) : (
-                    <HeartButton like={false} />
-                  )}
-                  <p>{comment.like_count}</p>
-                </LikeBox>
-              </>
+              <LikeBox>
+                {user ? (
+                  <HeartButton
+                    like={comment.likedByUser.includes(user.userId)}
+                    onClick={() => toggleLike(comment.rno)}
+                  />
+                ) : (
+                  <HeartButton like={false} />
+                )}
+                <p>{comment.like_count}</p>
+              </LikeBox>
             )}
           </BottomRow>
           <CommonHr
