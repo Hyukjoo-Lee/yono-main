@@ -113,7 +113,10 @@ export function NoticeTable() {
   const handleSerchSubmit = async () => {
     const { success, data, message } = await fetchSearchNotice(keyword);
     if (success) {
-      setRows(data);
+      const sortedData = data.sort(
+        (a, b) => new Date(b.createdAt) - new Date(a.createdAt),
+      );
+      setRows(sortedData);
     } else {
       alert(`검색 오류: ${message}`);
     }
@@ -124,7 +127,10 @@ export function NoticeTable() {
       const { success, data } = await fetchSearchNotice(keyword);
 
       if (success) {
-        setRows(data);
+        const sortedData = data.sort(
+          (a, b) => new Date(b.createdAt) - new Date(a.createdAt),
+        );
+        setRows(sortedData);
       } else {
         setRows([]);
         setPage(0);
