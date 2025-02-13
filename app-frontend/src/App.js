@@ -6,6 +6,7 @@ import Footer from './common/Footer';
 import { MainHeader } from './common/MainHeader';
 
 import { ThemeProvider } from 'styled-components';
+import Common404Page from './common/Common404Page';
 import { KakaoLoginHandler } from './pages/auth/components/KakaoLoginHandler';
 import FindID from './pages/auth/FindID';
 import FindPassword from './pages/auth/FindPassword';
@@ -26,7 +27,6 @@ import { MainPage } from './pages/main/MainPage';
 import { MyCard } from './pages/mycard/MyCard';
 import { MyPage } from './pages/mypage/MyPage';
 import CardListTest from './test/CardListTest';
-import Common404Page from './common/Common404Page';
 import theme from './theme/theme';
 
 const Root = styled.div`

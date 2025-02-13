@@ -11,12 +11,12 @@ import {
 } from '@mui/material';
 import axios from 'axios';
 import React, { useEffect, useState } from 'react';
+import { useSelector } from 'react-redux';
 import { useLocation, useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
 import CommonButton from '../../common/CommonButton';
 import CommonDialog from '../../common/CommonDialog';
 import CommonInput from '../../common/CommonInput';
-import { useSelector } from 'react-redux';
 
 const Root = styled.div`
   width: ${(props) => props.theme.display.lg};
@@ -126,7 +126,10 @@ export function CommunityTable() {
             row.userId.toLowerCase().includes(searchInput.toLowerCase()))
         );
       });
-      setFilteredRows(filtered);
+      const sortedFiltered = filtered.sort(
+        (a, b) => new Date(b.createdAt) - new Date(a.createdAt),
+      );
+      setFilteredRows(sortedFiltered);
     }
     setPage(0); // 검색 후 페이지를 처음으로 설정
   };
@@ -136,8 +139,11 @@ export function CommunityTable() {
     axios
       .get('/posts/list')
       .then((response) => {
-        setRows(response.data);
-        setFilteredRows(response.data); // 초기에는 전체 데이터 표시
+        const sortedData = response.data.sort((a, b) => {
+          return new Date(b.createdAt) - new Date(a.createdAt); // 최신순 정렬
+        });
+        setRows(sortedData);
+        setFilteredRows(sortedData); // 초기에는 전체 데이터 표시
       })
       .catch((error) => {
         console.error('API 요청 실패:', error);

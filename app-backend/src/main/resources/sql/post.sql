@@ -4,14 +4,14 @@ increment by 1
 nocycle
 nocache;
 
-alter sequence posts_seq
+alter sequence post
 nocache;
 
-alter table tbl_posts add imgurl VARCHAR2(500);
+alter table post add imgurl VARCHAR2(500);
 
-select * from tbl_posts;
-
-
+select * from post;
 
 
-drop table tbl_posts;
+
+
+drop table post;
