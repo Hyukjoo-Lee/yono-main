@@ -137,7 +137,7 @@ export function NoticePost() {
   };
 
   const handleNavigateToNext = async () => {
-    const nextId = parseInt(id, 10) + 1;
+    const nextId = parseInt(id, 10) - 1;
     try {
       const response = await fetch(`/api/notice/${nextId}`);
 
