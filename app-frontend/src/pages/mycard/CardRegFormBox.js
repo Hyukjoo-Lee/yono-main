@@ -204,10 +204,15 @@ const CardRegFormBox = ({ user }) => {
         formattedValue.slice(0, 14) + '-' + formattedValue.slice(14);
     }
 
+    if (numericValue.length === 16) {
+      formattedValue = formattedValue.slice(0, 9) + '-****-****';
+    }
+
     setFormData((prev) => ({
       ...prev,
       cardNumber: formattedValue,
     }));
+    console.log(numericValue);
     setCardNumToSave(numericValue);
   };
 
