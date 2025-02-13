@@ -1,22 +1,18 @@
 package com.mmk.service;
 
-import java.sql.Timestamp;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.mmk.dao.ReplyDAO;
 import com.mmk.dao.UserDAO;
 import com.mmk.dto.ReplyDTO;
 import com.mmk.entity.ReplyEntity;
 import com.mmk.entity.UserEntity;
-
-import jakarta.transaction.Transactional;
-
-import java.time.LocalDateTime;
 
 @Service
 public class ReplyServiceImpl implements ReplyService {
@@ -94,25 +90,25 @@ public class ReplyServiceImpl implements ReplyService {
     @Override
     @Transactional
     public boolean edit(int rno, ReplyDTO updatedComment) {
-    ReplyEntity existingComment = replyDao.findById(rno).orElse(null);
+        ReplyEntity existingComment = replyDao.findById(rno).orElse(null);
 
-    if (existingComment == null) {
-        return false; // 댓글이 존재하지 않으면 false 반환
+        if (existingComment == null) {
+            return false; // 댓글이 존재하지 않으면 false 반환
+        }
+
+        if (!validate(updatedComment)) {
+            return false; // 유효하지 않은 댓글 내용
+        }
+
+            // 댓글을 수정
+            existingComment.setR_content(updatedComment.getR_content()); // 수정된 내용으로 변경
+            existingComment.setUpdatedAt(updatedComment.getUpdatedAt()); // 수정일자 업데이트
+
+        // 수정된 댓글을 저장
+        replyDao.updateReply(existingComment);
+
+        return true; // 수정 성공
     }
-
-    if (!validate(updatedComment)) {
-        return false; // 유효하지 않은 댓글 내용
-    }
-
-        // 댓글을 수정
-        existingComment.setR_content(updatedComment.getR_content()); // 수정된 내용으로 변경
-        existingComment.setUpdatedAt(Timestamp.valueOf(LocalDateTime.now())); // 현재 시간으로 수정일자 업데이트
-
-    // 수정된 댓글을 저장
-    replyDao.updateReply(existingComment);
-
-    return true; // 수정 성공
-}
 
 
     @Override
