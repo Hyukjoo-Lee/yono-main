@@ -52,8 +52,8 @@ public class BadgeServiceImpl implements BadgeService {
         // BadgeDAO를 통해 이전 달 배지 데이터 조회
         BadgeEntity badgeEntity = badgeDAO.getUserRanking(previousMonth, userNum);
 
-        if (badgeEntity == null) {
-            return null; // null 반환하여 컨트롤러에서 204 응답 처리
+        if (badgeEntity == null || "admin".equals(badgeEntity.getUserEntity().getUserId())) {
+            return null; // admin 계정 제외
         }
 
         // 로그인한 유저 랭킹 순위
@@ -83,6 +83,7 @@ public class BadgeServiceImpl implements BadgeService {
         }
 
         return badgeEntities.stream()
+                .filter(badge -> !"admin".equals(badge.getUserEntity().getUserId())) // "admin" 계정 제외
                 .map(this::convertToDTO)
                 .sorted((a, b) -> {
                     int rankCompare = Integer.compare(b.getBadge(), a.getBadge());
