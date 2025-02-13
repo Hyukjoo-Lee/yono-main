@@ -10,11 +10,12 @@ import {
   TableRow,
 } from '@mui/material';
 import React, { useEffect, useState } from 'react';
+import { useSelector } from 'react-redux';
 import { Link, useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
 import { fetchSearchNotice } from '../../apis/noticeApi';
 import CommonButton from '../../common/CommonButton';
-// import CommonDialog from '../../common/CommonDialog';
+import CommonDialog from '../../common/CommonDialog';
 import CommonInput from '../../common/CommonInput';
 
 const Root = styled.div`
@@ -79,10 +80,11 @@ const Box = styled.div`
 `;
 
 export function NoticeTable() {
+  const { user } = useSelector((state) => state.user);
   const [rows, setRows] = useState([]);
   const [page, setPage] = useState(0);
   const [keyword, setKeyword] = useState('');
-  // const [isDialogOpen, setIsDialogOpen] = useState(false);
+  const [isDialogOpen, setIsDialogOpen] = useState(false);
   const rowsPerPage = 10;
   const navigate = useNavigate();
 
@@ -95,14 +97,13 @@ export function NoticeTable() {
   };
 
   const handleButtonClick = () => {
-    navigate('/noticeFormBox');
-    // const isAdmin = localStorage.getItem('userRole') === 'ADMIN';
+    const isAdmin = user.userRole === 'ADMIN';
 
-    // if (!isAdmin) {
-    //   setIsDialogOpen(true); // 권한이 없으면 다이얼로그를 열기
-    // } else {
-    //   navigate('/noticeFormBox'); // 관리자라면 폼으로 이동
-    // }
+    if (!isAdmin) {
+      setIsDialogOpen(true); // 권한이 없으면 다이얼로그를 열기
+    } else {
+      navigate('/noticeFormBox'); // 관리자라면 폼으로 이동
+    }
   };
 
   const handleSearchChange = (e) => {
@@ -112,7 +113,10 @@ export function NoticeTable() {
   const handleSerchSubmit = async () => {
     const { success, data, message } = await fetchSearchNotice(keyword);
     if (success) {
-      setRows(data);
+      const sortedData = data.sort(
+        (a, b) => new Date(b.createdAt) - new Date(a.createdAt),
+      );
+      setRows(sortedData);
     } else {
       alert(`검색 오류: ${message}`);
     }
@@ -123,7 +127,10 @@ export function NoticeTable() {
       const { success, data } = await fetchSearchNotice(keyword);
 
       if (success) {
-        setRows(data);
+        const sortedData = data.sort(
+          (a, b) => new Date(b.createdAt) - new Date(a.createdAt),
+        );
+        setRows(sortedData);
       } else {
         setRows([]);
         setPage(0);
@@ -174,7 +181,7 @@ export function NoticeTable() {
             text="글등록"
             onClick={handleButtonClick}
           />
-          {/* {isDialogOpen && (
+          {isDialogOpen && (
             <CommonDialog
               open={isDialogOpen}
               onClose={() => setIsDialogOpen(false)}
@@ -183,7 +190,7 @@ export function NoticeTable() {
               submitText="확인"
               onClick={() => setIsDialogOpen(false)}
             />
-          )} */}
+          )}
         </Container>
 
         <Paper sx={{ width: '100%', overflow: 'hidden', boxShadow: 'none' }}>

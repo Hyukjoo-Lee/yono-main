@@ -1,4 +1,4 @@
-select* from badge;
+select * from badge;
 drop table badge;
 
 

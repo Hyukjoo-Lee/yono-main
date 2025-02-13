@@ -221,7 +221,7 @@ public class CardServiceImpl implements CardService {
             }
 
             // 매칭된 카드 데이터 처리
-            processMatchingBenefits(recommendedCards, matchingBenefits);
+            processMatchingBenefits(recommendedCards, matchingBenefits, storeType);
 
             // 최대 5개의 카드만 추천
             if (recommendedCards.size() >= 5)
@@ -232,7 +232,8 @@ public class CardServiceImpl implements CardService {
     }
 
     // 매칭된 카드 혜택 데이터 추가 (중복 제거)
-    private void processMatchingBenefits(Map<String, RecCardDTO> recommendedCards, List<Object[]> matchingBenefits) {
+    private void processMatchingBenefits(Map<String, RecCardDTO> recommendedCards, List<Object[]> matchingBenefits,
+            String storeType) {
         for (Object[] cardData : matchingBenefits) {
             String cardTitle = (String) cardData[0];
             String cardImgUrl = (String) cardData[1];
@@ -250,7 +251,7 @@ public class CardServiceImpl implements CardService {
 
             // 기존 카드가 없으면 새로 생성하여 추가
             if (recCard == null) {
-                recCard = new RecCardDTO(cardTitle, cardImgUrl, cardApplyUrl, new ArrayList<>());
+                recCard = new RecCardDTO(cardTitle, cardImgUrl, cardApplyUrl, new ArrayList<>(), new ArrayList<>());
                 recommendedCards.put(cardTitle, recCard);
             }
 
@@ -264,11 +265,15 @@ public class CardServiceImpl implements CardService {
             logger.debug("매칭 카드의 추가 혜택: {}", allBenefits);
 
             for (CardBenefitDTO benefit : allBenefits) {
-                // 이미 추가된 혜택은 제외
                 if (!addedBenefits.contains(benefit.getBenefitTitle())) {
                     recCard.getBenefits().add(benefit);
                     addedBenefits.add(benefit.getBenefitTitle());
                 }
+            }
+
+            // 매칭된 소비 카테고리
+            if (!recCard.getMatchedCategories().contains(storeType)) {
+                recCard.getMatchedCategories().add(storeType);
             }
         }
     }

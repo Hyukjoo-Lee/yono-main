@@ -16,6 +16,8 @@ import com.mmk.entity.UserEntity;
 
 import jakarta.transaction.Transactional;
 
+import java.time.LocalDateTime;
+
 @Service
 public class ReplyServiceImpl implements ReplyService {
 
@@ -102,11 +104,9 @@ public class ReplyServiceImpl implements ReplyService {
         return false; // 유효하지 않은 댓글 내용
     }
 
-    // 댓글을 수정
-    existingComment.setR_content(updatedComment.getR_content()); // 수정된 내용으로 변경
-    
-    // updatedAt을 수동으로 설정하지 않고 현재 시간으로 설정
-    existingComment.setUpdatedAt(new Timestamp(System.currentTimeMillis())); // 현재 시간으로 설정
+        // 댓글을 수정
+        existingComment.setR_content(updatedComment.getR_content()); // 수정된 내용으로 변경
+        existingComment.setUpdatedAt(Timestamp.valueOf(LocalDateTime.now())); // 현재 시간으로 수정일자 업데이트
 
     // 수정된 댓글을 저장
     replyDao.updateReply(existingComment);

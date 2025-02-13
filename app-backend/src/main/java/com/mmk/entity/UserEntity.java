@@ -53,10 +53,9 @@ public class UserEntity {
     @Column(name = "password", nullable = false, length = 255)
     private String password;
 
-    // 이름 (한글만 허용, 2~10자)
+    // 이름 (프론트에서 한글 유효검사 처리, 구글 로그인을 위한 영어 허용)
     @NotNull
     @Size(min = 2, max = 17)
-    @Pattern(regexp = "^[가-힣]{2,10}$", message = "이름은 한글만 입력 가능하며, 2~10자여야 합니다.")
     @Column(name = "name", nullable = false, length = 17)
     private String name;
 

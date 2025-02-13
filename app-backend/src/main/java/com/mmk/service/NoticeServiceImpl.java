@@ -13,6 +13,10 @@ import com.mmk.entity.NoticeEntity;
 
 import jakarta.transaction.Transactional;
 
+/**
+ * NoticeServiceImpl 클래스는 NoticeService 인터페이스의 구현체로,
+ * 공지사항과 관련된 비즈니스 로직을 처리
+ */
 @Service
 @Transactional
 public class NoticeServiceImpl implements NoticeService {
@@ -23,21 +27,33 @@ public class NoticeServiceImpl implements NoticeService {
   @Autowired
   private UserService userService;
 
-  //글+파일 저장
+  /**
+   * 공지사항 저장
+   * 
+   * @param noticeDTO 저장할 공지사항 DTO
+   */
   @Override
   public void saveNotice(NoticeDTO noticeDTO) {
     NoticeEntity entity = toEntity(noticeDTO);
     noticeDAO.saveNotice(entity);
   }
 
-  //글 리스트 불러오기
+  /**
+   * 키워드를 기반으로 공지사항 검색
+   * @param keyword 검색할 키워드
+   * @return 검색된 공지사항 목록
+   */
   @Override
   public List<NoticeDTO> searchNotice(String keyword) {
     List<NoticeEntity> entities = noticeDAO.searchNotice(keyword);
     return entities.stream().map(this::toDTO).collect(Collectors.toList());
   }
 
-  //글 상세보기 + 조회수
+  /**
+     * ID를 기반으로 공지사항 조회
+     * @param id 조회할 공지사항의 ID
+     * @return 해당 ID에 해당하는 공지사항 DTO
+     */
   @Override
   public NoticeDTO getNoticeById(int id) {
     NoticeEntity noticeEntity = noticeDAO.findById(id);
@@ -47,14 +63,22 @@ public class NoticeServiceImpl implements NoticeService {
     return toDTO(noticeEntity);
   }
 
-  //글 삭제
+  /**
+     * 주어진 ID 목록에 해당하는 공지사항 삭제
+     * @param ids 삭제할 공지사항 ID 목록
+     */
   @Transactional
   @Override
   public void deleteByNotice(List<Integer> ids) {
     noticeDAO.deleteByNotice(ids);
   }
 
-  //글 수정
+  /**
+     * 공지사항 업데이트
+     *
+     * @param noticeDTO 업데이트할 공지사항 DTO
+     * @return 업데이트 성공 여부 (true - 성공, false - 실패)
+     */
   @Override
   public boolean updateNotice(NoticeDTO noticeDTO) {
     NoticeEntity existingNotice = noticeDAO.findById(noticeDTO.getNoticeNo());
@@ -72,7 +96,11 @@ public class NoticeServiceImpl implements NoticeService {
     return true;
   }
 
-  //entity -> dto
+  /**
+     * NoticeEntity를 NoticeDTO로 변환
+     * @param entity 변환할 NoticeEntity 객체
+     * @return 변환된 NoticeDTO 객체
+     */
   private NoticeDTO toDTO(NoticeEntity entity){
     if(entity == null){
       return null;
@@ -94,7 +122,11 @@ public class NoticeServiceImpl implements NoticeService {
     return dto;
   }
 
-  //dto -> entity
+  /**
+     * NoticeDTO를 NoticeEntity로 변환
+     * @param dto 변환할 NoticeDTO 객체
+     * @return 변환된 NoticeEntity 객체
+     */
   private NoticeEntity toEntity(NoticeDTO dto){
     if(dto == null){
       return null;

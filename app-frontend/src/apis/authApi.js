@@ -34,3 +34,22 @@ export const getUserInfo = async (accessToken) => {
   });
   return response.data;
 };
+
+// 구글 사용자 정보 요청
+export const getUserInfoByGoogle = async (accessToken) => {
+  try {
+    const response = await axios.get(
+      'https://www.googleapis.com/oauth2/v3/userinfo',
+      {
+        headers: {
+          Authorization: `Bearer ${accessToken}`,
+        },
+      },
+    );
+
+    return response.data;
+  } catch (error) {
+    console.error('구글 사용자 정보 요청 실패:', error);
+    return null;
+  }
+};

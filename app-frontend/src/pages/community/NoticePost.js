@@ -1,4 +1,5 @@
 import { useEffect, useState } from 'react';
+import { useSelector } from 'react-redux';
 import { useNavigate, useParams } from 'react-router-dom';
 import styled from 'styled-components';
 import { deleteNotice, fetchNoticeDetail } from '../../apis/noticeApi';
@@ -79,11 +80,14 @@ const EditBox = styled.div`
 `;
 
 export function NoticePost() {
+  const { user } = useSelector((state) => state.user);
   const [noticeData, setNoticeData] = useState(null);
   const [isDialogOpen, setIsDialogOpen] = useState(false);
   const navigate = useNavigate();
   const { id } = useParams();
   const baseURL = process.env.REACT_APP_API_URL;
+
+  const isAdmin = user && user.userRole === 'ADMIN';
 
   useEffect(() => {
     const fetchNoticeData = async () => {
@@ -106,8 +110,6 @@ export function NoticePost() {
   }, [id]);
 
   const handleEditClick = (id) => {
-    const isAdmin = localStorage.getItem('userRole') === 'ADMIN';
-
     if (!isAdmin) {
       setIsDialogOpen(true);
     } else {
@@ -116,12 +118,9 @@ export function NoticePost() {
   };
 
   const handleDelete = async () => {
-    const isAdmin = localStorage.getItem('userRole') === 'ADMIN';
-
     if (!isAdmin) {
       setIsDialogOpen(true);
     } else {
-      if (!window.confirm('정말 삭제하시겠습니까?')) return;
       try {
         await deleteNotice([parseInt(id, 10)]);
         alert('삭제되었습니다!');
@@ -181,16 +180,6 @@ export function NoticePost() {
             />
           )}
           <StyledButton text="삭제" onClick={handleDelete} />
-          {isDialogOpen && (
-            <CommonDialog
-              open={isDialogOpen}
-              onClose={() => setIsDialogOpen(false)}
-              title="접근제한"
-              children="관리자 권한 기능입니다."
-              submitText="확인"
-              onClick={() => setIsDialogOpen(false)}
-            />
-          )}
         </EditBox>
       </NoticeHeader>
 
@@ -209,16 +198,16 @@ export function NoticePost() {
       <CommonHr />
 
       <DataBox>
-        <div>{noticeData.content}</div>
         {noticeData.imgurl && (
           <div>
             <img
               src={`${baseURL}${noticeData.imgurl}`}
               alt="공지 이미지"
-              style={{ marginTop: '20px' }}
+              style={{ marginTop: '20px', maxWidth: '100%' }}
             />
           </div>
         )}
+        <div style={{ whiteSpace: 'pre-line' }}>{noticeData.content}</div>
       </DataBox>
     </Root>
   );

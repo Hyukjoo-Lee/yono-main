@@ -12,7 +12,7 @@ export const checkUserIdExists = async (userId) => {
 // 회원가입
 export const signUpUser = async (formData) => {
   const response = await axios.post('/user/signup', formData);
-  return response.data;
+  return response;
 };
 
 // 로그인
@@ -108,9 +108,7 @@ export const updatePwd = async (password, userId) => {
 
 // 회원 탈퇴
 export const deleteUser = async (userNum) => {
-  const response = await axios.put('/user/deleteUser', {
+  await axios.delete('/user/deleteUser', {
     params: { userNum },
   });
-
-  return response.data;
 };

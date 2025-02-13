@@ -40,6 +40,7 @@ export const USERID_DUPLICATE_MESSAGE = '이미 등록된 아이디입니다.';
 export const USERID_AVAILABLE_MESSAGE = '사용 가능한 아이디입니다.';
 export const USERID_VERIFY_PROMPT = '아이디 중복 확인을 해주세요.';
 export const CARD_DUPLICATE_MESSAGE = '이미 등록된 카드입니다.';
+export const EMAIL_DUPLICATE_MESSAGE = '중복된 이메일 입니다.';
 
 // 서버 관련
 export const SERVER_MESSAGE = '서버와의 통신 중 문제가 발생했습니다.';

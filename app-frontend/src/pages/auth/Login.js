@@ -8,7 +8,6 @@ import theme from '../../theme/theme';
 import {
   EMPTY_PASSWORD_MESSAGE,
   EMPTY_USERID_MESSAGE,
-  LOGIN_VERIFIED_MESSAGE,
   SERVER_MESSAGE,
 } from '../../common/Message';
 import { useNavigate } from 'react-router-dom';
@@ -17,6 +16,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { loginUser } from '../../redux/actions/userAction';
 import KakaoLoginButton from './components/KakaoLoginButton';
 import GoogleLoginButton from './components/GoogleLoginButton';
+import { GoogleOAuthProvider } from '@react-oauth/google';
 
 const RootIn = styled.div`
   width: ${(props) => props.theme.display.lg};
@@ -188,16 +188,18 @@ const Login = () => {
           localStorage.removeItem('savedUserId');
         }
         setIsLoginSuccessVisible(true);
-      } else if (result.status === 504 || result.payload.status === 401) {
-        setFormMessage({ error: LOGIN_VERIFIED_MESSAGE });
+      } else if (result.payload.status === 403) {
+        setFormMessage({ error: result.payload.message });
+      } else if (result.payload.status === 401) {
+        setFormMessage({ error: result.payload.message });
       } else {
         setFormMessage({ error: SERVER_MESSAGE });
       }
     } catch (error) {
-      setFormMessage({ error: LOGIN_VERIFIED_MESSAGE });
+      setFormMessage({ error: SERVER_MESSAGE });
     }
   };
-
+  const GOOGLE_CLIENT_ID = process.env.REACT_APP_GOOGLE_CLIENT_ID;
   return (
     <CommonRoot>
       <RootIn>
@@ -264,7 +266,11 @@ const Login = () => {
             </Divider>
             <SocialLoginWrapper>
               <KakaoLoginButton />
-              <GoogleLoginButton />
+              {GOOGLE_CLIENT_ID && (
+                <GoogleOAuthProvider clientId={GOOGLE_CLIENT_ID}>
+                  <GoogleLoginButton />
+                </GoogleOAuthProvider>
+              )}
             </SocialLoginWrapper>
           </FormWrapper>
           {isLoggedIn && (

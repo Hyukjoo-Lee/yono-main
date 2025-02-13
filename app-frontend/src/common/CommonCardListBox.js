@@ -17,6 +17,7 @@ import HomeIcon from '@mui/icons-material/Home';
 import HelpOutlineIcon from '@mui/icons-material/HelpOutline';
 import VerifiedIcon from '@mui/icons-material/Verified';
 import RestaurantIcon from '@mui/icons-material/Restaurant';
+import { Chip, Stack } from '@mui/material';
 import LocalConvenienceStoreIcon from '@mui/icons-material/LocalConvenienceStore';
 
 const HoverButtonContainer = styled.div`
@@ -106,7 +107,7 @@ const CardInfoContainer = styled.div`
 `;
 
 const CardNumber = styled.p`
-  font-size: 16px;
+  font-size: ${(props) => props.theme.fontSize.sm};
   color: ${(props) => props.theme.color.black};
   margin: 0;
   min-height: 27px;
@@ -193,8 +194,27 @@ const CommonCardListBox = ({
                 />
 
                 <CardInfoContainer>
-                  <CardName>{card.cardTitle}</CardName>
-                  <CardNumber> {card.cardNumber || ''}</CardNumber>
+                  <CardName>{card.cardTitle}</CardName>{' '}
+                  <CardNumber>
+                    {card.matchedCategories ? (
+                      <Stack direction="row" spacing={1} flexWrap="wrap">
+                        <TitleStyle>소비 내역과 매칭된 카드 혜택</TitleStyle>{' '}
+                        {card.matchedCategories.map((category, index) => (
+                          <Chip
+                            key={index}
+                            // icon={getBenefitIcon(category)}
+                            label={category}
+                            size="small"
+                            color="default"
+                            sx={{ '& .MuiChip-icon': { fontSize: '13px' } }}
+                            variant="filled"
+                          />
+                        ))}
+                      </Stack>
+                    ) : (
+                      card.cardNumber || ''
+                    )}
+                  </CardNumber>
                   {card.cardInfo.slice(0, 3).map((benefit, index) => (
                     <InfoRow key={index}>
                       <TitleStyle>

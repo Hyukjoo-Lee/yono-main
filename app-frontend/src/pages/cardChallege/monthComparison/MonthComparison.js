@@ -1,9 +1,9 @@
 import React, { useEffect, useState } from 'react';
+import { useSelector } from 'react-redux';
 import styled from 'styled-components';
+import { monthlyComparision } from '../../../apis/monthComparisionApi.js';
 import Barchart from './Barchart';
 import MonthComparisionTable from './MonthComparisonTable';
-import { useSelector } from 'react-redux';
-import { monthlyComparision } from '../../../apis/monthComparisionApi';
 
 const Root = styled.div`
   width: 100%;

@@ -21,6 +21,7 @@ import {
   USERID_DUPLICATE_MESSAGE,
   USERID_REGEX_MESSAGE,
   USERID_VERIFY_PROMPT,
+  EMAIL_DUPLICATE_MESSAGE,
 } from '../../common/Message';
 import ValidationMessage from '../../common/ValidationMessage';
 import CommonDialog from '../../common/CommonDialog';
@@ -115,6 +116,7 @@ const FORM_FIELDS = {
     errorMessage: {
       empty: EMPTY_EMAIL_MESSAGE,
       invalid: EMAIL_REGEX_MESSAGE,
+      duplicate: EMAIL_DUPLICATE_MESSAGE,
     },
   },
 };
@@ -255,7 +257,13 @@ const SignUp = () => {
       await signUpUser(formData);
       setIsSignUpSuccessVisible(true);
     } catch (error) {
-      setIsSignUpFailVisible(true);
+      if (error.response.status === 409) {
+        setFormMessage((prev) => ({
+          ...prev,
+          email: FORM_FIELDS.email.errorMessage.duplicate,
+        }));
+        setIsSignUpFailVisible(true);
+      }
     }
   };
 
