@@ -168,12 +168,11 @@ export function CommunityPost() {
       if (response.status === 200) {
         setCommentsData((prev) => [
           ...prev,
-          {
-            ...replyData,
+          Object.assign({}, replyData, {
             rno: response.data.rno,
             regdate: response.data.regdate || new Date().toISOString(),
             likedByUser: [],
-          },
+          }),
         ]);
         setComment('');
         setInputCount(0);
@@ -189,17 +188,19 @@ export function CommunityPost() {
       .then((response) => {
         if (response.status === 200) {
           setCommentsData(
-            response.data.map((comment) => ({
-              ...comment,
-              likedByUser: comment.likedByUser || [], // 좋아요한 유저 목록 초기화
-            })),
+            response.data
+              .map((comment) => ({
+                ...comment,
+                likedByUser: comment.likedByUser || [],
+              }))
+              .sort((a, b) => new Date(b.regdate) - new Date(a.regdate)),
           );
         }
       })
       .catch((error) => {
         console.error('댓글 데이터 요청 실패:', error);
       });
-  }, [rowData.no]);
+  }, [rowData.no, comment]);
 
   const handleDeletecommentClick = async (rno) => {
     if (!user) {
