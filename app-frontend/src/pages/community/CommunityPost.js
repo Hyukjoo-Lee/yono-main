@@ -96,7 +96,7 @@ const Box = styled.div`
 
   img {
     max-height: 100%;
-    max-width: auto;
+    max-width: 100%;
     object-fit: contain;
   }
 `;
@@ -266,6 +266,7 @@ export function CommunityPost() {
   const handleNavigateToCommunity = () => {
     navigate('/community');
   };
+
   const handleNavigateToEditForm = () => {
     if (!user || rowData.userId !== user.userId) {
       setDialogMessage('작성자만 수정할 수 있습니다.');
@@ -353,7 +354,6 @@ export function CommunityPost() {
 
   const handleDialogLogin = () => {
     setIsDialogOpen(false);
-    navigate('/login');
   };
 
   const handleDialogClose = () => {
